@@ -1,80 +1,80 @@
 # Translation of OpenERP Server.
 # This file contains the translation of the following modules:
-# * l10n_be
-# 
-# Translators:
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2014
-# Matjaž Mozetič <m.mozetic@matmoz.si>, 2014
+#	* l10n_be
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo 8.0\n"
-"Report-Msgid-Bugs-To: \n"
+"Project-Id-Version: OpenERP Server 6.0dev\n"
+"Report-Msgid-Bugs-To: support@openerp.com\n"
 "POT-Creation-Date: 2012-11-24 02:53+0000\n"
-"PO-Revision-Date: 2015-07-17 07:25+0000\n"
-"Last-Translator: Martin Trigaux\n"
-"Language-Team: Slovenian (http://www.transifex.com/odoo/odoo-8/language/sl/)\n"
+"PO-Revision-Date: 2010-10-30 15:33+0000\n"
+"Last-Translator: Fabien (Open ERP) <fp@tinyerp.com>\n"
+"Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: \n"
-"Language: sl\n"
-"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2014-04-22 07:05+0000\n"
+"X-Generator: Launchpad (build 16985)\n"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_appro_mbsd3
 msgid "Approvisionnements, marchandises, services et biens divers"
-msgstr "Nabave, blago, storitve in razne dobrine"
+msgstr "Approvisionnements, marchandises, services et biens divers"
 
 #. module: l10n_be
 #: field:vat.listing.clients,turnover:0
 msgid "Base Amount"
-msgstr "Osnovni znesek"
+msgstr "Base Amount"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_rmunrationschargessocialesetpensions2
 msgid "Rémunérations, charges sociales et pensions"
-msgstr "Plače, socialni prispevki in pokojnine"
+msgstr "Rémunérations, charges sociales et pensions"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_locationfinancementetdroitssimilaires2
 msgid "Location-financement et droits similaires"
-msgstr "Lizing in podobne pravice"
+msgstr "Location-financement et droits similaires"
 
 #. module: l10n_be
 #: field:l1on_be.vat.declaration,tax_code_id:0
 msgid "Tax Code"
-msgstr "Davčna koda"
+msgstr "Tax Code"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_produitsetchargesdexploitation1
 msgid "Produits et charges d'exploitation"
-msgstr "Prihodki in odhodki iz poslovanja"
+msgstr "Produits et charges d'exploitation"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_chargesfinancires1
 msgid "Charges financières"
-msgstr "Finančni odhodki"
+msgstr "Charges financières"
 
 #. module: l10n_be
-#: view:l1on_be.vat.declaration:0 field:l1on_be.vat.declaration,comments:0
-#: view:partner.vat.intra:0 field:partner.vat.intra,comments:0
-#: view:partner.vat.list:0 field:partner.vat.list,comments:0
+#: view:l1on_be.vat.declaration:0
+#: field:l1on_be.vat.declaration,comments:0
+#: view:partner.vat.intra:0
+#: field:partner.vat.intra,comments:0
+#: view:partner.vat.list:0
+#: field:partner.vat.list,comments:0
 msgid "Comments"
-msgstr "Komentarji"
+msgstr "Comments"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_primesdmission2
 msgid "Primes d'émission"
-msgstr "Premije iz deleža"
+msgstr "Primes d'émission"
 
 #. module: l10n_be
 #: model:ir.actions.act_window,name:l10n_be.action_account_report_be_pl
 msgid "Comptes de Charges"
-msgstr "Konti stroškov"
+msgstr "Comptes de Charges"
 
 #. module: l10n_be
 #: help:l1on_be.vat.declaration,ask_payment:0
 msgid "It indicates whether a payment is to make or not?"
-msgstr "Prikazuje, če je potrebno plačilo ali ne."
+msgstr "It indicates whether a payment is to make or not?"
 
 #. module: l10n_be
 #: model:ir.model,name:l10n_be.model_vat_listing_clients
@@ -85,89 +85,94 @@ msgstr "vat.listing.clients"
 #: model:ir.model,name:l10n_be.model_partner_vat_intra
 #: model:ir.ui.menu,name:l10n_be.l10_be_vat_intra
 msgid "Partner VAT Intra"
-msgstr "Partner DDV EU"
+msgstr "Partner VAT Intra"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_ammo2
 msgid ""
 "Amortissements et réductions de valeur sur frais d'établissement, sur "
 "immobilisations incorporelles et corporelles"
-msgstr "Amortizacija in odpisi vrednosti sredstev"
+msgstr ""
+"Amortissements et réductions de valeur sur frais d'établissement, sur "
+"immobilisations incorporelles et corporelles"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_prlvementssurlesimptsdiffrs1
 msgid "Prélèvements sur les impôts différés"
-msgstr "Prenosi iz odloženih davkov"
+msgstr "Prélèvements sur les impôts différés"
 
 #. module: l10n_be
 #: model:ir.ui.menu,name:l10n_be.menu_account_report_be_bs
 msgid "Balance Sheet"
-msgstr "Bilanca stanja"
+msgstr "Balance Sheet"
 
 #. module: l10n_be
-#: view:l1on_be.vat.declaration:0 view:partner.vat.intra:0
+#: view:l1on_be.vat.declaration:0
+#: view:partner.vat.intra:0
 #: field:partner.vat.intra,tax_code_id:0
 msgid "Company"
-msgstr "Družba"
+msgstr "Company"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_immobilisationsincorporelles1
 msgid "Immobilisations incorporelles"
-msgstr "Ne opredmetena sredstva"
+msgstr "Immobilisations incorporelles"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_rservesimmunises3
 msgid "Réserves immunisées"
-msgstr "Neobdavčene zaloge"
+msgstr "Réserves immunisées"
 
 #. module: l10n_be
 #: code:addons/l10n_be/wizard/l10n_be_partner_vat_listing.py:317
 #, python-format
 msgid "No record to print."
-msgstr "Ničesar za izpis."
+msgstr "No record to print."
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_rserves2
 msgid "Réserves"
-msgstr "Zaloge"
+msgstr "Réserves"
 
 #. module: l10n_be
 #: help:partner.vat.intra,mand_id:0
 msgid "Reference given by the Representative of the sending company."
-msgstr "Sklic predstavnika družbe pošiljatelja."
+msgstr "Reference given by the Representative of the sending company."
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_installationsmachinesetoutillage2
 msgid "Installations, machines et outillage"
-msgstr "Naprave, stroji in oprema"
+msgstr "Installations, machines et outillage"
 
 #. module: l10n_be
 #: help:l1on_be.vat.declaration,client_nihil:0
 msgid ""
 "Tick this case only if it concerns only the last statement on the civil or "
 "cessation of activity: no clients to be included in the client listing."
-msgstr "Označite le, če zadeva le zadnji izpisek ali prenehanje dejavnosti: kupci ne bodo vključeni v spisek kupcev."
+msgstr ""
+"Tick this case only if it concerns only the last statement on the civil or "
+"cessation of activity: no clients to be included in the client listing."
 
 #. module: l10n_be
 #: view:partner.vat.intra:0
 msgid "Save XML"
-msgstr "Shrani XML"
+msgstr "Save XML"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_placementsdetrsorerie1
 msgid "Placements de trésorerie"
-msgstr "Gotovinske naložbe"
+msgstr "Placements de trésorerie"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_autresdettes6
 #: model:account.financial.report,name:l10n_be.account_financial_report_autresdettes8
 msgid "Autres dettes"
-msgstr "Druge obveznosti"
+msgstr "Autres dettes"
 
 #. module: l10n_be
 #: view:partner.vat.intra:0
 msgid "Create _XML"
-msgstr "Ustvari _XML"
+msgstr "Create _XML"
 
 #. module: l10n_be
 #: code:addons/l10n_be/wizard/l10n_be_account_vat_declaration.py:87
@@ -176,14 +181,14 @@ msgstr "Ustvari _XML"
 #: code:addons/l10n_be/wizard/l10n_be_vat_intra.py:111
 #, python-format
 msgid "insufficient data!"
-msgstr "Nezadostni podatki!"
+msgstr "insufficient data!"
 
 #. module: l10n_be
 #: code:addons/l10n_be/wizard/l10n_be_partner_vat_listing.py:317
 #: code:addons/l10n_be/wizard/l10n_be_vat_intra.py:116
 #, python-format
 msgid "Error!"
-msgstr "Napaka!"
+msgstr "Error!"
 
 #. module: l10n_be
 #: code:addons/l10n_be/wizard/l10n_be_account_vat_declaration.py:112
@@ -198,58 +203,60 @@ msgstr "Napaka!"
 #: code:addons/l10n_be/wizard/l10n_be_vat_intra.py:246
 #, python-format
 msgid "Insufficient Data!"
-msgstr "Nezadostni podatki!"
+msgstr "Insufficient Data!"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_effetspayer4
 msgid "Effets à payer"
-msgstr "Plačljive zabeležke"
+msgstr "Effets à payer"
 
 #. module: l10n_be
 #: view:l1on_be.vat.declaration:0
 msgid "Is Last Declaration"
-msgstr "Je zadnja napoved"
+msgstr "Is Last Declaration"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_imptsdiffrs2
 msgid "Impôts différés"
-msgstr "Odloženi davki"
+msgstr "Impôts différés"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_produitsfinanciers1
 msgid "Produits financiers"
-msgstr "Finančni prihodki"
+msgstr "Produits financiers"
 
 #. module: l10n_be
 #: field:vat.listing.clients,vat:0
 msgid "VAT"
-msgstr "DDV"
+msgstr "VAT"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_transfertauximptsdiffrs1
 msgid "Transfert aux impôts différés"
-msgstr "Prenosi odloženih davkov"
+msgstr "Transfert aux impôts différés"
 
 #. module: l10n_be
 #: help:partner.vat.intra,period_ids:0
 msgid ""
 "Select here the period(s) you want to include in your intracom declaration"
-msgstr "Izbira obdobja za vključitev v intracom napoved"
+msgstr ""
+"Select here the period(s) you want to include in your intracom declaration"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_stocketcommandesencoursdexcution1
 msgid "Stock et commandes en cours d'exécution"
-msgstr "Zaloge in nedokončana proizvodnja"
+msgstr "Stock et commandes en cours d'exécution"
 
 #. module: l10n_be
 #: field:partner.vat.intra,mand_id:0
 msgid "Reference"
-msgstr "Sklic"
+msgstr "Reference"
 
 #. module: l10n_be
 #: help:partner.vat.intra,period_code:0
 msgid ""
-"This is where you have to set the period code for the intracom declaration using the format: ppyyyy\n"
+"This is where you have to set the period code for the intracom declaration "
+"using the format: ppyyyy\n"
 "      PP can stand for a month: from '01' to '12'.\n"
 "      PP can stand for a trimester: '31','32','33','34'\n"
 "          The first figure means that it is a trimester,\n"
@@ -257,140 +264,154 @@ msgid ""
 "      PP can stand for a complete fiscal year: '00'.\n"
 "      YYYY stands for the year (4 positions).\n"
 "    "
-msgstr "Tu se nastavi koda obdobja za napoved intracom v formatu: ppyyyy\n      PP lahko pomeni mesec: od '01' do '12'.\n      PP lahko pomeni trimester: '31','32','33','34'\n          Prva številka pomeni, da je trimester,\n          druga številka identificira trimester.\n      PP lahko pomeni celo fiskalno leto: '00'.\n      YYYY pomeni leto (4 mesta).\n    "
+msgstr ""
+"This is where you have to set the period code for the intracom declaration "
+"using the format: ppyyyy\n"
+"      PP can stand for a month: from '01' to '12'.\n"
+"      PP can stand for a trimester: '31','32','33','34'\n"
+"          The first figure means that it is a trimester,\n"
+"          The second figure identify the trimester.\n"
+"      PP can stand for a complete fiscal year: '00'.\n"
+"      YYYY stands for the year (4 positions).\n"
+"    "
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_dettesunanauplus2
 msgid "Dettes à un an au plus"
-msgstr "Zneski, ki se plačujejo v roku enega leta"
+msgstr "Dettes à un an au plus"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_imptssurlersultat1
 msgid "Impôts sur le résultat"
-msgstr "Davek iz dobička"
+msgstr "Impôts sur le résultat"
 
 #. module: l10n_be
 #: field:partner.vat.intra,period_code:0
 msgid "Period Code"
-msgstr "Koda obdobja"
+msgstr "Period Code"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_dettescommerciales5
 #: model:account.financial.report,name:l10n_be.account_financial_report_dettescommerciales7
 msgid "Dettes commerciales"
-msgstr "Obveznosti do dobaviteljev"
+msgstr "Dettes commerciales"
 
 #. module: l10n_be
 #: field:partner.vat.intra,period_ids:0
 msgid "Period (s)"
-msgstr "Obdobja"
+msgstr "Period (s)"
 
 #. module: l10n_be
 #: code:addons/l10n_be/wizard/l10n_be_partner_vat_listing.py:94
 #, python-format
 msgid "No data found for the selected year."
-msgstr "Ni podatkov za izbrano leto"
+msgstr "No data found for the selected year."
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_actifsimmobilises0
 msgid "ACTIFS IMMOBILISES"
-msgstr "Osnovna sredstva"
+msgstr "ACTIFS IMMOBILISES"
 
 #. module: l10n_be
 #: model:account.account.type,name:l10n_be.user_type_stock
 msgid "Stock et Encours"
-msgstr "Zaloge in izjeme"
+msgstr "Stock et Encours"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_autrescrances3
 #: model:account.financial.report,name:l10n_be.account_financial_report_autrescrances5
 msgid "Autres créances"
-msgstr "Druge terjatve"
+msgstr "Autres créances"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_fraisdtablissements1
 msgid "Frais d'établissements"
-msgstr "Pristojbine institucij"
+msgstr "Frais d'établissements"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_immobilisationsencoursetacomptesverss2
 msgid "Immobilisations en cours et acomptes versés"
-msgstr "Proizvodnja v teku in predplačila"
+msgstr "Immobilisations en cours et acomptes versés"
 
 #. module: l10n_be
 #: model:account.account.type,name:l10n_be.user_type_view
 msgid "Vue"
-msgstr "Pogled"
+msgstr "Vue"
 
 #. module: l10n_be
 #: code:addons/l10n_be/wizard/l10n_be_partner_vat_listing.py:265
 #, python-format
 msgid "Data Insufficient!"
-msgstr "Premalo podatkov!"
+msgstr "Data Insufficient!"
 
 #. module: l10n_be
 #: help:partner.vat.list,partner_ids:0
 msgid ""
 "You can remove clients/partners which you do not want to show in xml file"
-msgstr "Kupce/partnerje, ki jih ne želite v xml datoteki lahko odstranite"
+msgstr ""
+"You can remove clients/partners which you do not want to show in xml file"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_bnficepertedelexcercice1
 msgid "Bénéfice (Perte) de l'excercice"
-msgstr "Dobiček (izguba) iz poslovanja"
+msgstr "Bénéfice (Perte) de l'excercice"
 
 #. module: l10n_be
 #: field:l1on_be.vat.declaration,client_nihil:0
 msgid "Last Declaration, no clients in client listing"
-msgstr "Zadnja napoved, brez kupcev v seznamu kupcev"
+msgstr "Last Declaration, no clients in client listing"
 
 #. module: l10n_be
 #: code:addons/l10n_be/wizard/l10n_be_vat_intra.py:258
 #, python-format
 msgid "Save"
-msgstr "Shrani"
+msgstr "Save"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_reduc_cmd_encours2g
 msgid ""
 "Réductions de valeur sur stocks, sur commandes en cours d'exécution et sur "
 "créances commerciales: dotations (reprises)"
-msgstr "Oslabitve zalog, pogodbe v teku in terjatve do kupcev: povečanje (zmanjšanje)"
+msgstr ""
+"Réductions de valeur sur stocks, sur commandes en cours d'exécution et sur "
+"créances commerciales: dotations (reprises)"
 
 #. module: l10n_be
 #: code:addons/l10n_be/wizard/l10n_be_vat_intra.py:116
 #, python-format
 msgid "Period code is not valid."
-msgstr "Koda obdobja ni veljavna"
+msgstr "Period code is not valid."
 
 #. module: l10n_be
 #: help:partner.vat.intra,no_vat:0
 msgid ""
 "The Partner whose VAT number is not defined  and they are not included in "
 "XML File."
-msgstr "Partner, za katerega ni določena ID za DDV, ni vključen v XML datoteko."
+msgstr ""
+"The Partner whose VAT number is not defined  and they are not included in "
+"XML File."
 
 #. module: l10n_be
 #: field:partner.vat.intra,no_vat:0
 msgid "Partner With No VAT"
-msgstr "Partner brez DDV"
+msgstr "Partner With No VAT"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_acomptesreussurcommandes6
 #: model:account.financial.report,name:l10n_be.account_financial_report_acomptesreussurcommandes8
 msgid "Acomptes reçus sur commandes"
-msgstr "Prejeta predplačila"
+msgstr "Acomptes reçus sur commandes"
 
 #. module: l10n_be
 #: code:addons/l10n_be/wizard/l10n_be_vat_intra.py:123
 #, python-format
 msgid "No partner has a VAT number asociated with him."
-msgstr "Noben partner ni povezan z ID za DDV."
+msgstr "No partner has a VAT number asociated with him."
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_provisionspourrisquesetcharges2
 msgid "Provisions pour risques et charges"
-msgstr "Rezervacije za tveganja in stroške"
+msgstr "Provisions pour risques et charges"
 
 #. module: l10n_be
 #: model:ir.actions.act_window,name:l10n_be.action_account_report_be_bs
@@ -399,87 +420,88 @@ msgstr "Bilan"
 
 #. module: l10n_be
 #: field:l1on_be.vat.declaration,file_save:0
-#: field:partner.vat.intra,file_save:0 field:partner.vat.list,file_save:0
+#: field:partner.vat.intra,file_save:0
+#: field:partner.vat.list,file_save:0
 msgid "Save File"
-msgstr "Shrani datoteko"
+msgstr "Save File"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_rservesimmunises3_A
 msgid "Pour actions propres"
-msgstr "Za lastne delnice"
+msgstr "Pour actions propres"
 
 #. module: l10n_be
 #: help:l1on_be.vat.declaration,ask_restitution:0
 msgid "It indicates whether a restitution is to make or not?"
-msgstr "Prikazuje, če je potrebno vračilo ali ne."
+msgstr "It indicates whether a restitution is to make or not?"
 
 #. module: l10n_be
 #: code:addons/l10n_be/wizard/l10n_be_vat_intra.py:119
 #, python-format
 msgid "Please select at least one Period."
-msgstr "Izberite vsaj eno obdobje."
+msgstr "Please select at least one Period."
 
 #. module: l10n_be
 #: code:addons/l10n_be/wizard/l10n_be_account_vat_declaration.py:201
 #, python-format
 msgid "Save XML For Vat declaration"
-msgstr "Shrani XML za DDV napoved"
+msgstr "Save XML For Vat declaration"
 
 #. module: l10n_be
 #: help:partner.vat.intra,test_xml:0
 msgid "Sets the XML output as test file"
-msgstr "Določi XML izhod za testno datoteko"
+msgstr "Sets the XML output as test file"
 
 #. module: l10n_be
 #: view:partner.vat.intra:0
 msgid "Intracom VAT Declaration"
-msgstr "Intracom DDV napoved"
+msgstr "Intracom VAT Declaration"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_bnficeperteencours0
 msgid "Bénéfice (Perte) en cours, non affecté(e)"
-msgstr "Tekoči dobiček (izguba), brez vpliva"
+msgstr "Bénéfice (Perte) en cours, non affecté(e)"
 
 #. module: l10n_be
 #: view:partner.vat.intra:0
 msgid "_Preview"
-msgstr "_Predogled"
+msgstr "_Preview"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_dettesfinancires5
 #: model:account.financial.report,name:l10n_be.account_financial_report_dettesfinancires7
 msgid "Dettes financières"
-msgstr "Najeta posojila"
+msgstr "Dettes financières"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_bnficereporte0
 msgid "Bénéfice reporté"
-msgstr "Preneseni dobiček"
+msgstr "Bénéfice reporté"
 
 #. module: l10n_be
 #: help:partner.vat.intra,tax_code_id:0
 msgid "Keep empty to use the user's company"
-msgstr "Pustite prazno za uporabo družbe uporabnika"
+msgstr "Keep empty to use the user's company"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_actif
 msgid "ACTIF"
-msgstr "AKTIVA"
+msgstr "ACTIF"
 
 #. module: l10n_be
 #: field:partner.vat.intra,test_xml:0
 msgid "Test XML file"
-msgstr "Testna XML datoteka"
+msgstr "Test XML file"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_dettes1
 msgid "DETTES"
-msgstr "OBVEZNOSTI"
+msgstr "DETTES"
 
 #. module: l10n_be
 #: view:l1on_be.vat.declaration:0
 msgid "Save xml"
-msgstr "Shrani XML"
+msgstr "Save xml"
 
 #. module: l10n_be
 #: code:addons/l10n_be/wizard/l10n_be_account_vat_declaration.py:114
@@ -487,82 +509,85 @@ msgstr "Shrani XML"
 #: code:addons/l10n_be/wizard/l10n_be_vat_intra.py:149
 #, python-format
 msgid "No phone associated with the company."
-msgstr "Za družbo ni določenega telefona."
+msgstr "No phone associated with the company."
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_dettesplusdunan2
 msgid "Dettes à plus d'un an"
-msgstr "Obveznosti, ki se plačujejo v roku nad letom dni"
+msgstr "Dettes à plus d'un an"
 
 #. module: l10n_be
 #: code:addons/l10n_be/wizard/l10n_be_account_vat_declaration.py:87
 #: code:addons/l10n_be/wizard/l10n_be_vat_intra.py:111
 #, python-format
 msgid "No VAT number associated with your company."
-msgstr "Za glavno družbo ni povezane ID številke za DDV."
+msgstr "No VAT number associated with your company."
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_rservesimmunises3_B
 msgid "Autres"
-msgstr "Drugo"
+msgstr "Autres"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_crancesplusdunan1
 msgid "Créances à plus d'un an"
-msgstr "Terjatve po enem letu"
+msgstr "Créances à plus d'un an"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_bnficepertedelexcerciceavantimpts1
 msgid "Bénéfice (Perte) de l'excercice avant impôts"
-msgstr "Dobiček (izguba) iz poslovanja pred obdavčitvijo"
+msgstr "Bénéfice (Perte) de l'excercice avant impôts"
 
 #. module: l10n_be
-#: view:partner.vat.intra:0 field:partner.vat.intra,country_ids:0
+#: view:partner.vat.intra:0
+#: field:partner.vat.intra,country_ids:0
 msgid "European Countries"
-msgstr "Evropske države"
+msgstr "European Countries"
 
 #. module: l10n_be
-#: view:l1on_be.vat.declaration:0 view:partner.vat:0 view:partner.vat.intra:0
+#: view:l1on_be.vat.declaration:0
+#: view:partner.vat:0
+#: view:partner.vat.intra:0
 #: view:partner.vat.list:0
 msgid "or"
-msgstr "ali"
+msgstr "or"
 
 #. module: l10n_be
 #: view:partner.vat.intra:0
 msgid "Partner VAT intra"
-msgstr "Partner DDV EU"
+msgstr "Partner VAT intra"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_comptesdergularisation1
 #: model:account.financial.report,name:l10n_be.account_financial_report_comptesdergularisation2
 msgid "Comptes de régularisation"
-msgstr "Časovne razmejitve"
+msgstr "Comptes de régularisation"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_immobilisationscorporelles1
 msgid "Immobilisations corporelles"
-msgstr "Nepremičnine in oprema"
+msgstr "Immobilisations corporelles"
 
 #. module: l10n_be
 #: field:vat.listing.clients,vat_amount:0
 msgid "VAT Amount"
-msgstr "DDV znesek"
+msgstr "VAT Amount"
 
 #. module: l10n_be
 #: code:addons/l10n_be/wizard/l10n_be_vat_intra.py:246
 #, python-format
 msgid "No vat number defined for %s."
-msgstr "Za %s ni določene DDV številke."
+msgstr "No vat number defined for %s."
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_bnficepertereporte2
 msgid "Bénéfice (Perte) reporté(e)"
-msgstr "Prenos dobička (izgube)"
+msgstr "Bénéfice (Perte) reporté(e)"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_plusvaluesdervaluation2
 msgid "Plus-values de réévaluation"
-msgstr "Kapitalski dobički iz prevrednotenja"
+msgstr "Plus-values de réévaluation"
 
 #. module: l10n_be
 #: model:ir.model,name:l10n_be.model_partner_vat_list
@@ -572,177 +597,183 @@ msgstr "partner.vat.list"
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_rservelgale3
 msgid "Réserve légale"
-msgstr "Zakonske rezerve"
+msgstr "Réserve légale"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_capitauxpropres1
 msgid "CAPITAUX PROPRES"
-msgstr "LASTNIŠKI KAPITAL"
+msgstr "CAPITAUX PROPRES"
 
 #. module: l10n_be
 #: code:addons/l10n_be/wizard/l10n_be_partner_vat_listing.py:69
 #, python-format
 msgid "No belgian contact with a VAT number in your database."
-msgstr "V vaši podatkovni bazi ni belgijskega stika z DDV številko."
+msgstr "No belgian contact with a VAT number in your database."
 
 #. module: l10n_be
-#: field:l1on_be.vat.declaration,msg:0 field:partner.vat.intra,msg:0
+#: field:l1on_be.vat.declaration,msg:0
+#: field:partner.vat.intra,msg:0
 msgid "File created"
-msgstr "Datoteka ustvarjena"
+msgstr "File created"
 
 #. module: l10n_be
 #: view:partner.vat.list:0
 msgid "Customers"
-msgstr "Kupci"
+msgstr "Customers"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_chargesexceptionnelles1
 msgid "Charges exceptionnelles"
-msgstr "Izredni odhodki"
+msgstr "Charges exceptionnelles"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_chiffredaffaires3
 msgid "Chiffre d'affaires"
-msgstr "Prihodki od prodaje"
+msgstr "Chiffre d'affaires"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_autreschargesdexploitation2
 msgid "Autres charges d'exploitation"
-msgstr "Drugi poslovni odhodki"
+msgstr "Autres charges d'exploitation"
 
 #. module: l10n_be
 #: code:addons/l10n_be/wizard/l10n_be_partner_vat_listing.py:296
 #, python-format
 msgid "XML File has been Created"
-msgstr "XML datoteka je bila ustvarjena"
+msgstr "XML File has been Created"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_belgium_bs
 msgid "Belgium Balance Sheet"
-msgstr "Belgijska bilanca stanja"
+msgstr "Belgium Balance Sheet"
 
 #. module: l10n_be
 #: field:l1on_be.vat.declaration,ask_restitution:0
 msgid "Ask Restitution"
-msgstr "Zahtevaj vračilo"
+msgstr "Ask Restitution"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_prov_pr_chargesetdotations2
 msgid ""
 "Provisions pour riques et charges: dotations (utilisations et reprises)"
-msgstr "Rezervacije za tveganja in stroške: sredstva (večkratna uporaba)"
+msgstr ""
+"Provisions pour riques et charges: dotations (utilisations et reprises)"
 
 #. module: l10n_be
 #: view:l1on_be.vat.declaration:0
 msgid "Advanced Options"
-msgstr "Napredne opcije"
+msgstr "Advanced Options"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_produitsexceptionnels1
 msgid "Produits exceptionnels"
-msgstr "Izredni prihodki"
+msgstr "Produits exceptionnels"
 
 #. module: l10n_be
 #: view:vat.listing.clients:0
 msgid "VAT listing"
-msgstr "DDV seznam"
+msgstr "VAT listing"
 
 #. module: l10n_be
 #: field:partner.vat.list,partner_ids:0
 msgid "Clients"
-msgstr "Kupci"
+msgstr "Clients"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_margebrutedexploitation2
 msgid "Marge brute d'exploitation"
-msgstr "Bruto dobiček iz poslovanja"
+msgstr "Marge brute d'exploitation"
 
 #. module: l10n_be
 #: code:addons/l10n_be/wizard/l10n_be_partner_vat_listing.py:265
 #, python-format
 msgid "No data available for the client."
-msgstr "Za stranko ni razpoložljivih podatkov."
+msgstr "No data available for the client."
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_etablissementsdecrdit4
 msgid "Etablissements de crédit"
-msgstr "Kreditne institucije"
+msgstr "Etablissements de crédit"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_terrainsetconstructions2
 msgid "Terrains et constructions"
-msgstr "Zemljišča in objekti"
+msgstr "Terrains et constructions"
 
 #. module: l10n_be
 #: code:addons/l10n_be/wizard/l10n_be_partner_vat_listing.py:69
 #, python-format
 msgid "Error"
-msgstr "Napaka"
+msgstr "Error"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_capitalsouscrit3
 msgid "Capital souscrit"
-msgstr "Osnovni kapital"
+msgstr "Capital souscrit"
 
 #. module: l10n_be
 #: model:ir.actions.act_window,name:l10n_be.action_vat_intra
 msgid "Partner Vat Intra"
-msgstr "Partner DDV EU"
+msgstr "Partner Vat Intra"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_stocks2
 msgid "Stocks"
-msgstr "Zaloge"
+msgstr "Stocks"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_valeursdisponibles1
 msgid "Valeurs disponibles"
-msgstr "Razpoložljive vrednosti"
+msgstr "Valeurs disponibles"
 
 #. module: l10n_be
 #: field:l1on_be.vat.declaration,period_id:0
 msgid "Period"
-msgstr "Obdobje"
+msgstr "Period"
 
 #. module: l10n_be
 #: model:ir.actions.act_window,name:l10n_be.action_vat_declaration
 #: model:ir.model,name:l10n_be.model_l1on_be_vat_declaration
 msgid "Vat Declaration"
-msgstr "DDV napoved"
+msgstr "Vat Declaration"
 
 #. module: l10n_be
 #: model:ir.actions.act_window,name:l10n_be.action_partner_vat_listing
 #: view:partner.vat:0
 msgid "Partner VAT Listing"
-msgstr "DDV seznam partnerjev"
+msgstr "Partner VAT Listing"
 
 #. module: l10n_be
 #: view:partner.vat.intra:0
 msgid "General Information"
-msgstr "Splošne informacije"
+msgstr "General Information"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_immobilisationsfinancires1
 msgid "Immobilisations financières"
-msgstr "Finančna sredstva"
+msgstr "Immobilisations financières"
 
 #. module: l10n_be
 #: view:partner.vat.intra:0
 msgid "Periods"
-msgstr "Obdobja"
+msgstr "Periods"
 
 #. module: l10n_be
 #: view:partner.vat:0
 msgid ""
 "This wizard will create an XML file for VAT details and total invoiced "
 "amounts per partner."
-msgstr "Ta čarovnik ustvari XML datoteko za DDV podrobnosti in skupno zaračunane zneske po partnerju."
+msgstr ""
+"This wizard will create an XML file for VAT details and total invoiced "
+"amounts per partner."
 
 #. module: l10n_be
-#: view:l1on_be.vat.declaration:0 view:partner.vat:0 view:partner.vat.intra:0
+#: view:l1on_be.vat.declaration:0
+#: view:partner.vat:0
+#: view:partner.vat.intra:0
 #: view:partner.vat.list:0
 msgid "Cancel"
-msgstr "Preklic"
+msgstr "Cancel"
 
 #. module: l10n_be
 #: code:addons/l10n_be/wizard/l10n_be_account_vat_declaration.py:112
@@ -750,205 +781,207 @@ msgstr "Preklic"
 #: code:addons/l10n_be/wizard/l10n_be_vat_intra.py:147
 #, python-format
 msgid "No email address associated with the company."
-msgstr "Za družbo ni določenega e-poštnega naslova."
+msgstr "No email address associated with the company."
 
 #. module: l10n_be
-#: view:l1on_be.vat.declaration:0 view:partner.vat.list:0
+#: view:l1on_be.vat.declaration:0
+#: view:partner.vat.list:0
 msgid "Create XML"
-msgstr "Ustvari XML"
+msgstr "Create XML"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_pertereporte0
 msgid "Perte reportée"
-msgstr "Odložena izguba"
+msgstr "Perte reportée"
 
 #. module: l10n_be
 #: field:vat.listing.clients,name:0
 msgid "Client Name"
-msgstr "Naziv stranke"
+msgstr "Client Name"
 
 #. module: l10n_be
 #: view:partner.vat.list:0
 msgid "XML File has been Created."
-msgstr "XML datoteka je bila ustvarjena."
+msgstr "XML File has been Created."
 
 #. module: l10n_be
 #: view:partner.vat:0
 msgid "View Customers"
-msgstr "Prikaz kupcev"
+msgstr "View Customers"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_autresemprunts6
 #: model:account.financial.report,name:l10n_be.account_financial_report_autresemprunts9
 msgid "Autres emprunts"
-msgstr "Druga posojila"
+msgstr "Autres emprunts"
 
 #. module: l10n_be
 #: model:ir.ui.menu,name:l10n_be.menu_account_report_be_pl
 msgid "Profit And Loss"
-msgstr "Izkaz poslovnega izida"
+msgstr "Profit And Loss"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_passif0
 msgid "PASSIF"
-msgstr "PASIVA"
+msgstr "PASSIF"
 
 #. module: l10n_be
 #: view:partner.vat.list:0
 msgid "Print"
-msgstr "Natisni"
+msgstr "Print"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_fournisseurs4
 msgid "Fournisseurs"
-msgstr "Dobavitelji"
+msgstr "Fournisseurs"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_commandesencoursdexcution2
 msgid "Commandes en cours d'exécution"
-msgstr "Proizvodnja v teku (nedokončana proizvodnja)"
+msgstr "Commandes en cours d'exécution"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_actifscirculants0
 msgid "ACTIFS CIRCULANTS"
-msgstr "GIBLJIVA SREDSTVA"
+msgstr "ACTIFS CIRCULANTS"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_capital2
 msgid "Capital"
-msgstr "Kapital"
+msgstr "Capital"
 
 #. module: l10n_be
-#: view:l1on_be.vat.declaration:0 view:partner.vat.intra:0
+#: view:l1on_be.vat.declaration:0
+#: view:partner.vat.intra:0
 #: view:partner.vat.list:0
 msgid "Save the File with '.xml' extension."
-msgstr "Datoteko shrani z '.xml' končnico."
+msgstr "Save the File with '.xml' extension."
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_dettesfiscalessalarialesetsociales3
 msgid "Dettes fiscales, salariales et sociales"
-msgstr "Davčne, plačne in socialne obveznosti"
+msgstr "Dettes fiscales, salariales et sociales"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_autresimmobilisationscorporelles2
 msgid "Autres immobilisations corporelles"
-msgstr "Druga opredmetena osnovna sredstva"
+msgstr "Autres immobilisations corporelles"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_crancesunanauplus1
 msgid "Créances à un an au plus"
-msgstr "Terjatve v roku nad enim letom"
+msgstr "Créances à un an au plus"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_impts4
 msgid "Impôts"
-msgstr "Davki"
+msgstr "Impôts"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_charges_expl_pr_restruct2
 msgid ""
-"Charges d'exploitation portées à l'actif au titre de frais de "
-"restructuration"
-msgstr "Obratovalni stroški, ki izhajajo iz sredstev zaradi prestrukturiranja"
+"Charges d'exploitation portées à l'actif au titre de frais de restructuration"
+msgstr ""
+"Charges d'exploitation portées à l'actif au titre de frais de restructuration"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_rmunrationsetchargessociales4
 msgid "Rémunérations et charges sociales"
-msgstr "Plače in socialna varnost"
+msgstr "Rémunérations et charges sociales"
 
 #. module: l10n_be
 #: model:ir.ui.menu,name:l10n_be.partner_vat_listing
 msgid "Annual Listing Of VAT-Subjected Customers"
-msgstr "Letni DDV seznami - kupci zavezanci"
+msgstr "Annual Listing Of VAT-Subjected Customers"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_bnficepertecouranteavantimpts1
 msgid "Bénéfice (Perte) courant(e) avant impôts"
-msgstr "Tekoči dobiček (izguba) pred obdavčitvijo"
+msgstr "Bénéfice (Perte) courant(e) avant impôts"
 
 #. module: l10n_be
 #: view:partner.vat.intra:0
 msgid "Note: "
-msgstr "Opomba: "
+msgstr "Note: "
 
 #. module: l10n_be
 #: code:addons/l10n_be/wizard/l10n_be_partner_vat_listing.py:99
 #, python-format
 msgid "Vat Listing"
-msgstr "DDV seznam"
+msgstr "Vat Listing"
 
 #. module: l10n_be
 #: model:ir.ui.menu,name:l10n_be.l10_be_vat_declaration
 #: view:l1on_be.vat.declaration:0
 msgid "Periodical VAT Declaration"
-msgstr "Periodična DDV napoved"
+msgstr "Periodical VAT Declaration"
 
 #. module: l10n_be
 #: code:addons/l10n_be/wizard/l10n_be_partner_vat_listing.py:64
 #, python-format
 msgid "No data for the selected year."
-msgstr "Ni podatkov za izbrano leto"
+msgstr "No data for the selected year."
 
 #. module: l10n_be
 #: field:partner.vat,limit_amount:0
 msgid "Limit Amount"
-msgstr "Znesek limita"
+msgstr "Limit Amount"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_provisionsetimpotsdifferes1
 msgid "PROVISIONS ET IMPOTS DIFFERES"
-msgstr "REZERVACIJE IN ODLOŽENI DAVKI"
+msgstr "PROVISIONS ET IMPOTS DIFFERES"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_subsidesencapital2
 msgid "Subsides en capital"
-msgstr "Kapitalske subvencije"
+msgstr "Subsides en capital"
 
 #. module: l10n_be
 #: view:partner.vat.list:0
 msgid "Customer List"
-msgstr "Seznam kupcev"
+msgstr "Customer List"
 
 #. module: l10n_be
 #: view:partner.vat.list:0
 msgid "Annual Listing of VAT-Subjected Customers"
-msgstr "Letni DDV seznami - kupci zavezanci"
+msgstr "Annual Listing of VAT-Subjected Customers"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_mobilieretmatrielroulant2
 msgid "Mobilier et matériel roulant"
-msgstr "Pohištvo in vozila"
+msgstr "Mobilier et matériel roulant"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_capitalnonappel3
 msgid "Capital non appelé"
-msgstr "Ne vpoklicani kapital"
+msgstr "Capital non appelé"
 
 #. module: l10n_be
 #: model:ir.ui.menu,name:l10n_be.menu_finance_belgian_statement
 msgid "Belgium Statements"
-msgstr "Belgijske napovedi"
+msgstr "Belgium Statements"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_belgiumpl0
 msgid "Belgium P&L"
-msgstr "Belgija dobiček/izguba"
+msgstr "Belgium P&L"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_crancescommerciales3
 #: model:account.financial.report,name:l10n_be.account_financial_report_crancescommerciales5
 msgid "Créances commerciales"
-msgstr "Terjatve do kupcev"
+msgstr "Créances commerciales"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_bnficepertedexploitation1
 msgid "Bénéfice (Perte) d'exploitation"
-msgstr "Dobiček (izguba) iz poslovanja"
+msgstr "Bénéfice (Perte) d'exploitation"
 
 #. module: l10n_be
 #: view:l1on_be.vat.declaration:0
 msgid "Declare Periodical VAT"
-msgstr "Oddaj periodično napoved DDV"
+msgstr "Declare Periodical VAT"
 
 #. module: l10n_be
 #: model:ir.model,name:l10n_be.model_partner_vat
@@ -958,46 +991,96 @@ msgstr "partner.vat"
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_dettesplusdunanchantdanslanne3
 msgid "Dettes à plus d'un an échéant dans l'année"
-msgstr "Zneski, ki se plačujejo po enem letu zapadli v tekočem letu"
+msgstr "Dettes à plus d'un an échéant dans l'année"
 
 #. module: l10n_be
 #: code:addons/l10n_be/wizard/l10n_be_partner_vat_listing.py:184
 #, python-format
 msgid "No VAT number associated with the company."
-msgstr "Za glavno družbo ni povezane ID številke za DDV."
+msgstr "No VAT number associated with the company."
 
 #. module: l10n_be
-#: field:l1on_be.vat.declaration,name:0 field:partner.vat.intra,name:0
+#: field:l1on_be.vat.declaration,name:0
+#: field:partner.vat.intra,name:0
 #: field:partner.vat.list,name:0
 msgid "File Name"
-msgstr "Naziv datoteke"
+msgstr "File Name"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_etablissementcredits4
 msgid "Etablissements de crédit, dettes de location-financement et assimilés"
-msgstr "Krediti, leasing in podobni dolgovi"
+msgstr ""
+"Etablissements de crédit, dettes de location-financement et assimilés"
 
 #. module: l10n_be
 #: field:l1on_be.vat.declaration,ask_payment:0
 msgid "Ask Payment"
-msgstr "Zahtevaj plačilo"
+msgstr "Ask Payment"
 
 #. module: l10n_be
 #: field:partner.vat,year:0
 msgid "Year"
-msgstr "Leto"
+msgstr "Year"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_rservesindisponibles3
 msgid "Réserves indisponibles"
-msgstr "Ne razpoložljive rezerve"
+msgstr "Réserves indisponibles"
 
 #. module: l10n_be
 #: view:partner.vat.list:0
 msgid "Free Comments to be Added to the Declaration"
-msgstr "Komentarji, ki se dodajo napovedi"
+msgstr "Free Comments to be Added to the Declaration"
 
 #. module: l10n_be
 #: model:account.financial.report,name:l10n_be.account_financial_report_rservesdisponibles3
 msgid "Réserves disponibles"
-msgstr "Razpoložljive rezerve"
+msgstr "Réserves disponibles"
+
+#~ msgid "Ok"
+#~ msgstr "V redu"
+
+#~ msgid "Oct/Nov/Dec"
+#~ msgstr "Okt/Nov/Dec"
+
+#~ msgid "Notification"
+#~ msgstr "Obvestilo"
+
+#~ msgid "Select Fiscal Year"
+#~ msgstr "Izberi davčno leto"
+
+#~ msgid "Apr/May/Jun"
+#~ msgstr "Apr/Maj/Jun"
+
+#~ msgid "Error ! You can not create recursive account templates."
+#~ msgstr "Napaka! Ne morete oblikovati rekurzivnih predlog kontov."
+
+#~ msgid "Error ! You can not create recursive Tax Codes."
+#~ msgstr "Napaka! Ne morete oblikovati rekurzivnih davčnih oznak."
+
+#~ msgid "Fiscal Year"
+#~ msgstr "Davčno leto"
+
+#~ msgid "Tax"
+#~ msgstr "Davek"
+
+#~ msgid "Jan/Feb/Mar"
+#~ msgstr "Jan/Feb/Mar"
+
+#~ msgid "Jul/Aug/Sep"
+#~ msgstr "Jul/Avg/Sep"
+
+#~ msgid "Error! You can not create recursive companies."
+#~ msgstr "Napaka! Ne morete ustvariti rekurzivnih podjetij."
+
+#~ msgid "Companies"
+#~ msgstr "Podjetja"
+
+#~ msgid "Country"
+#~ msgstr "Država"
+
+#~ msgid "Amount"
+#~ msgstr "Količina"
+
+#~ msgid "Close"
+#~ msgstr "Zapri"

@@ -25,7 +25,6 @@
     'version': '1.0',
     'category': 'Hardware Drivers',
     'sequence': 6,
-    'website': 'https://www.odoo.com/page/point-of-sale',
     'summary': 'Hardware Driver for ESC/POS Printers and Cashdrawers',
     'description': """
 ESC/POS Hardware Driver

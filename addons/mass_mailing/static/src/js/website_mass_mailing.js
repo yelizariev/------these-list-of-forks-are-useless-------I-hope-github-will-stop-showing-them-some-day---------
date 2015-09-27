@@ -20,8 +20,10 @@
                 self.$target.find('a.js_subscribe_btn')
                     .attr("disabled", data.is_subscriber && data.email.length ? "disabled" : false);
                 self.$target.removeClass("hidden");
-                self.$target.find('.js_subscribe_btn').toggleClass('hidden', !!data.is_subscriber);
-                self.$target.find('.js_subscribed_btn').toggleClass('hidden', !data.is_subscriber);
+                if (data.is_subscriber) {
+                    self.$target.find('.js_subscribe_btn').addClass('hidden');
+                    self.$target.find('.js_subscribed_btn').removeClass('hidden');
+                }
             });
 
             // not if editable mode to allow designer to edit alert field

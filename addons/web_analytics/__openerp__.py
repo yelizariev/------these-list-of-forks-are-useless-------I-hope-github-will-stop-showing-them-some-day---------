@@ -30,7 +30,7 @@ Google Analytics.
 Collects web application usage with Google Analytics.
     """,
     'author': 'OpenERP SA',
-    'website': 'https://www.odoo.com/page/website-builder',
+    'website': 'http://openerp.com',
     'depends': ['web'],
     'data': [
         'views/web_analytics.xml',

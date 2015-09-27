@@ -27,7 +27,7 @@ function openerp_pos_widgets(instance, module){ //module is instance.point_of_sa
                             oldest_key  = key;
                         }
                     }
-                    if(oldest_key){
+                    if(oldestKey){
                         delete this.cache[oldest_key];
                         delete this.access_time[oldest_key];
                     }
@@ -294,7 +294,7 @@ function openerp_pos_widgets(instance, module){ //module is instance.point_of_sa
                     var ss = self.pos.pos_widget.screen_selector;
                     if(ss.get_current_screen() === 'clientlist'){
                         ss.back();
-                    }else if (ss.get_current_screen() !== 'receipt'){
+                    }else{
                         ss.set_current_screen('clientlist');
                     }
                 }else{
@@ -519,16 +519,9 @@ function openerp_pos_widgets(instance, module){ //module is instance.point_of_sa
             }
 
             var list_container = el_node.querySelector('.category-list');
-            if (list_container) { 
-                if (!hasimages) {
-                    list_container.classList.add('simple');
-                } else {
-                    list_container.classList.remove('simple');
-                }
-                for(var i = 0, len = this.subcategories.length; i < len; i++){
-                    list_container.appendChild(this.render_category(this.subcategories[i],hasimages));
-                };
-            }
+            for(var i = 0, len = this.subcategories.length; i < len; i++){
+                list_container.appendChild(this.render_category(this.subcategories[i],hasimages));
+            };
 
             var buttons = el_node.querySelectorAll('.js-category-switch');
             for(var i = 0; i < buttons.length; i++){
@@ -539,9 +532,6 @@ function openerp_pos_widgets(instance, module){ //module is instance.point_of_sa
             this.product_list_widget.set_product_list(products);
 
             this.el.querySelector('.searchbox input').addEventListener('keyup',this.search_handler);
-            $('.searchbox input', this.el).keypress(function(e){
-                e.stopPropagation();
-            });
 
             this.el.querySelector('.search-clear').addEventListener('click',this.clear_search_handler);
 
@@ -807,19 +797,6 @@ function openerp_pos_widgets(instance, module){ //module is instance.point_of_sa
             this.$('.button.reference').click(function(){
                 self.pos.barcode_reader.scan(self.$('input.ean').val());
             });
-            this.$('.button.show_orders').click(function(){
-                self.pos.pos_widget.screen_selector.show_popup('unsent-orders');
-            });
-            this.$('.button.delete_orders').click(function(){
-                self.pos.pos_widget.screen_selector.show_popup('confirm',{
-                    message: _t('Delete Unsent Orders ?'),
-                    comment: _t('This operation will permanently destroy all unsent orders from the local storage. You will lose all the data. This operation cannot be undone.'),
-                    confirm: function(){
-                        self.pos.db.remove_all_orders();
-                        self.pos.set({synch: { state:'connected', pending: 0 }});
-                    },
-                });
-            });
             _.each(this.eans, function(ean, name){
                 self.$('.button.'+name).click(function(){
                     self.$('input.ean').val(ean);
@@ -863,7 +840,7 @@ function openerp_pos_widgets(instance, module){ //module is instance.point_of_sa
                 self.set_status(synch.state, synch.pending);
             });
             this.$el.click(function(){
-                self.pos.push_order();
+                self.pos.flush();
             });
         },
     });
@@ -975,7 +952,7 @@ function openerp_pos_widgets(instance, module){ //module is instance.point_of_sa
                 $('.oe_web_client').off();
                 $('.openerp_webclient_container').off();
 
-
+                self.build_currency_template();
                 self.renderElement();
                 
                 self.$('.neworder-button').click(function(){
@@ -1020,45 +997,26 @@ function openerp_pos_widgets(instance, module){ //module is instance.point_of_sa
 
                 instance.webclient.set_content_full_screen(true);
 
+                if (!self.pos.session) {
+                    self.screen_selector.show_popup('error', 'Sorry, we could not create a user session');
+                }else if(!self.pos.config){
+                    self.screen_selector.show_popup('error', 'Sorry, we could not find any PoS Configuration for this session');
+                }
+            
                 self.$('.loader').animate({opacity:0},1500,'swing',function(){self.$('.loader').addClass('oe_hidden');});
-                
-                instance.web.cordova.send('posready');
 
-                self.pos.push_order();
+                self.pos.flush();
 
-            }).fail(function(err){   // error when loading models data from the backend
-                self.loading_error(err);
+            }).fail(function(){   // error when loading models data from the backend
+                return new instance.web.Model("ir.model.data").get_func("search_read")([['name', '=', 'action_pos_session_opening']], ['res_id'])
+                    .pipe( _.bind(function(res){
+                        return instance.session.rpc('/web/action/load', {'action_id': res[0]['res_id']})
+                            .pipe(_.bind(function(result){
+                                var action = result.result;
+                                this.do_action(action);
+                            }, this));
+                    }, self));
             });
-        },
-        loading_error: function(err){
-            var self = this;
-
-            var message = err.message;
-            var comment = err.stack;
-
-            if(err.message === 'XmlHttpRequestError '){
-                message = 'Network Failure (XmlHttpRequestError)';
-                comment = 'The Point of Sale could not be loaded due to a network problem.\n Please check your internet connection.';
-            }else if(err.message === 'OpenERP Server Error'){
-                message = err.data.message;
-                comment = err.data.debug;
-            }
-
-            if( typeof comment !== 'string' ){
-                comment = 'Traceback not available.';
-            }
-
-            var popup = $(QWeb.render('ErrorTracebackPopupWidget',{
-                widget: { message: message, comment: comment },
-            }));
-
-            popup.find('.button').click(function(){
-                self.close();
-            });
-
-            popup.css({ zindex: 9001 });
-
-            popup.appendTo(this.$el);
         },
         loading_progress: function(fac){
             this.$('.loader .loader-feedback').removeClass('oe_hidden');
@@ -1112,34 +1070,26 @@ function openerp_pos_widgets(instance, module){ //module is instance.point_of_sa
             this.error_barcode_popup = new module.ErrorBarcodePopupWidget(this, {});
             this.error_barcode_popup.appendTo(this.$el);
 
-            this.error_traceback_popup = new module.ErrorTracebackPopupWidget(this,{});
-            this.error_traceback_popup.appendTo(this.$el);
+            this.error_session_popup = new module.ErrorSessionPopupWidget(this, {});
+            this.error_session_popup.appendTo(this.$el);
+
+            this.choose_receipt_popup = new module.ChooseReceiptPopupWidget(this, {});
+            this.choose_receipt_popup.appendTo(this.$el);
+
+            this.error_no_client_popup = new module.ErrorNoClientPopupWidget(this, {});
+            this.error_no_client_popup.appendTo(this.$el);
+
+            this.error_invoice_transfer_popup = new module.ErrorInvoiceTransferPopupWidget(this, {});
+            this.error_invoice_transfer_popup.appendTo(this.$el);
 
             this.confirm_popup = new module.ConfirmPopupWidget(this,{});
             this.confirm_popup.appendTo(this.$el);
-
-            this.unsent_orders_popup = new module.UnsentOrdersPopupWidget(this,{});
-            this.unsent_orders_popup.appendTo(this.$el);
 
             // --------  Misc ---------
 
             this.close_button = new module.HeaderButtonWidget(this,{
                 label: _t('Close'),
-                action: function(){ 
-                    var self = this;
-                    if (!this.confirmed) {
-                        this.$el.addClass('confirm');
-                        this.$el.text(_t('Confirm'));
-                        this.confirmed = setTimeout(function(){
-                            self.$el.removeClass('confirm');
-                            self.$el.text(_t('Close'));
-                            self.confirmed = false;
-                        },2000);
-                    } else {
-                        clearTimeout(this.confirmed);
-                        this.pos_widget.close();
-                    }
-                },
+                action: function(){ self.close(); },
             });
             this.close_button.appendTo(this.$('.pos-rightheader'));
 
@@ -1185,9 +1135,11 @@ function openerp_pos_widgets(instance, module){ //module is instance.point_of_sa
                 popup_set:{
                     'error': this.error_popup,
                     'error-barcode': this.error_barcode_popup,
-                    'error-traceback': this.error_traceback_popup,
+                    'error-session': this.error_session_popup,
+                    'choose-receipt': this.choose_receipt_popup,
+                    'error-no-client': this.error_no_client_popup,
+                    'error-invoice-transfer': this.error_invoice_transfer_popup,
                     'confirm': this.confirm_popup,
-                    'unsent-orders': this.unsent_orders_popup,
                 },
                 default_screen: 'products',
                 default_mode: 'cashier',
@@ -1236,18 +1188,8 @@ function openerp_pos_widgets(instance, module){ //module is instance.point_of_sa
             var self = this;
 
             function close(){
-                self.pos.push_order().then(function(){
-                    instance.web.cordova.send('poslogout');
-                    return new instance.web.Model("ir.model.data").get_func("search_read")([['name', '=', 'action_client_pos_menu']], ['res_id']).pipe(function(res) {
-                        window.location = '/web#action=' + res[0]['res_id'];
-                    },function(err,event) {
-                        event.preventDefault();
-                        self.screen_selector.show_popup('error',{
-                            'message': _t('Could not close the point of sale.'),
-                            'comment': _t('Your internet connection is probably down.'),
-                        });
-                        self.close_button.renderElement();
-                    });
+                return new instance.web.Model("ir.model.data").get_func("search_read")([['name', '=', 'action_client_pos_menu']], ['res_id']).pipe(function(res) {
+                    window.location = '/web#action=' + res[0]['res_id'];
                 });
             }
 
@@ -1256,10 +1198,10 @@ function openerp_pos_widgets(instance, module){ //module is instance.point_of_sa
             });
             if(draft_order){
                 if (confirm(_t("Pending orders will be lost.\nAre you sure you want to leave this session?"))) {
-                    close();
+                    return close();
                 }
             }else{
-                close();
+                return close();
             }
         },
         destroy: function() {

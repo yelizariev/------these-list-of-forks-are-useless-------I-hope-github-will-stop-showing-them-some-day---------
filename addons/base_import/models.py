@@ -48,7 +48,7 @@ class ir_import(orm.TransientModel):
 
             .. attribute:: name (str)
 
-                The field's logical (Odoo) name within the scope of
+                The field's logical (OpenERP) name within the scope of
                 its parent.
 
             .. attribute:: string (str)
@@ -136,11 +136,7 @@ class ir_import(orm.TransientModel):
             StringIO(record.file),
             quotechar=str(options['quoting']),
             delimiter=str(options['separator']))
-
-        def nonempty(row):
-            return any(x for x in row if x.strip())
-
-        csv_nonempty = itertools.ifilter(nonempty, csv_iterator)
+        csv_nonempty = itertools.ifilter(None, csv_iterator)
         # TODO: guess encoding with chardet? Or https://github.com/aadsm/jschardet
         encoding = options.get('encoding', 'utf-8')
         return itertools.imap(
@@ -158,19 +154,12 @@ class ir_import(orm.TransientModel):
                   all the fields to traverse
         :rtype: list(Field)
         """
-        string_match = None
         for field in fields:
             # FIXME: should match all translations & original
             # TODO: use string distance (levenshtein? hamming?)
-            if header.lower() == field['name'].lower():
+            if header == field['name'] \
+              or header.lower() == field['string'].lower():
                 return [field]
-            if header.lower() == field['string'].lower():
-                # matching string are not reliable way because
-                # strings have no unique constraint
-                string_match = field
-        if string_match:
-            # this behavior is only applied if there is no matching field['name']
-            return [string_match]
 
         if '/' not in header:
             return []

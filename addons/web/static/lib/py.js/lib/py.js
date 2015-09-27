@@ -547,13 +547,11 @@ var py = {};
     };
     py.PY_call = function (callable, args, kwargs) {
         if (!args) {
-            args = [];
-        }
-        if (typeof args === 'object' && !(args instanceof Array)) {
+            args = []; kwargs = {};
+        } else if (typeof args === 'object' && !(args instanceof Array)) {
             kwargs = args;
             args = [];
-        }
-        if (!kwargs) {
+        } else if (!kwargs) {
             kwargs = {};
         }
         if (callable.__is_type) {

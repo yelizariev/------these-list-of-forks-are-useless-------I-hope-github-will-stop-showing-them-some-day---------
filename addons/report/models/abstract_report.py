@@ -54,9 +54,7 @@ class AbstractReport(osv.AbstractModel):
 
         # Rendering self._template with the wrapped report instance localcontext as
         # rendering environment
-        docargs = dict(wrapped_report.localcontext)
-        if not docargs.get('lang'):
-            docargs.pop('lang', False)
+        docargs = wrapped_report.localcontext
         docargs['docs'] = docargs.get('objects')
 
         # Used in template translation (see translate_doc method from report model)

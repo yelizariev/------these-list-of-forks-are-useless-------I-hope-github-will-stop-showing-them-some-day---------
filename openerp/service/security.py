@@ -27,9 +27,10 @@ def login(db, login, password):
     return res_users._login(db, login, password)
 
 def check_super(passwd):
-    if passwd and passwd == openerp.tools.config['admin_passwd']:
+    if passwd == openerp.tools.config['admin_passwd']:
         return True
-    raise openerp.exceptions.AccessDenied()
+    else:
+        raise openerp.exceptions.AccessDenied()
 
 def check(db, uid, passwd):
     res_users = openerp.registry(db)['res.users']

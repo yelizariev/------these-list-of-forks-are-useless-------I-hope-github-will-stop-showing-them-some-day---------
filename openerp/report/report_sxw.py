@@ -38,7 +38,6 @@ from openerp import SUPERUSER_ID
 from openerp.osv.fields import float as float_field, function as function_field, datetime as datetime_field
 from openerp.tools.translate import _
 from openerp.tools import DEFAULT_SERVER_DATE_FORMAT, DEFAULT_SERVER_DATETIME_FORMAT
-from openerp.tools.safe_eval import safe_eval as eval
 
 _logger = logging.getLogger(__name__)
 
@@ -193,9 +192,7 @@ class rml_parse(object):
         elif (hasattr(obj, '_field') and\
                 isinstance(obj._field, (float_field, function_field)) and\
                 obj._field.digits):
-                d = obj._field.digits[1]
-                if not d and d is not 0:
-                    d = DEFAULT_DIGITS
+                d = obj._field.digits[1] or DEFAULT_DIGITS
         return d
 
     def formatLang(self, value, digits=None, date=False, date_time=False, grouping=True, monetary=False, dp=False, currency_obj=False):
@@ -247,13 +244,12 @@ class rml_parse(object):
         res = self.lang_dict['lang_obj'].format('%.' + str(digits) + 'f', value, grouping=grouping, monetary=monetary)
         if currency_obj:
             if currency_obj.position == 'after':
-                res = u'%s\N{NO-BREAK SPACE}%s' % (res, currency_obj.symbol)
+                res='%s %s'%(res,currency_obj.symbol)
             elif currency_obj and currency_obj.position == 'before':
-                res = u'%s\N{NO-BREAK SPACE}%s' % (currency_obj.symbol, res)
+                res='%s %s'%(currency_obj.symbol, res)
         return res
 
-    def display_address(self, address_record, without_company=False):
-        # FIXME handle `without_company`
+    def display_address(self, address_record):
         return address_record.contact_address
 
     def repeatIn(self, lst, name,nodes_parent=False):

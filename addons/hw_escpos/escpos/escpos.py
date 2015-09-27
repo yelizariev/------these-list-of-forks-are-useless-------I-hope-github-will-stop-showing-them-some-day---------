@@ -1,4 +1,15 @@
 # -*- coding: utf-8 -*-
+'''
+@author: Manuel F Martinez <manpaz@bashlinux.com>
+@organization: Bashlinux
+@copyright: Copyright (c) 2012 Bashlinux
+@license: GPL
+'''
+
+try: 
+    import qrcode
+except ImportError:
+    qrcode = None
 
 import time
 import copy
@@ -17,11 +28,8 @@ try:
     import jcconv
 except ImportError:
     jcconv = None
-
-try: 
-    import qrcode
-except ImportError:
-    qrcode = None
+    print 'ESC/POS: please install jcconv for improved Japanese receipt printing:'
+    print ' # pip install jcconv'
 
 from constants import *
 from exceptions import *
@@ -81,41 +89,29 @@ class StyleStack:
                 'left':     TXT_ALIGN_LT,
                 'right':    TXT_ALIGN_RT,
                 'center':   TXT_ALIGN_CT,
-                '_order':   1,
             },
             'underline': {
                 'off':      TXT_UNDERL_OFF,
                 'on':       TXT_UNDERL_ON,
                 'double':   TXT_UNDERL2_ON,
-                # must be issued after 'size' command
-                # because ESC ! resets ESC -
-                '_order':   10,
             },
             'bold': {
                 'off':      TXT_BOLD_OFF,
                 'on':       TXT_BOLD_ON,
-                # must be issued after 'size' command
-                # because ESC ! resets ESC -
-                '_order':   10,
             },
             'font': {
                 'a':        TXT_FONT_A,
                 'b':        TXT_FONT_B,
-                # must be issued after 'size' command
-                # because ESC ! resets ESC -
-                '_order':   10,
             },
             'size': {
                 'normal':           TXT_NORMAL,
                 'double-height':    TXT_2HEIGHT,
                 'double-width':     TXT_2WIDTH,
                 'double':           TXT_DOUBLE,
-                '_order':   1,
             },
             'color': {
                 'black':    TXT_COLOR_BLACK,
                 'red':      TXT_COLOR_RED,
-                '_order':   1,
             },
         }
 
@@ -169,9 +165,7 @@ class StyleStack:
     def to_escpos(self):
         """ converts the current style to an escpos command string """
         cmd = ''
-        ordered_cmds = self.cmds.keys()
-        ordered_cmds.sort(lambda x,y: cmp(self.cmds[x]['_order'], self.cmds[y]['_order']))
-        for style in ordered_cmds:
+        for style in self.cmds:
             cmd += self.cmds[style][self.get(style)]
         return cmd
 
@@ -444,12 +438,7 @@ class Escpos:
             f.seek(0)
             img_rgba = Image.open(f)
             img = Image.new('RGB', img_rgba.size, (255,255,255))
-            channels = img_rgba.split()
-            if len(channels) > 1:
-                # use alpha channel as mask
-                img.paste(img_rgba, mask=channels[3])
-            else:
-                img.paste(img_rgba)
+            img.paste(img_rgba, mask=img_rgba.split()[3]) 
 
             print 'convert image'
         
@@ -748,7 +737,6 @@ class Escpos:
                     'cp866': TXT_ENC_PC866,
                     'cp862': TXT_ENC_PC862,
                     'cp720': TXT_ENC_PC720,
-                    'cp936': TXT_ENC_PC936,
                     'iso8859_2': TXT_ENC_8859_2,
                     'iso8859_7': TXT_ENC_8859_7,
                     'iso8859_9': TXT_ENC_8859_9,

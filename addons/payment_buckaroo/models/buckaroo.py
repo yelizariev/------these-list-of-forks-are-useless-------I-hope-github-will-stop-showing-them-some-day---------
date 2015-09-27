@@ -57,8 +57,6 @@ class AcquirerBuckaroo(osv.Model):
                 return values[key]
             return ''
 
-        values = dict(values or {})
-
         if inout == 'out':
             if 'BRQ_SIGNATURE' in values:
                 del values['BRQ_SIGNATURE']
@@ -83,12 +81,12 @@ class AcquirerBuckaroo(osv.Model):
             'Brq_amount': tx_values['amount'],
             'Brq_currency': tx_values['currency'] and tx_values['currency'].name or '',
             'Brq_invoicenumber': tx_values['reference'],
-            'brq_test': False if acquirer.environment == 'prod' else True,
+            'brq_test' : True,
             'Brq_return': '%s' % urlparse.urljoin(base_url, BuckarooController._return_url),
             'Brq_returncancel': '%s' % urlparse.urljoin(base_url, BuckarooController._cancel_url),
             'Brq_returnerror': '%s' % urlparse.urljoin(base_url, BuckarooController._exception_url),
             'Brq_returnreject': '%s' % urlparse.urljoin(base_url, BuckarooController._reject_url),
-            'Brq_culture': (partner_values.get('lang') or 'en_US').replace('_', '-'),
+            'Brq_culture': 'en-US',
         })
         if buckaroo_tx_values.get('return_url'):
             buckaroo_tx_values['add_returndata'] = {'return_url': '%s' % buckaroo_tx_values.pop('return_url')}

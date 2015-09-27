@@ -5,6 +5,7 @@
     company_id: base.main_company
     name: Accountant  
     login: acc
+    password: acc
     email: accountuser@yourcompany.com
 -
   I added groups for Accountant.
@@ -20,6 +21,7 @@
     company_id: base.main_company
     name: Financial Manager
     login: fm
+    password: fm
     email: accountmanager@yourcompany.com
 -
   I added groups for Financial Manager.

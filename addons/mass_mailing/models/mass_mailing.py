@@ -9,7 +9,6 @@ from openerp import tools
 from openerp.exceptions import Warning
 from openerp.tools.safe_eval import safe_eval as eval
 from openerp.tools.translate import _
-from openerp.tools import ustr
 from openerp.osv import osv, fields
 
 
@@ -24,35 +23,12 @@ class MassMailingCategory(osv.Model):
     }
 
 
-class MassMailingList(osv.Model):
-    """Model of a contact list. """
-    _name = 'mail.mass_mailing.list'
-    _order = 'name'
-    _description = 'Mailing List'
-
-    def _get_contact_nbr(self, cr, uid, ids, name, arg, context=None):
-        result = dict.fromkeys(ids, 0)
-        Contacts = self.pool.get('mail.mass_mailing.contact')
-        for group in Contacts.read_group(cr, uid, [('list_id', 'in', ids), ('opt_out', '!=', True)], ['list_id'], ['list_id'], context=context):
-            result[group['list_id'][0]] = group['list_id_count']
-        return result
-
-    _columns = {
-        'name': fields.char('Mailing List', required=True),
-        'contact_nbr': fields.function(
-            _get_contact_nbr, type='integer',
-            string='Number of Contacts',
-        ),
-    }
-
-
 class MassMailingContact(osv.Model):
     """Model of a contact. This model is different from the partner model
     because it holds only some basic information: name, email. The purpose is to
     be able to deal with large contact list to email without bloating the partner
     base."""
     _name = 'mail.mass_mailing.contact'
-    _inherit = 'mail.thread'
     _description = 'Mass Mailing Contact'
     _order = 'email'
     _rec_name = 'email'
@@ -76,22 +52,13 @@ class MassMailingContact(osv.Model):
         'list_id': _get_latest_list
     }
 
-    def get_name_email(self, name, context):
+    def name_create(self, cr, uid, name, context=None):
         name, email = self.pool['res.partner']._parse_partner_name(name, context=context)
         if name and not email:
             email = name
         if email and not name:
             name = email
-        return name, email
-
-    def name_create(self, cr, uid, name, context=None):
-        name, email = self.get_name_email(name, context=context)
         rec_id = self.create(cr, uid, {'name': name, 'email': email}, context=context)
-        return self.name_get(cr, uid, [rec_id], context)[0]
-
-    def add_to_list(self, cr, uid, name, list_id, context=None):
-        name, email = self.get_name_email(name, context=context)
-        rec_id = self.create(cr, uid, {'name': name, 'email': email, 'list_id': list_id}, context=context)
         return self.name_get(cr, uid, [rec_id], context)[0]
 
     def message_get_default_recipients(self, cr, uid, ids, context=None):
@@ -99,6 +66,28 @@ class MassMailingContact(osv.Model):
         for record in self.browse(cr, uid, ids, context=context):
             res[record.id] = {'partner_ids': [], 'email_to': record.email, 'email_cc': False}
         return res
+
+
+class MassMailingList(osv.Model):
+    """Model of a contact list. """
+    _name = 'mail.mass_mailing.list'
+    _order = 'name'
+    _description = 'Mailing List'
+
+    def _get_contact_nbr(self, cr, uid, ids, name, arg, context=None):
+        result = dict.fromkeys(ids, 0)
+        Contacts = self.pool.get('mail.mass_mailing.contact')
+        for group in Contacts.read_group(cr, uid, [('list_id', 'in', ids), ('opt_out', '!=', True)], ['list_id'], ['list_id'], context=context):
+            result[group['list_id'][0]] = group['list_id_count']
+        return result
+
+    _columns = {
+        'name': fields.char('Mailing List', required=True),
+        'contact_nbr': fields.function(
+            _get_contact_nbr, type='integer',
+            string='Number of Contacts',
+        ),
+    }
 
 
 class MassMailingStage(osv.Model):
@@ -273,11 +262,11 @@ class MassMailing(osv.Model):
         """
         date_begin = date_begin.date()
         section_result = [{'value': 0,
-                           'tooltip': ustr((date_begin + relativedelta.relativedelta(days=i)).strftime('%d %B %Y')),
+                           'tooltip': (date_begin + relativedelta.relativedelta(days=i)).strftime('%d %B %Y'),
                            } for i in range(0, self._period_number)]
         group_obj = obj.read_group(cr, uid, domain, read_fields, groupby_field, context=context)
-        field = obj._fields.get(groupby_field.split(':')[0])
-        pattern = tools.DEFAULT_SERVER_DATE_FORMAT if field.type == 'date' else tools.DEFAULT_SERVER_DATETIME_FORMAT
+        field_col_info = obj._all_columns.get(groupby_field.split(':')[0])
+        pattern = tools.DEFAULT_SERVER_DATE_FORMAT if field_col_info.column._type == 'date' else tools.DEFAULT_SERVER_DATETIME_FORMAT
         for group in group_obj:
             group_begin_date = datetime.strptime(group['__domain'][0][2], pattern).date()
             timedelta = relativedelta.relativedelta(group_begin_date, date_begin)
@@ -304,7 +293,7 @@ class MassMailing(osv.Model):
         return res
 
     def _get_statistics(self, cr, uid, ids, name, arg, context=None):
-        """ Compute statistics of the mass mailing """
+        """ Compute statistics of the mass mailing campaign """
         results = {}
         cr.execute("""
             SELECT
@@ -313,9 +302,9 @@ class MassMailing(osv.Model):
                 COUNT(CASE WHEN s.sent is not null THEN 1 ELSE null END) AS sent,
                 COUNT(CASE WHEN s.scheduled is not null AND s.sent is null AND s.exception is null THEN 1 ELSE null END) AS scheduled,
                 COUNT(CASE WHEN s.scheduled is not null AND s.sent is null AND s.exception is not null THEN 1 ELSE null END) AS failed,
-                COUNT(CASE WHEN s.sent is not null AND s.bounced is null THEN 1 ELSE null END) AS delivered,
+                COUNT(CASE WHEN s.id is not null AND s.bounced is null THEN 1 ELSE null END) AS delivered,
                 COUNT(CASE WHEN s.opened is not null THEN 1 ELSE null END) AS opened,
-                COUNT(CASE WHEN s.replied is not null THEN 1 ELSE null END) AS replied,
+                COUNT(CASE WHEN s.replied is not null THEN 1 ELSE null END) AS replied ,
                 COUNT(CASE WHEN s.bounced is not null THEN 1 ELSE null END) AS bounced
             FROM
                 mail_mail_statistics s
@@ -330,6 +319,7 @@ class MassMailing(osv.Model):
         for row in cr.dictfetchall():
             results[row.pop('mailing_id')] = row
             total = row['total'] or 1
+            row['delivered'] = row['sent'] - row['bounced']
             row['received_ratio'] = 100.0 * row['delivered'] / total
             row['opened_ratio'] = 100.0 * row['opened'] / total
             row['replied_ratio'] = 100.0 * row['replied'] / total
@@ -461,7 +451,6 @@ class MassMailing(osv.Model):
         'reply_to': lambda self, cr, uid, ctx=None: self.pool['mail.message']._get_default_from(cr, uid, context=ctx),
         'mailing_model': 'mail.mass_mailing.contact',
         'contact_ab_pc': 100,
-        'mailing_domain': [],
     }
 
     #------------------------------------------------------
@@ -514,11 +503,11 @@ class MassMailing(osv.Model):
                 elif len(item) == 3:
                     mailing_list_ids |= set(item[2])
             if mailing_list_ids:
-                value['mailing_domain'] = "[('list_id', 'in', %s), ('opt_out', '=', False)]" % list(mailing_list_ids)
+                value['mailing_domain'] = "[('list_id', 'in', %s)]" % list(mailing_list_ids)
             else:
                 value['mailing_domain'] = "[('list_id', '=', False)]"
         else:
-            value['mailing_domain'] = []
+            value['mailing_domain'] = False
         return {'value': value}
 
     def action_duplicate(self, cr, uid, ids, context=None):
@@ -551,7 +540,7 @@ class MassMailing(osv.Model):
         if not len(ids) == 1:
             raise ValueError('One and only one ID allowed for this action')
         mail = self.browse(cr, uid, ids[0], context=context)
-        url = '/website_mail/email_designer?model=mail.mass_mailing&res_id=%d&template_model=%s&return_action=%d&enable_editor=1' % (ids[0], mail.mailing_model, context['params']['action'])
+        url = '/website_mail/email_designer?model=mail.mass_mailing&res_id=%d&template_model=%s&enable_editor=1' % (ids[0], mail.mailing_model)
         return {
             'name': _('Open with Visual Editor'),
             'type': 'ir.actions.act_url',
@@ -595,7 +584,6 @@ class MassMailing(osv.Model):
             comp_ctx = dict(context, active_ids=res_ids)
             composer_values = {
                 'author_id': author_id,
-                'attachment_ids': [(4, attachment.id) for attachment in mailing.attachment_ids],
                 'body': mailing.body_html,
                 'subject': mailing.name,
                 'model': mailing.mailing_model,
@@ -604,7 +592,7 @@ class MassMailing(osv.Model):
                 'composition_mode': 'mass_mail',
                 'mass_mailing_id': mailing.id,
                 'mailing_list_ids': [(4, l.id) for l in mailing.contact_list_ids],
-                'no_auto_thread': mailing.reply_to_mode != 'thread',
+                'same_thread': mailing.reply_to_mode == 'thread',
             }
             if mailing.reply_to_mode == 'email':
                 composer_values['reply_to'] = mailing.reply_to

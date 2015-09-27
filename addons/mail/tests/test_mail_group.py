@@ -19,7 +19,7 @@
 #
 ##############################################################################
 
-from .common import TestMail
+from openerp.addons.mail.tests.common import TestMail
 from openerp.exceptions import AccessError
 from openerp.osv.orm import except_orm
 from openerp.tools import mute_logger

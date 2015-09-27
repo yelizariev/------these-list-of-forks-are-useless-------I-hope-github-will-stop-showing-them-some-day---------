@@ -6,10 +6,6 @@
 
     website.seo = {};
 
-    // This replaces \b, because accents(e.g. à, é) are not seen as word boundaries.
-    // Javascript \b is not unicode aware, and words beginning or ending by accents won't match \b
-    var WORD_SEPARATORS_REGEX = '([\\u2000-\\u206F\\u2E00-\\u2E7F\'!"#\\$%&\\(\\)\\*\\+,\\-\\.\\/:;<=>\\?¿¡@\\[\\]\\^_`\\{\\|\\}~\\s]+|^|$)';
-
     function analyzeKeyword(htmlPage, keyword) {
         return  htmlPage.isInTitle(keyword) ? {
                     title: 'label label-primary',
@@ -90,7 +86,7 @@
                     }
                 });
             }
-            $.getJSON("/website/seo_suggest/" + encodeURIComponent(this.root + " "), addSuggestions);
+            $.getJSON("http://suggest.hp.af.cm/suggest/"+encodeURIComponent(this.root + " "), addSuggestions);
         },
     });
 
@@ -297,13 +293,13 @@
             return $('body').children().not('.js_seo_configuration').text();
         },
         isInBody: function (text) {
-            return new RegExp(WORD_SEPARATORS_REGEX+text+WORD_SEPARATORS_REGEX, "gi").test(this.bodyText());
+            return new RegExp("\\b"+text+"\\b", "gi").test(this.bodyText());
         },
         isInTitle: function (text) {
-            return new RegExp(WORD_SEPARATORS_REGEX+text+WORD_SEPARATORS_REGEX, "gi").test(this.title());
+            return new RegExp("\\b"+text+"\\b", "gi").test(this.title());
         },
         isInDescription: function (text) {
-            return new RegExp(WORD_SEPARATORS_REGEX+text+WORD_SEPARATORS_REGEX, "gi").test(this.description());
+            return new RegExp("\\b"+text+"\\b", "gi").test(this.description());
         },
     });
 

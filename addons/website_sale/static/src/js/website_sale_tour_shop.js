@@ -2,8 +2,7 @@
     'use strict';
 
     var _t = openerp._t;
-    var website = openerp.website;
-    website.ready().done(function() {
+
     openerp.Tour.register({
         id: 'shop',
         name: _t("Create a product"),
@@ -63,13 +62,13 @@
                 content:   _t("Click here to set an image describing your product."),
             },
             {
-                element:   '.existing-attachment-cell:eq(4) > img',
+                element:   'img[alt=ipad]',
                 placement: 'top',
                 title:     _t("Select an Image"),
-                content:   _t("Let's select this image."),
+                content:   _t("Let's select an ipad image."),
             },
             {
-                waitFor:   '.existing-attachment-cell:eq(4).media_selected > img',
+                waitFor:   '.media_selected img[alt=ipad]',
                 element:   '.modal-content button.save',
                 placement: 'top',
                 title:     _t("Save this Image"),
@@ -111,7 +110,6 @@
                 popover:   { next: _t("Close Tutorial") },
             },
         ]
-    });
     });
 
 }());

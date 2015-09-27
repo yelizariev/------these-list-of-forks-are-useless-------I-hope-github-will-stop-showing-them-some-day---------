@@ -31,7 +31,6 @@ import openerp
 from openerp import SUPERUSER_ID
 from openerp import tools
 from openerp import workflow
-import openerp.api
 from openerp.osv import fields, osv
 from openerp.osv.orm import browse_record
 import openerp.report.interface
@@ -63,10 +62,6 @@ class actions(osv.osv):
         """unlink ir.action.todo which are related to actions which will be deleted.
            NOTE: ondelete cascade will not work on ir.actions.actions so we will need to do it manually."""
         todo_obj = self.pool.get('ir.actions.todo')
-        if not ids:
-            return True
-        if isinstance(ids, (int, long)):
-            ids = [ids]
         todo_ids = todo_obj.search(cr, uid, [('action_id', 'in', ids)], context=context)
         todo_obj.unlink(cr, uid, todo_ids, context=context)
         return super(actions, self).unlink(cr, uid, ids, context=context)
@@ -133,7 +128,7 @@ class ir_actions_report_xml(osv.osv):
                 else:
                     raise Exception, "Unhandled report type: %s" % r
             else:
-                raise Exception, "Required report does not exist: %s" % name
+                raise Exception, "Required report does not exist: %s" % r
 
         return new_report
 
@@ -269,9 +264,9 @@ class ir_actions_act_window(osv.osv):
         return res
 
     _columns = {
-        'name': fields.char('Action Name', required=True, translate=True),
+        'name': fields.char('Action Name', translate=True),
         'type': fields.char('Action Type', required=True),
-        'view_id': fields.many2one('ir.ui.view', 'View Ref.', ondelete='set null'),
+        'view_id': fields.many2one('ir.ui.view', 'View Ref.', ondelete='cascade'),
         'domain': fields.char('Domain Value',
             help="Optional domain filtering of the destination data, as a Python expression"),
         'context': fields.char('Context Value', required=True,
@@ -316,6 +311,7 @@ class ir_actions_act_window(osv.osv):
         'auto_search':True,
         'multi': False,
     }
+
     def read(self, cr, uid, ids, fields=None, context=None, load='_classic_read'):
         """ call the method get_empty_list_help of the model and set the window action help message
         """
@@ -324,12 +320,26 @@ class ir_actions_act_window(osv.osv):
             ids = [ids]
         results = super(ir_actions_act_window, self).read(cr, uid, ids, fields=fields, context=context, load=load)
 
-        if not fields or 'help' in fields:
-            for res in results:
-                model = res.get('res_model')
-                if model and self.pool.get(model):
-                    ctx = dict(context or {})
-                    res['help'] = self.pool[model].get_empty_list_help(cr, uid, res.get('help', ""), context=ctx)
+        context = dict(context or {})
+        eval_dict = {
+            'active_model': context.get('active_model'),
+            'active_id': context.get('active_id'),
+            'active_ids': context.get('active_ids'),
+            'uid': uid,
+            'context': context,
+        }
+        for res in results:
+            model = res.get('res_model')
+            if model in self.pool:
+                try:
+                    with tools.mute_logger("openerp.tools.safe_eval"):
+                        eval_context = eval(res['context'] or "{}", eval_dict) or {}
+                        res['context'] = str(eval_context)
+                except Exception:
+                    continue
+                if not fields or 'help' in fields:
+                    custom_context = dict(context, **eval_context)
+                    res['help'] = self.pool[model].get_empty_list_help(cr, uid, res.get('help', ""), context=custom_context)
         if ids_int:
             return results[0]
         return results
@@ -393,7 +403,7 @@ class ir_actions_act_url(osv.osv):
     _sequence = 'ir_actions_id_seq'
     _order = 'name'
     _columns = {
-        'name': fields.char('Action Name', required=True, translate=True),
+        'name': fields.char('Action Name', translate=True),
         'type': fields.char('Action Type', required=True),
         'url': fields.text('Action URL',required=True),
         'target': fields.selection((
@@ -484,7 +494,7 @@ class ir_actions_server(osv.osv):
         'model_name': fields.related('model_id', 'model', type='char',
                                      string='Model Name', readonly=True),
         'menu_ir_values_id': fields.many2one('ir.values', 'More Menu entry', readonly=True,
-                                             help='More menu entry.', copy=False),
+                                             help='More menu entry.'),
         # Client Action
         'action_id': fields.many2one('ir.actions.actions', 'Client Action',
                                      help="Select the client action that has to be executed."),
@@ -565,14 +575,16 @@ class ir_actions_server(osv.osv):
         'condition': 'True',
         'type': 'ir.actions.server',
         'sequence': 5,
-        'code': """# Available locals:
-#  - time, datetime, dateutil: Python libraries
-#  - env: Odoo Environement
-#  - model: Model of the record on which the action is triggered
+        'code': """# You can use the following variables:
+#  - self: ORM model of the record on which the action is triggered
 #  - object: Record on which the action is triggered if there is one, otherwise None
+#  - pool: ORM model pool (i.e. self.pool)
+#  - cr: database cursor
+#  - uid: current user id
+#  - context: current context
+#  - time: Python time module
 #  - workflow: Workflow engine
-#  - Warning: Warning Exception to use with raise
-# To return an action, assign: action = {...}""",
+# If you plan to return an action, assign: action = {...}""",
         'use_relational_model': 'base',
         'use_create': 'new',
         'use_write': 'current',
@@ -599,16 +611,16 @@ class ir_actions_server(osv.osv):
         # analyze path
         while path:
             step = path.pop(0)
-            field = self.pool[current_model_name]._fields.get(step)
-            if not field:
+            column_info = self.pool[current_model_name]._all_columns.get(step)
+            if not column_info:
                 return (False, None, 'Part of the expression (%s) is not recognized as a column in the model %s.' % (step, current_model_name))
-            ftype = field.type
-            if ftype not in ['many2one', 'int']:
-                return (False, None, 'Part of the expression (%s) is not a valid column type (is %s, should be a many2one or an int)' % (step, ftype))
-            if ftype == 'int' and path:
+            column_type = column_info.column._type
+            if column_type not in ['many2one', 'int']:
+                return (False, None, 'Part of the expression (%s) is not a valid column type (is %s, should be a many2one or an int)' % (step, column_type))
+            if column_type == 'int' and path:
                 return (False, None, 'Part of the expression (%s) is an integer field that is only allowed at the end of an expression' % (step))
-            if ftype == 'many2one':
-                current_model_name = field.comodel_name
+            if column_type == 'many2one':
+                current_model_name = column_info.column._obj
         return (True, current_model_name, None)
 
     def _check_write_expression(self, cr, uid, ids, context=None):
@@ -728,30 +740,26 @@ class ir_actions_server(osv.osv):
     def on_change_write_expression(self, cr, uid, ids, write_expression, model_id, context=None):
         """ Check the write_expression and update crud_model_id accordingly """
         values = {}
-        if write_expression:
-            valid, model_name, message = self._check_expression(cr, uid, write_expression, model_id, context=context)
-        else:
-            valid, model_name, message = True, None, False
-            if model_id:
-                model_name = self.pool['ir.model'].browse(cr, uid, model_id, context).model
-        if not valid:
-            return {
-                'warning': {
-                    'title': 'Incorrect expression',
-                    'message': message or 'Invalid expression',
-                }
-            }
-        if model_name:
+        valid, model_name, message = self._check_expression(cr, uid, write_expression, model_id, context=context)
+        if valid:
             ref_model_id = self.pool['ir.model'].search(cr, uid, [('model', '=', model_name)], context=context)[0]
             values['crud_model_id'] = ref_model_id
             return {'value': values}
-        return {'value': {}}
+        if not message:
+            message = 'Invalid expression'
+        return {
+            'warning': {
+                'title': 'Incorrect expression',
+                'message': message,
+            }
+        }
 
     def on_change_crud_model_id(self, cr, uid, ids, crud_model_id, context=None):
         """ When changing the CRUD model, update its stored name also """
         crud_model_name = False
         if crud_model_id:
             crud_model_name = self.pool.get('ir.model').browse(cr, uid, crud_model_id, context).model
+        
         values = {'link_field_id': False, 'crud_model_name': crud_model_name}
         return {'value': values}
 
@@ -844,22 +852,29 @@ class ir_actions_server(osv.osv):
          - `relational`: find the related model and object, using the relational
            field, then target_model_pool.signal_workflow(cr, uid, target_id, <TRIGGER_NAME>)
         """
-        # weird signature and calling -> no self.env, use action param's
-        record = action.env[action.model_id.model].browse(context['active_id'])
-        if action.use_relational_model == 'relational':
-            record = getattr(record, action.wkf_field_id.name)
-            if not isinstance(record, openerp.models.BaseModel):
-                record = action.env[action.wkf_model_id.model].browse(record)
+        obj_pool = self.pool[action.model_id.model]
+        if action.use_relational_model == 'base':
+            target_id = context.get('active_id')
+            target_pool = obj_pool
+        else:
+            value = getattr(obj_pool.browse(cr, uid, context.get('active_id'), context=context), action.wkf_field_id.name)
+            if action.wkf_field_id.ttype == 'many2one':
+                target_id = value.id
+            else:
+                target_id = value
+            target_pool = self.pool[action.wkf_model_id.model]
 
-        record.signal_workflow(action.wkf_transition_id.signal)
+        trigger_name = action.wkf_transition_id.signal
+
+        workflow.trg_validate(uid, target_pool._name, target_id, trigger_name, cr)
 
     def run_action_multi(self, cr, uid, action, eval_context=None, context=None):
-        res = False
+        res = []
         for act in action.child_ids:
-            result = self.run(cr, uid, [act.id], context=context)
+            result = self.run(cr, uid, [act.id], context)
             if result:
-                res = result
-        return res
+                res.append(result)
+        return res and res[0] or False
 
     def run_action_object_write(self, cr, uid, action, eval_context=None, context=None):
         """ Write server action.
@@ -873,7 +888,11 @@ class ir_actions_server(osv.osv):
         """
         res = {}
         for exp in action.fields_lines:
-            res[exp.col1.name] = exp.eval_value(eval_context=eval_context)[exp.id]
+            if exp.type == 'equation':
+                expr = eval(exp.value, eval_context)
+            else:
+                expr = exp.value
+            res[exp.col1.name] = expr
 
         if action.use_write == 'current':
             model = action.model_id.model
@@ -906,7 +925,11 @@ class ir_actions_server(osv.osv):
         """
         res = {}
         for exp in action.fields_lines:
-            res[exp.col1.name] = exp.eval_value(eval_context=eval_context)[exp.id]
+            if exp.type == 'equation':
+                expr = eval(exp.value, eval_context)
+            else:
+                expr = exp.value
+            res[exp.col1.name] = expr
 
         if action.use_create in ['new', 'copy_current']:
             model = action.model_id.model
@@ -933,35 +956,25 @@ class ir_actions_server(osv.osv):
         :param action: the current server action
         :type action: browse record
         :returns: dict -- evaluation context given to (safe_)eval """
+        user = self.pool.get('res.users').browse(cr, uid, uid, context=context)
         obj_pool = self.pool[action.model_id.model]
-        env = openerp.api.Environment(cr, uid, context)
-        model = env[action.model_id.model]
         obj = None
         if context.get('active_model') == action.model_id.model and context.get('active_id'):
-            obj = model.browse(context['active_id'])
+            obj = obj_pool.browse(cr, uid, context['active_id'], context=context)
         return {
-            # python libs
+            'self': obj_pool,
+            'object': obj,
+            'obj': obj,
+            'pool': self.pool,
             'time': time,
             'datetime': datetime,
             'dateutil': dateutil,
-            # orm
-            'env': env,
-            'model': model,
-            'workflow': workflow,
-            # Exceptions
-            'Warning': openerp.exceptions.Warning,
-            # record
-            # TODO: When porting to master move badly named obj and object to
-            # deprecated and define record (active_id) and records (active_ids)
-            'object': obj,
-            'obj': obj,
-            # Deprecated use env or model instead
-            'self': obj_pool,
-            'pool': self.pool,
             'cr': cr,
             'uid': uid,
+            'user': user,
             'context': context,
-            'user': env.user,
+            'workflow': workflow,
+            'Warning': openerp.exceptions.Warning,
         }
 
     def run(self, cr, uid, ids, context=None):
@@ -1019,11 +1032,9 @@ class ir_actions_server(osv.osv):
 
 class ir_server_object_lines(osv.osv):
     _name = 'ir.server.object.lines'
-    _description = 'Server Action value mapping'
     _sequence = 'ir_actions_id_seq'
-
     _columns = {
-        'server_id': fields.many2one('ir.actions.server', 'Related Server Action', ondelete='cascade'),
+        'server_id': fields.many2one('ir.actions.server', 'Related Server Action'),
         'col1': fields.many2one('ir.model.fields', 'Field', required=True),
         'value': fields.text('Value', required=True, help="Expression containing a value specification. \n"
                                                           "When Formula type is selected, this field may be a Python expression "
@@ -1034,24 +1045,9 @@ class ir_server_object_lines(osv.osv):
             ('equation', 'Python expression')
         ], 'Evaluation Type', required=True, change_default=True),
     }
-
     _defaults = {
         'type': 'value',
     }
-
-    def eval_value(self, cr, uid, ids, eval_context=None, context=None):
-        res = dict.fromkeys(ids, False)
-        for line in self.browse(cr, uid, ids, context=context):
-            expr = line.value
-            if line.type == 'equation':
-                expr = eval(line.value, eval_context)
-            elif line.col1.ttype in ['many2one', 'integer']:
-                try:
-                    expr = int(line.value)
-                except Exception:
-                    pass
-            res[line.id] = expr
-        return res
 
 
 TODO_STATES = [('open', 'To Do'),
@@ -1176,8 +1172,6 @@ class ir_actions_act_client(osv.osv):
 
     def _get_params(self, cr, uid, ids, field_name, arg, context):
         result = {}
-        # Need to remove bin_size from context, to obtains the binary and not the length.
-        context = dict(context, bin_size_params_store=False)
         for record in self.browse(cr, uid, ids, context=context):
             result[record.id] = record.params_store and eval(record.params_store, {'uid': uid}) or False
         return result

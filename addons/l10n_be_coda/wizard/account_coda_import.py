@@ -40,7 +40,7 @@ class account_coda_import(osv.osv_memory):
     }
 
     _defaults = {
-        'coda_fname': 'coda.txt',
+        'coda_fname': lambda *a: '',
     }
 
     def coda_parsing(self, cr, uid, ids, context=None, batch=False, codafile=None, codafilename=None):
@@ -59,7 +59,6 @@ class account_coda_import(osv.osv_memory):
                 return {}
         recordlist = unicode(base64.decodestring(codafile), 'windows-1252', 'strict').split('\n')
         statements = []
-        globalisation_comm = {}
         for line in recordlist:
             if not line:
                 pass
@@ -155,25 +154,26 @@ class account_coda_import(osv.osv_memory):
                     statementLine['entryDate'] = time.strftime(tools.DEFAULT_SERVER_DATE_FORMAT, time.strptime(rmspaces(line[115:121]), '%d%m%y'))
                     statementLine['type'] = 'normal'
                     statementLine['globalisation'] = int(line[124])
+                    if len(statement['globalisation_stack']) > 0 and statementLine['communication'] != '':
+                        statementLine['communication'] = "\n".join([statement['globalisation_stack'][-1]['communication'], statementLine['communication']])
                     if statementLine['globalisation'] > 0:
-                        if statementLine['globalisation'] in statement['globalisation_stack']:
-                            statement['globalisation_stack'].remove(statementLine['globalisation'])
+                        if len(statement['globalisation_stack']) > 0 and statement['globalisation_stack'][-1]['globalisation'] == statementLine['globalisation']:
+                            # Destack
+                            statement['globalisation_stack'].pop()
                         else:
+                            #Stack
                             statementLine['type'] = 'globalisation'
-                            statement['globalisation_stack'].append(statementLine['globalisation'])
-                        globalisation_comm[statementLine['ref_move']] = statementLine['communication']
-                    if not statementLine.get('communication'):
-                        statementLine['communication'] = globalisation_comm.get(statementLine['ref_move'], '')
+                            statement['globalisation_stack'].append(statementLine)
                     statement['lines'].append(statementLine)
                 elif line[1] == '2':
                     if statement['lines'][-1]['ref'][0:4] != line[2:6]:
-                        raise osv.except_osv(_('Error') + 'R2004', _('CODA parsing error on movement data record 2.2, seq nr %s! Please report this issue via your Odoo support channel.') % line[2:10])
+                        raise osv.except_osv(_('Error') + 'R2004', _('CODA parsing error on movement data record 2.2, seq nr %s! Please report this issue via your OpenERP support channel.') % line[2:10])
                     statement['lines'][-1]['communication'] += rmspaces(line[10:63])
                     statement['lines'][-1]['payment_reference'] = rmspaces(line[63:98])
                     statement['lines'][-1]['counterparty_bic'] = rmspaces(line[98:109])
                 elif line[1] == '3':
                     if statement['lines'][-1]['ref'][0:4] != line[2:6]:
-                        raise osv.except_osv(_('Error') + 'R2005', _('CODA parsing error on movement data record 2.3, seq nr %s! Please report this issue via your Odoo support channel.') % line[2:10])
+                        raise osv.except_osv(_('Error') + 'R2005', _('CODA parsing error on movement data record 2.3, seq nr %s! Please report this issue via your OpenERP support channel.') % line[2:10])
                     if statement['version'] == '1':
                         statement['lines'][-1]['counterpartyNumber'] = rmspaces(line[10:22])
                         statement['lines'][-1]['counterpartyName'] = rmspaces(line[47:73])
@@ -206,11 +206,11 @@ class account_coda_import(osv.osv_memory):
                     statement['lines'].append(infoLine)
                 elif line[1] == '2':
                     if infoLine['ref'] != rmspaces(line[2:10]):
-                        raise osv.except_osv(_('Error') + 'R3004', _('CODA parsing error on information data record 3.2, seq nr %s! Please report this issue via your Odoo support channel.') % line[2:10])
+                        raise osv.except_osv(_('Error') + 'R3004', _('CODA parsing error on information data record 3.2, seq nr %s! Please report this issue via your OpenERP support channel.') % line[2:10])
                     statement['lines'][-1]['communication'] += rmspaces(line[10:100])
                 elif line[1] == '3':
                     if infoLine['ref'] != rmspaces(line[2:10]):
-                        raise osv.except_osv(_('Error') + 'R3005', _('CODA parsing error on information data record 3.3, seq nr %s! Please report this issue via your Odoo support channel.') % line[2:10])
+                        raise osv.except_osv(_('Error') + 'R3005', _('CODA parsing error on information data record 3.3, seq nr %s! Please report this issue via your OpenERP support channel.') % line[2:10])
                     statement['lines'][-1]['communication'] += rmspaces(line[10:100])
             elif line[0] == '4':
                     comm_line = {}
@@ -290,25 +290,17 @@ class account_coda_import(osv.osv_memory):
 
                     if 'counterpartyAddress' in line and line['counterpartyAddress'] != '':
                         note.append(_('Counter Party Address') + ': ' + line['counterpartyAddress'])
+                    line['name'] = "\n".join(filter(None, [line['counterpartyName'], line['communication']]))
                     partner_id = None
-                    structured_com = False
+                    structured_com = ""
                     bank_account_id = False
                     if line['communication_struct'] and 'communication_type' in line and line['communication_type'] == '101':
                         structured_com = line['communication']
                     if 'counterpartyNumber' in line and line['counterpartyNumber']:
-                        account = str(line['counterpartyNumber'])
-                        domain = [('acc_number', '=', account)]
-                        iban = account[0:2].isalpha()
-                        if iban:
-                            n = 4
-                            space_separated_account = ' '.join(account[i:i + n] for i in range(0, len(account), n))
-                            domain = ['|', ('acc_number', '=', space_separated_account)] + domain
-                        ids = self.pool.get('res.partner.bank').search(cr, uid, domain)
+                        ids = self.pool.get('res.partner.bank').search(cr, uid, [('acc_number', '=', str(line['counterpartyNumber']))])
                         if ids:
                             bank_account_id = ids[0]
-                            bank_account = self.pool.get('res.partner.bank').browse(cr, uid, bank_account_id, context=context)
-                            line['counterpartyNumber'] = bank_account.acc_number
-                            partner_id = bank_account.partner_id.id
+                            partner_id = self.pool.get('res.partner.bank').browse(cr, uid, bank_account_id, context=context).partner_id.id
                         else:
                             #create the bank account, not linked to any partner. The reconciliation will link the partner manually
                             #chosen at the bank statement final confirmation time.
@@ -319,32 +311,36 @@ class account_coda_import(osv.osv_memory):
                             except ValueError:
                                 bank_code = 'bank'
                             bank_account_id = self.pool.get('res.partner.bank').create(cr, uid, {'acc_number': str(line['counterpartyNumber']), 'state': bank_code}, context=context)
-                    if line.get('communication', ''):
+                    if 'communication' in line and line['communication'] != '':
                         note.append(_('Communication') + ': ' + line['communication'])
                     data = {
-                        'name': structured_com or (line.get('communication', '') != '' and line['communication'] or '/'),
+                        'name': line['name'],
                         'note': "\n".join(note),
                         'date': line['entryDate'],
                         'amount': line['amount'],
                         'partner_id': partner_id,
-                        'partner_name': line['counterpartyName'],
                         'statement_id': statement['id'],
-                        'ref': line['ref'],
+                        'ref': structured_com,
                         'sequence': line['sequence'],
                         'bank_account_id': bank_account_id,
                     }
                     self.pool.get('account.bank.statement.line').create(cr, uid, data, context=context)
             if statement['coda_note'] != '':
                 self.pool.get('account.bank.statement').write(cr, uid, [statement['id']], {'coda_note': statement['coda_note']}, context=context)
-        model, action_id = self.pool.get('ir.model.data').get_object_reference(cr, uid, 'account', 'action_bank_reconcile_bank_statements')
+        model, action_id = self.pool.get('ir.model.data').get_object_reference(cr, uid, 'account', 'action_bank_statement_tree')
         action = self.pool[model].browse(cr, uid, action_id, context=context)
-        statements_ids = [statement['id'] for statement in statements]
         return {
             'name': action.name,
-            'tag': action.tag,
-            'context': {'statement_ids': statements_ids},
-            'type': 'ir.actions.client',
+            'view_type': action.view_type,
+            'view_mode': action.view_mode,
+            'res_model': action.res_model,
+            'domain': action.domain,
+            'context': action.context,
+            'type': 'ir.actions.act_window',
+            'search_view_id': action.search_view_id.id,
+            'views': [(v.view_id.id, v.view_mode) for v in action.view_ids]
         }
+
 
 def rmspaces(s):
     return " ".join(s.split())

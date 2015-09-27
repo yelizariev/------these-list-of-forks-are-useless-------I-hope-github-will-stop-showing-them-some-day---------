@@ -25,7 +25,6 @@
     'version': '1.2',
     'license': 'AGPL-3',
     'author': 'Noviat',
-    'website': 'https://www.odoo.com/page/accounting',
     'category' : 'Localization',
     'description': """
     

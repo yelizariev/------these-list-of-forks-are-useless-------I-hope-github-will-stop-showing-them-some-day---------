@@ -8,10 +8,10 @@ Adds enhanced support for (Ether)Pad attachments in the web client.
 ===================================================================
 
 Lets the company customize which Pad installation should be used to link to new
-pads (by default, http://etherpad.com/).
+pads (by default, http://ietherpad.com/).
     """,
     'author': 'OpenERP SA',
-    'website': 'https://www.odoo.com/page/notes',
+    'website': 'http://openerp.com',
     'depends': ['web'],
     'data': [
         'res_company.xml',
@@ -22,6 +22,7 @@ pads (by default, http://etherpad.com/).
     'auto_install': False,
     'web': True,
     'qweb' : ['static/src/xml/*.xml'],
+    'images': ['static/src/img/pad_link_companies.jpeg'],
 }
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

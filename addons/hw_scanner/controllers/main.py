@@ -19,7 +19,7 @@ _logger = logging.getLogger(__name__)
 try:
     import evdev
 except ImportError:
-    _logger.error('Odoo module hw_scanner depends on the evdev python module')
+    _logger.error('OpenERP module hw_scanner depends on the evdev python module')
     evdev = None
 
 
@@ -107,7 +107,7 @@ class Scanner(Thread):
         if status == 'error' and message:
             _logger.error('Barcode Scanner Error: '+message)
         elif status == 'disconnected' and message:
-            _logger.info('Disconnected Barcode Scanner: %s', message)
+            _logger.warning('Disconnected Barcode Scanner: '+message)
 
     def get_device(self):
         try:
@@ -167,52 +167,50 @@ class Scanner(Thread):
                 try:
                     device.ungrab() 
                 except Exception as e:
-                    device = None
                     self.set_status('error',str(e))
-            else:
+            device = self.get_device()
+            if not device:
                 time.sleep(5)   # wait until a suitable device is plugged
-                device = self.get_device()
-                if not device:
-                    continue
+            else:
+                try:
+                    device.grab()
+                    shift = False
+                    barcode = []
 
-            try:
-                device.grab()
-                shift = False
-                barcode = []
+                    while True: # keycode loop
+                        r,w,x = select([device],[],[],5)
+                        if len(r) == 0: # timeout
+                            break
+                        events = device.read()
 
-                while True: # keycode loop
-                    r,w,x = select([device],[],[],5)
-                    if len(r) == 0: # timeout
-                        break
-                    events = device.read()
+                        for event in events:
+                            if event.type == evdev.ecodes.EV_KEY:
+                                #_logger.debug('Evdev Keyboard event %s',evdev.categorize(event))
+                                if event.value == 1: # keydown events
+                                    if event.code in self.keymap: 
+                                        if shift:
+                                            barcode.append(self.keymap[event.code][1])
+                                        else:
+                                            barcode.append(self.keymap[event.code][0])
+                                    elif event.code == 42 or event.code == 54: # SHIFT
+                                        shift = True
+                                    elif event.code == 28: # ENTER, end of barcode
+                                        self.barcodes.put( (time.time(),''.join(barcode)) )
+                                        barcode = []
+                                elif event.value == 0: #keyup events
+                                    if event.code == 42 or event.code == 54: # LEFT SHIFT
+                                        shift = False
 
-                    for event in events:
-                        if event.type == evdev.ecodes.EV_KEY:
-                            #_logger.debug('Evdev Keyboard event %s',evdev.categorize(event))
-                            if event.value == 1: # keydown events
-                                if event.code in self.keymap: 
-                                    if shift:
-                                        barcode.append(self.keymap[event.code][1])
-                                    else:
-                                        barcode.append(self.keymap[event.code][0])
-                                elif event.code == 42 or event.code == 54: # SHIFT
-                                    shift = True
-                                elif event.code == 28: # ENTER, end of barcode
-                                    self.barcodes.put( (time.time(),''.join(barcode)) )
-                                    barcode = []
-                            elif event.value == 0: #keyup events
-                                if event.code == 42 or event.code == 54: # LEFT SHIFT
-                                    shift = False
+                except Exception as e:
+                    self.set_status('error',str(e))
 
-            except Exception as e:
-                self.set_status('error',str(e))
+s = Scanner()
 
-scanner_thread = None
-if evdev:
-    scanner_thread = Scanner()
-    hw_proxy.drivers['scanner'] = scanner_thread
+hw_proxy.drivers['scanner'] = s
 
 class ScannerDriver(hw_proxy.Proxy):
     @http.route('/hw_proxy/scanner', type='json', auth='none', cors='*')
     def scanner(self):
-        return scanner_thread.get_barcode() if scanner_thread else None
+        return s.get_barcode()
+        
+        

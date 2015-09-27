@@ -5,6 +5,7 @@
     company_id: base.main_company
     name: Event manager
     login: em
+    password: em
     email: eventmanager@yourcompany.com
 -
   I added groups for Event manager.
@@ -19,6 +20,7 @@
     company_id: base.main_company
     name: User
     login: eu
+    password: eu
     email: eventuser@yourcompany.com
 -
   I added groups for Event user.

@@ -11,8 +11,6 @@ from ..models import (
     LOG_ACCESS_COLUMNS,
 )
 
-from openerp.tools.safe_eval import safe_eval as eval
-
 # extra definitions for backward compatibility
 browse_record_list = BaseModel
 

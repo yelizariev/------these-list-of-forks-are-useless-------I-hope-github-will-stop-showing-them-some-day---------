@@ -20,7 +20,6 @@
 ##############################################################################
 
 import time
-from psycopg2 import OperationalError
 
 from openerp import SUPERUSER_ID
 from openerp.osv import fields, osv
@@ -80,7 +79,7 @@ class procurement_rule(osv.osv):
         return []
 
     _columns = {
-        'name': fields.char('Name', required=True, translate=True,
+        'name': fields.char('Name', required=True,
             help="This field will fill the packing origin and the name of its moves"),
         'active': fields.boolean('Active', help="If unchecked, it will allow you to hide the rule without removing it."),
         'group_propagation_option': fields.selection([('none', 'Leave Empty'), ('propagate', 'Propagate'), ('fixed', 'Fixed')], string="Propagation of Procurement Group"),
@@ -112,7 +111,7 @@ class procurement_order(osv.osv):
 
         'origin': fields.char('Source Document',
             help="Reference of the document that created this Procurement.\n"
-            "This is automatically completed by Odoo."),
+            "This is automatically completed by OpenERP."),
         'company_id': fields.many2one('res.company', 'Company', required=True),
 
         # These two fields are used for shceduling
@@ -194,48 +193,31 @@ class procurement_order(osv.osv):
     def reset_to_confirmed(self, cr, uid, ids, context=None):
         return self.write(cr, uid, ids, {'state': 'confirmed'}, context=context)
 
-    def run(self, cr, uid, ids, autocommit=False, context=None):
+    def run(self, cr, uid, ids, context=None):
         for procurement_id in ids:
-            #we intentionnaly do the browse under the for loop to avoid caching all ids which would be resource greedy
+            #we intentionnaly do the browse under the for loop to avoid caching all ids which would be ressource greedy
             #and useless as we'll make a refresh later that will invalidate all the cache (and thus the next iteration
             #will fetch all the ids again) 
             procurement = self.browse(cr, uid, procurement_id, context=context)
             if procurement.state not in ("running", "done"):
-                try:
-                    if self._assign(cr, uid, procurement, context=context):
-                        res = self._run(cr, uid, procurement, context=context or {})
-                        if res:
-                            self.write(cr, uid, [procurement.id], {'state': 'running'}, context=context)
-                        else:
-                            self.write(cr, uid, [procurement.id], {'state': 'exception'}, context=context)
+                if self._assign(cr, uid, procurement, context=context):
+                    procurement.refresh()
+                    res = self._run(cr, uid, procurement, context=context or {})
+                    if res:
+                        self.write(cr, uid, [procurement.id], {'state': 'running'}, context=context)
                     else:
-                        self.message_post(cr, uid, [procurement.id], body=_('No rule matching this procurement'), context=context)
                         self.write(cr, uid, [procurement.id], {'state': 'exception'}, context=context)
-                    if autocommit:
-                        cr.commit()
-                except OperationalError:
-                    if autocommit:
-                        cr.rollback()
-                        continue
-                    else:
-                        raise
+                else:
+                    self.message_post(cr, uid, [procurement.id], body=_('No rule matching this procurement'), context=context)
+                    self.write(cr, uid, [procurement.id], {'state': 'exception'}, context=context)
         return True
 
-    def check(self, cr, uid, ids, autocommit=False, context=None):
+    def check(self, cr, uid, ids, context=None):
         done_ids = []
         for procurement in self.browse(cr, uid, ids, context=context):
-            try:
-                result = self._check(cr, uid, procurement, context=context)
-                if result:
-                    done_ids.append(procurement.id)
-                if autocommit:
-                    cr.commit()
-            except OperationalError:
-                if autocommit:
-                    cr.rollback()
-                    continue
-                else:
-                    raise
+            result = self._check(cr, uid, procurement, context=context)
+            if result:
+                done_ids.append(procurement.id)
         if done_ids:
             self.write(cr, uid, done_ids, {'state': 'done'}, context=context)
         return done_ids
@@ -309,14 +291,11 @@ class procurement_order(osv.osv):
             dom = [('state', '=', 'confirmed')]
             if company_id:
                 dom += [('company_id', '=', company_id)]
-            prev_ids = []
             while True:
                 ids = self.search(cr, SUPERUSER_ID, dom, context=context)
-                if not ids or prev_ids == ids:
+                if not ids:
                     break
-                else:
-                    prev_ids = ids
-                self.run(cr, SUPERUSER_ID, ids, autocommit=use_new_cursor, context=context)
+                self.run(cr, SUPERUSER_ID, ids, context=context)
                 if use_new_cursor:
                     cr.commit()
 
@@ -325,14 +304,12 @@ class procurement_order(osv.osv):
             dom = [('state', '=', 'running')]
             if company_id:
                 dom += [('company_id', '=', company_id)]
-            prev_ids = []
             while True:
                 ids = self.search(cr, SUPERUSER_ID, dom, offset=offset, context=context)
-                if not ids or prev_ids == ids:
+                if not ids:
                     break
-                else:
-                    prev_ids = ids
-                self.check(cr, SUPERUSER_ID, ids, autocommit=use_new_cursor, context=context)
+                done = self.check(cr, SUPERUSER_ID, ids, context=context)
+                offset += len(ids) - len(done)
                 if use_new_cursor:
                     cr.commit()
 

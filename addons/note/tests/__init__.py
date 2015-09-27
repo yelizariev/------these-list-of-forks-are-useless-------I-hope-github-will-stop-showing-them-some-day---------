@@ -20,4 +20,8 @@
 ##############################################################################
 from . import test_note
 
+checks = [
+    test_note,
+]
+
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

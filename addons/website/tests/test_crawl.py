@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
 import logging
 import urlparse
+import unittest2
+import urllib2
 import time
+import werkzeug.urls
 
 import lxml.html
 
 import openerp
-import re
+from openerp import tools
 
 _logger = logging.getLogger(__name__)
 
@@ -22,15 +25,12 @@ class Crawler(openerp.tests.HttpCase):
     post_install = True
 
     def crawl(self, url, seen=None, msg=''):
-        if seen == None:
+        if seen ==  None:
             seen = set()
-
-        url_slug = re.sub(r"[/](([^/=?&]+-)?[0-9]+)([/]|$)", '/<slug>/', url)
-        url_slug = re.sub(r"([^/=?&]+)=[^/=?&]+", '\g<1>=param', url_slug)
-        if url_slug in seen:
+        if url in seen:
             return seen
         else:
-            seen.add(url_slug)
+            seen.add(url)
 
         _logger.info("%s %s", msg, url)
         r = self.url_open(url)

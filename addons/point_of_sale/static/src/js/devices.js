@@ -1,6 +1,5 @@
 
 function openerp_pos_devices(instance,module){ //module is instance.point_of_sale
-	var _t = instance.web._t;
 
     // the JobQueue schedules a sequence of 'jobs'. each job is
     // a function returning a deferred. the queue waits for each job to finish 
@@ -89,8 +88,6 @@ function openerp_pos_devices(instance,module){ //module is instance.point_of_sal
             var self = this;
             options = options || {};
             url = options.url || 'http://localhost:8069';
-
-            this.pos = parent;
             
             this.weighting = false;
             this.debug_weight = 0;
@@ -370,14 +367,13 @@ function openerp_pos_devices(instance,module){ //module is instance.point_of_sal
         scale_read: function(){
             var self = this;
             var ret = new $.Deferred();
-            if (self.use_debug_weight) {
-                return (new $.Deferred()).resolve({weight:this.debug_weight, unit:'Kg', info:'ok'});
-            }
+            console.log('scale_read');
             this.message('scale_read',{})
                 .then(function(weight){
-                    ret.resolve(weight);
+                    console.log(weight)
+                    ret.resolve(self.use_debug_weight ? self.debug_weight : weight);
                 }, function(){ //failed to read weight
-                    ret.resolve({weight:0.0, unit:'Kg', info:'ok'});
+                    ret.resolve(self.use_debug_weight ? self.debug_weight : {weight:0.0, unit:'Kg', info:'ok'});
                 });
             return ret;
         },
@@ -414,14 +410,7 @@ function openerp_pos_devices(instance,module){ //module is instance.point_of_sal
                     self.message('print_xml_receipt',{ receipt: r },{ timeout: 5000 })
                         .then(function(){
                             send_printing_job();
-                        },function(error){
-                            if (error) {
-                                self.pos.pos_widget.screen_selector.show_popup('error-traceback',{
-                                    'message': _t('Printing Error: ') + error.data.message,
-                                    'comment': error.data.debug,
-                                });
-                                return;
-                            }
+                        },function(){
                             self.receipt_queue.unshift(r)
                         });
                 }
@@ -696,7 +685,7 @@ function openerp_pos_devices(instance,module){ //module is instance.point_of_sal
                 };
             }
 
-            if(parse_result.type in {'product':'', 'weight':'', 'price':''}){    //ean is associated to a product
+            if(parse_result.type in {'product':'', 'weight':'', 'price':'', 'discount':''}){    //ean is associated to a product
                 if(this.action_callback['product']){
                     this.action_callback['product'](parse_result);
                 }

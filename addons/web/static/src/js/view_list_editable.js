@@ -226,15 +226,13 @@
             var item = false;
             if (record) {
                 item = record.attributes;
-                this.dataset.select_id(record.get('id'));
             } else {
                 record = this.make_empty_record(false);
                 this.records.add(record, {
                     at: this.prepends_on_create() ? 0 : null});
             }
-            return this.ensure_saved().then(function(){
-                return $.when.apply(null, self.editor.form.render_value_defs);
-            }).then(function () {
+
+            return this.ensure_saved().then(function () {
                 var $recordRow = self.groups.get_row_for(record);
                 var cells = self.get_cells_for($recordRow);
                 var fields = {};
@@ -260,7 +258,7 @@
                         if (!focus_field){
                             focus_field = _.find(self.editor.form.fields_order, function(field){ return fields[field] && fields[field].$el.is(':visible:has(input)'); });
                         }
-                        if (focus_field  && fields[focus_field]) fields[focus_field].$el.find('input').select();
+                        if (focus_field) fields[focus_field].$el.find('input').select();
                         return record.attributes;
                     });
                 }).fail(function () {
@@ -301,7 +299,7 @@
             var $cell = $(cell);
 
             field.set_dimensions($cell.outerHeight(), $cell.outerWidth());
-            field.$el.css({top: 0, left: 0}).position({
+            field.$el.position({
                 my: 'left top',
                 at: 'left top',
                 of: $cell
@@ -433,8 +431,7 @@
             var self = this;
             var on_write_callback = self.fields_view.arch.attrs.on_write;
             if (!on_write_callback) { return $.when(); }
-            var context = new instance.web.CompoundContext(self.dataset.get_context(), {'on_write_domain': self.dataset.domain}).eval();
-            return this.dataset.call(on_write_callback, [source_record.get('id'), context])
+            return this.dataset.call(on_write_callback, [source_record.get('id')])
                 .then(function (ids) {
                     return $.when.apply(
                         null, _(ids).map(
@@ -651,7 +648,7 @@
             var form = this.editor.form;
             var last_field = _(form.fields_order).chain()
                 .map(function (name) { return form.fields[name]; })
-                .filter(function (field) { return field.$el.is(':visible') && !field.get('effective_readonly'); })
+                .filter(function (field) { return field.$el.is(':visible'); })
                 .last()
                 .value();
             // tabbed from last field in form
@@ -659,7 +656,6 @@
                 e.preventDefault();
                 return this._next();
             }
-            this.editor.form.__clicked_inside = true;
             return $.when();
         }
     });

@@ -44,7 +44,8 @@ Note that if you want to check the follow-up level for a given partner/account e
 
 """,
     'author': 'OpenERP SA',
-    'website': 'https://www.odoo.com/page/billing',
+    'website': 'http://www.openerp.com',
+    'images': ['images/follow_ups.jpeg','images/send_followups.jpeg'],
     'depends': ['account_accountant', 'mail'],
     'data': [
         'security/account_followup_security.xml',

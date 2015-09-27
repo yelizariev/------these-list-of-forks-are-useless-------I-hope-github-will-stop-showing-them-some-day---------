@@ -34,10 +34,11 @@ Demo data for the module marketing_campaign.
 
 Creates demo data like leads, campaigns and segments for the module marketing_campaign.
     """,
-    'website': 'https://www.odoo.com/page/lead-automation',
+    'website': 'http://www.openerp.com',
     'data': [],
     'demo': ['marketing_campaign_demo.xml'],
     'installable': True,
     'auto_install': False,
+    'images': ['images/campaigns.jpeg','images/email_templates.jpeg'],
 }
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

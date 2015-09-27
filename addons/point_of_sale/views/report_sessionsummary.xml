@@ -97,6 +97,7 @@
                                     <th>Description</th>
                                     <th>Reference</th>
                                     <th>Partner</th>
+                                    <th>Type</th>
                                     <th>Account</th>
                                     <th class="text-right">Amount</th>
                                 </tr>
@@ -107,6 +108,7 @@
                                     <td><span t-field="line.name"/></td>
                                     <td><span t-field="line.ref"/></td>
                                     <td><span t-field="line.partner_id"/></td>
+                                    <td><span t-field="line.type"/></td>
                                     <td><span t-field="line.account_id"/></td>
                                     <td class="text-right">
                                         <span t-field="line.amount"

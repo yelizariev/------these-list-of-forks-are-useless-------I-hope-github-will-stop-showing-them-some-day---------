@@ -167,7 +167,7 @@ instance.web.ListView = instance.web.View.extend( /** @lends instance.web.ListVi
      * @returns {String} CSS style declaration
      */
     style_for: function (record) {
-        var len, style= '';
+        var style= '';
 
         var context = _.extend({}, record.attributes, {
             uid: this.session.uid,
@@ -299,24 +299,21 @@ instance.web.ListView = instance.web.View.extend( /** @lends instance.web.ListVi
             this.$pager
                 .on('click', 'a[data-pager-action]', function () {
                     var $this = $(this);
-                    var max_page_index = Math.ceil(self.dataset.size() / self.limit()) - 1;
+                    var max_page = Math.floor(self.dataset.size() / self.limit());
                     switch ($this.data('pager-action')) {
                         case 'first':
-                            self.page = 0;
-                            break;
+                            self.page = 0; break;
                         case 'last':
-                            self.page = max_page_index;
+                            self.page = max_page - 1;
                             break;
                         case 'next':
-                            self.page += 1;
-                            break;
+                            self.page += 1; break;
                         case 'previous':
-                            self.page -= 1;
-                            break;
+                            self.page -= 1; break;
                     }
                     if (self.page < 0) {
-                        self.page = max_page_index;
-                    } else if (self.page > max_page_index) {
+                        self.page = max_page;
+                    } else if (self.page > max_page) {
                         self.page = 0;
                     }
                     self.reload_content();
@@ -359,7 +356,7 @@ instance.web.ListView = instance.web.View.extend( /** @lends instance.web.ListVi
         //Sort
         var default_order = this.fields_view.arch.attrs.default_order,
             unsorted = !this.dataset._sort.length;
-        if (unsorted && default_order && !this.grouped) {
+        if (unsorted && default_order) {
             this.dataset.set_sort(default_order.split(','));
         }
 
@@ -377,8 +374,9 @@ instance.web.ListView = instance.web.View.extend( /** @lends instance.web.ListVi
         var $column = $(e.currentTarget);
         var col_name = $column.data('id');
         var field = this.fields_view.fields[col_name];
-        // test whether the field is sortable
-        if (field && !field.sortable) {
+        // test if the field is a function field with store=false, since it's impossible
+        // for the server to sort those fields we desactivate the feature
+        if (field && field.store === false) {
             return false;
         }
         this.dataset.sort(col_name);
@@ -524,7 +522,7 @@ instance.web.ListView = instance.web.View.extend( /** @lends instance.web.ListVi
                         self.dataset.index = 0;
                     }
                 } else if (self.dataset.index >= self.records.length) {
-                    self.dataset.index = self.records.length ? 0 : null;
+                    self.dataset.index = 0;
                 }
 
                 self.compute_aggregates();
@@ -541,7 +539,6 @@ instance.web.ListView = instance.web.View.extend( /** @lends instance.web.ListVi
     },
     reload_record: function (record) {
         var self = this;
-        var fields = this.fields_view.fields;
         return this.dataset.read_ids(
             [record.get('id')],
             _.pluck(_(this.columns).filter(function (r) {
@@ -554,10 +551,8 @@ instance.web.ListView = instance.web.View.extend( /** @lends instance.web.ListVi
                 self.records.remove(record);
                 return;
             }
-            _.each(values, function (value, key) {
-                if (fields[key] && fields[key].type === 'many2many')
-                    record.set(key + '__display', false, {silent: true});
-                record.set(key, value, {silent: true});            
+            _(_.keys(values)).each(function(key){
+                record.set(key, values[key], {silent: true});
             });
             record.trigger('change', record);
         });
@@ -1542,11 +1537,9 @@ instance.web.ListView.Groups = instance.web.Class.extend( /** @lends instance.we
         });
     },
     setup_resequence_rows: function (list, dataset) {
-        // drag and drop enabled if list is not sorted (unless it is sorted by
-        // sequence (ASC)), and there is a visible column with @widget=handle
-        // or "sequence" column in the view.
-        if ((dataset.sort && dataset.sort() && dataset.sort() !== 'sequence'
-            && dataset.sort() !== 'sequence ASC')
+        // drag and drop enabled if list is not sorted and there is a
+        // visible column with @widget=handle or "sequence" column in the view.
+        if ((dataset.sort && dataset.sort())
             || !_(this.columns).any(function (column) {
                     return column.widget === 'handle'
                         || column.name === 'sequence'; })) {
@@ -1618,9 +1611,7 @@ instance.web.ListView.Groups = instance.web.Class.extend( /** @lends instance.we
                 .filter(function (column) { return column.tag === 'field';})
                 .pluck('name').value(),
             function (groups) {
-                // page count is irrelevant on grouped page, replace by limit
-                self.view.$pager.find('.oe_pager_group').hide();
-                self.view.$pager.find('.oe_list_pager_state').text(self.view._limit ? self.view._limit : '∞');
+                self.view.$pager.hide();
                 $el[0].appendChild(
                     self.render_groups(groups));
                 if (post_render) { post_render(); }
@@ -2305,14 +2296,10 @@ instance.web.list.Binary = instance.web.list.Column.extend({
      * @private
      */
     _format: function (row_data, options) {
-        var text = _t("Download"), filename=_t('Binary file');
+        var text = _t("Download");
         var value = row_data[this.id].value;
-        if (!value) {
-            return options.value_if_empty || '';
-        }
-
         var download_url;
-        if (value.substr(0, 10).indexOf(' ') == -1) {
+        if (value && value.substr(0, 10).indexOf(' ') == -1) {
             download_url = "data:application/octet-stream;base64," + value;
         } else {
             download_url = instance.session.url('/web/binary/saveas', {model: options.model, field: this.id, id: options.id});
@@ -2323,13 +2310,11 @@ instance.web.list.Binary = instance.web.list.Column.extend({
         if (this.filename && row_data[this.filename]) {
             text = _.str.sprintf(_t("Download \"%s\""), instance.web.format_value(
                     row_data[this.filename].value, {type: 'char'}));
-            filename = row_data[this.filename].value;
         }
-        return _.template('<a download="<%-download%>" href="<%-href%>"><%-text%></a> (<%-size%>)', {
+        return _.template('<a href="<%-href%>"><%-text%></a> (<%-size%>)', {
             text: text,
             href: download_url,
             size: instance.web.binary_to_binsize(value),
-            download: filename,
         });
     }
 });

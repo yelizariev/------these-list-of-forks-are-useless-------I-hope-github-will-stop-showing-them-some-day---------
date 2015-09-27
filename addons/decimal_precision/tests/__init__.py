@@ -1,2 +1,6 @@
 # -*- coding: utf-8 -*-
-from . import test_qweb_float
+import test_qweb_float
+
+checks = [
+    test_qweb_float
+]

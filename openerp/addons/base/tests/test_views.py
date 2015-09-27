@@ -452,7 +452,7 @@ class TestTemplating(ViewCase):
     def setUp(self):
         import openerp.modules
         super(TestTemplating, self).setUp()
-        self._pool = openerp.modules.registry.RegistryManager.get(common.get_db_name())
+        self._pool = openerp.modules.registry.RegistryManager.get(common.DB)
         self._init = self._pool._init
         # fuck off
         self._pool._init = False
@@ -544,9 +544,9 @@ class TestTemplating(ViewCase):
                         'data-oe-id': str(id2),
                         'data-oe-field': 'arch',
                         'data-oe-xpath': '/xpath/item/content[1]',
-                        'data-oe-source-id': str(id)
                     }), {
                         'order': '2',
+                        'data-oe-source-id': str(id)
                     }),
                 E.item({
                     'order': '1',
@@ -612,7 +612,7 @@ class TestTemplating(ViewCase):
                     {'t-ignore': 'true', 'order': '1'},
                     E.t({'t-esc': 'foo'}),
                     E.item(
-                        {'order': '2'},
+                        {'order': '2', 'data-oe-source-id': str(id)},
                         E.content(
                             {'t-att-href': 'foo'},
                             "bar")
@@ -642,7 +642,7 @@ class test_views(ViewCase):
         """Insert view into database via a query to passtrough validation"""
         kw.pop('id', None)
         kw.setdefault('mode', 'extension' if kw.get('inherit_id') else 'primary')
-        kw.setdefault('active', True)
+        kw.setdefault('application', 'always')
 
         keys = sorted(kw.keys())
         fields = ','.join('"%s"' % (k.replace('"', r'\"'),) for k in keys)
@@ -680,20 +680,6 @@ class test_views(ViewCase):
             arch="""<?xml version="1.0"?>
                         <xpath expr="//field[@name='url']" position="before">
                           <field name="name"/>
-                        </xpath>
-                    """,
-        )
-        self.assertTrue(validate())     # inherited view
-
-        # validation of a second inherited view (depending on 1st)
-        self._insert_view(
-            name='inherited view 2',
-            model=model,
-            priority=5,
-            inherit_id=vid,
-            arch="""<?xml version="1.0"?>
-                        <xpath expr="//field[@name='name']" position="after">
-                          <field name="target"/>
                         </xpath>
                     """,
         )
@@ -1109,21 +1095,21 @@ class TestOptionalViews(ViewCase):
         self.v1 = self.create({
             'model': 'a',
             'inherit_id': self.v0,
-            'active': True,
+            'application': 'always',
             'priority': 10,
             'arch': '<xpath expr="//base" position="after"><v1/></xpath>',
         })
         self.v2 = self.create({
             'model': 'a',
             'inherit_id': self.v0,
-            'active': True,
+            'application': 'enabled',
             'priority': 9,
             'arch': '<xpath expr="//base" position="after"><v2/></xpath>',
         })
         self.v3 = self.create({
             'model': 'a',
             'inherit_id': self.v0,
-            'active': False,
+            'application': 'disabled',
             'priority': 8,
             'arch': '<xpath expr="//base" position="after"><v3/></xpath>'
         })
@@ -1142,10 +1128,10 @@ class TestOptionalViews(ViewCase):
         )
 
     def test_applied_state_toggle(self):
-        """ Change active states of v2 and v3, check that the results
+        """ Change application states of v2 and v3, check that the results
         are as expected
         """
-        self.browse(self.v2).toggle()
+        self.browse(self.v2).write({'application': 'disabled'})
         arch = self.read_combined(self.v0)['arch']
         self.assertEqual(
             ET.fromstring(arch),
@@ -1155,7 +1141,7 @@ class TestOptionalViews(ViewCase):
             )
         )
 
-        self.browse(self.v3).toggle()
+        self.browse(self.v3).write({'application': 'enabled'})
         arch = self.read_combined(self.v0)['arch']
         self.assertEqual(
             ET.fromstring(arch),
@@ -1166,7 +1152,7 @@ class TestOptionalViews(ViewCase):
             )
         )
 
-        self.browse(self.v2).toggle()
+        self.browse(self.v2).write({'application': 'enabled'})
         arch = self.read_combined(self.v0)['arch']
         self.assertEqual(
             ET.fromstring(arch),

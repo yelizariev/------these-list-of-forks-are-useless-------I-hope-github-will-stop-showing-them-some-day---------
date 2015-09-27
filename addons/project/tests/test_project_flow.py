@@ -19,7 +19,7 @@
 #
 ##############################################################################
 
-from .test_project_base import TestProjectBase
+from openerp.addons.project.tests.test_project_base import TestProjectBase
 from openerp.exceptions import AccessError
 from openerp.tools import mute_logger
 

@@ -216,7 +216,7 @@ instance.web.DiagramView = instance.web.View.extend({
         };
 
         CuteEdge.creation_callback = function(node_start, node_end){
-            return {label: ''};
+            return {label:_t("")};
         };
         CuteEdge.new_edge_callback = function(cuteedge){
             self.add_connector(cuteedge.get_start().id,

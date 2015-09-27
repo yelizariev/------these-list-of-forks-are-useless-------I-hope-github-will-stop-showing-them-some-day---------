@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 import copy
+import re
+import simplejson
+import werkzeug
 
 from lxml import etree, html
 
-from openerp import SUPERUSER_ID, api
+from openerp import SUPERUSER_ID
 from openerp.addons.website.models import website
 from openerp.http import request
 from openerp.osv import osv, fields
@@ -15,11 +18,9 @@ class view(osv.osv):
         'website_meta_title': fields.char("Website meta title", size=70, translate=True),
         'website_meta_description': fields.text("Website meta description", size=160, translate=True),
         'website_meta_keywords': fields.char("Website meta keywords", translate=True),
-        'customize_show': fields.boolean("Show As Optional Inherit"),
     }
     _defaults = {
         'page': False,
-        'customize_show': False,
     }
 
 
@@ -67,14 +68,15 @@ class view(osv.osv):
         extensions = view.inherit_children_ids
         if not options:
             # only active children
-            extensions = (v for v in view.inherit_children_ids if v.active)
+            extensions = (v for v in view.inherit_children_ids
+                          if v.application in ('always', 'enabled'))
 
         # Keep options in a deterministic order regardless of their applicability
         for extension in sorted(extensions, key=lambda v: v.id):
             for r in self._views_get(
                     cr, uid, extension,
                     # only return optional grandchildren if this child is enabled
-                    options=extension.active,
+                    options=extension.application in ('always', 'enabled'),
                     context=context, root=False):
                 if r not in result:
                     result.append(r)
@@ -87,8 +89,10 @@ class view(osv.osv):
         Model = self.pool[el.get('data-oe-model')]
         field = el.get('data-oe-field')
 
-        converter = self.pool['website.qweb'].get_converter_for(el.get('data-oe-type'))
-        value = converter.from_html(cr, uid, Model, Model._fields[field], el)
+        column = Model._all_columns[field].column
+        converter = self.pool['website.qweb'].get_converter_for(
+            el.get('data-oe-type'))
+        value = converter.from_html(cr, uid, Model, column, el)
 
         if value is not None:
             # TODO: batch writes?
@@ -128,7 +132,6 @@ class view(osv.osv):
 
         return arch
 
-    @api.cr_uid_ids_context
     def render(self, cr, uid, id_or_xml_id, values=None, engine='ir.qweb', context=None):
         if request and getattr(request, 'website_enabled', False):
             engine='website.qweb'
@@ -139,14 +142,12 @@ class view(osv.osv):
             if not context:
                 context = {}
 
-            company = self.pool['res.company'].browse(cr, SUPERUSER_ID, request.website.company_id.id, context=context)
-
             qcontext = dict(
                 context.copy(),
                 website=request.website,
                 url_for=website.url_for,
                 slug=website.slug,
-                res_company=company,
+                res_company=request.website.company_id,
                 user_id=self.pool.get("res.users").browse(cr, uid, uid),
                 translatable=context.get('lang') != request.website.default_lang_code,
                 editable=request.website.is_publisher(),
@@ -158,10 +159,7 @@ class view(osv.osv):
                 qcontext.update(values)
 
             # in edit mode ir.ui.view will tag nodes
-            if qcontext.get('editable'):
-                context = dict(context, inherit_branding=True)
-            elif request.registry['res.users'].has_group(cr, uid, 'base.group_website_publisher'):
-                context = dict(context, inherit_branding_auto=True)
+            context = dict(context, inherit_branding=qcontext.get('editable', False))
 
             view_obj = request.website.get_template(id_or_xml_id)
             if 'main_object' not in qcontext:
@@ -214,48 +212,3 @@ class view(osv.osv):
         view = self.browse(cr, SUPERUSER_ID, res_id, context=context)
         if view.model_data_id:
             view.model_data_id.write({'noupdate': True})
-
-    def customize_template_get(self, cr, uid, xml_id, full=False, bundles=False , context=None):
-        """ Get inherit view's informations of the template ``key``. By default, only
-        returns ``customize_show`` templates (which can be active or not), if
-        ``full=True`` returns inherit view's informations of the template ``key``.
-        ``bundles=True`` returns also the asset bundles
-        """
-        imd = request.registry['ir.model.data']
-        view_model, view_theme_id = imd.get_object_reference(cr, uid, 'website', 'theme')
-        user = request.registry['res.users'].browse(cr, uid, uid, context)
-        user_groups = set(user.groups_id)
-        views = self._views_get(cr, uid, xml_id, context=dict(context or {}, active_test=False))
-        done = set()
-        result = []
-        for v in views:
-            if not user_groups.issuperset(v.groups_id):
-                continue
-            if full or (v.customize_show and v.inherit_id.id != view_theme_id):
-                if v.inherit_id not in done:
-                    result.append({
-                        'name': v.inherit_id.name,
-                        'id': v.id,
-                        'xml_id': v.xml_id,
-                        'inherit_id': v.inherit_id.id,
-                        'header': True,
-                        'active': False
-                    })
-                    done.add(v.inherit_id)
-                result.append({
-                    'name': v.name,
-                    'id': v.id,
-                    'xml_id': v.xml_id,
-                    'inherit_id': v.inherit_id.id,
-                    'header': False,
-                    'active': v.active,
-                })
-        return result
-
-    def get_view_translations(self, cr, uid, xml_id, lang, field=['id', 'res_id', 'value', 'state', 'gengo_translation'], context=None):
-        views = self.customize_template_get(cr, uid, xml_id, full=True, context=context)
-        views_ids = [view.get('id') for view in views if view.get('active')]
-        domain = [('type', '=', 'view'), ('res_id', 'in', views_ids), ('lang', '=', lang)]
-        irt = request.registry.get('ir.translation')
-        return irt.search_read(cr, uid, domain, field, context=context)
-

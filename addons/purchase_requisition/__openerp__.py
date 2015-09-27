@@ -22,7 +22,8 @@
     'version': '0.1',
     'author': 'OpenERP SA',
     'category': 'Purchase Management',
-    'website': 'https://www.odoo.com/page/purchase',
+    'images': ['images/purchase_requisitions.jpeg'],
+    'website': 'http://www.openerp.com',
     'description': """
 This module allows you to manage your Purchase Requisition.
 ===========================================================

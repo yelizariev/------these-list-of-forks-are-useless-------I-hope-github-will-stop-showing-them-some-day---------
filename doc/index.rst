@@ -1,26 +1,63 @@
-:main-title: doc
-:banner: banners/index.jpg
+:orphan:
 
-=====
-Index
-=====
+========================================
+OpenERP Server Developers Documentation
+========================================
 
-.. todo:: what's the documentation's license?
+Howto
+'''''
 
-.. rst-class:: index-tree
-.. titlesonly breaks level 3 (~in-document) toc of left navbar, so use
-   maxdepth instead
 .. toctree::
-    :maxdepth: 2
+    :maxdepth: 1
 
-    tutorials
-    api_integration
-    setup
-    reference
-    business
+    howto/howto_website
 
-.. ifconfig:: todo_include_todos
+OpenERP Server
+''''''''''''''
 
-    .. rubric:: Things to add and fix
+.. toctree::
+   :maxdepth: 2
 
-    .. todolist::
+   01_getting_started
+   02_architecture
+   03_module_dev
+   04_security
+   workflows
+   05_test_framework
+   06_misc
+   deployment-gunicorn
+   deployment-mod-wsgi
+   form-view-guidelines
+   ir_actions
+
+OpenERP Server API
+''''''''''''''''''
+
+.. toctree::
+   :maxdepth: 1
+
+   new_api
+   orm-methods
+   api_models
+   routing
+
+Changelog
+'''''''''
+
+.. toctree::
+   :maxdepth: 1
+
+   changelog.rst
+
+Concepts
+''''''''
+
+.. glossary::
+
+    Database ID
+
+        The primary key of a record in a PostgreSQL table (or a
+        virtual version thereof), usually varies from one database to
+        the next.
+
+    External ID

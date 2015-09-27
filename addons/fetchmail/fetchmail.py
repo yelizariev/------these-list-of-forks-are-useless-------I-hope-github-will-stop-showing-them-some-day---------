@@ -20,7 +20,6 @@
 ##############################################################################
 
 import logging
-import poplib
 import time
 from imaplib import IMAP4
 from imaplib import IMAP4_SSL
@@ -40,11 +39,6 @@ from openerp import tools, api
 from openerp.tools.translate import _
 
 _logger = logging.getLogger(__name__)
-MAX_POP_MESSAGES = 50
-MAIL_TIMEOUT = 60
-
-# Workaround for Python 2.7.8 bug https://bugs.python.org/issue23906
-poplib._MAXLINE = 65536
 
 class fetchmail_server(osv.osv):
     """Incoming POP/IMAP mail server account"""
@@ -155,8 +149,6 @@ openerp_mailgate: "|/path/to/openerp-mailgate.py --host=localhost -u %(uid)d -p 
             #connection.user("recent:"+server.user)
             connection.user(server.user)
             connection.pass_(server.password)
-        # Add timeout on socket
-        connection.sock.settimeout(MAIL_TIMEOUT)
         return connection
 
     def button_confirm_login(self, cr, uid, ids, context=None):
@@ -230,31 +222,27 @@ openerp_mailgate: "|/path/to/openerp-mailgate.py --host=localhost -u %(uid)d -p 
                         imap_server.logout()
             elif server.type == 'pop':
                 try:
-                    while True:
-                        pop_server = server.connect()
-                        (numMsgs, totalSize) = pop_server.stat()
-                        pop_server.list()
-                        for num in range(1, min(MAX_POP_MESSAGES, numMsgs) + 1):
-                            (header, msges, octets) = pop_server.retr(num)
-                            msg = '\n'.join(msges)
-                            res_id = None
-                            try:
-                                res_id = mail_thread.message_process(cr, uid, server.object_id.model,
-                                                                     msg,
-                                                                     save_original=server.original,
-                                                                     strip_attachments=(not server.attach),
-                                                                     context=context)
-                                pop_server.dele(num)
-                            except Exception:
-                                _logger.exception('Failed to process mail from %s server %s.', server.type, server.name)
-                                failed += 1
-                            if res_id and server.action_id:
-                                action_pool.run(cr, uid, [server.action_id.id], {'active_id': res_id, 'active_ids': [res_id], 'active_model': context.get("thread_model", server.object_id.model)})
-                            cr.commit()
-                        if numMsgs < MAX_POP_MESSAGES:
-                            break
-                        pop_server.quit()
-                        _logger.info("Fetched %d email(s) on %s server %s; %d succeeded, %d failed.", numMsgs, server.type, server.name, (numMsgs - failed), failed)
+                    pop_server = server.connect()
+                    (numMsgs, totalSize) = pop_server.stat()
+                    pop_server.list()
+                    for num in range(1, numMsgs + 1):
+                        (header, msges, octets) = pop_server.retr(num)
+                        msg = '\n'.join(msges)
+                        res_id = None
+                        try:
+                            res_id = mail_thread.message_process(cr, uid, server.object_id.model,
+                                                                 msg,
+                                                                 save_original=server.original,
+                                                                 strip_attachments=(not server.attach),
+                                                                 context=context)
+                        except Exception:
+                            _logger.exception('Failed to process mail from %s server %s.', server.type, server.name)
+                            failed += 1
+                        if res_id and server.action_id:
+                            action_pool.run(cr, uid, [server.action_id.id], {'active_id': res_id, 'active_ids': [res_id], 'active_model': context.get("thread_model", server.object_id.model)})
+                        pop_server.dele(num)
+                        cr.commit()
+                    _logger.info("Fetched %d email(s) on %s server %s; %d succeeded, %d failed.", numMsgs, server.type, server.name, (numMsgs - failed), failed)
                 except Exception:
                     _logger.exception("General failure when trying to fetch mail from %s server %s.", server.type, server.name)
                 finally:
@@ -263,33 +251,27 @@ openerp_mailgate: "|/path/to/openerp-mailgate.py --host=localhost -u %(uid)d -p 
             server.write({'date': time.strftime(tools.DEFAULT_SERVER_DATETIME_FORMAT)})
         return True
 
-    def _update_cron(self, cr, uid, context=None):
-        if context and context.get('fetchmail_cron_running'):
-            return
-
-        try:
-            cron = self.pool['ir.model.data'].get_object(
-                cr, uid, 'fetchmail', 'ir_cron_mail_gateway_action', context=context)
-        except ValueError:
-            # Nevermind if default cron cannot be found
-            return
-
-        # Enabled/Disable cron based on the number of 'done' server of type pop or imap
-        cron.toggle(model=self._name, domain=[('state','=','done'), ('type','in',['pop','imap'])])
+    def cron_update(self, cr, uid, context=None):
+        if context is None:
+            context = {}
+        if not context.get('fetchmail_cron_running'):
+            # Enabled/Disable cron based on the number of 'done' server of type pop or imap
+            ids = self.search(cr, uid, [('state','=','done'),('type','in',['pop','imap'])])
+            try:
+                cron_id = self.pool.get('ir.model.data').get_object_reference(cr, uid, 'fetchmail', 'ir_cron_mail_gateway_action')[1]
+                self.pool.get('ir.cron').write(cr, 1, [cron_id], {'active': bool(ids)})
+            except ValueError:
+                # Nevermind if default cron cannot be found
+                pass
 
     def create(self, cr, uid, values, context=None):
         res = super(fetchmail_server, self).create(cr, uid, values, context=context)
-        self._update_cron(cr, uid, context=context)
+        self.cron_update(cr, uid, context=context)
         return res
 
     def write(self, cr, uid, ids, values, context=None):
         res = super(fetchmail_server, self).write(cr, uid, ids, values, context=context)
-        self._update_cron(cr, uid, context=context)
-        return res
-
-    def unlink(self, cr, uid, ids, context=None):
-        res = super(fetchmail_server, self).unlink(cr, uid, ids, context=context)
-        self._update_cron(cr, uid, context=context)
+        self.cron_update(cr, uid, context=context)
         return res
 
 class mail_mail(osv.osv):

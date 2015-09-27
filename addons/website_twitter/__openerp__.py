@@ -2,7 +2,6 @@
     'name': 'Twitter Roller',
     'category': 'Website',
     'summary': 'Add twitter scroller snippet in website builder',
-    'website': 'https://www.odoo.com/page/website-builder',
     'version': '1.0',
     'description': """
 Display best tweets
@@ -20,4 +19,5 @@ Display best tweets
     'demo': [],
     'qweb': [],
     'installable': True,
+    'application': True,
 }

@@ -229,8 +229,8 @@ def GetAFileName():
     oUcb=None
     oFileDialog = createUnoService("com.sun.star.ui.dialogs.FilePicker")
     oUcb = createUnoService("com.sun.star.ucb.SimpleFileAccess")
-    oFileDialog.appendFilter("Odoo Report File","*.sxw")
-    oFileDialog.setCurrentFilter("Odoo Report File")
+    oFileDialog.appendFilter("OpenERP Report File","*.sxw")
+    oFileDialog.setCurrentFilter("OpenERP Report File")
     if InitPath == "":
         InitPath =tempfile.gettempdir()
     #End If

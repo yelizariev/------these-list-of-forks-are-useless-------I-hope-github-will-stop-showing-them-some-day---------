@@ -32,11 +32,7 @@ except ImportError:
 import openerp
 import openerp.modules.registry
 from openerp.addons.base.ir.ir_qweb import AssetsBundle, QWebTemplateNotFound
-from openerp.modules import get_module_resource
-from openerp.service import model as service_model
-from openerp.tools import topological_sort
 from openerp.tools.translate import _
-from openerp.tools import ustr
 from openerp import http
 
 from openerp.http import request, serialize_exception as _serialize_exception
@@ -74,7 +70,7 @@ def serialize_exception(f):
             se = _serialize_exception(e)
             error = {
                 'code': 200,
-                'message': "Odoo Server Error",
+                'message': "OpenERP Server Error",
                 'data': se
             }
             return werkzeug.exceptions.InternalServerError(simplejson.dumps(error))
@@ -126,7 +122,7 @@ def ensure_db(redirect='/web/database/selector'):
         abort_and_redirect(url_redirect)
 
     # if db not provided, use the session one
-    if not db and request.session.db and http.db_filter([request.session.db]):
+    if not db:
         db = request.session.db
 
     # if no database provided and no database in session, use monodb
@@ -145,6 +141,50 @@ def ensure_db(redirect='/web/database/selector'):
 
     request.session.db = db
 
+def module_topological_sort(modules):
+    """ Return a list of module names sorted so that their dependencies of the
+    modules are listed before the module itself
+
+    modules is a dict of {module_name: dependencies}
+
+    :param modules: modules to sort
+    :type modules: dict
+    :returns: list(str)
+    """
+
+    dependencies = set(itertools.chain.from_iterable(modules.itervalues()))
+    # incoming edge: dependency on other module (if a depends on b, a has an
+    # incoming edge from b, aka there's an edge from b to a)
+    # outgoing edge: other module depending on this one
+
+    # [Tarjan 1976], http://en.wikipedia.org/wiki/Topological_sorting#Algorithms
+    #L ← Empty list that will contain the sorted nodes
+    L = []
+    #S ← Set of all nodes with no outgoing edges (modules on which no other
+    #    module depends)
+    S = set(module for module in modules if module not in dependencies)
+
+    visited = set()
+    #function visit(node n)
+    def visit(n):
+        #if n has not been visited yet then
+        if n not in visited:
+            #mark n as visited
+            visited.add(n)
+            #change: n not web module, can not be resolved, ignore
+            if n not in modules: return
+            #for each node m with an edge from m to n do (dependencies of n)
+            for m in modules[n]:
+                #visit(m)
+                visit(m)
+            #add n to L
+            L.append(n)
+    #for each node n in S do
+    for n in S:
+        #visit(n)
+        visit(n)
+    return L
+
 def module_installed():
     # Candidates module the current heuristic is the /static dir
     loadable = http.addons_manifest.keys()
@@ -162,7 +202,7 @@ def module_installed():
             dependencies = [i['name'] for i in deps_read]
             modules[module['name']] = dependencies
 
-    sorted_modules = topological_sort(modules)
+    sorted_modules = module_topological_sort(modules)
     return sorted_modules
 
 def module_installed_bypass_session(dbname):
@@ -184,7 +224,7 @@ def module_installed_bypass_session(dbname):
                     modules[module['name']] = dependencies
     except Exception,e:
         pass
-    sorted_modules = topological_sort(modules)
+    sorted_modules = module_topological_sort(modules)
     return sorted_modules
 
 def module_boot(db=None):
@@ -312,12 +352,12 @@ def set_cookie_and_redirect(redirect_url):
 
 def login_redirect():
     url = '/web/login?'
-    # built the redirect url, keeping all the query parameters of the url
-    redirect_url = '%s?%s' % (request.httprequest.base_url, werkzeug.urls.url_encode(request.params))
+    if request.debug:
+        url += 'debug&'
     return """<html><head><script>
-        window.location = '%sredirect=' + encodeURIComponent("%s" + location.hash);
+        window.location = '%sredirect=' + encodeURIComponent(window.location);
     </script></head></html>
-    """ % (url, redirect_url)
+    """ % (url,)
 
 def load_actions_from_ir_values(key, key2, models, meta):
     Values = request.session.model('ir.values')
@@ -445,14 +485,14 @@ def xml2json_from_elementtree(el, preserve_whitespaces=False):
     return res
 
 def content_disposition(filename):
-    filename = ustr(filename)
-    escaped = urllib2.quote(filename.encode('utf8'))
+    filename = filename.encode('utf8')
+    escaped = urllib2.quote(filename)
     browser = request.httprequest.user_agent.browser
     version = int((request.httprequest.user_agent.version or '0').split('.')[0])
     if browser == 'msie' and version < 9:
         return "attachment; filename=%s" % escaped
-    elif browser == 'safari' and version < 537:
-        return u"attachment; filename=%s" % filename.encode('ascii', 'replace')
+    elif browser == 'safari':
+        return "attachment; filename=%s" % filename
     else:
         return "attachment; filename*=UTF-8''%s" % escaped
 
@@ -469,6 +509,7 @@ class Home(http.Controller):
     @http.route('/web', type='http', auth="none")
     def web_client(self, s_action=None, **kw):
         ensure_db()
+
         if request.session.uid:
             if kw.get('redirect'):
                 return werkzeug.utils.redirect(kw.get('redirect'), 303)
@@ -479,11 +520,6 @@ class Home(http.Controller):
             return request.render('web.webclient_bootstrap', qcontext={'menu_data': menu_data})
         else:
             return login_redirect()
-
-    @http.route('/web/dbredirect', type='http', auth="none")
-    def web_db_redirect(self, redirect='/', **kw):
-        ensure_db()
-        return werkzeug.utils.redirect(redirect, 303)
 
     @http.route('/web/login', type='http', auth="none")
     def web_login(self, redirect=None, **kw):
@@ -512,18 +548,10 @@ class Home(http.Controller):
                 return http.redirect_with_hash(redirect)
             request.uid = old_uid
             values['error'] = "Wrong login/password"
-        if request.env.ref('web.login', False):
-            return request.render('web.login', values)
-        else:
-            # probably not an odoo compatible database
-            error = 'Unable to login on database %s' % request.session.db
-            return werkzeug.utils.redirect('/web/database/selector?error=%s' % error, 303)
-
+        return request.render('web.login', values)
 
     @http.route('/login', type='http', auth="none")
     def login(self, db, login, key, redirect="/web", **kw):
-        if not http.db_filter([db]):
-            return werkzeug.utils.redirect('/', 303)
         return login_and_redirect(db, login, key, redirect_url=redirect)
 
     @http.route([
@@ -542,15 +570,14 @@ class Home(http.Controller):
     @http.route([
         '/web/css/<xmlid>',
         '/web/css/<xmlid>/<version>',
-        '/web/css.<int:page>/<xmlid>/<version>',
     ], type='http', auth='public')
-    def css_bundle(self, xmlid, version=None, page=None, **kw):
+    def css_bundle(self, xmlid, version=None, **kw):
         try:
             bundle = AssetsBundle(xmlid)
         except QWebTemplateNotFound:
             return request.not_found()
 
-        response = request.make_response(bundle.css(page), [('Content-Type', 'text/css')])
+        response = request.make_response(bundle.css(), [('Content-Type', 'text/css')])
         return make_conditional(response, bundle.last_modified, max_age=BUNDLE_MAXAGE)
 
 class WebClient(http.Controller):
@@ -655,8 +682,7 @@ class Proxy(http.Controller):
         from werkzeug.test import Client
         from werkzeug.wrappers import BaseResponse
 
-        base_url = request.httprequest.base_url
-        return Client(request.httprequest.app, BaseResponse).get(path, base_url=base_url).data
+        return Client(request.httprequest.app, BaseResponse).get(path).data
 
 class Database(http.Controller):
 
@@ -671,7 +697,6 @@ class Database(http.Controller):
         return env.get_template("database_selector.html").render({
             'databases': dbs,
             'debug': request.debug,
-            'error': kw.get('error')
         })
 
     @http.route('/web/database/manager', type='http', auth="none")
@@ -722,7 +747,7 @@ class Database(http.Controller):
         password, db = operator.itemgetter(
             'drop_pwd', 'drop_db')(
                 dict(map(operator.itemgetter('name', 'value'), fields)))
-
+        
         try:
             if request.session.proxy("db").drop(password, db):
                 return True
@@ -734,21 +759,21 @@ class Database(http.Controller):
             return {'error': _('Could not drop database !'), 'title': _('Drop Database')}
 
     @http.route('/web/database/backup', type='http', auth="none")
-    def backup(self, backup_db, backup_pwd, token, backup_format='zip'):
+    def backup(self, backup_db, backup_pwd, token):
         try:
-            openerp.service.security.check_super(backup_pwd)
-            ts = datetime.datetime.utcnow().strftime("%Y-%m-%d_%H-%M-%S")
-            filename = "%s_%s.%s" % (backup_db, ts, backup_format)
-            headers = [
-                ('Content-Type', 'application/octet-stream; charset=binary'),
-                ('Content-Disposition', content_disposition(filename)),
-            ]
-            dump_stream = openerp.service.db.dump_db(backup_db, None, backup_format)
-            response = werkzeug.wrappers.Response(dump_stream, headers=headers, direct_passthrough=True)
-            response.set_cookie('fileToken', token)
-            return response
+            db_dump = base64.b64decode(
+                request.session.proxy("db").dump(backup_pwd, backup_db))
+            filename = "%(db)s_%(timestamp)s.dump" % {
+                'db': backup_db,
+                'timestamp': datetime.datetime.utcnow().strftime(
+                    "%Y-%m-%d_%H-%M-%SZ")
+            }
+            return request.make_response(db_dump,
+               [('Content-Type', 'application/octet-stream; charset=binary'),
+               ('Content-Disposition', content_disposition(filename))],
+               {'fileToken': token}
+            )
         except Exception, e:
-            _logger.exception('Database.backup')
             return simplejson.dumps([[],[{'error': openerp.tools.ustr(e), 'title': _('Backup Database')}]])
 
     @http.route('/web/database/restore', type='http', auth="none")
@@ -783,7 +808,6 @@ class Session(http.Controller):
             "user_context": request.session.get_context() if request.session.uid else {},
             "db": request.session.db,
             "username": request.session.login,
-            "company_id": request.env.user.company_id.id if request.session.uid else None,
         }
 
     @http.route('/web/session/get_session_info', type='json', auth="none")
@@ -931,13 +955,24 @@ class DataSet(http.Controller):
         return self._call_kw(model, method, args, {})
 
     def _call_kw(self, model, method, args, kwargs):
+        # Temporary implements future display_name special field for model#read()
+        if method in ('read', 'search_read') and kwargs.get('context', {}).get('future_display_name'):
+            if 'display_name' in args[1]:
+                if method == 'read':
+                    names = dict(request.session.model(model).name_get(args[0], **kwargs))
+                else:
+                    names = dict(request.session.model(model).name_search('', args[0], **kwargs))
+                args[1].remove('display_name')
+                records = getattr(request.session.model(model), method)(*args, **kwargs)
+                for record in records:
+                    record['display_name'] = \
+                        names.get(record['id']) or "{0}#{1}".format(model, (record['id']))
+                return records
+
         if method.startswith('_'):
             raise Exception("Access Denied: Underscore prefixed methods cannot be remotely called")
 
-        @service_model.check
-        def checked_call(__dbname, *args, **kwargs):
-            return getattr(request.registry.get(model), method)(request.cr, request.uid, *args, **kwargs)
-        return checked_call(request.db, *args, **kwargs)
+        return getattr(request.registry.get(model), method)(request.cr, request.uid, *args, **kwargs)
 
     @http.route('/web/dataset/call', type='json', auth="user")
     def call(self, model, method, args, domain_id=None, context_id=None):
@@ -1019,8 +1054,7 @@ class Binary(http.Controller):
     @http.route('/web/binary/image', type='http', auth="public")
     def image(self, model, id, field, **kw):
         last_update = '__last_update'
-        Model = request.registry[model]
-        cr, uid, context = request.cr, request.uid, request.context
+        Model = request.session.model(model)
         headers = [('Content-Type', 'image/png')]
         etag = request.httprequest.headers.get('If-None-Match')
         hashed_session = hashlib.md5(request.session_id).hexdigest()
@@ -1033,15 +1067,15 @@ class Binary(http.Controller):
                 if not id and hashed_session == etag:
                     return werkzeug.wrappers.Response(status=304)
                 else:
-                    date = Model.read(cr, uid, [id], [last_update], context)[0].get(last_update)
+                    date = Model.read([id], [last_update], request.context)[0].get(last_update)
                     if hashlib.md5(date).hexdigest() == etag:
                         return werkzeug.wrappers.Response(status=304)
 
             if not id:
-                res = Model.default_get(cr, uid, [field], context).get(field)
+                res = Model.default_get([field], request.context).get(field)
                 image_base64 = res
             else:
-                res = Model.read(cr, uid, [id], [last_update, field], context)[0]
+                res = Model.read([id], [last_update, field], request.context)[0]
                 retag = hashlib.md5(res.get(last_update)).hexdigest()
                 image_base64 = res.get(field)
 
@@ -1087,16 +1121,15 @@ class Binary(http.Controller):
         :param str filename_field: field holding the file's name, if any
         :returns: :class:`werkzeug.wrappers.Response`
         """
-        Model = request.registry[model]
-        cr, uid, context = request.cr, request.uid, request.context
+        Model = request.session.model(model)
         fields = [field]
         if filename_field:
             fields.append(filename_field)
         if id:
-            res = Model.read(cr, uid, [int(id)], fields, context)[0]
+            res = Model.read([int(id)], fields, request.context)[0]
         else:
-            res = Model.default_get(cr, uid, fields, context)
-        filecontent = base64.b64decode(res.get(field) or '')
+            res = Model.default_get(fields, request.context)
+        filecontent = base64.b64decode(res.get(field, ''))
         if not filecontent:
             return request.not_found()
         else:
@@ -1123,12 +1156,12 @@ class Binary(http.Controller):
         if filename_field:
             fields.append(filename_field)
         if data:
-            res = {field: data, filename_field: jdata.get('filename', None)}
+            res = { field: data }
         elif id:
             res = Model.read([int(id)], fields, context)[0]
         else:
             res = Model.default_get(fields, context)
-        filecontent = base64.b64decode(res.get(field) or '')
+        filecontent = base64.b64decode(res.get(field, ''))
         if not filecontent:
             raise ValueError(_("No content found for field '%s' on '%s:%s'") %
                 (field, model, id))
@@ -1179,17 +1212,15 @@ class Binary(http.Controller):
             }
         except Exception:
             args = {'error': "Something horrible happened"}
-            _logger.exception("Fail to upload attachment %s" % ufile.filename)
         return out % (simplejson.dumps(callback), simplejson.dumps(args))
 
     @http.route([
         '/web/binary/company_logo',
         '/logo',
         '/logo.png',
-    ], type='http', auth="none", cors="*")
-    def company_logo(self, dbname=None, **kw):
-        imgname = 'logo.png'
-        placeholder = functools.partial(get_module_resource, 'web', 'static', 'src', 'img')
+    ], type='http', auth="none")
+    def company_logo(self, dbname=None):
+        # TODO add etag, refactor to use /image code for etag
         uid = None
         if request.session.db:
             dbname = request.session.db
@@ -1201,13 +1232,13 @@ class Binary(http.Controller):
             uid = openerp.SUPERUSER_ID
 
         if not dbname:
-            response = http.send_file(placeholder(imgname))
+            image_data = self.placeholder('logo.png')
         else:
             try:
                 # create an empty registry
                 registry = openerp.modules.registry.Registry(dbname)
                 with registry.cursor() as cr:
-                    cr.execute("""SELECT c.logo_web, c.write_date
+                    cr.execute("""SELECT c.logo_web
                                     FROM res_users u
                                LEFT JOIN res_company c
                                       ON c.id = u.company_id
@@ -1215,19 +1246,22 @@ class Binary(http.Controller):
                                """, (uid,))
                     row = cr.fetchone()
                     if row and row[0]:
-                        image_data = StringIO(str(row[0]).decode('base64'))
-                        response = http.send_file(image_data, filename=imgname, mtime=row[1])
+                        image_data = str(row[0]).decode('base64')
                     else:
-                        response = http.send_file(placeholder('nologo.png'))
+                        image_data = self.placeholder('nologo.png')
             except Exception:
-                response = http.send_file(placeholder(imgname))
+                image_data = self.placeholder('logo.png')
 
-        return response
+        headers = [
+            ('Content-Type', 'image/png'),
+            ('Content-Length', len(image_data)),
+        ]
+        return request.make_response(image_data, headers)
 
 class Action(http.Controller):
 
     @http.route('/web/action/load', type='json', auth="user")
-    def load(self, action_id, do_not_eval=False, additional_context=None):
+    def load(self, action_id, do_not_eval=False):
         Actions = request.session.model('ir.actions.actions')
         value = False
         try:
@@ -1242,12 +1276,11 @@ class Action(http.Controller):
 
         base_action = Actions.read([action_id], ['type'], request.context)
         if base_action:
-            ctx = request.context
+            ctx = {}
             action_type = base_action[0]['type']
             if action_type == 'ir.actions.report.xml':
                 ctx.update({'bin_size': True})
-            if additional_context:
-                ctx.update(additional_context)
+            ctx.update(request.context)
             action = request.session.model(action_type).read([action_id], False, ctx)
             if action:
                 value = clean_action(action[0])
@@ -1297,7 +1330,7 @@ class Export(http.Controller):
             fields['.id'] = fields.pop('id', {'string': 'ID'})
 
         fields_sequence = sorted(fields.iteritems(),
-            key=lambda field: openerp.tools.ustr(field[1].get('string', '')))
+            key=lambda field: field[1].get('string', ''))
 
         records = []
         for field_name, field in fields_sequence:
@@ -1428,21 +1461,16 @@ class ExportFormat(object):
         raise NotImplementedError()
 
     def base(self, data, token):
-        params = simplejson.loads(data)
         model, fields, ids, domain, import_compat = \
             operator.itemgetter('model', 'fields', 'ids', 'domain',
                                 'import_compat')(
-                params)
+                simplejson.loads(data))
 
         Model = request.session.model(model)
-        context = dict(request.context or {}, **params.get('context', {}))
-        ids = ids or Model.search(domain, 0, False, False, context)
-
-        if not request.env[model]._is_an_ordinary_table():
-            fields = [field for field in fields if field['name'] != 'id']
+        ids = ids or Model.search(domain, 0, False, False, request.context)
 
         field_names = map(operator.itemgetter('name'), fields)
-        import_data = Model.export_data(ids, field_names, self.raw_data, context=context).get('datas',[])
+        import_data = Model.export_data(ids, field_names, self.raw_data, context=request.context).get('datas',[])
 
         if import_compat:
             columns_headers = field_names
@@ -1630,7 +1658,7 @@ class Apps(http.Controller):
         sakey = Session().save_session_action(action)
         debug = '?debug' if req.debug else ''
         return werkzeug.utils.redirect('/web{0}#sa={1}'.format(debug, sakey))
-
+        
 
 
 # vim:expandtab:tabstop=4:softtabstop=4:shiftwidth=4:

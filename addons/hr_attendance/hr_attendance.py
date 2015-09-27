@@ -61,16 +61,13 @@ class hr_attendance(osv.osv):
                     ('employee_id', '=', obj.employee_id.id),
                     ('name', '<', obj.name), ('action', '=', 'sign_in')
                 ], limit=1, order='name DESC')
-                if last_signin_id:
-                    last_signin = self.browse(cr, uid, last_signin_id, context=context)[0]
+                last_signin = self.browse(cr, uid, last_signin_id, context=context)[0]
 
-                    # Compute time elapsed between sign-in and sign-out
-                    last_signin_datetime = datetime.strptime(last_signin.name, '%Y-%m-%d %H:%M:%S')
-                    signout_datetime = datetime.strptime(obj.name, '%Y-%m-%d %H:%M:%S')
-                    workedhours_datetime = (signout_datetime - last_signin_datetime)
-                    res[obj.id] = ((workedhours_datetime.seconds) / 60) / 60.0
-                else:
-                    res[obj.id] = False
+                # Compute time elapsed between sign-in and sign-out
+                last_signin_datetime = datetime.strptime(last_signin.name, '%Y-%m-%d %H:%M:%S')
+                signout_datetime = datetime.strptime(obj.name, '%Y-%m-%d %H:%M:%S')
+                workedhours_datetime = (signout_datetime - last_signin_datetime)
+                res[obj.id] = ((workedhours_datetime.seconds) / 60) / 60
         return res
 
     _columns = {
@@ -149,7 +146,10 @@ class hr_employee(osv.osv):
 
     def _attendance_access(self, cr, uid, ids, name, args, context=None):
         # this function field use to hide attendance button to singin/singout from menu
-        visible = self.pool.get("res.users").has_group(cr, uid, "base.group_hr_attendance")
+        group = self.pool.get('ir.model.data').get_object(cr, uid, 'base', 'group_hr_attendance')
+        visible = False
+        if uid in [user.id for user in group.users]:
+            visible = True
         return dict([(x, visible) for x in ids])
 
     _columns = {

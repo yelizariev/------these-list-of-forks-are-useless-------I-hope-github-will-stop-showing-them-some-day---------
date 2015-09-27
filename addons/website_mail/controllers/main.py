@@ -46,8 +46,7 @@ class WebsiteMail(http.Controller):
             partner_ids = _object._find_partner_from_emails(
                 cr, SUPERUSER_ID, _id, [email], context=context, check_followers=True)
             if not partner_ids or not partner_ids[0]:
-                name = email.split('@')[0]
-                partner_ids = [partner_obj.create(cr, SUPERUSER_ID, {'name': name, 'email': email}, context=context)]
+                partner_ids = [partner_obj.create(cr, SUPERUSER_ID, {'name': email, 'email': email}, context=context)]
 
         # add or remove follower
         if _message_is_follower:

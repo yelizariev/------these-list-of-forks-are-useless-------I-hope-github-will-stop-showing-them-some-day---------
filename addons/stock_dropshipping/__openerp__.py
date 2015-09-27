@@ -39,7 +39,8 @@ internal transfer document is needed.
 
 """,
     'author': 'OpenERP SA',
-    'website': 'https://www.odoo.com/page/warehouse',
+    'website': 'http://www.openerp.com',
+    'images': [],
     'depends': ['purchase', 'sale_stock'],
     'data': ['stock_dropshipping.xml'],
     'test': [

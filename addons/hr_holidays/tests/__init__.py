@@ -19,6 +19,10 @@
 #
 ##############################################################################
 
-from . import test_holidays_flow
+from openerp.addons.hr_holidays.tests import test_holidays_flow
+
+checks = [
+    test_holidays_flow,
+]
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

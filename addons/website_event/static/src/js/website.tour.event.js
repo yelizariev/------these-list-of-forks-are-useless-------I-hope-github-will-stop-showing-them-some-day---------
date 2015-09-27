@@ -2,8 +2,7 @@
     'use strict';
 
     var _t = openerp._t;
-    var website = openerp.website;
-    website.ready().done(function() {
+
     openerp.Tour.register({
         id:   'event',
         name: _t("Create an event"),
@@ -101,7 +100,6 @@
                 element:   '.js_publish_management ul>li>a:last:visible',
             },
         ]
-    });
     });
 
 }());

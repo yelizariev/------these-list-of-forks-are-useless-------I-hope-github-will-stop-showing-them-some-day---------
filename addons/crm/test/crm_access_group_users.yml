@@ -5,6 +5,7 @@
     company_id: base.main_company
     name: Crm Sales manager
     login: csm
+    password: csm
     email: crmmanager@yourcompany.com
 -
   I added groups for Crm Salesmanager.
@@ -19,6 +20,7 @@
     company_id: base.main_company
     name: Crm Salesman
     login: csu
+    password: csu
     email: crmuser@yourcompany.com
 -
   I added groups for Crm Salesman.

@@ -13,12 +13,14 @@
             <field name="flow_start">True</field>
             <field name="name">draft</field>
         </record>
+
         <record id="act_proforma2" model="workflow.activity">
             <field name="wkf_id" ref="wkf"/>
             <field name="name">proforma2</field>
             <field name="action">write({'state':'proforma2'})</field>
             <field name="kind">function</field>
         </record>
+
         <record id="act_open" model="workflow.activity">
             <field name="wkf_id" ref="wkf"/>
             <field name="name">open</field>
@@ -33,7 +35,7 @@ invoice_validate()</field>
             <field name="name">re-open</field>
             <field name="action">write({'state':'open'})</field>
             <field name="kind">function</field>
-        </record>
+           </record>
         <record id="act_paid" model="workflow.activity">
             <field name="wkf_id" ref="wkf"/>
             <field name="name">paid</field>
@@ -59,9 +61,9 @@ write({'state':'cancel'})</field>
         <record id="t8" model="workflow.transition">
             <field name="act_from" ref="act_open"/>
             <field name="act_to" ref="act_paid"/>
-            <field name="trigger_model"/>
-            <field name="trigger_expr_id"/>
-            <field name="condition">reconciled</field>
+            <field name="trigger_model">account.move.line</field>
+            <field name="trigger_expr_id">move_line_id_payment_get()</field>
+            <field name="condition">test_paid()</field>
         </record>
         <record id="t9" model="workflow.transition">
             <field name="act_from" ref="act_draft"/>
@@ -76,8 +78,7 @@ write({'state':'cancel'})</field>
         <record id="t13" model="workflow.transition">
             <field name="act_from" ref="act_paid"/>
             <field name="act_to" ref="act_open_test"/>
-            <field name="signal"/>
-            <field name="condition">not reconciled</field>
+            <field name="signal">open_test</field>
         </record>
         <record id="t14" model="workflow.transition">
             <field name="act_from" ref="act_open_test"/>
@@ -88,9 +89,9 @@ write({'state':'cancel'})</field>
         <record id="open_test_to_paid" model="workflow.transition">
             <field name="act_from" ref="act_open_test"/>
             <field name="act_to" ref="act_paid"/>
-            <field name="trigger_model"/>
-            <field name="trigger_expr_id"/>
-            <field name="condition">reconciled</field>
+            <field name="trigger_model">account.move.line</field>
+            <field name="trigger_expr_id">move_line_id_payment_get()</field>
+            <field name="condition">test_paid()</field>
         </record>
 
         <record id="draft_to_pro2" model="workflow.transition">

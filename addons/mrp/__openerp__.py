@@ -24,10 +24,11 @@
     'name': 'MRP',
     'version': '1.1',
     'author': 'OpenERP SA',
-    'website': 'https://www.odoo.com/page/manufacturing',
+    'website': 'http://www.openerp.com',
     'category': 'Manufacturing',
     'sequence': 18,
     'summary': 'Manufacturing Orders, Bill of Materials, Routing',
+    'images': ['images/bill_of_materials.jpeg', 'images/manufacturing_order.jpeg', 'images/planning_manufacturing_order.jpeg', 'images/manufacturing_analysis.jpeg', 'images/routings.jpeg','images/work_centers.jpeg'],
     'depends': ['product', 'procurement', 'stock_account', 'resource', 'report'],
     'description': """
 Manage the Manufacturing process in OpenERP

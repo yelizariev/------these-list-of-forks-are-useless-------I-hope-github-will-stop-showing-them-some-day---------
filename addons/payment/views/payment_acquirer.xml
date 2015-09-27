@@ -20,7 +20,6 @@
                                 <field name="company_id"/>
                                 <field name="website_published"/>
                                 <field name="environment"/>
-                                <field name="validation"/>
                             </group>
                             <group>
                                 <field name="fees_active"/>
@@ -109,7 +108,7 @@
             <field name="arch" type="xml">
                 <form string="Payment Transactions">
                     <sheet>
-                        <group>
+                        <group col="6">
                             <group>
                                 <field name="reference"/>
                                 <field name="amount"/>

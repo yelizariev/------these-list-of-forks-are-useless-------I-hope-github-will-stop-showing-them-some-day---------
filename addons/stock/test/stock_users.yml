@@ -5,6 +5,7 @@
     company_id: base.main_company
     name: Stock Manager
     login: sam
+    password: sam
     email: stockmanager@yourcompany.com
 -
   I added groups for Stock Manager.
@@ -19,6 +20,7 @@
     company_id: base.main_company
     name: Stock User
     login: sau
+    password: sau
     email: stockuser@yourcompany.com
 -
   I added groups for Stock User.

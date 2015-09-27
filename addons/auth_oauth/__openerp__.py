@@ -30,7 +30,7 @@ Allow users to login through OAuth2 Provider.
 """,
     'author': 'OpenERP s.a.',
     'maintainer': 'OpenERP s.a.',
-    'website': 'https://www.odoo.com',
+    'website': 'http://www.openerp.com',
     'depends': ['base', 'web', 'base_setup', 'auth_signup'],
     'data': [
         'res_users.xml',
@@ -38,7 +38,6 @@ Allow users to login through OAuth2 Provider.
         'auth_oauth_data.yml',
         'auth_oauth_view.xml',
         'security/ir.model.access.csv',
-        'res_config.xml',
         'views/auth_oauth_login.xml',
     ],
     'installable': True,

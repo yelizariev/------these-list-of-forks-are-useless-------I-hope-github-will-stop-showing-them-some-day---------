@@ -222,25 +222,27 @@ instance.web.TreeView = instance.web.View.extend(/** @lends instance.web.TreeVie
         var local_context = {
             active_model: self.dataset.model,
             active_id: id,
-            active_ids: [id]
-        };
-        var ctx = instance.web.pyeval.eval(
-            'context', new instance.web.CompoundContext(
-                this.dataset.get_context(), local_context));
+            active_ids: [id]};
         return this.rpc('/web/treeview/action', {
             id: id,
             model: this.dataset.model,
-            context: ctx
+            context: instance.web.pyeval.eval(
+                'context', new instance.web.CompoundContext(
+                    this.dataset.get_context(), local_context))
         }).then(function (actions) {
             if (!actions.length) { return; }
             var action = actions[0][2];
-            var c = new instance.web.CompoundContext(local_context).set_eval_context(ctx);
+            var c = new instance.web.CompoundContext(local_context);
             if (action.context) {
                 c.add(action.context);
             }
-            action.context = c;
-            return self.do_action(action);
-        });
+            return instance.web.pyeval.eval_domains_and_contexts({
+                contexts: [c], domains: []
+            }).then(function (res) {
+                action.context = res.context;
+                return self.do_action(action);
+            }, null);
+        }, null);
     },
 
     // show & hide the contents

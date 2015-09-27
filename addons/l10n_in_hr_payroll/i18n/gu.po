@@ -1,21 +1,20 @@
-# Translation of OpenERP Server.
+# Gujarati Translation of OpenERP Server.
 # This file contains the translation of the following modules:
-# * l10n_in_hr_payroll
-# 
-# Translators:
+#   * l10n_in_hr_payroll
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo 8.0\n"
+"Project-Id-Version: OpenERP Server 7.0alpha\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-11-24 02:53+0000\n"
-"PO-Revision-Date: 2015-07-17 07:30+0000\n"
-"Last-Translator: Martin Trigaux\n"
-"Language-Team: Gujarati (http://www.transifex.com/odoo/odoo-8/language/gu/)\n"
+"PO-Revision-Date: 2012-10-10 12:31+0000\n"
+"Last-Translator: Fabien (Open ERP) <fp@tinyerp.com>\n"
+"Language-Team: Gujarati <gu@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: \n"
-"Language: gu\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2014-04-22 07:48+0000\n"
+"X-Generator: Launchpad (build 16985)\n"
 
 #. module: l10n_in_hr_payroll
 #: report:salary.detail.byyear:0
@@ -35,7 +34,7 @@ msgstr ""
 #. module: l10n_in_hr_payroll
 #: report:salary.detail.byyear:0
 msgid "Title"
-msgstr "શીર્ષક"
+msgstr ""
 
 #. module: l10n_in_hr_payroll
 #: report:payroll.advice:0
@@ -53,9 +52,11 @@ msgid "Payslips which are paid"
 msgstr ""
 
 #. module: l10n_in_hr_payroll
-#: view:hr.payroll.advice:0 view:payment.advice.report:0 view:payslip.report:0
+#: view:hr.payroll.advice:0
+#: view:payment.advice.report:0
+#: view:payslip.report:0
 msgid "Group By..."
-msgstr "ગ્રુપ દ્વારા..."
+msgstr ""
 
 #. module: l10n_in_hr_payroll
 #: report:salary.detail.byyear:0
@@ -70,7 +71,7 @@ msgstr ""
 #. module: l10n_in_hr_payroll
 #: report:salary.detail.byyear:0
 msgid "Department"
-msgstr "વિભાગ"
+msgstr ""
 
 #. module: l10n_in_hr_payroll
 #: report:salary.detail.byyear:0
@@ -100,17 +101,21 @@ msgid "Payslips"
 msgstr ""
 
 #. module: l10n_in_hr_payroll
-#: selection:payment.advice.report,month:0 selection:payslip.report,month:0
+#: selection:payment.advice.report,month:0
+#: selection:payslip.report,month:0
 msgid "March"
-msgstr "માર્ચ"
+msgstr ""
 
 #. module: l10n_in_hr_payroll
-#: view:hr.payroll.advice:0 field:hr.payroll.advice,company_id:0
-#: field:hr.payroll.advice.line,company_id:0 view:payment.advice.report:0
-#: field:payment.advice.report,company_id:0 view:payslip.report:0
+#: view:hr.payroll.advice:0
+#: field:hr.payroll.advice,company_id:0
+#: field:hr.payroll.advice.line,company_id:0
+#: view:payment.advice.report:0
+#: field:payment.advice.report,company_id:0
+#: view:payslip.report:0
 #: field:payslip.report,company_id:0
 msgid "Company"
-msgstr "કંપની"
+msgstr ""
 
 #. module: l10n_in_hr_payroll
 #: report:payroll.advice:0
@@ -130,12 +135,12 @@ msgstr ""
 #. module: l10n_in_hr_payroll
 #: report:payroll.advice:0
 msgid "to"
-msgstr "થી"
+msgstr ""
 
 #. module: l10n_in_hr_payroll
 #: report:payroll.advice:0
 msgid "Total :"
-msgstr "કુલ:"
+msgstr ""
 
 #. module: l10n_in_hr_payroll
 #: field:hr.payslip.run,available_advice:0
@@ -163,10 +168,12 @@ msgid "Pay Slip"
 msgstr ""
 
 #. module: l10n_in_hr_payroll
-#: view:payment.advice.report:0 field:payment.advice.report,day:0
-#: view:payslip.report:0 field:payslip.report,day:0
+#: view:payment.advice.report:0
+#: field:payment.advice.report,day:0
+#: view:payslip.report:0
+#: field:payslip.report,day:0
 msgid "Day"
-msgstr "દિવસ"
+msgstr ""
 
 #. module: l10n_in_hr_payroll
 #: view:payment.advice.report:0
@@ -186,7 +193,7 @@ msgstr ""
 #. module: l10n_in_hr_payroll
 #: report:paylip.details.in:0
 msgid "Code"
-msgstr "કોડ"
+msgstr ""
 
 #. module: l10n_in_hr_payroll
 #: view:hr.payroll.advice:0
@@ -194,9 +201,10 @@ msgid "Other Information"
 msgstr ""
 
 #. module: l10n_in_hr_payroll
-#: selection:hr.payroll.advice,state:0 selection:payment.advice.report,state:0
+#: selection:hr.payroll.advice,state:0
+#: selection:payment.advice.report,state:0
 msgid "Cancelled"
-msgstr "રદ કરેલ છે"
+msgstr ""
 
 #. module: l10n_in_hr_payroll
 #: model:ir.actions.act_window,help:l10n_in_hr_payroll.action_payslip_report_all
@@ -214,9 +222,10 @@ msgid "Details by Salary Rule Category:"
 msgstr ""
 
 #. module: l10n_in_hr_payroll
-#: field:hr.payroll.advice,number:0 report:paylip.details.in:0
+#: field:hr.payroll.advice,number:0
+#: report:paylip.details.in:0
 msgid "Reference"
-msgstr "સંદર્ભ"
+msgstr ""
 
 #. module: l10n_in_hr_payroll
 #: field:hr.contract,medical_insurance:0
@@ -226,12 +235,13 @@ msgstr ""
 #. module: l10n_in_hr_payroll
 #: report:paylip.details.in:0
 msgid "Identification No"
-msgstr "ઓળખ નંબર"
+msgstr ""
 
 #. module: l10n_in_hr_payroll
-#: view:payslip.report:0 field:payslip.report,struct_id:0
+#: view:payslip.report:0
+#: field:payslip.report,struct_id:0
 msgid "Structure"
-msgstr "બંધારણ"
+msgstr ""
 
 #. module: l10n_in_hr_payroll
 #: report:payroll.advice:0
@@ -239,25 +249,29 @@ msgid "form period"
 msgstr ""
 
 #. module: l10n_in_hr_payroll
-#: selection:hr.payroll.advice,state:0 selection:payment.advice.report,state:0
+#: selection:hr.payroll.advice,state:0
+#: selection:payment.advice.report,state:0
 msgid "Confirmed"
-msgstr "સમર્થિત"
+msgstr ""
 
 #. module: l10n_in_hr_payroll
-#: report:salary.detail.byyear:0 report:salary.employee.bymonth:0
+#: report:salary.detail.byyear:0
+#: report:salary.employee.bymonth:0
 msgid "From"
-msgstr "તરફથી"
+msgstr ""
 
 #. module: l10n_in_hr_payroll
-#: field:hr.payroll.advice.line,bysal:0 field:payment.advice.report,bysal:0
+#: field:hr.payroll.advice.line,bysal:0
+#: field:payment.advice.report,bysal:0
 #: report:payroll.advice:0
 msgid "By Salary"
 msgstr ""
 
 #. module: l10n_in_hr_payroll
-#: view:hr.payroll.advice:0 view:payment.advice.report:0
+#: view:hr.payroll.advice:0
+#: view:payment.advice.report:0
 msgid "Confirm"
-msgstr "ખાતરી કરો"
+msgstr ""
 
 #. module: l10n_in_hr_payroll
 #: field:hr.payroll.advice,chaque_nos:0
@@ -268,7 +282,7 @@ msgstr ""
 #. module: l10n_in_hr_payroll
 #: constraint:res.company:0
 msgid "Error! You can not create recursive companies."
-msgstr "ભૂલ! તમે પાસાના કંપનીઓ ન બનાવી શકો."
+msgstr ""
 
 #. module: l10n_in_hr_payroll
 #: model:ir.actions.act_window,name:l10n_in_hr_payroll.action_salary_employee_month
@@ -311,7 +325,7 @@ msgstr ""
 #. module: l10n_in_hr_payroll
 #: report:paylip.details.in:0
 msgid "Email"
-msgstr "ઈ-મેઈલ"
+msgstr ""
 
 #. module: l10n_in_hr_payroll
 #: help:hr.payslip.run,available_advice:0
@@ -335,14 +349,15 @@ msgid "Made Payment Order ? "
 msgstr ""
 
 #. module: l10n_in_hr_payroll
-#: view:hr.salary.employee.month:0 view:yearly.salary.detail:0
+#: view:hr.salary.employee.month:0
+#: view:yearly.salary.detail:0
 msgid "Print"
-msgstr "છાપો"
+msgstr ""
 
 #. module: l10n_in_hr_payroll
 #: selection:payslip.report,state:0
 msgid "Rejected"
-msgstr "રદ કરેલ છે"
+msgstr ""
 
 #. module: l10n_in_hr_payroll
 #: view:payslip.report:0
@@ -355,7 +370,8 @@ msgid "Payslip Batches"
 msgstr ""
 
 #. module: l10n_in_hr_payroll
-#: field:hr.payroll.advice.line,debit_credit:0 report:payroll.advice:0
+#: field:hr.payroll.advice.line,debit_credit:0
+#: report:payroll.advice:0
 msgid "C/D"
 msgstr ""
 
@@ -375,14 +391,15 @@ msgid "Employee Salary"
 msgstr ""
 
 #. module: l10n_in_hr_payroll
-#: selection:payment.advice.report,month:0 selection:payslip.report,month:0
+#: selection:payment.advice.report,month:0
+#: selection:payslip.report,month:0
 msgid "July"
-msgstr "જુલાઈ"
+msgstr ""
 
 #. module: l10n_in_hr_payroll
 #: view:res.company:0
 msgid "Configuration"
-msgstr "રુપરેખાંકન"
+msgstr ""
 
 #. module: l10n_in_hr_payroll
 #: view:payslip.report:0
@@ -415,7 +432,8 @@ msgid "IFSC"
 msgstr ""
 
 #. module: l10n_in_hr_payroll
-#: report:paylip.details.in:0 field:payslip.report,date_to:0
+#: report:paylip.details.in:0
+#: field:payslip.report,date_to:0
 msgid "Date To"
 msgstr ""
 
@@ -440,9 +458,10 @@ msgid "Dearness Allowance"
 msgstr ""
 
 #. module: l10n_in_hr_payroll
-#: selection:payment.advice.report,month:0 selection:payslip.report,month:0
+#: selection:payment.advice.report,month:0
+#: selection:payslip.report,month:0
 msgid "August"
-msgstr "ઑગસ્ટ"
+msgstr ""
 
 #. module: l10n_in_hr_payroll
 #: view:hr.contract:0
@@ -460,9 +479,10 @@ msgid "Payment Advices which are in confirm state"
 msgstr ""
 
 #. module: l10n_in_hr_payroll
-#: selection:payment.advice.report,month:0 selection:payslip.report,month:0
+#: selection:payment.advice.report,month:0
+#: selection:payslip.report,month:0
 msgid "December"
-msgstr "ડિસેમ્બર"
+msgstr ""
 
 #. module: l10n_in_hr_payroll
 #: view:hr.payroll.advice:0
@@ -470,10 +490,12 @@ msgid "Confirm Sheet"
 msgstr ""
 
 #. module: l10n_in_hr_payroll
-#: view:payment.advice.report:0 field:payment.advice.report,month:0
-#: view:payslip.report:0 field:payslip.report,month:0
+#: view:payment.advice.report:0
+#: field:payment.advice.report,month:0
+#: view:payslip.report:0
+#: field:payslip.report,month:0
 msgid "Month"
-msgstr "મહિનો"
+msgstr ""
 
 #. module: l10n_in_hr_payroll
 #: report:salary.detail.byyear:0
@@ -481,7 +503,8 @@ msgid "Employee Code"
 msgstr ""
 
 #. module: l10n_in_hr_payroll
-#: view:hr.salary.employee.month:0 view:yearly.salary.detail:0
+#: view:hr.salary.employee.month:0
+#: view:yearly.salary.detail:0
 msgid "or"
 msgstr ""
 
@@ -491,10 +514,11 @@ msgid "Hr Salary Employee By Month Report"
 msgstr ""
 
 #. module: l10n_in_hr_payroll
-#: field:hr.salary.employee.month,category_id:0 view:payslip.report:0
+#: field:hr.salary.employee.month,category_id:0
+#: view:payslip.report:0
 #: field:payslip.report,category_id:0
 msgid "Category"
-msgstr "શ્રેણી"
+msgstr ""
 
 #. module: l10n_in_hr_payroll
 #: code:addons/l10n_in_hr_payroll/l10n_in_hr_payroll.py:190
@@ -511,22 +535,26 @@ msgstr ""
 #. module: l10n_in_hr_payroll
 #: report:paylip.details.in:0
 msgid "Note"
-msgstr "નોંધ"
+msgstr ""
 
 #. module: l10n_in_hr_payroll
 #: report:paylip.details.in:0
 msgid "Salary Rule Category"
-msgstr "પગાર નિયમ પ્રકાર"
+msgstr ""
 
 #. module: l10n_in_hr_payroll
-#: view:hr.payroll.advice:0 selection:hr.payroll.advice,state:0
-#: view:payment.advice.report:0 selection:payment.advice.report,state:0
-#: view:payslip.report:0 selection:payslip.report,state:0
+#: view:hr.payroll.advice:0
+#: selection:hr.payroll.advice,state:0
+#: view:payment.advice.report:0
+#: selection:payment.advice.report,state:0
+#: view:payslip.report:0
+#: selection:payslip.report,state:0
 msgid "Draft"
-msgstr "ડ્રાફ્ટ"
+msgstr ""
 
 #. module: l10n_in_hr_payroll
-#: report:paylip.details.in:0 field:payslip.report,date_from:0
+#: report:paylip.details.in:0
+#: field:payslip.report,date_from:0
 msgid "Date From"
 msgstr ""
 
@@ -541,11 +569,14 @@ msgid "Payment Advice Analysis"
 msgstr ""
 
 #. module: l10n_in_hr_payroll
-#: view:hr.payroll.advice:0 field:hr.payroll.advice,state:0
-#: view:payment.advice.report:0 field:payment.advice.report,state:0
-#: view:payslip.report:0 field:payslip.report,state:0
+#: view:hr.payroll.advice:0
+#: field:hr.payroll.advice,state:0
+#: view:payment.advice.report:0
+#: field:payment.advice.report,state:0
+#: view:payslip.report:0
+#: field:payslip.report,state:0
 msgid "Status"
-msgstr "સ્થિતિ"
+msgstr ""
 
 #. module: l10n_in_hr_payroll
 #: help:res.company,dearness_allowance:0
@@ -554,14 +585,16 @@ msgstr ""
 
 #. module: l10n_in_hr_payroll
 #: field:hr.payroll.advice.line,ifsc_code:0
-#: field:payment.advice.report,ifsc_code:0 report:payroll.advice:0
+#: field:payment.advice.report,ifsc_code:0
+#: report:payroll.advice:0
 msgid "IFSC Code"
 msgstr ""
 
 #. module: l10n_in_hr_payroll
-#: selection:payment.advice.report,month:0 selection:payslip.report,month:0
+#: selection:payment.advice.report,month:0
+#: selection:payslip.report,month:0
 msgid "June"
-msgstr "જૂન"
+msgstr ""
 
 #. module: l10n_in_hr_payroll
 #: view:payslip.report:0
@@ -577,7 +610,8 @@ msgid ""
 msgstr ""
 
 #. module: l10n_in_hr_payroll
-#: view:payment.advice.report:0 field:payment.advice.report,nbr:0
+#: view:payment.advice.report:0
+#: field:payment.advice.report,nbr:0
 msgid "# Payment Lines"
 msgstr ""
 
@@ -592,19 +626,22 @@ msgid "Payment Lines"
 msgstr ""
 
 #. module: l10n_in_hr_payroll
-#: field:hr.payroll.advice,date:0 field:payment.advice.report,date:0
+#: field:hr.payroll.advice,date:0
+#: field:payment.advice.report,date:0
 msgid "Date"
-msgstr "તારીખ"
+msgstr ""
 
 #. module: l10n_in_hr_payroll
-#: selection:payment.advice.report,month:0 selection:payslip.report,month:0
+#: selection:payment.advice.report,month:0
+#: selection:payslip.report,month:0
 msgid "November"
-msgstr "નવેમ્બર"
+msgstr ""
 
 #. module: l10n_in_hr_payroll
-#: view:payment.advice.report:0 view:payslip.report:0
+#: view:payment.advice.report:0
+#: view:payslip.report:0
 msgid "Extended Filters..."
-msgstr "વિસ્તૃત ગાળકો ..."
+msgstr ""
 
 #. module: l10n_in_hr_payroll
 #: model:ir.actions.act_window,help:l10n_in_hr_payroll.action_payment_advice_report_all
@@ -612,12 +649,14 @@ msgid "This report performs analysis on Payment Advices"
 msgstr ""
 
 #. module: l10n_in_hr_payroll
-#: selection:payment.advice.report,month:0 selection:payslip.report,month:0
+#: selection:payment.advice.report,month:0
+#: selection:payslip.report,month:0
 msgid "October"
-msgstr "ઑક્ટોબર"
+msgstr ""
 
 #. module: l10n_in_hr_payroll
-#: report:paylip.details.in:0 report:salary.detail.byyear:0
+#: report:paylip.details.in:0
+#: report:salary.detail.byyear:0
 msgid "Designation"
 msgstr ""
 
@@ -627,9 +666,10 @@ msgid "Month of Payslip"
 msgstr ""
 
 #. module: l10n_in_hr_payroll
-#: selection:payment.advice.report,month:0 selection:payslip.report,month:0
+#: selection:payment.advice.report,month:0
+#: selection:payslip.report,month:0
 msgid "January"
-msgstr "જાન્યુઆરી"
+msgstr ""
 
 #. module: l10n_in_hr_payroll
 #: view:yearly.salary.detail:0
@@ -639,17 +679,18 @@ msgstr ""
 #. module: l10n_in_hr_payroll
 #: model:ir.model,name:l10n_in_hr_payroll.model_res_company
 msgid "Companies"
-msgstr "કંપનીઓ"
+msgstr ""
 
 #. module: l10n_in_hr_payroll
-#: report:paylip.details.in:0 report:payroll.advice:0
+#: report:paylip.details.in:0
+#: report:payroll.advice:0
 msgid "Authorized Signature"
 msgstr ""
 
 #. module: l10n_in_hr_payroll
 #: model:ir.model,name:l10n_in_hr_payroll.model_hr_contract
 msgid "Contract"
-msgstr "કરાર"
+msgstr ""
 
 #. module: l10n_in_hr_payroll
 #: field:hr.contract,supplementary_allowance:0
@@ -677,7 +718,8 @@ msgid "Payslips which are in draft state"
 msgstr ""
 
 #. module: l10n_in_hr_payroll
-#: view:hr.payroll.advice:0 field:hr.payroll.advice.line,advice_id:0
+#: view:hr.payroll.advice:0
+#: field:hr.payroll.advice.line,advice_id:0
 #: field:hr.payslip,advice_id:0
 #: model:ir.model,name:l10n_in_hr_payroll.model_hr_payroll_advice
 msgid "Bank Advice"
@@ -699,25 +741,29 @@ msgid "Check this box if your company use online transfer for salary"
 msgstr ""
 
 #. module: l10n_in_hr_payroll
-#: field:payment.advice.report,number:0 field:payslip.report,number:0
+#: field:payment.advice.report,number:0
+#: field:payslip.report,number:0
 msgid "Number"
-msgstr "નંબર"
+msgstr ""
 
 #. module: l10n_in_hr_payroll
-#: selection:payment.advice.report,month:0 selection:payslip.report,month:0
+#: selection:payment.advice.report,month:0
+#: selection:payslip.report,month:0
 msgid "September"
-msgstr "સપ્ટેમ્બર"
+msgstr ""
 
 #. module: l10n_in_hr_payroll
-#: view:payslip.report:0 selection:payslip.report,state:0
+#: view:payslip.report:0
+#: selection:payslip.report,state:0
 msgid "Done"
-msgstr "પુર્ણ થયુ"
+msgstr ""
 
 #. module: l10n_in_hr_payroll
-#: view:hr.payroll.advice:0 view:hr.salary.employee.month:0
+#: view:hr.payroll.advice:0
+#: view:hr.salary.employee.month:0
 #: view:yearly.salary.detail:0
 msgid "Cancel"
-msgstr "રદ કરો"
+msgstr ""
 
 #. module: l10n_in_hr_payroll
 #: view:payment.advice.report:0
@@ -747,11 +793,13 @@ msgid "Total Salary"
 msgstr ""
 
 #. module: l10n_in_hr_payroll
-#: field:hr.payroll.advice.line,employee_id:0 view:payment.advice.report:0
-#: field:payment.advice.report,employee_id:0 view:payslip.report:0
+#: field:hr.payroll.advice.line,employee_id:0
+#: view:payment.advice.report:0
+#: field:payment.advice.report,employee_id:0
+#: view:payslip.report:0
 #: field:payslip.report,employee_id:0
 msgid "Employee"
-msgstr "કર્મચારી"
+msgstr ""
 
 #. module: l10n_in_hr_payroll
 #: view:hr.payroll.advice:0
@@ -766,12 +814,13 @@ msgstr ""
 #. module: l10n_in_hr_payroll
 #: field:hr.payroll.advice,note:0
 msgid "Description"
-msgstr "વર્ણન"
+msgstr ""
 
 #. module: l10n_in_hr_payroll
-#: selection:payment.advice.report,month:0 selection:payslip.report,month:0
+#: selection:payment.advice.report,month:0
+#: selection:payslip.report,month:0
 msgid "May"
-msgstr "મે"
+msgstr ""
 
 #. module: l10n_in_hr_payroll
 #: view:res.company:0
@@ -784,27 +833,32 @@ msgid "NEFT"
 msgstr ""
 
 #. module: l10n_in_hr_payroll
-#: report:paylip.details.in:0 report:salary.detail.byyear:0
+#: report:paylip.details.in:0
+#: report:salary.detail.byyear:0
 msgid "Address"
 msgstr ""
 
 #. module: l10n_in_hr_payroll
-#: view:hr.payroll.advice:0 field:hr.payroll.advice,bank_id:0
-#: view:payment.advice.report:0 field:payment.advice.report,bank_id:0
-#: report:payroll.advice:0 report:salary.detail.byyear:0
+#: view:hr.payroll.advice:0
+#: field:hr.payroll.advice,bank_id:0
+#: view:payment.advice.report:0
+#: field:payment.advice.report,bank_id:0
+#: report:payroll.advice:0
+#: report:salary.detail.byyear:0
 msgid "Bank"
-msgstr "બેન્ક"
+msgstr ""
 
 #. module: l10n_in_hr_payroll
 #: field:hr.salary.employee.month,end_date:0
 #: field:yearly.salary.detail,date_to:0
 msgid "End Date"
-msgstr "અંતિમ તારીખ"
+msgstr ""
 
 #. module: l10n_in_hr_payroll
-#: selection:payment.advice.report,month:0 selection:payslip.report,month:0
+#: selection:payment.advice.report,month:0
+#: selection:payslip.report,month:0
 msgid "February"
-msgstr "ફેબ્રુઆરી"
+msgstr ""
 
 #. module: l10n_in_hr_payroll
 #: sql_constraint:res.company:0
@@ -812,23 +866,27 @@ msgid "The company name must be unique !"
 msgstr ""
 
 #. module: l10n_in_hr_payroll
-#: view:hr.payroll.advice:0 field:hr.payroll.advice,name:0
-#: report:paylip.details.in:0 field:payment.advice.report,name:0
-#: field:payslip.report,name:0 report:salary.employee.bymonth:0
+#: view:hr.payroll.advice:0
+#: field:hr.payroll.advice,name:0
+#: report:paylip.details.in:0
+#: field:payment.advice.report,name:0
+#: field:payslip.report,name:0
+#: report:salary.employee.bymonth:0
 msgid "Name"
-msgstr "નામ"
+msgstr ""
 
 #. module: l10n_in_hr_payroll
 #: view:hr.salary.employee.month:0
-#: field:hr.salary.employee.month,employee_ids:0 view:yearly.salary.detail:0
+#: field:hr.salary.employee.month,employee_ids:0
+#: view:yearly.salary.detail:0
 #: field:yearly.salary.detail,employee_ids:0
 msgid "Employees"
-msgstr "કર્મચારીઓ"
+msgstr ""
 
 #. module: l10n_in_hr_payroll
 #: report:paylip.details.in:0
 msgid "Bank Account"
-msgstr "બેન્ક એકાઉન્ટ"
+msgstr ""
 
 #. module: l10n_in_hr_payroll
 #: model:ir.actions.act_window,name:l10n_in_hr_payroll.action_payslip_report_all
@@ -839,9 +897,10 @@ msgid "Payslip Analysis"
 msgstr ""
 
 #. module: l10n_in_hr_payroll
-#: selection:payment.advice.report,month:0 selection:payslip.report,month:0
+#: selection:payment.advice.report,month:0
+#: selection:payslip.report,month:0
 msgid "April"
-msgstr "એપ્રિલ"
+msgstr ""
 
 #. module: l10n_in_hr_payroll
 #: report:payroll.advice:0
@@ -859,7 +918,7 @@ msgstr ""
 #: field:hr.salary.employee.month,start_date:0
 #: field:yearly.salary.detail,date_from:0
 msgid "Start Date"
-msgstr "શરુઆતની તારીખ"
+msgstr ""
 
 #. module: l10n_in_hr_payroll
 #: view:hr.contract:0
@@ -894,10 +953,11 @@ msgstr ""
 #. module: l10n_in_hr_payroll
 #: report:paylip.details.in:0
 msgid "Credit"
-msgstr "જમા"
+msgstr ""
 
 #. module: l10n_in_hr_payroll
-#: field:hr.payroll.advice.line,name:0 report:payroll.advice:0
+#: field:hr.payroll.advice.line,name:0
+#: report:payroll.advice:0
 msgid "Bank Account No."
 msgstr ""
 
@@ -917,27 +977,32 @@ msgid "Create Advice"
 msgstr ""
 
 #. module: l10n_in_hr_payroll
-#: view:payment.advice.report:0 field:payment.advice.report,year:0
-#: view:payslip.report:0 field:payslip.report,year:0
+#: view:payment.advice.report:0
+#: field:payment.advice.report,year:0
+#: view:payslip.report:0
+#: field:payslip.report,year:0
 msgid "Year"
-msgstr "વર્ષ"
+msgstr ""
 
 #. module: l10n_in_hr_payroll
-#: field:hr.payroll.advice,neft:0 field:payment.advice.report,neft:0
+#: field:hr.payroll.advice,neft:0
+#: field:payment.advice.report,neft:0
 msgid "NEFT Transaction"
 msgstr ""
 
 #. module: l10n_in_hr_payroll
-#: report:paylip.details.in:0 field:payslip.report,total:0
-#: report:salary.detail.byyear:0 report:salary.employee.bymonth:0
+#: report:paylip.details.in:0
+#: field:payslip.report,total:0
+#: report:salary.detail.byyear:0
+#: report:salary.employee.bymonth:0
 msgid "Total"
-msgstr "કુલ"
+msgstr ""
 
 #. module: l10n_in_hr_payroll
 #: help:hr.contract,house_rent_allowance_metro_nonmetro:0
 msgid ""
-"HRA is an allowance given by the employer to the employee for taking care of"
-" his rental or accommodation expenses for metro city it is 50 % and for non "
+"HRA is an allowance given by the employer to the employee for taking care of "
+"his rental or accommodation expenses for metro city it is 50 % and for non "
 "metro 40%.HRA computed as percentage(%)"
 msgstr ""
 

@@ -17,5 +17,4 @@ This module provides the core of the OpenERP Web Client.
     'qweb' : [
         "static/src/xml/*.xml",
     ],
-    'bootstrap': True, # load translations for login screen
 }

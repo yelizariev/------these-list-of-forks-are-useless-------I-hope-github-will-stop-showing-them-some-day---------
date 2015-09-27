@@ -43,9 +43,8 @@
   border: 0;
 }
 #oe_snippets .tab-content {
-  margin-right: 120px;
   display: inline-block;
-  white-space: normal;
+  white-space: nowrap;
   background: black;
 }
 #oe_snippets .tab-content > div {
@@ -72,7 +71,7 @@
 }
 
 .oe_snippet {
-  display: inline-block;
+  float: left;
   vertical-align: top;
   width: 93px;
   margin-left: 1px;
@@ -374,13 +373,6 @@
 }
 .oe_overlay .oe_overlay_options > .btn-group {
   left: -50%;
-  white-space: nowrap;
-}
-.oe_overlay .oe_overlay_options > .btn-group > a {
-  cursor: pointer;
-  display: inline-block;
-  float: none;
-  margin: 0 -3px;
 }
 .oe_overlay .oe_overlay_options .btn, .oe_overlay .oe_overlay_options a {
   cursor: pointer;

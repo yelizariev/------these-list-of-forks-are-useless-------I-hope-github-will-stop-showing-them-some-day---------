@@ -1,5 +1,4 @@
 import openerp
-from openerp.tools.safe_eval import safe_eval as eval
 
 class DiagramView(openerp.http.Controller):
 
@@ -49,7 +48,7 @@ class DiagramView(openerp.http.Controller):
         for tr in transitions:
             list_tr.append(tr)
             connectors.setdefault(tr, {
-                'id': int(tr),
+                'id': tr,
                 's_id': transitions[tr][0],
                 'd_id': transitions[tr][1]
             })

@@ -23,7 +23,7 @@
     'name' : 'Analytic Accounting',
     'version': '1.1',
     'author' : 'OpenERP SA',
-    'website' : 'https://www.odoo.com/page/accounting',
+    'website' : 'http://www.openerp.com',
     'category': 'Hidden/Dependency',
     'depends' : ['base', 'decimal_precision', 'mail'],
     'description': """

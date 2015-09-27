@@ -15,6 +15,7 @@
                             'default_subject': name,
                             'default_name': name,
                         }"
+                        attrs="{'invisible': [('is_product_variant', '=', False)]}"
                     />
                 </field>
             </field>

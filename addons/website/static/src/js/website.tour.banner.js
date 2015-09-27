@@ -2,8 +2,7 @@
     'use strict';
 
     var _t = openerp._t;
-    var website = openerp.website;
-    website.ready().done(function() {
+
     openerp.Tour.register({
         id:   'banner',
         name: _t("Build a page"),
@@ -114,7 +113,6 @@
                 popover:   { next: _t("Close Tutorial") },
             },
         ]
-    });
     });
 
 }());

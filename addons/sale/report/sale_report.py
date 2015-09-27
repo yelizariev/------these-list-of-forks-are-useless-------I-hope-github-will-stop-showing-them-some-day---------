@@ -29,7 +29,7 @@ class sale_report(osv.osv):
     _rec_name = 'date'
 
     _columns = {
-        'date': fields.datetime('Date Order', readonly=True),  # TDE FIXME master: rename into date_order
+        'date': fields.datetime('Date Order', readonly=True),
         'date_confirm': fields.date('Date Confirm', readonly=True),
         'product_id': fields.many2one('product.product', 'Product', readonly=True),
         'product_uom': fields.many2one('product.uom', 'Unit of Measure', readonly=True),
@@ -41,13 +41,16 @@ class sale_report(osv.osv):
         'price_total': fields.float('Total Price', readonly=True),
         'delay': fields.float('Commitment Delay', digits=(16,2), readonly=True),
         'categ_id': fields.many2one('product.category','Category of Product', readonly=True),
-        'nbr': fields.integer('# of Lines', readonly=True),  # TDE FIXME master: rename into nbr_lines
+        'nbr': fields.integer('# of Lines', readonly=True),
         'state': fields.selection([
-            ('cancel', 'Cancelled'),
-            ('draft', 'Draft'),
-            ('confirmed', 'Confirmed'),
-            ('exception', 'Exception'),
-            ('done', 'Done')], 'Order Status', readonly=True),
+            ('draft', 'Quotation'),
+            ('waiting_date', 'Waiting Schedule'),
+            ('manual', 'Manual In Progress'),
+            ('progress', 'In Progress'),
+            ('invoice_except', 'Invoice Exception'),
+            ('done', 'Done'),
+            ('cancel', 'Cancelled')
+            ], 'Order Status', readonly=True),
         'pricelist_id': fields.many2one('product.pricelist', 'Pricelist', readonly=True),
         'analytic_account_id': fields.many2one('account.analytic.account', 'Analytic Account', readonly=True),
         'section_id': fields.many2one('crm.case.section', 'Sales Team'),
@@ -56,20 +59,11 @@ class sale_report(osv.osv):
 
     def _select(self):
         select_str = """
-            WITH currency_rate (currency_id, rate, date_start, date_end) AS (
-                    SELECT r.currency_id, r.rate, r.name AS date_start,
-                        (SELECT name FROM res_currency_rate r2
-                        WHERE r2.name > r.name AND
-                            r2.currency_id = r.currency_id
-                         ORDER BY r2.name ASC
-                         LIMIT 1) AS date_end
-                    FROM res_currency_rate r
-                )
              SELECT min(l.id) as id,
                     l.product_id as product_id,
                     t.uom_id as product_uom,
                     sum(l.product_uom_qty / u.factor * u2.factor) as product_uom_qty,
-                    sum(l.product_uom_qty * cr.rate * l.price_unit * (100.0-l.discount) / 100.0) as price_total,
+                    sum(l.product_uom_qty * l.price_unit * (100.0-l.discount) / 100.0) as price_total,
                     count(*) as nbr,
                     s.date_order as date,
                     s.date_confirm as date_confirm,
@@ -77,7 +71,7 @@ class sale_report(osv.osv):
                     s.user_id as user_id,
                     s.company_id as company_id,
                     extract(epoch from avg(date_trunc('day',s.date_confirm)-date_trunc('day',s.create_date)))/(24*60*60)::decimal(16,2) as delay,
-                    l.state,
+                    s.state,
                     t.categ_id as categ_id,
                     s.pricelist_id as pricelist_id,
                     s.project_id as analytic_account_id,
@@ -88,15 +82,11 @@ class sale_report(osv.osv):
     def _from(self):
         from_str = """
                 sale_order_line l
-                      join sale_order s on (l.order_id=s.id)
+                      join sale_order s on (l.order_id=s.id) 
                         left join product_product p on (l.product_id=p.id)
                             left join product_template t on (p.product_tmpl_id=t.id)
                     left join product_uom u on (u.id=l.product_uom)
                     left join product_uom u2 on (u2.id=t.uom_id)
-                    left join product_pricelist pp on (s.pricelist_id = pp.id)
-                    join currency_rate cr on (cr.currency_id = pp.currency_id and
-                        cr.date_start <= coalesce(s.date_order, now()) and
-                        (cr.date_end is null or cr.date_end > coalesce(s.date_order, now())))
         """
         return from_str
 
@@ -111,7 +101,7 @@ class sale_report(osv.osv):
                     s.partner_id,
                     s.user_id,
                     s.company_id,
-                    l.state,
+                    s.state,
                     s.pricelist_id,
                     s.project_id,
                     s.section_id

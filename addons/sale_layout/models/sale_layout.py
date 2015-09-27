@@ -40,7 +40,7 @@ def grouplines(self, ordered_lines, sortkey):
 
 class SaleLayoutCategory(osv.Model):
     _name = 'sale_layout.category'
-    _order = 'sequence, id'
+    _order = 'sequence'
     _columns = {
         'name': fields.char('Name', required=True),
         'sequence': fields.integer('Sequence', required=True),
@@ -75,18 +75,17 @@ class AccountInvoice(osv.Model):
         return grouplines(self, ordered_lines, sortkey)
 
 
-import openerp
-
 class AccountInvoiceLine(osv.Model):
     _inherit = 'account.invoice.line'
-    _order = 'invoice_id, categ_sequence, sequence, id'
-
-    sale_layout_cat_id = openerp.fields.Many2one('sale_layout.category', string='Section')
-    categ_sequence = openerp.fields.Integer(related='sale_layout_cat_id.sequence',
-                                            string='Layout Sequence', store=True)
-    _defaults = {
-        'categ_sequence': 0
+    _columns = {
+        'sale_layout_cat_id': fields.many2one('sale_layout.category',
+                                              string='Section'),
+        'categ_sequence': fields.related('sale_layout_cat_id',
+                                         'sequence', type='integer',
+                                         string='Layout Sequence', store=True)
+        #  Store is intentionally set in order to keep the "historic" order.
     }
+    _order = 'invoice_id, categ_sequence, sequence, id'
 
 
 class SaleOrder(osv.Model):
@@ -116,12 +115,7 @@ class SaleOrderLine(osv.Model):
                                          string='Layout Sequence', store=True)
         #  Store is intentionally set in order to keep the "historic" order.
     }
-
-    _defaults = {
-        'categ_sequence': 0
-    }
-
-    _order = 'order_id, categ_sequence, sale_layout_cat_id, sequence, id'
+    _order = 'order_id, categ_sequence, sequence, id'
 
     def _prepare_order_line_invoice_line(self, cr, uid, line, account_id=False, context=None):
         """Save the layout when converting to an invoice line."""

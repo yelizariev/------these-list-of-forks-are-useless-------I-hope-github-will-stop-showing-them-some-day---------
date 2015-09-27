@@ -40,9 +40,8 @@
     .pill-content
         border: 0
     .tab-content
-        margin-right: 120px
         display: inline-block
-        white-space: normal
+        white-space: nowrap
         background: black
         > div
             background: rgb(0,0,0)
@@ -58,7 +57,7 @@
                     @include transform-origin(50% 50%)
 
 .oe_snippet
-    display: inline-block
+    float: left
     vertical-align: top
     width: 93px
     margin-left: 1px
@@ -281,12 +280,6 @@
         z-index: 1002
         > .btn-group
             left: -50%
-            white-space: nowrap
-            > a
-                cursor: pointer
-                display: inline-block
-                float: none
-                margin: 0 -3px
         .btn, a
             cursor: pointer
         .dropdown

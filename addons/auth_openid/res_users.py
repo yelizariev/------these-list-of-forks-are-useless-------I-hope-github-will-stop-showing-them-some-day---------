@@ -63,17 +63,24 @@ class res_users(osv.osv):
                 cr.commit()
                 return res[0] if res else False
 
-    def check_credentials(self, cr, uid, password):
+    def check(self, db, uid, passwd):
         try:
-            return super(res_users, self).check_credentials(cr, uid, password)
+            return super(res_users, self).check(db, uid, passwd)
         except openerp.exceptions.AccessDenied:
-            cr.execute('''SELECT COUNT(1)
-                            FROM res_users
-                           WHERE id=%s
-                             AND openid_key=%s
-                             AND active=%s''',
-                        (int(uid), password, True))
-            if not cr.fetchone()[0]:
+            if not passwd:
                 raise
+            with RegistryManager.get(db).cursor() as cr:
+                cr.execute('''SELECT COUNT(1)
+                                FROM res_users
+                               WHERE id=%s
+                                 AND openid_key=%s
+                                 AND active=%s''',
+                            (int(uid), passwd, True))
+                if not cr.fetchone()[0]:
+                    raise
+                self._uid_cache.setdefault(db, {})[uid] = passwd
+
+
+
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -19,7 +19,7 @@
 #
 ##############################################################################
 
-from .common import TestMail
+from openerp.addons.mail.tests.common import TestMail
 
 
 class test_invite(TestMail):

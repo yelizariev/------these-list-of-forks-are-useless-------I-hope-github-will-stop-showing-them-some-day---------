@@ -67,7 +67,7 @@ Hello ${object.name},
 
 <pre>
 -- 
-Odoo Automatic Email
+OpenERP Automatic Email
 </pre>
 
             ]]></field>

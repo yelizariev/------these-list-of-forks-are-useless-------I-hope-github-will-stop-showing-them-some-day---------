@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
-    <data noupdate="1">
+    <data>
 
         <record id="event_type" model="event.type">
             <field name="name">Generic Events</field>

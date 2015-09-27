@@ -41,4 +41,5 @@ Documentation based on question and pertinent answers of Forum
         'data/doc_demo.xml',
     ],
     'installable': True,
+    'application': True,
 }

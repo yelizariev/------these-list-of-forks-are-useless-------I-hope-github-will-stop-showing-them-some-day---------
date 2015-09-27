@@ -19,4 +19,8 @@
 #
 ##############################################################################
 
-from . import test_mail
+from openerp.addons.mass_mailing.tests import test_mail
+
+checks = [
+    test_mail,
+]

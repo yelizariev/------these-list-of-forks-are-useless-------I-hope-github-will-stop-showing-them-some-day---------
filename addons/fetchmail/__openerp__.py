@@ -54,16 +54,17 @@ same *conversation* document.
 For more specific needs, you may also assign custom-defined actions
 (technically: Server Actions) to be triggered for each incoming mail.
     """,
-    'website': 'https://www.odoo.com/page/mailing',
+    'website': 'http://www.openerp.com',
     'data': [
-        'fetchmail_data.xml',
         'fetchmail_view.xml',
+        'fetchmail_data.xml',
         'security/ir.model.access.csv',
         'fetchmail_installer_view.xml'
     ],
     'demo': [],
     'installable': True,
     'auto_install': True,
+    'images': ['images/1_email_servers.jpeg'],
 }
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -23,7 +23,7 @@
 from operator import itemgetter
 from textwrap import dedent
 
-from openerp import tools, SUPERUSER_ID
+from openerp import tools
 from openerp.osv import fields, osv
 
 class board_board(osv.osv):
@@ -49,6 +49,7 @@ class board_board(osv.osv):
             ('value', 'in', refs),
         ], context=context)
         menu_ids = map(itemgetter('res_id'), IrValues.read(cr, uid, irv_ids, ['res_id'], context=context))
+        menu_ids = Menus._filter_visible_menus(cr, uid, menu_ids, context=context)
         menu_names = Menus.name_get(cr, uid, menu_ids, context=context)
         return [dict(id=m[0], name=m[1]) for m in menu_names]
 
@@ -66,7 +67,7 @@ class board_board(osv.osv):
 
         res = {}
         res = super(board_board, self).fields_view_get(cr, user, view_id, view_type,
-                                                       context=context, toolbar=toolbar, submenu=submenu)
+                                                       context, toolbar=toolbar, submenu=submenu)
 
         CustView = self.pool.get('ir.ui.view.custom')
         vids = CustView.search(cr, user, [('user_id', '=', user), ('ref_id', '=', view_id)], context=context)
@@ -143,7 +144,7 @@ class board_create(osv.osv_memory):
             ''')
         }, context=context)
 
-        menu_id = self.pool.get('ir.ui.menu').create(cr, SUPERUSER_ID, {
+        menu_id = self.pool.get('ir.ui.menu').create(cr, uid, {
             'name': this.name,
             'parent_id': this.menu_parent_id.id,
             'action': 'ir.actions.act_window,%s' % (action_id,)

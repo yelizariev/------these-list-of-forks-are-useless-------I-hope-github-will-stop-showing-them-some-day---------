@@ -73,9 +73,8 @@ instance.web.Query = instance.web.Class.extend({
         }
         return q;
     },
-    _execute: function (options) {
+    _execute: function () {
         var self = this;
-        options = options || {};
         return instance.session.rpc('/web/dataset/search_read', {
             model: this._model.name,
             fields: this._fields || false,
@@ -86,7 +85,7 @@ instance.web.Query = instance.web.Class.extend({
             offset: this._offset,
             limit: this._limit,
             sort: instance.web.serialize_sort(this._order_by)
-        }, options).then(function (results) {
+        }).then(function (results) {
             self._count = results.length;
             return results.records;
         }, null);
@@ -94,12 +93,11 @@ instance.web.Query = instance.web.Class.extend({
     /**
      * Fetches the first record matching the query, or null
      *
-     * @param {Object} [options] additional options for the rpc() method
      * @returns {jQuery.Deferred<Object|null>}
      */
-    first: function (options) {
+    first: function () {
         var self = this;
-        return this.clone({limit: 1})._execute(options).then(function (records) {
+        return this.clone({limit: 1})._execute().then(function (records) {
             delete self._count;
             if (records.length) { return records[0]; }
             return null;
@@ -108,11 +106,10 @@ instance.web.Query = instance.web.Class.extend({
     /**
      * Fetches all records matching the query
      *
-     * @param {Object} [options] additional options for the rpc() method
      * @returns {jQuery.Deferred<Array<>>}
      */
-    all: function (options) {
-        return this._execute(options);
+    all: function () {
+        return this._execute();
     },
     /**
      * Fetches the number of records matching the query in the database
@@ -753,7 +750,7 @@ instance.web.DataSetStatic =  instance.web.DataSet.extend({
         var offset = options.offset || 0,
             limit = options.limit || false;
         var end_pos = limit && limit !== -1 ? offset + limit : this.ids.length;
-        return this.read_ids(this.ids.slice(offset, end_pos), fields, options);
+        return this.read_ids(this.ids.slice(offset, end_pos), fields);
     },
     set_ids: function (ids) {
         this.ids = ids;
@@ -969,8 +966,6 @@ instance.web.BufferedDataSet = instance.web.DataSetStatic.extend({
                             sign = -1;
                             field = field.slice(1);
                         }
-                        if(!a[field] && a[field] !== 0){ return sign}
-                        if(!b[field] && b[field] !== 0){ return (sign == -1) ? 1 : -1}
                         //m2o should be searched based on value[1] not based whole value(i.e. [id, value])
                         if(_.isArray(a[field]) && a[field].length == 2 && _.isString(a[field][1])){
                             return sign * compare(a[field][1], b[field][1]);

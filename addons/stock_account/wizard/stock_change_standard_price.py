@@ -33,8 +33,6 @@ class change_standard_price(osv.osv_memory):
             "If cost price is decreased, stock variation account will be creadited and stock input account will be debited."),
     }
 
-
-
     def default_get(self, cr, uid, fields, context=None):
         """ To get default values for the object.
          @param self: The object pointer.
@@ -46,12 +44,8 @@ class change_standard_price(osv.osv_memory):
         """
         if context is None:
             context = {}
-        if context.get("active_model") == 'product.product':
-            product_pool = self.pool.get('product.product')
-        else:
-            product_pool = self.pool.get('product.template')
+        product_pool = self.pool.get('product.product')
         product_obj = product_pool.browse(cr, uid, context.get('active_id', False))
-
         res = super(change_standard_price, self).default_get(cr, uid, fields, context=context)
 
         price = product_obj.standard_price
@@ -72,15 +66,10 @@ class change_standard_price(osv.osv_memory):
         """
         if context is None:
             context = {}
-        rec_id = context.get('active_id', False)
+        rec_id = context and context.get('active_id', False)
         assert rec_id, _('Active ID is not set in Context.')
-        if context.get("active_model") == 'product.product':
-            prod_obj = self.pool.get('product.product')
-            rec_id = prod_obj.browse(cr, uid, rec_id, context=context).product_tmpl_id.id
-        prod_obj = self.pool.get('product.template')
-        
+        prod_obj = self.pool.get('product.product')
         res = self.browse(cr, uid, ids, context=context)
-        
         prod_obj.do_change_standard_price(cr, uid, [rec_id], res[0].new_price, context)
         return {'type': 'ir.actions.act_window_close'}
 

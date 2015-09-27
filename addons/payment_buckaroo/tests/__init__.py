@@ -1,3 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from . import test_buckaroo
+from openerp.addons.payment_buckaroo.tests import test_buckaroo
+
+checks = [
+    test_buckaroo,
+]

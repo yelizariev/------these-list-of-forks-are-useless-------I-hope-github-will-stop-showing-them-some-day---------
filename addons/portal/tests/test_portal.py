@@ -27,31 +27,26 @@ from openerp.tools.misc import mute_logger
 
 class test_portal(TestMail):
 
-    @classmethod
-    def setUpClass(cls):
-        super(test_portal, cls).setUpClass()
-        cr, uid = cls.cr, cls.uid
+    def setUp(self):
+        super(test_portal, self).setUp()
+        cr, uid = self.cr, self.uid
 
         # Find Portal group
-        cls.group_portal_id = cls.env.ref('base.group_portal').id
+        group_portal = self.registry('ir.model.data').get_object(cr, uid, 'base', 'group_portal')
+        self.group_portal_id = group_portal.id
 
         # Create Chell (portal user)
-        cls.user_chell_id = cls.res_users.create(cr, uid, {
-            'name': 'Chell Gladys',
-            'login': 'chell',
-            'email': 'chell@gladys.portal',
-            'groups_id': [(6, 0, [cls.group_portal_id])]
-        }, {'no_reset_password': True})
-        cls.user_chell = cls.res_users.browse(cr, uid, cls.user_chell_id)
-        cls.partner_chell_id = cls.user_chell.partner_id.id
+        self.user_chell_id = self.res_users.create(cr, uid, {'name': 'Chell Gladys', 'login': 'chell', 'email': 'chell@gladys.portal', 'groups_id': [(6, 0, [self.group_portal_id])]})
+        self.user_chell = self.res_users.browse(cr, uid, self.user_chell_id)
+        self.partner_chell_id = self.user_chell.partner_id.id
 
         # Create a PigsPortal group
-        cls.group_port_id = cls.mail_group.create(cr, uid,
-                        {'name': 'PigsPortal', 'public': 'groups', 'group_public_id': cls.group_portal_id},
+        self.group_port_id = self.mail_group.create(cr, uid,
+                        {'name': 'PigsPortal', 'public': 'groups', 'group_public_id': self.group_portal_id},
                         {'mail_create_nolog': True})
 
         # Set an email address for the user running the tests, used as Sender for outgoing mails
-        cls.res_users.write(cr, uid, uid, {'email': 'test@localhost'})
+        self.res_users.write(cr, uid, uid, {'email': 'test@localhost'})
 
     @mute_logger('openerp.addons.base.ir.ir_model', 'openerp.models')
     def test_00_mail_access_rights(self):
@@ -136,11 +131,12 @@ class test_portal(TestMail):
         self.assertEqual(len(self._build_email_kwargs_list), 1, 'sent email number incorrect, should be only for Bert')
         for sent_email in self._build_email_kwargs_list:
             self.assertEqual(sent_email.get('subject'), 'Invitation to follow Discussion group: Pigs',
-                             'invite: subject of invitation email is incorrect')
+                            'invite: subject of invitation email is incorrect')
             self.assertIn('Administrator invited you to follow Discussion group document: Pigs', sent_email.get('body'),
-                          'invite: body of invitation email is incorrect')
-            self.assertIn(partner_carine.signup_token, sent_email.get('body'),
-                          'invite: body of invitation email does not contain signup token')
+                            'invite: body of invitation email is incorrect')
+            invite_url = partner_carine._get_signup_url_for_action(model='mail.group', res_id=self.group_pigs_id)[partner_carine.id]
+            self.assertTrue(invite_url in sent_email.get('body'),
+                            'invite: body of invitation email does not contain signup url')
 
     def test_20_notification_url(self):
         """ Tests designed to test the URL added in notification emails. """
@@ -161,8 +157,8 @@ class test_portal(TestMail):
 
         # Test: link for partner -> signup URL
         url = self.mail_mail._get_partner_access_link(cr, uid, mail, partner=partner_bert)
-        self.assertIn(partner_bert.signup_token, url,
-                        'notification email: mails send to a not-user partner should contain the signup token')
+        self.assertIn(partner_bert.signup_url, url,
+                        'notification email: mails send to a not-user partner should contain the signup URL')
 
         # Test: link for user -> signin
         url = self.mail_mail._get_partner_access_link(cr, uid, mail, partner=partner_raoul)

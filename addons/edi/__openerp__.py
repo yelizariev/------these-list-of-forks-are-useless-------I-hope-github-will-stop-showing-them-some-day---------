@@ -33,7 +33,7 @@ More details about OpenERP's EDI format may be found in the technical OpenERP
 documentation at http://doc.openerp.com.
     """,
     'author': 'OpenERP SA',
-    'website': 'https://www.odoo.com/page/api',
+    'website': 'http://www.openerp.com',
     'depends': ['base', 'email_template'],
     'data' : [
         'views/edi.xml',

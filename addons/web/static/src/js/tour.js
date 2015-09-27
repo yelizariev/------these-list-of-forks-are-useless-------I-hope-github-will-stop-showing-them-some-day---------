@@ -59,7 +59,6 @@ var localStorage = window.localStorage;
 var Tour = {
     tours: {},
     defaultDelay: 50,
-    autoRunning: true,
     retryRunningDelay: 1000,
     errorDelay: 5000,
     state: null,
@@ -76,7 +75,7 @@ var Tour = {
         if (!tour) {
             return Tour.error(null, "Can't run '"+tour_id+"' (tour undefined)");
         }
-        Tour.log("Tour '"+tour_id+"' Begin from run method", true);
+        console.log("Tour '"+tour_id+"' Begin from run method");
         var state = Tour.getState();
         if (state) {
              if (state.mode === "test") {
@@ -242,18 +241,10 @@ var Tour = {
     },
     repositionPopover: function() {
         var popover = Tour.$element.data("bs.popover");
-        var $tip = popover.tip();
+        var $tip = Tour.$element.data("bs.popover").tip();
 
         if (popover.options.orphan) {
             return $tip.css("top", $(window).outerHeight() / 2 - $tip.outerHeight() / 2);
-        }
-
-        if (Tour.$element.parents("div").filter(function(){ return getComputedStyle(this).position === 'fixed'; }).length) {
-            var pos = popover.getPosition();
-            var top = pos.top;
-            if (popover.options.placement === "top") top -= $tip.height();
-            if (popover.options.placement === "bottom") top += pos.height;
-            $tip.css({'top': top+'px'});
         }
 
         var offsetBottom, offsetHeight, offsetRight, offsetWidth, originalLeft, originalTop, tipOffset;
@@ -279,10 +270,10 @@ var Tour = {
         $tip.offset(tipOffset);
         if (popover.options.placement === "bottom" || popover.options.placement === "top") {
                 var left = Tour.$element.offset().left + Tour.$element.outerWidth()/2 - tipOffset.left;
-                popover.arrow().css("left", left ? left + "px" : "");
+                $tip.find(".arrow").css("left", left ? left + "px" : "");
         } else if (popover.options.placement !== "auto") {
                 var top = Tour.$element.offset().top + Tour.$element.outerHeight()/2 - tipOffset.top;
-                popover.arrow().css("top", top ? top + "px" : "");
+                $tip.find(".arrow").css("top", top ? top + "px" : "");
         }
     },
     _load_template: false,
@@ -320,7 +311,7 @@ var Tour = {
                 "step_id": 0
             };
             window.location.hash = "";
-            Tour.log("Tour '"+state.id+"' Begin from url hash");
+            console.log("Tour '"+state.id+"' Begin from url hash");
             Tour.saveState(state.id, state.mode, state.step_id, 0);
         }
         if (!state.id) {
@@ -330,17 +321,8 @@ var Tour = {
         state.step = state.tour && state.tour.steps[state.step_id === -1 ? 0 : state.step_id];
         return state;
     },
-    log: function (message, add_user) {
-        if (add_user) {
-            var user = $(".navbar .dropdown:has(>.js_usermenu) a:first, .navbar .oe_topbar_name, .pos .username").text();
-            if (!user && $('a[href*="/login"]')) user = 'Public User';
-            message += " (" + (user||"").replace(/^\s*|\s*$/g, '') + ")";
-        }
-        console.log(message);
-    },
     error: function (step, message) {
         var state = Tour.getState();
-        console.log(state.tour.steps.slice());
         message += '\n tour: ' + state.id
             + (step ? '\n step: ' + step.id + ": '" + (step._title || step.title) + "'" : '' )
             + '\n href: ' + window.location.href
@@ -350,7 +332,7 @@ var Tour = {
             + (step ? '\n waitFor: ' + Boolean(!step.waitFor || $(step.waitFor).size()) : '' )
             + "\n localStorage: " + JSON.stringify(localStorage)
             + '\n\n' + $("body").html();
-        Tour.log(message, true);
+        console.log(message);
         Tour.endTour();
     },
     lists: function () {
@@ -381,7 +363,7 @@ var Tour = {
         clearTimeout(Tour.timer);
         clearTimeout(Tour.testtimer);
         Tour.closePopover();
-        Tour.log("Tour reset");
+        console.log("Tour reset");
     },
     running: function () {
         var state = Tour.getState();
@@ -391,7 +373,7 @@ var Tour = {
                 Tour.load_template().then(Tour.running);
                 return;
             }
-            Tour.log("Tour '"+state.id+"' is running", true);
+            console.log("Tour '"+state.id+"' is running");
             Tour.registerSteps(state.tour, state.mode);
             Tour.nextStep();
         } else {
@@ -399,7 +381,7 @@ var Tour = {
                 return Tour.error(state.step, "Tour '"+state.id+"' undefined");
             }
             Tour.saveState(state.id, state.mode, state.step_id, state.number-1, state.wait+1);
-            Tour.log("Tour '"+state.id+"' wait for running (tour undefined)");
+            console.log("Tour '"+state.id+"' wait for running (tour undefined)");
             setTimeout(Tour.running, Tour.retryRunningDelay);
         }
     },
@@ -459,7 +441,7 @@ var Tour = {
         Tour.saveState(state.id, state.mode, step.id, state.number);
 
         if (step.id !== state.step_id) {
-            Tour.log("Tour '"+state.id+"' Step: '" + (step._title || step.title) + "' (" + (new Date().getTime() - this.time) + "ms)");
+            console.log("Tour '"+state.id+"' Step: '" + (step._title || step.title) + "' (" + (new Date().getTime() - this.time) + "ms)");
         }
 
         Tour.autoTogglePopover(true);
@@ -491,11 +473,11 @@ var Tour = {
         var test = state.step && state.step.id >= state.tour.steps.length-1;
         Tour.reset();
         if (test) {
-            Tour.log("Tour '"+state.id+"' finish: ok");
-            Tour.log('ok');
+            console.log("Tour '"+state.id+"' finish: ok");
+            console.log('ok');
         } else {
-            Tour.log("Tour '"+state.id+"' finish: error");
-            Tour.log('error');
+            console.log("Tour '"+state.id+"' finish: error");
+            console.log('error');
         }
     },
     autoNextStep: function (tour, step) {
@@ -570,10 +552,6 @@ openerp.Tour = Tour;
 
 /////////////////////////////////////////////////
 
-$(document).ready(function () {
-    if (Tour.autoRunning) {
-        Tour.running();
-    };
-});
+$(document).ready(Tour.running);
 
 }());

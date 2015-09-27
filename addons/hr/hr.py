@@ -96,8 +96,7 @@ class hr_job(osv.Model):
     _description = "Job Position"
     _inherit = ['mail.thread', 'ir.needaction_mixin']
     _columns = {
-        'name': fields.char('Job Name', required=True, select=True,
-                            translate=True),
+        'name': fields.char('Job Name', required=True, select=True),
         'expected_employees': fields.function(_get_nbr_employees, string='Total Forecasted Employees',
             help='Expected number of employees for this job position after new recruitment.',
             store = {
@@ -208,7 +207,7 @@ class hr_employee(osv.osv):
         'parent_id': fields.many2one('hr.employee', 'Manager'),
         'category_ids': fields.many2many('hr.employee.category', 'employee_category_rel', 'emp_id', 'category_id', 'Tags'),
         'child_ids': fields.one2many('hr.employee', 'parent_id', 'Subordinates'),
-        'resource_id': fields.many2one('resource.resource', 'Resource', ondelete='cascade', required=True, auto_join=True),
+        'resource_id': fields.many2one('resource.resource', 'Resource', ondelete='cascade', required=True),
         'coach_id': fields.many2one('hr.employee', 'Coach'),
         'job_id': fields.many2one('hr.job', 'Job Title'),
         # image: all image fields are base64 encoded and PIL-supported
@@ -271,7 +270,7 @@ class hr_employee(osv.osv):
         partner_ids = list(set(u.partner_id.id for u in res_users.browse(cr, SUPERUSER_ID, user_ids, context=context)))
         self.message_post(
             cr, uid, [employee_id],
-            body=_('Welcome to %s! Please help him/her take the first steps with Odoo!') % (employee.name),
+            body=_('Welcome to %s! Please help him/her take the first steps with OpenERP!') % (employee.name),
             partner_ids=partner_ids,
             subtype='mail.mt_comment', context=context
         )
@@ -292,7 +291,6 @@ class hr_employee(osv.osv):
         resource_ids = []
         for employee in self.browse(cr, uid, ids, context=context):
             resource_ids.append(employee.resource_id.id)
-        super(hr_employee, self).unlink(cr, uid, ids, context=context)
         return self.pool.get('resource.resource').unlink(cr, uid, resource_ids, context=context)
 
     def onchange_address_id(self, cr, uid, ids, address, context=None):
@@ -348,8 +346,8 @@ class hr_employee(osv.osv):
         if auto_follow_fields is None:
             auto_follow_fields = ['user_id']
         user_field_lst = []
-        for name, field in self._fields.items():
-            if name in auto_follow_fields and name in updated_fields and field.comodel_name == 'res.users':
+        for name, column_info in self._all_columns.items():
+            if name in auto_follow_fields and name in updated_fields and column_info.column._obj == 'res.users':
                 user_field_lst.append(name)
         return user_field_lst
 

@@ -22,7 +22,7 @@ Re-implement openerp's file import system:
   need or want an online import can avoid it being available to users.
 """,
     'category': 'Uncategorized',
-    'website': 'https://www.odoo.com',
+    'website': 'http://www.openerp.com',
     'author': 'OpenERP SA',
     'depends': ['web'],
     'installable': True,

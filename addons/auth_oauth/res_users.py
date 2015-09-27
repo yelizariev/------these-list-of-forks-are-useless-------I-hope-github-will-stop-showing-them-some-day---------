@@ -46,20 +46,6 @@ class res_users(osv.Model):
             validation.update(data)
         return validation
 
-    def _generate_signup_values(self, cr, uid, provider, validation, params, context=None):
-        oauth_uid = validation['user_id']
-        email = validation.get('email', 'provider_%s_user_%s' % (provider, oauth_uid))
-        name = validation.get('name', email)
-        return {
-            'name': name,
-            'login': email,
-            'email': email,
-            'oauth_provider_id': provider,
-            'oauth_uid': oauth_uid,
-            'oauth_access_token': params['access_token'],
-            'active': True,
-        }
-
     def _auth_oauth_signin(self, cr, uid, provider, validation, params, context=None):
         """ retrieve and sign in the user corresponding to provider and validated access token
             :param provider: oauth provider id (int)
@@ -84,7 +70,18 @@ class res_users(osv.Model):
                 return None
             state = simplejson.loads(params['state'])
             token = state.get('t')
-            values = self._generate_signup_values(cr, uid, provider, validation, params, context=context)
+            oauth_uid = validation['user_id']
+            email = validation.get('email', 'provider_%s_user_%s' % (provider, oauth_uid))
+            name = validation.get('name', email)
+            values = {
+                'name': name,
+                'login': email,
+                'email': email,
+                'oauth_provider_id': provider,
+                'oauth_uid': oauth_uid,
+                'oauth_access_token': params['access_token'],
+                'active': True,
+            }
             try:
                 _, login, _ = self.signup(cr, uid, values, token, context=context)
                 return login
@@ -101,12 +98,7 @@ class res_users(osv.Model):
         validation = self._auth_oauth_validate(cr, uid, provider, access_token)
         # required check
         if not validation.get('user_id'):
-            # Workaround: facebook does not send 'user_id' in Open Graph Api
-            if validation.get('id'):
-                validation['user_id'] = validation['id']
-            else:
-                raise openerp.exceptions.AccessDenied()
-
+            raise openerp.exceptions.AccessDenied()
         # retrieve and sign in user
         login = self._auth_oauth_signin(cr, uid, provider, validation, params, context=context)
         if not login:

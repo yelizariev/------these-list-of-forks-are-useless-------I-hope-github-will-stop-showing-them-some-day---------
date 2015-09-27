@@ -14,8 +14,7 @@ class WebsiteResPartner(osv.Model):
         'website_published': fields.boolean(
             'Publish', help="Publish on the website", copy=False),
         'website_description': fields.html(
-            'Website Partner Full Description',
-            strip_style=True
+            'Website Partner Full Description'
         ),
         'website_short_description': fields.text(
             'Website Partner Short Description'
@@ -25,5 +24,5 @@ class WebsiteResPartner(osv.Model):
     }
 
     _defaults = {
-        'website_published': True
+        'website_published': False
     }

@@ -20,10 +20,11 @@ class AdyenController(http.Controller):
     @http.route([
         '/payment/adyen/return/',
     ], type='http', auth='none')
-    def adyen_return(self, **post):
+    def adyen_return(self, pspReference, **post):
+        """ Paypal IPN."""
+        post["pspReference"] = pspReference
         _logger.info('Beginning Adyen form_feedback with post data %s', pprint.pformat(post))  # debug
-        if post.get('authResult') not in ['CANCELLED']:
-            request.registry['payment.transaction'].form_feedback(request.cr, SUPERUSER_ID, post, 'adyen', context=request.context)
+        request.registry['payment.transaction'].form_feedback(request.cr, SUPERUSER_ID, post, 'adyen', context=request.context)
         return_url = post.pop('return_url', '')
         if not return_url:
             custom = json.loads(post.pop('merchantReturnData', '{}'))
