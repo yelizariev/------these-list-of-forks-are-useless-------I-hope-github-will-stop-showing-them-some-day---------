@@ -18,7 +18,6 @@
             return this._super.apply(this, arguments).then(function () {
                 var $edit_button = $("button[data-action=edit]");
                 $edit_button.removeClass("hidden");
-                $edit_button.text("Translate");
 
                 if(website.no_editor) {
                     $edit_button.removeProp('disabled');
@@ -62,7 +61,10 @@
             var link = $('.js_language_selector a[data-default-lang]')[0];
             if (link) {
                 link.search += (link.search ? '&' : '?') + 'enable_editor=1';
-                window.location = link.attributes.href.value;
+                var url = link.pathname + link.search + window.location.hash;
+                link.pathname = '/website/lang/default';
+                link.search = '?' + $.param({r: url});
+                window.location = link.href;
             }
         },
         translate: function () {
@@ -130,7 +132,7 @@
             node.setAttribute('data-oe-translation-view-id', view_id);
             var content = node.childNodes[0].data.trim();
             var trans = this.translations.filter(function (t) {
-                return t.res_id === view_id && t.value === content;
+                return t.res_id === view_id && t.value.trim() === content;
             });
             if (trans.length) {
                 node.setAttribute('data-oe-translation-id', trans[0].id);

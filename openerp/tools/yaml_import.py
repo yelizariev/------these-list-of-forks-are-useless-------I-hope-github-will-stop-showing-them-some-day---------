@@ -316,10 +316,10 @@ class YamlInterpreter(object):
                     if not self._coerce_bool(record.forcecreate):
                         return None
 
-
             #context = self.get_context(record, self.eval_context)
-            #TOFIX: record.context like {'withoutemployee':True} should pass from self.eval_context. example: test_project.yml in project module
-            context = record.context
+            # FIXME: record.context like {'withoutemployee':True} should pass from self.eval_context. example: test_project.yml in project module
+            # TODO: cleaner way to avoid resetting password in auth_signup (makes user creation costly)
+            context = dict(record.context or {}, no_reset_password=True)
             view_info = False
             if view_id:
                 varg = view_id
@@ -397,7 +397,7 @@ class YamlInterpreter(object):
             onchange_spec = model._onchange_spec(self.cr, SUPERUSER_ID, view_info, context=self.context)
             # gather the default values on the object. (Can't use `fields´ as parameter instead of {} because we may
             # have references like `base.main_company´ in the yaml file and it's not compatible with the function)
-            defaults = default and model._add_missing_default_values(self.cr, SUPERUSER_ID, {}, context=self.context) or {}
+            defaults = default and model._add_missing_default_values(self.cr, self.uid, {}, context=self.context) or {}
 
             # copy the default values in record_dict, only if they are in the view (because that's what the client does)
             # the other default values will be added later on by the create().
@@ -438,7 +438,7 @@ class YamlInterpreter(object):
                         result = recs.onchange(record_dict, field_name, onchange_spec)
 
                     else:
-                        match = re.match("([a-z_1-9A-Z]+)\((.*)\)", el.attrib['on_change'])
+                        match = re.match("([a-z_1-9A-Z]+)\((.*)\)", el.attrib['on_change'], re.DOTALL)
                         assert match, "Unable to parse the on_change '%s'!" % (el.attrib['on_change'], )
 
                         # creating the context
@@ -458,19 +458,18 @@ class YamlInterpreter(object):
 
                         # Evaluation args
                         args = map(lambda x: eval(x, ctx), match.group(2).split(','))
-                        result = getattr(model, match.group(1))(self.cr, SUPERUSER_ID, [], *args)
+                        result = getattr(model, match.group(1))(self.cr, self.uid, [], *args)
 
                     for key, val in (result or {}).get('value', {}).items():
-                        assert key in fg, (
-                            "The field %r returned from the onchange call %r "
-                            "does not exist in the source view %r (of object "
-                            "%r). This field will be ignored (and thus not "
-                            "populated) when clients saves the new record" % (
-                                key, match.group(1), view_info.get('name', '?'), model._name
-                            ))
-                        if key not in fields:
-                            # do not shadow values explicitly set in yaml.
-                            record_dict[key] = process_val(key, val)
+                        if key in fg:
+                            if key not in fields:
+                                # do not shadow values explicitly set in yaml.
+                                record_dict[key] = process_val(key, val)
+                        else:
+                            _logger.debug("The returning field '%s' from your on_change call '%s'"
+                                            " does not exist either on the object '%s', either in"
+                                            " the view '%s'",
+                                            key, match.group(1), model._name, view_info['name'])
                 else:
                     nodes = list(el) + nodes
         else:
@@ -483,15 +482,15 @@ class YamlInterpreter(object):
             record_dict[field_name] = field_value
         return record_dict
 
-    def process_ref(self, node, column=None):
+    def process_ref(self, node, field=None):
         assert node.search or node.id, '!ref node should have a `search` attribute or `id` attribute'
         if node.search:
             if node.model:
                 model_name = node.model
-            elif column:
-                model_name = column._obj
+            elif field:
+                model_name = field.comodel_name
             else:
-                raise YamlImportException('You need to give a model for the search, or a column to infer it.')
+                raise YamlImportException('You need to give a model for the search, or a field to infer it.')
             model = self.get_model(model_name)
             q = eval(node.search, self.eval_context)
             ids = model.search(self.cr, self.uid, q)
@@ -511,34 +510,32 @@ class YamlInterpreter(object):
 
     def _eval_field(self, model, field_name, expression, view_info=False, parent={}, default=True):
         # TODO this should be refactored as something like model.get_field() in bin/osv
-        if field_name in model._columns:
-            column = model._columns[field_name]
-        elif field_name in model._inherit_fields:
-            column = model._inherit_fields[field_name][2]
-        else:
+        if field_name not in model._fields:
             raise KeyError("Object '%s' does not contain field '%s'" % (model, field_name))
+        field = model._fields[field_name]
+
         if is_ref(expression):
-            elements = self.process_ref(expression, column)
-            if column._type in ("many2many", "one2many"):
+            elements = self.process_ref(expression, field)
+            if field.type in ("many2many", "one2many"):
                 value = [(6, 0, elements)]
             else: # many2one
                 if isinstance(elements, (list,tuple)):
                     value = self._get_first_result(elements)
                 else:
                     value = elements
-        elif column._type == "many2one":
+        elif field.type == "many2one":
             value = self.get_id(expression)
-        elif column._type == "one2many":
-            other_model = self.get_model(column._obj)
+        elif field.type == "one2many":
+            other_model = self.get_model(field.comodel_name)
             value = [(0, 0, self._create_record(other_model, fields, view_info, parent, default=default)) for fields in expression]
-        elif column._type == "many2many":
+        elif field.type == "many2many":
             ids = [self.get_id(xml_id) for xml_id in expression]
             value = [(6, 0, ids)]
-        elif column._type == "date" and is_string(expression):
+        elif field.type == "date" and is_string(expression):
             # enforce ISO format for string date values, to be locale-agnostic during tests
             time.strptime(expression, misc.DEFAULT_SERVER_DATE_FORMAT)
             value = expression
-        elif column._type == "datetime" and is_string(expression):
+        elif field.type == "datetime" and is_string(expression):
             # enforce ISO format for string datetime values, to be locale-agnostic during tests
             time.strptime(expression, misc.DEFAULT_SERVER_DATETIME_FORMAT)
             value = expression
@@ -547,7 +544,7 @@ class YamlInterpreter(object):
                 value = self.process_eval(expression)
             else:
                 value = expression
-            # raise YamlImportException('Unsupported column "%s" or value %s:%s' % (field_name, type(expression), expression))
+            # raise YamlImportException('Unsupported field "%s" or value %s:%s' % (field_name, type(expression), expression))
         return value
 
     def process_context(self, node):
@@ -615,7 +612,7 @@ class YamlInterpreter(object):
             uid = workflow.uid
         else:
             uid = self.uid
-        self.cr.execute('select distinct signal from wkf_transition')
+        self.cr.execute('select distinct signal, sequence, id from wkf_transition ORDER BY sequence,id')
         signals=[x['signal'] for x in self.cr.dictfetchall()]
         if workflow.action not in signals:
             raise YamlImportException('Incorrect action %s. No such action defined' % workflow.action)
@@ -962,20 +959,5 @@ def yaml_import(cr, module, yamlfile, kind, idref=None, mode='init', noupdate=Fa
 
 # keeps convention of convert.py
 convert_yaml_import = yaml_import
-
-def threaded_yaml_import(db_name, module_name, file_name, delay=0):
-    def f():
-        time.sleep(delay)
-        cr = None
-        fp = None
-        try:
-            cr = sql_db.db_connect(db_name).cursor()
-            fp = misc.file_open(file_name)
-            convert_yaml_import(cr, module_name, fp, {}, 'update', True)
-        finally:
-            if cr: cr.close()
-            if fp: fp.close()
-    threading.Thread(target=f).start()
-
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

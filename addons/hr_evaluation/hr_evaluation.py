@@ -137,6 +137,7 @@ class hr_evaluation(osv.Model):
     _name = "hr_evaluation.evaluation"
     _inherit = "mail.thread"
     _description = "Employee Appraisal"
+    _rec_name = "employee_id"
     _columns = {
         'date': fields.date("Appraisal Deadline", required=True, select=True),
         'employee_id': fields.many2one('hr.employee', "Employee", required=True),
@@ -326,7 +327,8 @@ class hr_evaluation_interview(osv.Model):
     def survey_req_waiting_answer(self, cr, uid, ids, context=None):
         request_obj = self.pool.get('survey.user_input')
         for interview in self.browse(cr, uid, ids, context=context):
-            request_obj.action_survey_resent(cr, uid, [interview.id], context=context)
+            if interview.request_id:
+                request_obj.action_survey_resent(cr, uid, [interview.request_id.id], context=context)
             self.write(cr, uid, interview.id, {'state': 'waiting_answer'}, context=context)
         return True
 

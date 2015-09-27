@@ -12,7 +12,6 @@
         <field name="context">{
                 'default_type':'lead',
                 'stage_type':'lead',
-                'empty_list_help_model': 'crm.case.section',
                 'needaction_menu_ref': 'crm.menu_crm_opportunities',
                 'search_default_unassigned':1,
             }
@@ -36,8 +35,8 @@
         <field name="view_mode">kanban,tree,graph,form,calendar</field>
         <field name="domain">[('type','=','opportunity')]</field>
         <field name="context">{
-                'stage_type': 'opportunity', 
-                'default_type': 'opportunity', 
+                'stage_type': 'opportunity',
+                'default_type': 'opportunity',
                 'default_user_id': uid
             }
         </field>
@@ -45,7 +44,7 @@
         <field name="search_view_id" ref="crm.view_crm_case_opportunities_filter"/>
         <field name="help" type="html">
             <p>
-                OpenERP helps you keep track of your sales pipeline to follow
+                Odoo helps you keep track of your sales pipeline to follow
                 up potential sales and better forecast your future revenues.
             </p><p>
                 You will be able to plan meetings and phone calls from

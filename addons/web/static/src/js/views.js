@@ -339,7 +339,12 @@ instance.web.ActionManager = instance.web.Widget.extend({
             return this.do_action(action_client, options);
         } else if (_.isNumber(action) || _.isString(action)) {
             var self = this;
-            return self.rpc("/web/action/load", { action_id: action }).then(function(result) {
+            var additional_context = {
+                active_id : options.additional_context.active_id,
+                active_ids : options.additional_context.active_ids,
+                active_model : options.additional_context.active_model
+            };
+            return self.rpc("/web/action/load", { action_id: action, additional_context : additional_context }).then(function(result) {
                 return self.do_action(result, options);
             });
         }
@@ -365,16 +370,18 @@ instance.web.ActionManager = instance.web.Widget.extend({
         var type = action.type.replace(/\./g,'_');
         var popup = action.target === 'new';
         var inline = action.target === 'inline' || action.target === 'inlineview';
+        var form = _.str.startsWith(action.view_mode, 'form');
         action.flags = _.defaults(action.flags || {}, {
             views_switcher : !popup && !inline,
             search_view : !popup && !inline,
             action_buttons : !popup && !inline,
             sidebar : !popup && !inline,
-            pager : !popup && !inline,
+            pager : (!popup || !form) && !inline,
             display_title : !popup,
             search_disable_custom_filters: action.context && action.context.search_disable_custom_filters
         });
         action.menu_id = options.action_menu_id;
+        action.context.params = _.extend({ 'action' : action.id }, action.context.params);
         if (!(type in this)) {
             console.error("Action manager can't handle action of type " + action.type, action);
             return $.Deferred().reject();
@@ -405,15 +412,36 @@ instance.web.ActionManager = instance.web.Widget.extend({
         }
         var widget = executor.widget();
         if (executor.action.target === 'new') {
+            var pre_dialog = (this.dialog && !this.dialog.isDestroyed()) ? this.dialog : null;
+            if (pre_dialog){
+                // prevent previous dialog to consider itself closed,
+                // right now, as we're opening a new one (prevents
+                // reload of original form view)
+                pre_dialog.off('closing', null, pre_dialog.on_close);
+            }
             if (this.dialog_widget && !this.dialog_widget.isDestroyed()) {
                 this.dialog_widget.destroy();
             }
+            // explicitly passing a closing action to dialog_stop() prevents
+            // it from reloading the original form view
             this.dialog_stop(executor.action);
             this.dialog = new instance.web.Dialog(this, {
                 title: executor.action.name,
                 dialogClass: executor.klass,
             });
-            this.dialog.on("closing", null, options.on_close);
+
+            // chain on_close triggers with previous dialog, if any
+            this.dialog.on_close = function(){
+                options.on_close.apply(null, arguments);
+                if (pre_dialog && pre_dialog.on_close){
+                    // no parameter passed to on_close as this will
+                    // only be called when the last dialog is truly
+                    // closing, and *should* trigger a reload of the
+                    // underlying form view (see comments above)
+                    pre_dialog.on_close();
+                }
+            };
+            this.dialog.on("closing", null, this.dialog.on_close);
             if (widget instanceof instance.web.ViewManager) {
                 _.extend(widget.flags, {
                     $buttons: this.dialog.$buttons,
@@ -426,6 +454,9 @@ instance.web.ActionManager = instance.web.Widget.extend({
             this.dialog.open();
             return initialized;
         } else  {
+            // explicitly passing a closing action to dialog_stop() prevents
+            // it from reloading the original form view - we're opening a
+            // completely new action anyway
             this.dialog_stop(executor.action);
             this.inner_action = executor.action;
             this.inner_widget = widget;
@@ -598,7 +629,7 @@ instance.web.ViewManager =  instance.web.Widget.extend({
                     action_views_ids : views_ids
                 }, self.flags, self.flags[view.view_type] || {}, view.options || {})
             });
-            
+
             views_ids[view.view_type] = view.view_id;
         });
         if (this.flags.views_switcher === false) {
@@ -606,10 +637,10 @@ instance.web.ViewManager =  instance.web.Widget.extend({
         }
         // If no default view defined, switch to the first one in sequence
         var default_view = this.flags.default_view || this.views_src[0].view_type;
-  
+
         return this.switch_mode(default_view, null, this.flags[default_view] && this.flags[default_view].options);
-      
-        
+
+
     },
     switch_mode: function(view_type, no_store, view_options) {
         var self = this;
@@ -644,15 +675,13 @@ instance.web.ViewManager =  instance.web.Widget.extend({
         return $.when(view_promise).done(function () {
             _.each(_.keys(self.views), function(view_name) {
                 var controller = self.views[view_name].controller;
-                if (controller) {
-                    var container = self.$el.find("> div > div > .oe_view_manager_body > .oe_view_manager_view_" + view_name);
-                    if (view_name === view_type) {
-                        container.show();
-                        controller.do_show(view_options || {});
-                    } else {
-                        container.hide();
-                        controller.do_hide();
-                    }
+                var container = self.$el.find("> div > div > .oe_view_manager_body > .oe_view_manager_view_" + view_name);
+                if (view_name === view_type) {
+                    container.show();
+                    if (controller) controller.do_show(view_options || {});
+		} else {
+                    container.hide();
+                    if (controller) controller.do_hide();
                 }
             });
             self.trigger('switch_mode', view_type, no_store, view_options);
@@ -687,12 +716,12 @@ instance.web.ViewManager =  instance.web.Widget.extend({
         }
         controller.on('switch_mode', self, this.switch_mode);
         controller.on('previous_view', self, this.prev_view);
-        
+
         var container = this.$el.find("> div > div > .oe_view_manager_body > .oe_view_manager_view_" + view_type);
         var view_promise = controller.appendTo(container);
         this.views[view_type].controller = controller;
-        this.views[view_type].deferred.resolve(view_type);
         return $.when(view_promise).done(function() {
+            self.views[view_type].deferred.resolve(view_type);
             if (self.searchview
                     && self.flags.auto_search
                     && view.controller.searchable !== false) {
@@ -831,6 +860,9 @@ instance.web.ViewManager =  instance.web.Widget.extend({
                         : action_context.group_by;
             if (_.isString(groupby)) {
                 groupby = [groupby];
+            }
+            if (!controller.grouped && !_.isEmpty(groupby)){
+                self.dataset.set_sort([]);
             }
             $.when(controller.do_search(results.domain, results.context, groupby || [])).then(function() {
                 self.view_completely_inited.resolve();
@@ -1120,9 +1152,9 @@ instance.web.ViewManagerAction = instance.web.ViewManager.extend({
                     return self.switch_mode(state.view_type, true);
                 })
             );
-        } 
+        }
 
-        $.when(defs).done(function() {
+        $.when(this.views[this.active_view] ? this.views[this.active_view].deferred : $.when(), defs).done(function() {
             self.views[self.active_view].controller.do_load_state(state, warm);
         });
     },
@@ -1132,7 +1164,7 @@ instance.web.Sidebar = instance.web.Widget.extend({
     init: function(parent) {
         var self = this;
         this._super(parent);
-        var view = this.getParent();
+        this.view = this.getParent();
         this.sections = [
             { 'name' : 'print', 'label' : _t('Print'), },
             { 'name' : 'other', 'label' : _t('More'), }
@@ -1241,10 +1273,11 @@ instance.web.Sidebar = instance.web.Widget.extend({
                 new instance.web.Dialog(this, { title: _t("Warning"), size: 'medium',}, $("<div />").text(_t("You must choose at least one record."))).open();
                 return false;
             }
+            var dataset = self.getParent().dataset;
             var active_ids_context = {
                 active_id: ids[0],
                 active_ids: ids,
-                active_model: self.getParent().dataset.model,
+                active_model: dataset.model,
             };
 
             $.when(domain).done(function (domain) {
@@ -1257,7 +1290,8 @@ instance.web.Sidebar = instance.web.Widget.extend({
 
                 self.rpc("/web/action/load", {
                     action_id: item.action.id,
-                    context: c
+                    context: new instance.web.CompoundContext(
+                    dataset.get_context(), active_ids_context).eval()
                 }).done(function(result) {
                     result.context = new instance.web.CompoundContext(
                         result.context || {}, active_ids_context)
@@ -1417,7 +1451,7 @@ instance.web.View = instance.web.Widget.extend({
                 // Wrong group_by values will simply fail and forbid rendering of the destination view
                 var ncontext = new instance.web.CompoundContext(
                     _.object(_.reject(_.pairs(dataset.get_context().eval()), function(pair) {
-                      return pair[0].match('^(?:(?:default_|search_default_).+|.+_view_ref|group_by|group_by_no_leaf|active_id|active_ids)$') !== null;
+                      return pair[0].match('^(?:(?:default_|search_default_|show_).+|.+_view_ref|group_by|group_by_no_leaf|active_id|active_ids)$') !== null;
                     }))
                 );
                 ncontext.add(action_data.context || {});
@@ -1442,12 +1476,12 @@ instance.web.View = instance.web.Widget.extend({
         if (action_data.special === 'cancel') {
             return handler({"type":"ir.actions.act_window_close"});
         } else if (action_data.type=="object") {
-            var args = [[record_id]], additional_args = [];
+            var args = [[record_id]];
             if (action_data.args) {
                 try {
                     // Warning: quotes and double quotes problem due to json and xml clash
                     // Maybe we should force escaping in xml or do a better parse of the args array
-                    additional_args = JSON.parse(action_data.args.replace(/'/g, '"'));
+                    var additional_args = JSON.parse(action_data.args.replace(/'/g, '"'));
                     args = args.concat(additional_args);
                 } catch(e) {
                     console.error("Could not JSON.parse arguments", action_data.args);
@@ -1516,18 +1550,10 @@ instance.web.View = instance.web.Widget.extend({
     /**
      * Switches to a specific view type
      */
-    do_switch_view: function() { 
+    do_switch_view: function() {
         this.trigger.apply(this, ['switch_mode'].concat(_.toArray(arguments)));
     },
-    /**
-     * Cancels the switch to the current view, switches to the previous one
-     *
-     * @param {Object} [options]
-     * @param {Boolean} [options.created=false] resource was created
-     * @param {String} [options.default=null] view to switch to if no previous view
-     */
-
-    do_search: function(view) {
+    do_search: function(domain, context, group_by) {
     },
     on_sidebar_export: function() {
         new instance.web.DataExport(this, this.dataset).open();
@@ -1588,7 +1614,12 @@ instance.web.fields_view_get = function(args) {
     if (typeof model === 'string') {
         model = new instance.web.Model(args.model, args.context);
     }
-    return args.model.call('fields_view_get', [args.view_id, args.view_type, args.context, args.toolbar]).then(function(fvg) {
+    return args.model.call('fields_view_get', {
+        view_id: args.view_id,
+        view_type: args.view_type,
+        context: args.context,
+        toolbar: args.toolbar
+    }).then(function(fvg) {
         return postprocess(fvg);
     });
 };
@@ -1627,7 +1658,7 @@ instance.web.json_node_to_xml = function(node, human_readable, indent) {
         cr = human_readable ? '\n' : '';
 
     if (typeof(node) === 'string') {
-        return sindent + node;
+        return sindent + node.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     } else if (typeof(node.tag) !== 'string' || !node.children instanceof Array || !node.attrs instanceof Object) {
         throw new Error(
             _.str.sprintf(_t("Node [%s] is not a JSONified XML node"),

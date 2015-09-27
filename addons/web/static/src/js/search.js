@@ -487,11 +487,9 @@ instance.web.SearchView = instance.web.Widget.extend(/** @lends instance.web.Sea
      */
     setup_global_completion: function () {
         var self = this;
-
         this.autocomplete = new instance.web.search.AutoComplete(this, {
             source: this.proxy('complete_global_search'),
             select: this.proxy('select_completion'),
-            delay: 0,
             get_search_string: function () {
                 return self.$('div.oe_searchview_input').text();
             },
@@ -599,6 +597,7 @@ instance.web.SearchView = instance.web.Widget.extend(/** @lends instance.web.Sea
     search_view_loaded: function(data) {
         var self = this;
         this.fields_view = data;
+        this.view_id = this.view_id || data.view_id;
         if (data.type !== 'search' ||
             data.arch.tag !== 'search') {
                 throw new Error(_.str.sprintf(
@@ -782,6 +781,7 @@ instance.web.SearchViewDrawer = instance.web.Widget.extend({
 
     start: function() {
         var self = this;
+        if (this.searchview.headless) return $.when(this._super(), this.searchview.ready);
         var filters_ready = this.searchview.fields_view_get
                                 .then(this.proxy('prepare_filters'));
         return $.when(this._super(), filters_ready).then(function () {
@@ -1528,12 +1528,13 @@ instance.web.search.SelectionField = instance.web.search.Field.extend(/** @lends
         var results = _(this.attrs.selection).chain()
             .filter(function (sel) {
                 var value = sel[0], label = sel[1];
-                if (!value) { return false; }
+                if (value === undefined || !label) { return false; }
                 return label.toLowerCase().indexOf(needle.toLowerCase()) !== -1;
             })
             .map(function (sel) {
                 return {
                     label: _.escape(sel[1]),
+                    indent: true,
                     facet: facet_from(self, sel)
                 };
             }).value();
@@ -1572,7 +1573,19 @@ instance.web.search.DateField = instance.web.search.Field.extend(/** @lends inst
         return instance.web.date_to_str(facetValue.get('value'));
     },
     complete: function (needle) {
-        var d = Date.parse(needle);
+        var d;
+        try {
+            var t = (this.attrs && this.attrs.type === 'datetime') ? 'datetime' : 'date';
+            var v = instance.web.parse_value(needle, {'widget': t});
+            if (t === 'datetime'){
+                d = instance.web.str_to_datetime(v);
+            }
+            else{
+                d = instance.web.str_to_date(v);
+            }
+        } catch (e) {
+            // pass
+        }
         if (!d) { return $.when(null); }
         var date_string = instance.web.format_value(d, this.attrs);
         var label = _.str.sprintf(_.str.escapeHTML(
@@ -1623,7 +1636,7 @@ instance.web.search.ManyToOneField = instance.web.search.CharField.extend({
             facet: {
                 category: this.attrs.string,
                 field: this,
-                values: [{label: value, value: value}]
+                values: [{label: value, value: value, operator: 'ilike'}]
             },
             expand: this.expand.bind(this),
         }]);
@@ -1634,10 +1647,17 @@ instance.web.search.ManyToOneField = instance.web.search.CharField.extend({
         // FIXME: "concurrent" searches (multiple requests, mis-ordered responses)
         var context = instance.web.pyeval.eval(
             'contexts', [this.view.dataset.get_context()]);
+        var args = this.attrs.domain;
+        if(typeof args === 'string') {
+            try {
+                args = instance.web.pyeval.eval('domain', args);
+            } catch(e) {
+                args = [];
+            }
+        }
         return this.model.call('name_search', [], {
             name: needle,
-            args: instance.web.pyeval.eval(
-                'domains', this.attrs.domain ? [this.attrs.domain] : [], context),
+            args: args,
             limit: 8,
             context: context
         }).then(function (results) {
@@ -1662,7 +1682,8 @@ instance.web.search.ManyToOneField = instance.web.search.CharField.extend({
             // to handle this as if it were a single value.
             value = value[0];
         }
-        return this.model.call('name_get', [value]).then(function (names) {
+        var context = instance.web.pyeval.eval('contexts', [this.view.dataset.get_context()]);
+        return this.model.call('name_get', [value], {context: context}).then(function (names) {
             if (_(names).isEmpty()) { return null; }
             return facet_from(self, names[0]);
         });
@@ -1671,9 +1692,13 @@ instance.web.search.ManyToOneField = instance.web.search.CharField.extend({
         return facetValue.get('label');
     },
     make_domain: function (name, operator, facetValue) {
+        operator = facetValue.get('operator') || operator;
+
         switch(operator){
         case this.default_operator:
             return [[name, '=', facetValue.get('value')]];
+        case 'ilike':
+            return [[name, 'ilike', facetValue.get('value')]];
         case 'child_of':
             return [[name, 'child_of', facetValue.get('value')]];
         }
@@ -1683,7 +1708,10 @@ instance.web.search.ManyToOneField = instance.web.search.CharField.extend({
         var values = facet.values;
         if (_.isEmpty(this.attrs.context) && values.length === 1) {
             var c = {};
-            c['default_' + this.attrs.name] = values.at(0).get('value');
+            var v = values.at(0);
+            if (v.get('operator') !== 'ilike') {
+                c['default_' + this.attrs.name] = v.get('value');
+            }
             return c;
         }
         return this._super(facet);
@@ -1962,7 +1990,7 @@ instance.web.search.Advanced = instance.web.search.Input.extend({
                     context: this.view.dataset.context
                 }).done(function(data) {
                     self.fields = {
-                        id: { string: 'ID', type: 'id' }
+                        id: { string: 'ID', type: 'id', searchable: true }
                     };
                     _.each(data, function(field_def, field_name) {
                         if (field_def.selectable !== false && field_name != 'id') {
@@ -2036,7 +2064,7 @@ instance.web.search.ExtendedSearchProposition = instance.web.Widget.extend(/** @
         this._super(parent);
         this.fields = _(fields).chain()
             .map(function(val, key) { return _.extend({}, val, {'name': key}); })
-            .filter(function (field) { return !field.deprecated && (field.store === void 0 || field.store || field.fnct_search); })
+            .filter(function (field) { return !field.deprecated && field.searchable; })
             .sortBy(function(field) {return field.string;})
             .value();
         this.attrs = {_: _, fields: this.fields, selected: null};
@@ -2246,6 +2274,10 @@ instance.web.search.ExtendedSearchProposition.Float = instance.web.search.Extend
         {value: "∃", text: _lt("is set")},
         {value: "∄", text: _lt("is not set")}
     ],
+    init: function (parent) {
+        this._super(parent);
+        this.decimal_point = instance.web._t.database.parameters.decimal_point;
+    },
     toString: function () {
         return this.$el.val();
     },
@@ -2317,8 +2349,6 @@ instance.web.search.AutoComplete = instance.web.Widget.extend({
     // options.source: function ({term:query}, callback).  This function will be called to
     //      obtain the search results corresponding to the query string.  It is assumed that
     //      options.source will call callback with the results.
-    // options.delay: delay in millisecond before calling source.  Useful if you don't want
-    //      to make too many rpc calls
     // options.select: function (ev, {item: {facet:facet}}).  Autocomplete widget will call
     //      that function when a selection is made by the user
     // options.get_search_string: function ().  This function will be called by autocomplete
@@ -2327,15 +2357,14 @@ instance.web.search.AutoComplete = instance.web.Widget.extend({
         this._super(parent);
         this.$input = parent.$el;
         this.source = options.source;
-        this.delay = options.delay;
-        this.select = options.select,
+        this.select = options.select;
         this.get_search_string = options.get_search_string;
         this.width = options.width || 400;
 
         this.current_result = null;
 
         this.searching = true;
-        this.search_string = null;
+        this.search_string = '';
         this.current_search = null;
     },
     start: function () {
@@ -2347,23 +2376,41 @@ instance.web.search.AutoComplete = instance.web.Widget.extend({
                 ev.preventDefault();
                 return;
             }
-            if (!self.searching) {
-                self.searching = true;
+            if (ev.which === $.ui.keyCode.ENTER) {
+                if (self.search_string.length) {
+                    self.select_item(ev);
+                }
                 return;
             }
-            self.search_string = self.get_search_string();
+            var search_string = self.get_search_string();
+            if (self.search_string !== search_string) {
+                if (search_string.length) {
+                    self.search_string = search_string;
+                    self.initiate_search(search_string);
+                } else {
+                    self.close();
+                }
+            }
+        });
+        this.$input.on('keypress', function (ev) {
+            self.search_string = self.search_string + String.fromCharCode(ev.which);
             if (self.search_string.length) {
+                self.searching = true;
                 var search_string = self.search_string;
-                setTimeout(function () { self.initiate_search(search_string);}, self.delay);
+                self.initiate_search(search_string);
             } else {
                 self.close();
             }
         });
         this.$input.on('keydown', function (ev) {
             switch (ev.which) {
-                case $.ui.keyCode.TAB:
                 case $.ui.keyCode.ENTER:
-                    if (self.get_search_string().length) {
+
+                // TAB and direction keys are handled at KeyDown because KeyUp
+                // is not guaranteed to fire.
+                // See e.g. https://github.com/aef-/jquery.masterblaster/issues/13
+                case $.ui.keyCode.TAB:
+                    if (self.search_string.length) {
                         self.select_item(ev);
                     }
                     break;
@@ -2459,14 +2506,15 @@ instance.web.search.AutoComplete = instance.web.Widget.extend({
     },
     expand: function () {
         var self = this;
-        this.current_result.expand(this.get_search_string()).then(function (results) {
+        var current_result = this.current_result;
+        current_result.expand(this.get_search_string()).then(function (results) {
             (results || [{label: '(no result)'}]).reverse().forEach(function (result) {
                 result.indent = true;
                 var $li = self.make_list_item(result);
-                self.current_result.$el.after($li);
+                current_result.$el.after($li);
             });
-            self.current_result.expanded = true;
-            self.current_result.$el.find('span.oe-expand').html('▼');
+            current_result.expanded = true;
+            current_result.$el.find('span.oe-expand').html('▼');
         });
     },
     fold: function () {
@@ -2494,7 +2542,7 @@ instance.web.search.AutoComplete = instance.web.Widget.extend({
     },
     close: function () {
         this.current_search = null;
-        this.search_string = null;
+        this.search_string = '';
         this.searching = true;
         this.$el.hide();
     },

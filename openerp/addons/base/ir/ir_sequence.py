@@ -19,7 +19,9 @@
 #
 ##############################################################################
 
+from datetime import datetime
 import logging
+import pytz
 import time
 
 import openerp
@@ -97,7 +99,7 @@ class ir_sequence(openerp.osv.osv.osv):
         'number_next': openerp.osv.fields.integer('Next Number', required=True, help="Next number of this sequence"),
         'number_next_actual': openerp.osv.fields.function(_get_number_next_actual, fnct_inv=_set_number_next_actual, type='integer', required=True, string='Next Number', help='Next number that will be used. This number can be incremented frequently so the displayed value might already be obsolete'),
         'number_increment': openerp.osv.fields.integer('Increment Number', required=True, help="The next number of the sequence will be incremented by this number"),
-        'padding' : openerp.osv.fields.integer('Number Padding', required=True, help="OpenERP will automatically adds some '0' on the left of the 'Next Number' to get the required padding size."),
+        'padding' : openerp.osv.fields.integer('Number Padding', required=True, help="Odoo will automatically adds some '0' on the left of the 'Next Number' to get the required padding size."),
         'company_id': openerp.osv.fields.many2one('res.company', 'Company'),
     }
     _defaults = {
@@ -198,7 +200,7 @@ class ir_sequence(openerp.osv.osv.osv):
                 if new_implementation in ('standard', None):
                     # Implementation has NOT changed.
                     # Only change sequence if really requested.
-                    if row['number_next'] != n:
+                    if values.get('number_next'):
                         self._alter_sequence(cr, row['id'], i, n)
                     else:
                         # Just in case only increment changed
@@ -218,21 +220,18 @@ class ir_sequence(openerp.osv.osv.osv):
             return s % d
         return  ''
 
-    def _interpolation_dict(self):
-        t = time.localtime() # Actually, the server is always in UTC.
-        return {
-            'year': time.strftime('%Y', t),
-            'month': time.strftime('%m', t),
-            'day': time.strftime('%d', t),
-            'y': time.strftime('%y', t),
-            'doy': time.strftime('%j', t),
-            'woy': time.strftime('%W', t),
-            'weekday': time.strftime('%w', t),
-            'h24': time.strftime('%H', t),
-            'h12': time.strftime('%I', t),
-            'min': time.strftime('%M', t),
-            'sec': time.strftime('%S', t),
+    def _interpolation_dict_context(self, context=None):
+        if context is None:
+            context = {}
+        t = datetime.now(pytz.timezone(context.get('tz') or 'UTC'))
+        sequences = {
+            'year': '%Y', 'month': '%m', 'day': '%d', 'y': '%y', 'doy': '%j', 'woy': '%W',
+            'weekday': '%w', 'h24': '%H', 'h12': '%I', 'min': '%M', 'sec': '%S'
         }
+        return {key: t.strftime(sequence) for key, sequence in sequences.iteritems()}
+
+    def _interpolation_dict(self):
+        return self._interpolation_dict_context()
 
     def _next(self, cr, uid, ids, context=None):
         if not ids:
@@ -252,7 +251,7 @@ class ir_sequence(openerp.osv.osv.osv):
             cr.execute("SELECT number_next FROM ir_sequence WHERE id=%s FOR UPDATE NOWAIT", (seq['id'],))
             cr.execute("UPDATE ir_sequence SET number_next=number_next+number_increment WHERE id=%s ", (seq['id'],))
             self.invalidate_cache(cr, uid, ['number_next'], [seq['id']], context=context)
-        d = self._interpolation_dict()
+        d = self._interpolation_dict_context(context=context)
         try:
             interpolated_prefix = self._interpolate(seq['prefix'], d)
             interpolated_suffix = self._interpolate(seq['suffix'], d)

@@ -19,8 +19,8 @@
 #
 ##############################################################################
 
-import urllib
 import urlparse
+import werkzeug.urls
 
 from openerp import tools
 from openerp import SUPERUSER_ID
@@ -45,7 +45,7 @@ class MailMail(osv.Model):
         # TDE note: should be after 'all values computed', to have values (FIXME after merging other branch holding create refactoring)
         mail_id = super(MailMail, self).create(cr, uid, values, context=context)
         if values.get('statistics_ids'):
-            mail = self.browse(cr, SUPERUSER_ID, mail_id)
+            mail = self.browse(cr, SUPERUSER_ID, mail_id, context=context)
             for stat in mail.statistics_ids:
                 self.pool['mail.mail.statistics'].write(cr, uid, [stat.id], {'message_id': mail.message_id}, context=context)
         return mail_id
@@ -55,7 +55,7 @@ class MailMail(osv.Model):
         track_url = urlparse.urljoin(
             base_url, 'mail/track/%(mail_id)s/blank.gif?%(params)s' % {
                 'mail_id': mail.id,
-                'params': urllib.urlencode({'db': cr.dbname})
+                'params': werkzeug.url_encode({'db': cr.dbname})
             }
         )
         return '<img src="%s" alt=""/>' % track_url
@@ -65,7 +65,7 @@ class MailMail(osv.Model):
         url = urlparse.urljoin(
             base_url, 'mail/mailing/%(mailing_id)s/unsubscribe?%(params)s' % {
                 'mailing_id': mail.mailing_id.id,
-                'params': urllib.urlencode({'db': cr.dbname, 'res_id': mail.res_id, 'email': email_to})
+                'params': werkzeug.url_encode({'db': cr.dbname, 'res_id': mail.res_id, 'email': email_to})
             }
         )
         return '<small><a href="%s">%s</a></small>' % (url, msg or 'Click to unsubscribe')

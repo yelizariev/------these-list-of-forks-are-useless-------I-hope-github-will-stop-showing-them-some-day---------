@@ -22,7 +22,7 @@
     'name': 'Anglo-Saxon Accounting',
     'version': '1.2',
     'author': 'OpenERP SA, Veritos',
-    'website': 'http://openerp.com - http://veritos.nl',
+    'website': 'https://www.odoo.com',
     'description': """
 This module supports the Anglo-Saxon accounting methodology by changing the accounting logic with stock transactions.
 =====================================================================================================================
@@ -39,7 +39,6 @@ account when the invoice is created to transfer this amount to the
 debtor or creditor account. Secondly, price differences between actual 
 purchase price and fixed product standard price are booked on a separate 
 account.""",
-    'images': ['images/account_anglo_saxon.jpeg'],
     'depends': ['product', 'purchase'],
     'category': 'Accounting & Finance',
     'demo': [],

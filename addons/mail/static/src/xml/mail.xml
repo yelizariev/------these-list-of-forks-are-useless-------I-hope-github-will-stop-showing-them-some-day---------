@@ -50,10 +50,11 @@
             <t t-if="!widget.options.view_mailbox">
                 <div class="field_text oe_compact oe_compact_record">
                     <a class="oe_compose_post" t-if="widget.options.compose_placeholder"><t t-raw="widget.options.compose_placeholder"/></a>
-                    <a class="oe_compose_post" t-if="!widget.options.compose_placeholder and !widget.options.view_mailbox">Send a message</a>
+                    <a class="oe_compose_post" t-if="!widget.options.compose_placeholder and !widget.options.view_mailbox"
+                        title="Send a message to all followers of the document">Send a message</a>
                     <t t-if="widget.options.display_log_button">
                        <span class="oe_grey oe_sep_word">or</span>
-                       <a class="oe_compose_log">Log an internal note</a>
+                       <a class="oe_compose_log" title="Log a note for this document. No notification will be sent">Log an internal note</a>
                     </t>
                 </div>
             </t>
@@ -91,10 +92,10 @@
             <t t-if="attachment.file_type_icon !== 'webimage'">
                 <div t-attf-class="oe_attachment #{attachment.upload ? 'oe_uploading' : ''}">
                     <a t-att-href='attachment.url' target="_blank">
-                        <img t-att-src="'/mail/static/src/img/mimetypes/' + attachment.file_type_icon + '.png'"></img>
+                        <img t-att-src="'/mail/static/src/img/mimetypes/' + (attachment.file_type_icon or 'unknown')  + '.png'"></img>
                         <div class='oe_name'><t t-raw='attachment.name' /></div>
                     </a>
-                    <div class='oe_delete oe_e' title="Delete this attachment" t-att-data-id="attachment.id">[</div>
+                    <div t-if="!attachment.upload" class='oe_delete oe_e' title="Delete this attachment" t-att-data-id="attachment.id">[</div>
                     <div class='oe_progress_bar'>
                         uploading
                     </div>
@@ -106,7 +107,7 @@
                         <img t-att-src="widget.attachments_resize_image(attachment.id, [100,80])"></img>
                         <div class='oe_name'><t t-raw='attachment.name' /></div>
                     </a>
-                    <div class='oe_delete oe_e' title="Delete this attachment" t-att-data-id="attachment.id">[</div>
+                    <div t-if="!attachment.upload" class='oe_delete oe_e' title="Delete this attachment" t-att-data-id="attachment.id">[</div>
                     <div class='oe_progress_bar'>
                         uploading
                     </div>

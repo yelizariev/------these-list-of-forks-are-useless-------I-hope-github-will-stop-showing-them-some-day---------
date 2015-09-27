@@ -26,7 +26,7 @@
               <div class="col-md-4">
                 <div class="well text-center">
                   <div class="image">
-                    <img src="/website/static/src/img/bootswatch_default_thumbnail.png" class="img-responsive" alt="Default Theme"/>
+                    <img src="/website/static/src/img/bootswatch/bootswatch_default_thumbnail.png" class="img-responsive" alt="Default Theme"/>
                   </div>
                   <div class="options">
                     <h3>Default</h3>
@@ -39,7 +39,7 @@
               <div class="col-md-4">
                 <div class="well text-center">
                   <div class="image">
-                    <img class="img-responsive" src="http://bootswatch.com/amelia/thumbnail.png" alt="Amelia"/>
+                    <img class="img-responsive" src="/website/static/src/img/bootswatch/amelia_thumbnail.png" alt="Amelia"/>
                   </div>
                   <div class="options">
                     <h3>Amelia</h3>
@@ -52,7 +52,7 @@
               <div class="col-md-4">
                 <div class="well text-center">
                   <div class="image">
-                    <img class="img-responsive" src="http://bootswatch.com/cerulean/thumbnail.png" alt="Cerulean"/>
+                    <img class="img-responsive" src="/website/static/src/img/bootswatch/cerulean_thumbnail.png" alt="Cerulean"/>
                   </div>
                   <div class="options">
                     <h3>Cerulean</h3>
@@ -65,7 +65,7 @@
               <div class="col-md-4">
                 <div class="well text-center">
                   <div class="image">
-                    <img class="img-responsive" src="http://bootswatch.com/cosmo/thumbnail.png" alt="Cosmo"/>
+                    <img class="img-responsive" src="/website/static/src/img/bootswatch/cosmo_thumbnail.png" alt="Cosmo"/>
                   </div>
                   <div class="options">
                     <h3>Cosmo</h3>
@@ -78,7 +78,7 @@
               <div class="col-md-4">
                 <div class="well text-center">
                   <div class="image">
-                    <img class="img-responsive" src="http://bootswatch.com/cyborg/thumbnail.png" alt="Cyborg"/>
+                    <img class="img-responsive" src="/website/static/src/img/bootswatch/cyborg_thumbnail.png" alt="Cyborg"/>
                   </div>
                   <div class="options">
                     <h3>Cyborg</h3>
@@ -91,7 +91,7 @@
               <div class="col-md-4">
                 <div class="well text-center">
                   <div class="image">
-                    <img class="img-responsive" src="http://bootswatch.com/flatly/thumbnail.png" alt="Flatly"/>
+                    <img class="img-responsive" src="/website/static/src/img/bootswatch/flatly_thumbnail.png" alt="Flatly"/>
                   </div>
                   <div class="options">
                     <h3>Flatly</h3>
@@ -104,7 +104,7 @@
               <div class="col-md-4">
                 <div class="well text-center">
                   <div class="image">
-                    <img class="img-responsive" src="http://bootswatch.com/journal/thumbnail.png" alt="Journal"/>
+                    <img class="img-responsive" src="/website/static/src/img/bootswatch/journal_thumbnail.png" alt="Journal"/>
                   </div>
                   <div class="options">
                     <h3>Journal</h3>
@@ -117,7 +117,7 @@
               <div class="col-md-4">
                 <div class="well text-center">
                   <div class="image">
-                    <img class="img-responsive" src="http://bootswatch.com/readable/thumbnail.png" alt="Readable"/>
+                    <img class="img-responsive" src="/website/static/src/img/bootswatch/readable_thumbnail.png" alt="Readable"/>
                   </div>
                   <div class="options">
                     <h3>Readable</h3>
@@ -130,7 +130,7 @@
               <div class="col-md-4">
                 <div class="well text-center">
                   <div class="image">
-                    <img class="img-responsive" src="http://bootswatch.com/simplex/thumbnail.png" alt="Simplex"/>
+                    <img class="img-responsive" src="/website/static/src/img/bootswatch/simplex_thumbnail.png" alt="Simplex"/>
                   </div>
                   <div class="options">
                     <h3>Simplex</h3>
@@ -143,7 +143,7 @@
               <div class="col-md-4">
                 <div class="well text-center">
                   <div class="image">
-                    <img class="img-responsive" src="http://bootswatch.com/slate/thumbnail.png" alt="Slate"/>
+                    <img class="img-responsive" src="/website/static/src/img/bootswatch/slate_thumbnail.png" alt="Slate"/>
                   </div>
                   <div class="options">
                     <h3>Slate</h3>
@@ -156,7 +156,7 @@
               <div class="col-md-4">
                 <div class="well text-center">
                   <div class="image">
-                    <img class="img-responsive" src="http://bootswatch.com/spacelab/thumbnail.png" alt="Spacelab"/>
+                    <img class="img-responsive" src="/website/static/src/img/bootswatch/spacelab_thumbnail.png" alt="Spacelab"/>
                   </div>
                   <div class="options">
                     <h3>Spacelab</h3>
@@ -169,7 +169,7 @@
               <div class="col-md-4">
                 <div class="well text-center">
                   <div class="image">
-                    <img class="img-responsive" src="http://bootswatch.com/united/thumbnail.png" alt="United"/>
+                    <img class="img-responsive" src="/website/static/src/img/bootswatch/united_thumbnail.png" alt="United"/>
                   </div>
                   <div class="options">
                     <h3>United</h3>
@@ -182,7 +182,7 @@
               <div class="col-md-4">
                 <div class="well text-center">
                   <div class="image">
-                    <img class="img-responsive" src="http://bootswatch.com/yeti/thumbnail.png" alt="Yeti"/>
+                    <img class="img-responsive" src="/website/static/src/img/bootswatch/yeti_thumbnail.png" alt="Yeti"/>
                   </div>
                   <div class="options">
                     <h3>Yeti</h3>
@@ -203,82 +203,82 @@
      All Default Themes
 -->
 
-    <template id="website.theme_amelia" name="Amelia" inherit_id="website.theme" optional="disabled">
+    <template id="website.theme_amelia" name="Amelia" inherit_id="website.theme" active="False" customize_show="True">
         <xpath expr="//link[@id='bootstrap_css']" position="replace">
             <link rel='stylesheet' href='/website/static/src/css/bootswatch/amelia.min.css' t-ignore="true"/>
             <link rel='stylesheet' href='/website/static/src/css/bootswatch/amelia.fix.css' t-ignore="true"/>
         </xpath>
     </template>
 
-    <template id="website.theme_cerulean" name="Cerulean" inherit_id="website.theme" optional="disabled">
+    <template id="website.theme_cerulean" name="Cerulean" inherit_id="website.theme" active="False" customize_show="True">
         <xpath expr="//link[@id='bootstrap_css']" position="replace">
             <link rel='stylesheet' href='/website/static/src/css/bootswatch/cerulean.min.css' t-ignore="true"/>
         </xpath>
     </template>
 
-    <template id="website.theme_cosmo" name="Cosmo" inherit_id="website.theme" optional="disabled">
+    <template id="website.theme_cosmo" name="Cosmo" inherit_id="website.theme" active="False" customize_show="True">
         <xpath expr="//link[@id='bootstrap_css']" position="replace">
             <link rel='stylesheet' href='/website/static/src/css/bootswatch/cosmo.min.css' t-ignore="true"/>
             <link rel='stylesheet' href='/website/static/src/css/bootswatch/cosmo.fix.css' t-ignore="true"/>
         </xpath>
     </template>
 
-    <template id="website.theme_cyborg" name="Cyborg" inherit_id="website.theme" optional="disabled">
+    <template id="website.theme_cyborg" name="Cyborg" inherit_id="website.theme" active="False" customize_show="True">
         <xpath expr="//link[@id='bootstrap_css']" position="replace">
             <link rel='stylesheet' href='/website/static/src/css/bootswatch/cyborg.min.css' t-ignore="true"/>
             <link rel='stylesheet' href='/website/static/src/css/bootswatch/cyborg.fix.css' t-ignore="true"/>
         </xpath>
     </template>
 
-    <template id="website.theme_flatly" name="Flatly" inherit_id="website.theme" optional="disabled">
+    <template id="website.theme_flatly" name="Flatly" inherit_id="website.theme" active="False" customize_show="True">
         <xpath expr="//link[@id='bootstrap_css']" position="replace">
             <link rel='stylesheet' href='/website/static/src/css/bootswatch/flatly.min.css' t-ignore="true"/>
             <link rel='stylesheet' href='/website/static/src/css/bootswatch/flatly.fix.css' t-ignore="true"/>
         </xpath>
     </template>
 
-    <template id="website.theme_journal" name="Journal" inherit_id="website.theme" optional="disabled">
+    <template id="website.theme_journal" name="Journal" inherit_id="website.theme" active="False" customize_show="True">
         <xpath expr="//link[@id='bootstrap_css']" position="replace">
             <link rel='stylesheet' href='/website/static/src/css/bootswatch/journal.min.css' t-ignore="true"/>
             <link rel='stylesheet' href='/website/static/src/css/bootswatch/journal.fix.css' t-ignore="true"/>
         </xpath>
     </template>
 
-    <template id="website.theme_readable" name="Readable" inherit_id="website.theme" optional="disabled">
+    <template id="website.theme_readable" name="Readable" inherit_id="website.theme" active="False" customize_show="True">
         <xpath expr="//link[@id='bootstrap_css']" position="replace">
             <link rel='stylesheet' href='/website/static/src/css/bootswatch/readable.min.css' t-ignore="true"/>
             <link rel='stylesheet' href='/website/static/src/css/bootswatch/readable.fix.css' t-ignore="true"/>
         </xpath>
     </template>
 
-    <template id="website.theme_simplex" name="Simplex" inherit_id="website.theme" optional="disabled">
+    <template id="website.theme_simplex" name="Simplex" inherit_id="website.theme" active="False" customize_show="True">
         <xpath expr="//link[@id='bootstrap_css']" position="replace">
             <link rel='stylesheet' href='/website/static/src/css/bootswatch/simplex.min.css' t-ignore="true"/>
             <link rel='stylesheet' href='/website/static/src/css/bootswatch/simplex.fix.css' t-ignore="true"/>
         </xpath>
     </template>
 
-    <template id="website.theme_slate" name="Slate" inherit_id="website.theme" optional="disabled">
+    <template id="website.theme_slate" name="Slate" inherit_id="website.theme" active="False" customize_show="True">
         <xpath expr="//link[@id='bootstrap_css']" position="replace">
             <link rel='stylesheet' href='/website/static/src/css/bootswatch/slate.min.css' t-ignore="true"/>
             <link rel='stylesheet' href='/website/static/src/css/bootswatch/slate.fix.css' t-ignore="true"/>
         </xpath>
     </template>
 
-    <template id="website.theme_spacelab" name="Spacelab" inherit_id="website.theme" optional="disabled">
+    <template id="website.theme_spacelab" name="Spacelab" inherit_id="website.theme" active="False" customize_show="True">
         <xpath expr="//link[@id='bootstrap_css']" position="replace">
             <link rel='stylesheet' href='/website/static/src/css/bootswatch/spacelab.min.css' t-ignore="true"/>
             <link rel='stylesheet' href='/website/static/src/css/bootswatch/spacelab.fix.css' t-ignore="true"/>
         </xpath>
     </template>
 
-    <template id="website.theme_united" name="United" inherit_id="website.theme" optional="disabled">
+    <template id="website.theme_united" name="United" inherit_id="website.theme" active="False" customize_show="True">
         <xpath expr="//link[@id='bootstrap_css']" position="replace">
             <link rel='stylesheet' href='/website/static/src/css/bootswatch/united.min.css' t-ignore="true"/>
         </xpath>
     </template>
 
-    <template id="website.theme_yeti" name="Yeti" inherit_id="website.theme" optional="disabled">
+    <template id="website.theme_yeti" name="Yeti" inherit_id="website.theme" active="False" customize_show="True">
         <xpath expr="//link[@id='bootstrap_css']" position="replace">
             <link rel='stylesheet' href='/website/static/src/css/bootswatch/yeti.min.css' t-ignore="true"/>
             <link rel='stylesheet' href='/website/static/src/css/bootswatch/yeti.fix.css' t-ignore="true"/>

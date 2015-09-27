@@ -20,6 +20,7 @@ import babel.dates
 import werkzeug
 from lxml import etree, html
 from PIL import Image
+import psycopg2
 
 import openerp.http
 import openerp.tools
@@ -33,6 +34,8 @@ from openerp.tools.translate import _
 
 _logger = logging.getLogger(__name__)
 
+MAX_CSS_RULES = 4095
+
 #--------------------------------------------------------------------
 # QWeb template engine
 #--------------------------------------------------------------------
@@ -40,6 +43,10 @@ class QWebException(Exception):
     def __init__(self, message, **kw):
         Exception.__init__(self, message)
         self.qweb = dict(kw)
+    def pretty_xml(self):
+        if 'node' not in self.qweb:
+            return ''
+        return etree.tostring(self.qweb['node'], pretty_print=True)
 
 class QWebTemplateNotFound(QWebException):
     pass
@@ -56,6 +63,12 @@ def raise_qweb_exception(etype=None, **kw):
         # Will use `raise foo from bar` in python 3 and rename cause to __cause__
         e.qweb['cause'] = original
         raise
+
+def _build_attribute(name, value):
+    value = escape(value)
+    if isinstance(name, unicode): name = name.encode('utf-8')
+    if isinstance(value, unicode): value = value.encode('utf-8')
+    return ' %s="%s"' % (name, value)
 
 class QWebContext(dict):
     def __init__(self, cr, uid, data, loader=None, templates=None, context=None):
@@ -76,6 +89,9 @@ class QWebContext(dict):
         return eval(expr, None, locals_dict, nocopy=True, locals_builtins=True)
 
     def copy(self):
+        """ Clones the current context, conserving all data and metadata
+        (loader, template cache, ...)
+        """
         return QWebContext(self.cr, self.uid, dict.copy(self),
                            loader=self.loader,
                            templates=self.templates,
@@ -85,28 +101,12 @@ class QWebContext(dict):
         return self.copy()
 
 class QWeb(orm.AbstractModel):
-    """QWeb Xml templating engine
+    """ Base QWeb rendering engine
 
-    The templating engine use a very simple syntax based "magic" xml
-    attributes, to produce textual output (even non-xml).
-
-    The core magic attributes are:
-
-    flow attributes:
-        t-if t-foreach t-call
-
-    output attributes:
-        t-att t-raw t-esc t-trim
-
-    assignation attribute:
-        t-set
-
-    QWeb can be extended like any OpenERP model and new attributes can be
-    added.
-
-    If you need to customize t-fields rendering, subclass the ir.qweb.field
-    model (and its sub-models) then override :meth:`~.get_converter_for` to
-    fetch the right field converters for your qweb model.
+    * to customize ``t-field`` rendering, subclass ``ir.qweb.field`` and
+      create new models called :samp:`ir.qweb.field.{widget}`
+    * alternatively, override :meth:`~.get_converter_for` and return an
+      arbitrary model to use as field converter
 
     Beware that if you need extensions or alterations which could be
     incompatible with other subsystems, you should create a local object
@@ -158,13 +158,17 @@ class QWeb(orm.AbstractModel):
     def load_document(self, document, res_id, qwebcontext):
         """
         Loads an XML document and installs any contained template in the engine
+
+        :type document: a parsed lxml.etree element, an unparsed XML document
+                        (as a string) or the path of an XML file to load
         """
-        if hasattr(document, 'documentElement'):
+        if not isinstance(document, basestring):
+            # assume lxml.etree.Element
             dom = document
         elif document.startswith("<?xml"):
             dom = etree.fromstring(document)
         else:
-            dom = etree.parse(document)
+            dom = etree.parse(document).getroot()
 
         for node in dom:
             if node.get('t-name'):
@@ -175,6 +179,12 @@ class QWeb(orm.AbstractModel):
                 res_id = None
 
     def get_template(self, name, qwebcontext):
+        """ Tries to fetch the template ``name``, either gets it from the
+        context's template cache or loads one with the context's loader (if
+        any).
+
+        :raises QWebTemplateNotFound: if the template can not be found or loaded
+        """
         origin_template = qwebcontext.get('__caller__') or qwebcontext['__stack__'][0]
         if qwebcontext.loader and name not in qwebcontext.templates:
             try:
@@ -227,6 +237,15 @@ class QWeb(orm.AbstractModel):
         return int(bool(self.eval(expr, qwebcontext)))
 
     def render(self, cr, uid, id_or_xml_id, qwebcontext=None, loader=None, context=None):
+        """ render(cr, uid, id_or_xml_id, qwebcontext=None, loader=None, context=None)
+
+        Renders the template specified by the provided template name
+
+        :param qwebcontext: context for rendering the template
+        :type qwebcontext: dict or :class:`QWebContext` instance
+        :param loader: if ``qwebcontext`` is a dict, loader set into the
+                       context instantiated for rendering
+        """
         if qwebcontext is None:
             qwebcontext = {}
 
@@ -253,12 +272,6 @@ class QWeb(orm.AbstractModel):
                 uid = qwebcontext.get('request') and qwebcontext['request'].uid or None
                 can_see = self.user_has_groups(cr, uid, groups=attribute_value) if cr and uid else False
                 if not can_see:
-                    if qwebcontext.get('editable') and not qwebcontext.get('editable_no_editor'):
-                        errmsg = _("Editor disabled because some content can not be seen by a user who does not belong to the groups %s")
-                        raise openerp.http.Retry(
-                            _("User does not belong to groups %s") % attribute_value, {
-                                'editable_no_editor': errmsg % attribute_value
-                            })
                     return ''
 
             attribute_value = attribute_value.encode("utf8")
@@ -266,15 +279,18 @@ class QWeb(orm.AbstractModel):
             if attribute_name.startswith("t-"):
                 for attribute in self._render_att:
                     if attribute_name[2:].startswith(attribute):
-                        att, val = self._render_att[attribute](self, element, attribute_name, attribute_value, qwebcontext)
-                        generated_attributes += val and ' %s="%s"' % (att, escape(val)) or " "
+                        attrs = self._render_att[attribute](
+                            self, element, attribute_name, attribute_value, qwebcontext)
+                        for att, val in attrs:
+                            if not val: continue
+                            generated_attributes += self.render_attribute(element, att, val, qwebcontext)
                         break
                 else:
                     if attribute_name[2:] in self._render_tag:
                         t_render = attribute_name[2:]
                     template_attributes[attribute_name[2:]] = attribute_value
             else:
-                generated_attributes += ' %s="%s"' % (attribute_name, escape(attribute_value))
+                generated_attributes += self.render_attribute(element, attribute_name, attribute_value, qwebcontext)
 
         if 'debug' in template_attributes:
             debugger = template_attributes.get('debug', 'pdb')
@@ -285,7 +301,7 @@ class QWeb(orm.AbstractModel):
             result = self.render_element(element, template_attributes, generated_attributes, qwebcontext)
 
         if element.tail:
-            result += element.tail
+            result += element.tail.encode('utf-8')
 
         if isinstance(result, unicode):
             return result.encode('utf-8')
@@ -298,13 +314,13 @@ class QWeb(orm.AbstractModel):
         # qwebcontext: values
         # inner: optional innerXml
         if inner:
-            g_inner = inner
+            g_inner = inner.encode('utf-8') if isinstance(inner, unicode) else inner
         else:
-            g_inner = [] if element.text is None else [element.text]
+            g_inner = [] if element.text is None else [element.text.encode('utf-8')]
             for current_node in element.iterchildren(tag=etree.Element):
                 try:
                     g_inner.append(self.render_node(current_node, qwebcontext))
-                except (QWebException, openerp.http.Retry):
+                except QWebException:
                     raise
                 except Exception:
                     template = qwebcontext.get('__template__')
@@ -330,17 +346,22 @@ class QWeb(orm.AbstractModel):
         else:
             return "<%s%s/>" % (name, generated_attributes)
 
+    def render_attribute(self, element, name, value, qwebcontext):
+        return _build_attribute(name, value)
+
     # Attributes
     def render_att_att(self, element, attribute_name, attribute_value, qwebcontext):
         if attribute_name.startswith("t-attf-"):
-            att, val = attribute_name[7:], self.eval_format(attribute_value, qwebcontext)
-        elif attribute_name.startswith("t-att-"):
-            att, val = attribute_name[6:], self.eval(attribute_value, qwebcontext)
-        else:
-            att, val = self.eval_object(attribute_value, qwebcontext)
-        if val and not isinstance(val, str):
-            val = unicode(val).encode("utf8")
-        return att, val
+            return [(attribute_name[7:], self.eval_format(attribute_value, qwebcontext))]
+
+        if attribute_name.startswith("t-att-"):
+            return [(attribute_name[6:], self.eval(attribute_value, qwebcontext))]
+
+        result = self.eval_object(attribute_value, qwebcontext)
+        if isinstance(result, collections.Mapping):
+            return result.iteritems()
+        # assume tuple
+        return [result]
 
     # Tags
     def render_tag_raw(self, element, template_attributes, generated_attributes, qwebcontext):
@@ -349,9 +370,15 @@ class QWeb(orm.AbstractModel):
 
     def render_tag_esc(self, element, template_attributes, generated_attributes, qwebcontext):
         options = json.loads(template_attributes.get('esc-options') or '{}')
-        widget = self.get_widget_for(options.get('widget', ''))
+        widget = self.get_widget_for(options.get('widget'))
         inner = widget.format(template_attributes['esc'], options, qwebcontext)
         return self.render_element(element, template_attributes, generated_attributes, qwebcontext, inner)
+
+    def _iterate(self, iterable):
+        if isinstance (iterable, collections.Mapping):
+            return iterable.iteritems()
+
+        return itertools.izip(*itertools.tee(iterable))
 
     def render_tag_foreach(self, element, template_attributes, generated_attributes, qwebcontext):
         expr = template_attributes["foreach"]
@@ -359,23 +386,28 @@ class QWeb(orm.AbstractModel):
         if enum is None:
             template = qwebcontext.get('__template__')
             raise QWebException("foreach enumerator %r is not defined while rendering template %r" % (expr, template), template=template)
+        if isinstance(enum, int):
+            enum = range(enum)
 
         varname = template_attributes['as'].replace('.', '_')
         copy_qwebcontext = qwebcontext.copy()
-        size = -1
+
+        size = None
         if isinstance(enum, collections.Sized):
             size = len(enum)
-        copy_qwebcontext["%s_size" % varname] = size
+            copy_qwebcontext["%s_size" % varname] = size
+
         copy_qwebcontext["%s_all" % varname] = enum
         ru = []
-        for index, item in enumerate(enum):
+        for index, (item, value) in enumerate(self._iterate(enum)):
             copy_qwebcontext.update({
                 varname: item,
-                '%s_value' % varname: item,
+                '%s_value' % varname: value,
                 '%s_index' % varname: index,
                 '%s_first' % varname: index == 0,
-                '%s_last' % varname: index + 1 == size,
             })
+            if size is not None:
+                copy_qwebcontext['%s_last' % varname] = index + 1 == size
             if index % 2:
                 copy_qwebcontext.update({
                     '%s_parity' % varname: 'odd',
@@ -389,6 +421,10 @@ class QWeb(orm.AbstractModel):
                     '%s_odd' % varname: False,
                 })
             ru.append(self.render_element(element, template_attributes, generated_attributes, copy_qwebcontext))
+
+        for k in qwebcontext.keys():
+            qwebcontext[k] = copy_qwebcontext[k]
+
         return "".join(ru)
 
     def render_tag_if(self, element, template_attributes, generated_attributes, qwebcontext):
@@ -445,9 +481,9 @@ class QWeb(orm.AbstractModel):
         record, field_name = template_attributes["field"].rsplit('.', 1)
         record = self.eval_object(record, qwebcontext)
 
-        column = record._all_columns[field_name].column
+        field = record._fields[field_name]
         options = json.loads(template_attributes.get('field-options') or '{}')
-        field_type = get_field_type(column, options)
+        field_type = get_field_type(field, options)
 
         converter = self.get_converter_for(field_type)
 
@@ -455,10 +491,24 @@ class QWeb(orm.AbstractModel):
                                  element, template_attributes, generated_attributes, qwebcontext, context=qwebcontext.context)
 
     def get_converter_for(self, field_type):
+        """ returns a :class:`~openerp.models.Model` used to render a
+        ``t-field``.
+
+        By default, tries to get the model named
+        :samp:`ir.qweb.field.{field_type}`, falling back on ``ir.qweb.field``.
+
+        :param str field_type: type or widget of field to render
+        """
         return self.pool.get('ir.qweb.field.' + field_type, self.pool['ir.qweb.field'])
 
     def get_widget_for(self, widget):
-        return self.pool.get('ir.qweb.widget.' + widget, self.pool['ir.qweb.widget'])
+        """ returns a :class:`~openerp.models.Model` used to render a
+        ``t-esc``
+
+        :param str widget: name of the widget to use, or ``None``
+        """
+        widget_model = ('ir.qweb.widget.' + widget) if widget else 'ir.qweb.widget'
+        return self.pool.get(widget_model) or self.pool['ir.qweb.widget']
 
     def get_attr_bool(self, attr, default=False):
         if attr:
@@ -488,7 +538,8 @@ class FieldConverter(osv.AbstractModel):
     def attributes(self, cr, uid, field_name, record, options,
                    source_element, g_att, t_att, qweb_context,
                    context=None):
-        """
+        """ attributes(cr, uid, field_name, record, options, source_element, g_att, t_att, qweb_context, context=None)
+
         Generates the metadata attributes (prefixed by ``data-oe-`` for the
         root node of the field conversion. Attribute values are escaped by the
         parent.
@@ -498,16 +549,16 @@ class FieldConverter(osv.AbstractModel):
         * ``model``, the name of the record's model
         * ``id`` the id of the record to which the field belongs
         * ``field`` the name of the converted field
-        * ``type`` the logical field type (widget, may not match the column's
-          ``type``, may not be any _column subclass name)
+        * ``type`` the logical field type (widget, may not match the field's
+          ``type``, may not be any Field subclass name)
         * ``translate``, a boolean flag (``0`` or ``1``) denoting whether the
-          column is translatable
+          field is translatable
         * ``expression``, the original expression
 
         :returns: iterable of (attribute name, attribute value) pairs.
         """
-        column = record._all_columns[field_name].column
-        field_type = get_field_type(column, options)
+        field = record._fields[field_name]
+        field_type = get_field_type(field, options)
         return [
             ('data-oe-model', record._name),
             ('data-oe-id', record.id),
@@ -516,22 +567,28 @@ class FieldConverter(osv.AbstractModel):
             ('data-oe-expression', t_att['field']),
         ]
 
-    def value_to_html(self, cr, uid, value, column, options=None, context=None):
-        """ Converts a single value to its HTML version/output
+    def value_to_html(self, cr, uid, value, field, options=None, context=None):
+        """ value_to_html(cr, uid, value, field, options=None, context=None)
+
+        Converts a single value to its HTML version/output
         """
         if not value: return ''
         return value
 
-    def record_to_html(self, cr, uid, field_name, record, column, options=None, context=None):
-        """ Converts the specified field of the browse_record ``record`` to
-        HTML
+    def record_to_html(self, cr, uid, field_name, record, options=None, context=None):
+        """ record_to_html(cr, uid, field_name, record, options=None, context=None)
+
+        Converts the specified field of the browse_record ``record`` to HTML
         """
+        field = record._fields[field_name]
         return self.value_to_html(
-            cr, uid, record[field_name], column, options=options, context=context)
+            cr, uid, record[field_name], field, options=options, context=context)
 
     def to_html(self, cr, uid, field_name, record, options,
                 source_element, t_att, g_att, qweb_context, context=None):
-        """ Converts a ``t-field`` to its HTML output. A ``t-field`` may be
+        """ to_html(cr, uid, field_name, record, options, source_element, t_att, g_att, qweb_context, context=None)
+
+        Converts a ``t-field`` to its HTML output. A ``t-field`` may be
         extended by a ``t-field-options``, which is a JSON-serialized mapping
         of configuration values.
 
@@ -539,10 +596,7 @@ class FieldConverter(osv.AbstractModel):
         field's own ``_type``.
         """
         try:
-            content = self.record_to_html(
-                cr, uid, field_name, record,
-                record._all_columns[field_name].column,
-                options, context=context)
+            content = self.record_to_html(cr, uid, field_name, record, options, context=context)
             if options.get('html-escape', True):
                 content = escape(content)
             elif hasattr(content, '__html__'):
@@ -552,13 +606,17 @@ class FieldConverter(osv.AbstractModel):
                             field_name, record._name, exc_info=True)
             content = None
 
-        if context and context.get('inherit_branding'):
+        inherit_branding = context and context.get('inherit_branding')
+        if not inherit_branding and context and context.get('inherit_branding_auto'):
+            inherit_branding = self.pool['ir.model.access'].check(cr, uid, record._name, 'write', False, context=context)
+
+        if inherit_branding:
             # add branding attributes
             g_att += ''.join(
-                ' %s="%s"' % (name, escape(value))
+                _build_attribute(name, value)
                 for name, value in self.attributes(
                     cr, uid, field_name, record, options,
-                    source_element, g_att, t_att, qweb_context)
+                    source_element, g_att, t_att, qweb_context, context=context)
             )
 
         return self.render_element(cr, uid, source_element, t_att, g_att,
@@ -569,13 +627,16 @@ class FieldConverter(osv.AbstractModel):
 
     def render_element(self, cr, uid, source_element, t_att, g_att,
                        qweb_context, content):
-        """ Final rendering hook, by default just calls ir.qweb's ``render_element``
+        """ render_element(cr, uid, source_element, t_att, g_att, qweb_context, content)
+
+        Final rendering hook, by default just calls ir.qweb's ``render_element``
         """
         return self.qweb_object().render_element(
             source_element, t_att, g_att, qweb_context, content or '')
 
     def user_lang(self, cr, uid, context):
-        """
+        """ user_lang(cr, uid, context)
+
         Fetches the res.lang object corresponding to the language code stored
         in the user's context. Fallbacks to en_US if no lang is present in the
         context *or the language code is not valid*.
@@ -596,14 +657,14 @@ class FloatConverter(osv.AbstractModel):
     _name = 'ir.qweb.field.float'
     _inherit = 'ir.qweb.field'
 
-    def precision(self, cr, uid, column, options=None, context=None):
-        _, precision = column.digits or (None, None)
+    def precision(self, cr, uid, field, options=None, context=None):
+        _, precision = field.digits or (None, None)
         return precision
 
-    def value_to_html(self, cr, uid, value, column, options=None, context=None):
+    def value_to_html(self, cr, uid, value, field, options=None, context=None):
         if context is None:
             context = {}
-        precision = self.precision(cr, uid, column, options=options, context=context)
+        precision = self.precision(cr, uid, field, options=options, context=context)
         fmt = '%f' if precision is None else '%.{precision}f'
 
         lang_code = context.get('lang') or 'en_US'
@@ -622,14 +683,14 @@ class DateConverter(osv.AbstractModel):
     _name = 'ir.qweb.field.date'
     _inherit = 'ir.qweb.field'
 
-    def value_to_html(self, cr, uid, value, column, options=None, context=None):
-        if not value: return ''
+    def value_to_html(self, cr, uid, value, field, options=None, context=None):
+        if not value or len(value)<10: return ''
         lang = self.user_lang(cr, uid, context=context)
         locale = babel.Locale.parse(lang.code)
 
         if isinstance(value, basestring):
             value = datetime.datetime.strptime(
-                value, openerp.tools.DEFAULT_SERVER_DATE_FORMAT)
+                value[:10], openerp.tools.DEFAULT_SERVER_DATE_FORMAT)
 
         if options and 'format' in options:
             pattern = options['format']
@@ -645,7 +706,7 @@ class DateTimeConverter(osv.AbstractModel):
     _name = 'ir.qweb.field.datetime'
     _inherit = 'ir.qweb.field'
 
-    def value_to_html(self, cr, uid, value, column, options=None, context=None):
+    def value_to_html(self, cr, uid, value, field, options=None, context=None):
         if not value: return ''
         lang = self.user_lang(cr, uid, context=context)
         locale = babel.Locale.parse(lang.code)
@@ -671,7 +732,7 @@ class TextConverter(osv.AbstractModel):
     _name = 'ir.qweb.field.text'
     _inherit = 'ir.qweb.field'
 
-    def value_to_html(self, cr, uid, value, column, options=None, context=None):
+    def value_to_html(self, cr, uid, value, field, options=None, context=None):
         """
         Escapes the value and converts newlines to br. This is bullshit.
         """
@@ -683,19 +744,19 @@ class SelectionConverter(osv.AbstractModel):
     _name = 'ir.qweb.field.selection'
     _inherit = 'ir.qweb.field'
 
-    def record_to_html(self, cr, uid, field_name, record, column, options=None, context=None):
+    def record_to_html(self, cr, uid, field_name, record, options=None, context=None):
         value = record[field_name]
         if not value: return ''
-        selection = dict(fields.selection.reify(
-            cr, uid, record._model, column))
+        field = record._fields[field_name]
+        selection = dict(field.get_description(record.env)['selection'])
         return self.value_to_html(
-            cr, uid, selection[value], column, options=options)
+            cr, uid, selection[value], field, options=options)
 
 class ManyToOneConverter(osv.AbstractModel):
     _name = 'ir.qweb.field.many2one'
     _inherit = 'ir.qweb.field'
 
-    def record_to_html(self, cr, uid, field_name, record, column, options=None, context=None):
+    def record_to_html(self, cr, uid, field_name, record, options=None, context=None):
         [read] = record.read([field_name])
         if not read[field_name]: return ''
         _, value = read[field_name]
@@ -705,7 +766,7 @@ class HTMLConverter(osv.AbstractModel):
     _name = 'ir.qweb.field.html'
     _inherit = 'ir.qweb.field'
 
-    def value_to_html(self, cr, uid, value, column, options=None, context=None):
+    def value_to_html(self, cr, uid, value, field, options=None, context=None):
         return HTMLSafe(value or '')
 
 class ImageConverter(osv.AbstractModel):
@@ -720,7 +781,7 @@ class ImageConverter(osv.AbstractModel):
     _name = 'ir.qweb.field.image'
     _inherit = 'ir.qweb.field'
 
-    def value_to_html(self, cr, uid, value, column, options=None, context=None):
+    def value_to_html(self, cr, uid, value, field, options=None, context=None):
         try:
             image = Image.open(cStringIO.StringIO(value.decode('base64')))
             image.verify()
@@ -753,7 +814,7 @@ class MonetaryConverter(osv.AbstractModel):
             cr, uid, field_name, record, options,
             source_element, t_att, g_att, qweb_context, context=context)
 
-    def record_to_html(self, cr, uid, field_name, record, column, options, context=None):
+    def record_to_html(self, cr, uid, field_name, record, options, context=None):
         if context is None:
             context = {}
         Currency = self.pool['res.currency']
@@ -768,7 +829,7 @@ class MonetaryConverter(osv.AbstractModel):
         # The log10 of the rounding should be the number of digits involved if
         # negative, if positive clamp to 0 digits and call it a day.
         # nb: int() ~ floor(), we want nearest rounding instead
-        precision = int(round(math.log10(display_currency.rounding)))
+        precision = int(math.floor(math.log10(display_currency.rounding)))
         fmt = "%.{0}f".format(-precision if precision < 0 else 0)
 
         from_amount = record[field_name]
@@ -785,9 +846,9 @@ class MonetaryConverter(osv.AbstractModel):
 
         pre = post = u''
         if display_currency.position == 'before':
-            pre = u'{symbol} '
+            pre = u'{symbol}\N{NO-BREAK SPACE}'
         else:
-            post = u' {symbol}'
+            post = u'\N{NO-BREAK SPACE}{symbol}'
 
         return HTMLSafe(u'{pre}<span class="oe_currency_value">{0}</span>{post}'.format(
             formatted_amount,
@@ -824,7 +885,7 @@ class DurationConverter(osv.AbstractModel):
     _name = 'ir.qweb.field.duration'
     _inherit = 'ir.qweb.field'
 
-    def value_to_html(self, cr, uid, value, column, options=None, context=None):
+    def value_to_html(self, cr, uid, value, field, options=None, context=None):
         units = dict(TIMEDELTA_UNITS)
         if value < 0:
             raise ValueError(_("Durations can't be negative"))
@@ -851,7 +912,7 @@ class RelativeDatetimeConverter(osv.AbstractModel):
     _name = 'ir.qweb.field.relative'
     _inherit = 'ir.qweb.field'
 
-    def value_to_html(self, cr, uid, value, column, options=None, context=None):
+    def value_to_html(self, cr, uid, value, field, options=None, context=None):
         parse_format = openerp.tools.DEFAULT_SERVER_DATETIME_FORMAT
         locale = babel.Locale.parse(
             self.user_lang(cr, uid, context=context).code)
@@ -859,8 +920,8 @@ class RelativeDatetimeConverter(osv.AbstractModel):
         if isinstance(value, basestring):
             value = datetime.datetime.strptime(value, parse_format)
 
-        # value should be a naive datetime in UTC. So is fields.datetime.now()
-        reference = datetime.datetime.strptime(column.now(), parse_format)
+        # value should be a naive datetime in UTC. So is fields.Datetime.now()
+        reference = datetime.datetime.strptime(field.now(), parse_format)
 
         return babel.dates.format_timedelta(
             value - reference, add_direction=True, locale=locale)
@@ -869,30 +930,32 @@ class Contact(orm.AbstractModel):
     _name = 'ir.qweb.field.contact'
     _inherit = 'ir.qweb.field.many2one'
 
-    def record_to_html(self, cr, uid, field_name, record, column, options=None, context=None):
+    def record_to_html(self, cr, uid, field_name, record, options=None, context=None):
+        if context is None:
+            context = {}
+
         if options is None:
             options = {}
         opf = options.get('fields') or ["name", "address", "phone", "mobile", "fax", "email"]
 
-        if not getattr(record, field_name):
+        value_rec = record[field_name]
+        if not value_rec:
             return None
-
-        id = getattr(record, field_name).id
-        field_browse = self.pool[column._obj].browse(cr, openerp.SUPERUSER_ID, id, context={"show_address": True})
-        value = field_browse.name_get()[0][1]
+        value_rec = value_rec.sudo().with_context(show_address=True)
+        value = value_rec.name_get()[0][1]
 
         val = {
             'name': value.split("\n")[0],
             'address': escape("\n".join(value.split("\n")[1:])),
-            'phone': field_browse.phone,
-            'mobile': field_browse.mobile,
-            'fax': field_browse.fax,
-            'city': field_browse.city,
-            'country_id': field_browse.country_id.display_name,
-            'website': field_browse.website,
-            'email': field_browse.email,
+            'phone': value_rec.phone,
+            'mobile': value_rec.mobile,
+            'fax': value_rec.fax,
+            'city': value_rec.city,
+            'country_id': value_rec.country_id.display_name,
+            'website': value_rec.website,
+            'email': value_rec.email,
             'fields': opf,
-            'object': field_browse,
+            'object': value_rec,
             'options': options
         }
 
@@ -904,7 +967,7 @@ class QwebView(orm.AbstractModel):
     _name = 'ir.qweb.field.qweb'
     _inherit = 'ir.qweb.field.many2one'
 
-    def record_to_html(self, cr, uid, field_name, record, column, options=None, context=None):
+    def record_to_html(self, cr, uid, field_name, record, options=None, context=None):
         if not getattr(record, field_name):
             return None
 
@@ -944,9 +1007,9 @@ class QwebWidgetMonetary(osv.AbstractModel):
         )
         pre = post = u''
         if display.position == 'before':
-            pre = u'{symbol} '
+            pre = u'{symbol}\N{NO-BREAK SPACE}'
         else:
-            post = u' {symbol}'
+            post = u'\N{NO-BREAK SPACE}{symbol}'
 
         return u'{pre}{0}{post}'.format(
             formatted_amount, pre=pre, post=post
@@ -990,10 +1053,9 @@ def nl2br(string, options=None):
         string = escape(string)
     return HTMLSafe(string.replace('\n', '<br>\n'))
 
-def get_field_type(column, options):
-    """ Gets a t-field's effective type from the field's column and its options
-    """
-    return options.get('widget', column._type)
+def get_field_type(field, options):
+    """ Gets a t-field's effective type from the field definition and its options """
+    return options.get('widget', field.type)
 
 class AssetError(Exception):
     pass
@@ -1010,7 +1072,6 @@ class AssetsBundle(object):
     # Use this:
     #       sudo gem install compass --pre
     cmd_sass = ['sass', '--stdin', '-t', 'compressed', '--unix-newlines', '--compass', '-r', 'bootstrap-sass']
-    cache = openerp.tools.lru.LRU(32)
     rx_css_import = re.compile("(@import[^;{]+;?)", re.M)
     rx_sass_import = re.compile("""(@import\s?['"]([^'"]+)['"])""")
     rx_css_split = re.compile("\/\*\! ([a-f0-9-]+) \*\/")
@@ -1029,6 +1090,7 @@ class AssetsBundle(object):
 
         context = self.context.copy()
         context['inherit_branding'] = False
+        context['rendering_bundle'] = True
         self.html = self.registry['ir.ui.view'].render(self.cr, self.uid, xmlid, context=context)
         self.parse()
 
@@ -1081,10 +1143,18 @@ class AssetsBundle(object):
                 for jscript in self.javascripts:
                     response.append(jscript.to_html())
         else:
+            url_for = self.context.get('url_for', lambda url: url)
             if css and self.stylesheets:
-                response.append('<link href="/web/css/%s/%s" rel="stylesheet"/>' % (self.xmlid, self.version))
+                suffix = ''
+                if request:
+                    ua = request.httprequest.user_agent
+                    if ua.browser == "msie" and int((ua.version or '0').split('.')[0]) < 10:
+                        suffix = '.0'
+                href = '/web/css%s/%s/%s' % (suffix, self.xmlid, self.version)
+                response.append('<link href="%s" rel="stylesheet"/>' % url_for(href))
             if js:
-                response.append('<script type="text/javascript" src="/web/js/%s/%s"></script>' % (self.xmlid, self.version))
+                src = '/web/js/%s/%s' % (self.xmlid, self.version)
+                response.append('<script type="text/javascript" src="%s"></script>' % url_for(src))
         response.extend(self.remains)
         return sep + sep.join(response)
 
@@ -1110,21 +1180,18 @@ class AssetsBundle(object):
         return hashlib.sha1(check).hexdigest()
 
     def js(self):
-        key = 'js_%s' % self.xmlid
-        if key in self.cache and self.cache[key][0] != self.version:
-            # Invalidate cache on version mismach
-            self.cache.pop(key)
-        if key not in self.cache:
-            content =';\n'.join(asset.minify() for asset in self.javascripts)
-            self.cache[key] = (self.version, content)
-        return self.cache[key][1]
+        content = self.get_cache('js')
+        if content is None:
+            content = ';\n'.join(asset.minify() for asset in self.javascripts)
+            self.set_cache('js', content)
+        return content
 
-    def css(self):
-        key = 'css_%s' % self.xmlid
-        if key in self.cache and self.cache[key][0] != self.version:
-            # Invalidate cache on version mismach
-            self.cache.pop(key)
-        if key not in self.cache:
+    def css(self, page_number=None):
+        if page_number is not None:
+            return self.css_page(page_number)
+
+        content = self.get_cache('css')
+        if content is None:
             self.compile_sass()
             content = '\n'.join(asset.minify() for asset in self.stylesheets)
 
@@ -1142,11 +1209,70 @@ class AssetsBundle(object):
 
             matches.append(content)
             content = u'\n'.join(matches)
-            if self.css_errors:
-                return content
-            self.cache[key] = (self.version, content)
+            if not self.css_errors:
+                self.set_cache('css', content)
+            content = content.encode('utf-8')
 
-        return self.cache[key][1]
+        return content
+
+    def css_page(self, page_number):
+        content = self.get_cache('css.%d' % (page_number,))
+        if page_number:
+            return content
+        if content is None:
+            css = self.css().decode('utf-8')
+            re_rules = '([^{]+\{(?:[^{}]|\{[^{}]*\})*\})'
+            re_selectors = '()(?:\s*@media\s*[^{]*\{)?(?:\s*(?:[^,{]*(?:,|\{(?:[^}]*\}))))'
+            css_url = '@import url(\'/web/css.%%d/%s/%s\');' % (self.xmlid, self.version)
+            pages = [[]]
+            page = pages[0]
+            page_selectors = 0
+            for rule in re.findall(re_rules, css):
+                selectors = len(re.findall(re_selectors, rule))
+                if page_selectors + selectors < MAX_CSS_RULES:
+                    page_selectors += selectors
+                    page.append(rule)
+                else:
+                    pages.append([rule])
+                    page = pages[-1]
+                    page_selectors = selectors
+            if len(pages) == 1:
+                pages = []
+            for idx, page in enumerate(pages):
+                self.set_cache("css.%d" % (idx+1), ''.join(page))
+            content = '\n'.join(css_url % i for i in range(1,len(pages)+1))
+            self.set_cache("css.0", content)
+        if not content:
+            return self.css()
+        return content
+
+    def get_cache(self, type):
+        content = None
+        domain = [('url', '=', '/web/%s/%s/%s' % (type, self.xmlid, self.version))]
+        bundle = self.registry['ir.attachment'].search_read(self.cr, openerp.SUPERUSER_ID, domain, ['datas'], context=self.context)
+        if bundle and bundle[0]['datas']:
+            content = bundle[0]['datas'].decode('base64')
+        return content
+
+    def set_cache(self, type, content):
+        ira = self.registry['ir.attachment']
+        url_prefix = '/web/%s/%s/' % (type, self.xmlid)
+        # Invalidate previous caches
+        try:
+            with self.cr.savepoint():
+                domain = [('url', '=like', url_prefix + '%')]
+                oids = ira.search(self.cr, openerp.SUPERUSER_ID, domain, context=self.context)
+                if oids:
+                    ira.unlink(self.cr, openerp.SUPERUSER_ID, oids, context=self.context)
+                url = url_prefix + self.version
+                ira.create(self.cr, openerp.SUPERUSER_ID, dict(
+                    datas=content.encode('utf8').encode('base64'),
+                    type='binary',
+                    name=url,
+                    url=url,
+                ), context=self.context)
+        except psycopg2.Error:
+            pass
 
     def css_message(self, message):
         return """
@@ -1245,7 +1371,7 @@ class WebAsset(object):
                     fields = ['__last_update', 'datas', 'mimetype']
                     domain = [('type', '=', 'binary'), ('url', '=', self.url)]
                     ira = self.registry['ir.attachment']
-                    attach = ira.search_read(self.cr, self.uid, domain, fields, context=self.context)
+                    attach = ira.search_read(self.cr, openerp.SUPERUSER_ID, domain, fields, context=self.context)
                     self._ir_attach = attach[0]
                 except Exception:
                     raise AssetNotFound("Could not find %s" % self.name)
@@ -1384,21 +1510,26 @@ class SassAsset(StylesheetAsset):
 
     def to_html(self):
         if self.url:
-            ira = self.registry['ir.attachment']
-            url = self.html_url % self.url
-            domain = [('type', '=', 'binary'), ('url', '=', self.url)]
-            ira_id = ira.search(self.cr, self.uid, domain, context=self.context)
-            if ira_id:
-                # TODO: update only if needed
-                ira.write(self.cr, openerp.SUPERUSER_ID, [ira_id], {'datas': self.content}, context=self.context)
-            else:
-                ira.create(self.cr, openerp.SUPERUSER_ID, dict(
-                    datas=self.content.encode('utf8').encode('base64'),
-                    mimetype='text/css',
-                    type='binary',
-                    name=url,
-                    url=url,
-                ), context=self.context)
+            try:
+                ira = self.registry['ir.attachment']
+                url = self.html_url % self.url
+                domain = [('type', '=', 'binary'), ('url', '=', self.url)]
+                with self.cr.savepoint():
+                    ira_id = ira.search(self.cr, openerp.SUPERUSER_ID, domain, context=self.context)
+                    if ira_id:
+                        # TODO: update only if needed
+                        ira.write(self.cr, openerp.SUPERUSER_ID, [ira_id], {'datas': self.content},
+                                  context=self.context)
+                    else:
+                        ira.create(self.cr, openerp.SUPERUSER_ID, dict(
+                            datas=self.content.encode('utf8').encode('base64'),
+                            mimetype='text/css',
+                            type='binary',
+                            name=url,
+                            url=url,
+                        ), context=self.context)
+            except psycopg2.Error:
+                pass
         return super(SassAsset, self).to_html()
 
     def get_source(self):

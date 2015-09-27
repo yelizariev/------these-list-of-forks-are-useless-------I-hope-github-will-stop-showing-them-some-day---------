@@ -1,21 +1,21 @@
-# Italian translation for openobject-addons
-# Copyright (c) 2011 Rosetta Contributors and Canonical Ltd 2011
-# This file is distributed under the same license as the openobject-addons package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2011.
-#
+# Translation of OpenERP Server.
+# This file contains the translation of the following modules:
+# * l10n_pe
+# 
+# Translators:
 msgid ""
 msgstr ""
-"Project-Id-Version: openobject-addons\n"
-"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"Project-Id-Version: Odoo 8.0\n"
+"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-11-24 02:53+0000\n"
-"PO-Revision-Date: 2012-10-18 12:00+0000\n"
-"Last-Translator: Nicola Riolini - Micronaet <Unknown>\n"
-"Language-Team: Italian <it@li.org>\n"
+"PO-Revision-Date: 2015-05-21 14:20+0000\n"
+"Last-Translator: Martin Trigaux\n"
+"Language-Team: Italian (http://www.transifex.com/projects/p/odoo-8/language/it/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-11-25 06:33+0000\n"
-"X-Generator: Launchpad (build 16293)\n"
+"Content-Transfer-Encoding: \n"
+"Language: it\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. module: l10n_pe
 #: model:account.account.type,name:l10n_pe.account_account_type_EGP_FU_070
@@ -100,7 +100,7 @@ msgstr ""
 #. module: l10n_pe
 #: model:account.account.type,name:l10n_pe.account_account_type_BG_PTN_10
 msgid "Capital"
-msgstr ""
+msgstr "Capitale"
 
 #. module: l10n_pe
 #: model:account.account.type,name:l10n_pe.account_account_type_NCLASIFICADO
@@ -170,7 +170,7 @@ msgstr ""
 #. module: l10n_pe
 #: model:account.account.type,name:l10n_pe.account_account_type_BG_ACC_60
 msgid "Existencias"
-msgstr ""
+msgstr "Stock"
 
 #. module: l10n_pe
 #: model:account.account.type,name:l10n_pe.account_account_type_BG_ACN_35
@@ -385,39 +385,9 @@ msgstr ""
 #. module: l10n_pe
 #: model:account.account.type,name:l10n_pe.account_account_type_view
 msgid "Vista"
-msgstr ""
+msgstr "Vista"
 
 #. module: l10n_pe
 #: model:account.account.type,name:l10n_pe.account_account_type_EGP_NA_080
 msgid "(+/-) Variación de Envases y Embalajes"
 msgstr ""
-
-#~ msgid ""
-#~ "\n"
-#~ "    Peruvian Accounting : chart of Account\n"
-#~ "    "
-#~ msgstr ""
-#~ "\n"
-#~ "    Contabilità Peruviana - Piano dei conti\n"
-#~ "    "
-
-#~ msgid "Peruvian Chart of Account"
-#~ msgstr "Piano dei conti Peruviano"
-
-#~ msgid ""
-#~ "Generate Chart of Accounts from a Chart Template. You will be asked to pass "
-#~ "the name of the company, the chart template to follow, the no. of digits to "
-#~ "generate the code for your accounts and Bank account, currency to create "
-#~ "Journals. Thus,the pure copy of chart Template is generated.\n"
-#~ "\tThis is the same wizard that runs from Financial "
-#~ "Management/Configuration/Financial Accounting/Financial Accounts/Generate "
-#~ "Chart of Accounts from a Chart Template."
-#~ msgstr ""
-#~ "Genera il Piano dei Conti da un Modello. Vi verrà richiesto di passare il "
-#~ "nome dell'azienda, il modello da seguire, il numero di decimali per generare "
-#~ "il codice dei tuoi conti e, per il conto della Banca, la valuta per creare "
-#~ "il Libro Giornale. Così una copia vergine del Piano dei Conti, derivatante "
-#~ "dal modello, viene generata.\n"
-#~ "\tQuesto è la stessa procedura automatica che viene lanciata da: Gestione "
-#~ "Finanziaria / Configurazione / Contabilità / Conti finanziari / Genera il "
-#~ "Piano dei conti da un modello."

@@ -39,8 +39,7 @@ With this module:
     A + B + C -> D + E
     """,
     'author': 'OpenERP SA',
-    'website': 'http://www.openerp.com',
-    'images': ['images/bom_byproduct.jpeg'],
+    'website': 'https://www.odoo.com/page/manufacturing',
     'depends': ['base', 'mrp'],
     'data': [
        'security/ir.model.access.csv',

@@ -34,7 +34,7 @@ It is fully integrated with the email gateway so that you can create
 automatically new claims based on incoming emails.
     """,
     'author': 'OpenERP SA',
-    'website': 'http://www.openerp.com',
+    'website': 'https://www.odoo.com',
     'depends': ['crm'],
     'data': [
         'crm_claim_view.xml',
@@ -51,11 +51,6 @@ automatically new claims based on incoming emails.
     ],
     'installable': True,
     'auto_install': False,
-    'images': [
-        'images/claim_categories.jpeg',
-        'images/claim_stages.jpeg',
-        'images/claims.jpeg'
-    ],
 }
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -34,16 +34,15 @@ sales team, or an opportunity which still has status pending after 14 days might
 trigger an automatic reminder email.
     """,
     'author': 'OpenERP SA',
-    'website': 'http://www.openerp.com',
+    'website': 'https://www.odoo.com',
     'depends': ['base', 'resource', 'mail'],
     'data': [
+        'base_action_rule_data.xml',
         'base_action_rule_view.xml',
         'security/ir.model.access.csv',
-        'base_action_rule_data.xml'
     ],
     'demo': [],
     'installable': True,
     'auto_install': False,
-    'images': ['images/base_action_rule1.jpeg','images/base_action_rule2.jpeg','images/base_action_rule3.jpeg'],
 }
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

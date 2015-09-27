@@ -27,6 +27,7 @@ from openerp import SUPERUSER_ID
 from openerp import tools
 from openerp.addons.resource.faces import task as Task
 from openerp.osv import fields, osv
+from openerp.tools import float_is_zero
 from openerp.tools.translate import _
 
 
@@ -188,7 +189,7 @@ class project(osv.osv):
         return res
     def _task_count(self, cr, uid, ids, field_name, arg, context=None):
         res={}
-        for tasks in self.browse(cr, uid, ids, context):
+        for tasks in self.browse(cr, uid, ids, dict(context, active_test=False)):
             res[tasks.id] = len(tasks.task_ids)
         return res
     def _get_alias_models(self, cr, uid, context=None):
@@ -197,9 +198,9 @@ class project(osv.osv):
 
     def _get_visibility_selection(self, cr, uid, context=None):
         """ Overriden in portal_project to offer more options """
-        return [('public', 'Public project'),
-                ('employees', 'Internal project: all employees can access'),
-                ('followers', 'Private project: followers Only')]
+        return [('public', _('Public project')),
+                ('employees', _('Internal project: all employees can access')),
+                ('followers', _('Private project: followers Only'))]
 
     def attachment_tree_view(self, cr, uid, ids, context):
         task_ids = self.pool.get('project.task').search(cr, uid, [('project_id', 'in', ids)])
@@ -227,7 +228,11 @@ class project(osv.osv):
     _columns = {
         'active': fields.boolean('Active', help="If the active field is set to False, it will allow you to hide the project without removing it."),
         'sequence': fields.integer('Sequence', help="Gives the sequence order when displaying a list of Projects."),
-        'analytic_account_id': fields.many2one('account.analytic.account', 'Contract/Analytic', help="Link this project to an analytic account if you need financial management on projects. It enables you to connect projects with budgets, planning, cost and revenue analysis, timesheets on projects, etc.", ondelete="cascade", required=True),
+        'analytic_account_id': fields.many2one(
+            'account.analytic.account', 'Contract/Analytic',
+            help="Link this project to an analytic account if you need financial management on projects. "
+                 "It enables you to connect projects with budgets, planning, cost and revenue analysis, timesheets on projects, etc.",
+            ondelete="cascade", required=True, auto_join=True),
         'members': fields.many2many('res.users', 'project_user_rel', 'project_id', 'uid', 'Project Members',
             help="Project's members are users who can have an access to the tasks related to this project.", states={'close':[('readonly',True)], 'cancelled':[('readonly',True)]}),
         'tasks': fields.one2many('project.task', 'project_id', "Task Activities"),
@@ -309,7 +314,7 @@ class project(osv.osv):
         return True
 
     _constraints = [
-        (_check_dates, 'Error! project start-date must be lower then project end-date.', ['date_start', 'date'])
+        (_check_dates, 'Error! project start-date must be lower than project end-date.', ['date_start', 'date'])
     ]
 
     def set_template(self, cr, uid, ids, context=None):
@@ -654,9 +659,8 @@ class task(osv.osv):
             res[task.id] = {'effective_hours': hours.get(task.id, 0.0), 'total_hours': (task.remaining_hours or 0.0) + hours.get(task.id, 0.0)}
             res[task.id]['delay_hours'] = res[task.id]['total_hours'] - task.planned_hours
             res[task.id]['progress'] = 0.0
-            if (task.remaining_hours + hours.get(task.id, 0.0)):
+            if not float_is_zero(res[task.id]['total_hours'], precision_digits=2):
                 res[task.id]['progress'] = round(min(100.0 * hours.get(task.id, 0.0) / res[task.id]['total_hours'], 99.99),2)
-            # TDE CHECK: if task.state in ('done','cancelled'):
             if task.stage_id and task.stage_id.fold:
                 res[task.id]['progress'] = 100.0
         return res
@@ -695,10 +699,10 @@ class task(osv.osv):
         if default is None:
             default = {}
         if not default.get('name'):
-            current = self.browse(cr, uid, id, context=context)       
+            current = self.browse(cr, uid, id, context=context)
             default['name'] = _("%s (copy)") % current.name
         return super(task, self).copy_data(cr, uid, id, default, context)
-    
+
     def _is_template(self, cr, uid, ids, field_name, arg, context=None):
         res = {}
         for task in self.browse(cr, uid, ids, context=context):
@@ -778,7 +782,7 @@ class task(osv.osv):
         'project_id': _get_default_project_id,
         'date_last_stage_update': fields.datetime.now,
         'kanban_state': 'normal',
-        'priority': '1',
+        'priority': '0',
         'progress': 0,
         'sequence': 10,
         'active': True,
@@ -787,8 +791,8 @@ class task(osv.osv):
         'company_id': lambda self, cr, uid, ctx=None: self.pool.get('res.company')._company_default_get(cr, uid, 'project.task', context=ctx),
         'partner_id': lambda self, cr, uid, ctx=None: self._get_default_partner(cr, uid, context=ctx),
     }
-    _order = "priority, sequence, date_start, name, id"
-    
+    _order = "priority desc, sequence, date_start, name, id"
+
     def _check_recursion(self, cr, uid, ids, context=None):
         for id in ids:
             visited_branch = set()
@@ -832,25 +836,30 @@ class task(osv.osv):
 
     _constraints = [
         (_check_recursion, 'Error ! You cannot create recursive tasks.', ['parent_ids']),
-        (_check_dates, 'Error ! Task end-date must be greater then task start-date', ['date_start','date_end'])
+        (_check_dates, 'Error ! Task end-date must be greater than task start-date', ['date_start','date_end'])
     ]
 
     # Override view according to the company definition
     def fields_view_get(self, cr, uid, view_id=None, view_type='form', context=None, toolbar=False, submenu=False):
         users_obj = self.pool.get('res.users')
         if context is None: context = {}
+
+        res = super(task, self).fields_view_get(cr, uid, view_id, view_type, context=context, toolbar=toolbar, submenu=submenu)
+
         # read uom as admin to avoid access rights issues, e.g. for portal/share users,
         # this should be safe (no context passed to avoid side-effects)
         obj_tm = users_obj.browse(cr, SUPERUSER_ID, uid, context=context).company_id.project_time_mode_id
-        tm = obj_tm and obj_tm.name or 'Hours'
-
-        res = super(task, self).fields_view_get(cr, uid, view_id, view_type, context, toolbar, submenu=submenu)
-
-        if tm in ['Hours','Hour']:
+        try:
+            # using get_object to get translation value
+            uom_hour = self.pool['ir.model.data'].get_object(cr, uid, 'product', 'product_uom_hour', context=context)
+        except ValueError:
+            uom_hour = False
+        if not obj_tm or not uom_hour or obj_tm.id == uom_hour.id:
             return res
 
         eview = etree.fromstring(res['arch'])
 
+        # if the project_time_mode_id is not in hours (so in days), display it as a float field
         def _check_rec(eview):
             if eview.attrib.get('widget','') == 'float_time':
                 eview.set('widget','float')
@@ -862,9 +871,13 @@ class task(osv.osv):
 
         res['arch'] = etree.tostring(eview)
 
+        # replace reference of 'Hours' to 'Day(s)'
         for f in res['fields']:
+            # TODO this NOT work in different language than english
+            # the field 'Initially Planned Hours' should be replaced by 'Initially Planned Days'
+            # but string 'Initially Planned Days' is not available in translation
             if 'Hours' in res['fields'][f]['string']:
-                res['fields'][f]['string'] = res['fields'][f]['string'].replace('Hours',tm)
+                res['fields'][f]['string'] = res['fields'][f]['string'].replace('Hours', obj_tm.name)
         return res
 
     def get_empty_list_help(self, cr, uid, help, context=None):
@@ -958,7 +971,7 @@ class task(osv.osv):
     def set_remaining_time(self, cr, uid, ids, remaining_time=1.0, context=None):
         for task in self.browse(cr, uid, ids, context=context):
             if (task.stage_id and task.stage_id.sequence <= 1) or (task.planned_hours == 0.0):
-                self.write(cr, uid, [task.id], {'planned_hours': remaining_time}, context=context)
+                self.write(cr, uid, [task.id], {'planned_hours': remaining_time + task.effective_hours}, context=context)
         self.write(cr, uid, ids, {'remaining_hours': remaining_time}, context=context)
         return True
 
@@ -998,7 +1011,7 @@ class task(osv.osv):
         if vals.get('project_id') and not context.get('default_project_id'):
             context['default_project_id'] = vals.get('project_id')
         # user_id change: update date_start
-        if vals.get('user_id') and not vals.get('start_date'):
+        if vals.get('user_id') and not vals.get('date_start'):
             vals['date_start'] = fields.datetime.now()
 
         # context: no_log, because subtype already handle this
@@ -1045,13 +1058,20 @@ class task(osv.osv):
         context = context or {}
         result = ""
         ident = ' '*ident
+        company = self.pool["res.users"].browse(cr, uid, uid, context=context).company_id
+        duration_uom = {
+            'day(s)': 'd', 'days': 'd', 'day': 'd', 'd': 'd',
+            'month(s)': 'm', 'months': 'm', 'month': 'month', 'm': 'm',
+            'week(s)': 'w', 'weeks': 'w', 'week': 'w', 'w': 'w',
+            'hour(s)': 'H', 'hours': 'H', 'hour': 'H', 'h': 'H',
+        }.get(company.project_time_mode_id.name.lower(), "hour(s)")
         for task in tasks:
             if task.stage_id and task.stage_id.fold:
                 continue
             result += '''
 %sdef Task_%s():
-%s  todo = \"%.2fH\"
-%s  effort = \"%.2fH\"''' % (ident,task.id, ident,task.remaining_hours, ident,task.total_hours)
+%s  todo = \"%.2f%s\"
+%s  effort = \"%.2f%s\"''' % (ident, task.id, ident, task.remaining_hours, duration_uom, ident, task.total_hours, duration_uom)
             start = []
             for t2 in task.parent_ids:
                 start.append("up.Task_%s.end" % (t2.id,))
@@ -1151,12 +1171,12 @@ class project_work(osv.osv):
                 task_obj.invalidate_cache(cr, uid, ['remaining_hours'], [work.task_id.id], context=context)
         return super(project_work,self).write(cr, uid, ids, vals, context)
 
-    def unlink(self, cr, uid, ids, *args, **kwargs):
+    def unlink(self, cr, uid, ids, context=None):
         task_obj = self.pool.get('project.task')
         for work in self.browse(cr, uid, ids):
             cr.execute('update project_task set remaining_hours=remaining_hours + %s where id=%s', (work.hours, work.task_id.id))
             task_obj.invalidate_cache(cr, uid, ['remaining_hours'], [work.task_id.id], context=context)
-        return super(project_work,self).unlink(cr, uid, ids,*args, **kwargs)
+        return super(project_work,self).unlink(cr, uid, ids, context=context)
 
 
 class account_analytic_account(osv.osv):
@@ -1309,6 +1329,7 @@ class project_task_history_cumulative(osv.osv):
 
     _columns = {
         'end_date': fields.date('End Date'),
+        'nbr_tasks': fields.integer('# of Tasks', readonly=True),
         'project_id': fields.many2one('project.project', 'Project'),
     }
 
@@ -1325,11 +1346,16 @@ class project_task_history_cumulative(osv.osv):
                     h.id AS history_id,
                     h.date+generate_series(0, CAST((coalesce(h.end_date, DATE 'tomorrow')::date - h.date) AS integer)-1) AS date,
                     h.task_id, h.type_id, h.user_id, h.kanban_state,
+                    count(h.task_id) as nbr_tasks,
                     greatest(h.remaining_hours, 1) AS remaining_hours, greatest(h.planned_hours, 1) AS planned_hours,
                     t.project_id
                 FROM
                     project_task_history AS h
                     JOIN project_task AS t ON (h.task_id = t.id)
+                GROUP BY
+                  h.id,
+                  h.task_id,
+                  t.project_id
 
             ) AS history
         )

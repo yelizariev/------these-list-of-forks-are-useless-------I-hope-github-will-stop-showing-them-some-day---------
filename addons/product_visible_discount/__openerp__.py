@@ -22,6 +22,7 @@
     'version': '1.0',
     'author': 'OpenERP SA',
     'category': 'Sales Management',
+    'website': 'https://www.odoo.com',
     'description': """
 This module lets you calculate discounts on Sale Order lines and Invoice lines base on the partner's pricelist.
 ===============================================================================================================
@@ -40,7 +41,6 @@ To this end, a new check box named 'Visible Discount' is added to the pricelist 
     'data': ['product_visible_discount_view.xml'],
     'auto_install': False,
     'installable': True,
-    'images': ['images/pricelists_visible_discount.jpeg'],
 }
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -19,6 +19,7 @@
 #
 ##############################################################################
 
+import babel.dates
 import time
 from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
@@ -90,9 +91,12 @@ class website_event(http.Controller):
         if searches["type"] != 'all':
             current_type = type_obj.browse(cr, uid, int(searches['type']), context=context)
             domain_search["type"] = [("type", "=", int(searches["type"]))]
-        if searches["country"] != 'all':
+
+        if searches["country"] != 'all' and searches["country"] != 'online':
             current_country = country_obj.browse(cr, uid, int(searches['country']), context=context)
-            domain_search["country"] = [("country_id", "=", int(searches["country"]))]
+            domain_search["country"] = ['|', ("country_id", "=", int(searches["country"])), ("country_id", "=", False)]
+        elif searches["country"] == 'online':
+            domain_search["country"] = [("country_id", "=", False)]
 
         def dom_without(without):
             domain = [('state', "in", ['draft','confirm','done'])]
@@ -134,7 +138,13 @@ class website_event(http.Controller):
         event_count = event_obj.search(
             request.cr, request.uid, dom_without("none"), count=True,
             context=request.context)
-        pager = request.website.pager(url="/event", total=event_count, page=page, step=step, scope=5)
+        pager = request.website.pager(
+            url="/event",
+            url_args={'date': searches.get('date'), 'type': searches.get('type'), 'country': searches.get('country')},
+            total=event_count,
+            page=page,
+            step=step,
+            scope=5)
 
         order = 'website_published desc, date_begin'
         if searches.get('date','all') == 'old':
@@ -216,10 +226,16 @@ class website_event(http.Controller):
         return request.redirect("/event/%s/register?enable_editor=1" % slug(event))
 
     def get_formated_date(self, event):
+        context = request.context
         start_date = datetime.strptime(event.date_begin, tools.DEFAULT_SERVER_DATETIME_FORMAT).date()
         end_date = datetime.strptime(event.date_end, tools.DEFAULT_SERVER_DATETIME_FORMAT).date()
-        return ('%s %s%s') % (start_date.strftime("%b"), start_date.strftime("%e"), (end_date != start_date and ("-"+end_date.strftime("%e")) or ""))
-    
+        month = babel.dates.get_month_names('abbreviated', locale=context.get('lang', 'en_US'))[start_date.month]
+        return _('%(month)s %(start_day)s%(end_day)s') % {
+            'month': month,
+            'start_day': start_date.strftime("%e"),
+            'end_day': (end_date != start_date and ("-"+end_date.strftime("%e")) or "")
+        }
+
     @http.route('/event/get_country_event_list', type='http', auth='public', website=True)
     def get_country_events(self ,**post):
         cr, uid, context, event_ids = request.cr, request.uid, request.context,[]

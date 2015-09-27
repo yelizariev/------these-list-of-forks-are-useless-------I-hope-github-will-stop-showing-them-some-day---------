@@ -30,14 +30,23 @@ class res_partner(osv.osv):
         # the user may not have access rights for opportunities or meetings
         try:
             for partner in self.browse(cr, uid, ids, context):
+                if partner.is_company:
+                    operator = 'child_of'
+                else:
+                    operator = '='
+                opp_ids = self.pool['crm.lead'].search(cr, uid, [('partner_id', operator, partner.id), ('type', '=', 'opportunity'), ('probability', '<', '100')], context=context)
                 res[partner.id] = {
-                    'opportunity_count': len(partner.opportunity_ids),
+                    'opportunity_count': len(opp_ids),
                     'meeting_count': len(partner.meeting_ids),
                 }
         except:
             pass
+        return res
+
+    def _phonecall_count(self, cr, uid, ids, field_name, arg, context=None):
+        res = {}
         for partner in self.browse(cr, uid, ids, context):
-            res[partner.id]['phonecall_count'] = len(partner.phonecall_ids)
+            res[partner.id] = len(partner.phonecall_ids)
         return res
 
     _columns = {
@@ -50,7 +59,7 @@ class res_partner(osv.osv):
             'Phonecalls'),
         'opportunity_count': fields.function(_opportunity_meeting_phonecall_count, string="Opportunity", type='integer', multi='opp_meet'),
         'meeting_count': fields.function(_opportunity_meeting_phonecall_count, string="# Meetings", type='integer', multi='opp_meet'),
-        'phonecall_count': fields.function(_opportunity_meeting_phonecall_count, string="Phonecalls", type="integer", multi='opp_meet'),
+        'phonecall_count': fields.function(_phonecall_count, string="Phonecalls", type="integer"),
     }
 
     def redirect_partner_form(self, cr, uid, partner_id, context=None):
@@ -88,16 +97,11 @@ class res_partner(osv.osv):
         return opportunity_ids
 
     def schedule_meeting(self, cr, uid, ids, context=None):
-        if context is None:
-            context = {}
         partner_ids = list(ids)
         partner_ids.append(self.pool.get('res.users').browse(cr, uid, uid).partner_id.id)
         res = self.pool.get('ir.actions.act_window').for_xml_id(cr, uid, 'calendar', 'action_calendar_event', context)
         res['context'] = {
-            'default_partner_id': ids and ids[0] or False,
+            'search_default_partner_ids': list(ids),
             'default_partner_ids': partner_ids,
         }
         return res
-
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

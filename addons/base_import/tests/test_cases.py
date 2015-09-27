@@ -11,18 +11,10 @@ ID_FIELD = {
     'required': False,
     'fields': [],
 }
-DISPLAY_NAME_FIELD = {
-    'id': 'display_name',
-    'name': 'display_name',
-    'string': "Name",
-    'required': False,
-    'fields': [],
-}
 
 def make_field(name='value', string='unknown', required=False, fields=[]):
     return [
         ID_FIELD,
-        DISPLAY_NAME_FIELD,
         {'id': name, 'name': name, 'string': string, 'required': required, 'fields': fields},
     ]
 
@@ -50,7 +42,7 @@ class test_basic_fields(BaseImportCase):
 
     def test_readonly(self):
         """ Readonly fields should be filtered out"""
-        self.assertEqualFields(self.get_fields('char.readonly'), [ID_FIELD, DISPLAY_NAME_FIELD])
+        self.assertEqualFields(self.get_fields('char.readonly'), [ID_FIELD])
 
     def test_readonly_states(self):
         """ Readonly fields with states should not be filtered out"""
@@ -59,12 +51,12 @@ class test_basic_fields(BaseImportCase):
     def test_readonly_states_noreadonly(self):
         """ Readonly fields with states having nothing to do with
         readonly should still be filtered out"""
-        self.assertEqualFields(self.get_fields('char.noreadonly'), [ID_FIELD, DISPLAY_NAME_FIELD])
+        self.assertEqualFields(self.get_fields('char.noreadonly'), [ID_FIELD])
 
     def test_readonly_states_stillreadonly(self):
         """ Readonly fields with readonly states leaving them readonly
         always... filtered out"""
-        self.assertEqualFields(self.get_fields('char.stillreadonly'), [ID_FIELD, DISPLAY_NAME_FIELD])
+        self.assertEqualFields(self.get_fields('char.stillreadonly'), [ID_FIELD])
 
     def test_m2o(self):
         """ M2O fields should allow import of themselves (name_get),
@@ -92,7 +84,6 @@ class test_o2m(BaseImportCase):
     def test_shallow(self):
         self.assertEqualFields(self.get_fields('o2m'), make_field(fields=[
             ID_FIELD,
-            DISPLAY_NAME_FIELD,
             # FIXME: should reverse field be ignored?
             {'id': 'parent_id', 'name': 'parent_id', 'string': 'unknown', 'required': False, 'fields': [
                 {'id': 'parent_id', 'name': 'id', 'string': 'External ID', 'required': False, 'fields': []},
@@ -219,9 +210,6 @@ class test_preview(TransactionCase):
         })
         self.assertTrue('error' in result)
 
-    def test_csv_errors(self):
-        Import, id = self.make_import()
-
         result = Import.parse_preview(self.cr, self.uid, id, {
                 'quoting': '"',
                 'separator': 'bob',
@@ -250,7 +238,6 @@ class test_preview(TransactionCase):
         # Order depends on iteration order of fields_get
         self.assertItemsEqual(result['fields'], [
             ID_FIELD,
-            DISPLAY_NAME_FIELD,
             {'id': 'name', 'name': 'name', 'string': 'Name', 'required':False, 'fields': []},
             {'id': 'somevalue', 'name': 'somevalue', 'string': 'Some Value', 'required':True, 'fields': []},
             {'id': 'othervalue', 'name': 'othervalue', 'string': 'Other Variable', 'required':False, 'fields': []},
@@ -335,6 +322,28 @@ class test_convert_import_data(TransactionCase):
             ('', '6'),
         ])
 
+    def test_empty_rows(self):
+        Import = self.registry('base_import.import')
+        id = Import.create(self.cr, self.uid, {
+            'res_model': 'base_import.tests.models.preview',
+            'file': 'name,Some Value\n'
+                    'foo,1\n'
+                    '\n'
+                    'bar,2\n'
+                    '     \n'
+                    '\t \n'
+        })
+        record = Import.browse(self.cr, self.uid, id)
+        data, fields = Import._convert_import_data(
+            record, ['name', 'somevalue'],
+            {'quoting': '"', 'separator': ',', 'headers': True,})
+
+        self.assertItemsEqual(fields, ['name', 'somevalue'])
+        self.assertItemsEqual(data, [
+            ('foo', '1'),
+            ('bar', '2'),
+        ])
+
     def test_nofield(self):
         Import = self.registry('base_import.import')
 
@@ -366,3 +375,32 @@ class test_convert_import_data(TransactionCase):
             Import._convert_import_data,
             record, [False, False, False],
             {'quoting': '"', 'separator': ',', 'headers': True,})
+
+class test_failures(TransactionCase):
+    def test_big_attachments(self):
+        """
+        Ensure big fields (e.g. b64-encoded image data) can be imported and
+        we're not hitting limits of the default CSV parser config
+        """
+        import csv, cStringIO
+        from PIL import Image
+
+        im = Image.new('RGB', (1920, 1080))
+        fout = cStringIO.StringIO()
+
+        writer = csv.writer(fout, dialect=None)
+        writer.writerows([
+            ['name', 'db_datas'],
+            ['foo', im.tobytes().encode('base64')]
+        ])
+
+        Import = self.env['base_import.import']
+        imp = Import.create({
+            'res_model': 'ir.attachment',
+            'file': fout.getvalue()
+        })
+        [results] = imp.do(
+            ['name', 'db_datas'],
+            {'headers': True, 'separator': ',', 'quoting': '"'})
+        self.assertFalse(
+            results, "results should be empty on successful import")

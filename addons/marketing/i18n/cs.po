@@ -1,49 +1,78 @@
-# Czech translation for openobject-addons
-# Copyright (c) 2012 Rosetta Contributors and Canonical Ltd 2012
-# This file is distributed under the same license as the openobject-addons package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2012.
-#
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# * marketing
+# 
+# Translators:
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2014
 msgid ""
 msgstr ""
-"Project-Id-Version: openobject-addons\n"
-"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2012-12-21 17:05+0000\n"
-"PO-Revision-Date: 2012-04-06 05:18+0000\n"
-"Last-Translator: Jiří Hajda <robie@centrum.cz>\n"
-"Language-Team: Czech <cs@li.org>\n"
+"Project-Id-Version: Odoo 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-01-21 14:08+0000\n"
+"PO-Revision-Date: 2015-05-29 12:58+0000\n"
+"Last-Translator: Martin Trigaux\n"
+"Language-Team: Czech (http://www.transifex.com/projects/p/odoo-8/language/cs/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-04-22 07:33+0000\n"
-"X-Generator: Launchpad (build 16985)\n"
+"Content-Transfer-Encoding: \n"
+"Language: cs\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
 #. module: marketing
-#: model:ir.model,name:marketing.model_marketing_config_settings
-msgid "marketing.config.settings"
-msgstr "marketing.config.settings"
+#: view:marketing.config.settings:marketing.view_marketing_configuration
+msgid "Apply"
+msgstr "Použít"
 
 #. module: marketing
-#: help:marketing.config.settings,module_marketing_campaign_crm_demo:0
-msgid ""
-"Installs demo data like leads, campaigns and segments for Marketing "
-"Campaigns.\n"
-"                This installs the module marketing_campaign_crm_demo."
-msgstr ""
-"Nainstaluje ukázková data marketingových kampaní jako zájemce, kampaně a "
-"segmenty.\n"
-"                Nainstaluje modul marketing_campaign_crm_demo."
+#: view:marketing.config.settings:marketing.view_marketing_configuration
+msgid "Cancel"
+msgstr "Zrušit"
 
 #. module: marketing
 #: model:ir.actions.act_window,name:marketing.action_marketing_configuration
-#: view:marketing.config.settings:0
+#: view:marketing.config.settings:marketing.view_marketing_configuration
 msgid "Configure Marketing"
 msgstr "Konfigurace marketingu"
 
 #. module: marketing
-#: view:crm.lead:0
+#: field:marketing.config.settings,create_uid:0
+msgid "Created by"
+msgstr "Vytvořil"
+
+#. module: marketing
+#: field:marketing.config.settings,create_date:0
+msgid "Created on"
+msgstr "Vytvořeno"
+
+#. module: marketing
+#: field:marketing.config.settings,id:0
+msgid "ID"
+msgstr "Identifikátor"
+
+#. module: marketing
+#: field:marketing.config.settings,write_uid:0
+msgid "Last Updated by"
+msgstr "Naposled upravil"
+
+#. module: marketing
+#: field:marketing.config.settings,write_date:0
+msgid "Last Updated on"
+msgstr "Naposled upraveno"
+
+#. module: marketing
+#: model:res.groups,name:marketing.group_marketing_manager
+msgid "Manager"
+msgstr "Správce"
+
+#. module: marketing
 #: model:ir.ui.menu,name:marketing.menu_marketing_configuration
 msgid "Marketing"
 msgstr "Marketing"
+
+#. module: marketing
+#: view:marketing.config.settings:marketing.view_marketing_configuration
+msgid "Marketing Campaigns"
+msgstr "Marketingové kampaně"
 
 #. module: marketing
 #: field:marketing.config.settings,module_marketing_campaign:0
@@ -51,19 +80,29 @@ msgid "Marketing campaigns"
 msgstr "Marketingové kampaně"
 
 #. module: marketing
-#: view:marketing.config.settings:0
-msgid "or"
-msgstr "nebo"
+#: view:marketing.config.settings:marketing.view_marketing_configuration
+#: field:marketing.config.settings,module_mass_mailing:0
+msgid "Mass Mailing"
+msgstr "Hromadné zasílání emailů"
 
 #. module: marketing
-#: view:marketing.config.settings:0
-msgid "Campaigns"
-msgstr "Kampaně"
+#: help:marketing.config.settings,module_mass_mailing:0
+msgid ""
+"Provide a way to perform mass mailings.\n"
+"-This installs the module mass_mailing."
+msgstr "Umožňuje rozesílat hromadné emaily.\n- Toto nainstaluje modul mass_mailing."
 
 #. module: marketing
-#: model:res.groups,name:marketing.group_marketing_manager
-msgid "Manager"
-msgstr "Vedoucí"
+#: help:marketing.config.settings,module_marketing_campaign:0
+msgid ""
+"Provides leads automation through marketing campaigns. Campaigns can in fact be defined on any resource, not just CRM leads.\n"
+"-This installs the module marketing_campaign."
+msgstr "Umožňuje automatizaci kontaktování nových kontaktů skrze marketingové kampaně. Kampaně mohou být ve skutečnosti nastaveny pro jakýkoli kontakt, nejenom pro nové kontakty v rámci CRM.\n- Toto nainstaluje modul marketing_campaign."
+
+#. module: marketing
+#: view:marketing.config.settings:marketing.view_marketing_configuration
+msgid "Settings"
+msgstr "Nastavení"
 
 #. module: marketing
 #: model:res.groups,name:marketing.group_marketing_user
@@ -71,49 +110,6 @@ msgid "User"
 msgstr "Uživatel"
 
 #. module: marketing
-#: view:marketing.config.settings:0
-msgid "Campaigns Settings"
-msgstr "Nastavení kampaní"
-
-#. module: marketing
-#: field:marketing.config.settings,module_crm_profiling:0
-msgid "Track customer profile to focus your campaigns"
-msgstr "Sledovat profil zákazníka pro zacílení kampaní"
-
-#. module: marketing
-#: view:marketing.config.settings:0
-msgid "Cancel"
-msgstr "Zrušit"
-
-#. module: marketing
-#: view:marketing.config.settings:0
-msgid "Apply"
-msgstr "Použít"
-
-#. module: marketing
-#: help:marketing.config.settings,module_marketing_campaign:0
-msgid ""
-"Provides leads automation through marketing campaigns.\n"
-"                Campaigns can in fact be defined on any resource, not just "
-"CRM leads.\n"
-"                This installs the module marketing_campaign."
-msgstr ""
-"Umožňuje automatické získávání zájemců prostřednictvím marketingových "
-"kampaní.\n"
-"                Kampaně mohou být ve skutečnosti vytvořeny z jakýchkoliv "
-"zdrojů, nejen z CRM zájemců.\n"
-"                Nainstaluje modul marketing_campaign."
-
-#. module: marketing
-#: help:marketing.config.settings,module_crm_profiling:0
-msgid ""
-"Allows users to perform segmentation within partners.\n"
-"                This installs the module crm_profiling."
-msgstr ""
-"Dovoluje uživatelům provádět segmentaci mezi partnery.\n"
-"                Nainstaluje se modul crm_profiling."
-
-#. module: marketing
-#: field:marketing.config.settings,module_marketing_campaign_crm_demo:0
-msgid "Demo data for marketing campaigns"
-msgstr "Ukázková data marketingových kampaní"
+#: view:marketing.config.settings:marketing.view_marketing_configuration
+msgid "or"
+msgstr "nebo"

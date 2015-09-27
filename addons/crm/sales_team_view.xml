@@ -50,7 +50,7 @@
             </field>
             <field name="help" type="html">
                 <p>
-                    OpenERP helps you keep track of your sales pipeline to follow
+                    Odoo helps you keep track of your sales pipeline to follow
                     up potential sales and better forecast your future revenues.
                 </p><p>
                     You will be able to plan meetings and phone calls from
@@ -72,7 +72,7 @@
 
        <record id="action_report_crm_opportunity_salesteam" model="ir.actions.act_window">
             <field name="name">Opportunities Analysis</field>
-            <field name="res_model">crm.lead.report</field>
+            <field name="res_model">crm.opportunity.report</field>
             <field name="view_mode">graph</field>
             <field name="view_id" ref="crm.view_report_crm_opportunity_graph"/>
             <field name="domain">[('type','=', 'opportunity'), ('section_id', '=', active_id)]</field>

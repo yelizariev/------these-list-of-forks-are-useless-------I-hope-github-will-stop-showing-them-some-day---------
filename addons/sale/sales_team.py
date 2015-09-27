@@ -7,7 +7,7 @@ import json
 
 from openerp import tools
 from openerp.osv import fields, osv
-
+from openerp.tools.float_utils import float_repr
 
 class crm_case_section(osv.osv):
     _inherit = 'crm.case.section'
@@ -24,8 +24,7 @@ class crm_case_section(osv.osv):
             created_domain = [('section_id', '=', id), ('state', '=', 'draft'), ('date_order', '>=', date_begin), ('date_order', '<=', date_end)]
             validated_domain = [('section_id', '=', id), ('state', 'not in', ['draft', 'sent', 'cancel']), ('date_order', '>=', date_begin), ('date_order', '<=', date_end)]
             res[id]['monthly_quoted'] = json.dumps(self.__get_bar_values(cr, uid, obj, created_domain, ['amount_total', 'date_order'], 'amount_total', 'date_order', context=context))
-            res[id]['monthly_confirmed'] = json.dumps(self.__get_bar_values(cr, uid, obj, validated_domain, ['amount_total', 'date_order'], 'amount_total', 'date_order', context=context))
-
+            res[id]['monthly_confirmed'] = json.dumps(self.__get_bar_values(cr, uid, obj, validated_domain, ['amount_untaxed', 'date_order'], 'amount_untaxed', 'date_order', context=context))
         return res
 
     def _get_invoices_data(self, cr, uid, ids, field_name, arg, context=None):
@@ -36,8 +35,11 @@ class crm_case_section(osv.osv):
 
         res = {}
         for id in ids:
-            created_domain = [('section_id', '=', id), ('state', 'not in', ['draft', 'cancel']), ('date', '>=', date_begin), ('date', '<=', date_end)]
-            res[id] = json.dumps(self.__get_bar_values(cr, uid, obj, created_domain, ['price_total', 'date'], 'price_total', 'date', context=context))
+            created_domain = [('type', 'in', ['out_invoice', 'out_refund']), ('section_id', '=', id), ('state', 'not in', ['draft', 'cancel']), ('date', '>=', date_begin), ('date', '<=', date_end)]
+            values = self.__get_bar_values(cr, uid, obj, created_domain, ['price_total', 'date'], 'price_total', 'date', context=context)
+            for value in values:
+                value['value'] = float_repr(value.get('value', 0), precision_digits=self.pool['decimal.precision'].precision_get(cr, uid, 'Account'))
+            res[id] = json.dumps(values)
         return res
 
     _columns = {
@@ -50,13 +52,13 @@ class crm_case_section(osv.osv):
             help="Target of invoice revenue for the current month. This is the amount the sales \n"
                     "team estimates to be able to invoice this month."),
         'monthly_quoted': fields.function(_get_sale_orders_data,
-            type='any', readonly=True, multi='_get_sale_orders_data',
+            type='char', readonly=True, multi='_get_sale_orders_data',
             string='Rate of created quotation per duration'),
         'monthly_confirmed': fields.function(_get_sale_orders_data,
-            type='any', readonly=True, multi='_get_sale_orders_data',
+            type='char', readonly=True, multi='_get_sale_orders_data',
             string='Rate of validate sales orders per duration'),
         'monthly_invoiced': fields.function(_get_invoices_data,
-            type='any', readonly=True,
+            type='char', readonly=True,
             string='Rate of sent invoices per duration'),
     }
 

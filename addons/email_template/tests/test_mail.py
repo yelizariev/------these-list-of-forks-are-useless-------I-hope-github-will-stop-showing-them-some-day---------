@@ -192,9 +192,9 @@ class test_message_compose(TestMail):
         email_template.write(cr, uid, [email_template_id], {
             'model_id': user_model_id,
             'body_html': '${object.login}',
-            'email_to': '${object.email}, c@c',
+            'email_to': '${object.email}, c@c.c',
             'partner_to': '%i,%i' % (p_b_id, p_c_id),
-            'email_cc': 'd@d',
+            'email_cc': 'd@d.d',
             })
         # patner by email + partner by id (no double)
         send_to = [p_a_id, p_b_id, p_c_id, p_d_id]
@@ -237,8 +237,8 @@ class test_message_compose(TestMail):
         email_template.send_mail(cr, uid, email_template_id, self.group_pigs_id, force_send=True, context=context)
         sent_emails = self._build_email_kwargs_list
         email_to_lst = [
-            ['b@b.b', 'c@c.c'], ['"Administrator" <admin@yourcompany.example.com>'],
-            ['"Raoul Grosbedon" <raoul@raoul.fr>'], ['"Bert Tartignole" <bert@bert.fr>']]
+            ['b@b.b', 'c@c.c'], ['Administrator <admin@yourcompany.example.com>'],
+            ['Raoul Grosbedon <raoul@raoul.fr>'], ['Bert Tartignole <bert@bert.fr>']]
         self.assertEqual(len(sent_emails), 4, 'email_template: send_mail: 3 valid email recipients + email_to -> should send 4 emails')
         for email in sent_emails:
             self.assertIn(email['email_to'], email_to_lst, 'email_template: send_mail: wrong email_recipients')

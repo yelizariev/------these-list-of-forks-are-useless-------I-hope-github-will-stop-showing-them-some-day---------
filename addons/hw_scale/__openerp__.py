@@ -26,6 +26,7 @@
     'category': 'Hardware Drivers',
     'sequence': 6,
     'summary': 'Hardware Driver for Weighting Scales',
+    'website': 'https://www.odoo.com/page/point-of-sale',
     'description': """
 Barcode Scanner Hardware Driver
 ================================
@@ -36,6 +37,7 @@ such as the Mettler Toledo Ariva.
 """,
     'author': 'OpenERP SA',
     'depends': ['hw_proxy'],
+    'external_dependencies': {'python': ['serial']},
     'test': [
     ],
     'installable': True,

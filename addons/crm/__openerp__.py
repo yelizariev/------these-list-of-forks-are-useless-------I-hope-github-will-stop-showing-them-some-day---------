@@ -47,7 +47,7 @@ Dashboard for CRM will include:
 * Opportunities by Stage (graph)
 """,
     'author': 'OpenERP SA',
-    'website': 'http://www.openerp.com',
+    'website': 'https://www.odoo.com/page/crm',
     'depends': [
         'base_action_rule',
         'base_setup',
@@ -74,7 +74,7 @@ Dashboard for CRM will include:
         'wizard/crm_merge_opportunities_view.xml',
 
         'crm_view.xml',
-        
+
         'crm_phonecall_view.xml',
         'crm_phonecall_menu.xml',
 
@@ -84,6 +84,7 @@ Dashboard for CRM will include:
         'calendar_event_menu.xml',
 
         'report/crm_lead_report_view.xml',
+        'report/crm_opportunity_report_view.xml',
         'report/crm_phonecall_report_view.xml',
 
         'res_partner_view.xml',
@@ -116,16 +117,5 @@ Dashboard for CRM will include:
     'installable': True,
     'application': True,
     'auto_install': False,
-    'images': [
-        'images/customers.png',
-        'images/leads.png',
-        'images/opportunities_kanban.png',
-        'images/opportunities_form.png',
-        'images/opportunities_calendar.png',
-        'images/opportunities_graph.png',
-        'images/logged_calls.png',
-        'images/scheduled_calls.png',
-        'images/stages.png',
-    ],
 }
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -94,7 +94,7 @@
                         <group>
                             <separator string="Action to Perform" colspan="4"/>
                             <field name="action"/>
-                            <field name="survey_id" domain="[('state','=','open')]"/>
+                            <field name="survey_id"/>
                         </group>
                         <group string="Send to Managers">
                             <field name="send_answer_manager"/>
@@ -251,7 +251,7 @@
                 Each employee may be assigned an Appraisal Plan. Such a plan
                 defines the frequency and the way you manage your periodic
                 personnel evaluation. You will be able to define steps and
-                attach interviews to each step. OpenERP manages all kinds of
+                attach interviews to each step. Odoo manages all kinds of
                 evaluations: bottom-up, top-down, self-evaluation and final
                 evaluation by the manager.
               </p>
@@ -335,7 +335,6 @@
                     <field name="user_id" string="Interviewer"/>
                     <group expand="0" string="Group By">
                         <filter string="Interviewer" icon="terp-personal" domain="[]" context="{'group_by':'user_id'}"/>
-                        <filter string="Survey" icon="terp-stock_align_left_24" domain="[]" context="{'group_by':'survey_id'}"/>
                         <filter string="Status" name="group_state" icon="terp-stock_effects-object-colorize" domain="[]" context="{'group_by':'state'}"/>
                     </group>
                </search>
@@ -357,6 +356,7 @@
             <field name="res_model">hr.evaluation.interview</field>
             <field name="view_type">form</field>
             <field name="view_id" eval="False"/>
+            <field name="domain" eval="False"/> <!-- Force empty -->
             <field name="context">{"search_default_todo":1,"search_default_user_id":uid}</field>
             <field name="search_view_id" ref="view_hr_evaluation_interview_search"/>
             <field name="help" type="html">
@@ -364,7 +364,7 @@
                 Click to create a new interview request related to a personal evaluation.
               </p><p>
                 Interview requests are usually generated automatically by
-                OpenERP according to an employee's appraisal plan. Each user
+                Odoo according to an employee's appraisal plan. Each user
                 receives automatic emails and requests to evaluate their
                 colleagues periodically.
               </p>

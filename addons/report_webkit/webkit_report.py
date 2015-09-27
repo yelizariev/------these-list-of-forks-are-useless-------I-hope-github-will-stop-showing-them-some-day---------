@@ -43,6 +43,7 @@ from report_helper import WebKitHelper
 import openerp
 from openerp.modules.module import get_module_resource
 from openerp.report.report_sxw import *
+from openerp import SUPERUSER_ID
 from openerp import tools
 from openerp.tools.translate import _
 from openerp.osv.osv import except_osv
@@ -127,7 +128,7 @@ class WebKitParser(report_sxw):
     def get_lib(self, cursor, uid):
         """Return the lib wkhtml path"""
         proxy = self.pool['ir.config_parameter']
-        webkit_path = proxy.get_param(cursor, uid, 'webkit_path')
+        webkit_path = proxy.get_param(cursor, SUPERUSER_ID, 'webkit_path')
 
         if not webkit_path:
             try:
@@ -368,6 +369,9 @@ class WebKitParser(report_sxw):
             report_xml = ir_obj.browse(cursor, uid, report_xml_ids[0], context=context)
         else:
             return super(WebKitParser, self).create(cursor, uid, ids, data, context)
+
+        setattr(report_xml, 'use_global_header', self.header if report_xml.header else False)
+
         if report_xml.report_type != 'webkit':
             return super(WebKitParser, self).create(cursor, uid, ids, data, context)
         result = self.create_source_pdf(cursor, uid, ids, data, report_xml, context)

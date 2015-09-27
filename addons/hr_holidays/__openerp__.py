@@ -27,7 +27,7 @@
     'category': 'Human Resources',
     'sequence': 27,
     'summary': 'Holidays, Allocation and Leave Requests',
-    'website': 'http://www.openerp.com',
+    'website': 'https://www.odoo.com/page/employees',
     'description': """
 Manage leaves and allocation requests
 =====================================
@@ -44,7 +44,6 @@ You can keep track of leaves in different ways by following reports:
 
 A synchronization with an internal agenda (Meetings of the CRM module) is also possible in order to automatically create a meeting when a holiday request is accepted by setting up a type of meeting in Leave Type.
 """,
-    'images': ['images/hr_allocation_requests.jpeg', 'images/hr_leave_requests.jpeg', 'images/leaves_analysis.jpeg'],
     'depends': ['hr', 'calendar', 'resource'],
     'data': [
         'security/ir.model.access.csv',

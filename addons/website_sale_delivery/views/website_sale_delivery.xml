@@ -9,7 +9,7 @@
                 <td class="text-right">
                     <span t-field="website_sale_order.amount_delivery" t-field-options='{
                         "widget": "monetary",
-                        "display_currency": "website.pricelist_id.currency_id"
+                        "display_currency": "website_sale_order.currency_id"
                     }'/>
                 </td>
             </tr>
@@ -29,16 +29,20 @@
                 <h4>Choose your Delivery Method</h4>
                     <ul class="list-unstyled">
                         <li t-foreach="deliveries" t-as="delivery">
-                            <label>
-                                <input t-att-value="delivery.id" type="radio" name="delivery_type"
-                                    t-att-checked="order.carrier_id and order.carrier_id.id == delivery.id and 'checked' or False"/>
-                                <span t-field="delivery.name"/>
-                                <span class="badge" t-field="delivery.price"
-                                    t-field-options='{
-                                        "widget": "monetary",
-                                        "display_currency": "website.pricelist_id.currency_id"
-                                    }'/>
-                            </label>
+                            <t t-if="delivery.available">
+                                <label>
+                                    <input t-att-value="delivery.id" type="radio" name="delivery_type"
+                                        t-att-checked="order.carrier_id and order.carrier_id.id == delivery.id and 'checked' or False"/>
+                                    <span t-field="delivery.name"/>
+                                    <span class="badge" t-field="delivery.price"
+                                        t-field-options='{
+                                            "widget": "monetary",
+                                            "from_currency": "website.currency_id",
+                                            "display_currency": "website_sale_order.currency_id"
+                                        }'/>
+                                    <div t-field="delivery.website_description" class="text-muted"/>
+                                </label>
+                            </t>
                         </li>
                     </ul>
                 </div>

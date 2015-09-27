@@ -30,6 +30,7 @@
         'product_demo.xml',
         'product_image_demo.xml',
     ],
+    'website': 'https://www.odoo.com',
     'description': """
 This is the base module for managing products and pricelists in OpenERP.
 ========================================================================
@@ -67,7 +68,6 @@ Print product labels with barcode.
     ],
     'installable': True,
     'auto_install': False,
-    'images': ['images/product_uom.jpeg','images/product_pricelists.jpeg','images/products_categories.jpeg', 'images/products_form.jpeg'],
 }
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

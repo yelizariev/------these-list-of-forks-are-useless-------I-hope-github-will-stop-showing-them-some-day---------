@@ -277,7 +277,7 @@
                     <separator/>
                     <filter string="My Events" help="My Events" domain="[('user_id','=',uid)]"/>
                     <separator/>
-                    <filter string="Upcoming" name="upcoming" domain="[('date_begin','&gt;=', time.strftime('%%Y-%%m-%%d 00:00:00'))]" help="Upcoming events from today" />
+                    <filter string="Upcoming" name="upcoming" domain="[('date_begin','&gt;=', datetime.datetime.combine(context_today(), datetime.time(0,0,0)))]" help="Upcoming events from today" />
                     <field name="type"/>
                     <field name="user_id"/>
                     <group expand="0" string="Group By">
@@ -304,7 +304,7 @@
              <p class="oe_view_nocontent_create">
                Click to add a new event.
              </p><p>
-               OpenERP helps you schedule and efficiently organize your events:
+               Odoo helps you schedule and efficiently organize your events:
                track subscriptions and participations, automate the confirmation emails,
                sell tickets, etc.
              </p>

@@ -115,6 +115,7 @@ instance.web.Dialog = instance.web.Widget.extend({
             this.init_dialog();
         }
         this.$buttons.insertAfter(this.$dialog_box.find(".modal-body"));
+        $('.tooltip').remove(); //remove open tooltip if any to prevent them staying when modal is opened
         //add to list of currently opened modal
         opened_modal.push(this.$dialog_box);
         return this;
@@ -185,12 +186,12 @@ instance.web.Dialog = instance.web.Widget.extend({
     close: function(reason) {
         if (this.dialog_inited && !this.__tmp_dialog_hiding) {
             $('.tooltip').remove(); //remove open tooltip if any to prevent them staying when modal has disappeared
-            this.trigger("closing", reason);
             if (this.$el.is(":data(bs.modal)")) {     // may have been destroyed by closing signal
                 this.__tmp_dialog_hiding = true;
                 this.$dialog_box.modal('hide');
                 this.__tmp_dialog_hiding = undefined;
             }
+            this.trigger("closing", reason);
         }
     },
     _closing: function() {
@@ -230,6 +231,9 @@ instance.web.Dialog = instance.web.Widget.extend({
                 if (opened_modal.length > 0){
                     //we still have other opened modal so we should focus it
                     opened_modal[opened_modal.length-1].focus();
+                    //keep class modal-open (deleted by bootstrap hide fnct) on body 
+                    //to allow scrolling inside the modal
+                    $('body').addClass('modal-open');
                 }
             },0);
         }
@@ -252,7 +256,7 @@ instance.web.CrashManager = instance.web.Class.extend({
             return;
         }
         if (error.data.name === "openerp.http.SessionExpiredException" || error.data.name === "werkzeug.exceptions.Forbidden") {
-            this.show_warning({type: "Session Expired", data: { message: _t("Your OpenERP session expired. Please refresh the current web page.") }});
+            this.show_warning({type: "Session Expired", data: { message: _t("Your Odoo session expired. Please refresh the current web page.") }});
             return;
         }
         if (error.data.exception_type === "except_osv" || error.data.exception_type === "warning" || error.data.exception_type === "access_error") {
@@ -270,7 +274,7 @@ instance.web.CrashManager = instance.web.Class.extend({
         }
         new instance.web.Dialog(this, {
             size: 'medium',
-            title: "OpenERP " + (_.str.capitalize(error.type) || "Warning"),
+            title: "Odoo " + (_.str.capitalize(error.type) || "Warning"),
             buttons: [
                 {text: _t("Ok"), click: function() { this.parents('.modal').modal('hide'); }}
             ],
@@ -285,7 +289,7 @@ instance.web.CrashManager = instance.web.Class.extend({
             this.parents('.modal').modal('hide');
         };
         new instance.web.Dialog(this, {
-            title: "OpenERP " + _.str.capitalize(error.type),
+            title: "Odoo " + _.str.capitalize(error.type),
             buttons: buttons
         }, QWeb.render('CrashManager.error', {session: instance.session, error: error})).open();
     },
@@ -337,7 +341,7 @@ instance.web.RedirectWarningHandler = instance.web.Dialog.extend(instance.web.Ex
 
         new instance.web.Dialog(this, {
             size: 'medium',
-            title: "OpenERP " + (_.str.capitalize(error.type) || "Warning"),
+            title: "Odoo " + (_.str.capitalize(error.type) || "Warning"),
             buttons: [
                 {text: _t("Ok"), click: function() { self.$el.parents('.modal').modal('hide');  self.destroy();}},
                 {text: error.data.arguments[2],
@@ -551,12 +555,9 @@ instance.web.DatabaseManager = instance.web.Widget.extend({
                 self.do_notify(_t("Backed"), _t("Database backed up successfully"));
             },
             error: function(error){
-               if(error){
-                  self.display_error({
-                        title: _t("Backup Database"),
-                        error: 'AccessDenied'
-                  });
-               }
+                if (error && error[1]) {
+                    self.display_error(error[1][0]);
+                }
             },
             complete: function() {
                 self.unblockUI();
@@ -910,7 +911,7 @@ instance.web.Menu =  instance.web.Widget.extend({
         }
         // add a tooltip to cropped menu items
         this.$secondary_menus.find('.oe_secondary_submenu li a span').each(function() {
-            $(this).tooltip(this.scrollWidth > this.clientWidth ? {title: $(this).text().trim(), placement: 'auto right'} :'destroy');
+            $(this).tooltip(this.scrollWidth > this.clientWidth ? {title: $(this).text().trim(), placement: 'right'} :'destroy');
        });
     },
     /**
@@ -989,6 +990,7 @@ instance.web.Menu =  instance.web.Widget.extend({
         self.do_load_needaction(menu_ids).then(function () {
             self.trigger("need_action_reloaded");
         });
+        this.$el.parents().find(".oe_secondary_menus_container").scrollTop(0,0);
 
         this.on_menu_click(ev);
     },
@@ -1044,7 +1046,7 @@ instance.web.UserMenu =  instance.web.Widget.extend({
         this.update_promise = this.update_promise.then(fct, fct);
     },
     on_menu_help: function() {
-        window.open('http://help.openerp.com', '_blank');
+        window.open('http://help.odoo.com', '_blank');
     },
     on_menu_logout: function() {
         this.trigger('user_logout');
@@ -1073,7 +1075,10 @@ instance.web.UserMenu =  instance.web.Widget.extend({
                     state: JSON.stringify(state),
                     scope: 'userinfo',
                 };
-                instance.web.redirect('https://accounts.openerp.com/oauth2/auth?'+$.param(params));
+                instance.web.redirect('https://accounts.odoo.com/oauth2/auth?'+$.param(params));
+            }).fail(function(result, ev){
+                ev.preventDefault();
+                instance.web.redirect('https://accounts.odoo.com/account');
             });
         }
     },
@@ -1156,7 +1161,7 @@ instance.web.Client = instance.web.Widget.extend({
             }, 0);
         });
         instance.web.bus.on('click', this, function(ev) {
-            $.fn.tooltip('destroy');
+            $('.tooltip').remove();
             if (!$(ev.target).is('input[type=file]')) {
                 self.$el.find('.oe_dropdown_menu.oe_opened, .oe_dropdown_toggle.oe_opened').removeClass('oe_opened');
             }
@@ -1167,7 +1172,7 @@ instance.web.Client = instance.web.Widget.extend({
         this.crashmanager =  new instance.web.CrashManager();
         instance.session.on('error', this.crashmanager, this.crashmanager.rpc_error);
         self.notification = new instance.web.Notification(this);
-        self.notification.appendTo(self.$el);
+        self.notification.appendTo(self.$el.find('.openerp'));
         self.loading = new instance.web.Loading(self);
         self.loading.appendTo(self.$('.openerp_webclient_container'));
         self.action_manager = new instance.web.ActionManager(self);
@@ -1190,12 +1195,13 @@ instance.web.WebClient = instance.web.Client.extend({
         this._current_state = null;
         this.menu_dm = new instance.web.DropMisordered();
         this.action_mutex = new $.Mutex();
-        this.set('title_part', {"zopenerp": "OpenERP"});
+        this.set('title_part', {"zopenerp": "Odoo"});
     },
     start: function() {
         var self = this;
         this.on("change:title_part", this, this._title_changed);
         this._title_changed();
+
 
         return $.when(this._super()).then(function() {
             if (jQuery.deparam !== undefined && jQuery.deparam(jQuery.param.querystring()).kitten !== undefined) {
@@ -1208,6 +1214,10 @@ instance.web.WebClient = instance.web.Client.extend({
                 self.action_manager.do_action(self.client_options.action);
                 delete(self.client_options.action);
             }
+            instance.web.cordova.ready();
+            instance.web.cordova.on('back', self, function() {
+                self.do_action('history_back');
+            });
         });
     },
     to_kitten: function() {
@@ -1216,7 +1226,7 @@ instance.web.WebClient = instance.web.Client.extend({
         $("body").css("background-image", "url(" + instance.session.origin + "/web/static/src/img/back-enable.jpg" + ")");
         if ($.blockUI) {
             var imgkit = Math.floor(Math.random() * 2 + 1);
-            $.blockUI.defaults.message = '<img src="http://www.amigrave.com/loading-kitten/' + imgkit + '.gif" class="loading-kitten">';
+            $.blockUI.defaults.message = '<img src="/web/static/src/img/k-waiting' + imgkit + '.gif" class="loading-kitten">';
         }
     },
     /**
@@ -1284,7 +1294,8 @@ instance.web.WebClient = instance.web.Client.extend({
         }
     },
     update_logo: function() {
-        var img = this.session.url('/web/binary/company_logo');
+        var company = this.session.company_id;
+        var img = this.session.url('/web/binary/company_logo' + '?db=' + this.session.db + (company ? '&company=' + company : ''));
         this.$('.oe_logo img').attr('src', '').attr('src', img);
         this.$('.oe_logo_edit').toggleClass('oe_logo_edit_admin', this.session.uid === 1);
     },
@@ -1362,6 +1373,7 @@ instance.web.WebClient = instance.web.Client.extend({
     on_logout: function() {
         var self = this;
         if (!this.has_uncommitted_changes()) {
+            instance.web.cordova.logout();
             self.action_manager.do_action('logout');
         }
     },
@@ -1522,6 +1534,76 @@ instance.web.embed = function (origin, dbname, login, key, action, options) {
     var client = new instance.web.EmbeddedClient(null, origin, dbname, login, key, action, options);
     client.insertAfter(currentScript);
 };
+
+
+
+/* 
+ * The Android/iPhone App is a JS/HTML app that launches the
+ * Odoo webclient in an iframe, using the Cordova framework.
+ *
+ * This class acts as a link between the webclient and the
+ * Odoo Android/iPhone App implemented with cordova.
+ */
+instance.web.Cordova = instance.web.Class.extend({}, instance.web.PropertiesMixin, {
+    init: function(parent) {
+        var self = this;
+        instance.web.PropertiesMixin.init.call(this, parent);
+
+        window.addEventListener('message', function(event) {
+            self.receive(event);
+        }, false);
+
+    },
+    // odoo.send('foobar') in cordova will call messages.foobar()
+    messages: {
+        // launch the POS !
+        pos: function() {
+            if (window.location.href.indexOf('/pos/web') < 0) {
+                window.location.href = "/pos/web";
+            }
+        },
+    },
+    // what happens when we receive an event from cordova
+    // -> call messages[event.data]()
+    // -> selfs trigger(event.data)
+    receive: function(event) {
+        if (event.origin !== 'file://') {
+            return;
+        } 
+
+        if (typeof event.data === 'string') {
+            this.trigger(event.data);
+            if (this.messages[event.data]) {
+                this.messages[event.data].call(this);
+            }
+        }
+    },
+    // send a message to cordova
+    send: function(message) {
+        function inIframe(){
+            try {
+                return window.self !== window.top;
+            } catch (e) {
+                return true;
+            }
+        }
+        if (inIframe()) {
+            window.parent.postMessage(message,'file://');
+        }
+    },
+
+
+    // notifies cordova that the webclient is ready.
+    ready:      function() { this.send('ready');     },
+    // notifies cordova that we want to exit the app.
+    logout:     function() { this.send('logout');    },
+    // asks cordova to emit a beep.
+    beep:       function() { this.send('beep');      },
+    // ask cordova to vibrate the phone.
+    vibrate:    function() { this.send('vibrate');   },
+});
+
+instance.web.cordova = new instance.web.Cordova();
 
 })();
 

@@ -48,8 +48,10 @@
             <field name="model">hr.analytic.timesheet</field>
             <field name="inherit_id" ref="hr_timesheet.hr_timesheet_line_form"/>
             <field name="arch" type="xml">
-                <field name="account_id" position="replace">
-                    <field domain="[('type','in',['normal','contract']),('state', '&lt;&gt;', 'close'),('use_timesheets','=',1)]" name="account_id" on_change="on_change_account_id(account_id, user_id)" context="{'default_use_timesheets': 1}"/>
+                <field name="account_id" position="attributes">
+                    <attribute name="domain">[('type','in',['normal','contract']),('state', '&lt;&gt;', 'close'),('use_timesheets','=',1)]</attribute>
+                    <attribute name="on_change">on_change_account_id(account_id, user_id)</attribute>
+                    <attribute name="context">{'default_use_timesheets': 1}</attribute>
                 </field>
             </field>
         </record>
@@ -70,8 +72,10 @@
             <field name="model">hr.analytic.timesheet</field>
             <field name="inherit_id" ref="hr_timesheet.hr_timesheet_line_tree"/>
             <field name="arch" type="xml">
-                <field name="account_id" position="replace">
-                    <field domain="[('type','in',['normal','contract']),('state', '&lt;&gt;', 'close'),('use_timesheets','=',1)]" name="account_id" on_change="on_change_account_id(account_id, user_id)" context="{'default_use_timesheets': 1}"/>
+                <field name="account_id" position="attributes">
+                    <attribute name="domain">[('type','in',['normal','contract']),('state', '&lt;&gt;', 'close'),('use_timesheets','=',1)]</attribute>
+                    <attribute name="on_change">on_change_account_id(account_id, user_id)</attribute>
+                    <attribute name="context">{'default_use_timesheets': 1}</attribute>
                 </field>
             </field>
         </record>
@@ -170,7 +174,7 @@
               <p class="oe_view_nocontent_create">
                 Click to add a new type of invoicing.
               </p><p>
-                OpenERP allows you to create default invoicing types. You might
+                Odoo allows you to create default invoicing types. You might
                 have to regularly assign discounts because of a specific
                 contract or agreement with a customer. From this menu, you can
                 create additional types of invoicing to speed up your

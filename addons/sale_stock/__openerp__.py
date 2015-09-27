@@ -43,8 +43,7 @@ You can choose flexible invoicing methods:
 * *Before Delivery*: A Draft invoice is created and must be paid before delivery
 """,
     'author': 'OpenERP SA',
-    'website': 'http://www.openerp.com',
-    'images': ['images/deliveries_to_invoice.jpeg'],
+    'website': 'https://www.odoo.com/page/warehouse',
     'depends': ['sale', 'stock_account'],
     'data': [
         'security/sale_stock_security.xml',
@@ -63,6 +62,7 @@ You can choose flexible invoicing methods:
         'test/picking_order_policy.yml',
         'test/prepaid_order_policy.yml',
         'test/sale_order_onchange.yml',
+        'test/sale_order_canceled_line.yml',
     ],
     'installable': True,
     'auto_install': True,

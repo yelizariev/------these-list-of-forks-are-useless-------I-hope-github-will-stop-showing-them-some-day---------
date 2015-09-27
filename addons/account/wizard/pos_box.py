@@ -40,8 +40,11 @@ class CashBox(osv.osv_memory):
         return {}
 
     def _create_bank_statement_line(self, cr, uid, box, record, context=None):
+        if record.state == 'confirm':
+            raise osv.except_osv(_('Error!'),
+                                 _("You cannot put/take money in/out for a bank statement which is closed."))
         values = self._compute_values_for_statement_line(cr, uid, box, record, context=context)
-        return self.pool.get('account.bank.statement.line').create(cr, uid, values, context=context)
+        return self.pool.get('account.bank.statement').write(cr, uid, [record.id], {'line_ids': [(0, False, values)]}, context=context)
 
 
 class CashBoxIn(CashBox):
@@ -49,16 +52,20 @@ class CashBoxIn(CashBox):
 
     _columns = CashBox._columns.copy()
     _columns.update({
-        'ref' : fields.char('Reference'),
+        'ref': fields.char('Reference'),
     })
 
     def _compute_values_for_statement_line(self, cr, uid, box, record, context=None):
+        if not record.journal_id.internal_account_id.id:
+            raise osv.except_osv(_('Configuration Error'), _("You should have defined an 'Internal Transfer Account' in your cash register's journal!"))
         return {
-            'statement_id' : record.id,
-            'journal_id' : record.journal_id.id,
-            'amount' : box.amount or 0.0,
-            'ref' : '%s' % (box.ref or ''),
-            'name' : box.name,
+            'date': record.date,
+            'statement_id': record.id,
+            'journal_id': record.journal_id.id,
+            'amount': box.amount or 0.0,
+            'account_id': record.journal_id.internal_account_id.id,
+            'ref': '%s' % (box.ref or ''),
+            'name': box.name,
         }
 
 
@@ -68,11 +75,14 @@ class CashBoxOut(CashBox):
     _columns = CashBox._columns.copy()
 
     def _compute_values_for_statement_line(self, cr, uid, box, record, context=None):
+        if not record.journal_id.internal_account_id.id:
+            raise osv.except_osv(_('Configuration Error'), _("You should have defined an 'Internal Transfer Account' in your cash register's journal!"))
         amount = box.amount or 0.0
         return {
-            'statement_id' : record.id,
-            'journal_id' : record.journal_id.id,
-            'amount' : -amount if amount > 0.0 else amount,
-            'name' : box.name,
+            'date': record.date,
+            'statement_id': record.id,
+            'journal_id': record.journal_id.id,
+            'amount': -amount if amount > 0.0 else amount,
+            'account_id': record.journal_id.internal_account_id.id,
+            'name': box.name,
         }
-

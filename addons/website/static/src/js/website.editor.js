@@ -308,7 +308,6 @@
 
             this.$('#website-top-edit').hide();
             this.$('#website-top-view').show();
-            this.$buttons.edit.show();
 
             var $edit_button = this.$buttons.edit
                     .prop('disabled', website.no_editor);
@@ -356,7 +355,13 @@
             observer.disconnect();
             var editor = this.rte.editor;
             var root = editor.element && editor.element.$;
-            editor.destroy();
+            try {
+                editor.destroy();
+            }
+            catch(err) {
+                // Hack to avoid the lost of all changes because ckeditor fails in destroy
+                console.log("Error in editor.destroy() : " + err.toString() + "\n  " + err.stack);
+            }
             // FIXME: select editables then filter by dirty?
             var defs = this.rte.fetch_editables(root)
                 .filter('.oe_dirty')
@@ -418,7 +423,16 @@
          * Saves an RTE content, which always corresponds to a view section (?).
          */
         saveElement: function ($el) {
-            var markup = $el.prop('outerHTML');
+            // escape text nodes for xml saving
+            var escaped_el = $el.clone();
+            var to_escape = escaped_el.find('*').addBack();
+            to_escape = to_escape.not(to_escape.filter('object,iframe,script,style,[data-oe-model][data-oe-model!="ir.ui.view"]').find('*').addBack());
+            to_escape.contents().each(function(){
+                if(this.nodeType == 3) {
+                    this.nodeValue = $('<div />').text(this.nodeValue).html();
+                }
+            });
+            var markup = escaped_el.prop('outerHTML');
             return openerp.jsonRpc('/web/dataset/call', 'call', {
                 model: 'ir.ui.view',
                 method: 'save',
@@ -558,7 +572,7 @@
     website.EditorBarCustomize = openerp.Widget.extend({
         events: {
             'mousedown a.dropdown-toggle': 'load_menu',
-            'click ul a[data-action!=ace]': 'do_customize',
+            'click ul a[data-view-id]': 'do_customize',
         },
         start: function() {
             var self = this;
@@ -744,6 +758,7 @@
             var def = $.Deferred();
             var editor = this.editor = CKEDITOR.inline(root, self._config());
             editor.on('instanceReady', function () {
+                $("[data-oe-type=selection]").attr("contenteditable",false);
                 editor.setReadOnly(false);
                 // ckeditor set root to editable, disable it (only inner
                 // sections are editable)
@@ -813,15 +828,9 @@
 
         fetch_editables: function (root) {
             return $(root).find('[data-oe-model]')
+                .not('[data-oe-type = "selection"]')
                 .not('link, script')
-                .not('.oe_snippet_editor')
-                .filter(function () {
-                    var $this = $(this);
-                    // keep view sections and fields which are *not* in
-                    // view sections for top-level editables
-                    return $this.data('oe-model') === 'ir.ui.view'
-                       || !$this.closest('[data-oe-model = "ir.ui.view"]').length;
-                });
+                .not('.oe_snippet_editor');
         },
 
         _current_editor: function () {
@@ -927,6 +936,12 @@
         close: function () {
             this.$el.modal('hide');
         },
+        destroy: function () {
+            this.$el.modal('hide').remove();
+            if($(".modal.in").length>0){
+                $('body').addClass('modal-open');
+            }
+        },
     });
 
     website.editor.LinkDialog = website.editor.Dialog.extend({
@@ -1011,17 +1026,17 @@
             var classes = (style && style.length ? "btn " : "") + style + " " + size;
 
             if ($e.hasClass('email-address') && $e.val().indexOf("@") !== -1) {
-                def.resolve('mailto:' + val, false, label);
+                def.resolve('mailto:' + val, false, label, classes);
             } else if ($e.val() && $e.val().length && $e.hasClass('page')) {
                 var data = $e.select2('data');
                 if (!data.create) {
-                    def.resolve(data.id, false, data.text);
+                    def.resolve(data.id, false, label || data.text, classes);
                 } else {
                     // Create the page, get the URL back
                     $.get(_.str.sprintf(
                             '/website/add/%s?noredirect=1', encodeURI(data.id)))
                         .then(function (response) {
-                            def.resolve(response, false, data.id);
+                            def.resolve(response, false, data.id, classes);
                         });
                 }
             } else {
@@ -1040,6 +1055,7 @@
         make_link: function (url, new_window, label, classes) {
         },
         bind_data: function () {
+            var self = this;
             var href = this.element && (this.element.data( 'cke-saved-href')
                                     ||  this.element.getAttribute('href'));
             var new_window = this.element
@@ -1047,8 +1063,13 @@
                         : false;
             var text = this.element ? this.element.getText() : '';
             if (!text.length) {
-                var selection = this.editor.getSelection();
-                text = selection.getSelectedText();
+                if (this.editor) {
+                    text = this.editor.getSelection().getSelectedText();
+                } else {
+                    text = this.data.name;
+                    href = this.data.url;
+                    new_window = this.data.new_window;
+                }
             }
 
             this.$('input#link-text').val(text);
@@ -1069,8 +1090,14 @@
                 this.$('input.email-address').val(match[1]).change();
             }
             if (href && !$control) {
-                this.$('input.url').val(href).change();
-                this.$('input.window-new').closest("div").show();
+                this.page_exists(href).then(function (exist) {
+                    if (exist) {
+                        self.$('#link-page').select2('data', {'id': href, 'text': href});
+                    } else {
+                        self.$('input.url').val(href).change();
+                        self.$('input.window-new').closest("div").show();
+                    }
+                });
             }
             this.preview();
         },
@@ -1252,6 +1279,11 @@
         start: function () {
             var self = this;
 
+            if (this.editor.getSelection) {
+                var selection = this.editor.getSelection();
+                this.range = selection.getRanges(true)[0];
+            }
+
             this.imageDialog = new website.editor.RTEImageDialog(this, this.editor, this.media);
             this.imageDialog.appendTo(this.$("#editor-media-image"));
             this.iconDialog = new website.editor.FontIconsDialog(this, this.editor, this.media);
@@ -1305,11 +1337,9 @@
                     this.videoDialog.clear();
                 }
             } else {
-                var selection = this.editor.getSelection();
-                var range = selection.getRanges(true)[0];
                 this.media = new CKEDITOR.dom.element("img");
-                range.insertNode(this.media);
-                range.selectNodeContents(this.media);
+                self.range.insertNode(this.media);
+                self.range.selectNodeContents(this.media);
                 this.active.media = this.media;
             }
 
@@ -1320,6 +1350,7 @@
             this.media.$.className = this.media.$.className.replace(/\s+/g, ' ');
 
             setTimeout(function () {
+                if(self.range) self.range.select();
                 $el.trigger("saved", self.active.media.$);
                 $(document.body).trigger("media-saved", [$el[0], self.active.media.$]);
             },0);
@@ -1363,7 +1394,17 @@
                 this.changed($(e.target));
             },
             'click button.filepicker': function () {
-                this.$('input[type=file]').click();
+                var filepicker = this.$('input[type=file]');
+                if (!_.isEmpty(filepicker)){
+                    filepicker[0].click();
+                }
+            },
+            'click .js_disable_optimization': function () {
+                this.$('input[name="disable_optimization"]').val('1');
+                var filepicker = this.$('button.filepicker');
+                if (!_.isEmpty(filepicker)){
+                    filepicker[0].click();
+                }
             },
             'change input[type=file]': 'file_selection',
             'submit form': 'form_submit',
@@ -1695,7 +1736,7 @@
             var final_classes = non_fa_classes.concat(this.get_fa_classes());
             this.media.$.className = final_classes.join(' ');
             this.media.renameNode("span");
-            this.media.$.attributes.style.textContent = style;
+            $(this.media.$).attr("style", style || null);
             this._super();
         },
         /**
@@ -1759,7 +1800,8 @@
                         .attr('data-size', size)
                         .addClass(size)
                         .addClass(no_sizes);
-                if ((size && _.contains(classes, size)) || (classes[2] === "" && !selected)) {
+
+                if ((size && _.contains(classes, size)) || (size === "" && !selected)) {
                     this.$preview.append($p.clone());
                     this.$('#fa-size').val(size);
                     $p.addClass('font-icons-selected');
@@ -1873,7 +1915,12 @@
             this._super();
         },
         clear: function () {
-            delete this.media.$.dataset.src;
+            if(this.media.$.dataset.ckeSavedSrc){
+                delete this.media.$.dataset.ckeSavedSrc;
+            }
+            if(this.media.$.dataset.src){
+                delete this.media.$.dataset.src;
+            }
             this.media.$.className = this.media.$.className.replace(/(^|\s)media_iframe_video(\s|$)/g, ' ');
         },
     });
@@ -1886,6 +1933,11 @@
         subtree: true,
         attributeOldValue: true,
     };
+    var pasting = false;
+    $(document).on('paste', '[contenteditable]', function() {
+        pasting = true;
+        setTimeout(function(){ pasting = false; }, 0);
+    });
     var observer = new website.Observer(function (mutations) {
         // NOTE: Webkit does not fire DOMAttrModified => webkit browsers
         //       relying on JsMutationObserver shim (Chrome < 18, Safari < 6)
@@ -1904,9 +1956,10 @@
                     return false;
                 }
                 switch(m.type) {
-                case 'attributes': // ignore .cke_focus being added or removed
-                    // ignore id modification
-                    if (m.attributeName === 'id') { return false; }
+                case 'attributes':
+                    // ignore special attributes and .cke_focus class being added or removed
+                    var ignored_attrs = ['id', 'contenteditable', 'attributeeditable']
+                    if (_.contains(ignored_attrs, m.attributeName)) { return false; }
                     // if attribute is not a class, can't be .cke_focus change
                     if (m.attributeName !== 'class') { return true; }
 
@@ -1921,6 +1974,7 @@
                     setTimeout(function () {
                         fixup_browser_crap(m.addedNodes);
                     }, 0);
+                    if (pasting) { remove_oe_attributes(m.addedNodes); }
                     // Remove ignorable nodes from addedNodes or removedNodes,
                     // if either set remains non-empty it's considered to be an
                     // impactful change. Otherwise it's ignored.
@@ -1941,6 +1995,16 @@
             .uniq()
             .each(function (node) { $(node).trigger('content_changed'); })
     });
+    function remove_oe_attributes(nodes) {
+        _.chain(nodes).filter(function(node){ return node.nodeType === 1 }).each(function(node){
+            _.each(_.toArray(node.attributes), function(attr){
+                if(attr.nodeName.indexOf('data-oe-') === 0) {
+                    node.removeAttribute(attr.nodeName)
+                }
+            });
+            remove_oe_attributes(node.childNodes);
+        });
+    };
     function remove_mundane_nodes(nodes) {
         if (!nodes || !nodes.length) { return []; }
 

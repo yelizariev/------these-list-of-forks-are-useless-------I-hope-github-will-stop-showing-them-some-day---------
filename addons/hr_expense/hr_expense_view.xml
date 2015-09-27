@@ -93,7 +93,7 @@
                                             <field name="product_id" on_change="onchange_product_id(product_id, context)" context="{'default_hr_expense_ok':1}"/>
                                             <field name="name"/>
                                             <field name="ref"/>
-                                            <field domain="[('type','=','normal')]" name="analytic_account" groups="analytic.group_analytic_accounting"/>
+                                            <field domain="[('type','in',['normal','contract'])]" name="analytic_account" groups="analytic.group_analytic_accounting"/>
                                         </group>
                                         <group>
                                             <field name="unit_amount"/>
@@ -181,7 +181,7 @@
               <p class="oe_view_nocontent_create">
                 Click to register new expenses. 
               </p><p>
-                OpenERP will ensure the whole process is followed; the expense
+                Odoo will ensure the whole process is followed; the expense
                 sheet is validated by manager(s), the employee is reimbursed
                 from his expenses, some expenses must be re-invoiced to the
                 customers.

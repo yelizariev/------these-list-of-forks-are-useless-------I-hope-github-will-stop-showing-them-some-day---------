@@ -44,8 +44,7 @@ The validation can be configured in the company:
 * Maximal difference between timesheet and attendances
     """,
     'author': 'OpenERP SA',
-    'website': 'http://www.openerp.com',
-    'images': ['images/hr_my_current_timesheet.jpeg','images/hr_timesheet_analysis.jpeg','images/hr_timesheet_sheet_analysis.jpeg','images/hr_timesheet_activity.jpeg'],
+    'website': 'https://www.odoo.com/page/employees',
     'depends': ['hr_timesheet', 'hr_timesheet_invoice'],
     'data': [
         'security/ir.model.access.csv',

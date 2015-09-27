@@ -24,6 +24,7 @@
     'name': 'Margins by Products',
     'version': '1.0',
     'category': 'Sales Management',
+    'website': 'https://www.odoo.com',
     'description': """
 Adds a reporting menu in products that computes sales, purchases, margins and other interesting indicators based on invoices.
 =============================================================================================================================
@@ -41,6 +42,5 @@ The wizard to launch the report has several options to help you get the data you
     'demo': [],
     'installable': True,
     'auto_install': False,
-    'images': ['images/open_margins.jpeg','images/product_margins_form.jpeg', 'images/product_margins_list.jpeg'],
 }
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -63,12 +63,14 @@ _ref_vat = {
     'mx': 'MXABC123456T1B',
     'nl': 'NL123456782B90',
     'no': 'NO123456785',
+    'pe': 'PER10254824220 or PED10254824220',
     'pl': 'PL1234567883',
     'pt': 'PT123456789',
     'ro': 'RO1234567897',
     'se': 'SE123456789701',
     'si': 'SI12345679',
     'sk': 'SK0012345675',
+    'tr': 'TR1234567890 (VERGINO) veya TR12345678901 (TCKIMLIKNO)' # Levent Karakas @ Eska Yazilim A.S.
 }
 
 class res_partner(osv.osv):
@@ -90,6 +92,10 @@ class res_partner(osv.osv):
                         getattr(vatnumber, check_func_name, None)
         if not check_func:
             # No VAT validation available, default to check that the country code exists
+            if country_code.upper() == 'EU':
+                # Foreign companies that trade with non-enterprises in the EU
+                # may have a VATIN starting with "EU" instead of a country code.
+                return True
             res_country = self.pool.get('res.country')
             return bool(res_country.search(cr, uid, [('code', '=ilike', country_code)], context=context))
         return check_func(vat_number)
@@ -144,10 +150,11 @@ class res_partner(osv.osv):
             return cn[0] in string.ascii_lowercase and cn[1] in string.ascii_lowercase
         vat_country, vat_number = self._split_vat(self.browse(cr, uid, ids)[0].vat)
         vat_no = "'CC##' (CC=Country Code, ##=VAT Number)"
+        error_partner = self.browse(cr, uid, ids, context=context)
         if default_vat_check(vat_country, vat_number):
             vat_no = _ref_vat[vat_country] if vat_country in _ref_vat else vat_no
-        #Retrieve the current partner for wich the VAT is not valid
-        error_partner = self.browse(cr, uid, ids, context=context)
+            if self.pool['res.users'].browse(cr, uid, uid).company_id.vat_check_vies:
+                return '\n' + _('The VAT number [%s] for partner [%s] either failed the VIES VAT validation check or did not respect the expected format %s.') % (error_partner[0].vat, error_partner[0].name, vat_no)
         return '\n' + _('The VAT number [%s] for partner [%s] does not seem to be valid. \nNote: the expected format is %s') % (error_partner[0].vat, error_partner[0].name, vat_no)
 
     _constraints = [(check_vat, _construct_constraint_msg, ["vat"])]
@@ -218,7 +225,7 @@ class res_partner(osv.osv):
             return vat[7] == self._ie_check_char(vat[2:7] + vat[0] + vat[8])
         return False
 
-    # Mexican VAT verification, contributed by <moylop260@hotmail.com>
+    # Mexican VAT verification, contributed by Vauxoo
     # and Panos Christeas <p_christ@hol.gr>
     __check_vat_mx_re = re.compile(r"(?P<primeras>[A-Za-z\xd1\xf1&]{3,4})" \
                                     r"[ \-_]?" \
@@ -275,5 +282,81 @@ class res_partner(osv.osv):
             return False
         return check == int(vat[8])
 
+    # Peruvian VAT validation, contributed by Vauxoo
+    def check_vat_pe(self, vat):
+
+        vat_type,vat = vat and len(vat)>=2 and (vat[0], vat[1:]) or (False, False)
+
+        if vat_type and vat_type.upper() == 'D':
+            #DNI
+            return True
+        elif vat_type and vat_type.upper() == 'R':
+            #verify RUC
+            factor = '5432765432'
+            sum = 0
+            dig_check = False
+            if len(vat) != 11:
+                return False
+            try:
+                int(vat)
+            except ValueError:
+                return False 
+                         
+            for f in range(0,10):
+                sum += int(factor[f]) * int(vat[f])
+                
+            subtraction = 11 - (sum % 11)
+            if subtraction == 10:
+                dig_check = 0
+            elif subtraction == 11:
+                dig_check = 1
+            else:
+                dig_check = subtraction
+            
+            return int(vat[10]) == dig_check
+        else:
+            return False
+
+    # VAT validation in Turkey, contributed by # Levent Karakas @ Eska Yazilim A.S.
+    def check_vat_tr(self, vat):
+
+        if not (10 <= len(vat) <= 11):
+            return False
+        try:
+            int(vat)
+        except ValueError:
+            return False
+
+        # check vat number (vergi no)
+        if len(vat) == 10:
+            sum = 0
+            check = 0
+            for f in range(0,9):
+                c1 = (int(vat[f]) + (9-f)) % 10
+                c2 = ( c1 * (2 ** (9-f)) ) % 9
+                if (c1 != 0) and (c2 == 0): c2 = 9
+                sum += c2
+            if sum % 10 == 0:
+                check = 0
+            else:
+                check = 10 - (sum % 10)
+            return int(vat[9]) == check
+
+        # check personal id (tc kimlik no)
+        if len(vat) == 11:
+            c1a = 0
+            c1b = 0
+            c2 = 0
+            for f in range(0,9,2):
+                c1a += int(vat[f])
+            for f in range(1,9,2):
+                c1b += int(vat[f])
+            c1 = ( (7 * c1a) - c1b) % 10
+            for f in range(0,10):
+                c2 += int(vat[f])
+            c2 = c2 % 10
+            return int(vat[9]) == c1 and int(vat[10]) == c2
+
+        return False
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -34,7 +34,7 @@ which is not necessarily related to a claim. Select a customer, add notes
 and categorize your interventions with a channel and a priority level.
     """,
     'author': 'OpenERP SA',
-    'website': 'http://www.openerp.com',
+    'website': 'https://www.odoo.com',
     'depends': ['crm'],
     'data': [
         'crm_helpdesk_view.xml',
@@ -47,7 +47,6 @@ and categorize your interventions with a channel and a priority level.
     'test': ['test/process/help-desk.yml'],
     'installable': True,
     'auto_install': False,
-    'images': ['images/helpdesk_analysis.jpeg','images/helpdesk_categories.jpeg','images/helpdesk_requests.jpeg'],
 }
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

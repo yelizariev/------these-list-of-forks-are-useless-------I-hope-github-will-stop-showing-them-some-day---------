@@ -36,7 +36,7 @@ meeting minutes.
 Notes can be found in the 'Home' menu.
 """,
     'author': 'OpenERP SA',
-    'website': 'http://openerp.com',
+    'website': 'https://www.odoo.com/page/notes',
     'summary': 'Sticky notes, Collaborative, Memos',
     'sequence': 9,
     'depends': [
@@ -54,11 +54,6 @@ Notes can be found in the 'Home' menu.
         'note_demo.xml',
     ],
     'test': [
-    ],
-    'images': [
-        'images/note_kanban.jpeg',
-        'images/note.jpeg',
-        'images/categories_tree.jpeg'
     ],
     'installable': True,
     'application': True,

@@ -32,7 +32,7 @@ Keeps account of the attendances of the employees on the basis of the
 actions(Sign in/Sign out) performed by them.
        """,
     'author': 'OpenERP SA',
-    'images': ['images/hr_attendances.jpeg'],
+    'website': 'https://www.odoo.com/page/employees',
     'depends': ['hr', 'report'],
     'data': [
         'security/ir_rule.xml',

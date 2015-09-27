@@ -54,11 +54,10 @@ only the country code will be validated.
     """,
     'author': 'OpenERP SA',
     'depends': ['account'],
-    'website': 'http://www.openerp.com',
+    'website': 'https://www.odoo.com/page/accounting',
     'data': ['base_vat_view.xml'],
     'installable': True,
     'auto_install': False,
-    'images': ['images/1_partner_vat.jpeg'],
 }
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

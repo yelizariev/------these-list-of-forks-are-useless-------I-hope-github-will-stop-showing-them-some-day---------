@@ -41,13 +41,14 @@ class WebsiteCustomer(http.Controller):
 
         if country_id:
             domain += [('country_id', '=', country_id)]
-            if not any(x['country_id'][0] == country_id for x in countries):
-                country = country_obj.browse(cr, uid, country_id, context)
-                countries.append({
-                    'country_id_count': 0,
-                    'country_id': (country_id, country.name)
-                })
-                countries.sort(key=lambda d: d['country_id'][1])
+            if not any(x['country_id'][0] == country_id for x in countries if x['country_id']):
+                country = country_obj.read(cr, uid, country_id, ['name'], context)
+                if country:
+                    countries.append({
+                        'country_id_count': 0,
+                        'country_id': (country_id, country['name'])
+                    })
+                countries.sort(key=lambda d: d['country_id'] and d['country_id'][1])
 
         countries.insert(0, {
             'country_id_count': country_count,
@@ -58,8 +59,11 @@ class WebsiteCustomer(http.Controller):
         partner_count = partner_obj.search_count(cr, openerp.SUPERUSER_ID, domain, context=request.context)
 
         # pager
+        url = '/customers'
+        if country_id:
+            url += '/country/%s' % country_id
         pager = request.website.pager(
-            url="/customers", total=partner_count, page=page, step=self._references_per_page,
+            url=url, total=partner_count, page=page, step=self._references_per_page,
             scope=7, url_args=post
         )
 

@@ -36,8 +36,7 @@ Add all information on the employee form to manage contracts.
 You can assign several contracts per employee.
     """,
     'author': 'OpenERP SA',
-    'website': 'http://www.openerp.com',
-    'images': ['images/hr_contract.jpeg'],
+    'website': 'https://www.odoo.com/page/employees',
     'depends': ['base_action_rule', 'hr'],
     'data': [
         'security/ir.model.access.csv',

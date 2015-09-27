@@ -28,7 +28,7 @@ This module gives you a quick view of your address book, accessible from your ho
 You can track your suppliers, customers and other contacts.
 """,
     'author': 'OpenERP SA',
-    'website': 'http://openerp.com',
+    'website': 'https://www.odoo.com/page/crm',
     'summary': 'Contacts, People and Companies',
     'depends': [
         'mail',
@@ -36,7 +36,6 @@ You can track your suppliers, customers and other contacts.
     'data': [
         'contacts_view.xml',
     ],
-    'images': ['images/contacts.jpeg'],
     'installable': True,
     'application': True,
     'auto_install': False,

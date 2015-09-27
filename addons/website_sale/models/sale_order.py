@@ -4,15 +4,8 @@ import random
 from openerp import SUPERUSER_ID
 from openerp.osv import osv, orm, fields
 from openerp.addons.web.http import request
+from openerp.tools.translate import _
 
-
-class payment_transaction(orm.Model):
-    _inherit = 'payment.transaction'
-
-    _columns = {
-        # link with the sale order
-        'sale_order_id': fields.many2one('sale.order', 'Sale Order'),
-    }
 
 class sale_order(osv.Model):
     _inherit = "sale.order"
@@ -30,8 +23,8 @@ class sale_order(osv.Model):
             help='Order Lines to be displayed on the website. They should not be used for computation purpose.',
         ),
         'cart_quantity': fields.function(_cart_qty, type='integer', string='Cart Quantity'),
-        'payment_acquirer_id': fields.many2one('payment.acquirer', 'Payment Acquirer', on_delete='set null'),
-        'payment_tx_id': fields.many2one('payment.transaction', 'Transaction', on_delete='set null'),
+        'payment_acquirer_id': fields.many2one('payment.acquirer', 'Payment Acquirer', on_delete='set null', copy=False),
+        'payment_tx_id': fields.many2one('payment.transaction', 'Transaction', on_delete='set null', copy=False),
     }
 
     def _get_errors(self, cr, uid, order, context=None):
@@ -50,14 +43,16 @@ class sale_order(osv.Model):
                 domain += [('id', '=', line_id)]
             return self.pool.get('sale.order.line').search(cr, SUPERUSER_ID, domain, context=context)
 
-    def _website_product_id_change(self, cr, uid, ids, order_id, product_id, line_id=None, context=None):
+    def _website_product_id_change(self, cr, uid, ids, order_id, product_id, qty=0, line_id=None, context=None):
         so = self.pool.get('sale.order').browse(cr, uid, order_id, context=context)
 
         values = self.pool.get('sale.order.line').product_id_change(cr, SUPERUSER_ID, [],
             pricelist=so.pricelist_id.id,
             product=product_id,
             partner_id=so.partner_id.id,
-            context=context
+            fiscal_position=so.fiscal_position.id,
+            qty=qty,
+            context=dict(context or {}, company_id=so.company_id.id)
         )['value']
 
         if line_id:
@@ -65,7 +60,7 @@ class sale_order(osv.Model):
             values['name'] = line.name
         else:
             product = self.pool.get('product.product').browse(cr, uid, product_id, context=context)
-            values['name'] = product.description_sale or product.name
+            values['name'] = product.description_sale and "%s\n%s" % (product.display_name, product.description_sale) or product.display_name
 
         values['product_id'] = product_id
         values['order_id'] = order_id
@@ -79,6 +74,9 @@ class sale_order(osv.Model):
 
         quantity = 0
         for so in self.browse(cr, uid, ids, context=context):
+            if so.state != 'draft':
+                request.session['sale_order_id'] = None
+                raise osv.except_osv(_('Error!'), _('It is forbidden to modify a sale order which is not in draft status'))
             if line_id != False:
                 line_ids = so._cart_find_product_line(product_id, line_id, context=context, **kwargs)
                 if line_ids:
@@ -86,7 +84,7 @@ class sale_order(osv.Model):
 
             # Create line if no line with product_id can be located
             if not line_id:
-                values = self._website_product_id_change(cr, uid, ids, so.id, product_id, context=context)
+                values = self._website_product_id_change(cr, uid, ids, so.id, product_id, qty=1, context=context)
                 line_id = sol.create(cr, SUPERUSER_ID, values, context=context)
                 if add_qty:
                     add_qty -= 1
@@ -102,7 +100,7 @@ class sale_order(osv.Model):
                 sol.unlink(cr, SUPERUSER_ID, [line_id], context=context)
             else:
                 # update line
-                values = self._website_product_id_change(cr, uid, ids, so.id, product_id, line_id, context=context)
+                values = self._website_product_id_change(cr, uid, ids, so.id, product_id, qty=quantity, line_id=line_id, context=context)
                 values['product_uom_qty'] = quantity
                 sol.write(cr, SUPERUSER_ID, [line_id], values, context=context)
 
@@ -164,7 +162,6 @@ class website(orm.Model):
                     pricelist_id = pricelist_ids[0]
                     request.session['sale_order_code_pricelist_id'] = pricelist_id
                     update_pricelist = True
-                request.session['sale_order_code_pricelist_id'] = False
 
             pricelist_id = request.session.get('sale_order_code_pricelist_id') or partner.property_product_pricelist.id
 
@@ -176,14 +173,15 @@ class website(orm.Model):
                 fiscal_position = sale_order.fiscal_position and sale_order.fiscal_position.id or False
 
                 values = sale_order_obj.onchange_partner_id(cr, SUPERUSER_ID, [sale_order_id], partner.id, context=context)['value']
-                order_lines = map(int,sale_order.order_line)
-                values.update(sale_order_obj.onchange_fiscal_position(cr, SUPERUSER_ID, [],
-                    values['fiscal_position'], [[6, 0, order_lines]], context=context)['value'])
+                if values.get('fiscal_position'):
+                    order_lines = map(int,sale_order.order_line)
+                    values.update(sale_order_obj.onchange_fiscal_position(cr, SUPERUSER_ID, [],
+                        values['fiscal_position'], [[6, 0, order_lines]], context=context)['value'])
 
                 values['partner_id'] = partner.id
                 sale_order_obj.write(cr, SUPERUSER_ID, [sale_order_id], values, context=context)
 
-                if flag_pricelist or values.get('fiscal_position') != fiscal_position:
+                if flag_pricelist or values.get('fiscal_position', False) != fiscal_position:
                     update_pricelist = True
 
             # update the pricelist
@@ -192,7 +190,8 @@ class website(orm.Model):
                 values.update(sale_order.onchange_pricelist_id(pricelist_id, None)['value'])
                 sale_order.write(values)
                 for line in sale_order.order_line:
-                    sale_order._cart_update(product_id=line.product_id.id, add_qty=0)
+                    if line.exists():
+                        sale_order._cart_update(product_id=line.product_id.id, line_id=line.id, add_qty=0)
 
             # update browse record
             if (code and code != sale_order.pricelist_id.code) or sale_order.partner_id.id !=  partner.id:
@@ -204,9 +203,9 @@ class website(orm.Model):
         transaction_obj = self.pool.get('payment.transaction')
         tx_id = request.session.get('sale_transaction_id')
         if tx_id:
-            tx_ids = transaction_obj.search(cr, uid, [('id', '=', tx_id), ('state', 'not in', ['cancel'])], context=context)
+            tx_ids = transaction_obj.search(cr, SUPERUSER_ID, [('id', '=', tx_id), ('state', 'not in', ['cancel'])], context=context)
             if tx_ids:
-                return transaction_obj.browse(cr, uid, tx_ids[0], context=context)
+                return transaction_obj.browse(cr, SUPERUSER_ID, tx_ids[0], context=context)
             else:
                 request.session['sale_transaction_id'] = False
         return False

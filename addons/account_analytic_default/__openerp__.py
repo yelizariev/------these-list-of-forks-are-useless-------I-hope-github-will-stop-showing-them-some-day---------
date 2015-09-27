@@ -36,8 +36,7 @@ Allows to automatically select analytic accounts based on criterions:
     * Date
     """,
     'author': 'OpenERP SA',
-    'website': 'http://www.openerp.com',
-    'images': ['images/analytic_defaults.jpeg'],
+    'website': 'https://www.odoo.com/page/accounting',
     'depends': ['sale_stock'],
     'data': [
         'security/ir.model.access.csv', 

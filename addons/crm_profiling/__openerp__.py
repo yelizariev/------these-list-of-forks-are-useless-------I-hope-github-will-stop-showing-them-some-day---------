@@ -38,7 +38,7 @@ were overlapping.
     **Note:** this module is not compatible with the module segmentation, since it's the same which has been renamed.
     """,
     'author': 'OpenERP SA',
-    'website': 'http://www.openerp.com',
+    'website': 'https://www.odoo.com/page/crm',
     'depends': ['base', 'crm'],
     'data': ['security/ir.model.access.csv', 'wizard/open_questionnaire_view.xml', 'crm_profiling_view.xml'],
     'demo': ['crm_profiling_demo.xml'],
@@ -47,6 +47,5 @@ were overlapping.
     ],
     'installable': True,
     'auto_install': False,
-    'images': ['images/profiling_questionnaires.jpeg','images/profiling_questions.jpeg'],
 }
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

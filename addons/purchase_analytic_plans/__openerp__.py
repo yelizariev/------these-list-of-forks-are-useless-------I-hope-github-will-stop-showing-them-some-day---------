@@ -32,8 +32,7 @@ Allows the user to maintain several analysis plans. These let you split a line
 on a supplier purchase order into several accounts and analytic plans.
     """,
     'author': 'OpenERP SA',
-    'website': 'http://www.openerp.com',
-    'images': ['images/purchase_analytic_distribution.jpeg'],
+    'website': 'https://www.odoo.com/page/purchase',
     'depends': ['purchase', 'account_analytic_plans'],
     'data': ['purchase_analytic_plans_view.xml'],
     'demo': [],

@@ -23,20 +23,10 @@
     'name': 'Project Management',
     'version': '1.1',
     'author': 'OpenERP SA',
-    'website': 'http://www.openerp.com',
+    'website': 'https://www.odoo.com/page/project-management',
     'category': 'Project Management',
     'sequence': 8,
     'summary': 'Projects, Tasks',
-    'images': [
-        'images/gantt.png',
-        'images/project_task_tree.jpeg',
-        'images/project_task.jpeg',
-        'images/project.jpeg',
-        'images/task_analysis.jpeg',
-        'images/project_kanban.jpeg',
-        'images/task_kanban.jpeg',
-        'images/task_stages.jpeg'
-    ],
     'depends': [
         'base_setup',
         'product',

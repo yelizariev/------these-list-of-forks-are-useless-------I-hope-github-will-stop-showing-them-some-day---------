@@ -25,11 +25,8 @@
     'author': 'OpenERP SA',
     'category': 'Human Resources',
     'sequence': 31,
-    'website': 'http://www.openerp.com',
+    'website': 'https://www.odoo.com/page/appraisal',
     'summary': 'Periodical Evaluations, Appraisals, Surveys',
-    'images': ['images/hr_evaluation_analysis.jpeg',
-               'images/hr_evaluation.jpeg',
-               'images/hr_interview_requests.jpeg'],
     'depends': ['hr', 'calendar', 'survey'],
     'description': """
 Periodical Employees evaluation and appraisals
