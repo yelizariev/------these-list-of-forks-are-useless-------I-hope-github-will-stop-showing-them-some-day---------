@@ -343,3 +343,35 @@ class TestXMLTranslation(TransactionCase):
                 'src': src,
                 'value': value,
             })
+
+    def test_translation_with_nodes(self):
+        env_en = self.env(context={})
+        env_fr = self.env(context={'lang': 'fr_FR'})
+
+        archf = '<a>%s</a>'
+        text = "<span>Original Text</span><span>Second original node</span>"
+        text_fr = "<span>Translated Text</span><span>Second translated node</span>"
+        arch = archf % text
+        arch_fr = archf % text_fr
+
+        view = self.env['ir.ui.view'].create({
+            'name': 'test_translation_with_nodes',
+            'type': 'qweb',
+            'arch': arch,
+        })
+
+        self.env['ir.translation'].create({
+            'type': 'model',
+            'name': 'ir.ui.view,arch_db',
+            'lang': 'fr_FR',
+            'res_id': view.id,
+            'source': text,
+            'value': text_fr,
+        })
+        # check that translation works
+        self.assertEqual(view.with_env(env_en).arch_db, arch)
+        self.assertEqual(view.with_env(env_fr).arch_db, arch_fr)
+
+        # Try to make a copy of the view. It will copy view's translations and run
+        # translation check, which potentially may wrongly raise an issue
+        view.copy()

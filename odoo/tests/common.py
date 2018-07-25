@@ -316,8 +316,8 @@ class SavepointCase(SingleTransactionCase):
         super(SavepointCase, self).tearDown()
 
 
-class HttpCase(TransactionCase):
-    """ Transactional HTTP TestCase with url_open and phantomjs helpers.
+class HttpBaseCase(BaseCase):
+    """ Base HTTP TestCase with url_open and phantomjs helpers.
     """
     registry_test_mode = True
 
@@ -530,6 +530,39 @@ class HttpCase(TransactionCase):
         cmd = ['phantomjs', phantomtest, json.dumps(options)]
         self.phantom_run(cmd, timeout)
 
+
+class HttpCase(HttpBaseCase, TransactionCase):
+    """ NonTransactional HTTP TestCase with url_open and phantomjs helpers.
+    """
+    registry_test_mode = True
+
+
+class HttpNonTransactionCase(HttpBaseCase):
+    """ NonTransactional HTTP TestCase with url_open and phantomjs helpers.
+    """
+    registry_test_mode = False
+
+    def phantom_js_multi(self, sessions, commands, timeout=60, **kw):
+        """check phantomtest.js for description of sessions and commands"""
+        for sname, sdata in sessions.items():
+            sid = self.authenticate(sdata['login'], sdata.get('password'))
+            sdata.setdefault('session_id', sid)
+
+        options = {
+            # since 10.0 we use odoo with --workers=1 + nginx,
+            # and hence we shall not specify port and proxy requests to nginx
+            # 'port': PORT,
+            'db': get_db_name(),
+            'sessions': sessions,
+            'commands': commands,
+            'host': MAIN_DOMAIN,
+        }
+
+        options.update(kw)
+        phantomtest = os.path.join(os.path.dirname(__file__), 'phantomtest-multi.js')
+        cmd = ['phantomjs', phantomtest, json.dumps(options)]
+
+        self.phantom_run(cmd, timeout)
 
 def users(*logins):
     """ Decorate a method to execute it once for each given user. """
