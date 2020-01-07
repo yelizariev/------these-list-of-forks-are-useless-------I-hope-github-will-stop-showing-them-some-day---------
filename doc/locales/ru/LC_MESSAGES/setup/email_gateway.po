@@ -1,0 +1,87 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Odoo S.A.
+# This file is distributed under the same license as the odoo package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2020.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: odoo 13.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-01-07 15:02+0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.3.4\n"
+
+#: ../../setup/email_gateway.rst:5
+msgid "Odoo email gateway"
+msgstr ""
+
+#: ../../setup/email_gateway.rst:7
+msgid ""
+"The Odoo mail gateway allows you to inject directly all the received "
+"emails in Odoo."
+msgstr ""
+
+#: ../../setup/email_gateway.rst:9
+msgid ""
+"Its principle is straightforward: your SMTP server executes the "
+"\"mailgate\" script for every new incoming email."
+msgstr ""
+
+#: ../../setup/email_gateway.rst:11
+msgid ""
+"The script takes care of connecting to your Odoo database through XML-"
+"RPC, and send the emails via the MailThread.message_process() feature."
+msgstr ""
+
+#: ../../setup/email_gateway.rst:14
+msgid "Prerequisites"
+msgstr ""
+
+#: ../../setup/email_gateway.rst:15
+msgid "Administrator access to the Odoo database."
+msgstr ""
+
+#: ../../setup/email_gateway.rst:16
+msgid "Your own mail server such as Postfix or Exim."
+msgstr ""
+
+#: ../../setup/email_gateway.rst:17
+msgid "Technical knowledge on how to configure an email server."
+msgstr ""
+
+#: ../../setup/email_gateway.rst:20
+msgid "For Postfix"
+msgstr ""
+
+#: ../../setup/email_gateway.rst:21
+msgid "In you alias config (/etc/aliases):"
+msgstr ""
+
+#: ../../setup/email_gateway.rst:27
+msgid ""
+"Resources - `Postfix <http://www.postfix.org/documentation.html>` - "
+"`Postfix aliases <http://www.postfix.org/aliases.5.html>` - `Postfix "
+"virtual <http://www.postfix.org/virtual.8.html>`"
+msgstr ""
+
+#: ../../setup/email_gateway.rst:34
+msgid "For Exim"
+msgstr ""
+
+#: ../../setup/email_gateway.rst:39
+msgid "Resources - `Exim <https://www.exim.org/docs.html>`"
+msgstr ""
+
+#: ../../setup/email_gateway.rst:43
+msgid ""
+"If you don't have access/manage your email server, use `inbound "
+"messages<https://www.odoo.com/documentation/user/13.0/discuss/email_servers.html"
+"#how-to-manage-inbound-messages>`."
+msgstr ""
+

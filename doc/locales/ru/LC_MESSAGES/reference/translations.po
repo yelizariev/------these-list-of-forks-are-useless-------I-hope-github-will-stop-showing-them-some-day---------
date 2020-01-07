@@ -1,0 +1,240 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Odoo S.A.
+# This file is distributed under the same license as the odoo package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2020.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: odoo 13.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-01-07 15:02+0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.3.4\n"
+
+#: ../../reference/translations.rst:8
+msgid "Translating Modules"
+msgstr ""
+
+#: ../../reference/translations.rst:10
+msgid "This section explains how to provide translation abilities to your module."
+msgstr ""
+
+#: ../../reference/translations.rst:12
+msgid ""
+"If you want to contribute to the translation of Odoo itself, please refer"
+" to the `Odoo Wiki page "
+"<https://github.com/odoo/odoo/wiki/Translations>`_."
+msgstr ""
+
+#: ../../reference/translations.rst:16
+msgid "Exporting translatable term"
+msgstr ""
+
+#: ../../reference/translations.rst:18
+msgid ""
+"A number of terms in your modules are \"implicitly translatable\" as a "
+"result, even if you haven't done any specific work towards translation "
+"you can export your module's translatable terms and may find content to "
+"work with."
+msgstr ""
+
+#: ../../reference/translations.rst:24
+msgid ""
+"Translations export is performed via the administration interface by "
+"logging into the backend interface and opening :menuselection:`Settings "
+"--> Translations --> Import / Export --> Export Translations`"
+msgstr ""
+
+#: ../../reference/translations.rst:28
+msgid "leave the language to the default (new language/empty template)"
+msgstr ""
+
+#: ../../reference/translations.rst:29
+msgid "select the `PO File`_ format"
+msgstr ""
+
+#: ../../reference/translations.rst:30
+msgid "select your module"
+msgstr ""
+
+#: ../../reference/translations.rst:31
+msgid "click :guilabel:`Export` and download the file"
+msgstr ""
+
+#: ../../reference/translations.rst:37
+msgid ""
+"This gives you a file called :file:`{yourmodule}.pot` which should be "
+"moved to the :file:`{yourmodule}/i18n/` directory. The file is a *PO "
+"Template* which simply lists translatable strings and from which actual "
+"translations (PO files) can be created. PO files can be created using "
+"msginit_, with a dedicated translation tool like POEdit_ or by simply "
+"copying the template to a new file called :file:`{language}.po`. "
+"Translation files should be put in :file:`{yourmodule}/i18n/`, next to "
+":file:`{yourmodule}.pot`, and will be automatically loaded by Odoo when "
+"the corresponding language is installed (via :menuselection:`Settings -->"
+" Translations --> Languages`)"
+msgstr ""
+
+#: ../../reference/translations.rst:47
+msgid ""
+"translations for all loaded languages are also installed or updated when "
+"installing or updating a module"
+msgstr ""
+
+#: ../../reference/translations.rst:51
+msgid "Implicit exports"
+msgstr ""
+
+#: ../../reference/translations.rst:53
+msgid ""
+"Odoo automatically exports translatable strings from \"data\"-type "
+"content:"
+msgstr ""
+
+#: ../../reference/translations.rst:55
+msgid ""
+"in non-QWeb views, all text nodes are exported as well as the content of "
+"the ``string``, ``help``, ``sum``, ``confirm`` and ``placeholder`` "
+"attributes"
+msgstr ""
+
+#: ../../reference/translations.rst:58
+msgid ""
+"QWeb templates (both server-side and client-side), all text nodes are "
+"exported except inside ``t-translation=\"off\"`` blocks, the content of "
+"the ``title``, ``alt``, ``label`` and ``placeholder`` attributes are also"
+" exported"
+msgstr ""
+
+#: ../../reference/translations.rst:62
+msgid ""
+"for :class:`~odoo.fields.Field`, unless their model is marked with "
+"``_translate = False``:"
+msgstr ""
+
+#: ../../reference/translations.rst:65
+msgid "their ``string`` and ``help`` attributes are exported"
+msgstr ""
+
+#: ../../reference/translations.rst:66
+msgid "if ``selection`` is present and a list (or tuple), it's exported"
+msgstr ""
+
+#: ../../reference/translations.rst:67
+msgid ""
+"if their ``translate`` attribute is set to ``True``, all of their "
+"existing values (across all records) are exported"
+msgstr ""
+
+#: ../../reference/translations.rst:69
+msgid ""
+"help/error messages of :attr:`~odoo.models.Model._constraints` and "
+":attr:`~odoo.models.Model._sql_constraints` are exported"
+msgstr ""
+
+#: ../../reference/translations.rst:73
+msgid "Explicit exports"
+msgstr ""
+
+#: ../../reference/translations.rst:75
+msgid ""
+"When it comes to more \"imperative\" situations in Python code or "
+"Javascript code, Odoo cannot automatically export translatable terms so "
+"they must be marked explicitly for export. This is done by wrapping a "
+"literal string in a function call."
+msgstr ""
+
+#: ../../reference/translations.rst:80
+msgid "In Python, the wrapping function is :func:`odoo._`::"
+msgstr ""
+
+#: ../../reference/translations.rst:84
+msgid "In JavaScript, the wrapping function is generally :js:func:`odoo.web._t`:"
+msgstr ""
+
+#: ../../reference/translations.rst:92
+msgid ""
+"Only literal strings can be marked for exports, not expressions or "
+"variables. For situations where strings are formatted, this means the "
+"format string must be marked, not the formatted string"
+msgstr ""
+
+#: ../../reference/translations.rst:96
+msgid ""
+"The lazy version of `_` and `_t` is :func:`odoo._lt` in python and "
+":js:func:`odoo.web._lt` in javascript. The translation lookup is executed"
+" only at rendering and can be used to declare translatable properties in "
+"class methods of global variables."
+msgstr ""
+
+#: ../../reference/translations.rst:102
+msgid "Variables"
+msgstr ""
+
+#: ../../reference/translations.rst:103
+msgid ""
+"**Don't** the extract may work but it will not translate the text "
+"correctly::"
+msgstr ""
+
+#: ../../reference/translations.rst:107
+msgid "**Do** set the dynamic variables outside of the translation lookup::"
+msgstr ""
+
+#: ../../reference/translations.rst:113
+msgid "Blocks"
+msgstr ""
+
+#: ../../reference/translations.rst:114
+msgid "**Don't** split your translation in several blocks or multiples lines::"
+msgstr ""
+
+#: ../../reference/translations.rst:124
+msgid "**Do** keep in one block, giving the full context to translators::"
+msgstr ""
+
+#: ../../reference/translations.rst:135
+msgid "Plural"
+msgstr ""
+
+#: ../../reference/translations.rst:136
+msgid "**Don't** pluralize terms the English-way::"
+msgstr ""
+
+#: ../../reference/translations.rst:142
+msgid "**Do** keep in mind every language has different plural forms::"
+msgstr ""
+
+#: ../../reference/translations.rst:150
+msgid "Read vs Run Time"
+msgstr ""
+
+#: ../../reference/translations.rst:152
+msgid "**Don't** invoke translation lookup at server launch::"
+msgstr ""
+
+#: ../../reference/translations.rst:165
+msgid "**Don't** invoke translation lookup when the javascript file is read::"
+msgstr ""
+
+#: ../../reference/translations.rst:176
+msgid "**Do** use lazy translation lookup method::"
+msgstr ""
+
+#: ../../reference/translations.rst:190
+msgid "or **do** evaluate dynamically the translatable content::"
+msgstr ""
+
+#: ../../reference/translations.rst:199
+msgid ""
+"**Do** in the case where the translation lookup is done when the JS file "
+"is *read*, use `_lt` instead of `_t` to translate the term when it is "
+"*used*::"
+msgstr ""
+

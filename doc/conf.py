@@ -185,6 +185,9 @@ intersphinx_mapping = {
 github_user = 'odoo'
 github_project = 'odoo'
 
+gettext_compact = False
+language = "ru"
+
 # monkeypatch PHP lexer to not require <?php
 from sphinx.highlighting import lexers
 from pygments.lexers.web import PhpLexer
