@@ -29,7 +29,7 @@ jobs:
         pip install sphinx sphinx_rtd_theme sphinx-intl
     - name: Rebuild Dev Docs
       run: |
-        cd doc
+        cd src/doc
         sphinx-build -b gettext . _build/gettext
         sphinx-intl update -p _build/gettext -l ru
         cp -a _build/html/. ../../dst
