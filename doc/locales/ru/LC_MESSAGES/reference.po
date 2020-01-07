@@ -19,5 +19,4 @@ msgstr ""
 
 #: ../../reference.rst:5
 msgid "Reference"
-msgstr ""
-
+msgstr "Ссылка"

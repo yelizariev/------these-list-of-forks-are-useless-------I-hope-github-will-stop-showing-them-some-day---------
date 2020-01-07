@@ -19,78 +19,102 @@ msgstr ""
 
 #: ../../reference/testing.rst:8
 msgid "Testing Odoo"
-msgstr ""
+msgstr "Тестирование Odoo"
 
 #: ../../reference/testing.rst:10
 msgid ""
-"There are many ways to test an application.  In Odoo, we have three kinds"
-" of tests"
+"There are many ways to test an application.  In Odoo, we have three kinds of"
+" tests"
 msgstr ""
+"Есть много способов протестировать приложение. В Odoo у нас есть три вида "
+"тестов"
 
 #: ../../reference/testing.rst:13
 msgid ""
 "Python unit tests (see `Testing Python code`_): useful for testing model "
 "business logic"
 msgstr ""
+"Модульные тесты Python (см. «Тестирование кода Python»): полезны для "
+"тестирования бизнес-логики модели"
 
 #: ../../reference/testing.rst:14
 msgid ""
-"JS unit tests (see `Testing JS code`_): useful to test the javascript "
-"code in isolation"
+"JS unit tests (see `Testing JS code`_): useful to test the javascript code "
+"in isolation"
 msgstr ""
+"Модульные тесты JS (см. «Тестирование кода JS»): полезно для тестирования "
+"кода javascript в отдельности"
 
 #: ../../reference/testing.rst:15
 msgid ""
-"Tours (see `Integration Testing`_): tours simulate a real situation. They"
-" ensures that the python and the javascript parts properly talk to each "
+"Tours (see `Integration Testing`_): tours simulate a real situation. They "
+"ensures that the python and the javascript parts properly talk to each "
 "other."
 msgstr ""
+"Туры (см. «Интеграционное тестирование»): туры имитируют реальную ситуацию. "
+"Они гарантируют, что части python и javascript правильно общаются друг с "
+"другом."
 
 #: ../../reference/testing.rst:19
 msgid "Testing Python code"
-msgstr ""
+msgstr "Тестирование кода Python"
 
 #: ../../reference/testing.rst:21
 msgid "Odoo provides support for testing modules using unittest."
 msgstr ""
+"Odoo предоставляет поддержку для тестирования модулей с использованием "
+"unittest."
 
 #: ../../reference/testing.rst:23
 msgid ""
 "To write tests, simply define a ``tests`` sub-package in your module, it "
-"will be automatically inspected for test modules. Test modules should "
-"have a name starting with ``test_`` and should be imported from "
+"will be automatically inspected for test modules. Test modules should have a"
+" name starting with ``test_`` and should be imported from "
 "``tests/__init__.py``, e.g."
 msgstr ""
+"Чтобы написать тесты, просто определите подпакет `` tests`` в вашем модуле, "
+"он будет автоматически проверен на наличие тестовых модулей. Тестовые модули"
+" должны иметь имя, начинающееся с `` test_``, и должны быть импортированы из"
+" `` tests / __ init __. Py``, например"
 
 #: ../../reference/testing.rst:37
 msgid "and ``__init__.py`` contains::"
-msgstr ""
+msgstr "и `` __init __. py`` содержит ::"
 
 #: ../../reference/testing.rst:43
 msgid ""
-"test modules which are not imported from ``tests/__init__.py`` will not "
-"be run"
+"test modules which are not imported from ``tests/__init__.py`` will not be "
+"run"
 msgstr ""
+"тестовые модули, которые не импортированы из `` tests / __ init __. py``, не"
+" будут запущены"
 
 #: ../../reference/testing.rst:46
 msgid ""
-"The test runner will simply run any test case, as described in the "
-"official `unittest documentation`_, but Odoo provides a number of "
-"utilities and helpers related to testing Odoo content (modules, mainly):"
+"The test runner will simply run any test case, as described in the official "
+"`unittest documentation`_, but Odoo provides a number of utilities and "
+"helpers related to testing Odoo content (modules, mainly):"
 msgstr ""
+"Организатор теста просто запустит любой тестовый случай, как описано в "
+"официальной `документации для unittest`_, но Odoo предоставляет ряд утилит и"
+" помощников, связанных с тестированием контента Odoo (в основном модулей):"
 
 #: odoo.tests.common.TransactionCase:1 of
 msgid ""
-"TestCase in which each test method is run in its own transaction, and "
-"with its own cursor. The transaction is rolled back and the cursor is "
-"closed after each test."
+"TestCase in which each test method is run in its own transaction, and with "
+"its own cursor. The transaction is rolled back and the cursor is closed "
+"after each test."
 msgstr ""
+"TestCase, в котором каждый метод теста запускается в своей собственной "
+"транзакции и со своим собственным курсором. Откат транзакции и курсор "
+"закрывается после каждого теста."
 
 #: odoo.tests.common.HttpCase.browse_ref:1
 #: odoo.tests.common.SingleTransactionCase.browse_ref:1
 #: odoo.tests.common.TransactionCase.browse_ref:1 of
 msgid "Returns a record object for the provided :term:`external identifier`"
 msgstr ""
+"Возвращает объект записи для предоставленного: term: `external identifier`"
 
 #: odoo.tests.common.Form odoo.tests.common.HttpCase.browse_ref
 #: odoo.tests.common.HttpCase.ref
@@ -99,7 +123,7 @@ msgstr ""
 #: odoo.tests.common.TransactionCase.browse_ref
 #: odoo.tests.common.TransactionCase.ref of
 msgid "Параметры"
-msgstr ""
+msgstr "Параметры"
 
 #: odoo.tests.common.HttpCase.browse_ref:4 odoo.tests.common.HttpCase.ref:4
 #: odoo.tests.common.SingleTransactionCase.browse_ref:4
@@ -110,6 +134,8 @@ msgid ""
 "fully-qualified :term:`external identifier`, in the form "
 ":samp:`{module}.{identifier}`"
 msgstr ""
+"полностью определено: term: `external identifier`, в форме: samp:` {module}."
+" {identifier} `"
 
 #: odoo.tests.common.HttpCase.browse_ref odoo.tests.common.HttpCase.ref
 #: odoo.tests.common.SingleTransactionCase.browse_ref
@@ -117,7 +143,7 @@ msgstr ""
 #: odoo.tests.common.TransactionCase.browse_ref
 #: odoo.tests.common.TransactionCase.ref of
 msgid "raise"
-msgstr ""
+msgstr "повышение"
 
 #: odoo.tests.common.HttpCase.browse_ref:6 odoo.tests.common.HttpCase.ref:6
 #: odoo.tests.common.SingleTransactionCase.browse_ref:6
@@ -125,7 +151,7 @@ msgstr ""
 #: odoo.tests.common.TransactionCase.browse_ref:6
 #: odoo.tests.common.TransactionCase.ref:6 of
 msgid "ValueError if not found"
-msgstr ""
+msgstr "ValueError, если не найден"
 
 #: odoo.tests.common.HttpCase.browse_ref odoo.tests.common.HttpCase.ref
 #: odoo.tests.common.SingleTransactionCase.browse_ref
@@ -133,91 +159,118 @@ msgstr ""
 #: odoo.tests.common.TransactionCase.browse_ref
 #: odoo.tests.common.TransactionCase.ref of
 msgid "Результат"
-msgstr ""
+msgstr "Результат"
 
 #: odoo.tests.common.HttpCase.browse_ref:7
 #: odoo.tests.common.SingleTransactionCase.browse_ref:7
 #: odoo.tests.common.TransactionCase.browse_ref:7 of
 msgid ":class:`~odoo.models.BaseModel`"
-msgstr ""
+msgstr ": Класс: `~ odoo.models.BaseModel`"
 
 #: odoo.tests.common.HttpCase.ref:1
 #: odoo.tests.common.SingleTransactionCase.ref:1
 #: odoo.tests.common.TransactionCase.ref:1 of
 msgid ""
-"Returns database ID for the provided :term:`external identifier`, "
-"shortcut for ``get_object_reference``"
+"Returns database ID for the provided :term:`external identifier`, shortcut "
+"for ``get_object_reference``"
 msgstr ""
+"Возвращает идентификатор базы данных для предоставленного: term: `внешний "
+"идентификатор`, ярлык для` `get_object_reference``"
 
 #: odoo.tests.common.HttpCase.ref:7
 #: odoo.tests.common.SingleTransactionCase.ref:7
 #: odoo.tests.common.TransactionCase.ref:7 of
 msgid "registered id"
-msgstr ""
+msgstr "зарегистрированный идентификатор"
 
 #: odoo.tests.common.SingleTransactionCase:1 of
 msgid ""
 "TestCase in which all test methods are run in the same transaction, the "
-"transaction is started with the first test method and rolled back at the "
-"end of the last."
+"transaction is started with the first test method and rolled back at the end"
+" of the last."
 msgstr ""
+"TestCase, в котором все методы тестирования выполняются в одной и той же "
+"транзакции, транзакция запускается с первым методом тестирования и "
+"откатывается в конце последней."
 
 #: odoo.tests.common.SavepointCase:1 of
 msgid ""
-"Similar to :class:`SingleTransactionCase` in that all test methods are "
-"run in a single transaction *but* each test case is run inside a "
-"rollbacked savepoint (sub-transaction)."
+"Similar to :class:`SingleTransactionCase` in that all test methods are run "
+"in a single transaction *but* each test case is run inside a rollbacked "
+"savepoint (sub-transaction)."
 msgstr ""
+"Аналогично: class: `SingleTransactionCase` в том, что все методы "
+"тестирования выполняются в одной транзакции *, но * каждый тестовый случай "
+"выполняется в откатанной точке сохранения (под-транзакции)."
 
 #: odoo.tests.common.SavepointCase:5 of
 msgid ""
-"Useful for test cases containing fast tests but with significant database"
-" setup common to all cases (complex in-db test data): "
-":meth:`~.setUpClass` can be used to generate db test data once, then all "
-"test cases use the same data without influencing one another but without "
-"having to recreate the test data either."
+"Useful for test cases containing fast tests but with significant database "
+"setup common to all cases (complex in-db test data): :meth:`~.setUpClass` "
+"can be used to generate db test data once, then all test cases use the same "
+"data without influencing one another but without having to recreate the test"
+" data either."
 msgstr ""
+"Полезно для тестовых случаев, содержащих быстрые тесты, но со значительной "
+"настройкой базы данных, общей для всех случаев (сложные тестовые данные in-"
+"db): данные, не влияя друг на друга, но без необходимости повторного "
+"создания тестовых данных."
 
 #: odoo.tests.common.HttpCase:1 of
 msgid "Transactional HTTP TestCase with url_open and Chrome headless helpers."
 msgstr ""
+"Транзакционный HTTP TestCase с url_open и безголовыми помощниками Chrome."
 
 #: odoo.tests.common.HttpCase.phantom_js:1 of
 msgid ""
-"Test js code running in the browser - optionnally log as 'login' - load "
-"page given by url_path - wait for ready object to be available - "
-"eval(code) inside the page"
+"Test js code running in the browser - optionnally log as 'login' - load page"
+" given by url_path - wait for ready object to be available - eval(code) "
+"inside the page"
 msgstr ""
+"Проверьте js-код, работающий в браузере - при необходимости войдите в "
+"систему как &#39;login&#39; - загрузите страницу, заданную url_path - "
+"дождитесь готовности готового объекта - eval (код) внутри страницы"
 
 #: odoo.tests.common.HttpCase.phantom_js:7 of
 msgid "To signal success test do: console.log('test successful')"
 msgstr ""
+"Чтобы сообщить об успешном тестировании, выполните: console.log («тест "
+"пройден успешно»)"
 
 #: odoo.tests.common.HttpCase.phantom_js:10 of
 msgid "To signal failure do: console.error('test failed')"
 msgstr ""
+"Чтобы сообщить о сбое, выполните: console.error (&#39;test failed&#39;)"
 
 #: odoo.tests.common.HttpCase.phantom_js:13 of
 msgid "If neither are done before timeout test fails."
-msgstr ""
+msgstr "Если ни то, ни другое не выполнено до того, как таймаут не пройден"
 
 #: odoo.tests.common.tagged:1 of
 msgid ""
 "A decorator to tag BaseCase objects Tags are stored in a set that can be "
-"accessed from a 'test_tags' attribute A tag prefixed by '-' will remove "
-"the tag e.g. to remove the 'standard' tag By default, all Test classes "
-"from odoo.tests.common have a test_tags attribute that defaults to "
-"'standard' and also the module technical name When using class "
-"inheritance, the tags are NOT inherited."
+"accessed from a 'test_tags' attribute A tag prefixed by '-' will remove the "
+"tag e.g. to remove the 'standard' tag By default, all Test classes from "
+"odoo.tests.common have a test_tags attribute that defaults to 'standard' and"
+" also the module technical name When using class inheritance, the tags are "
+"NOT inherited."
 msgstr ""
+"Декоратор для тегирования объектов BaseCase Теги хранятся в наборе, доступ к"
+" которому можно получить из атрибута «test_tags». Тег с префиксом «-» удалит"
+" тег, например, для удаления «стандартного» тега. По умолчанию все классы "
+"Test из odoo. У test.common есть атрибут test_tags, который по умолчанию "
+"равен стандарту, а также техническое имя модуля. При использовании "
+"наследования классов теги НЕ наследуются."
 
 #: ../../reference/testing.rst:63
 msgid ""
-"By default, tests are run once right after the corresponding module has "
-"been installed. Test cases can also be configured to run after all "
-"modules have been installed, and not run right after the module "
-"installation:"
+"By default, tests are run once right after the corresponding module has been"
+" installed. Test cases can also be configured to run after all modules have "
+"been installed, and not run right after the module installation:"
 msgstr ""
+"По умолчанию тесты запускаются один раз сразу после установки "
+"соответствующего модуля. Тестовые случаи также можно настроить для запуска "
+"после установки всех модулей, а не для запуска сразу после установки модуля:"
 
 #: odoo.tests.common.at_install:1 of
 msgid ""
@@ -225,18 +278,26 @@ msgid ""
 "whether the test should (``True``) or should not (``False``) run during "
 "module installation."
 msgstr ""
+"Устанавливает состояние теста при установке, флаг является логическим "
+"значением, определяющим, должен ли тест (`` True``) или не ((`False``) "
+"выполняться во время установки модуля)."
 
 #: odoo.tests.common.at_install:5 of
 msgid ""
-"By default, tests are run right after installing the module, before "
-"starting the installation of the next module."
+"By default, tests are run right after installing the module, before starting"
+" the installation of the next module."
 msgstr ""
+"По умолчанию тесты запускаются сразу после установки модуля, перед началом "
+"установки следующего модуля."
 
 #: odoo.tests.common.at_install:10 of
 msgid ""
-"``at_install`` is now a flag, you can use :func:`tagged` to add/remove "
-"it, although ``tagged`` only works on test classes"
+"``at_install`` is now a flag, you can use :func:`tagged` to add/remove it, "
+"although ``tagged`` only works on test classes"
 msgstr ""
+"`` at_install`` теперь является флагом, вы можете использовать: func: "
+"`tagged`, чтобы добавить / удалить его, хотя` `tagged`` работает только на "
+"тестовых классах"
 
 #: odoo.tests.common.post_install:1 of
 msgid ""
@@ -244,68 +305,89 @@ msgid ""
 "whether the test should or should not run after a set of module "
 "installations."
 msgstr ""
+"Устанавливает состояние после установки теста. Флаг является логическим "
+"значением, указывающим, должен ли тест выполняться или не запускаться после "
+"набора установок модуля."
 
 #: odoo.tests.common.post_install:5 of
 msgid ""
 "By default, tests are *not* run after installation of all modules in the "
 "current installation set."
 msgstr ""
+"По умолчанию тесты * не * запускаются после установки всех модулей в текущем"
+" наборе установки."
 
 #: odoo.tests.common.post_install:10 of
 msgid ""
-"``post_install`` is now a flag, you can use :func:`tagged` to add/remove "
-"it, although ``tagged`` only works on test classes"
+"``post_install`` is now a flag, you can use :func:`tagged` to add/remove it,"
+" although ``tagged`` only works on test classes"
 msgstr ""
+"`` post_install`` теперь является флагом, вы можете использовать: func: "
+"`tagged`, чтобы добавить / удалить его, хотя` `tagged`` работает только на "
+"тестовых классах"
 
 #: ../../reference/testing.rst:71
 msgid ""
 "The most common situation is to use "
-":class:`~odoo.tests.common.TransactionCase` and test a property of a "
-"model in each method::"
+":class:`~odoo.tests.common.TransactionCase` and test a property of a model "
+"in each method::"
 msgstr ""
+"Наиболее распространенной ситуацией является использование: class: `~ "
+"odoo.tests.common.TransactionCase` и тестирование свойства модели в каждом "
+"методе:"
 
 #: ../../reference/testing.rst:87
 msgid "Test methods must start with ``test_``"
-msgstr ""
+msgstr "Методы тестирования должны начинаться с `` test_``"
 
 #: odoo.tests.common.Form:1 of
 msgid "Server-side form view implementation (partial)"
-msgstr ""
+msgstr "Реализация представления формы на стороне сервера (частично)"
 
 #: odoo.tests.common.Form:3 of
 msgid ""
 "Implements much of the \"form view\" manipulation flow, such that server-"
-"side tests can more properly reflect the behaviour which would be "
-"observed when manipulating the interface:"
+"side tests can more properly reflect the behaviour which would be observed "
+"when manipulating the interface:"
 msgstr ""
+"Реализует большую часть потока манипуляций с «представлением формы», так что"
+" тесты на стороне сервера могут более правильно отражать поведение, которое "
+"наблюдается при манипулировании интерфейсом:"
 
 #: odoo.tests.common.Form:7 of
 msgid "call default_get and the relevant onchanges on \"creation\""
 msgstr ""
+"вызовите default_get и соответствующие изменения на &quot;создание&quot;"
 
 #: odoo.tests.common.Form:8 of
 msgid "call the relevant onchanges on setting fields"
-msgstr ""
+msgstr "позвоните в соответствующие органы по настройке полей"
 
 #: odoo.tests.common.Form:9 of
 msgid "properly handle defaults & onchanges around x2many fields"
 msgstr ""
+"правильно обрабатывать значения по умолчанию и изменения вокруг полей x2many"
 
 #: odoo.tests.common.Form:11 of
 msgid "Saving the form returns the created record if in creation mode."
-msgstr ""
+msgstr "Сохранение формы возвращает созданную запись, если в режиме создания."
 
 #: odoo.tests.common.Form:13 of
 msgid ""
 "Regular fields can just be assigned directly to the form, for "
 ":class:`~odoo.fields.Many2one` fields assign a singleton recordset::"
 msgstr ""
+"Регулярные поля могут быть просто назначены непосредственно в форме, для "
+"полей: class: `~ odoo.fields.Many2one` назначается одноэлементный набор "
+"записей ::"
 
 #: odoo.tests.common.Form:21 of
 msgid ""
-"When editing a record, using the form as a context manager to "
-"automatically save it at the end of the scope::"
+"When editing a record, using the form as a context manager to automatically "
+"save it at the end of the scope::"
 msgstr ""
+"При редактировании записи, используя форму в качестве менеджера контекста, "
+"вы автоматически сохраняете ее в конце области ::"
 
 #: odoo.tests.common.Form:28 of
 msgid ""
@@ -313,28 +395,42 @@ msgid ""
 ":class:`~odoo.tests.common.M2MProxy` and can be altered by adding or "
 "removing records::"
 msgstr ""
+"Для полей: class: `~ odoo.fields.Many2many` само поле является: class:` ~ "
+"odoo.tests.common.M2MProxy` и может быть изменено путем добавления или "
+"удаления records ::"
 
 #: odoo.tests.common.Form:36 of
 msgid ""
 "Finally :class:`~odoo.fields.One2many` are reified as "
 ":class:`~odoo.tests.common.O2MProxy`."
 msgstr ""
+"Наконец: class: `~ odoo.fields.One2many` имеют вид: class:` ~ "
+"odoo.tests.common.O2MProxy`."
 
 #: odoo.tests.common.Form:39 of
 msgid ""
-"Because the :class:`~odoo.fields.One2many` only exists through its "
-"parent, it is manipulated more directly by creating \"sub-forms\" with "
-"the :meth:`~odoo.tests.common.O2MProxy.new` and "
-":meth:`~odoo.tests.common.O2MProxy.edit` methods. These would normally be"
-" used as context managers since they get saved in the parent record::"
+"Because the :class:`~odoo.fields.One2many` only exists through its parent, "
+"it is manipulated more directly by creating \"sub-forms\" with the "
+":meth:`~odoo.tests.common.O2MProxy.new` and "
+":meth:`~odoo.tests.common.O2MProxy.edit` methods. These would normally be "
+"used as context managers since they get saved in the parent record::"
 msgstr ""
+"Поскольку: class: `~ odoo.fields.One2many` существует только через своего "
+"родителя, он более непосредственно управляется путем создания« подформ »с "
+"помощью: meth:` ~ odoo.tests.common.O2MProxy.new` и: Методы: `~ "
+"odoo.tests.common.O2MProxy.edit`. Обычно они используются как менеджеры "
+"контекста, так как они сохраняются в родительской записи:"
 
 #: odoo.tests.common.Form:60 of
 msgid ""
 "empty or singleton recordset. An empty recordset will put the view in "
-"\"creation\" mode and trigger calls to default_get and on-load onchanges,"
-" a singleton will put it in \"edit\" mode and only load the view's data."
+"\"creation\" mode and trigger calls to default_get and on-load onchanges, a "
+"singleton will put it in \"edit\" mode and only load the view's data."
 msgstr ""
+"пустой или одиночный набор записей. Пустой набор записей переведет "
+"представление в режим «создания» и вызовет вызовы default_get и on-load "
+"onchanges, а синглтон переведет его в режим «редактирования» и загрузит "
+"только данные представления."
 
 #: odoo.tests.common.Form:65 of
 msgid ""
@@ -342,14 +438,17 @@ msgid ""
 "constraints. If none is provided, simply loads the default view for the "
 "model."
 msgstr ""
+"id, xmlid или фактический объект представления, чтобы использовать для "
+"onchanges и ограничений представления. Если ничего не указано, просто "
+"загружается представление по умолчанию для модели."
 
 #: odoo.tests.common.Form.save:1 of
 msgid "Saves the form, returns the created record if applicable"
-msgstr ""
+msgstr "Сохраняет форму, возвращает созданную запись, если применимо"
 
 #: odoo.tests.common.Form.save:3 of
 msgid "does not save ``readonly`` fields"
-msgstr ""
+msgstr "не сохраняет `` readonly`` поля"
 
 #: odoo.tests.common.Form.save:4 of
 msgid ""
@@ -357,85 +456,105 @@ msgid ""
 "onchange return marks the field as modified, even if set to its current "
 "value"
 msgstr ""
+"не сохраняет неизмененные поля (во время редактирования) - любое "
+"присваивание или возвращение onchange помечает поле как измененное, даже "
+"если установлено его текущее значение"
 
 #: odoo.tests.common.Form.save odoo.tests.common.O2MProxy.edit
 #: odoo.tests.common.O2MProxy.new odoo.tests.common.O2MProxy.remove of
 msgid "Исключение"
-msgstr ""
+msgstr "Исключение"
 
 #: odoo.tests.common.Form.save:8 of
 msgid "if the form has any unfilled required field"
-msgstr ""
+msgstr "если в форме есть незаполненное обязательное поле"
 
 #: odoo.tests.common.M2MProxy:1 of
 msgid ""
-"Behaves as a :class:`~collection.Sequence` of recordsets, can be indexed "
-"or sliced to get actual underlying recordsets."
+"Behaves as a :class:`~collection.Sequence` of recordsets, can be indexed or "
+"sliced to get actual underlying recordsets."
 msgstr ""
+"Ведет себя как: class: `~ collection.Sequence` наборов записей, может быть "
+"проиндексирован или разрезан для получения реальных базовых наборов записей."
 
 #: odoo.tests.common.M2MProxy.add:1 of
 msgid "Adds ``record`` to the field, the record must already exist."
-msgstr ""
+msgstr "Добавляет `` record`` в поле, запись уже должна существовать."
 
 #: odoo.tests.common.M2MProxy.add:3 of
 msgid "The addition will only be finalized when the parent record is saved."
 msgstr ""
+"Добавление будет завершено только после сохранения родительской записи."
 
 #: odoo.tests.common.M2MProxy.clear:1 of
 msgid "Removes all existing records in the m2m"
-msgstr ""
+msgstr "Удаляет все существующие записи в м2"
 
 #: odoo.tests.common.M2MProxy.remove:1 of
-msgid "Removes a record at a certain index or with a provided id from the field."
+msgid ""
+"Removes a record at a certain index or with a provided id from the field."
 msgstr ""
+"Удаляет запись с определенным индексом или с указанным идентификатором из "
+"поля."
 
 #: odoo.tests.common.O2MProxy.edit:1 of
 msgid ""
 "Returns a :class:`Form` to edit the pre-existing "
 ":class:`~odoo.fields.One2many` record."
 msgstr ""
+"Возвращает: class: `Form` для редактирования существующей записи: class:` ~ "
+"odoo.fields.One2many`."
 
 #: odoo.tests.common.O2MProxy.edit:4 odoo.tests.common.O2MProxy.new:4 of
 msgid ""
-"The form is created from the list view if editable, or the field's form "
-"view otherwise."
+"The form is created from the list view if editable, or the field's form view"
+" otherwise."
 msgstr ""
+"Форма создается из списка, если он доступен для редактирования, или из формы"
+" поля в противном случае."
 
 #: odoo.tests.common.O2MProxy.edit:7 odoo.tests.common.O2MProxy.new:7
 #: odoo.tests.common.O2MProxy.remove:3 of
 msgid "if the field is not editable"
-msgstr ""
+msgstr "если поле не доступно для редактирования"
 
 #: odoo.tests.common.O2MProxy.new:1 of
 msgid ""
 "Returns a :class:`Form` for a new :class:`~odoo.fields.One2many` record, "
 "properly initialised."
 msgstr ""
+"Возвращает: class: `Form` для новой записи: class:` ~ odoo.fields.One2many`,"
+" правильно инициализированной."
 
 #: odoo.tests.common.O2MProxy.remove:1 of
 msgid "Removes the record at ``index`` from the parent form."
-msgstr ""
+msgstr "Удаляет запись в `` index`` из родительской формы."
 
 #: ../../reference/testing.rst:99
 msgid "Running tests"
-msgstr ""
+msgstr "Запуск тестов"
 
 #: ../../reference/testing.rst:101
 msgid ""
 "Tests are automatically run when installing or updating modules if "
-":option:`--test-enable <odoo-bin --test-enable>` was enabled when "
-"starting the Odoo server."
+":option:`--test-enable <odoo-bin --test-enable>` was enabled when starting "
+"the Odoo server."
 msgstr ""
+"Тесты автоматически запускаются при установке или обновлении модулей, если: "
+"option: `--test-enable <odoo-bin --test-enable> `был включен при запуске "
+"сервера Odoo."
 
 #: ../../reference/testing.rst:108
 msgid "Test selection"
-msgstr ""
+msgstr "Тестовый выбор"
 
 #: ../../reference/testing.rst:110
 msgid ""
-"In Odoo, Python tests can be tagged to facilitate the test selection when"
-" running tests."
+"In Odoo, Python tests can be tagged to facilitate the test selection when "
+"running tests."
 msgstr ""
+"В Odoo тесты Python могут быть помечены для облегчения выбора тестов при "
+"запуске тестов."
 
 #: ../../reference/testing.rst:113
 msgid ""
@@ -445,112 +564,152 @@ msgid ""
 ":class:`~odoo.tests.common.HttpCase`) are automatically tagged with "
 "``standard``, ``at_install`` and their source module's name by default."
 msgstr ""
+"Подклассы: class: `odoo.tests.common.BaseCase` (обычно через: class:` ~ "
+"odoo.tests.common.TransactionCase`,: class: `~ "
+"odoo.tests.common.SavepointCase` или: class:` ~ odoo.tests.common.HttpCase`)"
+" автоматически помечаются как `` standard``, `` at_install`` и именем их "
+"исходного модуля по умолчанию."
 
 #: ../../reference/testing.rst:120
 msgid "Invocation"
-msgstr ""
+msgstr "мольба"
 
 #: ../../reference/testing.rst:122
 msgid ""
-":option:`--test-tags <odoo-bin --test-tags>` can be used to select/filter"
-" tests to run on the command-line."
+":option:`--test-tags <odoo-bin --test-tags>` can be used to select/filter "
+"tests to run on the command-line."
 msgstr ""
+": Опция: `--test-теги <odoo-bin --test-tags> `может использоваться для "
+"выбора / фильтрации тестов для запуска в командной строке."
 
 #: ../../reference/testing.rst:125
 msgid ""
 "This option defaults to ``+standard`` meaning tests tagged ``standard`` "
-"(explicitly or implicitly) will be run by default when starting Odoo with"
-" :option:`--test-enable <odoo-bin --test-enable>`."
+"(explicitly or implicitly) will be run by default when starting Odoo with "
+":option:`--test-enable <odoo-bin --test-enable>`."
 msgstr ""
+"Эта опция по умолчанию имеет значение `` + standard``, что означает, что "
+"тесты с тегом `` standard`` (явно или неявно) будут запускаться по умолчанию"
+" при запуске Odoo с: option: `--test-enable <odoo-bin --test-enable> `."
 
 #: ../../reference/testing.rst:129
 msgid ""
-"When writing tests, the :func:`~odoo.tests.common.tagged` decorator can "
-"be used on **test classes** to add or remove tags."
+"When writing tests, the :func:`~odoo.tests.common.tagged` decorator can be "
+"used on **test classes** to add or remove tags."
 msgstr ""
+"При написании тестов декоратор: func: `~ odoo.tests.common.tagged` можно "
+"использовать в ** тестовых классах ** для добавления или удаления тегов."
 
 #: ../../reference/testing.rst:132
 msgid "The decorator's arguments are tag names, as strings."
-msgstr ""
+msgstr "Аргументы декоратора - это имена тегов в виде строк."
 
 #: ../../reference/testing.rst:134
 msgid ""
-":func:`~odoo.tests.common.tagged` is a class decorator, it has no effect "
-"on functions or methods"
+":func:`~odoo.tests.common.tagged` is a class decorator, it has no effect on "
+"functions or methods"
 msgstr ""
+": func: `~ odoo.tests.common.tagged` это декоратор класса, он не влияет на "
+"функции или методы"
 
 #: ../../reference/testing.rst:137
 msgid ""
-"Tags can be prefixed with the minus (``-``) sign, to *remove* them "
-"instead of add or select them e.g. if you don't want your test to be "
-"executed by default you can remove the ``standard`` tag:"
+"Tags can be prefixed with the minus (``-``) sign, to *remove* them instead "
+"of add or select them e.g. if you don't want your test to be executed by "
+"default you can remove the ``standard`` tag:"
 msgstr ""
+"Теги могут иметь префикс со знаком минус (`` -``), чтобы * удалить * их "
+"вместо добавления или выбрать их, например, если вы не хотите, чтобы ваш "
+"тест выполнялся по умолчанию, вы можете удалить `` standard`` тег:"
 
 #: ../../reference/testing.rst:149
 msgid ""
-"This test will not be selected by default, to run it the relevant tag "
-"will have to be selected explicitely:"
+"This test will not be selected by default, to run it the relevant tag will "
+"have to be selected explicitely:"
 msgstr ""
+"Этот тест не будет выбран по умолчанию, для его запуска соответствующий тег "
+"должен быть выбран явно:"
 
 #: ../../reference/testing.rst:156
 msgid ""
-"Note that only the tests tagged ``nice`` are going to be executed. To run"
-" *both* ``nice`` and ``standard`` tests, provide multiple values to "
-":option:`--test-tags <odoo-bin --test-tags>`: on the command-line, values"
-" are *additive* (you're selecting all tests with *any* of the specified "
-"tags)"
+"Note that only the tests tagged ``nice`` are going to be executed. To run "
+"*both* ``nice`` and ``standard`` tests, provide multiple values to "
+":option:`--test-tags <odoo-bin --test-tags>`: on the command-line, values "
+"are *additive* (you're selecting all tests with *any* of the specified tags)"
 msgstr ""
+"Обратите внимание, что будут выполняться только тесты с тегом `` nice``. Для"
+" запуска * обоих * `` nice`` и `` standard``, укажите несколько значений "
+"для: option: `--test-tags <odoo-bin --test-tags> `: в командной строке "
+"значения являются * аддитивными * (вы выбираете все тесты с * любым * из "
+"указанных тегов)"
 
 #: ../../reference/testing.rst:165
 msgid ""
-"The config switch parameter also accepts the ``+`` and ``-`` prefixes. "
-"The ``+`` prefix is implied and therefore, totaly optional. The ``-`` "
-"(minus) prefix is made to deselect tests tagged with the prefixed tags, "
-"even if they are selected by other specified tags e.g. if there are "
-"``standard`` tests which are also tagged as ``slow`` you can run all "
-"standard tests *except* the slow ones:"
+"The config switch parameter also accepts the ``+`` and ``-`` prefixes. The "
+"``+`` prefix is implied and therefore, totaly optional. The ``-`` (minus) "
+"prefix is made to deselect tests tagged with the prefixed tags, even if they"
+" are selected by other specified tags e.g. if there are ``standard`` tests "
+"which are also tagged as ``slow`` you can run all standard tests *except* "
+"the slow ones:"
 msgstr ""
+"Параметр config switch также принимает префиксы `` + `` и `` -``. Префикс ``"
+" + `` подразумевается и, следовательно, полностью необязателен. Префикс `` "
+"-`` (минус) предназначен для отмены выбора тестов, помеченных префиксными "
+"тегами, даже если они выбраны другими указанными тегами, например, если "
+"существуют `` стандартные`` тесты, которые также помечены как `` slow`` Вы "
+"можете запустить все стандартные тесты * кроме * медленных:"
 
 #: ../../reference/testing.rst:176
 msgid ""
 "When you write a test that does not inherit from the "
-":class:`~odoo.tests.common.BaseCase`, this test will not have the default"
-" tags, you have to add them explicitely to have the test included in the "
+":class:`~odoo.tests.common.BaseCase`, this test will not have the default "
+"tags, you have to add them explicitely to have the test included in the "
 "default test suite.  This is a common issue when using a simple "
 "``unittest.TestCase`` as they're not going to get run:"
 msgstr ""
+"Когда вы пишете тест, который не наследуется от: class: `~ "
+"odoo.tests.common.BaseCase`, этот тест не будет иметь тегов по умолчанию, вы"
+" должны добавить их явно, чтобы тест был включен в набор тестов по умолчанию"
+" , Это распространенная проблема при использовании простого `` "
+"unittest.TestCase``, так как они не запускаются:"
 
 #: ../../reference/testing.rst:192
 msgid "Special tags"
-msgstr ""
+msgstr "Специальные теги"
 
 #: ../../reference/testing.rst:194
 msgid ""
 "``standard``: All Odoo tests that inherit from "
 ":class:`~odoo.tests.common.BaseCase` are implicitely tagged standard. "
-":option:`--test-tags <odoo-bin --test-tags>` also defaults to "
-"``standard``."
+":option:`--test-tags <odoo-bin --test-tags>` also defaults to ``standard``."
 msgstr ""
+"`` standard``: Все тесты Odoo, которые наследуются от: class: `~ "
+"odoo.tests.common.BaseCase`, неявно помечены как стандартные. : Опция: "
+"`--test-теги <odoo-bin --test-tags> `также по умолчанию` `стандарт``."
 
 #: ../../reference/testing.rst:198
 msgid ""
-"That means untagged test will be executed by default when tests are "
-"enabled."
+"That means untagged test will be executed by default when tests are enabled."
 msgstr ""
+"Это означает, что тест без тегов будет выполняться по умолчанию, когда тесты"
+" включены."
 
 #: ../../reference/testing.rst:199
 msgid ""
-"``at_install``: Means that the test will be executed right after the "
-"module installation and before other modules are installed. This is a "
-"default implicit tag."
+"``at_install``: Means that the test will be executed right after the module "
+"installation and before other modules are installed. This is a default "
+"implicit tag."
 msgstr ""
+"`` at_install``: означает, что тест будет выполнен сразу после установки "
+"модуля и до установки других модулей. Это неявный тег по умолчанию."
 
 #: ../../reference/testing.rst:202
 msgid ""
-"``post_install``: Means that the test will be executed after all the "
-"modules are installed. This is what you want for HttpCase tests most of "
-"the time."
+"``post_install``: Means that the test will be executed after all the modules"
+" are installed. This is what you want for HttpCase tests most of the time."
 msgstr ""
+"`` post_install``: означает, что тест будет выполнен после установки всех "
+"модулей. Это то, что вы хотите для тестов HttpCase большую часть времени."
 
 #: ../../reference/testing.rst:205
 msgid ""
@@ -558,61 +717,78 @@ msgid ""
 "will generally not want both ``post_install`` is usually paired with "
 "``-at_install`` when tagging a test class."
 msgstr ""
+"Обратите внимание, что это * не исключительно * с `` at_install``, однако, "
+"поскольку вы, как правило, не хотите, чтобы оба `` post_install`` обычно "
+"сопряжены с `` -at_install`` при пометке тестового класса."
 
 #: ../../reference/testing.rst:208
 msgid ""
 "*module_name*: Odoo tests classes extending "
 ":class:`~odoo.tests.common.BaseCase` are implicitely tagged with the "
-"technical name of their module. This allows easily selecting or excluding"
-" specific modules when testing e.g. if you want to only run tests from "
+"technical name of their module. This allows easily selecting or excluding "
+"specific modules when testing e.g. if you want to only run tests from "
 "``stock_account``:"
 msgstr ""
+"* module_name *: Odoo тестирует классы, расширяющие: class: `~ "
+"odoo.tests.common.BaseCase` неявно помечены техническим именем их модуля. "
+"Это позволяет легко выбирать или исключать определенные модули при "
+"тестировании, например, если вы хотите запускать тесты только из `` "
+"stock_account``:"
 
 #: ../../reference/testing.rst:219
 msgid "Examples"
-msgstr ""
+msgstr "Примеры"
 
 #: ../../reference/testing.rst:223
 msgid ""
-"Tests will be executed only in the installed or updated modules.  So "
-"modules have to be selected with the :option:`-u <odoo-bin -u>` or "
-":option:`-i <odoo-bin -i>` switches.  For simplicity, those switches are "
-"not specified in the examples below."
+"Tests will be executed only in the installed or updated modules.  So modules"
+" have to be selected with the :option:`-u <odoo-bin -u>` or :option:`-i "
+"<odoo-bin -i>` switches.  For simplicity, those switches are not specified "
+"in the examples below."
 msgstr ""
+"Тесты будут выполняться только в установленных или обновленных модулях. "
+"Поэтому модули должны выбираться с помощью опции: option: `-u <odoo-bin -u> "
+"`или: опция:` -i <odoo-bin -i> переключатели. Для простоты эти переключатели"
+" не указаны в приведенных ниже примерах."
 
 #: ../../reference/testing.rst:228
 msgid "Run only the tests from the sale module:"
-msgstr ""
+msgstr "Запустите только тесты из модуля продажи:"
 
 #: ../../reference/testing.rst:234
 msgid "Run the tests from the sale module but not the ones tagged as slow:"
-msgstr ""
+msgstr "Запустите тесты из модуля продажи, но не помеченные как медленные:"
 
 #: ../../reference/testing.rst:240
 msgid "Run only the tests from stock or tagged as slow:"
-msgstr ""
+msgstr "Запускайте только тесты со склада или помеченные как медленные:"
 
 #: ../../reference/testing.rst:246
 msgid "``-standard`` is implicit (not required), and present for clarity"
 msgstr ""
+"`` -standard`` является неявным (не обязательным) и представлен для ясности"
 
 #: ../../reference/testing.rst:249
 msgid "Testing JS code"
-msgstr ""
+msgstr "Тестирование кода JS"
 
 #: ../../reference/testing.rst:251
 msgid ""
-"Testing a complex system is an important safeguard to prevent regressions"
-" and to guarantee that some basic functionality still works. Since Odoo "
-"has a non trivial codebase in Javascript, it is necessary to test it. In "
-"this section, we will discuss the practice of testing JS code in "
-"isolation: these tests stay in the browser, and are not supposed to reach"
-" the server."
+"Testing a complex system is an important safeguard to prevent regressions "
+"and to guarantee that some basic functionality still works. Since Odoo has a"
+" non trivial codebase in Javascript, it is necessary to test it. In this "
+"section, we will discuss the practice of testing JS code in isolation: these"
+" tests stay in the browser, and are not supposed to reach the server."
 msgstr ""
+"Тестирование сложной системы является важной гарантией предотвращения "
+"регрессий и гарантии того, что некоторые основные функции все еще работают. "
+"Поскольку Odoo имеет нетривиальную кодовую базу в Javascript, необходимо "
+"протестировать ее. В этом разделе мы обсудим практику тестирования кода JS "
+"изолированно: эти тесты остаются в браузере и не должны достигать сервера."
 
 #: ../../reference/testing.rst:258
 msgid "Qunit test suite"
-msgstr ""
+msgstr "Тестовый набор Qunit"
 
 #: ../../reference/testing.rst:260
 msgid ""
@@ -620,253 +796,339 @@ msgid ""
 "runner. QUnit defines the concepts of *tests* and *modules* (a set of "
 "related tests), and gives us a web based interface to execute the tests."
 msgstr ""
+"Каркас Odoo использует каркас тестирования библиотеки QUnit_ в качестве "
+"тестового прогона. QUnit определяет понятия * tests * и * modules * (набор "
+"связанных тестов) и предоставляет нам веб-интерфейс для выполнения тестов."
 
 #: ../../reference/testing.rst:264
 msgid "For example, here is what a pyUtils test could look like:"
-msgstr ""
+msgstr "Например, вот как может выглядеть тест pyUtils:"
 
 #: ../../reference/testing.rst:279
 msgid ""
-"The main way to run the test suite is to have a running Odoo server, then"
-" navigate a web browser to ``/web/tests``.  The test suite will then be "
+"The main way to run the test suite is to have a running Odoo server, then "
+"navigate a web browser to ``/web/tests``.  The test suite will then be "
 "executed by the web browser Javascript engine."
 msgstr ""
+"Основной способ запустить набор тестов - запустить работающий сервер Odoo, а"
+" затем перейти в веб-браузер к `` / web / tests``. Затем набор тестов будет "
+"выполнен движком Javascript веб-браузера."
 
 #: ../../reference/testing.rst:286
 msgid ""
 "The web UI has many useful features: it can run only some submodules, or "
-"filter tests that match a string. It can show every assertions, failed or"
-" passed, rerun specific tests, ..."
+"filter tests that match a string. It can show every assertions, failed or "
+"passed, rerun specific tests, ..."
 msgstr ""
+"Веб-интерфейс имеет много полезных функций: он может запускать только "
+"некоторые подмодули или фильтровать тесты, соответствующие строке. Он может "
+"показать все утверждения, неудачные или пройденные, перезапустить "
+"определенные тесты, ..."
 
 #: ../../reference/testing.rst:292
 msgid "While the test suite is running, make sure that:"
-msgstr ""
+msgstr "Во время работы набора тестов убедитесь, что:"
 
 #: ../../reference/testing.rst:294
 msgid "your browser window is focused,"
-msgstr ""
+msgstr "окно вашего браузера сфокусировано,"
 
 #: ../../reference/testing.rst:295
 msgid "it is not zoomed in/out. It needs to have exactly 100% zoom level."
 msgstr ""
+"он не увеличен / уменьшен. Он должен иметь ровно 100% уровень "
+"масштабирования."
 
 #: ../../reference/testing.rst:297
 msgid ""
-"If this is not the case, some tests will fail, without a proper "
-"explanation."
+"If this is not the case, some tests will fail, without a proper explanation."
 msgstr ""
+"Если это не так, некоторые тесты не пройдут без надлежащего объяснения."
 
 #: ../../reference/testing.rst:300
 msgid "Testing Infrastructure"
-msgstr ""
+msgstr "Инфраструктура тестирования"
 
 #: ../../reference/testing.rst:302
 msgid ""
 "Here is a high level overview of the most important parts of the testing "
 "infrastructure:"
-msgstr ""
+msgstr "Вот краткий обзор самых важных частей инфраструктуры тестирования:"
 
 #: ../../reference/testing.rst:305
 msgid ""
-"there is an asset bundle named `web.js_tests_assets`_.  This bundle "
-"contains the main code (assets common + assets backend), some libraries, "
-"the QUnit test runner, and some additional helper code"
+"there is an asset bundle named `web.js_tests_assets`_.  This bundle contains"
+" the main code (assets common + assets backend), some libraries, the QUnit "
+"test runner, and some additional helper code"
 msgstr ""
+"есть пакет ресурсов с именем `web.js_tests_assets`_. Этот пакет содержит "
+"основной код (общие ресурсы + бэкэнд ресурсов), некоторые библиотеки, "
+"средство выполнения тестов QUnit и дополнительный вспомогательный код"
 
 #: ../../reference/testing.rst:309
 msgid ""
-"another asset bundle, `web.qunit_suite`_, contains all the tests (and the"
-" js_tests_assets code).  Almost all the test files should be added to "
-"this bundle"
+"another asset bundle, `web.qunit_suite`_, contains all the tests (and the "
+"js_tests_assets code).  Almost all the test files should be added to this "
+"bundle"
 msgstr ""
+"другой пакет ресурсов, `web.qunit_suite`_, содержит все тесты (и код "
+"js_tests_assets). Почти все тестовые файлы должны быть добавлены в этот "
+"комплект"
 
 #: ../../reference/testing.rst:313
 msgid ""
 "there is a `controller`_ in web, mapped to the route */web/tests*. This "
 "controller simply renders the *web.qunit_suite* template."
 msgstr ""
+"в сети есть `controller`_, сопоставленный с маршрутом * / web / tests *. "
+"Этот контроллер просто отображает шаблон * web.qunit_suite *."
 
 #: ../../reference/testing.rst:316
 msgid ""
 "to execute the tests, one can simply point its browser to the route "
-"*/web/tests*. In that case, the browser will download all assets, and "
-"QUnit will take over."
+"*/web/tests*. In that case, the browser will download all assets, and QUnit "
+"will take over."
 msgstr ""
+"чтобы выполнить тесты, можно просто указать браузеру маршрут * / web / tests"
+" *. В этом случае браузер загрузит все ресурсы, и QUnit вступит во владение."
 
 #: ../../reference/testing.rst:319
 msgid ""
 "there is some code in `qunit_config.js`_ which logs in the console some "
 "information when a test passes or fails."
 msgstr ""
+"в `qunit_config.js`_ есть некоторый код, который регистрирует в консоли "
+"некоторую информацию, когда тест проходит или не проходит."
 
 #: ../../reference/testing.rst:322
 msgid ""
 "we want the runbot to also run these tests, so there is a test (in "
 "`test_js.py`_) which simply spawns a browser and points it to the "
-"*web/tests* url.  Note that the phantom_js method does not spawn "
-"phantom_js, but Chrome headless instead."
+"*web/tests* url.  Note that the phantom_js method does not spawn phantom_js,"
+" but Chrome headless instead."
 msgstr ""
+"мы хотим, чтобы runbot также запускал эти тесты, поэтому есть тест (в "
+"`test_js.py`_), который просто порождает браузер и указывает его на URL * "
+"web / tests *. Обратите внимание, что метод phantom_js порождает не "
+"phantom_js, а Chrome без заголовка."
 
 #: ../../reference/testing.rst:328
 msgid "Modularity and testing"
-msgstr ""
+msgstr "Модульность и тестирование"
 
 #: ../../reference/testing.rst:330
 msgid ""
-"With the way Odoo is designed, any addon can modify the behaviour of "
-"other parts of the system.  For example, the *voip* addon can modify the "
-"*FieldPhone* widget to use extra features.  This is not really good from "
-"the perspective of the testing system, since this means that a test in "
-"the addon web will fail whenever the voip addon is installed (note that "
-"the runbot runs the tests with all addons installed)."
+"With the way Odoo is designed, any addon can modify the behaviour of other "
+"parts of the system.  For example, the *voip* addon can modify the "
+"*FieldPhone* widget to use extra features.  This is not really good from the"
+" perspective of the testing system, since this means that a test in the "
+"addon web will fail whenever the voip addon is installed (note that the "
+"runbot runs the tests with all addons installed)."
 msgstr ""
+"Благодаря тому, как Odoo разработан, любой аддон может изменять поведение "
+"других частей системы. Например, дополнение * voip * может изменить виджет *"
+" FieldPhone * для использования дополнительных функций. Это не очень хорошо "
+"с точки зрения системы тестирования, так как это означает, что тест в сети "
+"аддонов будет провален всякий раз, когда аддон voip установлен (обратите "
+"внимание, что runbot запускает тесты со всеми установленными аддонами)."
 
 #: ../../reference/testing.rst:337
 msgid ""
-"At the same time, our testing sytem is good, because it can detect "
-"whenever another module breaks some core functionality.  There is no "
-"complete solution to this issue.  For now, we solve this on a case by "
-"case basis."
+"At the same time, our testing sytem is good, because it can detect whenever "
+"another module breaks some core functionality.  There is no complete "
+"solution to this issue.  For now, we solve this on a case by case basis."
 msgstr ""
+"В то же время, наша система тестирования хороша, потому что она может "
+"обнаруживать, когда другой модуль нарушает некоторые основные функции. Нет "
+"полного решения этой проблемы. Сейчас мы решаем это в каждом конкретном "
+"случае."
 
 #: ../../reference/testing.rst:341
 msgid ""
-"Usually, it is not a good idea to modify some other behaviour.  For our "
-"voip example, it is certainly cleaner to add a new *FieldVOIPPhone* "
-"widget and modify the few views that needs it.  This way, the "
-"*FieldPhone* widget is not impacted, and both can be tested."
+"Usually, it is not a good idea to modify some other behaviour.  For our voip"
+" example, it is certainly cleaner to add a new *FieldVOIPPhone* widget and "
+"modify the few views that needs it.  This way, the *FieldPhone* widget is "
+"not impacted, and both can be tested."
 msgstr ""
+"Обычно не стоит менять какое-либо другое поведение. В нашем примере с voip "
+"лучше добавить новый виджет * FieldVOIPPhone * и изменить несколько "
+"представлений, которым он нужен. Таким образом, виджет * FieldPhone * не "
+"затрагивается, и оба могут быть протестированы."
 
 #: ../../reference/testing.rst:347
 msgid "Adding a new test case"
-msgstr ""
+msgstr "Добавление нового теста"
 
 #: ../../reference/testing.rst:349
 msgid ""
-"Let us assume that we are maintaining an addon *my_addon*, and that we "
-"want to add a test for some javascript code (for example, some utility "
-"function myFunction, located in *my_addon.utils*). The process to add a "
-"new test case is the following:"
+"Let us assume that we are maintaining an addon *my_addon*, and that we want "
+"to add a test for some javascript code (for example, some utility function "
+"myFunction, located in *my_addon.utils*). The process to add a new test case"
+" is the following:"
 msgstr ""
+"Предположим, что мы поддерживаем аддон * my_addon * и хотим добавить тест "
+"для некоторого кода JavaScript (например, некоторой служебной функции "
+"myFunction, расположенной в * my_addon.utils *). Процесс добавления нового "
+"контрольного примера следующий:"
 
 #: ../../reference/testing.rst:354
 msgid ""
-"create a new file *my_addon/static/tests/utils_tests.js*. This file "
-"contains the basic code to add a QUnit module *my_addon > utils*."
+"create a new file *my_addon/static/tests/utils_tests.js*. This file contains"
+" the basic code to add a QUnit module *my_addon > utils*."
 msgstr ""
+"создайте новый файл * my_addon / static / tests / utils_tests.js *. Этот "
+"файл содержит основной код для добавления модуля QUnit * my_addon&gt; utils "
+"*."
 
 #: ../../reference/testing.rst:372
 msgid "In *my_addon/assets.xml*, add the file to the main test assets:"
 msgstr ""
+"В * my_addon / assets.xml * добавьте файл в основные тестовые ресурсы:"
 
 #: ../../reference/testing.rst:385
 msgid ""
-"Restart the server and update *my_addon*, or do it from the interface (to"
-" make sure the new test file is loaded)"
+"Restart the server and update *my_addon*, or do it from the interface (to "
+"make sure the new test file is loaded)"
 msgstr ""
+"Перезапустите сервер и обновите * my_addon * или сделайте это из интерфейса "
+"(чтобы убедиться, что новый тестовый файл загружен)"
 
 #: ../../reference/testing.rst:388
 msgid "Add a test case after the definition of the *utils* sub test suite:"
 msgstr ""
+"Добавьте тестовый пример после определения набора субтестов * utils *:"
 
 #: ../../reference/testing.rst:399
 msgid "Visit */web/tests/* to make sure the test is executed"
-msgstr ""
+msgstr "Посетите * / web / tests / *, чтобы убедиться, что тест выполнен"
 
 #: ../../reference/testing.rst:402
 msgid "Helper functions and specialized assertions"
-msgstr ""
+msgstr "Вспомогательные функции и специализированные утверждения"
 
 #: ../../reference/testing.rst:404
 msgid ""
 "Without help, it is quite difficult to test some parts of Odoo. In "
-"particular, views are tricky, because they communicate with the server "
-"and may perform many rpcs, which needs to be mocked.  This is why we "
-"developed some specialized helper functions, located in `test_utils.js`_."
+"particular, views are tricky, because they communicate with the server and "
+"may perform many rpcs, which needs to be mocked.  This is why we developed "
+"some specialized helper functions, located in `test_utils.js`_."
 msgstr ""
+"Без помощи довольно сложно протестировать некоторые части Odoo. В частности,"
+" представления являются хитрыми, потому что они взаимодействуют с сервером и"
+" могут выполнять много операций rpcs, которые необходимо смоделировать. Вот "
+"почему мы разработали некоторые специализированные вспомогательные функции, "
+"расположенные в `test_utils.js`_."
 
 #: ../../reference/testing.rst:409
 msgid ""
-"Mock test functions: these functions help setting up a test environment. "
-"The most important use case is mocking the answers given by the Odoo "
-"server. These functions use a `mock server`_. This is a javascript class "
-"that simulates answers to the most common model methods: read, "
-"search_read, nameget, ..."
+"Mock test functions: these functions help setting up a test environment. The"
+" most important use case is mocking the answers given by the Odoo server. "
+"These functions use a `mock server`_. This is a javascript class that "
+"simulates answers to the most common model methods: read, search_read, "
+"nameget, ..."
 msgstr ""
+"Тестовые функции: эти функции помогают настроить тестовую среду. Наиболее "
+"важным вариантом использования является насмешка над ответами, данными "
+"сервером Odoo. Эти функции используют `mock server`_. Это класс javascript, "
+"который имитирует ответы на наиболее распространенные методы модели: read, "
+"search_read, nameget, ..."
 
 #: ../../reference/testing.rst:414
 msgid ""
-"DOM helpers: useful to simulate events/actions on some specific target. "
-"For example, testUtils.dom.click performs a click on a target.  Note that"
-" it is safer than doing it manually, because it also checks that the "
-"target exists, and is visible."
+"DOM helpers: useful to simulate events/actions on some specific target. For "
+"example, testUtils.dom.click performs a click on a target.  Note that it is "
+"safer than doing it manually, because it also checks that the target exists,"
+" and is visible."
 msgstr ""
+"Помощники DOM: полезны для имитации событий / действий для определенной "
+"цели. Например, testUtils.dom.click выполняет щелчок по цели. Обратите "
+"внимание, что это безопаснее, чем делать это вручную, поскольку он также "
+"проверяет, что цель существует и видна."
 
 #: ../../reference/testing.rst:419
 msgid ""
-"create helpers: they are probably the most important functions exported "
-"by `test_utils.js`_.  These helpers are useful to create a widget, with a"
-" mock environment, and a lot of small detail to simulate as much as "
-"possible the real conditions.  The most important is certainly "
-"`createView`_."
+"create helpers: they are probably the most important functions exported by "
+"`test_utils.js`_.  These helpers are useful to create a widget, with a mock "
+"environment, and a lot of small detail to simulate as much as possible the "
+"real conditions.  The most important is certainly `createView`_."
 msgstr ""
+"создавать помощников: они, вероятно, являются наиболее важными функциями, "
+"экспортируемыми `test_utils.js`_. Эти помощники полезны для создания "
+"виджетов, с имитацией среды и множеством мелких деталей, чтобы максимально "
+"симулировать реальные условия. Самое важное, безусловно, `createView`_."
 
 #: ../../reference/testing.rst:424
 msgid ""
-"`qunit assertions`_: QUnit can be extended with specialized assertions. "
-"For Odoo, we frequently test some DOM properties. This is why we made "
-"some assertions to help with that.  For example, the *containsOnce* "
-"assertion takes a widget/jQuery/HtmlElement and a selector, then checks "
-"if the target contains exactly one match for the css selector."
+"`qunit assertions`_: QUnit can be extended with specialized assertions. For "
+"Odoo, we frequently test some DOM properties. This is why we made some "
+"assertions to help with that.  For example, the *containsOnce* assertion "
+"takes a widget/jQuery/HtmlElement and a selector, then checks if the target "
+"contains exactly one match for the css selector."
 msgstr ""
+"`qunit assertions`_: QUnit может быть расширен специальными утверждениями. "
+"Для Odoo мы часто тестируем некоторые свойства DOM. Вот почему мы сделали "
+"некоторые утверждения, чтобы помочь с этим. Например, утверждение * "
+"containsOnce * принимает виджет / jQuery / HtmlElement и селектор, а затем "
+"проверяет, содержит ли цель одно совпадение с селектором css."
 
 #: ../../reference/testing.rst:430
 msgid ""
-"For example, with these helpers, here is what a simple form test could "
-"look like:"
+"For example, with these helpers, here is what a simple form test could look "
+"like:"
 msgstr ""
+"Например, с этими помощниками вот как может выглядеть простой тест формы:"
 
 #: ../../reference/testing.rst:454
 msgid ""
-"Notice the use of the testUtils.createView helper and of the containsOnce"
-" assertion.  Also, the form controller was properly destroyed at the end "
-"of the test."
+"Notice the use of the testUtils.createView helper and of the containsOnce "
+"assertion.  Also, the form controller was properly destroyed at the end of "
+"the test."
 msgstr ""
+"Обратите внимание на использование хелпера testUtils.createView и "
+"утверждения containsOnce. Кроме того, контроллер формы был должным образом "
+"уничтожен в конце теста."
 
 #: ../../reference/testing.rst:459
 msgid "Best Practices"
-msgstr ""
+msgstr "Лучшие практики"
 
 #: ../../reference/testing.rst:461
 msgid "In no particular order:"
-msgstr ""
+msgstr "В произвольном порядке:"
 
 #: ../../reference/testing.rst:463
 msgid "all test files should be added in *some_addon/static/tests/*"
 msgstr ""
+"все тестовые файлы должны быть добавлены в * some_addon / static / tests / *"
 
 #: ../../reference/testing.rst:464
 msgid ""
-"for bug fixes, make sure that the test fails without the bug fix, and "
-"passes with it.  This ensures that it actually works."
+"for bug fixes, make sure that the test fails without the bug fix, and passes"
+" with it.  This ensures that it actually works."
 msgstr ""
+"для исправления ошибок убедитесь, что тест не пройден без исправления "
+"ошибки, и проходит с ним. Это гарантирует, что это на самом деле работает."
 
 #: ../../reference/testing.rst:466
 msgid "try to have the minimal amount of code necessary for the test to work."
 msgstr ""
+"старайтесь иметь минимальный объем кода, необходимый для работы теста."
 
 #: ../../reference/testing.rst:467
 msgid ""
-"usually, two small tests are better than one large test.  A smaller test "
-"is easier to understand and to fix."
+"usually, two small tests are better than one large test.  A smaller test is "
+"easier to understand and to fix."
 msgstr ""
+"обычно два маленьких теста лучше, чем один большой. Меньший тест легче "
+"понять и исправить."
 
 #: ../../reference/testing.rst:469
 msgid ""
 "always cleanup after a test.  For example, if your test instantiates a "
 "widget, it should destroy it at the end."
 msgstr ""
+"всегда убирайте после теста. Например, если ваш тест создает экземпляр "
+"виджета, он должен уничтожить его в конце."
 
 #: ../../reference/testing.rst:471
 msgid ""
@@ -875,74 +1137,107 @@ msgid ""
 "whenever a bug is fixed, it is really much easier to add a test to an "
 "existing test suite."
 msgstr ""
+"нет необходимости иметь полное и полное покрытие кода. Но добавление "
+"нескольких тестов очень помогает: оно гарантирует, что ваш код не полностью "
+"сломан, и всякий раз, когда ошибка исправлена, действительно намного проще "
+"добавить тест в существующий набор тестов."
 
 #: ../../reference/testing.rst:474
 msgid ""
 "if you want to check some negative assertion (for example, that a "
 "HtmlElement does not have a specific css class), then try to add the "
-"positive assertion in the same test (for example, by doing an action that"
-" changes the state). This will help avoid the test to become dead in the "
+"positive assertion in the same test (for example, by doing an action that "
+"changes the state). This will help avoid the test to become dead in the "
 "future (for example, if the css class is changed)."
 msgstr ""
+"если вы хотите проверить некоторое отрицательное утверждение (например, что "
+"HtmlElement не имеет определенного класса css), то попробуйте добавить "
+"положительное утверждение в том же тесте (например, выполнив действие, "
+"которое изменяет состояние). Это поможет избежать смерти теста в будущем "
+"(например, при изменении класса css)."
 
 #: ../../reference/testing.rst:481
 msgid "Tips"
-msgstr ""
+msgstr "подсказки"
 
 #: ../../reference/testing.rst:483
 msgid ""
-"running only one test: you can (temporarily!) change the "
-"*QUnit.test(...)* definition into *QUnit.only(...)*.  This is useful to "
-"make sure that QUnit only runs this specific test."
+"running only one test: you can (temporarily!) change the *QUnit.test(...)* "
+"definition into *QUnit.only(...)*.  This is useful to make sure that QUnit "
+"only runs this specific test."
 msgstr ""
+"запуск только одного теста: вы можете (временно!) изменить определение * "
+"QUnit.test (...) * на * QUnit.only (...) *. Это полезно, чтобы убедиться, "
+"что QUnit запускает только этот конкретный тест."
 
 #: ../../reference/testing.rst:486
 msgid ""
-"debug flag: most create utility functions have a debug mode (activated by"
-" the debug: true parameter).  In that case, the target widget will be put"
-" in the DOM instead of the hidden qunit specific fixture, and more "
-"information will be logged. For example, all mocked network "
-"communications will be available in the console."
+"debug flag: most create utility functions have a debug mode (activated by "
+"the debug: true parameter).  In that case, the target widget will be put in "
+"the DOM instead of the hidden qunit specific fixture, and more information "
+"will be logged. For example, all mocked network communications will be "
+"available in the console."
 msgstr ""
+"флаг отладки: большинство служебных функций создания имеют режим отладки "
+"(активируется параметром debug: true). В этом случае целевой виджет будет "
+"помещен в DOM вместо специального скрытого прибора Qunit, и будет записано "
+"больше информации. Например, все смоделированные сетевые коммуникации будут "
+"доступны в консоли."
 
 #: ../../reference/testing.rst:491
 msgid ""
 "when working on a failing test, it is common to add the debug flag, then "
-"comment the end of the test (in particular, the destroy call).  With "
-"this, it is possible to see the state of the widget directly, and even "
-"better, to manipulate the widget by clicking/interacting with it."
+"comment the end of the test (in particular, the destroy call).  With this, "
+"it is possible to see the state of the widget directly, and even better, to "
+"manipulate the widget by clicking/interacting with it."
 msgstr ""
+"при работе над ошибочным тестом обычно добавляют флаг отладки, а затем "
+"комментируют конец теста (в частности, вызов destroy). Благодаря этому можно"
+" напрямую видеть состояние виджета и, что еще лучше, управлять им, щелкая / "
+"взаимодействуя с ним."
 
 #: ../../reference/testing.rst:498
 msgid "Integration Testing"
-msgstr ""
+msgstr "Интеграционное тестирование"
 
 #: ../../reference/testing.rst:500
 msgid ""
-"Testing Python code and JS code separately is very useful, but it does "
-"not prove that the web client and the server work together.  In order to "
-"do that, we can write another kind of test: tours.  A tour is a mini "
-"scenario of some interesting business flow.  It explains a sequence of "
-"steps that should be followed.  The test runner will then create a "
-"phantom_js browser, point it to the proper url and simulate the click and"
-" inputs, according to the scenario."
+"Testing Python code and JS code separately is very useful, but it does not "
+"prove that the web client and the server work together.  In order to do "
+"that, we can write another kind of test: tours.  A tour is a mini scenario "
+"of some interesting business flow.  It explains a sequence of steps that "
+"should be followed.  The test runner will then create a phantom_js browser, "
+"point it to the proper url and simulate the click and inputs, according to "
+"the scenario."
 msgstr ""
+"Тестирование кода Python и кода JS по отдельности очень полезно, но это не "
+"доказывает, что веб-клиент и сервер работают вместе. Для этого мы можем "
+"написать еще один вид теста: туры. Тур - это мини-сценарий интересного "
+"делового потока. Это объясняет последовательность шагов, которые должны быть"
+" выполнены. Затем организатор теста создаст браузер phantom_js, укажет ему "
+"правильный URL-адрес и смоделирует щелчок и ввод данных в соответствии со "
+"сценарием."
 
 #: ../../reference/testing.rst:508
 msgid "Screenshots and screencasts during browser_js tests"
-msgstr ""
+msgstr "Скриншоты и скриншоты во время тестов browser_js"
 
 #: ../../reference/testing.rst:510
 msgid ""
-"When running tests that use HttpCase.browser_js from the command line, "
-"the Chrome browser is used in headless mode. By default, if a test fails,"
-" a PNG screenshot is taken at the moment of the failure and written in"
+"When running tests that use HttpCase.browser_js from the command line, the "
+"Chrome browser is used in headless mode. By default, if a test fails, a PNG "
+"screenshot is taken at the moment of the failure and written in"
 msgstr ""
+"При запуске тестов, использующих HttpCase.browser_js из командной строки, "
+"браузер Chrome используется в автономном режиме. По умолчанию, если тест не "
+"пройден, снимок экрана PNG берется в момент сбоя и записывается в"
 
 #: ../../reference/testing.rst:518
 msgid ""
-"Two new command line arguments were added since Odoo 13.0 to control this"
-" behavior: :option:`--screenshots <odoo-bin --screenshots>` and "
+"Two new command line arguments were added since Odoo 13.0 to control this "
+"behavior: :option:`--screenshots <odoo-bin --screenshots>` and "
 ":option:`--screencasts <odoo-bin --screencasts>`"
 msgstr ""
-
+"С Odoo 13.0 были добавлены два новых аргумента командной строки для "
+"управления этим поведением:: option: `--screenshots <odoo-bin --screenshots>"
+" `и: опция:` --screencasts <odoo-bin --screencasts> `"

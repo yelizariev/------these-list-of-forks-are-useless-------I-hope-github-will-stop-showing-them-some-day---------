@@ -19,96 +19,122 @@ msgstr ""
 
 #: ../../howtos/profilecode.rst:3
 msgid "Profiling Odoo code"
-msgstr ""
+msgstr "Профилирование кода Odoo"
 
 #: ../../howtos/profilecode.rst:7
 msgid ""
 "This tutorial requires :ref:`having installed Odoo <setup/install>` and "
 ":doc:`writing Odoo code <backend>`"
 msgstr ""
+"Этот учебник требует: ref: `установив Odoo <setup/install> `и :doc:`writing "
+"Odoo code <backend>`"
 
 #: ../../howtos/profilecode.rst:11
 msgid "Graph a method"
-msgstr ""
+msgstr "График метод"
 
 #: ../../howtos/profilecode.rst:13
 msgid ""
-"Odoo embeds a profiler of code. This embeded profiler output can be used "
-"to generate a graph of calls triggered by the method, number of queries, "
-"percentage of time taken in the method itself as well as the time that "
-"the method took and its sub-called methods."
+"Odoo embeds a profiler of code. This embeded profiler output can be used to "
+"generate a graph of calls triggered by the method, number of queries, "
+"percentage of time taken in the method itself as well as the time that the "
+"method took and its sub-called methods."
 msgstr ""
+"Odoo встраивает профилировщик кода. Этот встроенный вывод профилировщика "
+"можно использовать для генерации графика вызовов, инициируемых методом, "
+"количества запросов, процента времени, затраченного в самом методе, а также "
+"времени, которое занял метод и его под-вызываемые методы."
 
 #: ../../howtos/profilecode.rst:25
 msgid "This produces a file called /temp/prof.profile"
-msgstr ""
+msgstr "Это создает файл с именем /temp/prof.profile"
 
 #: ../../howtos/profilecode.rst:27
 msgid "A tool called *gprof2dot* will produce a graph with this result:"
 msgstr ""
+"Инструмент под названием * gprof2dot * создаст график с таким результатом:"
 
 #: ../../howtos/profilecode.rst:33
 msgid "A tool called *xdot* will display the resulting graph:"
-msgstr ""
+msgstr "Инструмент под названием * xdot * отобразит полученный график:"
 
 #: ../../howtos/profilecode.rst:40
 msgid "Log a method"
-msgstr ""
+msgstr "Журнал метод"
 
 #: ../../howtos/profilecode.rst:42
 msgid "Another profiler can be used to log statistics on a method:"
 msgstr ""
+"Другой профилировщик может использоваться для регистрации статистики по "
+"методу:"
 
 #: ../../howtos/profilecode.rst:52
 msgid ""
 "The statistics will be displayed into the logs once the method to be "
 "analysed is completely reviewed."
 msgstr ""
+"Статистика будет отображаться в журналах, как только анализируемый метод "
+"будет полностью рассмотрен."
 
 #: ../../howtos/profilecode.rst:83
 msgid "Dump stack"
-msgstr ""
+msgstr "Стек дампа"
 
 #: ../../howtos/profilecode.rst:85
 msgid ""
 "Sending the SIGQUIT signal to an Odoo process (only available on POSIX) "
-"makes this process output the current stack trace to log, with info "
-"level. When an odoo process seems stucked, sending this signal to the "
-"process permit to know what the process is doing, and letting the process"
-" continue his job."
+"makes this process output the current stack trace to log, with info level. "
+"When an odoo process seems stucked, sending this signal to the process "
+"permit to know what the process is doing, and letting the process continue "
+"his job."
 msgstr ""
+"Отправка сигнала SIGQUIT процессу Odoo (доступно только в POSIX) заставляет "
+"этот процесс выводить текущую трассировку стека в журнал с уровнем "
+"информации. Когда процесс odoo кажется застрявшим, отправка этого сигнала "
+"процессу позволяет узнать, что делает процесс, и позволяет процессу "
+"продолжить свою работу."
 
 #: ../../howtos/profilecode.rst:91
 msgid "Tracing code execution"
-msgstr ""
+msgstr "Отслеживание выполнения кода"
 
 #: ../../howtos/profilecode.rst:93
 msgid ""
-"Instead of sending the SIGQUIT signal to an Odoo process often enough, to"
-" check where the processes are performing worse than expected, we can use"
-" the pyflame tool to do it for us."
+"Instead of sending the SIGQUIT signal to an Odoo process often enough, to "
+"check where the processes are performing worse than expected, we can use the"
+" pyflame tool to do it for us."
 msgstr ""
+"Вместо того, чтобы посылать сигнал SIGQUIT процессу Odoo достаточно часто, "
+"чтобы проверить, где процессы работают хуже, чем ожидалось, мы можем "
+"использовать инструмент pyflame, чтобы сделать это за нас."
 
 #: ../../howtos/profilecode.rst:98
 msgid "Install pyflame and flamegraph"
-msgstr ""
+msgstr "Установите пифламе и флеймограф"
 
 #: ../../howtos/profilecode.rst:113
 msgid "Record executed code"
-msgstr ""
+msgstr "Запишите выполненный код"
 
 #: ../../howtos/profilecode.rst:115
 msgid ""
-"As pyflame is installed, we now record the executed code lines with "
-"pyflame. This tool will record, multiple times a second, the stacktrace "
-"of the process. Once done, we'll display them as an execution graph."
+"As pyflame is installed, we now record the executed code lines with pyflame."
+" This tool will record, multiple times a second, the stacktrace of the "
+"process. Once done, we'll display them as an execution graph."
 msgstr ""
+"Поскольку pyflame установлен, мы теперь записываем строки исполняемого кода "
+"с pyflame. Этот инструмент будет записывать, несколько раз в секунду, "
+"трассировку стека процесса. После этого мы отобразим их как график "
+"выполнения."
 
 #: ../../howtos/profilecode.rst:123
 msgid ""
-"where <PID> is the process ID of the odoo process you want to graph. This"
-" will wait until the dead of the process, with a maximum of one hour, and"
-" and get 5 traces a second. With the output of pyflame, we can produce an"
-" SVG graph with the flamegraph tool:"
+"where <PID> is the process ID of the odoo process you want to graph. This "
+"will wait until the dead of the process, with a maximum of one hour, and and"
+" get 5 traces a second. With the output of pyflame, we can produce an SVG "
+"graph with the flamegraph tool:"
 msgstr ""
-
+"где <PID> это идентификатор процесса odoo, который вы хотите отобразить на "
+"графике. Это будет ждать до завершения процесса, максимум один час, и "
+"получит 5 трасс в секунду. С выводом pyflame мы можем создать SVG-график с "
+"помощью инструмента Flamegraph:"

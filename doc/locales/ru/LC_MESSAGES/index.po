@@ -19,5 +19,4 @@ msgstr ""
 
 #: ../../index.rst:6
 msgid "Index"
-msgstr ""
-
+msgstr "Показатель"

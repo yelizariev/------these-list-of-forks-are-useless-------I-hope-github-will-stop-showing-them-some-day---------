@@ -19,123 +19,162 @@ msgstr ""
 
 #: ../../howtos/company.rst:7
 msgid "Multi-company Guidelines"
-msgstr ""
+msgstr "Руководство для нескольких компаний"
 
 #: ../../howtos/company.rst:11
 msgid ""
 "This tutorial requires good knowledge of Odoo. Please refer to the "
 ":ref:`basic tutorial <howto/base>` first if needed."
 msgstr ""
+"Этот урок требует хорошего знания Odoo. Пожалуйста, обратитесь к: ref: "
+"`basic tutorial <howto/base> `сначала, если нужно."
 
 #: ../../howtos/company.rst:14
 msgid ""
-"As of version 13.0, a user can be logged in multiple companies at once. "
-"This allows the user to access information from multiple companies but "
-"also to create/edit records in a multi-company environment."
+"As of version 13.0, a user can be logged in multiple companies at once. This"
+" allows the user to access information from multiple companies but also to "
+"create/edit records in a multi-company environment."
 msgstr ""
+"Начиная с версии 13.0, пользователь может войти в несколько компаний "
+"одновременно. Это позволяет пользователю получать доступ к информации от "
+"нескольких компаний, а также создавать / редактировать записи в среде "
+"нескольких компаний."
 
 #: ../../howtos/company.rst:18
 msgid ""
 "If not handled correctly, it may be the source of a lot of inconsistent "
-"multi-company behaviors. For instance, a user logged in both companies A "
-"and B could create a sales order in company A and add products belonging "
-"to company B to it. It is only when the user will log out from company B "
-"that access errors will occur for the sales order."
+"multi-company behaviors. For instance, a user logged in both companies A and"
+" B could create a sales order in company A and add products belonging to "
+"company B to it. It is only when the user will log out from company B that "
+"access errors will occur for the sales order."
 msgstr ""
+"Если не обрабатывается правильно, это может быть источником многих "
+"противоречивых поведений нескольких компаний. Например, пользователь, "
+"вошедший в обе компании A и B, может создать заказ на продажу в компании A и"
+" добавить в него продукты, принадлежащие компании B. Только когда "
+"пользователь выйдет из компании B, ошибки доступа возникнут для заказа на "
+"продажу."
 
 #: ../../howtos/company.rst:23
 msgid ""
-"To correctly manage multi-company behaviors, Odoo's ORM provides multiple"
-" features:"
+"To correctly manage multi-company behaviors, Odoo's ORM provides multiple "
+"features:"
 msgstr ""
+"Для правильного управления поведением нескольких компаний ORM Odoo "
+"предоставляет несколько функций:"
 
 #: ../../howtos/company.rst:25
 msgid ":ref:`Company-dependent fields <howto/company/company_dependent>`"
 msgstr ""
+": ref: `зависимые от компании поля <howto/company/company_dependent> `"
 
 #: ../../howtos/company.rst:26
 msgid ":ref:`Multi-company consistency <howto/company/check_company>`"
 msgstr ""
+": ref: `Согласованность нескольких компаний <howto/company/check_company> `"
 
 #: ../../howtos/company.rst:27
 msgid ":ref:`Default company <howto/company/default_company>`"
-msgstr ""
+msgstr ": ref: `По умолчанию компания <howto/company/default_company> `"
 
 #: ../../howtos/company.rst:28
 msgid ":ref:`Views <howto/company/views>`"
-msgstr ""
+msgstr ": Ссылка: `Просмотров <howto/company/views> `"
 
 #: ../../howtos/company.rst:29
 msgid ":ref:`Security rules <howto/company/security>`"
-msgstr ""
+msgstr ": ref: `Правила безопасности <howto/company/security> `"
 
 #: ../../howtos/company.rst:34
 msgid "Company-dependent fields"
-msgstr ""
+msgstr "Зависимые от компании поля"
 
 #: ../../howtos/company.rst:36
 msgid ""
 "When a record is available from multiple companies, we must expect that "
-"different values will be assigned to a given field depending on the "
-"company from which the value is set."
+"different values will be assigned to a given field depending on the company "
+"from which the value is set."
 msgstr ""
+"Когда запись доступна из нескольких компаний, мы должны ожидать, что для "
+"данного поля будут назначены разные значения в зависимости от компании, из "
+"которой установлено значение."
 
 #: ../../howtos/company.rst:39
 msgid ""
-"For the field of a same record to support several values, it must be "
-"defined with the attribute `company_dependent` set to `True`."
+"For the field of a same record to support several values, it must be defined"
+" with the attribute `company_dependent` set to `True`."
 msgstr ""
+"Чтобы поле одной и той же записи поддерживало несколько значений, оно должно"
+" быть определено с атрибутом `company_dependent`, установленным в` True`."
 
 #: ../../howtos/company.rst:58
 msgid ""
 "The `_compute_display_info` method is decorated with "
-"`depends_context('force_company')` (see "
-":attr:`~odoo.api.depends_context`) to ensure that the computed field is "
-"recomputed depending on the forced/current company (`force_company` "
-"context key set, or `self.env.company`)."
+"`depends_context('force_company')` (see :attr:`~odoo.api.depends_context`) "
+"to ensure that the computed field is recomputed depending on the "
+"forced/current company (`force_company` context key set, or "
+"`self.env.company`)."
 msgstr ""
+"Метод `_compute_display_info` декорирован с помощью метода "
+"&#39;depen_context (&#39; force_company &#39;)` (см .: attr: `~ "
+"odoo.api.depends_context`), чтобы обеспечить пересчет вычисляемого поля в "
+"зависимости от принудительной / текущей компании (контекст` force_company`) "
+"ключ или `self.env.company`)."
 
 #: ../../howtos/company.rst:63
 msgid ""
 "When a company-dependent field is read, the current company is used to "
-"retrieve its value. In other words, if a user is logged in companies A "
-"and B with A as main company and creates a record for company B, the "
-"values of company-dependent fields will be that of company A."
+"retrieve its value. In other words, if a user is logged in companies A and B"
+" with A as main company and creates a record for company B, the values of "
+"company-dependent fields will be that of company A."
 msgstr ""
+"Когда поле, зависящее от компании, читается, текущая компания используется "
+"для получения его значения. Другими словами, если пользователь вошел в "
+"компании A и B с A в качестве основной компании и создал запись для компании"
+" B, значения зависимых от компании полей будут равны компании A."
 
 #: ../../howtos/company.rst:67
 msgid ""
-"To read the values of company-dependent fields set from another company "
-"than the current one, the context key `force_company` must be set to the "
-"ID of the desired company."
+"To read the values of company-dependent fields set from another company than"
+" the current one, the context key `force_company` must be set to the ID of "
+"the desired company."
 msgstr ""
+"Чтобы прочитать значения зависимых от компании полей, установленных из "
+"другой компании, отличной от текущей, в контекстном ключе `force_company` "
+"должен быть указан идентификатор нужной компании."
 
 #: ../../howtos/company.rst:82
 msgid "Multi-company consistency"
-msgstr ""
+msgstr "Многопрофильность"
 
 #: ../../howtos/company.rst:84
 msgid ""
-"When a record is made shareable between several companies by the mean of "
-"a `company_id` field, we must take care that it cannot be linked to the "
-"record of another company through a relational field. For instance, we do"
-" not want to have a sales order and its invoice belonging to different "
-"companies."
+"When a record is made shareable between several companies by the mean of a "
+"`company_id` field, we must take care that it cannot be linked to the record"
+" of another company through a relational field. For instance, we do not want"
+" to have a sales order and its invoice belonging to different companies."
 msgstr ""
+"Когда запись делится между несколькими компаниями посредством поля "
+"`company_id`, мы должны позаботиться о том, чтобы ее нельзя было связать с "
+"записью другой компании через поле реляционных данных. Например, мы не "
+"хотим, чтобы заказ на продажу и его счет принадлежали разным компаниям."
 
 #: ../../howtos/company.rst:88
 msgid "To ensure this multi-company consistency, you must:"
 msgstr ""
+"Чтобы обеспечить согласованность действий нескольких компаний, вы должны:"
 
 #: ../../howtos/company.rst:90
 msgid "Set the class attribute `_check_company_auto` to `True`."
-msgstr ""
+msgstr "Установите атрибут класса `_check_company_auto` в` True`."
 
 #: ../../howtos/company.rst:91
 msgid ""
-"Define relational fields with the attribute `check_company` set to `True`"
-" if their model has a `company_id` field."
+"Define relational fields with the attribute `check_company` set to `True` if"
+" their model has a `company_id` field."
 msgstr ""
+"Определите реляционные поля с атрибутом `check_company`, установленным в` "
+"True`, если их модель имеет поле `company_id`."
 
 #: ../../howtos/company.rst:94
 msgid ""
@@ -143,26 +182,31 @@ msgid ""
 ":meth:`~odoo.models.Model.write`, automatic checks will be triggered to "
 "ensure the multi-company consistency of the record."
 msgstr ""
+"Для каждого: meth: `~ odoo.models.Model.create` и: meth:` ~ "
+"odoo.models.Model.write` будут выполняться автоматические проверки для "
+"обеспечения согласованности записи в нескольких компаниях."
 
 #: ../../howtos/company.rst:108
 msgid "The field `company_id` must not be defined with `check_company=True`."
 msgstr ""
+"Поле `company_id` не должно быть определено с помощью` check_company = "
+"True`."
 
 #: odoo.models.Model._check_company:1 of
 msgid "Check the companies of the values of the given field names."
-msgstr ""
+msgstr "Проверьте компании значения указанных названий полей."
 
 #: odoo.models.Model._check_company of
 msgid "Параметры"
-msgstr ""
+msgstr "Параметры"
 
 #: odoo.models.Model._check_company:3 of
 msgid "names of relational fields to check"
-msgstr ""
+msgstr "имена реляционных полей для проверки"
 
 #: odoo.models.Model._check_company of
 msgid "Исключение"
-msgstr ""
+msgstr "Исключение"
 
 #: odoo.models.Model._check_company:4 of
 msgid ""
@@ -170,74 +214,101 @@ msgid ""
 "self.company_id]` (or `self` if "
 ":class:`~odoo.addons.base.models.res_company`)."
 msgstr ""
+"если значение `company_id` значения какого-либо поля отсутствует в` [False, "
+"self.company_id] `(или` self` if: class: `~ "
+"odoo.addons.base.models.res_company`)."
 
 #: odoo.models.Model._check_company:8 of
 msgid ""
-"For :class:`~odoo.addons.base.models.res_users` relational fields, "
-"verifies record company is in `company_ids` fields."
+"For :class:`~odoo.addons.base.models.res_users` relational fields, verifies "
+"record company is in `company_ids` fields."
 msgstr ""
+"Для: class: `~ odoo.addons.base.models.res_users` реляционных полей, "
+"проверяет, находится ли звукозаписывающая компания в полях` company_ids`."
 
 #: odoo.models.Model._check_company:11 of
 msgid ""
 "User with main company A, having access to company A and B, could be "
 "assigned or linked to records in company B."
 msgstr ""
+"Пользователь с основной компанией A, имеющий доступ к компаниям A и B, может"
+" быть назначен или связан с записями в компании B."
 
 #: ../../howtos/company.rst:113
 msgid ""
 "The `check_company` feature performs a strict check ! It means that if a "
-"record has no `company_id` (i.e. the field is not required), it cannot be"
-" linked to a record whose `company_id` is set."
+"record has no `company_id` (i.e. the field is not required), it cannot be "
+"linked to a record whose `company_id` is set."
 msgstr ""
+"Функция check_company выполняет строгую проверку! Это означает, что если "
+"запись не имеет `company_id` (то есть поле не является обязательным), она не"
+" может быть связана с записью, для которой установлен` company_id`."
 
 #: ../../howtos/company.rst:119
 msgid ""
-"When no domain is defined on the field and `check_company` is set to "
-"`True`, a default domain is added: `['|', '('company_id', '=', False), "
+"When no domain is defined on the field and `check_company` is set to `True`,"
+" a default domain is added: `['|', '('company_id', '=', False), "
 "('company_id', '=', company_id)]`"
 msgstr ""
+"Если домен не определен в поле и для `check_company` установлено значение` "
+"True`, добавляется домен по умолчанию: `[&#39;|&#39;, &#39;(&#39; company_id"
+" &#39;,&#39; = &#39;, False), (&#39; company_id &#39;,&#39; = &#39;, "
+"company_id)] `"
 
 #: ../../howtos/company.rst:125
 msgid "Default company"
-msgstr ""
+msgstr "Компания по умолчанию"
 
 #: ../../howtos/company.rst:127
 msgid ""
-"When the field `company_id` is made required on a model, a good practice "
-"is to set a default company. It eases the setup flow for the user or even"
-" guarantees its validity when the company is hidden from the view. "
-"Indeed, the company is usually hidden if the user does not have access to"
-" multiple companies (i.e. when the user does not have the group "
+"When the field `company_id` is made required on a model, a good practice is "
+"to set a default company. It eases the setup flow for the user or even "
+"guarantees its validity when the company is hidden from the view. Indeed, "
+"the company is usually hidden if the user does not have access to multiple "
+"companies (i.e. when the user does not have the group "
 "`base.group_multi_company`)."
 msgstr ""
+"Когда поле &#39;company_id` является обязательным для модели, рекомендуется "
+"установить компанию по умолчанию. Это облегчает процесс настройки для "
+"пользователя или даже гарантирует его действительность, когда компания "
+"скрыта от просмотра. Действительно, компания обычно скрыта, если у "
+"пользователя нет доступа к нескольким компаниям (т. Е. Когда у пользователя "
+"нет группы `base.group_multi_company`)."
 
 #: ../../howtos/company.rst:149
 msgid "Views"
-msgstr ""
+msgstr "Взгляды"
 
 #: ../../howtos/company.rst:151
 msgid ""
-"As stated in :ref:`above <howto/company/default_company>`, the company is"
-" usually hidden from the view if the user does not have access to "
-"multiple companies. This is tested with the group "
-"`base.group_multi_company`."
+"As stated in :ref:`above <howto/company/default_company>`, the company is "
+"usually hidden from the view if the user does not have access to multiple "
+"companies. This is tested with the group `base.group_multi_company`."
 msgstr ""
+"Как указано в: ref: `выше <howto/company/default_company> `, компания обычно"
+" скрыта от просмотра, если пользователь не имеет доступа к нескольким "
+"компаниям. Это проверено с группой `base.group_multi_company`."
 
 #: ../../howtos/company.rst:178
 msgid "Security rules"
-msgstr ""
+msgstr "Правила безопасности"
 
 #: ../../howtos/company.rst:180
 msgid ""
-"When working with records shared across companies or restricted to a "
-"single company, we must take care that a user does not have access to "
-"records belonging to other companies."
+"When working with records shared across companies or restricted to a single "
+"company, we must take care that a user does not have access to records "
+"belonging to other companies."
 msgstr ""
+"При работе с записями, которые распространяются между компаниями или "
+"ограничиваются одной компанией, мы должны следить за тем, чтобы у "
+"пользователя не было доступа к записям, принадлежащим другим компаниям."
 
 #: ../../howtos/company.rst:183
 msgid ""
-"This is achieved with security rules based on `company_ids`, which "
-"contains the current companies of the user (the companies the user "
-"checked in the multi-company widget)."
+"This is achieved with security rules based on `company_ids`, which contains "
+"the current companies of the user (the companies the user checked in the "
+"multi-company widget)."
 msgstr ""
-
+"Это достигается с помощью правил безопасности, основанных на `company_ids`, "
+"который содержит текущие компании пользователя (компании, которые "
+"пользователь проверил в виджете для нескольких компаний)."

@@ -19,148 +19,196 @@ msgstr ""
 
 #: ../../reference/javascript_cheatsheet.rst:7
 msgid "Javascript Cheatsheet"
-msgstr ""
+msgstr "Javascript Cheatsheet"
 
 #: ../../reference/javascript_cheatsheet.rst:9
 msgid ""
-"There are many ways to solve a problem in JavaScript, and in Odoo.  "
-"However, the Odoo framework was designed to be extensible (this is a "
-"pretty big constraint), and some common problems have a nice standard "
-"solution.  The standard solution has probably the advantage of being easy"
-" to understand for an odoo developers, and will probably keep working "
-"when Odoo is modified."
+"There are many ways to solve a problem in JavaScript, and in Odoo.  However,"
+" the Odoo framework was designed to be extensible (this is a pretty big "
+"constraint), and some common problems have a nice standard solution.  The "
+"standard solution has probably the advantage of being easy to understand for"
+" an odoo developers, and will probably keep working when Odoo is modified."
 msgstr ""
+"Есть много способов решить проблему как в JavaScript, так и в Odoo. Тем не "
+"менее, инфраструктура Odoo была разработана, чтобы быть расширяемой (это "
+"довольно большое ограничение), и некоторые распространенные проблемы имеют "
+"хорошее стандартное решение. Стандартное решение, вероятно, имеет то "
+"преимущество, что его легко понять разработчикам odoo, и, вероятно, оно "
+"будет продолжать работать после модификации Odoo."
 
 #: ../../reference/javascript_cheatsheet.rst:15
 msgid ""
-"This document tries to explain the way one could solve some of these "
-"issues. Note that this is not a reference.  This is just a random "
-"collection of recipes, or explanations on how to proceed in some cases."
+"This document tries to explain the way one could solve some of these issues."
+" Note that this is not a reference.  This is just a random collection of "
+"recipes, or explanations on how to proceed in some cases."
 msgstr ""
+"Этот документ пытается объяснить, как можно решить некоторые из этих "
+"проблем. Обратите внимание, что это не ссылка. Это просто случайная "
+"коллекция рецептов или объяснения того, как действовать в некоторых случаях."
 
 #: ../../reference/javascript_cheatsheet.rst:20
 msgid ""
-"First of all, remember that the first rule of customizing odoo with JS "
-"is: *try to do it in python*.  This may seem strange, but the python "
-"framework is quite extensible, and many behaviours can be done simply "
-"with a touch of xml or python.  This has usually a lower cost of "
-"maintenance than working with JS:"
+"First of all, remember that the first rule of customizing odoo with JS is: "
+"*try to do it in python*.  This may seem strange, but the python framework "
+"is quite extensible, and many behaviours can be done simply with a touch of "
+"xml or python.  This has usually a lower cost of maintenance than working "
+"with JS:"
 msgstr ""
+"Прежде всего, помните, что первое правило настройки odoo с помощью JS: * "
+"попробуйте сделать это в python *. Это может показаться странным, но среда "
+"Python достаточно расширяема, и многие варианты поведения могут быть "
+"реализованы просто с помощью xml или python. Это обычно имеет более низкую "
+"стоимость обслуживания, чем работа с JS:"
 
 #: ../../reference/javascript_cheatsheet.rst:25
 msgid ""
 "the JS framework tends to change more, so JS code needs to be more "
 "frequently updated"
 msgstr ""
+"среда JS имеет тенденцию меняться больше, поэтому код JS необходимо чаще "
+"обновлять"
 
 #: ../../reference/javascript_cheatsheet.rst:27
 msgid ""
-"it is often more difficult to implement a customized behaviour if it "
-"needs to communicate with the server and properly integrate with the "
-"javascript framework. There are many small details taken care by the "
-"framework that customized code needs to replicate.  For example, "
-"responsiveness, or updating the url, or displaying data without "
-"flickering."
+"it is often more difficult to implement a customized behaviour if it needs "
+"to communicate with the server and properly integrate with the javascript "
+"framework. There are many small details taken care by the framework that "
+"customized code needs to replicate.  For example, responsiveness, or "
+"updating the url, or displaying data without flickering."
 msgstr ""
+"часто бывает сложнее реализовать настраиваемое поведение, если ему "
+"необходимо взаимодействовать с сервером и должным образом интегрироваться в "
+"инфраструктуру javascript. Фреймворк требует много мелких деталей, которые "
+"нужно реплицировать в настраиваемом коде. Например, отзывчивость, или "
+"обновление URL, или отображение данных без мерцания."
 
 #: ../../reference/javascript_cheatsheet.rst:34
 msgid ""
-"This document does not really explain any concepts. This is more a "
-"cookbook.  For more details, please consult the javascript reference page"
-" (see :doc:`javascript_reference`)"
+"This document does not really explain any concepts. This is more a cookbook."
+"  For more details, please consult the javascript reference page (see "
+":doc:`javascript_reference`)"
 msgstr ""
+"Этот документ на самом деле не объясняет никаких понятий. Это больше "
+"поваренная книга. Для более подробной информации, пожалуйста, обратитесь к "
+"справочной странице по javascript (см . :doc:`javascript_reference`)"
 
 #: ../../reference/javascript_cheatsheet.rst:39
 msgid "Creating a new field widget"
-msgstr ""
+msgstr "Создание нового виджета поля"
 
 #: ../../reference/javascript_cheatsheet.rst:41
 msgid ""
 "This is probably a really common usecase: we want to display some "
-"information in a form view in a really specific (maybe business "
-"dependent) way.  For example, assume that we want to change the text "
-"color depending on some business condition."
+"information in a form view in a really specific (maybe business dependent) "
+"way.  For example, assume that we want to change the text color depending on"
+" some business condition."
 msgstr ""
+"Вероятно, это очень распространенный сценарий использования: мы хотим "
+"отображать некоторую информацию в виде формы действительно конкретным "
+"(возможно, бизнес-зависимым) способом. Например, предположим, что мы хотим "
+"изменить цвет текста в зависимости от бизнес-условий."
 
 #: ../../reference/javascript_cheatsheet.rst:45
 msgid ""
-"This can be done in three steps: creating a new widget, registering it in"
-" the field registry, then adding the widget to the field in the form view"
+"This can be done in three steps: creating a new widget, registering it in "
+"the field registry, then adding the widget to the field in the form view"
 msgstr ""
+"Это можно сделать в три этапа: создать новый виджет, зарегистрировать его в "
+"реестре полей, затем добавить виджет в поле в представлении формы."
 
 #: ../../reference/javascript_cheatsheet.rst:59
 msgid "creating a new widget:"
-msgstr ""
+msgstr "Создание нового виджета:"
 
 #: ../../reference/javascript_cheatsheet.rst:49
 msgid "This can be done by extending a widget:"
-msgstr ""
+msgstr "Это можно сделать, расширив виджет:"
 
 #: ../../reference/javascript_cheatsheet.rst:69
 msgid "registering it in the field registry:"
-msgstr ""
+msgstr "зарегистрировать его в полевом реестре:"
 
 #: ../../reference/javascript_cheatsheet.rst:62
 msgid ""
 "The web client needs to know the mapping between a widget name and its "
 "actual class.  This is done by a registry:"
 msgstr ""
+"Веб-клиент должен знать соответствие между именем виджета и его фактическим "
+"классом. Это делается реестром:"
 
 #: ../../reference/javascript_cheatsheet.rst:78
 msgid "adding the widget in the form view"
-msgstr ""
+msgstr "добавление виджета в виде формы"
 
 #: ../../reference/javascript_cheatsheet.rst:76
 msgid ""
 "Note that only the form, list and kanban views use this field widgets "
-"registry. These views are tightly integrated, because the list and kanban"
-" views can appear inside a form view)."
+"registry. These views are tightly integrated, because the list and kanban "
+"views can appear inside a form view)."
 msgstr ""
+"Обратите внимание, что только поля формы, списка и представления kanban "
+"используют это поле реестра виджетов. Эти представления тесно интегрированы,"
+" поскольку представления списка и канбана могут отображаться внутри "
+"представления формы)."
 
 #: ../../reference/javascript_cheatsheet.rst:81
 msgid "Modifying an existing field widget"
-msgstr ""
+msgstr "Изменение существующего виджета поля"
 
 #: ../../reference/javascript_cheatsheet.rst:83
 msgid ""
-"Another use case is that we want to modify an existing field widget.  For"
-" example, the voip addon in odoo need to modify the FieldPhone widget to "
-"add the possibility to easily call the given number on voip. This is done"
-" by *including* the FieldPhone widget, so there is no need to change any "
+"Another use case is that we want to modify an existing field widget.  For "
+"example, the voip addon in odoo need to modify the FieldPhone widget to add "
+"the possibility to easily call the given number on voip. This is done by "
+"*including* the FieldPhone widget, so there is no need to change any "
 "existing form view."
 msgstr ""
+"Другой вариант использования - мы хотим изменить существующий виджет поля. "
+"Например, аддон voip в odoo должен изменить виджет FieldPhone, чтобы "
+"добавить возможность легко звонить по указанному номеру в voip. Это делается"
+" путем * включения * виджета FieldPhone, поэтому нет необходимости изменять "
+"какой-либо существующий вид формы."
 
 #: ../../reference/javascript_cheatsheet.rst:88
 msgid ""
 "Field Widgets (instances of (subclass of) AbstractField) are like every "
 "other widgets, so they can be monkey patched. This looks like this:"
 msgstr ""
+"Виджеты полей (экземпляры (подкласса) AbstractField), как и все остальные "
+"виджеты, могут быть исправлены обезьянами. Это выглядит так:"
 
 #: ../../reference/javascript_cheatsheet.rst:110
 msgid ""
-"Note that there is no need to add the widget to the registry, since it is"
-" already registered."
+"Note that there is no need to add the widget to the registry, since it is "
+"already registered."
 msgstr ""
+"Обратите внимание, что нет необходимости добавлять виджет в реестр, так как "
+"он уже зарегистрирован."
 
 #: ../../reference/javascript_cheatsheet.rst:114
 msgid "Modifying a main widget from the interface"
-msgstr ""
+msgstr "Модификация основного виджета из интерфейса"
 
 #: ../../reference/javascript_cheatsheet.rst:116
 msgid ""
-"Another common usecase is the need to customize some elements from the "
-"user interface.  For example, adding a message in the home menu.  The "
-"usual process in this case is again to *include* the widget.  This is the"
-" only way to do it, since there are no registries for those widgets."
+"Another common usecase is the need to customize some elements from the user "
+"interface.  For example, adding a message in the home menu.  The usual "
+"process in this case is again to *include* the widget.  This is the only way"
+" to do it, since there are no registries for those widgets."
 msgstr ""
+"Другим распространенным вариантом использования является необходимость "
+"настройки некоторых элементов из пользовательского интерфейса. Например, "
+"добавив сообщение в домашнее меню. Обычный процесс в этом случае снова "
+"включает * включение * виджета. Это единственный способ сделать это, "
+"поскольку для этих виджетов нет реестров."
 
 #: ../../reference/javascript_cheatsheet.rst:121
 msgid "This is usually done with code looking like this:"
-msgstr ""
+msgstr "Обычно это делается с помощью кода, похожего на это:"
 
 #: ../../reference/javascript_cheatsheet.rst:137
 msgid "Creating a new view (from scratch)"
-msgstr ""
+msgstr "Создание нового вида (с нуля)"
 
 #: ../../reference/javascript_cheatsheet.rst:139
 msgid ""
@@ -168,20 +216,28 @@ msgid ""
 "highlight the steps that will probably need to be done (in no particular "
 "order):"
 msgstr ""
+"Создание нового представления - более сложная тема. Эта таблица будет только"
+" подсвечивать шаги, которые, вероятно, нужно будет выполнить (без "
+"определенного порядка):"
 
 #: ../../reference/javascript_cheatsheet.rst:142
 msgid "adding a new view type to the field ``type`` of ``ir.ui.view``::"
 msgstr ""
+"добавление нового типа представления в поле `` type`` из `` ir.ui.view`` ::"
 
 #: ../../reference/javascript_cheatsheet.rst:149
 msgid ""
 "adding the new view type to the field ``view_mode`` of "
 "``ir.actions.act_window.view``::"
 msgstr ""
+"добавление нового типа представления в поле `` view_mode`` `` "
+"ir.actions.act_window.view`` ::"
 
 #: ../../reference/javascript_cheatsheet.rst:180
 msgid "creating the four main pieces which makes a view (in JavaScript):"
 msgstr ""
+"Создание четырех основных частей, из которых создается представление (в "
+"JavaScript):"
 
 #: ../../reference/javascript_cheatsheet.rst:158
 msgid ""
@@ -190,92 +246,124 @@ msgid ""
 "``AbstractController``) and a model (from ``AbstractModel``).  I suggest "
 "starting by simply extending the superclasses:"
 msgstr ""
+"нам нужно представление (подкласс `` AbstractView``, это фабрика), средство "
+"визуализации (из `` AbstractRenderer``), контроллер (из `` "
+"AbstractController``) и модель (из `` AbstractModel` `). Я предлагаю начать "
+"с простого расширения суперклассов:"
 
 #: ../../reference/javascript_cheatsheet.rst:190
 msgid "adding the view to the registry:"
-msgstr ""
+msgstr "добавление представления в реестр:"
 
 #: ../../reference/javascript_cheatsheet.rst:183
 msgid ""
-"As usual, the mapping between a view type and the actual class needs to "
-"be updated:"
+"As usual, the mapping between a view type and the actual class needs to be "
+"updated:"
 msgstr ""
+"Как обычно, отображение между типом представления и фактическим классом "
+"должно быть обновлено:"
 
 #: ../../reference/javascript_cheatsheet.rst:197
 msgid "implementing the four main classes:"
-msgstr ""
+msgstr "Реализация четырех основных классов:"
 
 #: ../../reference/javascript_cheatsheet.rst:193
 msgid ""
 "The ``View`` class needs to parse the ``arch`` field and setup the other "
-"three classes.  The ``Renderer`` is in charge of representing the data in"
-" the user interface, the ``Model`` is supposed to talk to the server, to "
-"load data and process it.  And the ``Controller`` is there to coordinate,"
-" to talk to the web client, ..."
+"three classes.  The ``Renderer`` is in charge of representing the data in "
+"the user interface, the ``Model`` is supposed to talk to the server, to load"
+" data and process it.  And the ``Controller`` is there to coordinate, to "
+"talk to the web client, ..."
 msgstr ""
+"Класс `` View`` должен проанализировать поле `` arch`` и настроить остальные"
+" три класса. «Renderer» отвечает за представление данных в пользовательском "
+"интерфейсе, а «Model» должен общаться с сервером, загружать данные и "
+"обрабатывать их. И `` Контроллер`` предназначен для координации, общения с "
+"веб-клиентом, ..."
 
 #: ../../reference/javascript_cheatsheet.rst:211
 msgid "creating some views in the database:"
-msgstr ""
+msgstr "создание некоторых представлений в базе данных:"
 
 #: ../../reference/javascript_cheatsheet.rst:214
 msgid "Customizing an existing view"
-msgstr ""
+msgstr "Настройка существующего представления"
 
 #: ../../reference/javascript_cheatsheet.rst:216
 msgid ""
-"Assume we need to create a custom version of a generic view.  For "
-"example, a kanban view with some extra *ribbon-like* widget on top (to "
-"display some specific custom information). In that case, this can be done"
-" with 3 steps: extend the kanban view (which also probably mean extending"
-" controllers/renderers and/or models), then registering the view in the "
-"view registry, and finally, using the view in the kanban arch (a specific"
-" example is the helpdesk dashboard)."
+"Assume we need to create a custom version of a generic view.  For example, a"
+" kanban view with some extra *ribbon-like* widget on top (to display some "
+"specific custom information). In that case, this can be done with 3 steps: "
+"extend the kanban view (which also probably mean extending "
+"controllers/renderers and/or models), then registering the view in the view "
+"registry, and finally, using the view in the kanban arch (a specific example"
+" is the helpdesk dashboard)."
 msgstr ""
+"Предположим, нам нужно создать собственную версию универсального "
+"представления. Например, представление канбан с некоторым дополнительным * "
+"ленточным * виджетом сверху (для отображения определенной пользовательской "
+"информации). В этом случае это можно сделать за 3 шага: расширить "
+"представление канбана (что также, вероятно, означает расширение контроллеров"
+" / визуализаторов и / или моделей), затем зарегистрировать представление в "
+"реестре представлений и, наконец, использовать представление в арке канбана."
+" (конкретный пример - панель инструментов службы поддержки)."
 
 #: ../../reference/javascript_cheatsheet.rst:246
 msgid "extending a view:"
-msgstr ""
+msgstr "расширяя вид:"
 
 #: ../../reference/javascript_cheatsheet.rst:224
 msgid "Here is what it could look like:"
-msgstr ""
+msgstr "Вот как это может выглядеть:"
 
 #: ../../reference/javascript_cheatsheet.rst:255
 msgid "adding it to the view registry:"
-msgstr ""
+msgstr "добавив его в реестр просмотра:"
 
 #: ../../reference/javascript_cheatsheet.rst:249
 msgid ""
-"as usual, we need to inform the web client of the mapping between the "
-"name of the views and the actual class."
+"as usual, we need to inform the web client of the mapping between the name "
+"of the views and the actual class."
 msgstr ""
+"как обычно, нам нужно проинформировать веб-клиента о сопоставлении имени "
+"представлений и фактического класса."
 
 #: ../../reference/javascript_cheatsheet.rst:274
 msgid "using it in an actual view:"
-msgstr ""
+msgstr "используя его в реальном виде:"
 
 #: ../../reference/javascript_cheatsheet.rst:258
 msgid ""
-"we now need to inform the web client that a specific ``ir.ui.view`` needs"
-" to use our new class.  Note that this is a web client specific concern."
-"  From the point of view of the server, we still have a kanban view.  The"
-" proper way to do this is by using a special attribute ``js_class`` "
-"(which will be renamed someday into ``widget``, because this is really "
-"not a good name) on the root node of the arch:"
+"we now need to inform the web client that a specific ``ir.ui.view`` needs to"
+" use our new class.  Note that this is a web client specific concern.  From "
+"the point of view of the server, we still have a kanban view.  The proper "
+"way to do this is by using a special attribute ``js_class`` (which will be "
+"renamed someday into ``widget``, because this is really not a good name) on "
+"the root node of the arch:"
 msgstr ""
+"Теперь нам нужно сообщить веб-клиенту, что конкретному `` ir.ui.view`` "
+"необходимо использовать наш новый класс. Обратите внимание, что это особая "
+"проблема веб-клиента. С точки зрения сервера у нас все еще есть "
+"представление о канбан. Правильный способ сделать это - использовать "
+"специальный атрибут `` js_class`` (который когда-нибудь будет переименован в"
+" `` widget``, потому что это действительно не очень хорошее имя) в корневом "
+"узле арки:"
 
 #: ../../reference/javascript_cheatsheet.rst:278
 msgid ""
 "Note: you can change the way the view interprets the arch structure.  "
 "However, from the server point of view, this is still a view of the same "
-"base type, subjected to the same rules (rng validation, for example).  "
-"So, your views still need to have a valid arch field."
+"base type, subjected to the same rules (rng validation, for example).  So, "
+"your views still need to have a valid arch field."
 msgstr ""
+"Примечание: вы можете изменить способ, которым представление интерпретирует "
+"структуру арки. Однако, с точки зрения сервера, это все еще вид того же "
+"базового типа, подчиняющийся тем же правилам (например, валидация rng). "
+"Таким образом, ваши представления все еще должны иметь правильное поле арки."
 
 #: ../../reference/javascript_cheatsheet.rst:284
 msgid "Promises and asynchronous code"
-msgstr ""
+msgstr "Обещания и асинхронный код"
 
 #: ../../reference/javascript_cheatsheet.rst:286
 #, python-format
@@ -284,188 +372,245 @@ msgid ""
 "excellent article https://github.com/getify/You-Dont-Know-JS/blob/1st-"
 "ed/async%20%26%20performance/ch3.md"
 msgstr ""
+"Для очень хорошего и полного введения в обещания, пожалуйста, прочитайте эту"
+" превосходную статью https://github.com/getify/You-Dont-Know-JS/blob/1st-"
+"ed/async%20%26%20performance/ch3.md"
 
 #: ../../reference/javascript_cheatsheet.rst:289
 msgid "Creating new Promises"
-msgstr ""
+msgstr "Создание новых обещаний"
 
 #: ../../reference/javascript_cheatsheet.rst:308
 msgid "turn a constant into a promise"
-msgstr ""
+msgstr "превратить константу в обещание"
 
 #: ../../reference/javascript_cheatsheet.rst:291
 msgid ""
-"There are 2 static functions on Promise that create a resolved or "
-"rejected promise based on a constant:"
+"There are 2 static functions on Promise that create a resolved or rejected "
+"promise based on a constant:"
 msgstr ""
+"В Promise есть две статические функции, которые создают разрешенное или "
+"отклоненное обещание на основе константы:"
 
 #: ../../reference/javascript_cheatsheet.rst:307
 msgid ""
-"Note that even if the promises are created already resolved or rejected, "
-"the `then` or `catch` handlers will still be called asynchronously."
+"Note that even if the promises are created already resolved or rejected, the"
+" `then` or `catch` handlers will still be called asynchronously."
 msgstr ""
+"Обратите внимание, что даже если обещания созданы уже разрешенными или "
+"отклоненными, обработчики `then` или` catch` будут по-прежнему вызываться "
+"асинхронно."
 
 #: ../../reference/javascript_cheatsheet.rst:321
 msgid "based on an already asynchronous code"
-msgstr ""
+msgstr "на основе уже асинхронного кода"
 
 #: ../../reference/javascript_cheatsheet.rst:311
 msgid ""
-"Suppose that in a function you must do a rpc, and when it is completed "
-"set the result on this. The `this._rpc` is a function that returns a "
-"`Promise`."
+"Suppose that in a function you must do a rpc, and when it is completed set "
+"the result on this. The `this._rpc` is a function that returns a `Promise`."
 msgstr ""
+"Предположим, что в функции вы должны выполнить rpc, и когда она будет "
+"завершена, установите результат для этого. This._rpc - это функция, которая "
+"возвращает Promise."
 
 #: ../../reference/javascript_cheatsheet.rst:351
 msgid "for callback based function"
-msgstr ""
+msgstr "для функции обратного вызова"
 
 #: ../../reference/javascript_cheatsheet.rst:324
 msgid ""
-"Suppose that you were using a function `this.close` that takes as "
-"parameter a callback that is called when the closing is finished. Now "
-"suppose that you are doing that in a method that must send a promise that"
-" is resolved when the closing is finished."
+"Suppose that you were using a function `this.close` that takes as parameter "
+"a callback that is called when the closing is finished. Now suppose that you"
+" are doing that in a method that must send a promise that is resolved when "
+"the closing is finished."
 msgstr ""
+"Предположим, что вы использовали функцию `this.close`, которая принимает в "
+"качестве параметра обратный вызов, который вызывается по окончании закрытия."
+" Теперь предположим, что вы делаете это в методе, который должен отправить "
+"обещание, которое разрешается после завершения закрытия."
 
 #: ../../reference/javascript_cheatsheet.rst:337
 msgid ""
-"line 2: we save the `this` into a variable so that in an inner function, "
-"we can access the scope of our component"
+"line 2: we save the `this` into a variable so that in an inner function, we "
+"can access the scope of our component"
 msgstr ""
+"строка 2: мы сохраняем this в переменную, чтобы во внутренней функции мы "
+"могли получить доступ к области действия нашего компонента"
 
 #: ../../reference/javascript_cheatsheet.rst:339
 msgid ""
 "line 3: we create and return a new promise. The constructor of a promise "
-"takes a function as parameter. This function itself has 2 parameters that"
-" we called here `resolve` and `reject`"
+"takes a function as parameter. This function itself has 2 parameters that we"
+" called here `resolve` and `reject`"
 msgstr ""
+"строка 3: мы создаем и возвращаем новое обещание. Конструктор обещания "
+"принимает функцию в качестве параметра. Эта функция сама имеет 2 параметра, "
+"которые мы назвали здесь `resol` и` reject`"
 
 #: ../../reference/javascript_cheatsheet.rst:339
 msgid ""
-"`resolve` is a function that, when called, puts the promise in the "
-"resolved state."
+"`resolve` is a function that, when called, puts the promise in the resolved "
+"state."
 msgstr ""
+"`resol` - это функция, которая при вызове переводит обещание в разрешенное "
+"состояние."
 
 #: ../../reference/javascript_cheatsheet.rst:340
 msgid ""
-"`reject` is a function that, when called, puts the promise in the "
-"rejected state. We do not use reject here and it can be omitted."
+"`reject` is a function that, when called, puts the promise in the rejected "
+"state. We do not use reject here and it can be omitted."
 msgstr ""
+"`reject` - это функция, которая при вызове переводит обещание в отклоненное "
+"состояние. Мы не используем отклонение здесь, и это может быть опущено."
 
 #: ../../reference/javascript_cheatsheet.rst:341
 msgid ""
-"line 4: we are calling the function close on our object. It takes a "
-"function as parameter (the callback) and it happens that resolve is "
-"already a function, so we can pass it directly. To be clearer, we could "
-"have written:"
+"line 4: we are calling the function close on our object. It takes a function"
+" as parameter (the callback) and it happens that resolve is already a "
+"function, so we can pass it directly. To be clearer, we could have written:"
 msgstr ""
+"строка 4: мы вызываем функцию close для нашего объекта. Он принимает функцию"
+" в качестве параметра (обратный вызов), и случается, что resolved уже "
+"является функцией, поэтому мы можем передать ее напрямую. Чтобы быть более "
+"понятным, мы могли бы написать:"
 
 #: ../../reference/javascript_cheatsheet.rst:367
 msgid ""
 "creating a promise generator (calling one promise after the other *in "
 "sequence* and waiting for the last one)"
 msgstr ""
+"создание генератора обещаний (вызов одного обещания за другим * в "
+"последовательности * и ожидание последнего)"
 
 #: ../../reference/javascript_cheatsheet.rst:354
 msgid ""
-"Suppose that you need to loop over an array, do an operation *in "
-"sequence* and resolve a promise when the last operation is done."
+"Suppose that you need to loop over an array, do an operation *in sequence* "
+"and resolve a promise when the last operation is done."
 msgstr ""
+"Предположим, вам нужно зациклить массив, выполнить операцию * в "
+"последовательности * и разрешить обещание, когда последняя операция будет "
+"выполнена."
 
 #: ../../reference/javascript_cheatsheet.rst:368
 msgid "This way, the promise you return is effectively the last promise."
 msgstr ""
+"Таким образом, обещание, которое вы возвращаете, фактически является "
+"последним обещанием."
 
 #: ../../reference/javascript_cheatsheet.rst:383
 msgid ""
-"creating a promise, then resolving it outside the scope of its definition"
-" (anti-pattern)"
+"creating a promise, then resolving it outside the scope of its definition "
+"(anti-pattern)"
 msgstr ""
+"создание обещания, а затем разрешение его вне рамок его определения (анти-"
+"шаблон)"
 
 #: ../../reference/javascript_cheatsheet.rst:370
 msgid ""
-"we do not recommend using this, but sometimes it is useful. Think "
-"carefully for alternatives first..."
+"we do not recommend using this, but sometimes it is useful. Think carefully "
+"for alternatives first..."
 msgstr ""
+"мы не рекомендуем использовать это, но иногда это полезно. Сначала тщательно"
+" продумайте альтернативы ..."
 
 #: ../../reference/javascript_cheatsheet.rst:386
 msgid "Waiting for Promises"
-msgstr ""
+msgstr "В ожидании обещаний"
 
 #: ../../reference/javascript_cheatsheet.rst:405
 msgid "waiting for a number of Promises"
-msgstr ""
+msgstr "в ожидании ряда обещаний"
 
 #: ../../reference/javascript_cheatsheet.rst:388
 msgid ""
-"if you have multiple promises that all need to be waited, you can convert"
-" them into a single promise that will be resolved when all the promises "
-"are resolved using Promise.all(arrayOfPromises)."
+"if you have multiple promises that all need to be waited, you can convert "
+"them into a single promise that will be resolved when all the promises are "
+"resolved using Promise.all(arrayOfPromises)."
 msgstr ""
+"если у вас есть несколько обещаний, которые все должны ждать, вы можете "
+"преобразовать их в одно обещание, которое будет разрешено, когда все "
+"обещания будут разрешены с помощью Promise.all (arrayOfPromises)."
 
 #: ../../reference/javascript_cheatsheet.rst:420
 msgid "waiting for a part of a promise chain, but not another part"
-msgstr ""
+msgstr "ожидание части цепочки обещаний, но не другой части"
 
 #: ../../reference/javascript_cheatsheet.rst:408
 msgid ""
-"If you have an asynchronous process that you want to wait to do "
-"something, but you also want to return to the caller before that "
-"something is done."
+"If you have an asynchronous process that you want to wait to do something, "
+"but you also want to return to the caller before that something is done."
 msgstr ""
+"Если у вас есть асинхронный процесс, который вы хотите подождать, чтобы что-"
+"то сделать, но вы также хотите вернуться к вызывающей стороне, прежде чем "
+"что-то сделать."
 
 #: ../../reference/javascript_cheatsheet.rst:423
 msgid "Error handling"
-msgstr ""
+msgstr "Обработка ошибок"
 
 #: ../../reference/javascript_cheatsheet.rst:447
 msgid "in general in promises"
-msgstr ""
+msgstr "в общем в обещаниях"
 
 #: ../../reference/javascript_cheatsheet.rst:426
 msgid ""
-"The general idea is that a promise should not be rejected for control "
-"flow, but should only be rejected for errors. When that is the case, you "
-"would have multiple resolutions of your promise with, for instance status"
-" codes that you would have to check in the `then` handlers and a single "
-"`catch` handler at the end of the promise chain."
+"The general idea is that a promise should not be rejected for control flow, "
+"but should only be rejected for errors. When that is the case, you would "
+"have multiple resolutions of your promise with, for instance status codes "
+"that you would have to check in the `then` handlers and a single `catch` "
+"handler at the end of the promise chain."
 msgstr ""
+"Общая идея заключается в том, что обещание не должно быть отклонено для "
+"потока управления, а должно быть отклонено только для ошибок. В этом случае "
+"у вас будет несколько разрешений вашего обещания с, например, кодами "
+"состояния, которые вы должны будете проверить в обработчиках `then` и "
+"одиночном обработчике` catch` в конце цепочки обещаний."
 
 #: ../../reference/javascript_cheatsheet.rst:487
 msgid "in Odoo specifically"
-msgstr ""
+msgstr "в Оду конкретно"
 
 #: ../../reference/javascript_cheatsheet.rst:450
 msgid ""
-"In Odoo, it happens that we use promise rejection for control flow, like "
-"in mutexes and other concurrency primitives defined in module "
-"`web.concurrency` We also want to execute the catch for *business* "
-"reasons, but not when there is a coding error in the definition of the "
-"promise or of the handlers. For this, we have introduced the concept of "
-"`guardedCatch`. It is called like `catch` but not when the rejected "
-"reason is an error"
+"In Odoo, it happens that we use promise rejection for control flow, like in "
+"mutexes and other concurrency primitives defined in module `web.concurrency`"
+" We also want to execute the catch for *business* reasons, but not when "
+"there is a coding error in the definition of the promise or of the handlers."
+" For this, we have introduced the concept of `guardedCatch`. It is called "
+"like `catch` but not when the rejected reason is an error"
 msgstr ""
+"В Odoo случается, что мы используем отклонение обещания для потока "
+"управления, как в мьютексах и других примитивах параллелизма, определенных в"
+" модуле `web.concurrency`. Мы также хотим выполнить перехват по причинам * "
+"business *, но не в случае ошибки кодирования в определении обещания или "
+"обработчиков. Для этого мы ввели понятие `guardedCatch`. Он вызывается как "
+"`catch`, но не тогда, когда отклоненная причина является ошибкой"
 
 #: ../../reference/javascript_cheatsheet.rst:490
 msgid "Testing asynchronous code"
-msgstr ""
+msgstr "Тестирование асинхронного кода"
 
 #: ../../reference/javascript_cheatsheet.rst:544
 msgid "using promises in tests"
-msgstr ""
+msgstr "используя обещания в тестах"
 
 #: ../../reference/javascript_cheatsheet.rst:493
 msgid ""
-"In the tests code, we support the latest version of Javascript, including"
-" primitives like `async` and `await`. This makes using and waiting for "
+"In the tests code, we support the latest version of Javascript, including "
+"primitives like `async` and `await`. This makes using and waiting for "
 "promises very easy. Most helper methods also return a promise (either by "
 "being marked `async` or by returning a promise directly."
 msgstr ""
+"В тестовом коде мы поддерживаем последнюю версию Javascript, включая "
+"примитивы, такие как `async` и` await`. Это делает использование и ожидание "
+"обещаний очень легким. Большинство вспомогательных методов также возвращают "
+"обещание (либо помечая как «async», либо возвращая обещание напрямую."
 
 #: ../../reference/javascript_cheatsheet.rst:545
 msgid ""
-"as you can see, the nicer form is to use `async/await` as it is clearer "
-"and shorter to write."
+"as you can see, the nicer form is to use `async/await` as it is clearer and "
+"shorter to write."
 msgstr ""
-
+"Как вы можете видеть, более приятной формой является использование `async / "
+"await`, так как это проще и короче писать."

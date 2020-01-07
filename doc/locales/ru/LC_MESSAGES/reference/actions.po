@@ -19,141 +19,162 @@ msgstr ""
 
 #: ../../reference/actions.rst:7
 msgid "Actions"
-msgstr ""
+msgstr "действия"
 
 #: ../../reference/actions.rst:9
 msgid ""
 "Actions define the behavior of the system in response to user actions: "
 "login, action button, selection of an invoice, ..."
 msgstr ""
+"Действия определяют поведение системы в ответ на действия пользователя: вход"
+" в систему, кнопка действия, выбор счета-фактуры, ..."
 
 #: ../../reference/actions.rst:12
 msgid ""
-"Actions can be stored in the database or returned directly as "
-"dictionaries in e.g. button methods. All actions share two mandatory "
-"attributes:"
+"Actions can be stored in the database or returned directly as dictionaries "
+"in e.g. button methods. All actions share two mandatory attributes:"
 msgstr ""
+"Действия могут быть сохранены в базе данных или возвращены непосредственно в"
+" виде словарей, например, в кнопочных методах. Все действия имеют два "
+"обязательных атрибута:"
 
 #: ../../reference/actions.rst:16
 msgid "``type``"
-msgstr ""
+msgstr "`` type``"
 
 #: ../../reference/actions.rst:16
 msgid ""
-"the category of the current action, determines which fields may be used "
-"and how the action is interpreted"
+"the category of the current action, determines which fields may be used and "
+"how the action is interpreted"
 msgstr ""
+"категория текущего действия, определяет, какие поля можно использовать и как"
+" интерпретировать действие"
 
 #: ../../reference/actions.rst:19 ../../reference/actions.rst:401
 msgid "``name``"
-msgstr ""
+msgstr "`` Name``"
 
 #: ../../reference/actions.rst:19
 msgid ""
 "short user-readable description of the action, may be displayed in the "
 "client's interface"
 msgstr ""
+"краткое читаемое описание действия, может отображаться в интерфейсе клиента"
 
 #: ../../reference/actions.rst:24 ../../reference/actions.rst:45
 msgid "``binding_model_id``"
-msgstr ""
+msgstr "`` binding_model_id``"
 
 #: ../../reference/actions.rst:22
 msgid "if set, the action is available in the action bar for the given model"
 msgstr ""
+"если установлено, действие доступно в панели действий для данной модели"
 
 #: ../../reference/actions.rst:24
 msgid "For Server Actions, use ``model_id``."
-msgstr ""
+msgstr "Для действий с сервером используйте `` model_id``."
 
 #: ../../reference/actions.rst:26
 msgid "A client can get actions in 4 forms:"
-msgstr ""
+msgstr "Клиент может получить действия в 4 формах:"
 
 #: ../../reference/actions.rst:28
 msgid "``False``"
-msgstr ""
+msgstr "`` False``"
 
 #: ../../reference/actions.rst:29
 msgid "if any action dialog is currently open, close it"
-msgstr ""
+msgstr "если какой-либо диалог действий открыт, закройте его"
 
 #: ../../reference/actions.rst:31
 msgid "A string"
-msgstr ""
+msgstr "Строка"
 
 #: ../../reference/actions.rst:31
 msgid ""
-"if a :ref:`client action <reference/actions/client>` matches, interpret "
-"as a client action's tag, otherwise treat as a number"
+"if a :ref:`client action <reference/actions/client>` matches, interpret as a"
+" client action's tag, otherwise treat as a number"
 msgstr ""
+"если: ref: `клиентское действие <reference/actions/client> `соответствует, "
+"интерпретировать как тег клиентского действия, иначе рассматривать как число"
 
 #: ../../reference/actions.rst:34
 msgid "A number"
-msgstr ""
+msgstr "Число"
 
 #: ../../reference/actions.rst:34
 msgid ""
-"read the corresponding action record from the database, may be a database"
-" identifier or an :term:`external id`"
+"read the corresponding action record from the database, may be a database "
+"identifier or an :term:`external id`"
 msgstr ""
+"читать соответствующую запись действия из базы данных, может быть "
+"идентификатором базы данных или: term: `external id`"
 
 #: ../../reference/actions.rst:37
 msgid "A dictionary"
-msgstr ""
+msgstr "Словарь"
 
 #: ../../reference/actions.rst:37
 msgid "treat as a client action descriptor and execute"
-msgstr ""
+msgstr "рассматривать как дескриптор действия клиента и выполнить"
 
 #: ../../reference/actions.rst:40
 msgid "Bindings"
-msgstr ""
+msgstr "Наручники"
 
 #: ../../reference/actions.rst:42
 msgid ""
-"Aside from their two mandatory attributes, all actions also share "
-"*optional* attributes used to present an action in an arbitrary model's "
-"contextual menu:"
+"Aside from their two mandatory attributes, all actions also share *optional*"
+" attributes used to present an action in an arbitrary model's contextual "
+"menu:"
 msgstr ""
+"Помимо двух обязательных атрибутов, все действия также имеют общие * "
+"необязательные * атрибуты, используемые для представления действия в "
+"контекстном меню произвольной модели:"
 
 #: ../../reference/actions.rst:46
 msgid "specifies which model the action is bound to"
-msgstr ""
+msgstr "указывает, с какой моделью связано действие"
 
 #: ../../reference/actions.rst:55
 msgid "``binding_type``"
-msgstr ""
+msgstr "`` binding_type``"
 
 #: ../../reference/actions.rst:48
 msgid ""
 "specifies the type of binding, which is mostly which contextual menu the "
 "action will appear under"
 msgstr ""
+"указывает тип привязки, который в основном зависит от контекстного меню, в "
+"котором будет отображаться действие"
 
 #: ../../reference/actions.rst:52
 msgid "``action`` (default)"
-msgstr ""
+msgstr "`` action`` (по умолчанию)"
 
 #: ../../reference/actions.rst:52
 msgid ""
 "Specifies that the action will appear in the :menuselection:`Action` "
 "contextual menu of the bound model."
 msgstr ""
+"Указывает, что действие будет отображаться в контекстном меню "
+":menuselection:`Action` связанной модели."
 
 #: ../../reference/actions.rst:55
 msgid "``report``"
-msgstr ""
+msgstr "`` report``"
 
 #: ../../reference/actions.rst:55
 msgid ""
 "Specifies that the action will appear in the :menuselection:`Print` "
 "contextual menu of the bound model."
 msgstr ""
+"Указывает, что действие появится в контекстном меню :menuselection:`Print` "
+"связанной модели."
 
 #: ../../reference/actions.rst:60
 msgid "``binding_view_types``"
-msgstr ""
+msgstr "`` binding_view_types``"
 
 #: ../../reference/actions.rst:58
 msgid ""
@@ -161,293 +182,374 @@ msgid ""
 "contextual menu, mostly \"list\" and / or \"form\". Defaults to "
 "``list,form`` (both list and form )"
 msgstr ""
+"разделенный запятыми список типов представлений, для которых действие "
+"появляется в контекстном меню, в основном «список» и / или «форма». По "
+"умолчанию `` список, форма`` (и список, и форма)"
 
 #: ../../reference/actions.rst:65
 msgid "Window Actions (``ir.actions.act_window``)"
-msgstr ""
+msgstr "Действия с окном (`` ir.actions.act_window``)"
 
 #: ../../reference/actions.rst:67
 msgid ""
 "The most common action type, used to present visualisations of a model "
 "through :ref:`views <reference/views>`: a window action defines a set of "
-"view types (and possibly specific views) for a model (and possibly "
-"specific record of the model)."
+"view types (and possibly specific views) for a model (and possibly specific "
+"record of the model)."
 msgstr ""
+"Наиболее распространенный тип действия, используемый для представления "
+"визуализаций модели через: ref: `views <reference/views> `: действие окна "
+"определяет набор типов представлений (и, возможно, определенных "
+"представлений) для модели (и, возможно, конкретной записи модели)."
 
 #: ../../reference/actions.rst:72
 msgid "Its fields are:"
-msgstr ""
+msgstr "Его поля:"
 
 #: ../../reference/actions.rst:74
 msgid "``res_model``"
-msgstr ""
+msgstr "`` res_model``"
 
 #: ../../reference/actions.rst:75
 msgid "model to present views for"
-msgstr ""
+msgstr "модель для представления взглядов для"
 
 #: ../../reference/actions.rst:83
 msgid "``views``"
-msgstr ""
+msgstr "`` Views``"
 
 #: ../../reference/actions.rst:77
 msgid ""
-"a list of ``(view_id, view_type)`` pairs. The second element of each pair"
-" is the category of the view (tree, form, graph, ...) and the first is an"
-" optional database id (or ``False``). If no id is provided, the client "
-"should fetch the default view of the specified type for the requested "
-"model (this is automatically done by "
-":meth:`~odoo.models.Model.fields_view_get`). The first type of the list "
-"is the default view type and will be open by default when the action is "
-"executed. Each view type should be present at most once in the list"
+"a list of ``(view_id, view_type)`` pairs. The second element of each pair is"
+" the category of the view (tree, form, graph, ...) and the first is an "
+"optional database id (or ``False``). If no id is provided, the client should"
+" fetch the default view of the specified type for the requested model (this "
+"is automatically done by :meth:`~odoo.models.Model.fields_view_get`). The "
+"first type of the list is the default view type and will be open by default "
+"when the action is executed. Each view type should be present at most once "
+"in the list"
 msgstr ""
+"список пар `` (view_id, view_type) ``. Второй элемент каждой пары - это "
+"категория представления (дерево, форма, граф, ...), а первый - "
+"необязательный идентификатор базы данных (или `` False``). Если "
+"идентификатор не указан, клиент должен получить представление по умолчанию "
+"указанного типа для запрашиваемой модели (это автоматически выполняется с "
+"помощью: meth: `~ odoo.models.Model.fields_view_get`). Первый тип списка "
+"является типом представления по умолчанию и будет открыт по умолчанию при "
+"выполнении действия. Каждый тип представления должен присутствовать не более"
+" одного раза в списке"
 
 #: ../../reference/actions.rst:86
 msgid "``res_id`` (optional)"
-msgstr ""
+msgstr "`` res_id`` (необязательно)"
 
 #: ../../reference/actions.rst:86
 msgid ""
-"if the default view is ``form``, specifies the record to load (otherwise "
-"a new record should be created)"
+"if the default view is ``form``, specifies the record to load (otherwise a "
+"new record should be created)"
 msgstr ""
+"если представлением по умолчанию является `` form``, указывает загружаемую "
+"запись (в противном случае должна быть создана новая запись)"
 
 #: ../../reference/actions.rst:90
 msgid "``search_view_id`` (optional)"
-msgstr ""
+msgstr "`` search_view_id`` (необязательно)"
 
 #: ../../reference/actions.rst:89
 msgid ""
-"``(id, name)`` pair, ``id`` is the database identifier of a specific "
-"search view to load for the action. Defaults to fetching the default "
-"search view for the model"
+"``(id, name)`` pair, ``id`` is the database identifier of a specific search "
+"view to load for the action. Defaults to fetching the default search view "
+"for the model"
 msgstr ""
+"`` (id, name) `` pair, `` id`` - это идентификатор базы данных определенного"
+" вида поиска, который нужно загрузить для действия. По умолчанию выбирается "
+"стандартное представление поиска для модели."
 
 #: ../../reference/actions.rst:95 ../../reference/actions.rst:381
 msgid "``target`` (optional)"
-msgstr ""
+msgstr "`` target`` (необязательно)"
 
 #: ../../reference/actions.rst:93
 msgid ""
-"whether the views should be open in the main content area (``current``), "
-"in full screen mode (``fullscreen``) or in a dialog/popup (``new``). Use "
+"whether the views should be open in the main content area (``current``), in "
+"full screen mode (``fullscreen``) or in a dialog/popup (``new``). Use "
 "``main`` instead of ``current`` to clear the breadcrumbs. Defaults to "
 "``current``."
 msgstr ""
+"должны ли представления быть открыты в основной области содержимого (`` "
+"current``), в полноэкранном режиме (`` fullscreen``) или в диалоговом / "
+"всплывающем окне (`` new``). Используйте `` main`` вместо `` current``, "
+"чтобы очистить крошки. По умолчанию `` current``."
 
 #: ../../reference/actions.rst:97 ../../reference/actions.rst:222
 msgid "``context`` (optional)"
-msgstr ""
+msgstr "`` context`` (необязательно)"
 
 #: ../../reference/actions.rst:98
 msgid "additional context data to pass to the views"
-msgstr ""
+msgstr "дополнительные контекстные данные для передачи в представления"
 
 #: ../../reference/actions.rst:99
 msgid "``domain`` (optional)"
-msgstr ""
+msgstr "`` домен`` (необязательно)"
 
 #: ../../reference/actions.rst:100
 msgid "filtering domain to implicitly add to all view search queries"
 msgstr ""
+"фильтрация домена для неявного добавления ко всем просмотрам поисковых "
+"запросов"
 
 #: ../../reference/actions.rst:103
 msgid "``limit`` (optional)"
-msgstr ""
+msgstr "`` limit`` (необязательно)"
 
 #: ../../reference/actions.rst:102
 msgid ""
-"number of records to display in lists by default. Defaults to 80 in the "
-"web client"
+"number of records to display in lists by default. Defaults to 80 in the web "
+"client"
 msgstr ""
+"количество записей для отображения в списках по умолчанию. По умолчанию 80 в"
+" веб-клиенте"
 
 #: ../../reference/actions.rst:105
 msgid ""
 "For instance, to open customers (partner with the ``customer`` flag set) "
 "with list and form views::"
 msgstr ""
+"Например, чтобы открыть клиентов (партнер с установленным флагом `` "
+"customer``) с представлениями списка и формы:"
 
 #: ../../reference/actions.rst:115
 msgid ""
-"Or to open the form view of a specific product (obtained separately) in a"
-" new dialog::"
+"Or to open the form view of a specific product (obtained separately) in a "
+"new dialog::"
 msgstr ""
+"Или открыть представление формы определенного продукта (полученного "
+"отдельно) в новом диалоге:"
 
 #: ../../reference/actions.rst:126
 msgid ""
 "In-database window actions have a few different fields which should be "
 "ignored by clients, mostly to use in composing the ``views`` list:"
 msgstr ""
+"Действия в окне базы данных имеют несколько различных полей, которые должны "
+"игнорироваться клиентами, в основном для использования при составлении "
+"списка `` views``:"
 
 #: ../../reference/actions.rst:130
 msgid "``view_mode`` (default= ``tree,form`` )"
-msgstr ""
+msgstr "`` view_mode`` (по умолчанию = `` tree, form``)"
 
 #: ../../reference/actions.rst:130
 msgid ""
-"comma-separated list of view types as a string (/!\\\\ No spaces /!\\\\)."
-" All of these types will be present in the generated ``views`` list (with"
-" at least a ``False`` view_id)"
+"comma-separated list of view types as a string (/!\\\\ No spaces /!\\\\). "
+"All of these types will be present in the generated ``views`` list (with at "
+"least a ``False`` view_id)"
 msgstr ""
+"Разделенный запятыми список типов представлений в виде строки (/! \\\\ Без "
+"пробелов /! \\\\). Все эти типы будут присутствовать в сгенерированном "
+"списке `` views`` (по крайней мере с `` False`` view_id)"
 
 #: ../../reference/actions.rst:148
 msgid "``view_ids``"
-msgstr ""
+msgstr "`` View_ids``"
 
 #: ../../reference/actions.rst:133
 msgid ""
 "M2M\\ [#notquitem2m]_ to view objects, defines the initial content of "
 "``views``"
 msgstr ""
+"M2M \\ [# notquitem2m] _ для просмотра объектов, определяет начальное "
+"содержимое `` views``"
 
 #: ../../reference/actions.rst:136
 msgid ""
 "Act_window views can also be defined cleanly through "
 "``ir.actions.act_window.view``."
 msgstr ""
+"Представления Act_window также могут быть точно определены через `` "
+"ir.actions.act_window.view``."
 
 #: ../../reference/actions.rst:138
 msgid ""
 "If you plan to allow multiple views for your model, prefer using "
 "ir.actions.act_window.view instead of the action ``view_ids``"
 msgstr ""
+"Если вы планируете разрешить несколько представлений для вашей модели, "
+"предпочтите использовать ir.actions.act_window.view вместо действия `` "
+"view_ids``"
 
 #: ../../reference/actions.rst:153
 msgid "``view_id``"
-msgstr ""
+msgstr "`` View_id``"
 
 #: ../../reference/actions.rst:151
 msgid ""
-"specific view added to the ``views`` list in case its type is part of the"
-" ``view_mode`` list and not already filled by one of the views in "
+"specific view added to the ``views`` list in case its type is part of the "
+"``view_mode`` list and not already filled by one of the views in "
 "``view_ids``"
 msgstr ""
+"определенный вид добавляется в список `` views``, если его тип является "
+"частью списка `` view_mode`` и еще не заполнен одним из представлений в `` "
+"view_ids``"
 
 #: ../../reference/actions.rst:155
-msgid "These are mostly used when defining actions from :ref:`reference/data`:"
+msgid ""
+"These are mostly used when defining actions from :ref:`reference/data`:"
 msgstr ""
+"Они в основном используются при определении действий из: ref: `reference / "
+"data`:"
 
 #: ../../reference/actions.rst:166
 msgid ""
-"will use the \"my_specific_view\" view even if that's not the default "
-"view for the model."
+"will use the \"my_specific_view\" view even if that's not the default view "
+"for the model."
 msgstr ""
+"будет использовать представление &quot;my_specific_view&quot;, даже если это"
+" не представление по умолчанию для модели."
 
 #: ../../reference/actions.rst:169
-msgid "The server-side composition of the ``views`` sequence is the following:"
+msgid ""
+"The server-side composition of the ``views`` sequence is the following:"
 msgstr ""
+"Состав на стороне сервера последовательности `` views`` выглядит следующим "
+"образом:"
 
 #: ../../reference/actions.rst:171
 msgid "get each ``(id, type)`` from ``view_ids`` (ordered by ``sequence``)"
 msgstr ""
+"получить каждый `` (id, type) `` из `` view_ids`` (упорядочено по `` "
+"sequence``)"
 
 #: ../../reference/actions.rst:172
 msgid ""
 "if ``view_id`` is defined and its type isn't already filled, append its "
 "``(id, type)``"
 msgstr ""
+"если `` view_id`` определен и его тип еще не заполнен, добавьте его `` (id, "
+"type) ``"
 
 #: ../../reference/actions.rst:174
 msgid "for each unfilled type in ``view_mode``, append ``(False, type)``"
 msgstr ""
+"для каждого незаполненного типа в `` view_mode`` добавьте `` (False, type) "
+"``"
 
 #: ../../reference/actions.rst:182
 msgid ""
-"technically not an M2M: adds a sequence field and may be composed of just"
-" a view type, without a view id."
+"technically not an M2M: adds a sequence field and may be composed of just a "
+"view type, without a view id."
 msgstr ""
+"технически не M2M: добавляет поле последовательности и может состоять только"
+" из типа представления без идентификатора представления."
 
 #: ../../reference/actions.rst:188
 msgid "URL Actions (``ir.actions.act_url``)"
-msgstr ""
+msgstr "Действия URL (`` ir.actions.act_url``)"
 
 #: ../../reference/actions.rst:190
 msgid ""
-"Allow opening a URL (website/web page) via an Odoo action. Can be "
-"customized via two fields:"
+"Allow opening a URL (website/web page) via an Odoo action. Can be customized"
+" via two fields:"
 msgstr ""
+"Разрешить открытие URL (веб-сайта / веб-страницы) с помощью действия Odoo. "
+"Можно настроить с помощью двух полей:"
 
 #: ../../reference/actions.rst:193
 msgid "``url``"
-msgstr ""
+msgstr "`` url``"
 
 #: ../../reference/actions.rst:194
 msgid "the address to open when activating the action"
-msgstr ""
+msgstr "адрес, который нужно открыть при активации действия"
 
 #: ../../reference/actions.rst:197
 msgid "``target``"
-msgstr ""
+msgstr "`` Target``"
 
 #: ../../reference/actions.rst:196
 msgid ""
 "opens the address in a new window/page if ``new``, replaces the current "
 "content with the page if ``self``. Defaults to ``new``"
 msgstr ""
+"открывает адрес в новом окне / странице, если `` new``, заменяет текущий "
+"контент на страницу, если `` self``. По умолчанию `` new``"
 
 #: ../../reference/actions.rst:207
 msgid "will replace the current content section by the Odoo home page."
-msgstr ""
+msgstr "заменит текущий раздел контента домашней страницей Odoo."
 
 #: ../../reference/actions.rst:212
 msgid "Server Actions (``ir.actions.server``)"
-msgstr ""
+msgstr "Действия сервера (`` ir.actions.server``)"
 
 #: odoo.addons.base.models.ir_actions.IrActionsServer:1 of
 msgid ""
-"Server actions model. Server action work on a base model and offer "
-"various type of actions that can be executed automatically, for example "
-"using base action rules, of manually, by adding the action in the 'More' "
-"contextual menu."
+"Server actions model. Server action work on a base model and offer various "
+"type of actions that can be executed automatically, for example using base "
+"action rules, of manually, by adding the action in the 'More' contextual "
+"menu."
 msgstr ""
+"Модель действий сервера. Действие сервера работает на базовой модели и "
+"предлагает различные типы действий, которые можно выполнить автоматически, "
+"например, с использованием правил базовых действий, вручную, добавив "
+"действие в контекстное меню «Дополнительно»."
 
 #: odoo.addons.base.models.ir_actions.IrActionsServer:6 of
 msgid ""
 "Since Odoo 8.0 a button 'Create Menu Action' button is available on the "
-"action form view. It creates an entry in the More menu of the base model."
-" This allows to create server actions and run them in mass mode easily "
+"action form view. It creates an entry in the More menu of the base model. "
+"This allows to create server actions and run them in mass mode easily "
 "through the interface."
 msgstr ""
+"Начиная с Odoo 8.0, кнопка «Создать действие меню» доступна в виде формы "
+"действий. Создает запись в меню «Дополнительно» базовой модели. Это "
+"позволяет легко создавать действия сервера и запускать их в массовом режиме "
+"через интерфейс."
 
 #: odoo.addons.base.models.ir_actions.IrActionsServer:11 of
 msgid "The available actions are :"
-msgstr ""
+msgstr "Доступные действия:"
 
 #: odoo.addons.base.models.ir_actions.IrActionsServer:13 of
 msgid "'Execute Python Code': a block of python code that will be executed"
-msgstr ""
+msgstr "«Выполнить код Python»: блок кода Python, который будет выполнен"
 
 #: odoo.addons.base.models.ir_actions.IrActionsServer:14 of
 msgid "'Create a new Record': create a new record with new values"
-msgstr ""
+msgstr "«Создать новую запись»: создать новую запись с новыми значениями"
 
 #: odoo.addons.base.models.ir_actions.IrActionsServer:15 of
 msgid "'Write on a Record': update the values of a record"
-msgstr ""
+msgstr "«Запись на запись»: обновить значения записи"
 
 #: odoo.addons.base.models.ir_actions.IrActionsServer:16 of
 msgid ""
 "'Execute several actions': define an action that triggers several other "
 "server actions"
 msgstr ""
+"«Выполнить несколько действий»: определить действие, которое запускает "
+"несколько других действий сервера"
 
 #: ../../reference/actions.rst:216
 msgid ""
-"Allow triggering complex server code from any valid action location. Only"
-" two fields are relevant to clients:"
+"Allow triggering complex server code from any valid action location. Only "
+"two fields are relevant to clients:"
 msgstr ""
+"Разрешить запуск сложного серверного кода из любого допустимого места "
+"действия. Только два поля относятся к клиентам:"
 
 #: ../../reference/actions.rst:219
 msgid "``id``"
-msgstr ""
+msgstr "`` Id``"
 
 #: ../../reference/actions.rst:220
 msgid "the in-database identifier of the server action to run"
-msgstr ""
+msgstr "в базе данных идентификатор действия сервера для запуска"
 
 #: ../../reference/actions.rst:222
 msgid "context data to use when running the server action"
-msgstr ""
+msgstr "контекстные данные для использования при выполнении действия сервера"
 
 #: ../../reference/actions.rst:224
 msgid ""
@@ -455,303 +557,359 @@ msgid ""
 "specific or generic actions based on their ``state``. Some fields (and "
 "corresponding behaviors) are shared between states:"
 msgstr ""
+"Записи в базе данных значительно богаче и могут выполнять ряд специфических "
+"или общих действий в зависимости от их «состояния». Некоторые поля (и "
+"соответствующие поведения) разделены между состояниями:"
 
 #: ../../reference/actions.rst:229 ../../reference/actions.rst:418
 msgid "``model_id``"
-msgstr ""
+msgstr "`` model_id``"
 
 #: ../../reference/actions.rst:229
 msgid "Odoo model linked to the action."
-msgstr ""
+msgstr "Модель Odoo связана с действием."
 
 #: ../../reference/actions.rst:231
 msgid "``state``"
-msgstr ""
+msgstr "`` State``"
 
 #: ../../reference/actions.rst:233
 msgid "``code``: Executes python code given through the ``code`` argument."
-msgstr ""
+msgstr "`` code``: Выполняет код Python, указанный в аргументе `` code``."
 
 #: ../../reference/actions.rst:235
 msgid ""
-"``object_create``: Creates a new record of model ``crud_model_id`` "
-"following ``fields_lines`` specifications."
+"``object_create``: Creates a new record of model ``crud_model_id`` following"
+" ``fields_lines`` specifications."
 msgstr ""
+"`` object_create``: Создает новую запись модели `` crud_model_id``, следуя "
+"спецификациям `` fields_lines``."
 
 #: ../../reference/actions.rst:237
 msgid ""
-"``object_write``: Updates the current record(s) following "
-"``fields_lines`` specifications"
+"``object_write``: Updates the current record(s) following ``fields_lines`` "
+"specifications"
 msgstr ""
+"`` object_write``: обновляет текущую запись (записи) в соответствии со "
+"спецификациями `` fields_lines``"
 
 #: ../../reference/actions.rst:239
 msgid ""
 "``multi``: Executes serveral actions given through the ``child_ids`` "
 "argument."
 msgstr ""
+"`` multi``: выполняет несколько действий, заданных аргументом `` "
+"child_ids``."
 
 #: ../../reference/actions.rst:242
 msgid "State fields"
-msgstr ""
+msgstr "Государственные поля"
 
 #: ../../reference/actions.rst:244
 msgid ""
-"Depending on its state, the behavior is defined through different fields."
-" The concerned state is given after each field."
+"Depending on its state, the behavior is defined through different fields. "
+"The concerned state is given after each field."
 msgstr ""
+"В зависимости от его состояния, поведение определяется через различные поля."
+" Соответствующее состояние указывается после каждого поля."
 
 #: ../../reference/actions.rst:287
 msgid "``code`` (code)"
-msgstr ""
+msgstr "`` код`` (код)"
 
 #: ../../reference/actions.rst:248
 msgid "Specify a piece of Python code to execute when the action is called"
-msgstr ""
+msgstr "Укажите часть кода Python для выполнения при вызове действия"
 
 #: ../../reference/actions.rst:262
 msgid ""
 "The code segment can define a variable called ``action``, which will be "
 "returned to the client as the next action to execute:"
 msgstr ""
+"Сегмент кода может определить переменную с именем `` action``, которая будет"
+" возвращена клиенту в качестве следующего выполняемого действия:"
 
 #: ../../reference/actions.rst:281
 msgid ""
 "will ask the client to open a form for the record if it fulfills some "
 "condition"
 msgstr ""
+"попросит клиента открыть форму для записи, если она удовлетворяет некоторому"
+" условию"
 
 #: ../../reference/actions.rst:289
 msgid "``crud_model_id`` (create)(required)"
-msgstr ""
+msgstr "`` crud_model_id`` (создать) (обязательно)"
 
 #: ../../reference/actions.rst:290
 msgid "model in which to create a new record"
-msgstr ""
+msgstr "модель для создания новой записи"
 
 #: ../../reference/actions.rst:293
 msgid "``link_field_id`` (create)"
-msgstr ""
+msgstr "`` link_field_id`` (создать)"
 
 #: ../../reference/actions.rst:292
 msgid ""
-"many2one to ``ir.model.fields``, specifies the current record's m2o field"
-" on which the newly created record should be set (models should match)"
+"many2one to ``ir.model.fields``, specifies the current record's m2o field on"
+" which the newly created record should be set (models should match)"
 msgstr ""
+"many2one to `` ir.model.fields``, указывает поле m2o текущей записи, для "
+"которого должна быть установлена вновь созданная запись (модели должны "
+"совпадать)"
 
 #: ../../reference/actions.rst:307
 msgid "``fields_lines`` (create/write)"
-msgstr ""
+msgstr "`` fields_lines`` (создание / запись)"
 
 #: ../../reference/actions.rst:296
 msgid ""
 "fields to override when creating or copying the record. "
 ":class:`~odoo.fields.One2many` with the fields:"
 msgstr ""
+"поля для переопределения при создании или копировании записи. : class: `~ "
+"odoo.fields.One2many` с полями:"
 
 #: ../../reference/actions.rst:300
 msgid "``col1``"
-msgstr ""
+msgstr "`` col1``"
 
 #: ../../reference/actions.rst:300
 msgid ""
 "``ir.model.fields`` to set in the concerned model (``crud_model_id`` for "
 "creates, ``model_id`` for updates)"
 msgstr ""
+"`` ir.model.fields`` для установки в соответствующей модели (`` "
+"crud_model_id`` для созданий, `` model_id`` для обновлений)"
 
 #: ../../reference/actions.rst:302
 msgid "``value``"
-msgstr ""
+msgstr "`` Значения ``"
 
 #: ../../reference/actions.rst:303
 msgid "value for the field, interpreted via ``type``"
-msgstr ""
+msgstr "значение для поля, интерпретируемое через `` type``"
 
 #: ../../reference/actions.rst:307
 msgid "``type`` (value|reference|equation)"
-msgstr ""
+msgstr "`` тип`` (значение | ссылка | уравнение)"
 
 #: ../../reference/actions.rst:305
 msgid ""
 "If ``value``, the ``value`` field is interpreted as a literal value "
-"(possibly converted), if ``equation`` the ``value`` field is interpreted "
-"as a Python expression and evaluated"
+"(possibly converted), if ``equation`` the ``value`` field is interpreted as "
+"a Python expression and evaluated"
 msgstr ""
+"Если `` value``, поле `` value`` интерпретируется как буквальное значение "
+"(возможно преобразованное), если `` уравнение``, поле `` value`` "
+"интерпретируется как выражение Python и вычисляется"
 
 #: ../../reference/actions.rst:312
 msgid "``child_ids`` (multi)"
-msgstr ""
+msgstr "`` child_ids`` (multi)"
 
 #: ../../reference/actions.rst:310
 msgid ""
-"Specify the multiple sub-actions (``ir.actions.server``) to enact in "
-"state multi. If sub-actions themselves return actions, the last one will "
-"be returned to the client as the multi's own next action"
+"Specify the multiple sub-actions (``ir.actions.server``) to enact in state "
+"multi. If sub-actions themselves return actions, the last one will be "
+"returned to the client as the multi's own next action"
 msgstr ""
+"Укажите несколько подэтапов (`` ir.actions.server``), которые необходимо "
+"выполнить в состоянии multi. Если подэтапы сами возвращают действия, "
+"последнее будет возвращено клиенту как собственное следующее действие мульти"
 
 #: ../../reference/actions.rst:317
 msgid "Evaluation context"
-msgstr ""
+msgstr "Контекст оценки"
 
 #: ../../reference/actions.rst:319
 msgid ""
-"A number of keys are available in the evaluation context of or "
-"surrounding server actions:"
+"A number of keys are available in the evaluation context of or surrounding "
+"server actions:"
 msgstr ""
+"Ряд ключей доступен в контексте оценки или окружающих действий сервера:"
 
 #: ../../reference/actions.rst:322
 msgid "``model`` model object linked to the action via ``model_id``"
-msgstr ""
+msgstr "`` model`` объект модели, связанный с действием через `` model_id``"
 
 #: ../../reference/actions.rst:323
 msgid ""
-"``record``/``records`` record/recorset on which the action is triggered, "
-"can be void."
+"``record``/``records`` record/recorset on which the action is triggered, can"
+" be void."
 msgstr ""
+"`` record`` / `` records`` запись / запись, на которой запущено действие, "
+"может быть аннулирована."
 
 #: ../../reference/actions.rst:324
 msgid "``env`` Odoo Environment"
-msgstr ""
+msgstr "`` env`` Odoo Environment"
 
 #: ../../reference/actions.rst:325
 msgid ""
 "``datetime``, ``dateutil``, ``time``, ``timezone`` corresponding Python "
 "modules"
 msgstr ""
+"`` datetime``, `` dateutil``, `` time``, `` timezone`` соответствующие "
+"модули Python"
 
 #: ../../reference/actions.rst:326
 msgid ""
 "``log: log(message, level='info')`` logging function to record debug "
 "information in ir.logging table"
 msgstr ""
+"`` log: log (message, level = &#39;info&#39;) `` функция ведения журнала для"
+" записи отладочной информации в таблицу ir.logging"
 
 #: ../../reference/actions.rst:327
 msgid "``Warning`` constructor for the ``Warning`` exception"
-msgstr ""
+msgstr "Конструктор `` Warning`` для исключения `` Warning``"
 
 #: ../../reference/actions.rst:332
 msgid "Report Actions (``ir.actions.report``)"
-msgstr ""
+msgstr "Действия отчета (`` ir.actions.report``)"
 
 #: ../../reference/actions.rst:334
 msgid "Triggers the printing of a report"
-msgstr ""
+msgstr "Запускает печать отчета"
 
 #: ../../reference/actions.rst:337
 msgid "``name`` (mandatory)"
-msgstr ""
+msgstr "`` имя`` (обязательно)"
 
 #: ../../reference/actions.rst:337
 msgid ""
-"only useful as a mnemonic/description of the report when looking for one "
-"in a list of some sort"
+"only useful as a mnemonic/description of the report when looking for one in "
+"a list of some sort"
 msgstr ""
+"полезно только как мнемоника / описание отчета при поиске в списке какого-"
+"либо типа"
 
 #: ../../reference/actions.rst:339
 msgid "``model`` (mandatory)"
-msgstr ""
+msgstr "`` модель`` (обязательно)"
 
 #: ../../reference/actions.rst:340
 msgid "the model your report will be about"
-msgstr ""
+msgstr "модель вашего отчета"
 
 #: ../../reference/actions.rst:341
 msgid "``report_type`` (default=qweb-pdf)"
-msgstr ""
+msgstr "`` report_type`` (по умолчанию = qweb-pdf)"
 
 #: ../../reference/actions.rst:342
 msgid "either ``qweb-pdf`` for PDF reports or ``qweb-html`` for HTML"
 msgstr ""
+"или `` qweb-pdf`` для отчетов в формате PDF или `` qweb-html`` для HTML"
 
 #: ../../reference/actions.rst:343
 msgid "``report_name`` (mandatory)"
-msgstr ""
+msgstr "`` report_name`` (обязательно)"
 
 #: ../../reference/actions.rst:344
 msgid "the name of your report (which will be the name of the PDF output)"
-msgstr ""
+msgstr "название вашего отчета (который будет именем вывода PDF)"
 
 #: ../../reference/actions.rst:346
 msgid "``groups_id``"
-msgstr ""
+msgstr "`` groups_id``"
 
 #: ../../reference/actions.rst:346
 msgid ""
-":class:`~odoo.fields.Many2many` field to the groups allowed to view/use "
-"the current report"
+":class:`~odoo.fields.Many2many` field to the groups allowed to view/use the "
+"current report"
 msgstr ""
+": class: `~ odoo.fields.Many2many` поле для групп, которым разрешено "
+"просматривать / использовать текущий отчет"
 
 #: ../../reference/actions.rst:348
 msgid "``multi``"
-msgstr ""
+msgstr "`` multi``"
 
 #: ../../reference/actions.rst:349
 msgid "if set to ``True``, the action will not be displayed on a form view."
 msgstr ""
+"если установлено значение `` True``, действие не будет отображаться в "
+"представлении формы."
 
 #: ../../reference/actions.rst:351
 msgid "``paperformat_id``"
-msgstr ""
+msgstr "`` Paperformat_id``"
 
 #: ../../reference/actions.rst:351
 msgid ""
-":class:`~odoo.fields.Many2one` field to the paper format you wish to use "
-"for this report (if not specified, the company format will be used)"
+":class:`~odoo.fields.Many2one` field to the paper format you wish to use for"
+" this report (if not specified, the company format will be used)"
 msgstr ""
+": class: `~ odoo.fields.Many2one` для формата бумаги, который вы хотите "
+"использовать для этого отчета (если не указан, будет использоваться формат "
+"компании)"
 
 #: ../../reference/actions.rst:358
 msgid "``attachment_use``"
-msgstr ""
+msgstr "`` attachment_use``"
 
 #: ../../reference/actions.rst:354
 msgid ""
-"if set to ``True``, the report is only generated once the first time it "
-"is requested, and re-printed from the stored report afterwards instead of"
-" being re-generated every time."
+"if set to ``True``, the report is only generated once the first time it is "
+"requested, and re-printed from the stored report afterwards instead of being"
+" re-generated every time."
 msgstr ""
+"если установлено значение `` True``, отчет генерируется только один раз при "
+"первом запросе, а затем повторно распечатывается из сохраненного отчета, а "
+"не создается заново каждый раз."
 
 #: ../../reference/actions.rst:358
 msgid ""
-"Can be used for reports which must only be generated once (e.g. for legal"
-" reasons)"
+"Can be used for reports which must only be generated once (e.g. for legal "
+"reasons)"
 msgstr ""
+"Может использоваться для отчетов, которые должны быть созданы только один "
+"раз (например, по юридическим причинам)"
 
 #: ../../reference/actions.rst:362
 msgid "``attachment``"
-msgstr ""
+msgstr "`` attachment``"
 
 #: ../../reference/actions.rst:361
 msgid ""
 "python expression that defines the name of the report; the record is "
 "accessible as the variable ``object``"
 msgstr ""
+"выражение python, определяющее имя отчета; запись доступна как переменная ``"
+" object``"
 
 #: ../../reference/actions.rst:367
 msgid "Client Actions (``ir.actions.client``)"
-msgstr ""
+msgstr "Действия клиента (`` ir.actions.client``)"
 
 #: ../../reference/actions.rst:369
 msgid "Triggers an action implemented entirely in the client."
-msgstr ""
+msgstr "Запускает действие, полностью реализованное в клиенте."
 
 #: ../../reference/actions.rst:372
 msgid "``tag``"
-msgstr ""
+msgstr "`` Tag``"
 
 #: ../../reference/actions.rst:372
 msgid ""
 "the client-side identifier of the action, an arbitrary string which the "
 "client should know how to react to"
 msgstr ""
+"клиентский идентификатор действия, произвольная строка, на которую клиент "
+"должен знать, как реагировать на"
 
 #: ../../reference/actions.rst:375
 msgid "``params`` (optional)"
-msgstr ""
+msgstr "`` params`` (необязательно)"
 
 #: ../../reference/actions.rst:375
 msgid ""
-"a Python dictionary of additional data to send to the client, alongside "
-"the client action tag"
+"a Python dictionary of additional data to send to the client, alongside the "
+"client action tag"
 msgstr ""
+"словарь дополнительных данных для отправки клиенту вместе с тегом действия "
+"клиента"
 
 #: ../../reference/actions.rst:378
 msgid ""
@@ -760,80 +918,96 @@ msgid ""
 "(``new``). Use ``main`` instead of ``current`` to clear the breadcrumbs. "
 "Defaults to ``current``."
 msgstr ""
+"должно ли действие клиента быть открыто в основной области содержимого (`` "
+"current``), в полноэкранном режиме (`` fullscreen``) или в диалоге / "
+"всплывающем окне (`` new``). Используйте `` main`` вместо `` current``, "
+"чтобы очистить крошки. По умолчанию `` current``."
 
 #: ../../reference/actions.rst:390
 msgid ""
 "tells the client to start the Point of Sale interface, the server has no "
 "idea how the POS interface works."
 msgstr ""
+"говорит клиенту запустить интерфейс Point of Sale, сервер не знает, как "
+"работает интерфейс POS."
 
 #: ../../reference/actions.rst:396
 msgid "Automated Actions (``ir.cron``)"
-msgstr ""
+msgstr "Автоматизированные действия (`` ir.cron``)"
 
 #: ../../reference/actions.rst:398
 msgid "Actions triggered automatically on a predefined frequency."
-msgstr ""
+msgstr "Действия запускаются автоматически на заданной частоте."
 
 #: ../../reference/actions.rst:401
 msgid "Name of the automated action (Mainly used in log display)"
 msgstr ""
+"Название автоматизированного действия (в основном используется при "
+"отображении журнала)"
 
 #: ../../reference/actions.rst:404
 msgid "``interval_number``"
-msgstr ""
+msgstr "`` interval_number``"
 
 #: ../../reference/actions.rst:404
 msgid "Number of *interval_type* uom between two executions of the action"
-msgstr ""
+msgstr "Количество * interval_type * uom между двумя исполнениями действия"
 
 #: ../../reference/actions.rst:407
 msgid "``interval_type``"
-msgstr ""
+msgstr "`` interval_type``"
 
 #: ../../reference/actions.rst:407
 msgid ""
 "Unit of measure of frequency interval (``minutes``, ``hours``, ``days``, "
 "``weeks``, ``months``,"
 msgstr ""
+"Единица измерения частотного интервала («минуты», «часы», «дни», «недели», "
+"«месяцы»,"
 
 #: ../../reference/actions.rst:411
 msgid "``numbercall``"
-msgstr ""
+msgstr "`` numbercall``"
 
 #: ../../reference/actions.rst:410
 msgid ""
-"Number of times this action has to be run. If the action is expected to "
-"run indefinitely, set to ``-1``."
+"Number of times this action has to be run. If the action is expected to run "
+"indefinitely, set to ``-1``."
 msgstr ""
+"Количество раз, когда это действие должно быть выполнено. Если ожидается, "
+"что действие будет выполняться бесконечно, установите значение `` -1``."
 
 #: ../../reference/actions.rst:415
 msgid "``doall``"
-msgstr ""
+msgstr "`` Doall``"
 
 #: ../../reference/actions.rst:414
 msgid ""
-"Boolean precising whether the missed actions have to be executed in case "
-"of server restarts."
+"Boolean precising whether the missed actions have to be executed in case of "
+"server restarts."
 msgstr ""
+"Boolean, уточняющий, нужно ли выполнять пропущенные действия в случае "
+"перезапуска сервера."
 
 #: ../../reference/actions.rst:418
 msgid "Model on which this action will be called"
-msgstr ""
+msgstr "Модель, по которой будет называться это действие"
 
 #: ../../reference/actions.rst:426
 msgid "``code``"
-msgstr ""
+msgstr "`` code``"
 
 #: ../../reference/actions.rst:421
-msgid "Code content of the action. Can be a simple call to the model's method :"
-msgstr ""
+msgid ""
+"Code content of the action. Can be a simple call to the model's method :"
+msgstr "Код содержания акции. Может быть простой вызов метода модели:"
 
 #: ../../reference/actions.rst:428
 msgid "``nextcall``"
-msgstr ""
+msgstr "`` nextcall``"
 
 #: ../../reference/actions.rst:429
 msgid "Next planned execution date of this action (date/time format)"
 msgstr ""
-
+"Следующая запланированная дата выполнения этого действия (формат даты / "
+"времени)"

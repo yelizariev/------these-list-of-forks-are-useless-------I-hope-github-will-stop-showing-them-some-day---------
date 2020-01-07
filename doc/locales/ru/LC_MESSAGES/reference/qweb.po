@@ -19,102 +19,124 @@ msgstr ""
 
 #: ../../reference/qweb.rst:9
 msgid "QWeb"
-msgstr ""
+msgstr "Qweb"
 
 #: ../../reference/qweb.rst:11
 msgid ""
-"QWeb is the primary templating_ engine used by Odoo\\ [#othertemplates]_."
-" It is an XML templating engine\\ [#genshif]_ and used mostly to generate"
-" HTML_ fragments and pages."
+"QWeb is the primary templating_ engine used by Odoo\\ [#othertemplates]_. It"
+" is an XML templating engine\\ [#genshif]_ and used mostly to generate HTML_"
+" fragments and pages."
 msgstr ""
+"QWeb - это основной движок шаблонов, используемый Odoo \\ [#othertemplates] "
+"_. Это механизм шаблонов XML \\ [#genshif] _ и используется в основном для "
+"генерации HTML_ фрагментов и страниц."
 
 #: ../../reference/qweb.rst:15
 msgid ""
-"Template directives are specified as XML attributes prefixed with ``t-``,"
-" for instance ``t-if`` for :ref:`reference/qweb/conditionals`, with "
-"elements and other attributes being rendered directly."
+"Template directives are specified as XML attributes prefixed with ``t-``, "
+"for instance ``t-if`` for :ref:`reference/qweb/conditionals`, with elements "
+"and other attributes being rendered directly."
 msgstr ""
+"Шаблонные директивы указываются как атрибуты XML с префиксом `` t-``, "
+"например `` t-if`` для: ref: `reference / qweb / conditionals`, с элементами"
+" и другими атрибутами, отображаемыми напрямую."
 
 #: ../../reference/qweb.rst:19
 msgid ""
-"To avoid element rendering, a placeholder element ``<t>`` is also "
-"available, which executes its directive but doesn't generate any output "
-"in and of itself::"
+"To avoid element rendering, a placeholder element ``<t>`` is also available,"
+" which executes its directive but doesn't generate any output in and of "
+"itself::"
 msgstr ""
+"Чтобы избежать визуализации элемента, элемент-заполнитель `` <t> `` также "
+"доступен, который выполняет свою директиву, но не генерирует никакого вывода"
+" сам по себе:"
 
 #: ../../reference/qweb.rst:27 ../../reference/qweb.rst:37
 #: ../../reference/qweb.rst:325
 msgid "will result in::"
-msgstr ""
+msgstr "приведет к ::"
 
 #: ../../reference/qweb.rst:31
 msgid "if ``condition`` is true, but::"
-msgstr ""
+msgstr "если `` условие`` истинно, но ::"
 
 #: ../../reference/qweb.rst:46
 msgid "Data output"
-msgstr ""
+msgstr "Вывод данных"
 
 #: ../../reference/qweb.rst:48
 msgid ""
 "QWeb has a primary output directive which automatically HTML-escape its "
-"content limiting XSS_ risks when displaying user-provided content: "
-"``esc``."
+"content limiting XSS_ risks when displaying user-provided content: ``esc``."
 msgstr ""
+"QWeb имеет первичную директиву вывода, которая автоматически выводит HTML из"
+" своего содержимого, ограничивая риски XSS_ при отображении "
+"пользовательского содержимого: `` esc``."
 
 #: ../../reference/qweb.rst:51
 msgid "``esc`` takes an expression, evaluates it and prints the content::"
-msgstr ""
+msgstr "`` esc`` принимает выражение, оценивает его и печатает содержимое ::"
 
 #: ../../reference/qweb.rst:55
 msgid "rendered with the value ``value`` set to ``42`` yields::"
 msgstr ""
+"отображается со значением `` value``, установленным в `` 42``, приводит к ::"
 
 #: ../../reference/qweb.rst:59
 msgid ""
 "There is one other output directive ``raw`` which behaves the same as "
-"respectively ``esc`` but *does not HTML-escape its output*. It can be "
-"useful to display separately constructed markup (e.g. from functions) or "
-"already sanitized user-provided markup."
+"respectively ``esc`` but *does not HTML-escape its output*. It can be useful"
+" to display separately constructed markup (e.g. from functions) or already "
+"sanitized user-provided markup."
 msgstr ""
+"Есть еще одна выходная директива `` raw``, которая ведет себя так же, как "
+"соответственно `` esc``, но * не экранирует HTML-выход *. Может быть полезно"
+" отобразить отдельно созданную разметку (например, из функций) или уже "
+"очищенную предоставленную пользователем разметку."
 
 #: ../../reference/qweb.rst:67
 msgid "Conditionals"
-msgstr ""
+msgstr "Conditionals"
 
 #: ../../reference/qweb.rst:69
 msgid ""
-"QWeb has a conditional directive ``if``, which evaluates an expression "
-"given as attribute value::"
+"QWeb has a conditional directive ``if``, which evaluates an expression given"
+" as attribute value::"
 msgstr ""
+"QWeb имеет условную директиву `` if``, которая оценивает выражение, заданное"
+" как значение атрибута:"
 
 #: ../../reference/qweb.rst:78
 msgid "The element is rendered if the condition is true::"
-msgstr ""
+msgstr "Элемент отображается, если условие истинно:"
 
 #: ../../reference/qweb.rst:84
 msgid "but if the condition is false it is removed from the result::"
-msgstr ""
+msgstr "но если условие ложно, оно удаляется из результата:"
 
 #: ../../reference/qweb.rst:89
 msgid ""
-"The conditional rendering applies to the bearer of the directive, which "
-"does not have to be ``<t>``::"
+"The conditional rendering applies to the bearer of the directive, which does"
+" not have to be ``<t>``::"
 msgstr ""
+"Условный рендеринг применяется к носителю директивы, который не обязательно "
+"должен быть `` <t> `` ::"
 
 #: ../../reference/qweb.rst:96
 msgid "will give the same results as the previous example."
-msgstr ""
+msgstr "даст те же результаты, что и в предыдущем примере."
 
 #: ../../reference/qweb.rst:98
 msgid ""
-"Extra conditional branching directives ``t-elif`` and ``t-else`` are also"
-" available::"
+"Extra conditional branching directives ``t-elif`` and ``t-else`` are also "
+"available::"
 msgstr ""
+"Также доступны дополнительные условные директивы ветвления `` t-elif`` и `` "
+"t-else`` ::"
 
 #: ../../reference/qweb.rst:111
 msgid "Loops"
-msgstr ""
+msgstr "Loops"
 
 #: ../../reference/qweb.rst:113
 msgid ""
@@ -122,93 +144,110 @@ msgid ""
 "returning the collection to iterate on, and a second parameter ``t-as`` "
 "providing the name to use for the \"current item\" of the iteration::"
 msgstr ""
+"QWeb имеет итерационную директиву `` foreach``, которая принимает выражение,"
+" возвращающее коллекцию для повторения, и второй параметр `` t-as``, "
+"предоставляющий имя, используемое для «текущего элемента» итерации ::"
 
 #: ../../reference/qweb.rst:121 ../../reference/qweb.rst:210
 #: ../../reference/qweb.rst:224 ../../reference/qweb.rst:235
 #: ../../reference/qweb.rst:245
 msgid "will be rendered as::"
-msgstr ""
+msgstr "будет отображаться как ::"
 
 #: ../../reference/qweb.rst:127
 msgid ""
-"Like conditions, ``foreach`` applies to the element bearing the "
-"directive's attribute, and"
+"Like conditions, ``foreach`` applies to the element bearing the directive's "
+"attribute, and"
 msgstr ""
+"Подобно условиям, `` foreach`` применяется к элементу, содержащему атрибут "
+"директивы, и"
 
 #: ../../reference/qweb.rst:136
 msgid "is equivalent to the previous example."
-msgstr ""
+msgstr "эквивалентно предыдущему примеру."
 
 #: ../../reference/qweb.rst:138
 msgid ""
-"``foreach`` can iterate on an array (the current item will be the current"
-" value) or a mapping (the current item will be the current key). "
-"Iterating on an integer (equivalent to iterating on an array between 0 "
-"inclusive and the provided integer exclusive) is still supported but "
-"deprecated."
+"``foreach`` can iterate on an array (the current item will be the current "
+"value) or a mapping (the current item will be the current key). Iterating on"
+" an integer (equivalent to iterating on an array between 0 inclusive and the"
+" provided integer exclusive) is still supported but deprecated."
 msgstr ""
+"`` foreach`` может выполнять итерации в массиве (текущий элемент будет "
+"текущим значением) или в отображении (текущий элемент будет текущим ключом)."
+" Итерирование по целому числу (эквивалентно итерации по массиву между 0 "
+"включительно и предоставленным целочисленным исключением) все еще "
+"поддерживается, но не рекомендуется."
 
 #: ../../reference/qweb.rst:143
 msgid ""
 "In addition to the name passed via ``t-as``, ``foreach`` provides a few "
 "other variables for various data points:"
 msgstr ""
+"В дополнение к имени, передаваемому через `` t-as``, `` foreach`` "
+"предоставляет несколько других переменных для различных точек данных:"
 
 #: ../../reference/qweb.rst:146
 msgid "``$as`` will be replaced by the name passed to ``t-as``"
-msgstr ""
+msgstr "`` $ as`` будет заменено именем, переданным в `` t-as``"
 
 #: ../../reference/qweb.rst:151
 msgid ":samp:`{$as}_all` (deprecated)"
-msgstr ""
+msgstr ": samp: `{$ as} _all` (устарело)"
 
 #: ../../reference/qweb.rst:149
 msgid "the object being iterated over"
-msgstr ""
+msgstr "объект перебирается"
 
 #: ../../reference/qweb.rst:151
 msgid "This variable is only available on JavaScript QWeb, not Python."
-msgstr ""
+msgstr "Эта переменная доступна только в JavaScript QWeb, но не в Python."
 
 #: ../../reference/qweb.rst:154
 msgid ":samp:`{$as}_value`"
-msgstr ""
+msgstr ": Сэмпл: `{$}, как _value`"
 
 #: ../../reference/qweb.rst:154
 msgid ""
-"the current iteration value, identical to ``$as`` for lists and integers,"
-" but for mappings it provides the value (where ``$as`` provides the key)"
+"the current iteration value, identical to ``$as`` for lists and integers, "
+"but for mappings it provides the value (where ``$as`` provides the key)"
 msgstr ""
+"текущее значение итерации, идентичное `` $ as`` для списков и целых чисел, "
+"но для отображений оно предоставляет значение (где `` $ as`` предоставляет "
+"ключ)"
 
 #: ../../reference/qweb.rst:156
 msgid ":samp:`{$as}_index`"
-msgstr ""
+msgstr ": Сэмпл: `{$}, как _index`"
 
 #: ../../reference/qweb.rst:157
-msgid "the current iteration index (the first item of the iteration has index 0)"
-msgstr ""
+msgid ""
+"the current iteration index (the first item of the iteration has index 0)"
+msgstr "текущий индекс итерации (первый элемент итерации имеет индекс 0)"
 
 #: ../../reference/qweb.rst:158
 msgid ":samp:`{$as}_size`"
-msgstr ""
+msgstr ": Сэмпл: `{$}, как _size`"
 
 #: ../../reference/qweb.rst:159
 msgid "the size of the collection if it is available"
-msgstr ""
+msgstr "размер коллекции, если она доступна"
 
 #: ../../reference/qweb.rst:161
 msgid ":samp:`{$as}_first`"
-msgstr ""
+msgstr ": Сэмпл: `{$}, как _first`"
 
 #: ../../reference/qweb.rst:161
 msgid ""
 "whether the current item is the first of the iteration (equivalent to "
 ":samp:`{$as}_index == 0`)"
 msgstr ""
+"является ли текущий элемент первым в итерации (эквивалентно: samp: `{$ as} "
+"_index == 0`)"
 
 #: ../../reference/qweb.rst:165
 msgid ":samp:`{$as}_last`"
-msgstr ""
+msgstr ": Сэмпл: `{$}, как _last`"
 
 #: ../../reference/qweb.rst:164
 msgid ""
@@ -216,146 +255,183 @@ msgid ""
 ":samp:`{$as}_index + 1 == {$as}_size`), requires the iteratee's size be "
 "available"
 msgstr ""
+"является ли текущий элемент последним в итерации (эквивалентно: samp: `{$ "
+"as} _index + 1 == {$ as} _size`), требует ли размер итерируемого быть "
+"доступным"
 
 #: ../../reference/qweb.rst:167
 msgid ":samp:`{$as}_parity` (deprecated)"
-msgstr ""
+msgstr ": samp: `{$ as} _parity` (устарело)"
 
 #: ../../reference/qweb.rst:168
-msgid ""
-"either ``\"even\"`` or ``\"odd\"``, the parity of the current iteration "
-"round"
+msgid "either ``\"even\"`` or ``\"odd\"``, the parity of the current iteration round"
 msgstr ""
+"либо `` &#39;четное&#39; `` или `` &quot;нечетное&quot; ``, четность "
+"текущего раунда итерации"
 
 #: ../../reference/qweb.rst:170
 msgid ":samp:`{$as}_even` (deprecated)"
-msgstr ""
+msgstr ": samp: `{$ as} _even` (устарело)"
 
 #: ../../reference/qweb.rst:170
 msgid ""
 "a boolean flag indicating that the current iteration round is on an even "
 "index"
 msgstr ""
+"логический флаг, указывающий, что текущий раунд итерации находится на четном"
+" индексе"
 
 #: ../../reference/qweb.rst:174
 msgid ":samp:`{$as}_odd` (deprecated)"
-msgstr ""
+msgstr ": samp: `{$ as} _odd` (устарело)"
 
 #: ../../reference/qweb.rst:173
 msgid ""
 "a boolean flag indicating that the current iteration round is on an odd "
 "index"
 msgstr ""
+"логический флаг, указывающий, что текущий раунд итерации находится на "
+"нечетном индексе"
 
 #: ../../reference/qweb.rst:176
 msgid ""
 "These extra variables provided and all new variables created into the "
 "``foreach`` are only available in the scope of the``foreach``. If the "
-"variable exists outside the context of the ``foreach``, the value is "
-"copied at the end of the foreach into the global context."
+"variable exists outside the context of the ``foreach``, the value is copied "
+"at the end of the foreach into the global context."
 msgstr ""
+"Эти дополнительные переменные и все новые переменные, созданные в `` "
+"foreach``, доступны только в области `` foreach``. Если переменная "
+"существует вне контекста `` foreach``, значение копируется в конце foreach в"
+" глобальный контекст."
 
 #: ../../reference/qweb.rst:198
 msgid "attributes"
-msgstr ""
+msgstr "атрибуты"
 
 #: ../../reference/qweb.rst:200
 msgid ""
-"QWeb can compute attributes on-the-fly and set the result of the "
-"computation on the output node. This is done via the ``t-att`` "
-"(attribute) directive which exists in 3 different forms:"
+"QWeb can compute attributes on-the-fly and set the result of the computation"
+" on the output node. This is done via the ``t-att`` (attribute) directive "
+"which exists in 3 different forms:"
 msgstr ""
+"QWeb может вычислять атрибуты на лету и устанавливать результат вычисления "
+"на выходном узле. Это делается с помощью директивы `` t-att`` (attribute), "
+"которая существует в 3 различных формах:"
 
 #: ../../reference/qweb.rst:211
 msgid ":samp:`t-att-{$name}`"
-msgstr ""
+msgstr ": Сэмпл: `т-ATT - {$ имя}`"
 
 #: ../../reference/qweb.rst:205
 msgid ""
-"an attribute called ``$name`` is created, the attribute value is "
-"evaluated and the result is set as the attribute's value::"
+"an attribute called ``$name`` is created, the attribute value is evaluated "
+"and the result is set as the attribute's value::"
 msgstr ""
+"создается атрибут с именем `` $ name``, значение атрибута оценивается, а "
+"результат устанавливается как значение атрибута ::"
 
 #: ../../reference/qweb.rst:227
 msgid ":samp:`t-attf-{$name}`"
-msgstr ""
+msgstr ": Сэмпл: `т-ATTF - {$ имя}`"
 
 #: ../../reference/qweb.rst:214
 msgid ""
-"same as previous, but the parameter is a :term:`format string` instead of"
-" just an expression, often useful to mix literal and non-literal string "
-"(e.g. classes)::"
+"same as previous, but the parameter is a :term:`format string` instead of "
+"just an expression, often useful to mix literal and non-literal string (e.g."
+" classes)::"
 msgstr ""
+"такой же, как и предыдущий, но параметром является: term: `format string`, а"
+" не просто выражение, часто полезное для смешивания литеральной и "
+"нелитеральной строки (например, classes) ::"
 
 #: ../../reference/qweb.rst:236
 msgid ":samp:`t-att=mapping`"
-msgstr ""
+msgstr ": SAMP: `т-Att = mapping`"
 
 #: ../../reference/qweb.rst:230
 msgid ""
 "if the parameter is a mapping, each (key, value) pair generates a new "
 "attribute and its value::"
 msgstr ""
+"если параметр является отображением, каждая пара (ключ, значение) генерирует"
+" новый атрибут и его значение ::"
 
 #: ../../reference/qweb.rst:247
 msgid ":samp:`t-att=pair`"
-msgstr ""
+msgstr ": SAMP: `т-Att = pair`"
 
 #: ../../reference/qweb.rst:239
 msgid ""
-"if the parameter is a pair (tuple or array of 2 element), the first item "
-"of the pair is the name of the attribute and the second item is the "
-"value::"
+"if the parameter is a pair (tuple or array of 2 element), the first item of "
+"the pair is the name of the attribute and the second item is the value::"
 msgstr ""
+"если параметр является парой (кортеж или массив из 2 элементов), первым "
+"элементом пары является имя атрибута, а вторым элементом является значение "
+"::"
 
 #: ../../reference/qweb.rst:250
 msgid "setting variables"
-msgstr ""
+msgstr "установка переменных"
 
 #: ../../reference/qweb.rst:252
 msgid ""
 "QWeb allows creating variables from within the template, to memoize a "
-"computation (to use it multiple times), give a piece of data a clearer "
-"name, ..."
+"computation (to use it multiple times), give a piece of data a clearer name,"
+" ..."
 msgstr ""
+"QWeb позволяет создавать переменные из шаблона, запоминать вычисления "
+"(использовать их несколько раз), давать фрагменту данных более четкое имя, "
+"..."
 
 #: ../../reference/qweb.rst:256
 msgid ""
-"This is done via the ``set`` directive, which takes the name of the "
-"variable to create. The value to set can be provided in two ways:"
+"This is done via the ``set`` directive, which takes the name of the variable"
+" to create. The value to set can be provided in two ways:"
 msgstr ""
+"Это делается с помощью директивы `` set``, которая принимает имя создаваемой"
+" переменной. Значение для установки может быть предоставлено двумя "
+"способами:"
 
 #: ../../reference/qweb.rst:259
 msgid ""
 "a ``t-value`` attribute containing an expression, and the result of its "
 "evaluation will be set::"
 msgstr ""
+"атрибут `` t-value``, содержащий выражение, и результат его оценки будет "
+"установлен ::"
 
 #: ../../reference/qweb.rst:265
 msgid "will print ``3``"
-msgstr ""
+msgstr "напечатает `` 3``"
 
 #: ../../reference/qweb.rst:266
 msgid ""
-"if there is no ``t-value`` attribute, the node's body is rendered and set"
-" as the variable's value::"
+"if there is no ``t-value`` attribute, the node's body is rendered and set as"
+" the variable's value::"
 msgstr ""
+"если атрибут `` t-value`` отсутствует, тело узла отображается и "
+"устанавливается как значение переменной ::"
 
 #: ../../reference/qweb.rst:274
 msgid ""
-"will generate ``&lt;li&gt;ok&lt;/li&gt;`` (the content is escaped as we "
-"used the ``esc`` directive)"
+"will generate ``&lt;li&gt;ok&lt;/li&gt;`` (the content is escaped as we used"
+" the ``esc`` directive)"
 msgstr ""
+"сгенерирует `` &lt;li&gt; ok &lt;/ li&gt; `` (содержимое экранируется, "
+"поскольку мы использовали директиву `` esc``)"
 
 #: ../../reference/qweb.rst:277
 msgid ""
-"using the result of this operation is a significant use-case for the "
-"``raw`` directive."
+"using the result of this operation is a significant use-case for the ``raw``"
+" directive."
 msgstr ""
+"использование результата этой операции является значительным примером "
+"использования директивы `` raw``."
 
 #: ../../reference/qweb.rst:281
 msgid "calling sub-templates"
-msgstr ""
+msgstr "вызов суб-шаблонов"
 
 #: ../../reference/qweb.rst:283
 msgid ""
@@ -363,28 +439,36 @@ msgid ""
 "used from within another template (to avoid duplication or give names to "
 "parts of templates) using the ``t-call`` directive::"
 msgstr ""
+"Шаблоны QWeb можно использовать для рендеринга верхнего уровня, но их также "
+"можно использовать из другого шаблона (чтобы избежать дублирования или дать "
+"имена частям шаблонов) с помощью директивы `` t-call`` ::"
 
 #: ../../reference/qweb.rst:289
 msgid ""
-"This calls the named template with the execution context of the parent, "
-"if ``other_template`` is defined as::"
+"This calls the named template with the execution context of the parent, if "
+"``other_template`` is defined as::"
 msgstr ""
+"Это вызывает именованный шаблон с контекстом выполнения родителя, если `` "
+"other_template`` определено как ::"
 
 #: ../../reference/qweb.rst:294
 msgid "the call above will be rendered as ``<p/>`` (no content), but::"
-msgstr ""
+msgstr "вызов выше будет обработан как `` <p/> `` (без контента), но ::"
 
 #: ../../reference/qweb.rst:299
 msgid "will be rendered as ``<p>1</p>``."
-msgstr ""
+msgstr "будет отображаться как `` <p> 1 </p> ``."
 
 #: ../../reference/qweb.rst:301
 msgid ""
-"However this has the problem of being visible from outside the "
-"``t-call``. Alternatively, content set in the body of the ``call`` "
-"directive will be evaluated *before* calling the sub-template, and can "
-"alter a local context::"
+"However this has the problem of being visible from outside the ``t-call``. "
+"Alternatively, content set in the body of the ``call`` directive will be "
+"evaluated *before* calling the sub-template, and can alter a local context::"
 msgstr ""
+"Однако проблема заключается в том, чтобы быть видимым снаружи `` t-call``. В"
+" качестве альтернативы, содержимое, установленное в теле директивы `` "
+"call``, будет оценено * перед * вызовом суб-шаблона и может изменить "
+"локальный контекст ::"
 
 #: ../../reference/qweb.rst:310
 msgid ""
@@ -392,396 +476,477 @@ msgid ""
 "``set`` directives), and its rendered form will be available within the "
 "called template as a magical ``0`` variable::"
 msgstr ""
+"Тело директивы `` call`` может быть произвольно сложным (не только "
+"директивами `` set``), и его визуализированная форма будет доступна в "
+"вызываемом шаблоне как магическая переменная `` 0`` ::"
 
 #: ../../reference/qweb.rst:319
 msgid "being called thus::"
-msgstr ""
+msgstr "вызывается таким образом:"
 
 #: ../../reference/qweb.rst:333
 msgid "Python"
-msgstr ""
+msgstr "питон"
 
 #: ../../reference/qweb.rst:336 ../../reference/qweb.rst:437
 msgid "Exclusive directives"
-msgstr ""
+msgstr "Эксклюзивные директивы"
 
 #: ../../reference/qweb.rst:339
 msgid "Asset bundles"
-msgstr ""
+msgstr "Пакеты активов"
 
 #: ../../reference/qweb.rst:344
 msgid "\"smart records\" fields formatting"
-msgstr ""
+msgstr "«умные записи» форматирование полей"
 
 #: ../../reference/qweb.rst:346
 msgid ""
 "The ``t-field`` directive can only be used when performing field access "
 "(``a.b``) on a \"smart\" record (result of the ``browse`` method). It is "
-"able to automatically format based on field type, and is integrated in "
-"the website's rich text edition."
+"able to automatically format based on field type, and is integrated in the "
+"website's rich text edition."
 msgstr ""
+"Директива `` t-field`` может использоваться только при выполнении доступа к "
+"полю (`` ab``) для &quot;умной&quot; записи (результат метода `` browse``). "
+"Он может автоматически форматировать в зависимости от типа поля и "
+"интегрируется в расширенную текстовую версию веб-сайта."
 
 #: ../../reference/qweb.rst:351
 msgid ""
 "``t-options`` can be used to customize fields, the most common option is "
 "``widget``, other options are field- or widget-dependent."
 msgstr ""
+"`` t-options`` можно использовать для настройки полей, наиболее "
+"распространенным вариантом является `` widget``, другие параметры зависят от"
+" поля или виджета."
 
 #: ../../reference/qweb.rst:355
 msgid "Debugging"
-msgstr ""
+msgstr "Отладка"
 
 #: ../../reference/qweb.rst:363 ../../reference/qweb.rst:531
 msgid "``t-debug``"
-msgstr ""
+msgstr "`` Т-debug``"
 
 #: ../../reference/qweb.rst:358
 msgid ""
-"invokes a debugger using PDB's ``set_trace`` API. The parameter should be"
-" the name of a module, on which a ``set_trace`` method is called::"
+"invokes a debugger using PDB's ``set_trace`` API. The parameter should be "
+"the name of a module, on which a ``set_trace`` method is called::"
 msgstr ""
+"вызывает отладчик, используя `` set_trace`` API PDB. Параметр должен быть "
+"именем модуля, для которого вызывается метод `` set_trace``:"
 
 #: ../../reference/qweb.rst:363
 msgid "is equivalent to ``importlib.import_module(\"pdb\").set_trace()``"
 msgstr ""
+"эквивалентно `` importlib.import_module (&quot;pdb&quot;). set_trace () ``"
 
 #: ../../reference/qweb.rst:366 ../../reference/qweb.rst:544
 msgid "Helpers"
-msgstr ""
+msgstr "Помощники"
 
 #: ../../reference/qweb.rst:369
 msgid "Request-based"
-msgstr ""
+msgstr "Запрос на основе"
 
 #: ../../reference/qweb.rst:371
 msgid ""
-"Most Python-side uses of QWeb are in controllers (and during HTTP "
-"requests), in which case templates stored in the database (as :ref:`views"
-" <reference/views/qweb>`) can be trivially rendered by calling "
+"Most Python-side uses of QWeb are in controllers (and during HTTP requests),"
+" in which case templates stored in the database (as :ref:`views "
+"<reference/views/qweb>`) can be trivially rendered by calling "
 ":meth:`odoo.http.HttpRequest.render`:"
 msgstr ""
+"Большинство QWeb на стороне Python используются в контроллерах (и во время "
+"HTTP-запросов), и в этом случае шаблоны хранятся в базе данных (как: ref: "
+"`views <reference/views/qweb> `) может быть тривиально воспроизведен путем "
+"вызова: meth:` odoo.http.HttpRequest.render`:"
 
 #: ../../reference/qweb.rst:382
 msgid ""
-"This automatically creates a :class:`~odoo.http.Response` object which "
-"can be returned from the controller (or further customized to suit)."
+"This automatically creates a :class:`~odoo.http.Response` object which can "
+"be returned from the controller (or further customized to suit)."
 msgstr ""
+"Это автоматически создает объект: class: `~ odoo.http.Response`, который "
+"может быть возвращен из контроллера (или дополнительно настроен для "
+"соответствия)."
 
 #: ../../reference/qweb.rst:386
 msgid "View-based"
-msgstr ""
+msgstr "Просмотр на основе"
 
 #: ../../reference/qweb.rst:388
 msgid ""
 "At a deeper level than the previous helper is the ``render`` method on "
 "``ir.ui.view``:"
 msgstr ""
+"На более глубоком уровне, чем предыдущий помощник, находится метод `` "
+"render`` в `` ir.ui.view``:"
 
 #: ../../reference/qweb.rst:393
 msgid ""
 "Renders a QWeb view/template by database id or :term:`external id`. "
 "Templates are automatically loaded from ``ir.ui.view`` records."
 msgstr ""
+"Визуализирует представление / шаблон QWeb по идентификатору базы данных или:"
+" term: `external id`. Шаблоны автоматически загружаются из записей `` "
+"ir.ui.view``."
 
 #: ../../reference/qweb.rst:396
 msgid "Sets up a number of default values in the rendering context:"
 msgstr ""
+"Устанавливает количество значений по умолчанию в контексте рендеринга:"
 
 #: ../../reference/qweb.rst:398
 msgid "``request``"
-msgstr ""
+msgstr "`` request``"
 
 #: ../../reference/qweb.rst:399
 msgid "the current :class:`~odoo.http.WebRequest` object, if any"
-msgstr ""
+msgstr "текущий объект: class: `~ odoo.http.WebRequest`, если есть"
 
 #: ../../reference/qweb.rst:400
 msgid "``debug``"
-msgstr ""
+msgstr "`` Debug``"
 
 #: ../../reference/qweb.rst:401
 msgid "whether the current request (if any) is in ``debug`` mode"
-msgstr ""
+msgstr "находится ли текущий запрос (если есть) в режиме `` debug``"
 
 #: ../../reference/qweb.rst:402
 msgid ":func:`quote_plus <werkzeug.urls.url_quote_plus>`"
-msgstr ""
+msgstr ": FUNC: `quote_plus <werkzeug.urls.url_quote_plus> `"
 
 #: ../../reference/qweb.rst:403
 msgid "url-encoding utility function"
-msgstr ""
+msgstr "функция полезности кодирования URL"
 
 #: ../../reference/qweb.rst:404
 msgid ":mod:`json`"
-msgstr ""
+msgstr ": Моды: `json`"
 
 #: ../../reference/qweb.rst:405 ../../reference/qweb.rst:407
 #: ../../reference/qweb.rst:409
 msgid "the corresponding standard library module"
-msgstr ""
+msgstr "соответствующий стандартный библиотечный модуль"
 
 #: ../../reference/qweb.rst:406
 msgid ":mod:`time`"
-msgstr ""
+msgstr ": Моды: `time`"
 
 #: ../../reference/qweb.rst:408
 msgid ":mod:`datetime`"
-msgstr ""
+msgstr ": Моды: `datetime`"
 
 #: ../../reference/qweb.rst:410
 msgid ""
 "`relativedelta <https://labix.org/python-dateutil#head-"
 "ba5ffd4df8111d1b83fc194b97ebecf837add454>`_"
 msgstr ""
+"`relativedelta <https://labix.org/python-dateutil#head-"
+"ba5ffd4df8111d1b83fc194b97ebecf837add454>`_"
 
 #: ../../reference/qweb.rst:411
 msgid "see module"
-msgstr ""
+msgstr "см. модуль"
 
 #: ../../reference/qweb.rst:413
 msgid "``keep_query``"
-msgstr ""
+msgstr "`` Keep_query``"
 
 #: ../../reference/qweb.rst:413
 msgid "the ``keep_query`` helper function"
-msgstr ""
+msgstr "вспомогательная функция `` keep_query``"
 
 #: ../../reference/qweb.rst
 msgid "Параметры"
-msgstr ""
+msgstr "Параметры"
 
 #: ../../reference/qweb.rst:415
 msgid "context values to pass to QWeb for rendering"
-msgstr ""
+msgstr "значения контекста для передачи в QWeb для рендеринга"
 
 #: ../../reference/qweb.rst:416
 msgid ""
 "name of the Odoo model to use for rendering, can be used to expand or "
-"customize QWeb locally (by creating a \"new\" qweb based on ``ir.qweb`` "
-"with alterations)"
+"customize QWeb locally (by creating a \"new\" qweb based on ``ir.qweb`` with"
+" alterations)"
 msgstr ""
+"имя модели Odoo, используемой для рендеринга, может использоваться для "
+"локального расширения или настройки QWeb (путем создания «нового» qweb на "
+"основе `` ir.qweb`` с изменениями)"
 
 #: ../../reference/qweb.rst:434
 msgid "Javascript"
-msgstr ""
+msgstr "Javascript"
 
 #: ../../reference/qweb.rst:440
 msgid "defining templates"
-msgstr ""
+msgstr "определяющие шаблоны"
 
 #: ../../reference/qweb.rst:442
 msgid ""
-"The ``t-name`` directive can only be placed at the top-level of a "
-"template file (direct children to the document root)::"
+"The ``t-name`` directive can only be placed at the top-level of a template "
+"file (direct children to the document root)::"
 msgstr ""
+"Директива `` t-name`` может быть размещена только на верхнем уровне файла "
+"шаблона (прямые дочерние элементы к корню документа) ::"
 
 #: ../../reference/qweb.rst:451
 msgid ""
-"It takes no other parameter, but can be used with a ``<t>`` element or "
-"any other. With a ``<t>`` element, the ``<t>`` should have a single "
-"child."
+"It takes no other parameter, but can be used with a ``<t>`` element or any "
+"other. With a ``<t>`` element, the ``<t>`` should have a single child."
 msgstr ""
+"Он не принимает никаких других параметров, но может использоваться с `` <t> "
+"Элемент или любой другой. С `` <t> `` элемент, `` <t> `` должен иметь одного"
+" ребенка."
 
 #: ../../reference/qweb.rst:454
 msgid ""
-"The template name is an arbitrary string, although when multiple "
-"templates are related (e.g. called sub-templates) it is customary to use "
-"dot-separated names to indicate hierarchical relationships."
+"The template name is an arbitrary string, although when multiple templates "
+"are related (e.g. called sub-templates) it is customary to use dot-separated"
+" names to indicate hierarchical relationships."
 msgstr ""
+"Имя шаблона является произвольной строкой, хотя, когда несколько шаблонов "
+"связаны (например, называются под-шаблонами), обычно используются "
+"разделенные точками имена для обозначения иерархических отношений."
 
 #: ../../reference/qweb.rst:459
 msgid "template inheritance"
-msgstr ""
+msgstr "наследование шаблонов"
 
 #: ../../reference/qweb.rst:461
 msgid ""
-"Template inheritance is used to alter existing templates in-place, e.g. "
-"to add information to templates created by other modules."
+"Template inheritance is used to alter existing templates in-place, e.g. to "
+"add information to templates created by other modules."
 msgstr ""
+"Наследование шаблонов используется для изменения существующих шаблонов на "
+"месте, например, для добавления информации в шаблоны, созданные другими "
+"модулями."
 
 #: ../../reference/qweb.rst:464
 msgid ""
-"Template inheritance is performed via the ``t-extend`` directive which "
-"takes the name of the template to alter as parameter."
+"Template inheritance is performed via the ``t-extend`` directive which takes"
+" the name of the template to alter as parameter."
 msgstr ""
+"Наследование шаблонов выполняется с помощью директивы `t-extend``, которая "
+"принимает имя шаблона для изменения в качестве параметра."
 
 #: ../../reference/qweb.rst:467
 msgid ""
-"When ``t-extend`` is combined with ``t-name`` a new template with the "
-"given name is created. In this case the extended template is not altered,"
-" instead the directives define how to create the new template."
+"When ``t-extend`` is combined with ``t-name`` a new template with the given "
+"name is created. In this case the extended template is not altered, instead "
+"the directives define how to create the new template."
 msgstr ""
+"Когда `` t-extension`` объединяется с `` t-name``, создается новый шаблон с "
+"заданным именем. В этом случае расширенный шаблон не изменяется, вместо "
+"этого директивы определяют, как создать новый шаблон."
 
 #: ../../reference/qweb.rst:471
 msgid ""
 "In both cases the alteration is then performed with any number of "
 "``t-jquery`` sub-directives::"
 msgstr ""
+"В обоих случаях изменение затем выполняется с любым количеством подкаталогов"
+" `` t-jquery`` ::"
 
 #: ../../reference/qweb.rst:480
 msgid ""
-"The ``t-jquery`` directives takes a `CSS selector`_. This selector is "
-"used on the extended template to select *context nodes* to which the "
-"specified ``t-operation`` is applied:"
+"The ``t-jquery`` directives takes a `CSS selector`_. This selector is used "
+"on the extended template to select *context nodes* to which the specified "
+"``t-operation`` is applied:"
 msgstr ""
+"Директивы `` t-jquery`` принимают `селектор CSS`_. Этот селектор "
+"используется в расширенном шаблоне для выбора * узлов контекста *, к которым"
+" применяется указанная `t-операция``:"
 
 #: ../../reference/qweb.rst:485
 msgid "``append``"
-msgstr ""
+msgstr "`` Append``"
 
 #: ../../reference/qweb.rst:485
 msgid ""
 "the node's body is appended at the end of the context node (after the "
 "context node's last child)"
 msgstr ""
+"тело узла добавляется в конец узла контекста (после последнего потомка узла "
+"контекста)"
 
 #: ../../reference/qweb.rst:488
 msgid "``prepend``"
-msgstr ""
+msgstr "`` prepend``"
 
 #: ../../reference/qweb.rst:488
 msgid ""
 "the node's body is prepended to the context node (inserted before the "
 "context node's first child)"
 msgstr ""
+"тело узла добавляется к контекстному узлу (вставляется перед первым дочерним"
+" узлом контекста)"
 
 #: ../../reference/qweb.rst:490
 msgid "``before``"
-msgstr ""
+msgstr "`` before``"
 
 #: ../../reference/qweb.rst:491
 msgid "the node's body is inserted right before the context node"
-msgstr ""
+msgstr "тело узла вставляется прямо перед контекстным узлом"
 
 #: ../../reference/qweb.rst:492
 msgid "``after``"
-msgstr ""
+msgstr "`` after``"
 
 #: ../../reference/qweb.rst:493
 msgid "the node's body is inserted right after the context node"
-msgstr ""
+msgstr "тело узла вставляется сразу после контекстного узла"
 
 #: ../../reference/qweb.rst:494
 msgid "``inner``"
-msgstr ""
+msgstr "`` inner``"
 
 #: ../../reference/qweb.rst:495
 msgid "the node's body replaces the context node's children"
-msgstr ""
+msgstr "тело узла заменяет дочерние узлы контекста"
 
 #: ../../reference/qweb.rst:496
 msgid "``replace``"
-msgstr ""
+msgstr "`` replace``"
 
 #: ../../reference/qweb.rst:497
 msgid "the node's body is used to replace the context node itself"
-msgstr ""
+msgstr "тело узла используется для замены самого узла контекста"
 
 #: ../../reference/qweb.rst:501
 msgid "``attributes``"
-msgstr ""
+msgstr "`` attributes``"
 
 #: ../../reference/qweb.rst:499
 msgid ""
-"the nodes's body should be any number of ``attribute`` elements, each "
-"with a ``name`` attribute and some textual content, the named attribute "
-"of the context node will be set to the specified value (either replaced "
-"if it already existed or added if not)"
+"the nodes's body should be any number of ``attribute`` elements, each with a"
+" ``name`` attribute and some textual content, the named attribute of the "
+"context node will be set to the specified value (either replaced if it "
+"already existed or added if not)"
 msgstr ""
+"Тело узлов должно состоять из любого количества элементов `` attribute``, "
+"каждый из которых имеет атрибут `` name`` и некоторое текстовое содержимое; "
+"для именованного атрибута узла контекста будет установлено указанное "
+"значение (либо заменяется, если оно уже существовало) или добавил если нет)"
 
 #: ../../reference/qweb.rst:509
 msgid "No operation"
-msgstr ""
+msgstr "Нет операции"
 
 #: ../../reference/qweb.rst:504
 msgid ""
 "if no ``t-operation`` is specified, the template body is interpreted as "
 "javascript code and executed with the context node as ``this``"
 msgstr ""
+"если `` t-операция`` не указана, тело шаблона интерпретируется как код "
+"javascript и выполняется с узлом контекста как `` this``"
 
 #: ../../reference/qweb.rst:507
 msgid ""
 "while much more powerful than other operations, this mode is also much "
 "harder to debug and maintain, it is recommended to avoid it"
 msgstr ""
+"Хотя этот режим гораздо более мощный, чем другие операции, его также гораздо"
+" сложнее отлаживать и поддерживать, но рекомендуется его избегать."
 
 #: ../../reference/qweb.rst:512
 msgid "debugging"
-msgstr ""
+msgstr "отладка"
 
 #: ../../reference/qweb.rst:514
 msgid "The javascript QWeb implementation provides a few debugging hooks:"
-msgstr ""
+msgstr "Реализация javascript QWeb предоставляет несколько отладочных хуков:"
 
 #: ../../reference/qweb.rst:522
 msgid "``t-log``"
-msgstr ""
+msgstr "`` Т-log``"
 
 #: ../../reference/qweb.rst:517
 msgid ""
-"takes an expression parameter, evaluates the expression during rendering "
-"and logs its result with ``console.log``::"
+"takes an expression parameter, evaluates the expression during rendering and"
+" logs its result with ``console.log``::"
 msgstr ""
+"принимает параметр выражения, вычисляет выражение во время рендеринга и "
+"записывает его результат с помощью `` console.log`` ::"
 
 #: ../../reference/qweb.rst:523
 msgid "will print ``42`` to the console"
-msgstr ""
+msgstr "выведет `` 42`` на консоль"
 
 #: ../../reference/qweb.rst:525
 msgid "triggers a debugger breakpoint during template rendering::"
-msgstr ""
+msgstr "запускает точку останова отладчика во время рендеринга шаблона:"
 
 #: ../../reference/qweb.rst:531
 msgid ""
-"will stop execution if debugging is active (exact condition depend on the"
-" browser and its development tools)"
+"will stop execution if debugging is active (exact condition depend on the "
+"browser and its development tools)"
 msgstr ""
+"остановит выполнение, если отладка активна (точное условие зависит от "
+"браузера и его инструментов разработки)"
 
 #: ../../reference/qweb.rst:541
 msgid "``t-js``"
-msgstr ""
+msgstr "`` Т-js``"
 
 #: ../../reference/qweb.rst:534
 msgid ""
-"the node's body is javascript code executed during template rendering. "
-"Takes a ``context`` parameter, which is the name under which the "
-"rendering context will be available in the ``t-js``'s body::"
+"the node's body is javascript code executed during template rendering. Takes"
+" a ``context`` parameter, which is the name under which the rendering "
+"context will be available in the ``t-js``'s body::"
 msgstr ""
+"тело узла - это код JavaScript, выполняемый во время рендеринга шаблона. "
+"Принимает параметр `` context``, который является именем, под которым "
+"контекст рендеринга будет доступен в теле `` t-js`` ::"
 
 #: ../../reference/qweb.rst:548
 msgid ""
-"(core is the ``web.core`` module) An instance of :js:class:`QWeb2.Engine`"
-" with all module-defined template files loaded, and references to "
-"standard helper objects ``_`` (underscore), ``_t`` (translation function)"
-" and JSON_."
+"(core is the ``web.core`` module) An instance of :js:class:`QWeb2.Engine` "
+"with all module-defined template files loaded, and references to standard "
+"helper objects ``_`` (underscore), ``_t`` (translation function) and JSON_."
 msgstr ""
+"(ядро - это модуль `` web.core``). Экземпляр: js: class: `QWeb2.Engine` со "
+"всеми загруженными файлами шаблонов модулей и ссылками на стандартные "
+"вспомогательные объекты` `_`` (подчеркивание), `` _t`` (функция перевода) и "
+"JSON_."
 
 #: ../../reference/qweb.rst:552
 msgid ""
 ":js:func:`core.qweb.render <QWeb2.Engine.render>` can be used to easily "
 "render basic module templates"
 msgstr ""
+": ЯШ: FUNC: `core.qweb.render <QWeb2.Engine.render> `может использоваться "
+"для простой визуализации базовых шаблонов модулей"
 
 #: ../../reference/qweb.rst:558
 msgid "API"
-msgstr ""
+msgstr "API"
 
 #: ../../reference/qweb.rst:562
 msgid ""
 "The QWeb \"renderer\", handles most of QWeb's logic (loading, parsing, "
 "compiling and rendering templates)."
 msgstr ""
+"QWeb «рендерер» обрабатывает большую часть логики QWeb (загрузка, анализ, "
+"компиляция и рендеринг шаблонов)."
 
 #: ../../reference/qweb.rst:565
 msgid ""
-"Odoo Web instantiates one for the user in the core module, and exports it"
-" to ``core.qweb``. It also loads all the template files of the various "
-"modules into that QWeb instance."
+"Odoo Web instantiates one for the user in the core module, and exports it to"
+" ``core.qweb``. It also loads all the template files of the various modules "
+"into that QWeb instance."
 msgstr ""
+"Odoo Web создает экземпляр для пользователя в модуле ядра и экспортирует его"
+" в `` core.qweb``. Он также загружает все файлы шаблонов различных модулей в"
+" этот экземпляр QWeb."
 
 #: ../../reference/qweb.rst:569
 msgid "A :js:class:`QWeb2.Engine` also serves as a \"template namespace\"."
 msgstr ""
+"A: js: class: `QWeb2.Engine` также служит« пространством имен шаблона »."
 
 #: ../../reference/qweb.rst:573
 msgid ""
@@ -789,89 +954,114 @@ msgid ""
 "provided) to find the variables accessed during template rendering (e.g. "
 "strings to display)."
 msgstr ""
+"Визуализирует ранее загруженный шаблон в строку, используя `` context`` "
+"(если имеется), чтобы найти переменные, к которым обращались во время "
+"рендеринга шаблона (например, строки для отображения)."
 
 #: ../../reference/qweb.rst:577
 msgid "the name of the template to render"
-msgstr ""
+msgstr "название шаблона для отображения"
 
 #: ../../reference/qweb.rst:578
 msgid "the basic namespace to use for template rendering"
-msgstr ""
+msgstr "основное пространство имен, используемое для рендеринга шаблона"
 
 #: ../../reference/qweb.rst
 msgid "Результат"
-msgstr ""
+msgstr "Результат"
 
 #: ../../reference/qweb.rst:580
 msgid "String"
-msgstr ""
+msgstr "строка"
 
 #: ../../reference/qweb.rst:582
 msgid ""
-"The engine exposes an other method which may be useful in some cases "
-"(e.g. if you need a separate template namespace with, in Odoo Web, Kanban"
-" views get their own :js:class:`QWeb2.Engine` instance so their templates"
-" don't collide with more general \"module\" templates):"
+"The engine exposes an other method which may be useful in some cases (e.g. "
+"if you need a separate template namespace with, in Odoo Web, Kanban views "
+"get their own :js:class:`QWeb2.Engine` instance so their templates don't "
+"collide with more general \"module\" templates):"
 msgstr ""
+"Движок предоставляет другой метод, который может быть полезен в некоторых "
+"случаях (например, если вам нужно отдельное пространство имен шаблона с, в "
+"Odoo Web представления Kanban получают свой собственный экземпляр: js: "
+"class: `QWeb2.Engine`, поэтому их шаблоны не сталкиваются с более общими "
+"«модульными» шаблонами):"
 
 #: ../../reference/qweb.rst:590
 msgid ""
-"Loads a template file (a collection of templates) in the QWeb instance. "
-"The templates can be specified as:"
+"Loads a template file (a collection of templates) in the QWeb instance. The "
+"templates can be specified as:"
 msgstr ""
+"Загружает файл шаблона (коллекцию шаблонов) в экземпляре QWeb. Шаблоны могут"
+" быть указаны как:"
 
 #: ../../reference/qweb.rst:595
 msgid "An XML string"
-msgstr ""
+msgstr "XML-строка"
 
 #: ../../reference/qweb.rst:594
 msgid "QWeb will attempt to parse it to an XML document then load it."
 msgstr ""
+"QWeb попытается проанализировать его в XML-документе, а затем загрузить его."
 
 #: ../../reference/qweb.rst:599
 msgid "A URL"
-msgstr ""
+msgstr "URL"
 
 #: ../../reference/qweb.rst:598
 msgid ""
-"QWeb will attempt to download the URL content, then load the resulting "
-"XML string."
+"QWeb will attempt to download the URL content, then load the resulting XML "
+"string."
 msgstr ""
+"QWeb попытается загрузить содержимое URL, а затем загрузить полученную XML-"
+"строку."
 
 #: ../../reference/qweb.rst:604
 msgid "A ``Document`` or ``Node``"
-msgstr ""
+msgstr "«Документ» или «Узел»"
 
 #: ../../reference/qweb.rst:602
 msgid ""
-"QWeb will traverse the first level of the document (the child nodes of "
-"the provided root) and load any named template or template override."
+"QWeb will traverse the first level of the document (the child nodes of the "
+"provided root) and load any named template or template override."
 msgstr ""
+"QWeb будет проходить по первому уровню документа (дочерним узлам "
+"предоставленного корня) и загружать любой именованный шаблон или "
+"переопределение шаблона."
 
 #: ../../reference/qweb.rst:608
 msgid ""
 "A :js:class:`QWeb2.Engine` also exposes various attributes for behavior "
 "customization:"
 msgstr ""
+"A: js: class: `QWeb2.Engine` также предоставляет различные атрибуты для "
+"настройки поведения:"
 
 #: ../../reference/qweb.rst:613
 msgid ""
-"Prefix used to recognize directives during parsing. A string. By default,"
-" ``t``."
+"Prefix used to recognize directives during parsing. A string. By default, "
+"``t``."
 msgstr ""
+"Префикс используется для распознавания директив во время синтаксического "
+"анализа. Строка. По умолчанию `` t``."
 
 #: ../../reference/qweb.rst:618
 msgid ""
-"Boolean flag putting the engine in \"debug mode\". Normally, QWeb "
-"intercepts any error raised during template execution. In debug mode, it "
-"leaves all exceptions go through without intercepting them."
+"Boolean flag putting the engine in \"debug mode\". Normally, QWeb intercepts"
+" any error raised during template execution. In debug mode, it leaves all "
+"exceptions go through without intercepting them."
 msgstr ""
+"Логический флаг, переводящий двигатель в «режим отладки». Обычно QWeb "
+"перехватывает любую ошибку, возникающую во время выполнения шаблона. В "
+"режиме отладки он оставляет все исключения без их перехвата."
 
 #: ../../reference/qweb.rst:625
 msgid ""
-"The jQuery instance used during template inheritance processing. Defaults"
-" to ``window.jQuery``."
+"The jQuery instance used during template inheritance processing. Defaults to"
+" ``window.jQuery``."
 msgstr ""
+"Экземпляр jQuery, используемый во время обработки наследования шаблона. По "
+"умолчанию используется `` window.jQuery``."
 
 #: ../../reference/qweb.rst:630
 msgid ""
@@ -879,17 +1069,25 @@ msgid ""
 "template code. In Odoo Web, this is used to automatically translate text "
 "content and some attributes in templates. Defaults to ``null``."
 msgstr ""
+"`` Функция``. Если присутствует, вызывается перед компиляцией каждого узла "
+"DOM в код шаблона. В Odoo Web это используется для автоматического перевода "
+"текстового содержимого и некоторых атрибутов в шаблонах. По умолчанию `` "
+"null``."
 
 #: ../../reference/qweb.rst:635
 msgid ""
 "it is similar in that to Genshi_, although it does not use (and has no "
 "support for) `XML namespaces`_"
 msgstr ""
+"в этом он похож на Genshi_, хотя он не использует (и не поддерживает) "
+"`пространства имен XML`_"
 
 #: ../../reference/qweb.rst:638
 msgid ""
-"although it uses a few others, either for historical reasons or because "
-"they remain better fits for the use case. Odoo 9.0 still depends on "
-"Jinja_ and Mako_."
+"although it uses a few others, either for historical reasons or because they"
+" remain better fits for the use case. Odoo 9.0 still depends on Jinja_ and "
+"Mako_."
 msgstr ""
-
+"хотя он использует несколько других, либо по историческим причинам, либо "
+"потому, что они лучше подходят для варианта использования. Odoo 9.0 все еще "
+"зависит от Jinja_ и Mako_."

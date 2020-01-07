@@ -19,25 +19,31 @@ msgstr ""
 
 #: ../../setup/deploy.rst:5
 msgid "Deploying Odoo"
-msgstr ""
+msgstr "Развертывание Odoo"
 
 #: ../../setup/deploy.rst:7
 msgid ""
-"This document describes basic steps to set up Odoo in production or on an"
-" internet-facing server. It follows :ref:`installation <setup/install>`, "
-"and is not generally necessary for a development systems that is not "
-"exposed on the internet."
+"This document describes basic steps to set up Odoo in production or on an "
+"internet-facing server. It follows :ref:`installation <setup/install>`, and "
+"is not generally necessary for a development systems that is not exposed on "
+"the internet."
 msgstr ""
+"В этом документе описываются основные шаги по настройке Odoo на производстве"
+" или на сервере, подключенном к Интернету. Следует: ref: `установка "
+"<setup/install> `, и, как правило, не требуется для систем разработки, не "
+"представленных в Интернете."
 
 #: ../../setup/deploy.rst:12
 msgid ""
-"If you are setting up a public server, be sure to check our "
-":ref:`security` recommandations!"
+"If you are setting up a public server, be sure to check our :ref:`security` "
+"recommandations!"
 msgstr ""
+"Если вы настраиваете публичный сервер, обязательно ознакомьтесь с нашими "
+"рекомендациями: ref: `security`!"
 
 #: ../../setup/deploy.rst:18
 msgid "dbfilter"
-msgstr ""
+msgstr "dbfilter"
 
 #: ../../setup/deploy.rst:20
 msgid ""
@@ -46,34 +52,51 @@ msgid ""
 "customizations (starting from the modules being loaded) depending on the "
 "\"current database\"."
 msgstr ""
+"Odoo - это мультитенантная система: одна система Odoo может работать и "
+"обслуживать несколько экземпляров базы данных. Он также очень настраиваемый,"
+" с настройками (начиная с загружаемых модулей) в зависимости от «текущей "
+"базы данных»."
 
 #: ../../setup/deploy.rst:24
 msgid ""
-"This is not an issue when working with the backend (web client) as a "
-"logged-in company user: the database can be selected when logging in, and"
-" customizations loaded afterwards."
+"This is not an issue when working with the backend (web client) as a logged-"
+"in company user: the database can be selected when logging in, and "
+"customizations loaded afterwards."
 msgstr ""
+"Это не проблема при работе с бэкэндом (веб-клиентом) в качестве "
+"зарегистрированного пользователя компании: базу данных можно выбрать при "
+"входе в систему, а затем загрузить настройки."
 
 #: ../../setup/deploy.rst:28
 msgid ""
-"However it is an issue for non-logged users (portal, website) which "
-"aren't bound to a database: Odoo needs to know which database should be "
-"used to load the website page or perform the operation. If multi-tenancy "
-"is not used that is not an issue, there's only one database to use, but "
-"if there are multiple databases accessible Odoo needs a rule to know "
-"which one it should use."
+"However it is an issue for non-logged users (portal, website) which aren't "
+"bound to a database: Odoo needs to know which database should be used to "
+"load the website page or perform the operation. If multi-tenancy is not used"
+" that is not an issue, there's only one database to use, but if there are "
+"multiple databases accessible Odoo needs a rule to know which one it should "
+"use."
 msgstr ""
+"Однако это проблема для незарегистрированных пользователей (портал, веб-"
+"сайт), которые не связаны с базой данных: Odoo необходимо знать, какую базу "
+"данных следует использовать для загрузки страницы веб-сайта или выполнения "
+"операции. Если многопользовательский режим не используется, это не проблема,"
+" можно использовать только одну базу данных, но если доступно несколько баз "
+"данных, Odoo необходимо правило, чтобы знать, какую из них использовать."
 
 #: ../../setup/deploy.rst:34
 #, python-format
 msgid ""
-"That is one of the purposes of :option:`--db-filter <odoo-bin --db-"
-"filter>`: it specifies how the database should be selected based on the "
-"hostname (domain) that is being requested. The value is a `regular "
-"expression`_, possibly including the dynamically injected hostname "
-"(``%h``) or the first subdomain (``%d``) through which the system is "
-"being accessed."
+"That is one of the purposes of :option:`--db-filter <odoo-bin --db-filter>`:"
+" it specifies how the database should be selected based on the hostname "
+"(domain) that is being requested. The value is a `regular expression`_, "
+"possibly including the dynamically injected hostname (``%h``) or the first "
+"subdomain (``%d``) through which the system is being accessed."
 msgstr ""
+"Это одна из целей: option: `--db-filter <odoo-bin --db-filter> `: указывает,"
+" как следует выбирать базу данных на основе запрашиваемого имени хоста "
+"(домена). Значением является `регулярное выражение`_, возможно, включающее "
+"динамически внедренное имя хоста (` `% h``) или первый поддомен (` `% d``), "
+"через который осуществляется доступ к системе."
 
 #: ../../setup/deploy.rst:40
 msgid ""
@@ -81,58 +104,78 @@ msgid ""
 "``website`` is used, dbfilter **must** be set, otherwise a number of "
 "features will not work correctly."
 msgstr ""
+"Для серверов, на которых размещено несколько баз данных, особенно если "
+"используется `` website``, dbfilter ** должен быть установлен **, иначе ряд "
+"функций будет работать некорректно."
 
 #: ../../setup/deploy.rst:45
 msgid "Configuration samples"
-msgstr ""
+msgstr "Образцы конфигурации"
 
 #: ../../setup/deploy.rst:47
 msgid "Show only databases with names beginning with 'mycompany'"
-msgstr ""
+msgstr "Показывать только базы данных с именами, начинающимися с «mycompany»"
 
 #: ../../setup/deploy.rst:49 ../../setup/deploy.rst:61
 #: ../../setup/deploy.rst:156 ../../setup/deploy.rst:282
 msgid "in ``/etc/odoo.conf`` set:"
-msgstr ""
+msgstr "в `` / etc / odoo.conf`` установлено:"
 
 #: ../../setup/deploy.rst:56
 msgid ""
-"Show only databases matching the first subdomain after ``www``: for "
-"example the database \"mycompany\" will be shown if the incoming request "
-"was sent to ``www.mycompany.com`` or ``mycompany.co.uk``, but not for "
+"Show only databases matching the first subdomain after ``www``: for example "
+"the database \"mycompany\" will be shown if the incoming request was sent to"
+" ``www.mycompany.com`` or ``mycompany.co.uk``, but not for "
 "``www2.mycompany.com`` or ``helpdesk.mycompany.com``."
 msgstr ""
+"Отображать только базы данных, соответствующие первому поддомену после `` "
+"www``: например, база данных «mycompany» будет отображаться, если входящий "
+"запрос был отправлен на «www.mycompany.com» или «mycompany.co.uk» , но не "
+"для `` www2.mycompany.com`` или `` helpdesk.mycompany.com``."
 
 #: ../../setup/deploy.rst:69
 msgid ""
 "Setting a proper :option:`--db-filter <odoo-bin --db-filter>` is an "
-"important part of securing your deployment. Once it is correctly working "
-"and only matching a single database per hostname, it is strongly "
-"recommended to block access to the database manager screens, and to use "
-"the ``--no-database-list`` startup paramater to prevent listing your "
-"databases, and to block access to the database management screens. See "
-"also security_."
+"important part of securing your deployment. Once it is correctly working and"
+" only matching a single database per hostname, it is strongly recommended to"
+" block access to the database manager screens, and to use the ``--no-"
+"database-list`` startup paramater to prevent listing your databases, and to "
+"block access to the database management screens. See also security_."
 msgstr ""
+"Установка правильного: option: `--db-filter <odoo-bin --db-filter> `является"
+" важной частью обеспечения вашего развертывания. Если он работает правильно "
+"и соответствует только одной базе данных для каждого имени хоста, "
+"настоятельно рекомендуется заблокировать доступ к экранам менеджера баз "
+"данных и использовать параметр запуска `--no-database-list`` для "
+"предотвращения вывода списка ваших баз данных, и заблокировать доступ к "
+"экранам управления базой данных. Смотрите также security_."
 
 #: ../../setup/deploy.rst:79
 msgid "PostgreSQL"
-msgstr ""
+msgstr "PostgreSQL"
 
 #: ../../setup/deploy.rst:81
 msgid ""
-"By default, PostgreSQL only allows connection over UNIX sockets and "
-"loopback connections (from \"localhost\", the same machine the PostgreSQL"
-" server is installed on)."
+"By default, PostgreSQL only allows connection over UNIX sockets and loopback"
+" connections (from \"localhost\", the same machine the PostgreSQL server is "
+"installed on)."
 msgstr ""
+"По умолчанию PostgreSQL разрешает соединение только через сокеты UNIX и "
+"петлевые соединения (от «localhost», на той же машине, на которой установлен"
+" сервер PostgreSQL)."
 
 #: ../../setup/deploy.rst:85
 msgid ""
-"UNIX socket is fine if you want Odoo and PostgreSQL to execute on the "
-"same machine, and is the default when no host is provided, but if you "
-"want Odoo and PostgreSQL to execute on different machines [#different-"
-"machines]_ it will need to `listen to network interfaces`_ [#remote-"
-"socket]_, either:"
+"UNIX socket is fine if you want Odoo and PostgreSQL to execute on the same "
+"machine, and is the default when no host is provided, but if you want Odoo "
+"and PostgreSQL to execute on different machines [#different-machines]_ it "
+"will need to `listen to network interfaces`_ [#remote-socket]_, either:"
 msgstr ""
+"Гнездо UNIX хорошо, если вы хотите, чтобы Odoo и PostgreSQL выполнялись на "
+"одной и той же машине, и используется по умолчанию, когда хост не указан, но"
+" если вы хотите, чтобы Odoo и PostgreSQL выполнялись на разных машинах [# "
+"различных машин] _, это необходимо `прослушивать сетевые интерфейсы`_ [# "
+"remote-socket] _, либо:"
 
 #: ../../setup/deploy.rst:90
 msgid ""
@@ -140,62 +183,78 @@ msgid ""
 "machine on which Odoo runs and the one on which PostgreSQL runs, then "
 "configure Odoo to connect to its end of the tunnel"
 msgstr ""
+"Принимайте только петлевые соединения и `используйте SSH туннель` между "
+"машиной, на которой работает Odoo, и той, на которой работает PostgreSQL, "
+"затем настройте Odoo для подключения к своему концу туннеля."
 
 #: ../../setup/deploy.rst:93
 msgid ""
-"Accept connections to the machine on which Odoo is installed, possibly "
-"over ssl (see `PostgreSQL connection settings`_ for details), then "
-"configure Odoo to connect over the network"
+"Accept connections to the machine on which Odoo is installed, possibly over "
+"ssl (see `PostgreSQL connection settings`_ for details), then configure Odoo"
+" to connect over the network"
 msgstr ""
+"Примите подключения к машине, на которой установлен Odoo, возможно, через "
+"ssl (подробнее см. «Настройки подключения PostgreSQL»), затем настройте Odoo"
+" для подключения по сети."
 
 #: ../../setup/deploy.rst:98 ../../setup/deploy.rst:148
 #: ../../setup/deploy.rst:237 ../../setup/deploy.rst:277
 msgid "Configuration sample"
-msgstr ""
+msgstr "Пример конфигурации"
 
 #: ../../setup/deploy.rst:100
 msgid "Allow tcp connection on localhost"
-msgstr ""
+msgstr "Разрешить TCP-соединение на локальном хосте"
 
 #: ../../setup/deploy.rst:101
 msgid "Allow tcp connection from 192.168.1.x network"
-msgstr ""
+msgstr "Разрешить TCP-соединение из сети 192.168.1.x"
 
 #: ../../setup/deploy.rst:103
 msgid "in ``/etc/postgresql/9.5/main/pg_hba.conf`` set:"
-msgstr ""
+msgstr "в `` / etc / postgresql / 9.5 / main / pg_hba.conf`` установлено:"
 
 #: ../../setup/deploy.rst:111
 msgid "in ``/etc/postgresql/9.5/main/postgresql.conf`` set:"
-msgstr ""
+msgstr "в `` / etc / postgresql / 9.5 / main / postgresql.conf`` установлено:"
 
 #: ../../setup/deploy.rst:122
 msgid "Configuring Odoo"
-msgstr ""
+msgstr "Конфигурирование Odoo"
 
 #: ../../setup/deploy.rst:124
 msgid ""
-"Out of the box, Odoo connects to a local postgres over UNIX socket via "
-"port 5432. This can be overridden using :ref:`the database options "
-"<reference/cmdline/server/database>` when your Postgres deployment is not"
-" local and/or does not use the installation defaults."
+"Out of the box, Odoo connects to a local postgres over UNIX socket via port "
+"5432. This can be overridden using :ref:`the database options "
+"<reference/cmdline/server/database>` when your Postgres deployment is not "
+"local and/or does not use the installation defaults."
 msgstr ""
+"Из коробки Odoo подключается к локальному postgres через сокет UNIX через "
+"порт 5432. Это можно изменить, используя: ref: `опции базы данных "
+"<reference/cmdline/server/database> `когда ваше развертывание Postgres не "
+"является локальным и / или не использует установки по умолчанию."
 
 #: ../../setup/deploy.rst:129
 msgid ""
-"The :ref:`packaged installers <setup/install/packaged>` will "
-"automatically create a new user (``odoo``) and set it as the database "
-"user."
+"The :ref:`packaged installers <setup/install/packaged>` will automatically "
+"create a new user (``odoo``) and set it as the database user."
 msgstr ""
+": Ref: `упакованные установщики <setup/install/packaged> `автоматически "
+"создаст нового пользователя (` `odoo``) и установит его в качестве "
+"пользователя базы данных."
 
 #: ../../setup/deploy.rst:132
 msgid ""
 "The database management screens are protected by the ``admin_passwd`` "
 "setting. This setting can only be set using configuration files, and is "
-"simply checked before performing database alterations. It should be set "
-"to a randomly generated value to ensure third parties can not use this "
+"simply checked before performing database alterations. It should be set to a"
+" randomly generated value to ensure third parties can not use this "
 "interface."
 msgstr ""
+"Экраны управления базой данных защищены настройкой `` admin_passwd``. Этот "
+"параметр может быть установлен только с помощью файлов конфигурации, и его "
+"просто проверяют перед выполнением изменений базы данных. Следует установить"
+" случайное значение, чтобы третьи лица не могли использовать этот интерфейс."
 
 #: ../../setup/deploy.rst:137
 msgid ""
@@ -204,73 +263,93 @@ msgid ""
 "screen. For the database management screen to work requires that the "
 "PostgreSQL user have ``createdb`` right."
 msgstr ""
+"Все операции с базой данных используют: ref: `опции базы данных "
+"<reference/cmdline/server/database> `, включая экран управления базой "
+"данных. Для работы экрана управления базой данных требуется, чтобы "
+"пользователь PostgreSQL имел право `` createb``."
 
 #: ../../setup/deploy.rst:141
 msgid ""
-"Users can always drop databases they own. For the database management "
-"screen to be completely non-functional, the PostgreSQL user needs to be "
-"created with ``no-createdb`` and the database must be owned by a "
-"different PostgreSQL user."
+"Users can always drop databases they own. For the database management screen"
+" to be completely non-functional, the PostgreSQL user needs to be created "
+"with ``no-createdb`` and the database must be owned by a different "
+"PostgreSQL user."
 msgstr ""
+"Пользователи всегда могут удалить свои базы данных. Чтобы экран управления "
+"базой данных полностью не функционировал, пользователь PostgreSQL должен "
+"быть создан с помощью `` no-creatb``, а база данных должна принадлежать "
+"другому пользователю PostgreSQL."
 
 #: ../../setup/deploy.rst:145
 msgid "the PostgreSQL user *must not* be a superuser"
-msgstr ""
+msgstr "пользователь PostgreSQL * не должен * быть суперпользователем"
 
 #: ../../setup/deploy.rst:150
 msgid "connect to a PostgreSQL server on 192.168.1.2"
-msgstr ""
+msgstr "подключиться к серверу PostgreSQL на 192.168.1.2"
 
 #: ../../setup/deploy.rst:151
 msgid "port 5432"
-msgstr ""
+msgstr "порт 5432"
 
 #: ../../setup/deploy.rst:152
 msgid "using an 'odoo' user account,"
-msgstr ""
+msgstr "используя учетную запись пользователя «odoo»,"
 
 #: ../../setup/deploy.rst:153
 msgid "with 'pwd' as a password"
-msgstr ""
+msgstr "с паролем в качестве пароля"
 
 #: ../../setup/deploy.rst:154
 msgid "filtering only db with a name beginning with 'mycompany'"
-msgstr ""
+msgstr "фильтрация только БД с именем, начинающимся с &#39;mycompany&#39;"
 
 #: ../../setup/deploy.rst:171
 msgid "SSL Between Odoo and PostgreSQL"
-msgstr ""
+msgstr "SSL между Odoo и PostgreSQL"
 
 #: ../../setup/deploy.rst:173
 msgid ""
-"Since Odoo 11.0, you can enforce ssl connection between Odoo and "
-"PostgreSQL. in Odoo the db_sslmode control the ssl security of the "
-"connection with value choosed out of 'disable', 'allow', 'prefer', "
-"'require', 'verify-ca' or 'verify-full'"
+"Since Odoo 11.0, you can enforce ssl connection between Odoo and PostgreSQL."
+" in Odoo the db_sslmode control the ssl security of the connection with "
+"value choosed out of 'disable', 'allow', 'prefer', 'require', 'verify-ca' or"
+" 'verify-full'"
 msgstr ""
+"Начиная с Odoo 11.0, вы можете установить ssl-соединение между Odoo и "
+"PostgreSQL. в Odoo db_sslmode контролирует безопасность ssl соединения со "
+"значением, выбранным из «отключить», «разрешить», «предпочесть», "
+"«потребовать», «проверить-ca» или «проверить-полный»"
 
 #: ../../setup/deploy.rst:178
 msgid ""
 "`PostgreSQL Doc <https://www.postgresql.org/docs/current/static/libpq-"
 "ssl.html>`_"
 msgstr ""
+"`PostgreSQL Doc <https://www.postgresql.org/docs/current/static/libpq-"
+"ssl.html>`_"
 
 #: ../../setup/deploy.rst:183
 msgid "Builtin server"
-msgstr ""
+msgstr "Встроенный сервер"
 
 #: ../../setup/deploy.rst:185
 msgid ""
 "Odoo includes built-in HTTP servers, using either multithreading or "
 "multiprocessing."
 msgstr ""
+"Odoo включает в себя встроенные HTTP-серверы, использующие многопоточность "
+"или многопроцессорность."
 
 #: ../../setup/deploy.rst:188
 msgid ""
-"For production use, it is recommended to use the multiprocessing server "
-"as it increases stability, makes somewhat better use of computing "
-"resources and can be better monitored and resource-restricted."
+"For production use, it is recommended to use the multiprocessing server as "
+"it increases stability, makes somewhat better use of computing resources and"
+" can be better monitored and resource-restricted."
 msgstr ""
+"Для производственного использования рекомендуется использовать "
+"многопроцессорный сервер, поскольку он повышает стабильность, несколько "
+"лучше использует вычислительные ресурсы и может лучше контролироваться и "
+"ограничиваться ресурсами."
 
 #: ../../setup/deploy.rst:192
 msgid ""
@@ -279,326 +358,434 @@ msgid ""
 "based on the number of cores in the machine (possibly with some room for "
 "cron workers depending on how much cron work is predicted)"
 msgstr ""
+"Многопроцессорность включается путем настройки: option: `ненулевое "
+"количество рабочих процессов <odoo-bin --workers> `, число рабочих должно "
+"быть основано на количестве ядер в машине (возможно, с некоторым количеством"
+" рабочих для cron в зависимости от того, сколько прогнозируется работа cron)"
 
 #: ../../setup/deploy.rst:196
 msgid ""
-"Worker limits can be configured based on the hardware configuration to "
-"avoid resources exhaustion"
+"Worker limits can be configured based on the hardware configuration to avoid"
+" resources exhaustion"
 msgstr ""
+"Рабочие ограничения могут быть настроены на основе конфигурации "
+"оборудования, чтобы избежать исчерпания ресурсов"
 
 #: ../../setup/deploy.rst:199
 msgid "multiprocessing mode currently isn't available on Windows"
-msgstr ""
+msgstr "многопроцессорный режим в настоящее время недоступен в Windows"
 
 #: ../../setup/deploy.rst:203
 msgid "Worker number calculation"
-msgstr ""
+msgstr "Расчет рабочего числа"
 
 #: ../../setup/deploy.rst:205
 msgid "Rule of thumb : (#CPU * 2) + 1"
-msgstr ""
+msgstr "Правило большого пальца: (#CPU * 2) + 1"
 
 #: ../../setup/deploy.rst:206
 msgid "Cron workers need CPU"
-msgstr ""
+msgstr "Cron работникам нужен процессор"
 
 #: ../../setup/deploy.rst:207
 msgid "1 worker ~= 6 concurrent users"
-msgstr ""
+msgstr "1 работник ~ = 6 одновременно работающих пользователей"
 
 #: ../../setup/deploy.rst:210
 msgid "memory size calculation"
-msgstr ""
+msgstr "расчет объема памяти"
 
 #: ../../setup/deploy.rst:212
 #, python-format
 msgid ""
-"We consider 20% of the requests are heavy requests, while 80% are simpler"
-" ones"
+"We consider 20% of the requests are heavy requests, while 80% are simpler "
+"ones"
 msgstr ""
+"Мы считаем, что 20% запросов - это тяжелые запросы, а 80% - более простые."
 
 #: ../../setup/deploy.rst:213
 msgid ""
-"A heavy worker, when all computed field are well designed, SQL requests "
-"are well designed, ... is estimated to consume around 1Go of RAM"
+"A heavy worker, when all computed field are well designed, SQL requests are "
+"well designed, ... is estimated to consume around 1Go of RAM"
 msgstr ""
+"Тяжелый работник, когда все вычисляемые поля хорошо спроектированы, запросы "
+"SQL хорошо спроектированы, ... по оценкам, потребляет около 1 ГБ ОЗУ"
 
 #: ../../setup/deploy.rst:214
 msgid ""
-"A lighter worker, in the same scenario, is estimated to consume around "
-"150MB of RAM"
+"A lighter worker, in the same scenario, is estimated to consume around 150MB"
+" of RAM"
 msgstr ""
+"Легкий рабочий, по тому же сценарию, по оценкам, потребляет около 150 МБ ОЗУ"
 
 #: ../../setup/deploy.rst:216
 msgid ""
-"Needed RAM = #worker * ( (light_worker_ratio * "
-"light_worker_ram_estimation) + (heavy_worker_ratio * "
-"heavy_worker_ram_estimation) )"
+"Needed RAM = #worker * ( (light_worker_ratio * light_worker_ram_estimation) "
+"+ (heavy_worker_ratio * heavy_worker_ram_estimation) )"
 msgstr ""
+"Требуется ОЗУ = # работник * ((light_worker_ratio * light_worker_ram_estima)"
+" + (heavy_worker_ratio * heavy_worker_ram_esvaluation))"
 
 #: ../../setup/deploy.rst:219 ../../setup/deploy.rst:376
 msgid "LiveChat"
-msgstr ""
+msgstr "Живой чат"
 
 #: ../../setup/deploy.rst:221
 msgid ""
-"In multiprocessing, a dedicated LiveChat worker is automatically started "
-"and listening on :option:`the longpolling port <odoo-bin --longpolling-"
-"port>` but the client will not connect to it."
+"In multiprocessing, a dedicated LiveChat worker is automatically started and"
+" listening on :option:`the longpolling port <odoo-bin --longpolling-port>` "
+"but the client will not connect to it."
 msgstr ""
+"В многопроцессорном режиме выделенный рабочий LiveChat автоматически "
+"запускается и прослушивает: option: `longpolling port <odoo-bin "
+"--longpolling-port> `но клиент не будет подключаться к нему."
 
 #: ../../setup/deploy.rst:225
 msgid ""
 "Instead you must have a proxy redirecting requests whose URL starts with "
-"``/longpolling/`` to the longpolling port. Other request should be "
-"proxied to the :option:`normal HTTP port <odoo-bin --http-port>`"
+"``/longpolling/`` to the longpolling port. Other request should be proxied "
+"to the :option:`normal HTTP port <odoo-bin --http-port>`"
 msgstr ""
+"Вместо этого у вас должен быть прокси-сервер, перенаправляющий запросы, URL-"
+"адрес которых начинается с `` / longpolling / `` на порт longpolling. Другой"
+" запрос должен быть перенаправлен на: option: `normal HTTP port <odoo-bin "
+"--http-port> `"
 
 #: ../../setup/deploy.rst:229
 msgid ""
-"To achieve such a thing, you'll need to deploy a reverse proxy in front "
-"of Odoo, like nginx or apache. When doing so, you'll need to forward some"
-" more http Headers to Odoo, and activate the proxy_mode in Odoo "
-"configuration to have Odoo read those headers."
+"To achieve such a thing, you'll need to deploy a reverse proxy in front of "
+"Odoo, like nginx or apache. When doing so, you'll need to forward some more "
+"http Headers to Odoo, and activate the proxy_mode in Odoo configuration to "
+"have Odoo read those headers."
 msgstr ""
+"Чтобы добиться этого, вам необходимо развернуть обратный прокси-сервер перед"
+" Odoo, например, nginx или apache. При этом вам нужно будет перенаправить "
+"еще несколько http-заголовков в Odoo и активировать proxy_mode в "
+"конфигурации Odoo, чтобы Odoo прочитал эти заголовки."
 
 #: ../../setup/deploy.rst:239
 msgid "Server with 4 CPU, 8 Thread"
-msgstr ""
+msgstr "Сервер с 4 процессорами, 8 потоков"
 
 #: ../../setup/deploy.rst:240
 msgid "60 concurrent users"
-msgstr ""
+msgstr "60 одновременных пользователей"
 
 #: ../../setup/deploy.rst:242
 msgid "60 users / 6 = 10 <- theorical number of worker needed"
 msgstr ""
+"60 пользователей / 6 = 10 &lt;- теоретически необходимое количество "
+"работников"
 
 #: ../../setup/deploy.rst:243
 msgid "(4 * 2) + 1 = 9 <- theorical maximal number of worker"
 msgstr ""
+"(4 * 2) + 1 = 9 &lt;- теоретическое максимальное количество работников"
 
 #: ../../setup/deploy.rst:244
 msgid ""
 "We'll use 8 workers + 1 for cron. We'll also use a monitoring system to "
 "measure cpu load, and check if it's between 7 and 7.5 ."
 msgstr ""
+"Мы будем использовать 8 рабочих + 1 для cron. Мы также будем использовать "
+"систему мониторинга для измерения нагрузки на процессор и проверки, "
+"находится ли она между 7 и 7,5."
 
 #: ../../setup/deploy.rst:245
 msgid "RAM = 9 * ((0.8*150) + (0.2*1024)) ~= 3Go RAM for Odoo"
-msgstr ""
+msgstr "RAM = 9 * ((0,8 * 150) + (0,2 * 1024)) ~ = 3Go RAM для Odoo"
 
 #: ../../setup/deploy.rst:247
 msgid "in ``/etc/odoo.conf``:"
-msgstr ""
+msgstr "в `` / etc / odoo.conf``:"
 
 #: ../../setup/deploy.rst:263
 msgid "HTTPS"
-msgstr ""
+msgstr "HTTPS"
 
 #: ../../setup/deploy.rst:265
 msgid ""
-"Whether it's accessed via website/web client or web service, Odoo "
-"transmits authentication information in cleartext. This means a secure "
-"deployment of Odoo must use HTTPS\\ [#switching]_. SSL termination can be"
-" implemented via just about any SSL termination proxy, but requires the "
-"following setup:"
+"Whether it's accessed via website/web client or web service, Odoo transmits "
+"authentication information in cleartext. This means a secure deployment of "
+"Odoo must use HTTPS\\ [#switching]_. SSL termination can be implemented via "
+"just about any SSL termination proxy, but requires the following setup:"
 msgstr ""
+"Доступ к нему осуществляется через веб-сайт / веб-клиент или веб-сервис, "
+"Odoo передает информацию об аутентификации в открытом виде. Это означает, "
+"что для безопасного развертывания Odoo необходимо использовать HTTPS \\ "
+"[#switching] _. Завершение SSL может быть реализовано через любой прокси-"
+"сервер завершения SSL, но требует следующей настройки:"
 
 #: ../../setup/deploy.rst:270
 msgid ""
-"Enable Odoo's :option:`proxy mode <odoo-bin --proxy-mode>`. This should "
-"only be enabled when Odoo is behind a reverse proxy"
+"Enable Odoo's :option:`proxy mode <odoo-bin --proxy-mode>`. This should only"
+" be enabled when Odoo is behind a reverse proxy"
 msgstr ""
+"Включить Odoo&#39;s: опция: `режим прокси <odoo-bin --proxy-mode> `. Это "
+"должно быть включено только когда Odoo находится за обратным прокси"
 
 #: ../../setup/deploy.rst:271
 msgid "Set up the SSL termination proxy (`Nginx termination example`_)"
-msgstr ""
+msgstr "Настройте прокси-сервер завершения SSL (`Пример завершения Nginx`_)"
 
 #: ../../setup/deploy.rst:272
 msgid "Set up the proxying itself (`Nginx proxying example`_)"
-msgstr ""
+msgstr "Настройте сам прокси (`пример прокси Nginx`_)"
 
 #: ../../setup/deploy.rst:273
 msgid ""
 "Your SSL termination proxy should also automatically redirect non-secure "
 "connections to the secure port"
 msgstr ""
+"Ваш прокси-сервер завершения SSL также должен автоматически перенаправлять "
+"незащищенные соединения на безопасный порт"
 
 #: ../../setup/deploy.rst:279
 msgid "Redirect http requests to https"
-msgstr ""
+msgstr "Перенаправить http запросы на https"
 
 #: ../../setup/deploy.rst:280
 msgid "Proxy requests to odoo"
-msgstr ""
+msgstr "Прокси-запросы к odoo"
 
 #: ../../setup/deploy.rst:288
 msgid "in ``/etc/nginx/sites-enabled/odoo.conf`` set:"
-msgstr ""
+msgstr "в `` / etc / nginx / sites-enabled / odoo.conf`` установлено:"
 
 #: ../../setup/deploy.rst:350
 msgid "Odoo as a WSGI Application"
-msgstr ""
+msgstr "Odoo как приложение WSGI"
 
 #: ../../setup/deploy.rst:352
 msgid ""
 "It is also possible to mount Odoo as a standard WSGI_ application. Odoo "
-"provides the base for a WSGI launcher script as ``odoo-wsgi.example.py``."
-" That script should be customized (possibly after copying it from the "
-"setup directory) to correctly set the configuration directly in "
+"provides the base for a WSGI launcher script as ``odoo-wsgi.example.py``. "
+"That script should be customized (possibly after copying it from the setup "
+"directory) to correctly set the configuration directly in "
 ":mod:`odoo.tools.config` rather than through the command-line or a "
 "configuration file."
 msgstr ""
+"Также возможно монтировать Odoo как стандартное приложение WSGI_. Odoo "
+"предоставляет базу для сценария запуска WSGI как `` odoo-wsgi.example.py``. "
+"Этот сценарий должен быть настроен (возможно, после копирования его из "
+"каталога установки) для правильной настройки конфигурации непосредственно в:"
+" mod: `odoo.tools.config`, а не через командную строку или файл "
+"конфигурации."
 
 #: ../../setup/deploy.rst:358
 msgid ""
-"However the WSGI server will only expose the main HTTP endpoint for the "
-"web client, website and webservice API. Because Odoo does not control the"
-" creation of workers anymore it can not setup cron or livechat workers"
+"However the WSGI server will only expose the main HTTP endpoint for the web "
+"client, website and webservice API. Because Odoo does not control the "
+"creation of workers anymore it can not setup cron or livechat workers"
 msgstr ""
+"Однако сервер WSGI будет предоставлять только главную конечную точку HTTP "
+"для веб-клиента, веб-сайта и API веб-сервиса. Поскольку Odoo больше не "
+"контролирует создание рабочих, он не может настроить cron или livechat "
+"работников."
 
 #: ../../setup/deploy.rst:363
 msgid "Cron Workers"
-msgstr ""
+msgstr "Cron Workers"
 
 #: ../../setup/deploy.rst:365
 msgid "To run cron jobs for an Odoo deployment as a WSGI application requires"
 msgstr ""
+"Для запуска заданий cron для развертывания Odoo в качестве приложения WSGI "
+"требуется"
 
 #: ../../setup/deploy.rst:367
 msgid "A classical Odoo (run via ``odoo-bin``)"
-msgstr ""
+msgstr "Классический Odoo (запускается через `` odoo-bin``)"
 
 #: ../../setup/deploy.rst:368
 msgid ""
-"Connected to the database in which cron jobs have to be run (via :option"
-":`odoo-bin -d`)"
+"Connected to the database in which cron jobs have to be run (via "
+":option:`odoo-bin -d`)"
 msgstr ""
+"Подключен к базе данных, в которой должны выполняться задания cron (через: "
+"option: `odoo-bin -d`)"
 
 #: ../../setup/deploy.rst:370
 msgid ""
-"Which should not be exposed to the network. To ensure cron runners are "
-"not network-accessible, it is possible to disable the built-in HTTP "
-"server entirely with :option:`odoo-bin --no-http` or setting "
-"``http_enable = False`` in the configuration file"
+"Which should not be exposed to the network. To ensure cron runners are not "
+"network-accessible, it is possible to disable the built-in HTTP server "
+"entirely with :option:`odoo-bin --no-http` or setting ``http_enable = "
+"False`` in the configuration file"
 msgstr ""
+"Который не должен подвергаться воздействию сети. Чтобы гарантировать, что "
+"бегуны cron недоступны по сети, можно полностью отключить встроенный HTTP-"
+"сервер с помощью: option: `odoo-bin --no-http` или установки` `http_enable ="
+" False`` в файле конфигурации"
 
 #: ../../setup/deploy.rst:378
 msgid ""
-"The second problematic subsystem for WSGI deployments is the LiveChat: "
-"where most HTTP connections are relatively short and quickly free up "
-"their worker process for the next request, LiveChat require a long-lived "
-"connection for each client in order to implement near-real-time "
-"notifications."
+"The second problematic subsystem for WSGI deployments is the LiveChat: where"
+" most HTTP connections are relatively short and quickly free up their worker"
+" process for the next request, LiveChat require a long-lived connection for "
+"each client in order to implement near-real-time notifications."
 msgstr ""
+"Второй проблемной подсистемой для развертываний WSGI является LiveChat: там,"
+" где большинство HTTP-соединений относительно короткие и быстро освобождают "
+"свой рабочий процесс для следующего запроса, LiveChat требует долгоживущего "
+"соединения для каждого клиента для реализации уведомлений почти в реальном "
+"времени. ,"
 
 #: ../../setup/deploy.rst:383
 msgid ""
-"This is in conflict with the process-based worker model, as it will tie "
-"up worker processes and prevent new users from accessing the system. "
-"However, those long-lived connections do very little and mostly stay "
-"parked waiting for notifications."
+"This is in conflict with the process-based worker model, as it will tie up "
+"worker processes and prevent new users from accessing the system. However, "
+"those long-lived connections do very little and mostly stay parked waiting "
+"for notifications."
 msgstr ""
+"Это противоречит рабочей модели на основе процессов, поскольку она связывает"
+" рабочие процессы и препятствует доступу новых пользователей к системе. "
+"Однако эти долгоживущие соединения делают очень мало и в основном остаются "
+"на стоянке в ожидании уведомлений."
 
 #: ../../setup/deploy.rst:388
-msgid "The solutions to support livechat/motifications in a WSGI application are:"
-msgstr ""
+msgid ""
+"The solutions to support livechat/motifications in a WSGI application are:"
+msgstr "Решения для поддержки livechat / мотивации в приложении WSGI:"
 
 #: ../../setup/deploy.rst:390
 msgid ""
-"Deploy a threaded version of Odoo (instread of a process-based preforking"
-" one) and redirect only requests to URLs starting with ``/longpolling/`` "
-"to that Odoo, this is the simplest and the longpolling URL can double up "
-"as the cron instance."
+"Deploy a threaded version of Odoo (instread of a process-based preforking "
+"one) and redirect only requests to URLs starting with ``/longpolling/`` to "
+"that Odoo, this is the simplest and the longpolling URL can double up as the"
+" cron instance."
 msgstr ""
+"Разверните многопоточную версию Odoo (экземпляр первичной обработки на "
+"основе процесса) и перенаправьте только запросы к URL-адресам, начинающимся "
+"с `` / longpolling / ``, на этот Odoo, это самый простой, а URL-адрес с "
+"длинным опросом может удвоиться как экземпляр cron ,"
 
 #: ../../setup/deploy.rst:394
 msgid ""
-"Deploy an evented Odoo via ``odoo-gevent`` and proxy requests starting "
-"with ``/longpolling/`` to :option:`the longpolling port <odoo-bin "
-"--longpolling-port>`."
+"Deploy an evented Odoo via ``odoo-gevent`` and proxy requests starting with "
+"``/longpolling/`` to :option:`the longpolling port <odoo-bin --longpolling-"
+"port>`."
 msgstr ""
+"Разверните чётный Odoo через `` odoo-gevent`` и прокси-запросы, начинающиеся"
+" с `` / longpolling / `` to: option: `longpolling port <odoo-bin "
+"--longpolling-port> `."
 
 #: ../../setup/deploy.rst:399
 msgid "Serving Static Files"
-msgstr ""
+msgstr "Обслуживание статических файлов"
 
 #: ../../setup/deploy.rst:401
 msgid ""
-"For development convenience, Odoo directly serves all static files in its"
-" modules. This may not be ideal when it comes to performances, and static"
-" files should generally be served by a static HTTP server."
+"For development convenience, Odoo directly serves all static files in its "
+"modules. This may not be ideal when it comes to performances, and static "
+"files should generally be served by a static HTTP server."
 msgstr ""
+"Для удобства разработки Odoo напрямую обслуживает все статические файлы в "
+"своих модулях. Это может быть не идеально, когда речь идет о "
+"производительности, и статические файлы обычно должны обслуживаться "
+"статическим HTTP-сервером."
 
 #: ../../setup/deploy.rst:405
 msgid ""
-"Odoo static files live in each module's ``static/`` folder, so static "
-"files can be served by intercepting all requests to "
-":samp:`/{MODULE}/static/{FILE}`, and looking up the right module (and "
-"file) in the various addons paths."
+"Odoo static files live in each module's ``static/`` folder, so static files "
+"can be served by intercepting all requests to "
+":samp:`/{MODULE}/static/{FILE}`, and looking up the right module (and file) "
+"in the various addons paths."
 msgstr ""
+"Статические файлы Odoo находятся в папке `` static / `` каждого модуля, "
+"поэтому статические файлы могут быть обработаны путем перехвата всех "
+"запросов: samp: `/ {MODULE} / static / {FILE}` и поиска нужного модуля (и "
+"файл) в различных путях аддонов."
 
 #: ../../setup/deploy.rst:416
 msgid "Security"
-msgstr ""
+msgstr "Безопасность"
 
 #: ../../setup/deploy.rst:418
 msgid ""
 "For starters, keep in mind that securing an information system is a "
-"continuous process, not a one-shot operation. At any moment, you will "
-"only be as secure as the weakest link in your environment."
+"continuous process, not a one-shot operation. At any moment, you will only "
+"be as secure as the weakest link in your environment."
 msgstr ""
+"Для начала имейте в виду, что защита информационной системы - это "
+"непрерывный процесс, а не разовая операция. В любой момент вы будете в "
+"безопасности только в качестве самого слабого звена в своей среде."
 
 #: ../../setup/deploy.rst:422
 msgid ""
 "So please do not take this section as the ultimate list of measures that "
-"will prevent all security problems. It's only intended as a summary of "
-"the first important things you should be sure to include in your security"
-" action plan. The rest will come from best security practices for your "
-"operating system and distribution, best practices in terms of users, "
-"passwords, and access control management, etc."
+"will prevent all security problems. It's only intended as a summary of the "
+"first important things you should be sure to include in your security action"
+" plan. The rest will come from best security practices for your operating "
+"system and distribution, best practices in terms of users, passwords, and "
+"access control management, etc."
 msgstr ""
+"Поэтому, пожалуйста, не принимайте этот раздел как окончательный список мер,"
+" которые предотвратят все проблемы с безопасностью. Это всего лишь краткое "
+"изложение первых важных вещей, которые вы должны обязательно включить в свой"
+" план действий по обеспечению безопасности. Все остальное будет связано с "
+"лучшими практиками безопасности для вашей операционной системы и "
+"дистрибутива, лучшими практиками в отношении пользователей, паролей, "
+"управления доступом и т. Д."
 
 #: ../../setup/deploy.rst:428
 msgid ""
 "When deploying an internet-facing server, please be sure to consider the "
 "following security-related topics:"
 msgstr ""
+"При развертывании сервера, подключенного к Интернету, обязательно учитывайте"
+" следующие темы, связанные с безопасностью:"
 
 #: ../../setup/deploy.rst:431
 msgid ""
-"Always set a strong super-admin admin password, and restrict access to "
-"the database management pages as soon as the system is set up. See "
+"Always set a strong super-admin admin password, and restrict access to the "
+"database management pages as soon as the system is set up. See "
 ":ref:`db_manager_security`."
 msgstr ""
+"Всегда устанавливайте надежный пароль администратора супер-администратора и "
+"ограничивайте доступ к страницам управления базой данных, как только система"
+" настроена. Смотрите: ref: `db_manager_security`."
 
 #: ../../setup/deploy.rst:434
 msgid ""
-"Choose unique logins and strong passwords for all administrator accounts "
-"on all databases. Do not use 'admin' as the login. Do not use those "
-"logins for day-to-day operations, only for controlling/managing the "
-"installation. *Never* use any default passwords like admin/admin, even "
-"for test/staging databases."
+"Choose unique logins and strong passwords for all administrator accounts on "
+"all databases. Do not use 'admin' as the login. Do not use those logins for "
+"day-to-day operations, only for controlling/managing the installation. "
+"*Never* use any default passwords like admin/admin, even for test/staging "
+"databases."
 msgstr ""
+"Выбирайте уникальные логины и надежные пароли для всех учетных записей "
+"администраторов во всех базах данных. Не используйте «admin» в качестве "
+"логина. Не используйте эти логины для повседневных операций, только для "
+"контроля / управления установкой. Никогда не используйте пароли по "
+"умолчанию, такие как admin / admin, даже для тестовых / промежуточных баз "
+"данных."
 
 #: ../../setup/deploy.rst:439
 msgid ""
-"Do **not** install demo data on internet-facing servers. Databases with "
-"demo data contain default logins and passwords that can be used to get "
-"into your systems and cause significant trouble, even on staging/dev "
-"systems."
+"Do **not** install demo data on internet-facing servers. Databases with demo"
+" data contain default logins and passwords that can be used to get into your"
+" systems and cause significant trouble, even on staging/dev systems."
 msgstr ""
+"** Не ** устанавливайте демонстрационные данные на интернет-серверах. Базы "
+"данных с демонстрационными данными содержат логины и пароли по умолчанию, "
+"которые можно использовать для входа в ваши системы и вызвать серьезные "
+"проблемы даже в системах staging / dev."
 
 #: ../../setup/deploy.rst:443
 msgid ""
 "Use appropriate database filters ( :option:`--db-filter <odoo-bin --db-"
 "filter>`) to restrict the visibility of your databases according to the "
-"hostname. See :ref:`db_filter`. You may also use :option:`-d <odoo-bin "
-"-d>` to provide your own (comma-separated) list of available databases to"
-" filter from, instead of letting the system fetch them all from the "
-"database backend."
+"hostname. See :ref:`db_filter`. You may also use :option:`-d <odoo-bin -d>` "
+"to provide your own (comma-separated) list of available databases to filter "
+"from, instead of letting the system fetch them all from the database "
+"backend."
 msgstr ""
+"Используйте соответствующие фильтры базы данных (: опция: `--db-filter "
+"<odoo-bin --db-filter> `) ограничить видимость ваших баз данных в "
+"соответствии с именем хоста. Смотрите: ref: `db_filter`. Вы также можете "
+"использовать: option: `-d <odoo-bin -d> `предоставить собственный "
+"(разделенный запятыми) список доступных баз данных для фильтрации, вместо "
+"того, чтобы позволить системе извлекать их все из базы данных базы данных."
 
 #: ../../setup/deploy.rst:450
 msgid ""
@@ -609,162 +796,230 @@ msgid ""
 ":option:`--no-database-list <odoo-bin --no-database-list>` command-line "
 "option)"
 msgstr ""
+"После того, как ваши `` db_name`` и `` db_filter`` настроены и соответствуют"
+" только одной базе данных для каждого имени хоста, вы должны установить "
+"опцию конфигурации `` list_db`` в `` False``, чтобы полностью запретить "
+"перечисление баз данных и заблокировать доступ к экранам управления базой "
+"данных (это также отображается как опция: `--no-database-list <odoo-bin "
+"--no-database-list> `опция командной строки)"
 
 #: ../../setup/deploy.rst:456
 msgid ""
-"Make sure the PostgreSQL user (:option:`--db_user <odoo-bin --db_user>`) "
-"is *not* a super-user, and that your databases are owned by a different "
-"user. For example they could be owned by the ``postgres`` super-user if "
-"you are using a dedicated non-privileged ``db_user``. See also "
+"Make sure the PostgreSQL user (:option:`--db_user <odoo-bin --db_user>`) is "
+"*not* a super-user, and that your databases are owned by a different user. "
+"For example they could be owned by the ``postgres`` super-user if you are "
+"using a dedicated non-privileged ``db_user``. See also "
 ":ref:`setup/deploy/odoo`."
 msgstr ""
+"Убедитесь, что пользователь PostgreSQL (: option: `--db_user <odoo-bin "
+"--db_user> `) * не * суперпользователь, и ваши базы данных принадлежат "
+"другому пользователю. Например, они могут принадлежать суперпользователю `` "
+"postgres``, если вы используете выделенный непривилегированный `` db_user``."
+" Смотрите также: ref: `setup / deploy / odoo`."
 
 #: ../../setup/deploy.rst:461
 msgid ""
-"Keep installations updated by regularly installing the latest builds, "
-"either via GitHub or by downloading the latest version from "
+"Keep installations updated by regularly installing the latest builds, either"
+" via GitHub or by downloading the latest version from "
 "https://www.odoo.com/page/download or http://nightly.odoo.com"
 msgstr ""
+"Обновляйте установки, регулярно устанавливая последние сборки, либо через "
+"GitHub, либо загружая последнюю версию с https://www.odoo.com/page/download "
+"или http://nightly.odoo.com."
 
 #: ../../setup/deploy.rst:465
 msgid ""
-"Configure your server in multi-process mode with proper limits matching "
-"your typical usage (memory/CPU/timeouts). See also :ref:`builtin_server`."
+"Configure your server in multi-process mode with proper limits matching your"
+" typical usage (memory/CPU/timeouts). See also :ref:`builtin_server`."
 msgstr ""
+"Настройте сервер в многопроцессорном режиме с надлежащими ограничениями, "
+"соответствующими типичному использованию (память / ЦП / тайм-ауты). Смотрите"
+" также: ref: `builtin_server`."
 
 #: ../../setup/deploy.rst:468
 msgid ""
-"Run Odoo behind a web server providing HTTPS termination with a valid SSL"
-" certificate, in order to prevent eavesdropping on cleartext "
-"communications. SSL certificates are cheap, and many free options exist. "
-"Configure the web proxy to limit the size of requests, set appropriate "
-"timeouts, and then enable the :option:`proxy mode <odoo-bin --proxy-"
-"mode>` option. See also :ref:`https_proxy`."
+"Run Odoo behind a web server providing HTTPS termination with a valid SSL "
+"certificate, in order to prevent eavesdropping on cleartext communications. "
+"SSL certificates are cheap, and many free options exist. Configure the web "
+"proxy to limit the size of requests, set appropriate timeouts, and then "
+"enable the :option:`proxy mode <odoo-bin --proxy-mode>` option. See also "
+":ref:`https_proxy`."
 msgstr ""
+"Запустите Odoo за веб-сервером, обеспечивающим завершение HTTPS "
+"действительным сертификатом SSL, чтобы предотвратить подслушивание при "
+"передаче открытого текста. SSL-сертификаты дешевы, и существует множество "
+"бесплатных опций. Настройте веб-прокси, чтобы ограничить размер запросов, "
+"установите соответствующие таймауты, а затем включите параметр: option: "
+"`proxy mode <odoo-bin --proxy-mode> `вариант. Смотрите также: ref: "
+"`https_proxy`."
 
 #: ../../setup/deploy.rst:475
 msgid ""
-"If you need to allow remote SSH access to your servers, make sure to set "
-"a strong password for **all** accounts, not just `root`. It is strongly "
+"If you need to allow remote SSH access to your servers, make sure to set a "
+"strong password for **all** accounts, not just `root`. It is strongly "
 "recommended to entirely disable password-based authentication, and only "
-"allow public key authentication. Also consider restricting access via a "
-"VPN, allowing only trusted IPs in the firewall, and/or running a brute-"
-"force detection system such as `fail2ban` or equivalent."
+"allow public key authentication. Also consider restricting access via a VPN,"
+" allowing only trusted IPs in the firewall, and/or running a brute-force "
+"detection system such as `fail2ban` or equivalent."
 msgstr ""
+"Если вам нужно разрешить удаленный SSH-доступ к вашим серверам, обязательно "
+"установите надежный пароль для ** всех ** учетных записей, а не только для "
+"пользователя root. Настоятельно рекомендуется полностью отключить "
+"аутентификацию на основе пароля и разрешить только аутентификацию с открытым"
+" ключом. Также подумайте об ограничении доступа через VPN, разрешении только"
+" доверенных IP-адресов в брандмауэре и / или использовании системы "
+"обнаружения перебором, такой как `fail2ban` или эквивалентной."
 
 #: ../../setup/deploy.rst:481
 msgid ""
-"Consider installing appropriate rate-limiting on your proxy or firewall, "
-"to prevent brute-force attacks and denial of service attacks. See also "
+"Consider installing appropriate rate-limiting on your proxy or firewall, to "
+"prevent brute-force attacks and denial of service attacks. See also "
 ":ref:`login_brute_force` for specific measures."
 msgstr ""
+"Рассмотрите возможность установки соответствующего ограничения скорости на "
+"вашем прокси или брандмауэре, чтобы предотвратить атаки методом &quot;грубой"
+" силы&quot; и атаки типа &quot;отказ в обслуживании&quot;. Смотрите также: "
+"ref: `login_brute_force` для конкретных мер."
 
 #: ../../setup/deploy.rst:485
 msgid ""
-"Many network providers provide automatic mitigation for Distributed "
-"Denial of Service attacks (DDOS), but this is often an optional service, "
-"so you should consult with them."
+"Many network providers provide automatic mitigation for Distributed Denial "
+"of Service attacks (DDOS), but this is often an optional service, so you "
+"should consult with them."
 msgstr ""
+"Многие сетевые провайдеры предоставляют автоматическую защиту от атак "
+"распределенного отказа в обслуживании (DDOS), но это часто дополнительная "
+"услуга, поэтому вам следует проконсультироваться с ними."
 
 #: ../../setup/deploy.rst:489
 msgid ""
-"Whenever possible, host your public-facing demo/test/staging instances on"
-" different machines than the production ones. And apply the same security"
-" precautions as for production."
+"Whenever possible, host your public-facing demo/test/staging instances on "
+"different machines than the production ones. And apply the same security "
+"precautions as for production."
 msgstr ""
+"По возможности размещайте общедоступные демонстрационные / тестовые / "
+"промежуточные экземпляры на компьютерах, отличных от производственных. И "
+"применять те же меры безопасности, что и для производства."
 
 #: ../../setup/deploy.rst:493
 msgid ""
-"If you are hosting multiple customers, isolate customer data and files "
-"from each other using containers or appropriate \"jail\" techniques."
+"If you are hosting multiple customers, isolate customer data and files from "
+"each other using containers or appropriate \"jail\" techniques."
 msgstr ""
+"Если вы размещаете несколько клиентов, изолируйте данные и файлы клиентов "
+"друг от друга, используя контейнеры или соответствующие методы «тюрьмы»."
 
 #: ../../setup/deploy.rst:496
 msgid ""
-"Setup daily backups of your databases and filestore data, and copy them "
-"to a remote archiving server that is not accessible from the server "
-"itself."
+"Setup daily backups of your databases and filestore data, and copy them to a"
+" remote archiving server that is not accessible from the server itself."
 msgstr ""
+"Настраивайте ежедневные резервные копии ваших баз данных и данных хранилища "
+"файлов и копируйте их на удаленный сервер архивации, который недоступен с "
+"самого сервера."
 
 #: ../../setup/deploy.rst:503
 msgid "Blocking Brute Force Attacks"
-msgstr ""
+msgstr "Блокировка атак грубой силы"
 
 #: ../../setup/deploy.rst:504
 msgid ""
-"For internet-facing deployments, brute force attacks on user passwords "
-"are very common, and this threat should not be neglected for Odoo "
-"servers. Odoo emits a log entry whenever a login attempt is performed, "
-"and reports the result: success or failure, along with the target login "
-"and source IP."
+"For internet-facing deployments, brute force attacks on user passwords are "
+"very common, and this threat should not be neglected for Odoo servers. Odoo "
+"emits a log entry whenever a login attempt is performed, and reports the "
+"result: success or failure, along with the target login and source IP."
 msgstr ""
+"Для развертываний с выходом в Интернет очень распространены атаки методом "
+"&quot;грубой силы&quot; на пароли пользователей, и этой угрозой нельзя "
+"пренебрегать для серверов Odoo. Odoo создает запись в журнале всякий раз, "
+"когда выполняется попытка входа в систему, и сообщает результат: успех или "
+"неудача вместе с целевым именем входа и исходным IP-адресом."
 
 #: ../../setup/deploy.rst:508
 msgid "The log entries will have the following form."
-msgstr ""
+msgstr "Записи в журнале будут иметь следующую форму."
 
 #: ../../setup/deploy.rst:510
 msgid "Failed login::"
-msgstr ""
+msgstr "Не удалось войти ::"
 
 #: ../../setup/deploy.rst:514
 msgid "Successful login::"
-msgstr ""
+msgstr "Успешный вход в систему::"
 
 #: ../../setup/deploy.rst:519
 msgid ""
-"These logs can be easily analyzed by an intrusion prevention system such "
-"as `fail2ban`."
+"These logs can be easily analyzed by an intrusion prevention system such as "
+"`fail2ban`."
 msgstr ""
+"Эти журналы могут быть легко проанализированы системой предотвращения "
+"вторжений, такой как `fail2ban`."
 
 #: ../../setup/deploy.rst:521
 msgid ""
-"For example, the following fail2ban filter definition should match a "
-"failed login::"
+"For example, the following fail2ban filter definition should match a failed "
+"login::"
 msgstr ""
+"Например, следующее определение фильтра fail2ban должно соответствовать "
+"неудачной регистрации:"
 
 #: ../../setup/deploy.rst:528
 msgid ""
 "This could be used with a jail definition to block the attacking IP on "
 "HTTP(S)."
 msgstr ""
+"Это может быть использовано с определением тюрьмы для блокировки атакующего "
+"IP по HTTP (S)."
 
 #: ../../setup/deploy.rst:530
 msgid ""
-"Here is what it could look like for blocking the IP for 15 minutes when "
-"10 failed login attempts are detected from the same IP within 1 minute::"
+"Here is what it could look like for blocking the IP for 15 minutes when 10 "
+"failed login attempts are detected from the same IP within 1 minute::"
 msgstr ""
+"Вот как это может выглядеть для блокировки IP-адреса на 15 минут, когда с "
+"одного и того же IP-адреса в течение 1 минуты обнаруживаются 10 неудачных "
+"попыток входа в систему:"
 
 #: ../../setup/deploy.rst:547
 msgid "Database Manager Security"
-msgstr ""
+msgstr "Безопасность менеджера баз данных"
 
 #: ../../setup/deploy.rst:549
 msgid ":ref:`setup/deploy/odoo` mentioned ``admin_passwd`` in passing."
-msgstr ""
+msgstr ": ref: `setup / deploy / odoo` упомянул` `admin_passwd`` мимоходом."
 
 #: ../../setup/deploy.rst:551
 msgid ""
-"This setting is used on all database management screens (to create, "
-"delete, dump or restore databases)."
+"This setting is used on all database management screens (to create, delete, "
+"dump or restore databases)."
 msgstr ""
+"Этот параметр используется на всех экранах управления базами данных (для "
+"создания, удаления, сброса или восстановления баз данных)."
 
 #: ../../setup/deploy.rst:554
 msgid ""
 "If the management screens must not be accessible at all, you should set "
-"``list_db`` configuration option to ``False``, to block access to all the"
-" database selection and management screens."
+"``list_db`` configuration option to ``False``, to block access to all the "
+"database selection and management screens."
 msgstr ""
+"Если экраны управления вообще не должны быть доступны, вы должны установить "
+"для параметра конфигурации `` list_db`` значение `` False``, чтобы "
+"заблокировать доступ ко всем экранам выбора и управления базой данных."
 
 #: ../../setup/deploy.rst:560
 msgid ""
-"It is strongly recommended to disable the Database Manager for any "
-"internet-facing system! It is meant as a development/demo tool, to make "
-"it easy to quickly create and manage databases. It is not designed for "
-"use in production, and may even expose dangerous features to attackers. "
-"It is also not designed to handle large databases, and may trigger memory"
-" limits."
+"It is strongly recommended to disable the Database Manager for any internet-"
+"facing system! It is meant as a development/demo tool, to make it easy to "
+"quickly create and manage databases. It is not designed for use in "
+"production, and may even expose dangerous features to attackers. It is also "
+"not designed to handle large databases, and may trigger memory limits."
 msgstr ""
+"Настоятельно рекомендуется отключить менеджер баз данных для любой интернет-"
+"системы! Он предназначен как инструмент разработки / демонстрации, "
+"позволяющий легко создавать базы данных и управлять ими. Он не предназначен "
+"для использования в производстве и может даже представлять опасные функции "
+"для злоумышленников. Он также не предназначен для работы с большими базами "
+"данных и может вызывать ограничения памяти."
 
 #: ../../setup/deploy.rst:566
 msgid ""
@@ -772,90 +1027,122 @@ msgid ""
 "performed by the system administrator, including provisioning of new "
 "databases and automated backups."
 msgstr ""
+"В производственных системах операции по управлению базами данных всегда "
+"должны выполняться системным администратором, включая предоставление новых "
+"баз данных и автоматическое резервное копирование."
 
 #: ../../setup/deploy.rst:569
 msgid ""
 "Be sure to setup an appropriate ``db_name`` parameter (and optionally, "
-"``db_filter`` too) so that the system can determine the target database "
-"for each request, otherwise users will be blocked as they won't be "
-"allowed to choose the database themselves."
+"``db_filter`` too) so that the system can determine the target database for "
+"each request, otherwise users will be blocked as they won't be allowed to "
+"choose the database themselves."
 msgstr ""
+"Обязательно установите соответствующий параметр `` db_name`` (и, возможно, "
+"тоже `` db_filter``), чтобы система могла определять целевую базу данных для"
+" каждого запроса, в противном случае пользователи будут заблокированы, "
+"поскольку им не будет позволено выбирать сами базы данных."
 
 #: ../../setup/deploy.rst:574
 msgid ""
 "If the management screens must only be accessible from a selected set of "
 "machines, use the proxy server's features to block access to all routes "
-"starting with ``/web/database`` except (maybe) ``/web/database/selector``"
-" which displays the database-selection screen."
+"starting with ``/web/database`` except (maybe) ``/web/database/selector`` "
+"which displays the database-selection screen."
 msgstr ""
+"Если экраны управления должны быть доступны только с выбранного набора "
+"компьютеров, используйте функции прокси-сервера, чтобы заблокировать доступ "
+"ко всем маршрутам, начинающимся с `` / web / database``, за исключением "
+"(возможно) `` / web / database / selector`` который отображает экран выбора "
+"базы данных."
 
 #: ../../setup/deploy.rst:578
 msgid ""
 "If the database-management screen should be left accessible, the "
-"``admin_passwd`` setting must be changed from its ``admin`` default: this"
-" password is checked before allowing database-alteration operations."
+"``admin_passwd`` setting must be changed from its ``admin`` default: this "
+"password is checked before allowing database-alteration operations."
 msgstr ""
+"Если экран управления базой данных следует оставить доступным, параметр `` "
+"admin_passwd`` должен быть изменен с его значения по умолчанию `` admin``: "
+"этот пароль проверяется перед разрешением операций по изменению базы данных."
 
 #: ../../setup/deploy.rst:582
 msgid "It should be stored securely, and should be generated randomly e.g."
 msgstr ""
+"Он должен храниться надежно и генерироваться случайным образом, например"
 
 #: ../../setup/deploy.rst:588
 msgid "which will generate a 32 characters pseudorandom printable string."
-msgstr ""
+msgstr "который сгенерирует псевдослучайную печатную строку из 32 символов."
 
 #: ../../setup/deploy.rst:591
 msgid "Supported Browsers"
-msgstr ""
+msgstr "Поддерживаемые браузеры"
 
 #: ../../setup/deploy.rst:593
 msgid ""
 "Odoo is supported by multiple browsers for each of its versions. No "
-"distinction is made according to the browser version in order to be up-"
-"to-date. Odoo is supported on the current browser version. We support the"
-" following browsers:"
+"distinction is made according to the browser version in order to be up-to-"
+"date. Odoo is supported on the current browser version. We support the "
+"following browsers:"
 msgstr ""
+"Odoo поддерживается несколькими браузерами для каждой из своих версий. "
+"Никаких различий не делается в соответствии с версией браузера, чтобы быть в"
+" курсе. Odoo поддерживается в текущей версии браузера. Мы поддерживаем "
+"следующие браузеры:"
 
 #: ../../setup/deploy.rst:598
 msgid "Mozilla Firefox"
-msgstr ""
+msgstr "Mozilla Firefox"
 
 #: ../../setup/deploy.rst:599
 msgid "Google Chrome"
-msgstr ""
+msgstr "Гугл Хром"
 
 #: ../../setup/deploy.rst:600
 msgid "Safari"
-msgstr ""
+msgstr "Сафари"
 
 #: ../../setup/deploy.rst:601
 msgid "Microsoft Edge"
-msgstr ""
+msgstr "Microsoft Edge"
 
 #: ../../setup/deploy.rst:605
 msgid "Since Odoo 13.0, ES6 is supported.  Therefore, IE support is dropped."
 msgstr ""
+"Начиная с Odoo 13.0, ES6 поддерживается. Поэтому поддержка IE прекращена."
 
 #: ../../setup/deploy.rst:609
 msgid ""
-"to have multiple Odoo installations use the same PostgreSQL database, or "
-"to provide more computing resources to both software."
+"to have multiple Odoo installations use the same PostgreSQL database, or to "
+"provide more computing resources to both software."
 msgstr ""
+"чтобы несколько установок Odoo использовали одну и ту же базу данных "
+"PostgreSQL, или чтобы предоставить больше вычислительных ресурсов обоим "
+"программам."
 
 #: ../../setup/deploy.rst:612
 msgid ""
 "technically a tool like socat_ can be used to proxy UNIX sockets across "
-"networks, but that is mostly for software which can only be used over "
-"UNIX sockets"
+"networks, but that is mostly for software which can only be used over UNIX "
+"sockets"
 msgstr ""
+"технически такой инструмент, как socat_, можно использовать для прокси-"
+"подключения сокетов UNIX в сетях, но это в основном для программного "
+"обеспечения, которое можно использовать только через сокеты UNIX"
 
 #: ../../setup/deploy.rst:616
 msgid ""
 "or be accessible only over an internal packet-switched network, but that "
-"requires secured switches, protections against `ARP spoofing`_ and "
-"precludes usage of WiFi. Even over secure packet-switched networks, "
-"deployment over HTTPS is recommended, and possible costs are lowered as "
-"\"self-signed\" certificates are easier to deploy on a controlled "
-"environment than over the internet."
+"requires secured switches, protections against `ARP spoofing`_ and precludes"
+" usage of WiFi. Even over secure packet-switched networks, deployment over "
+"HTTPS is recommended, and possible costs are lowered as \"self-signed\" "
+"certificates are easier to deploy on a controlled environment than over the "
+"internet."
 msgstr ""
-
+"или быть доступным только через внутреннюю сеть с коммутацией пакетов, но "
+"для этого требуются защищенные коммутаторы, защита от `ARP spoofing`_ и "
+"исключение использования WiFi. Даже в защищенных сетях с коммутацией пакетов"
+" рекомендуется развертывание по протоколу HTTPS, а возможные затраты "
+"снижаются, поскольку «самозаверяющие» сертификаты легче развертывать в "
+"контролируемой среде, чем через Интернет."

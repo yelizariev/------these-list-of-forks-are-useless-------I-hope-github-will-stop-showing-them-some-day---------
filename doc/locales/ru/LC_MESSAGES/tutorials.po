@@ -19,5 +19,4 @@ msgstr ""
 
 #: ../../tutorials.rst:3
 msgid "Tutorials"
-msgstr ""
-
+msgstr "Учебники"

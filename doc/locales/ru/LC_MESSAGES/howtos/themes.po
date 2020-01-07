@@ -19,24 +19,28 @@ msgstr ""
 
 #: ../../howtos/themes.rst:5
 msgid "Theme Tutorial"
-msgstr ""
+msgstr "Тема Учебник"
 
 #: ../../howtos/themes.rst:9
 msgid ""
-"Odoo celebrates freedom. Freedom for the designer to go further and "
-"freedom for the user to customize everything according to their needs."
+"Odoo celebrates freedom. Freedom for the designer to go further and freedom "
+"for the user to customize everything according to their needs."
 msgstr ""
+"Оду празднует свободу. Свобода для дизайнера идти дальше и свобода для "
+"пользователя, чтобы настроить все в соответствии со своими потребностями."
 
 #: ../../howtos/themes.rst:12
 msgid ""
-"Ready to create your own theme? Great. Here are some things you should "
-"know before you begin. This tutorial is a guide to creating an Odoo "
-"theme."
+"Ready to create your own theme? Great. Here are some things you should know "
+"before you begin. This tutorial is a guide to creating an Odoo theme."
 msgstr ""
+"Готовы создать собственную тему? Отлично. Вот некоторые вещи, которые вы "
+"должны знать, прежде чем начать. Это руководство является руководством по "
+"созданию темы Odoo."
 
 #: ../../howtos/themes.rst:18
 msgid "An introduction for web designers"
-msgstr ""
+msgstr "Введение для веб-дизайнеров"
 
 #: ../../howtos/themes.rst:20
 msgid ""
@@ -44,345 +48,444 @@ msgid ""
 "right place. This introduction will outline the basics of Odoo theme "
 "creation."
 msgstr ""
+"Если вы веб-дизайнер, использующий Odoo в первый раз, вы находитесь в "
+"правильном месте. В этом введении будут изложены основы создания темы Odoo."
 
 #: ../../howtos/themes.rst:25
 msgid ""
-"Odoo’s team has created a framework that’s powerful and easy to use. "
-"There’s no need to know special syntaxes to use this set of tools."
+"Odoo’s team has created a framework that’s powerful and easy to use. There’s"
+" no need to know special syntaxes to use this set of tools."
 msgstr ""
+"Команда Odoo создала мощный и простой в использовании фреймворк. Нет "
+"необходимости знать специальные синтаксисы, чтобы использовать этот набор "
+"инструментов."
 
 #: ../../howtos/themes.rst:28
 msgid "From common CMS to Odoo"
-msgstr ""
+msgstr "От обычной CMS к Odoo"
 
 #: ../../howtos/themes.rst:32
 msgid ""
-"If you always think and work in the same way, you’ll probably get the "
-"same results. If you want something completely new,  then try something "
+"If you always think and work in the same way, you’ll probably get the same "
+"results. If you want something completely new,  then try something "
 "different."
 msgstr ""
+"Если вы всегда думаете и работаете одинаково, вы, вероятно, получите те же "
+"результаты. Если вы хотите что-то совершенно новое, попробуйте что-то "
+"другое."
 
 #: ../../howtos/themes.rst:36
 msgid "Where is my header.php file?"
-msgstr ""
+msgstr "Где мой файл header.php?"
 
 #: ../../howtos/themes.rst:38
 msgid ""
-"This is usually the first question from a web designer used to working "
-"with Wordpress or Joomla and coming to Odoo for the first time."
+"This is usually the first question from a web designer used to working with "
+"Wordpress or Joomla and coming to Odoo for the first time."
 msgstr ""
+"Обычно это первый вопрос веб-дизайнера, который работал с Wordpress или "
+"Joomla и впервые посещает Odoo."
 
 #: ../../howtos/themes.rst:48
 msgid ""
 "Indeed, when using common CMSs, you have to code several files (like "
-"header.php, page.php, post.php, etc.) in order to create a basic "
-"structure for your website. With those systems, this base structure acts "
-"as a design foundation that you have to update over time to ensure "
-"compatibility within your CMS. So, even after you have spent hours coding"
-" the files, you have not even started on the design yet."
+"header.php, page.php, post.php, etc.) in order to create a basic structure "
+"for your website. With those systems, this base structure acts as a design "
+"foundation that you have to update over time to ensure compatibility within "
+"your CMS. So, even after you have spent hours coding the files, you have not"
+" even started on the design yet."
 msgstr ""
+"Действительно, при использовании обычных CMS вам необходимо кодировать "
+"несколько файлов (таких как header.php, page.php, post.php и т. Д.), Чтобы "
+"создать базовую структуру для вашего веб-сайта. В этих системах эта базовая "
+"структура выступает в качестве основы проектирования, которую вы должны со "
+"временем обновлять для обеспечения совместимости в вашей CMS. Таким образом,"
+" даже после того, как вы потратили часы на кодирование файлов, вы еще даже "
+"не начали разработку."
 
 #: ../../howtos/themes.rst:50
 msgid "This **does not** apply to creating Odoo themes."
-msgstr ""
+msgstr "Это ** не ** относится к созданию тем Odoo."
 
 #: ../../howtos/themes.rst:54
 msgid ""
-"We think that theme design should be simple (and powerful). When we "
-"created our Website Builder, we decided to start from scratch instead of "
-"relying on what already existed. This approach gave us the freedom to "
-"focus on the things that are really important for designers: styles, "
-"content and the logic behind them. No more struggling with technical "
-"stuff."
+"We think that theme design should be simple (and powerful). When we created "
+"our Website Builder, we decided to start from scratch instead of relying on "
+"what already existed. This approach gave us the freedom to focus on the "
+"things that are really important for designers: styles, content and the "
+"logic behind them. No more struggling with technical stuff."
 msgstr ""
+"Мы считаем, что дизайн темы должен быть простым (и мощным). Когда мы создали"
+" наш конструктор сайтов, мы решили начать с нуля, а не полагаться на то, что"
+" уже существовало. Этот подход дал нам свободу сосредоточиться на вещах, "
+"которые действительно важны для дизайнеров: стили, контент и логика, стоящая"
+" за ними. Больше не нужно бороться с техническими вещами."
 
 #: ../../howtos/themes.rst:57
 msgid "Odoo default theme structure"
-msgstr ""
+msgstr "Структура темы Odoo по умолчанию"
 
 #: ../../howtos/themes.rst:63
 msgid ""
-"Odoo comes with a default theme structure. It is a very basic “theme” "
-"that provides minimal structure and layout. When you create a new theme, "
-"you are actually extending this. Indeed it’s always enabled in your setup"
-" and it acts exactly like the CMS’s base structure we mentioned above, "
-"except that you don’t have to create or maintain it. It will upgrade "
-"automatically within your Odoo installation and, since it is included in "
-"the Website Builder module, everything is smoothly integrated by default."
+"Odoo comes with a default theme structure. It is a very basic “theme” that "
+"provides minimal structure and layout. When you create a new theme, you are "
+"actually extending this. Indeed it’s always enabled in your setup and it "
+"acts exactly like the CMS’s base structure we mentioned above, except that "
+"you don’t have to create or maintain it. It will upgrade automatically "
+"within your Odoo installation and, since it is included in the Website "
+"Builder module, everything is smoothly integrated by default."
 msgstr ""
+"Odoo поставляется со структурой темы по умолчанию. Это очень простая «тема»,"
+" которая обеспечивает минимальную структуру и макет. Когда вы создаете новую"
+" тему, вы фактически расширяете ее. Действительно, он всегда включен в вашей"
+" настройке и действует точно так же, как базовая структура CMS, о которой мы"
+" упоминали выше, за исключением того, что вам не нужно создавать или "
+"поддерживать ее. Он автоматически обновится в вашей установке Odoo и, "
+"поскольку он включен в модуль Website Builder, по умолчанию все плавно "
+"интегрируется."
 
 #: ../../howtos/themes.rst:68
 msgid ""
-"As a result, you are totally free to focus on design while this structure"
-" does the job of providing integrations and functionality."
+"As a result, you are totally free to focus on design while this structure "
+"does the job of providing integrations and functionality."
 msgstr ""
+"В результате вы можете полностью сосредоточиться на дизайне, в то время как "
+"эта структура обеспечивает интеграцию и функциональность."
 
 #: ../../howtos/themes.rst:78
 msgid "**Main features:**"
-msgstr ""
+msgstr "** Основные функции: **"
 
 #: ../../howtos/themes.rst:80
 msgid "Basic layouts for pages, blog and eCommerce"
-msgstr ""
+msgstr "Основные макеты для страниц, блога и электронной коммерции"
 
 #: ../../howtos/themes.rst:81
 msgid "Website Builder integration"
-msgstr ""
+msgstr "Интеграция с Веб-сайтом"
 
 #: ../../howtos/themes.rst:82
 msgid "Basic Snippets"
-msgstr ""
+msgstr "Основные фрагменты"
 
 #: ../../howtos/themes.rst:83
 msgid "Automatic Less/Sass compiling"
-msgstr ""
+msgstr "Автоматическая компиляция Less / Sass"
 
 #: ../../howtos/themes.rst:84
 msgid "Automatic Js and CSS minification and combination"
-msgstr ""
+msgstr "Автоматическая минимизация и сочетание Js и CSS"
 
 #: ../../howtos/themes.rst:88
 msgid "**Main technologies:**"
-msgstr ""
+msgstr "** Основные технологии: **"
 
 #: ../../howtos/themes.rst:90
 msgid "Twitter Bootstrap"
-msgstr ""
+msgstr "Twitter Bootstrap"
 
 #: ../../howtos/themes.rst:91
 msgid "jQuery"
-msgstr ""
+msgstr "JQuery"
 
 #: ../../howtos/themes.rst:92
 msgid "jQuery UI"
-msgstr ""
+msgstr "JQuery UI"
 
 #: ../../howtos/themes.rst:93
 msgid "underscore.js"
-msgstr ""
+msgstr "underscore.js"
 
 #: ../../howtos/themes.rst:96
 msgid "Thinking \"modular\""
-msgstr ""
+msgstr "Мышление &quot;модульное&quot;"
 
 #: ../../howtos/themes.rst:98
 msgid ""
-"An Odoo theme is not a folder containing HTML or PHP files, it’s a "
-"modular framework written in XML. Never worked with XML files before? "
-"Don’t worry, after following the tutorial, you’ll be able to create your "
-"first theme with only basic knowledge of HTML."
+"An Odoo theme is not a folder containing HTML or PHP files, it’s a modular "
+"framework written in XML. Never worked with XML files before? Don’t worry, "
+"after following the tutorial, you’ll be able to create your first theme with"
+" only basic knowledge of HTML."
 msgstr ""
+"Тема Odoo - это не папка, содержащая файлы HTML или PHP, это модульная "
+"структура, написанная на XML. Никогда раньше не работал с файлами XML? Не "
+"волнуйтесь, после прочтения урока вы сможете создать свою первую тему только"
+" с базовыми знаниями HTML."
 
 #: ../../howtos/themes.rst:100
 msgid ""
 "Using classical web design workflows, you usually code the layout of the "
-"entire page. The result of this is a “static” web page. You can update "
-"the content, of course, but your client will need you to work on making "
-"even basic changes."
+"entire page. The result of this is a “static” web page. You can update the "
+"content, of course, but your client will need you to work on making even "
+"basic changes."
 msgstr ""
+"Используя классические рабочие процессы веб-дизайна, вы обычно кодируете "
+"макет всей страницы. Результатом этого является «статическая» веб-страница. "
+"Конечно, вы можете обновлять контент, но вашему клиенту понадобится, чтобы "
+"вы работали над внесением даже базовых изменений."
 
 #: ../../howtos/themes.rst:102
 msgid ""
 "Creating themes for Odoo is a total change of perspective. Instead of "
-"defining the complete layout for a page, you can create blocks (snippets)"
-" at let the user choose where to “drag&drop” them, creating the page "
-"layout on their own. We call this modular design."
+"defining the complete layout for a page, you can create blocks (snippets) at"
+" let the user choose where to “drag&drop” them, creating the page layout on "
+"their own. We call this modular design."
 msgstr ""
+"Создание тем для Odoo - это полное изменение перспективы. Вместо того, чтобы"
+" определять полный макет для страницы, вы можете создавать блоки "
+"(фрагменты), позволяя пользователю выбирать, куда их «перетаскивать», "
+"создавая макет страницы самостоятельно. Мы называем это модульной "
+"конструкцией."
 
 #: ../../howtos/themes.rst:105
 msgid ""
-"Imagine an Odoo theme as a “list” of elements and options that you have "
-"to create and style. As a designer, your goal is to style these elements "
-"in order to achieve a wonderful result, regardless of where the end user "
+"Imagine an Odoo theme as a “list” of elements and options that you have to "
+"create and style. As a designer, your goal is to style these elements in "
+"order to achieve a wonderful result, regardless of where the end user "
 "chooses to place them."
 msgstr ""
+"Представьте себе тему Odoo как «список» элементов и опций, которые вы должны"
+" создать и оформить. Как дизайнер, ваша цель состоит в том, чтобы "
+"стилизовать эти элементы для достижения замечательного результата, "
+"независимо от того, где конечный пользователь решит разместить их."
 
 #: ../../howtos/themes.rst:108
 msgid "Let’s take a tour of our “list” elements:"
-msgstr ""
+msgstr "Давайте познакомимся с нашими элементами «списка»:"
 
 #: ../../howtos/themes.rst:115
 msgid "Snippets (or building-blocks)"
-msgstr ""
+msgstr "Фрагменты (или строительные блоки)"
 
 #: ../../howtos/themes.rst:117
 msgid ""
-"A piece of HTML code.  The user  will  drag&drop, modify and combine them"
-" using our built-in Website Builder interface. You can define sets of "
-"options and styles for each snippet. The user will choose from them "
-"according to their needs."
+"A piece of HTML code.  The user  will  drag&drop, modify and combine them "
+"using our built-in Website Builder interface. You can define sets of options"
+" and styles for each snippet. The user will choose from them according to "
+"their needs."
 msgstr ""
+"Кусок HTML-кода. Пользователь будет перетаскивать, изменять и комбинировать "
+"их, используя наш встроенный интерфейс Website Builder. Вы можете определить"
+" наборы параметров и стилей для каждого фрагмента. Пользователь будет "
+"выбирать из них в соответствии с их потребностями."
 
 #: ../../howtos/themes.rst:122
 msgid "Pages"
-msgstr ""
+msgstr "страницы"
 
 #: ../../howtos/themes.rst:124
 msgid ""
-"These are normal web pages, except that they will be editable by the "
-"final user and that you can define an empty area that the user can “fill”"
-" by dragging snippets into it."
+"These are normal web pages, except that they will be editable by the final "
+"user and that you can define an empty area that the user can “fill” by "
+"dragging snippets into it."
 msgstr ""
+"Это обычные веб-страницы, за исключением того, что они будут доступны для "
+"редактирования конечным пользователем, и вы можете определить пустую "
+"область, которую пользователь может «заполнить», перетаскивая в нее "
+"фрагменты."
 
 #: ../../howtos/themes.rst:135
 msgid "Styles"
-msgstr ""
+msgstr "Стили"
 
 #: ../../howtos/themes.rst:137
 msgid ""
-"Styles are defined using standard CSS files (or Less/Sass). You can "
-"define a style as **default** or **optional**. The default styles are "
-"always active in your theme, the optional styles can be enabled or "
-"disabled by the user."
+"Styles are defined using standard CSS files (or Less/Sass). You can define a"
+" style as **default** or **optional**. The default styles are always active "
+"in your theme, the optional styles can be enabled or disabled by the user."
 msgstr ""
+"Стили определяются с использованием стандартных файлов CSS (или Less / "
+"Sass). Вы можете определить стиль как ** по умолчанию ** или ** "
+"необязательно **. Стили по умолчанию всегда активны в вашей теме, "
+"дополнительные стили могут быть включены или отключены пользователем."
 
 #: ../../howtos/themes.rst:142
 msgid "Functionalities"
-msgstr ""
+msgstr "Функциональности"
 
 #: ../../howtos/themes.rst:144
 msgid ""
-"Thanks to Odoo’s modularity, everything can be personalized even more. "
-"This means there are endless possibilities for your creativity. Adding "
+"Thanks to Odoo’s modularity, everything can be personalized even more. This "
+"means there are endless possibilities for your creativity. Adding "
 "functionalities is easy and it’s simple to provide the end user with "
 "customizable options."
 msgstr ""
+"Благодаря модульности Odoo все можно персонализировать еще больше. Это "
+"означает, что у вашего творчества есть бесконечные возможности. Добавить "
+"функциональность легко и просто, чтобы предоставить конечному пользователю "
+"настраиваемые параметры."
 
 #: ../../howtos/themes.rst:148
 msgid "Odoo's XML files, an overview"
-msgstr ""
+msgstr "XML-файлы Odoo, обзор"
 
 #: ../../howtos/themes.rst:150
 msgid ""
-"Any Odoo XML file starts with encoding specifications. After that, you "
-"have to write your code inside a ``<odoo>`` tag."
+"Any Odoo XML file starts with encoding specifications. After that, you have "
+"to write your code inside a ``<odoo>`` tag."
 msgstr ""
+"Любой файл Odoo XML начинается со спецификаций кодирования. После этого вы "
+"должны написать свой код внутри `` <odoo> `` тег."
 
 #: ../../howtos/themes.rst:163
 msgid ""
-"Almost every element and option that you create has to be placed inside a"
-" ``<template>`` tag, like in this example."
+"Almost every element and option that you create has to be placed inside a "
+"``<template>`` tag, like in this example."
 msgstr ""
+"Почти каждый элемент и опция, которую вы создаете, должны быть помещены "
+"внутри `` <template> `` тег, как в этом примере."
 
 #: ../../howtos/themes.rst:175
 msgid ""
-"don't misunderstand what ``template`` means. A template tag only defines "
-"a piece of html code or options - but it does not necessarily coincide "
-"with a visual arrangement of elements."
+"don't misunderstand what ``template`` means. A template tag only defines a "
+"piece of html code or options - but it does not necessarily coincide with a "
+"visual arrangement of elements."
 msgstr ""
+"не поймите неправильно, что означает `` шаблон``. Тег шаблона определяет "
+"только часть HTML-кода или параметров, но он не обязательно совпадает с "
+"визуальным расположением элементов."
 
 #: ../../howtos/themes.rst:179
 msgid ""
 "The previous code defines a title, but it will not be displayed anywhere "
 "because that *template* is not associated with any part of the **Odoo "
-"default structure**.  In order to do that you can use **xpath**, **qWeb**"
-" or a combination of both."
+"default structure**.  In order to do that you can use **xpath**, **qWeb** or"
+" a combination of both."
 msgstr ""
+"Предыдущий код определяет заголовок, но он нигде не будет отображаться, "
+"поскольку этот * шаблон * не связан ни с одной частью ** стандартной "
+"структуры Odoo **. Для этого вы можете использовать ** xpath **, ** qWeb ** "
+"или их комбинацию."
 
 #: ../../howtos/themes.rst:184
 msgid ""
-"Keep reading the tutorial to learn to how properly extend it with your "
-"own code."
+"Keep reading the tutorial to learn to how properly extend it with your own "
+"code."
 msgstr ""
+"Продолжайте читать учебник, чтобы узнать, как правильно дополнить его "
+"собственным кодом."
 
 #: ../../howtos/themes.rst:187 ../../howtos/themes.rst:366
 #: ../../howtos/themes.rst:541 ../../howtos/themes.rst:641
 #: ../../howtos/themes.rst:912
 msgid "Update your theme"
-msgstr ""
+msgstr "Обновите свою тему"
 
 #: ../../howtos/themes.rst:193
 msgid ""
-"Since XML files are only loaded when you install the theme, you will have"
-" to force reloading every time you make changes on an xml file."
+"Since XML files are only loaded when you install the theme, you will have to"
+" force reloading every time you make changes on an xml file."
 msgstr ""
+"Поскольку файлы XML загружаются только при установке темы, вам придется "
+"принудительно перезагружать каждый раз, когда вы вносите изменения в файл "
+"XML."
 
 #: ../../howtos/themes.rst:195
 msgid "To do that, click on the Upgrade button in the module’s page."
-msgstr ""
+msgstr "Для этого нажмите кнопку «Обновить» на странице модуля."
 
 #: ../../howtos/themes.rst:206
 msgid "Create a theme module"
-msgstr ""
+msgstr "Создать модуль темы"
 
 #: ../../howtos/themes.rst:208
 msgid ""
-"Odoo’s themes are packaged like modules. Even if you are designing a very"
-" simple website for your company or client, you need to package the theme"
-" like an Odoo module."
+"Odoo’s themes are packaged like modules. Even if you are designing a very "
+"simple website for your company or client, you need to package the theme "
+"like an Odoo module."
 msgstr ""
+"Темы Odoo упакованы как модули. Даже если вы разрабатываете очень простой "
+"веб-сайт для своей компании или клиента, вам нужно упаковать тему как модуль"
+" Odoo."
 
 #: ../../howtos/themes.rst:212
 msgid "``main folder``"
-msgstr ""
+msgstr "`` главная папка``"
 
 #: ../../howtos/themes.rst:211
 msgid ""
-"Create a folder and name it like this: ``theme_`` followed by your "
-"theme's name."
+"Create a folder and name it like this: ``theme_`` followed by your theme's "
+"name."
 msgstr ""
+"Создайте папку и назовите ее так: `` theme_``, за которой следует название "
+"вашей темы."
 
 #: ../../howtos/themes.rst:217
 msgid "``__manifest__.py``"
-msgstr ""
+msgstr "`` __Manifest __. Py``"
 
 #: ../../howtos/themes.rst:215
 msgid ""
-"Create an empty document and save it to your folder as "
-"``__manifest__.py``. This will contain the configuration info for your "
-"theme."
+"Create an empty document and save it to your folder as ``__manifest__.py``. "
+"This will contain the configuration info for your theme."
 msgstr ""
+"Создайте пустой документ и сохраните его в своей папке как `` __manifest __."
+" Py``. Это будет содержать информацию о конфигурации вашей темы."
 
 #: ../../howtos/themes.rst:221
 msgid "``__init__.py``"
-msgstr ""
+msgstr "`` __Init __. Py``"
 
 #: ../../howtos/themes.rst:220
 msgid ""
 "Create another empty file and name it ``__init__.py``. It's a mandatory "
 "system file. Create and leave it blank."
 msgstr ""
+"Создайте еще один пустой файл и назовите его `` __init __. Py``. Это "
+"обязательный системный файл. Создайте и оставьте это поле пустым."
 
 #: ../../howtos/themes.rst:227
 msgid "``views`` and ``static`` folders"
-msgstr ""
+msgstr "папки `` views`` и `` static``"
 
 #: ../../howtos/themes.rst:224
 msgid ""
 "Create them in the main folder. In ``views`` you'll place your xml files "
-"that define your snippets, your pages and your options. ``static`` folder"
-" is the right place for your style , images and custom js code."
+"that define your snippets, your pages and your options. ``static`` folder is"
+" the right place for your style , images and custom js code."
 msgstr ""
+"Создайте их в главной папке. В `` views`` вы разместите ваши xml-файлы, "
+"которые определяют ваши фрагменты, ваши страницы и ваши параметры. Папка `` "
+"static`` - подходящее место для вашего стиля, изображений и "
+"пользовательского кода js."
 
 #: ../../howtos/themes.rst:231
 msgid ""
-"Use two underscore characters at the beginning and two at the end of odoo"
-" and init file names."
+"Use two underscore characters at the beginning and two at the end of odoo "
+"and init file names."
 msgstr ""
+"Используйте два символа подчеркивания в начале и два в конце имен файлов "
+"odoo и init."
 
 #: ../../howtos/themes.rst:234
 msgid "The final result should be something like this:"
-msgstr ""
+msgstr "Окончательный результат должен быть примерно таким:"
 
 #: ../../howtos/themes.rst:239
 msgid "Edit ``__manifest__.py``"
-msgstr ""
+msgstr "Редактировать `` __manifest __. Py``"
 
 #: ../../howtos/themes.rst:241
 msgid "Open the ``__manifest__.py`` you created and copy/paste the following:"
 msgstr ""
+"Откройте созданный вами `` __manifest __. Py`` и скопируйте / вставьте "
+"следующее:"
 
 #: ../../howtos/themes.rst:257
 msgid ""
 "Replace the first four property’s values with anything you like. These "
 "values will be used to identify your new theme in Odoo’s backend."
 msgstr ""
+"Замените первые четыре значения свойств на что угодно. Эти значения будут "
+"использоваться для идентификации вашей новой темы в бэкэнде Odoo."
 
 #: ../../howtos/themes.rst:260
 msgid ""
-"The ``data`` property will contain the xml files list. Right now it’s "
-"empty, but we will add any new files created."
+"The ``data`` property will contain the xml files list. Right now it’s empty,"
+" but we will add any new files created."
 msgstr ""
+"Свойство `` data`` будет содержать список файлов xml. Сейчас он пуст, но мы "
+"добавим все новые созданные файлы."
 
 #: ../../howtos/themes.rst:262
 msgid ""
@@ -390,270 +493,362 @@ msgid ""
 "slash, the subcategory. You can use one subcategory from the Odoo Apps "
 "categories list. (https://www.odoo.com/apps/themes)"
 msgstr ""
+"`` category`` определяет категорию вашего модуля (всегда «Theme») и, после "
+"косой черты, подкатегорию. Вы можете использовать одну подкатегорию из "
+"списка категорий приложений Odoo. (Https://www.odoo.com/apps/themes)"
 
 #: ../../howtos/themes.rst:265
 msgid ""
-"``depends`` specifies the modules needed by our theme to work properly. "
-"For our tutorial theme, we only need website. If you need blogging or "
-"eCommerce features as well, you have to add those modules too."
+"``depends`` specifies the modules needed by our theme to work properly. For "
+"our tutorial theme, we only need website. If you need blogging or eCommerce "
+"features as well, you have to add those modules too."
 msgstr ""
+"`` depen`` указывает модули, необходимые нашей теме для правильной работы. "
+"Для нашей учебной темы нам нужен только веб-сайт. Если вам также нужны "
+"функции ведения блога или электронной коммерции, вы должны также добавить "
+"эти модули."
 
 #: ../../howtos/themes.rst:276
 msgid "Installing your theme"
-msgstr ""
+msgstr "Установка вашей темы"
 
 #: ../../howtos/themes.rst:278
 msgid ""
 "To install your theme, you just place your theme folder inside addons in "
 "your Odoo installation."
 msgstr ""
+"Чтобы установить свою тему, вы просто помещаете папку с темой в аддоны в "
+"вашей установке Odoo."
 
 #: ../../howtos/themes.rst:280
 msgid ""
 "After that, navigate to the Odoo **Website** module, go to "
 ":menuselection:`Configuration --> Settings`."
 msgstr ""
+"После этого перейдите к модулю Odoo ** Website **, перейдите по адресу "
+":menuselection:`Configuration --> Settings`."
 
 #: ../../howtos/themes.rst:283
 msgid ""
-"Under **Website** section click the **Choose a theme** button, then hover"
-" over your theme and click **Use this theme**."
+"Under **Website** section click the **Choose a theme** button, then hover "
+"over your theme and click **Use this theme**."
 msgstr ""
+"В разделе ** Веб-сайт ** нажмите кнопку ** Выберите тему **, затем наведите "
+"курсор мыши на тему и нажмите ** Использовать эту тему **."
 
 #: ../../howtos/themes.rst:287
 msgid "Structure of an Odoo page"
-msgstr ""
+msgstr "Структура страницы Odoo"
 
 #: ../../howtos/themes.rst:289
 msgid ""
-"An Odoo page is the visual result of a combination of 2 kind of elements,"
-" **cross-pages** and **unique**. By default, Odoo provides you with a "
+"An Odoo page is the visual result of a combination of 2 kind of elements, "
+"**cross-pages** and **unique**. By default, Odoo provides you with a "
 "**Header** and a **Footer** (cross-pages) and a unique main element that "
 "contains the content that makes your page unique."
 msgstr ""
+"Страница Odoo - это визуальный результат комбинации двух видов элементов, **"
+" кросс-страниц ** и ** уникальных **. По умолчанию Odoo предоставляет вам **"
+" Верхний колонтитул ** и ** Нижний колонтитул ** (кросс-страницы) и "
+"уникальный главный элемент, содержащий контент, который делает вашу страницу"
+" уникальной."
 
 #: ../../howtos/themes.rst:294
 msgid ""
 "Cross-pages elements will be the same on every page. Unique elements are "
 "related to a specific page only."
 msgstr ""
+"Элементы кросс-страниц будут одинаковыми на каждой странице. Уникальные "
+"элементы относятся только к определенной странице."
 
 #: ../../howtos/themes.rst:298
 msgid ""
-"To inspect the default layout, simply create a new page using the Website"
-" Builder.  Click on :menuselection:`Content --> New Page` and add a page "
+"To inspect the default layout, simply create a new page using the Website "
+"Builder.  Click on :menuselection:`Content --> New Page` and add a page "
 "name.  Inspect the page using your browser."
 msgstr ""
+"Чтобы проверить макет по умолчанию, просто создайте новую страницу с помощью"
+" конструктора веб-сайтов. Нажмите на :menuselection:`Content --> New Page` и"
+" добавьте имя страницы. Проверьте страницу, используя ваш браузер."
 
 #: ../../howtos/themes.rst:311
 msgid "Extend the default Header"
-msgstr ""
+msgstr "Расширить заголовок по умолчанию"
 
 #: ../../howtos/themes.rst:313
 msgid ""
 "By default, Odoo header contains a responsive navigation menu and the "
-"company’s logo. You can easily add new elements or style the existing "
-"one."
+"company’s logo. You can easily add new elements or style the existing one."
 msgstr ""
+"По умолчанию заголовок Odoo содержит адаптивное меню навигации и логотип "
+"компании. Вы можете легко добавлять новые элементы или стилизовать "
+"существующие."
 
 #: ../../howtos/themes.rst:315
 msgid ""
-"To do so, create a **layout.xml** file in your **views** folder and add "
-"the default Odoo xml markup."
+"To do so, create a **layout.xml** file in your **views** folder and add the "
+"default Odoo xml markup."
 msgstr ""
+"Для этого создайте файл ** layout.xml ** в папке ** views ** и добавьте "
+"разметку Odoo xml по умолчанию."
 
 #: ../../howtos/themes.rst:326
 msgid ""
-"Create a new template into the ``<odoo>`` tag, copy-pasting the following"
-" code."
-msgstr ""
+"Create a new template into the ``<odoo>`` tag, copy-pasting the following "
+"code."
+msgstr "Создать новый шаблон в `` <odoo> `` тег, скопируйте следующий код."
 
 #: ../../howtos/themes.rst:349
 msgid ""
-"The first xpath will add the id ``my_header`` to the header. It’s the "
-"best option if you want to target css rules to that element and avoid "
-"these affecting other content on the page."
+"The first xpath will add the id ``my_header`` to the header. It’s the best "
+"option if you want to target css rules to that element and avoid these "
+"affecting other content on the page."
 msgstr ""
+"Первый xpath добавит идентификатор `` my_header`` в заголовок. Это лучший "
+"вариант, если вы хотите настроить правила CSS для этого элемента и избежать "
+"их влияния на другое содержимое на странице."
 
 #: ../../howtos/themes.rst:354
 msgid ""
-"Be careful replacing default elements attributes. As your theme will "
-"extend the default one, your changes will take priority in any future "
-"Odoo’s update."
+"Be careful replacing default elements attributes. As your theme will extend "
+"the default one, your changes will take priority in any future Odoo’s "
+"update."
 msgstr ""
+"Будьте осторожны при замене атрибутов элементов по умолчанию. Поскольку ваша"
+" тема будет расширена по умолчанию, ваши изменения будут иметь приоритет в "
+"любом будущем обновлении Odoo."
 
 #: ../../howtos/themes.rst:357
 msgid ""
-"The second xpath will add a welcome message just after the navigation "
-"menu."
+"The second xpath will add a welcome message just after the navigation menu."
 msgstr ""
+"Второй xpath добавит приветственное сообщение сразу после меню навигации."
 
 #: ../../howtos/themes.rst:359
 msgid ""
 "The last step is to add layout.xml to the list of xml files used by the "
 "theme. To do that, edit your ``__manifest__.py`` file like this"
 msgstr ""
+"Последний шаг - добавить layout.xml в список файлов xml, используемых темой."
+" Для этого отредактируйте ваш файл `` __manifest __. Py`` следующим образом"
 
 #: ../../howtos/themes.rst:370
 msgid ""
-"Great! We successfully added an id to the header and an element after the"
-" navigation menu. These changes will be applied to each page of the "
-"website."
+"Great! We successfully added an id to the header and an element after the "
+"navigation menu. These changes will be applied to each page of the website."
 msgstr ""
+"Большой! Мы успешно добавили идентификатор в заголовок и элемент после меню "
+"навигации. Эти изменения будут применены к каждой странице сайта."
 
 #: ../../howtos/themes.rst:378
 msgid "Create a specific page layout"
-msgstr ""
+msgstr "Создать конкретный макет страницы"
 
 #: ../../howtos/themes.rst:380
 msgid ""
-"Imagine that we want to create a specific layout for a Services page. For"
-" this page, we need to add a list of services to the top and give the "
-"client the possibility of setting the rest of the page’s layout using "
-"snippets."
+"Imagine that we want to create a specific layout for a Services page. For "
+"this page, we need to add a list of services to the top and give the client "
+"the possibility of setting the rest of the page’s layout using snippets."
 msgstr ""
+"Представьте, что мы хотим создать определенный макет для страницы Сервисов. "
+"Для этой страницы нам нужно добавить список сервисов вверху и дать клиенту "
+"возможность настроить остальную часть макета страницы, используя фрагменты."
 
 #: ../../howtos/themes.rst:383
 msgid ""
-"Inside your *views* folder, create a **pages.xml** file and add the "
-"default Odoo markup.  Inside ``<odoo>``, instead of defining a "
-"``<template>``, we will create a *page* object."
+"Inside your *views* folder, create a **pages.xml** file and add the default "
+"Odoo markup.  Inside ``<odoo>``, instead of defining a ``<template>``, we "
+"will create a *page* object."
 msgstr ""
+"Внутри вашей папки * views * создайте файл ** pages.xml ** и добавьте "
+"разметку Odoo по умолчанию. Внутри <odoo> ``, вместо определения `` "
+"<template> ``, мы создадим объект * page *."
 
 #: ../../howtos/themes.rst:413
 msgid ""
-"As you can see, pages come with many additional properties like the "
-"*name* or the *url* where it is reachable."
+"As you can see, pages come with many additional properties like the *name* "
+"or the *url* where it is reachable."
 msgstr ""
+"Как видите, страницы имеют много дополнительных свойств, таких как * name * "
+"или * url *, где они доступны."
 
 #: ../../howtos/themes.rst:416
 msgid ""
-"We successfully created a new page layout, but we haven't told the system"
-" **how to use it**. To do that, we can use **QWeb**. Wrap the html code "
-"into a ``<t>`` tag, like in this example."
+"We successfully created a new page layout, but we haven't told the system "
+"**how to use it**. To do that, we can use **QWeb**. Wrap the html code into "
+"a ``<t>`` tag, like in this example."
 msgstr ""
+"Мы успешно создали новый макет страницы, но мы не сообщили системе **, как "
+"его использовать **. Для этого мы можем использовать ** QWeb **. Оберните "
+"HTML-код в `` <t> `` тег, как в этом примере."
 
 #: ../../howtos/themes.rst:447
 msgid ""
-"Using ``<t t-call=\"website.layout\">`` we will extend the Odoo default "
-"page layout with our code."
+"Using ``<t t-call=\"website.layout\">`` we will extend the Odoo default page"
+" layout with our code."
 msgstr ""
+"Используя `` <t t-call=\"website.layout\"> «Мы расширим макет страницы Odoo "
+"по умолчанию с помощью нашего кода."
 
 #: ../../howtos/themes.rst:450
 msgid ""
 "As you can see, we wrapped our code into two ``<div>``,  one with ID "
-"``wrap`` and the other one with class ``container``. This is to provide a"
-" minimal layout."
+"``wrap`` and the other one with class ``container``. This is to provide a "
+"minimal layout."
 msgstr ""
+"Как видите, мы обернули наш код в два <div> ``, один с идентификатором `` "
+"wrap``, а другой с классом `` container``. Это должно обеспечить минимальное"
+" расположение."
 
 #: ../../howtos/themes.rst:452
 msgid ""
-"The next step is to add an empty area that the user can fill with "
-"snippets. To achieve this, just create a ``div`` with ``oe_structure`` "
-"class just before closing the ``div#wrap`` element."
+"The next step is to add an empty area that the user can fill with snippets. "
+"To achieve this, just create a ``div`` with ``oe_structure`` class just "
+"before closing the ``div#wrap`` element."
 msgstr ""
+"Следующим шагом является добавление пустой области, которую пользователь "
+"может заполнить фрагментами. Чтобы достичь этого, просто создайте `` div`` с"
+" классом `` oe_structure`` непосредственно перед закрытием элемента `` div #"
+" wrap``."
 
 #: ../../howtos/themes.rst:493
 msgid ""
-"You can create as many snippet areas as you like and place them anywhere "
-"in your pages."
+"You can create as many snippet areas as you like and place them anywhere in "
+"your pages."
 msgstr ""
+"Вы можете создать столько областей фрагментов, сколько захотите, и "
+"разместить их в любом месте на своих страницах."
 
 #: ../../howtos/themes.rst:495
 msgid ""
 "It is worth mentioning there is an alternative to create pages using the "
 "``<template>`` directive we saw before."
 msgstr ""
+"Стоит отметить, что существует альтернатива для создания страниц с "
+"использованием `` <template> «Директива, которую мы видели раньше."
 
 #: ../../howtos/themes.rst:530
 msgid ""
 "This would allow your page content to be further customized using "
 "``<xpath>``."
 msgstr ""
+"Это позволило бы дополнительно настроить содержимое вашей страницы с помощью"
+" `` <xpath> ``."
 
 #: ../../howtos/themes.rst:532
 msgid ""
-"Our page is almost ready. Now all we have to do is add **pages.xml** in "
-"our **__manifest__.py** file"
+"Our page is almost ready. Now all we have to do is add **pages.xml** in our "
+"**__manifest__.py** file"
 msgstr ""
+"Наша страница почти готова. Теперь все, что нам нужно сделать, это добавить "
+"** pages.xml ** в наш ** __ манифест __. Py ** файл"
 
 #: ../../howtos/themes.rst:545
 msgid ""
 "Great, our Services page is ready and you’ll be able to access it by "
 "navigating to ``<yourwebsite>/services`` (the URL we chose above)."
 msgstr ""
+"Отлично, наша страница Сервисов готова, и вы сможете получить к ней доступ, "
+"перейдя к `` <yourwebsite> / services`` (URL, который мы выбрали выше)."
 
 #: ../../howtos/themes.rst:547
 msgid ""
-"You will notice that it's possible to drag/drop snippets underneath the "
-"*Our Services* list."
+"You will notice that it's possible to drag/drop snippets underneath the *Our"
+" Services* list."
 msgstr ""
+"Вы заметите, что можно перетаскивать фрагменты под списком * Наши услуги *."
 
 #: ../../howtos/themes.rst:553
 msgid ""
 "Now let's go back to our *pages.xml* and, after our page template, "
 "copy/paste the following code."
 msgstr ""
+"Теперь вернемся к нашему * pages.xml * и после шаблона страницы скопируйте /"
+" вставьте следующий код."
 
 #: ../../howtos/themes.rst:565
 msgid ""
 "This code will add a link to the main menu, referring to the page we "
 "created."
 msgstr ""
+"Этот код добавит ссылку в главное меню со ссылкой на страницу, которую мы "
+"создали."
 
 #: ../../howtos/themes.rst:570
 msgid ""
-"The **sequence** attribute defines the link’s position in the top menu. "
-"In our example, we set the value to ``99`` in order to place it last. I "
-"you want to place it in a particular position, you have to replace the "
-"value according to your needs."
+"The **sequence** attribute defines the link’s position in the top menu. In "
+"our example, we set the value to ``99`` in order to place it last. I you "
+"want to place it in a particular position, you have to replace the value "
+"according to your needs."
 msgstr ""
+"Атрибут ** sequence ** определяет позицию ссылки в верхнем меню. В нашем "
+"примере мы устанавливаем значение в `` 99``, чтобы поместить его последним. "
+"Если вы хотите поместить его в определенную позицию, вы должны заменить "
+"значение в соответствии с вашими потребностями."
 
 #: ../../howtos/themes.rst:573
 msgid ""
-"As you can see inspecting the *data.xml* file in the ``website`` module, "
-"the **Home** link is set to ``10`` and the **Contact** us one is set to "
-"``60`` by default. If, for example, you want to place your link in the "
-"**middle**, you can set your link’s sequence value to ``40``."
+"As you can see inspecting the *data.xml* file in the ``website`` module, the"
+" **Home** link is set to ``10`` and the **Contact** us one is set to ``60`` "
+"by default. If, for example, you want to place your link in the **middle**, "
+"you can set your link’s sequence value to ``40``."
 msgstr ""
+"Как вы можете видеть, проверяя файл * data.xml * в модуле `` website``, "
+"ссылка ** Home ** установлена на `` 10``, а ** Contact ** us установлена на "
+"`` 60`` по умолчанию. Например, если вы хотите разместить свою ссылку в "
+"середине **, вы можете установить значение последовательности вашей ссылки в"
+" `` 40``."
 
 #: ../../howtos/themes.rst:577
 msgid "Add Styles"
-msgstr ""
+msgstr "Добавить стили"
 
 #: ../../howtos/themes.rst:579
 msgid ""
-"Odoo includes Bootstrap by default. This means that you can take "
-"advantage of all Bootstrap styles and layout functionalities out of the "
-"box."
+"Odoo includes Bootstrap by default. This means that you can take advantage "
+"of all Bootstrap styles and layout functionalities out of the box."
 msgstr ""
+"Odoo включает Bootstrap по умолчанию. Это означает, что вы можете "
+"воспользоваться всеми стилями Bootstrap и функциями макета из коробки."
 
 #: ../../howtos/themes.rst:581
 msgid ""
-"Of course Bootstrap is not enough if you want to provide a unique design."
-" The following steps will guide you through how to add custom styles to "
-"your theme. The final result won't be pretty, but will provide you with "
-"enough information to build upon on your own."
+"Of course Bootstrap is not enough if you want to provide a unique design. "
+"The following steps will guide you through how to add custom styles to your "
+"theme. The final result won't be pretty, but will provide you with enough "
+"information to build upon on your own."
 msgstr ""
+"Конечно, Bootstrap недостаточно, если вы хотите предоставить уникальный "
+"дизайн. Следующие шаги помогут вам добавить пользовательские стили в вашу "
+"тему. Окончательный результат не будет красивым, но предоставит вам "
+"достаточно информации, на которой можно будет опираться самостоятельно."
 
 #: ../../howtos/themes.rst:584
 msgid ""
-"Let’s start by creating an empty file called **style.scss** and place it "
-"in a folder called **scss** in your static folder. The following rules "
-"will style our *Services* page. Copy and paste it, then save the file."
+"Let’s start by creating an empty file called **style.scss** and place it in "
+"a folder called **scss** in your static folder. The following rules will "
+"style our *Services* page. Copy and paste it, then save the file."
 msgstr ""
+"Давайте начнем с создания пустого файла с именем ** style.scss ** и поместим"
+" его в папку с именем ** scss ** в вашей статической папке. Следующие "
+"правила будут стилизовать нашу страницу * Services *. Скопируйте и вставьте "
+"его, затем сохраните файл."
 
 #: ../../howtos/themes.rst:609
 msgid "Our file is ready but it is not included in our theme yet."
-msgstr ""
+msgstr "Наш файл готов, но он еще не включен в нашу тему."
 
 #: ../../howtos/themes.rst:611
 msgid ""
 "Let’s navigate to the view folder and create an XML file called "
-"*assets.xml*. Add the default Odoo xml markup and copy/paste the "
-"following code. Remember to replace ``theme folder`` with your theme’s "
-"main folder name."
+"*assets.xml*. Add the default Odoo xml markup and copy/paste the following "
+"code. Remember to replace ``theme folder`` with your theme’s main folder "
+"name."
 msgstr ""
+"Давайте перейдем к папке просмотра и создадим файл XML с именем * assets.xml"
+" *. Добавьте стандартную разметку Odoo xml и скопируйте / вставьте следующий"
+" код. Не забудьте заменить `` theme folder`` на имя основной папки вашей "
+"темы."
 
 #: ../../howtos/themes.rst:621
 msgid ""
@@ -662,283 +857,366 @@ msgid ""
 "tells Odoo that our template is referring to another one in order to "
 "operate."
 msgstr ""
+"Мы только что создали шаблон, определяющий наш файл scss. Как вы можете "
+"видеть, наш шаблон имеет специальный атрибут, называемый `` inherit_id``. "
+"Этот атрибут сообщает Odoo, что наш шаблон ссылается на другой для работы."
 
 #: ../../howtos/themes.rst:626
 msgid ""
-"In this case, we are referring to ``assets_frontend`` template, located "
-"in the ``website`` module. ``assets_frontend`` specifies the list of "
-"assets loaded by the website builder and our goal is to add our scss file"
-" to this list."
+"In this case, we are referring to ``assets_frontend`` template, located in "
+"the ``website`` module. ``assets_frontend`` specifies the list of assets "
+"loaded by the website builder and our goal is to add our scss file to this "
+"list."
 msgstr ""
+"В данном случае мы ссылаемся на шаблон `` assets_frontend``, расположенный в"
+" модуле `` website``. `assets_frontend`` определяет список ресурсов, "
+"загружаемых разработчиком веб-сайта, и наша цель - добавить наш scss-файл в "
+"этот список."
 
 #: ../../howtos/themes.rst:631
 msgid ""
 "This can be achieved using xpath with the attributes "
-"``expr=\"link[last()]\"`` and ``position=\"after\"``, which means \"*take"
-" my style file and place it after the last link in the list of the "
-"assets*\"."
+"``expr=\"link[last()]\"`` and ``position=\"after\"``, which means \"*take my"
+" style file and place it after the last link in the list of the assets*\"."
 msgstr ""
+"Это может быть достигнуто с помощью xpath с атрибутами `` expr = &quot;link "
+"[last ()]&quot; `` и `` position = &quot;after&quot; ``, что означает "
+"&quot;* взять мой файл стиля и поместить его после последней ссылки в Список"
+" активов * »."
 
 #: ../../howtos/themes.rst:636
 msgid ""
-"Placing it after the last one, we ensure that our file will be loaded at "
-"the end and take priority."
+"Placing it after the last one, we ensure that our file will be loaded at the"
+" end and take priority."
 msgstr ""
+"Разместив его после последнего, мы гарантируем, что наш файл будет загружен "
+"в конце и получит приоритет."
 
 #: ../../howtos/themes.rst:639
 msgid "Finally add **assets.xml** in your **__manifest__.py** file."
 msgstr ""
+"Наконец, добавьте ** assets.xml ** в ваш файл ** __ манифеста __. Py **."
 
 #: ../../howtos/themes.rst:646
 msgid ""
 "Our scss file is now included in our theme, it will be automatically "
 "compiled, minified and combined with all Odoo’s assets."
 msgstr ""
+"Наш файл scss теперь включен в нашу тему, он будет автоматически "
+"компилироваться, минимизироваться и объединяться со всеми активами Odoo."
 
 #: ../../howtos/themes.rst:652
 msgid "Create Snippets"
-msgstr ""
+msgstr "Создать фрагменты"
 
 #: ../../howtos/themes.rst:654
 msgid ""
 "Since snippets are how users design and layout pages, they are the most "
 "important element of your design. Let’s create a snippet for our Service "
-"page. The snippet will display three testimonials and it will be editable"
-" by the end user using the Website Builder UI. Navigate to the view "
-"folder and create an XML file called **snippets.xml**. Add the default "
-"Odoo xml markup and copy/paste the following code. The template contains "
-"the HTML markup that will be displayed by the snippet."
+"page. The snippet will display three testimonials and it will be editable by"
+" the end user using the Website Builder UI. Navigate to the view folder and "
+"create an XML file called **snippets.xml**. Add the default Odoo xml markup "
+"and copy/paste the following code. The template contains the HTML markup "
+"that will be displayed by the snippet."
 msgstr ""
+"Поскольку фрагменты - это то, как пользователи создают и размечают страницы,"
+" они являются наиболее важным элементом вашего дизайна. Давайте создадим "
+"фрагмент для нашей страницы сервиса. Фрагмент будет отображать три отзыва и "
+"будет доступен для редактирования конечному пользователю с помощью "
+"пользовательского интерфейса Website Builder. Перейдите в папку просмотра и "
+"создайте файл XML с именем ** snippets.xml **. Добавьте стандартную разметку"
+" Odoo xml и скопируйте / вставьте следующий код. Шаблон содержит HTML-"
+"разметку, которая будет отображаться во фрагменте."
 
 #: ../../howtos/themes.rst:686
 msgid ""
 "As you can see, we used Bootstrap default classes for our three columns. "
-"It’s not just about layout, these classes **will be triggered by the "
-"Website Builder to make them resizable by the user**."
+"It’s not just about layout, these classes **will be triggered by the Website"
+" Builder to make them resizable by the user**."
 msgstr ""
+"Как вы можете видеть, мы использовали классы Bootstrap по умолчанию для "
+"наших трех столбцов. Это не просто макет, эти классы ** будут запускаться "
+"конструктором веб-сайтов, чтобы пользователь мог изменять их размеры **."
 
 #: ../../howtos/themes.rst:688
 msgid ""
-"The previous code will create the snippet’s content, but we still need to"
-" place it into the editor bar, so the user will be able to drag&drop it "
-"into the page. Copy/paste this template in your **snippets.xml** file."
+"The previous code will create the snippet’s content, but we still need to "
+"place it into the editor bar, so the user will be able to drag&drop it into "
+"the page. Copy/paste this template in your **snippets.xml** file."
 msgstr ""
+"Предыдущий код создаст содержимое фрагмента, но нам все равно нужно "
+"поместить его в панель редактора, чтобы пользователь мог перетащить его на "
+"страницу. Скопируйте / вставьте этот шаблон в ваш файл ** snippets.xml **."
 
 #: ../../howtos/themes.rst:701
 msgid ""
 "Using xpath, we are targeting a particular element with id "
 "``snippet_structure``. This means that the snippet will appear in the "
-"Structure tab. If you want to change the destination tab, you have just "
-"to replace the ``id`` value in the xpath expression."
+"Structure tab. If you want to change the destination tab, you have just to "
+"replace the ``id`` value in the xpath expression."
 msgstr ""
+"Используя xpath, мы нацеливаемся на конкретный элемент с идентификатором `` "
+"snippet_structure``. Это означает, что фрагмент появится на вкладке "
+"Структура. Если вы хотите изменить вкладку назначения, вам просто нужно "
+"заменить значение `` id`` в выражении xpath."
 
 #: ../../howtos/themes.rst:713
 msgid "Tab Name"
-msgstr ""
+msgstr "Название вкладки"
 
 #: ../../howtos/themes.rst:713
 msgid "Xpath expression"
-msgstr ""
+msgstr "Выражение Xpath"
 
 #: ../../howtos/themes.rst:715
 msgid "Structure"
-msgstr ""
+msgstr "Структура"
 
 #: ../../howtos/themes.rst:715
 msgid "``//div[@id='snippet_structure']``"
-msgstr ""
+msgstr "`` // ДИВ [@ ID = &#39;snippet_structure&#39;] ``"
 
 #: ../../howtos/themes.rst:716
 msgid "Content"
-msgstr ""
+msgstr "содержание"
 
 #: ../../howtos/themes.rst:716
 msgid "``//div[@id='snippet_content']``"
-msgstr ""
+msgstr "`` // ДИВ [@ ID = &#39;snippet_content&#39;] ``"
 
 #: ../../howtos/themes.rst:717
 msgid "Feature"
-msgstr ""
+msgstr "Особенность"
 
 #: ../../howtos/themes.rst:717
 msgid "``//div[@id='snippet_feature']``"
-msgstr ""
+msgstr "`` // ДИВ [@ ID = &#39;snippet_feature&#39;] ``"
 
 #: ../../howtos/themes.rst:718
 msgid "Effect"
-msgstr ""
+msgstr "эффект"
 
 #: ../../howtos/themes.rst:718
 msgid "``//div[@id='snippet_effect']``"
-msgstr ""
+msgstr "`` // ДИВ [@ ID = &#39;snippet_effect&#39;] ``"
 
 #: ../../howtos/themes.rst:721
 msgid ""
-"The ``<t>`` tag will call our snippet's template and will assign a "
-"thumbnail placed in the img folder. You can now drag your snippet from "
-"the snippet bar, drop it in your page and see the result."
+"The ``<t>`` tag will call our snippet's template and will assign a thumbnail"
+" placed in the img folder. You can now drag your snippet from the snippet "
+"bar, drop it in your page and see the result."
 msgstr ""
+"`` <t> Тег `` вызовет шаблон нашего фрагмента и назначит миниатюру, "
+"помещенную в папку img. Теперь вы можете перетащить свой фрагмент из панели "
+"фрагментов, перетащить его на страницу и увидеть результат."
 
 #: ../../howtos/themes.rst:728
 msgid "Snippet options"
-msgstr ""
+msgstr "Варианты фрагмента"
 
 #: ../../howtos/themes.rst:730
 msgid ""
-"Options allow publishers to edit a snippet’s appearance using the Website"
-" Builder’s UI. Using Website Builder functionalities, you can create "
-"snippet options easily and automatically add them to the UI."
+"Options allow publishers to edit a snippet’s appearance using the Website "
+"Builder’s UI. Using Website Builder functionalities, you can create snippet "
+"options easily and automatically add them to the UI."
 msgstr ""
+"Параметры позволяют издателям редактировать внешний вид фрагмента с помощью "
+"пользовательского интерфейса конструктора веб-сайтов. Используя "
+"функциональные возможности Website Builder, вы можете легко создавать "
+"параметры фрагментов и автоматически добавлять их в пользовательский "
+"интерфейс."
 
 #: ../../howtos/themes.rst:734
 msgid "Options group properties"
-msgstr ""
+msgstr "Свойства группы параметров"
 
 #: ../../howtos/themes.rst:736
 msgid ""
-"Options are wrapped in groups. Groups can have properties that define how"
-" the included options will interact with the user interface."
+"Options are wrapped in groups. Groups can have properties that define how "
+"the included options will interact with the user interface."
 msgstr ""
+"Параметры заключены в группы. Группы могут иметь свойства, которые "
+"определяют, как включенные опции будут взаимодействовать с пользовательским "
+"интерфейсом."
 
 #: ../../howtos/themes.rst:738
 msgid "``data-selector=\"[css selector(s)]\"``"
-msgstr ""
+msgstr "`` data-selector = &quot;[css selector (s)]&quot; ``"
 
 #: ../../howtos/themes.rst:739
 msgid "Bind all the options included into the group to a particular element."
-msgstr ""
+msgstr "Свяжите все опции, включенные в группу, с определенным элементом."
 
 #: ../../howtos/themes.rst:740
 msgid "``data-js=\" custom method name \"``"
-msgstr ""
+msgstr "`` data-js = &quot;имя пользовательского метода&quot; ``"
 
 #: ../../howtos/themes.rst:741
 msgid "Is used to bind custom Javascript methods."
-msgstr ""
+msgstr "Используется для привязки пользовательских методов Javascript."
 
 #: ../../howtos/themes.rst:742
 msgid "``data-drop-in=\"[css selector(s)]\"``"
-msgstr ""
+msgstr "`` data-drop-in = &quot;[css selector (s)]&quot; ``"
 
 #: ../../howtos/themes.rst:743
 msgid "Defines the list of elements where the snippet can be dropped into."
-msgstr ""
+msgstr "Определяет список элементов, в которые можно вставить фрагмент."
 
 #: ../../howtos/themes.rst:745
 msgid "``data-drop-near=\"[css selector(s)]\"``"
-msgstr ""
+msgstr "`` data-drop-near = &quot;[css selector (s)]&quot; ``"
 
 #: ../../howtos/themes.rst:745
 msgid "Defines the list of elements that the snippet can be dropped beside."
 msgstr ""
+"Определяет список элементов, рядом с которыми можно отбросить фрагмент."
 
 #: ../../howtos/themes.rst:748
 msgid "Default option methods"
-msgstr ""
+msgstr "Методы опций по умолчанию"
 
 #: ../../howtos/themes.rst:750
 msgid ""
-"Options apply standard CSS classes to the snippet. Depending on the "
-"method that you choose, the UI will behave differently."
+"Options apply standard CSS classes to the snippet. Depending on the method "
+"that you choose, the UI will behave differently."
 msgstr ""
+"Опции применяют стандартные классы CSS к фрагменту. В зависимости от "
+"выбранного вами метода пользовательский интерфейс будет вести себя по-"
+"разному."
 
 #: ../../howtos/themes.rst:753
 msgid "``data-select-class=\"[class name]\"``"
-msgstr ""
+msgstr "`` data-select-class = &quot;[имя класса]&quot; ``"
 
 #: ../../howtos/themes.rst:753
 msgid ""
-"More data-select-class in the same group defines a list of classes that "
-"the user can choose to apply. Only one option can be enabled at a time."
+"More data-select-class in the same group defines a list of classes that the "
+"user can choose to apply. Only one option can be enabled at a time."
 msgstr ""
+"Больше data-select-class в той же группе определяет список классов, которые "
+"пользователь может выбрать для применения. Только одна опция может быть "
+"включена одновременно."
 
 #: ../../howtos/themes.rst:756
 msgid "``data-toggle-class=\"[class name]\"``"
-msgstr ""
+msgstr "`` data-toggle-class = &quot;[имя класса]&quot; ``"
 
 #: ../../howtos/themes.rst:756
 msgid ""
-"The data-toggle-class is used to apply one or more CSS classes from the "
-"list to a snippet. Multiple selections can be applied at once."
+"The data-toggle-class is used to apply one or more CSS classes from the list"
+" to a snippet. Multiple selections can be applied at once."
 msgstr ""
+"Data-toggle-class используется для применения одного или нескольких CSS-"
+"классов из списка к фрагменту. Несколько вариантов могут быть применены "
+"одновременно."
 
 #: ../../howtos/themes.rst:758
 msgid "Let's demonstrate how default options work with a basic example."
 msgstr ""
+"Давайте продемонстрируем, как работают параметры по умолчанию на базовом "
+"примере."
 
 #: ../../howtos/themes.rst:760
 msgid ""
-"We start by adding a new file in our views folder - name it "
-"**options.xml** and add the default Odoo XML markup. Create a new "
-"template copy/pasting the following"
+"We start by adding a new file in our views folder - name it **options.xml** "
+"and add the default Odoo XML markup. Create a new template copy/pasting the "
+"following"
 msgstr ""
+"Мы начнем с добавления нового файла в нашу папку представлений - назовите "
+"его ** options.xml ** и добавим разметку Odoo XML по умолчанию. Создайте "
+"новый шаблон, скопируйте / вставьте следующее"
 
 #: ../../howtos/themes.rst:782
 msgid ""
-"The previous template will inherit the default **snippet_options "
-"template** adding our options after the **background** options (xpath "
-"expr attribute). To place your options in a particular order, inspect the"
-" **snippet_options template** from the **website module** and add your "
-"options before/after the desired position."
+"The previous template will inherit the default **snippet_options template** "
+"adding our options after the **background** options (xpath expr attribute). "
+"To place your options in a particular order, inspect the **snippet_options "
+"template** from the **website module** and add your options before/after the"
+" desired position."
 msgstr ""
+"Предыдущий шаблон наследует шаблон ** snippet_options по умолчанию **, "
+"добавляя наши параметры после параметров ** background ** (атрибут xpath "
+"expr). Чтобы разместить параметры в определенном порядке, просмотрите шаблон"
+" ** snippet_options ** из модуля ** веб-сайта ** и добавьте параметры до / "
+"после требуемой позиции."
 
 #: ../../howtos/themes.rst:785
 msgid ""
-"As you can see, we wrapped all our options inside a DIV tag that will "
-"group our options and that will target them to the right selector "
-"(``data-selector=\".snippet_testimonial\"``)."
+"As you can see, we wrapped all our options inside a DIV tag that will group "
+"our options and that will target them to the right selector (``data-"
+"selector=\".snippet_testimonial\"``)."
 msgstr ""
+"Как вы можете видеть, мы обернули все наши опции в тег DIV, который "
+"сгруппирует наши опции и нацелит их на правильный селектор (`` data-selector"
+" = &quot;. Snippet_testimonial&quot; ``)."
 
 #: ../../howtos/themes.rst:789
 msgid ""
 "To define our options we applied ``data-select-class`` attributes to the "
-"``li`` elements. When the user selects an option, the class contained in "
-"the attribute will automatically be applied to the element."
+"``li`` elements. When the user selects an option, the class contained in the"
+" attribute will automatically be applied to the element."
 msgstr ""
+"Для определения наших опций мы применили атрибуты `` data-select-class`` к "
+"элементам `` li``. Когда пользователь выбирает параметр, класс, содержащийся"
+" в атрибуте, автоматически применяется к элементу."
 
 #: ../../howtos/themes.rst:793
 msgid ""
-"Since ``selectClass`` method avoids multiple selections, the last "
-"\"empty\" option will reset the snippet to default."
+"Since ``selectClass`` method avoids multiple selections, the last \"empty\" "
+"option will reset the snippet to default."
 msgstr ""
+"Поскольку метод `` selectClass`` позволяет избежать множественного выбора, "
+"последний «пустой» параметр сбрасывает фрагмент кода по умолчанию."
 
 #: ../../howtos/themes.rst:796
 msgid "Add **options.xml** to ``__manifest__.py`` and update your theme."
 msgstr ""
+"Добавьте ** options.xml ** в `` __manifest __. Py`` и обновите вашу тему."
 
 #: ../../howtos/themes.rst:800
 msgid ""
-"Dropping our snippet onto the page, you will notice that our new options "
-"are automatically added to the customize menu. Inspecting the page, you "
-"will also notice that the class will be applied to the element when "
-"selecting an option."
+"Dropping our snippet onto the page, you will notice that our new options are"
+" automatically added to the customize menu. Inspecting the page, you will "
+"also notice that the class will be applied to the element when selecting an "
+"option."
 msgstr ""
+"Поместив наш фрагмент на страницу, вы заметите, что наши новые опции "
+"автоматически добавляются в меню настройки. Осматривая страницу, вы также "
+"заметите, что класс будет применен к элементу при выборе опции."
 
 #: ../../howtos/themes.rst:804
 msgid ""
-"Let’s create some css rules in order to provide a visual feedback for our"
-" options. Open our **style.scss** file and add the following"
+"Let’s create some css rules in order to provide a visual feedback for our "
+"options. Open our **style.scss** file and add the following"
 msgstr ""
+"Давайте создадим некоторые правила CSS, чтобы обеспечить визуальную обратную"
+" связь для наших опций. Откройте наш файл ** style.scss ** и добавьте "
+"следующее"
 
 #: ../../howtos/themes.rst:832
 msgid "Great! We successfully created options for our snippet."
-msgstr ""
+msgstr "Большой! Мы успешно создали параметры для нашего фрагмента."
 
 #: ../../howtos/themes.rst:834
 msgid ""
-"Any time the publisher clicks on an option, the system will add the class"
-" specified in the data-select-class attribute."
+"Any time the publisher clicks on an option, the system will add the class "
+"specified in the data-select-class attribute."
 msgstr ""
+"Каждый раз, когда издатель нажимает на опцию, система добавляет класс, "
+"указанный в атрибуте data-select-class."
 
 #: ../../howtos/themes.rst:836
 msgid ""
-"By replacing ``data-select-class`` with ``data-toggle-class`` you will be"
-" able to select more classes at the same time."
+"By replacing ``data-select-class`` with ``data-toggle-class`` you will be "
+"able to select more classes at the same time."
 msgstr ""
+"Заменив `` data-select-class`` на `` data-toggle-class``, вы сможете выбрать"
+" больше классов одновременно."
 
 #: ../../howtos/themes.rst:841
 msgid "Javascript Options"
-msgstr ""
+msgstr "Параметры Javascript"
 
 #: ../../howtos/themes.rst:843
 msgid ""
@@ -946,14 +1224,21 @@ msgid ""
 "perform simple class change operations. But what if your snippet’s "
 "customization needs something more?"
 msgstr ""
+"`` data-select-class`` и `` data-toggle-class`` отлично подходят, если вам "
+"нужно выполнить простые операции по изменению класса. Но что, если для "
+"настройки вашего фрагмента нужно нечто большее?"
 
 #: ../../howtos/themes.rst:846
 msgid ""
-"As we said before, ``data-js`` propriety can be assigned to an options "
-"group in order to define a custom method. Let’s create one for our "
-"*testimonials snippet* by adding a ``data-js`` attribute to the option’s "
-"group div that we created earlier."
+"As we said before, ``data-js`` propriety can be assigned to an options group"
+" in order to define a custom method. Let’s create one for our *testimonials "
+"snippet* by adding a ``data-js`` attribute to the option’s group div that we"
+" created earlier."
 msgstr ""
+"Как мы уже говорили ранее, свойство `` data-js`` может быть назначено группе"
+" параметров для определения пользовательского метода. Давайте создадим его "
+"для нашего * фрагмента отзыва *, добавив атрибут `` data-js`` в группу div "
+"опции, которую мы создали ранее."
 
 #: ../../howtos/themes.rst:854
 msgid ""
@@ -961,324 +1246,402 @@ msgid ""
 "``snippet_testimonial_options`` method each time the publisher enters in "
 "edit mode."
 msgstr ""
+"Выполнено. С этого момента конструктор веб-сайтов будет искать метод `` "
+"snippet_testimonial_options`` каждый раз, когда издатель входит в режим "
+"редактирования."
 
 #: ../../howtos/themes.rst:858
 msgid ""
 "Let's go one step further by creating a javascript file, name it "
-"**tutorial_editor.js** and place it into the **static** folder.  "
-"Copy/paste the following code"
+"**tutorial_editor.js** and place it into the **static** folder.  Copy/paste "
+"the following code"
 msgstr ""
+"Давайте сделаем еще один шаг, создав файл javascript, назовите его ** "
+"tutorial_editor.js ** и поместите в папку ** static **. Скопируйте / "
+"вставьте следующий код"
 
 #: ../../howtos/themes.rst:870
 msgid ""
-"Great, we successfully created our javascript editor file. This file will"
-" contain all the javascript functions used by our snippets in edit mode. "
+"Great, we successfully created our javascript editor file. This file will "
+"contain all the javascript functions used by our snippets in edit mode. "
 "Let’s create a new function for our testimonial snippet using the "
 "``snippet_testimonial_options`` method that we created before."
 msgstr ""
+"Отлично, мы успешно создали наш файл редактора JavaScript. Этот файл будет "
+"содержать все функции javascript, используемые нашими фрагментами в режиме "
+"редактирования. Давайте создадим новую функцию для нашего фрагмента отзыва, "
+"используя метод `` snippet_testimonial_options``, который мы создали ранее."
 
 #: ../../howtos/themes.rst:886
 msgid ""
 "As you will notice, we used a method called ``onFocus`` to trigger our "
-"function. The Website Builder provides several events you can use to "
-"trigger your custom functions."
+"function. The Website Builder provides several events you can use to trigger"
+" your custom functions."
 msgstr ""
+"Как вы заметите, мы использовали метод `` onFocus`` для запуска нашей "
+"функции. Конструктор веб-сайтов предоставляет несколько событий, которые "
+"можно использовать для запуска пользовательских функций."
 
 #: ../../howtos/themes.rst:889
 msgid "Event"
-msgstr ""
+msgstr "Событие"
 
 #: ../../howtos/themes.rst:889
 msgid "Description"
-msgstr ""
+msgstr "Описание"
 
 #: ../../howtos/themes.rst:891
 msgid "``start``"
-msgstr ""
+msgstr "`` Start``"
 
 #: ../../howtos/themes.rst:891
 msgid ""
 "Fires when the publisher selects the snippet for the first time in an "
 "editing session or when the snippet is drag-dropped into the page"
 msgstr ""
+"Срабатывает, когда издатель впервые выбирает фрагмент в сеансе "
+"редактирования или когда фрагмент перетаскивается на страницу"
 
 #: ../../howtos/themes.rst:892
 msgid "``onFocus``"
-msgstr ""
+msgstr "`` OnFocus``"
 
 #: ../../howtos/themes.rst:892
 msgid ""
-"Fires each time the snippet is selected by the user or when the snippet "
-"is drag-dropped into the page."
+"Fires each time the snippet is selected by the user or when the snippet is "
+"drag-dropped into the page."
 msgstr ""
+"Срабатывает каждый раз, когда фрагмент выбирается пользователем или когда "
+"фрагмент перетаскивается на страницу."
 
 #: ../../howtos/themes.rst:893
 msgid "``onBlur``"
-msgstr ""
+msgstr "`` OnBlur``"
 
 #: ../../howtos/themes.rst:893
 msgid "This event occurs when a snippet loses focus."
-msgstr ""
+msgstr "Это событие происходит, когда фрагмент теряет фокус."
 
 #: ../../howtos/themes.rst:894
 msgid "``onClone``"
-msgstr ""
+msgstr "`` OnClone``"
 
 #: ../../howtos/themes.rst:894
 msgid "Fires just after a snippet is duplicated."
-msgstr ""
+msgstr "Срабатывает сразу после дублирования фрагмента."
 
 #: ../../howtos/themes.rst:895
 msgid "``onRemove``"
-msgstr ""
+msgstr "`` OnRemove``"
 
 #: ../../howtos/themes.rst:895
 msgid "It occurs just before that the snippet is removed."
-msgstr ""
+msgstr "Это происходит непосредственно перед тем, как снимет фрагмент."
 
 #: ../../howtos/themes.rst:896
 msgid "``onBuilt``"
-msgstr ""
+msgstr "`` OnBuilt``"
 
 #: ../../howtos/themes.rst:896
 msgid ""
-"Fires just after that the snippet is drag and dropped into a drop zone. "
-"When this event is triggered, the content is already inserted in the "
-"page."
+"Fires just after that the snippet is drag and dropped into a drop zone. When"
+" this event is triggered, the content is already inserted in the page."
 msgstr ""
+"Срабатывает сразу после этого, фрагмент перетаскивается в зону сброса. Когда"
+" это событие инициируется, содержимое уже вставлено на страницу."
 
 #: ../../howtos/themes.rst:897
 msgid "``cleanForSave``"
-msgstr ""
+msgstr "`` cleanForSave``"
 
 #: ../../howtos/themes.rst:897
 msgid "It trigger before the publisher save the page."
-msgstr ""
+msgstr "Это срабатывает до того, как издатель сохранит страницу."
 
 #: ../../howtos/themes.rst:900
 msgid ""
 "Let’s add our new javascript files to the editor assets list. Go back to "
-"**assets.xml** and create a new template like the previous one. This time"
-" we have to inherit ``assets_editor`` instead of ``assets_frontend``."
+"**assets.xml** and create a new template like the previous one. This time we"
+" have to inherit ``assets_editor`` instead of ``assets_frontend``."
 msgstr ""
+"Давайте добавим наши новые файлы javascript в список ресурсов редактора. "
+"Вернитесь к ** assets.xml ** и создайте новый шаблон, подобный предыдущему. "
+"На этот раз мы должны унаследовать `` assets_editor`` вместо `` "
+"assets_frontend``."
 
 #: ../../howtos/themes.rst:917
 msgid ""
-"Let’s test our new javascript function. Enter in Edit mode and drop into "
-"the page. You should now see the javascript alert that we bound on the "
-"``onFocus`` event. If you close it, then click outside of your snippet "
-"and then click in it again, the event will trigger again."
+"Let’s test our new javascript function. Enter in Edit mode and drop into the"
+" page. You should now see the javascript alert that we bound on the "
+"``onFocus`` event. If you close it, then click outside of your snippet and "
+"then click in it again, the event will trigger again."
 msgstr ""
+"Давайте проверим нашу новую функцию JavaScript. Войдите в режим "
+"редактирования и перейдите на страницу. Теперь вы должны увидеть "
+"предупреждение javascript, которое мы связали с событием `` onFocus``. Если "
+"вы закроете его, затем щелкните за пределами своего фрагмента, а затем снова"
+" щелкните по нему, событие снова сработает."
 
 #: ../../howtos/themes.rst:927
 msgid "Editing Reference Guide"
-msgstr ""
+msgstr "Редактирование справочного руководства"
 
 #: ../../howtos/themes.rst:929
 msgid ""
-"Basically all the elements in a page can be edited by the publisher. "
-"Besides that, some element types and css classes will trigger special "
-"Website Builder functionalities when edited."
+"Basically all the elements in a page can be edited by the publisher. Besides"
+" that, some element types and css classes will trigger special Website "
+"Builder functionalities when edited."
 msgstr ""
+"В основном все элементы на странице могут быть отредактированы издателем. "
+"Кроме того, некоторые типы элементов и классы css будут вызывать специальные"
+" функциональные возможности Website Builder при редактировании."
 
 #: ../../howtos/themes.rst:933
 msgid "Layout"
-msgstr ""
+msgstr "раскладка"
 
 #: ../../howtos/themes.rst:936
 msgid "``<section />``"
-msgstr ""
+msgstr "`` <section /> ``"
 
 #: ../../howtos/themes.rst:936
 msgid ""
-"Any section element can be edited like a block of content. The publisher "
-"can move or duplicate it. It’s also possible to set a background image or"
-" color. Section is the standard main container of any snippet."
+"Any section element can be edited like a block of content. The publisher can"
+" move or duplicate it. It’s also possible to set a background image or "
+"color. Section is the standard main container of any snippet."
 msgstr ""
+"Любой элемент раздела может быть отредактирован как блок контента. Издатель "
+"может переместить или продублировать его. Также возможно установить фоновое "
+"изображение или цвет. Секция является стандартным основным контейнером "
+"любого фрагмента."
 
 #: ../../howtos/themes.rst:939
 msgid "``.row > .col-lg-*``"
-msgstr ""
+msgstr "`` .row&gt; .col-lg- * ``"
 
 #: ../../howtos/themes.rst:939
 msgid ""
-"Any large bootstrap columns directly descending from a .row element, will"
-" be resizable by the publisher."
+"Any large bootstrap columns directly descending from a .row element, will be"
+" resizable by the publisher."
 msgstr ""
+"Любые большие столбцы начальной загрузки, непосредственно нисходящие от "
+"элемента .row, будут изменять размеры издателя."
 
 #: ../../howtos/themes.rst:942
 msgid "``contenteditable=\"False\"``"
-msgstr ""
+msgstr "`` Contenteditable = &quot;False&quot;, ``"
 
 #: ../../howtos/themes.rst:942
-msgid "This attribute will prevent editing to the element and all its children."
+msgid ""
+"This attribute will prevent editing to the element and all its children."
 msgstr ""
+"Этот атрибут предотвратит редактирование элемента и всех его дочерних "
+"элементов."
 
 #: ../../howtos/themes.rst:945
 msgid "``contenteditable=\"True\"``"
-msgstr ""
+msgstr "`` Contenteditable = &quot;True&quot; ``"
 
 #: ../../howtos/themes.rst:945
 msgid ""
-"Apply it to an element inside a contenteditable=\"False\" element in "
-"order to create an exception and make the element and its children "
-"editable."
+"Apply it to an element inside a contenteditable=\"False\" element in order "
+"to create an exception and make the element and its children editable."
 msgstr ""
+"Примените его к элементу внутри элемента contenteditable = "
+"&quot;False&quot;, чтобы создать исключение и сделать элемент и его дочерние"
+" элементы редактируемыми."
 
 #: ../../howtos/themes.rst:948
 msgid "``<a href=”#” />``"
-msgstr ""
+msgstr "`` <a href=”#” />``</a>"
 
 #: ../../howtos/themes.rst:948
 msgid ""
-"In Edit Mode, any link can be edited and styled. Using the “Link Modal” "
-"it’s also possible to replace it with a button."
+"In Edit Mode, any link can be edited and styled. Using the “Link Modal” it’s"
+" also possible to replace it with a button."
 msgstr ""
+"В режиме редактирования любую ссылку можно редактировать и стилизовать. С "
+"помощью «Link Modal» также можно заменить его кнопкой."
 
 #: ../../howtos/themes.rst:951
 msgid "Media"
-msgstr ""
+msgstr "СМИ"
 
 #: ../../howtos/themes.rst:953
 msgid "``<span class=”fa” />``"
-msgstr ""
+msgstr "` ` <span class=”fa” />`` `</span>"
 
 #: ../../howtos/themes.rst:953
 msgid ""
-"Pictogram elements. Editing this element will open the Pictogram library "
-"to replace the icon. It’s also possible to transform the elements using "
-"CSS."
+"Pictogram elements. Editing this element will open the Pictogram library to "
+"replace the icon. It’s also possible to transform the elements using CSS."
 msgstr ""
+"Элементы пиктограммы. Редактирование этого элемента откроет библиотеку "
+"Pictogram, чтобы заменить значок. Также возможно преобразовать элементы, "
+"используя CSS."
 
 #: ../../howtos/themes.rst:956
 msgid "``<img />``"
-msgstr ""
+msgstr "`` <img /> ``"
 
 #: ../../howtos/themes.rst:956
 msgid ""
 "Once clicked, the Image Library will open and you can replace images. "
 "Transformation is also possible for this kind of element."
 msgstr ""
+"После нажатия откроется библиотека изображений, и вы сможете заменить "
+"изображения. Преобразование также возможно для этого вида элемента."
 
 #: ../../howtos/themes.rst:966
 msgid ""
 "This html structure will create an ``<iframe>`` element editable by the "
 "publisher."
 msgstr ""
+"Эта структура HTML создаст `` <iframe> `` элемент редактируемый издателем."
 
 #: ../../howtos/themes.rst:971
 msgid "SEO best practice"
-msgstr ""
+msgstr "SEO лучшая практика"
 
 #: ../../howtos/themes.rst:974
 msgid "Facilitate content insertion"
-msgstr ""
+msgstr "Облегчить вставку контента"
 
 #: ../../howtos/themes.rst:976
 msgid ""
-"Modern search engine algorithms increasingly focus on content, which "
-"means there is less focus on **keyword saturation** and more focus on "
-"whether or not the content is **actually relevant to the keywords**."
+"Modern search engine algorithms increasingly focus on content, which means "
+"there is less focus on **keyword saturation** and more focus on whether or "
+"not the content is **actually relevant to the keywords**."
 msgstr ""
+"Современные алгоритмы поисковых систем все больше ориентируются на контент, "
+"а это означает, что меньше внимания уделяется ** насыщенности ключевых слов "
+"** и больше внимания уделяется тому, действительно ли контент ** "
+"действительно соответствует ключевым словам **."
 
 #: ../../howtos/themes.rst:978
 msgid ""
 "As content is so important for SEO, you should concentrate on giving "
-"publishers the tools to easily insert it. It is important that your "
-"snippets are “content-responsive”, meaning that they should fit the "
-"publisher’s content regardless of size."
+"publishers the tools to easily insert it. It is important that your snippets"
+" are “content-responsive”, meaning that they should fit the publisher’s "
+"content regardless of size."
 msgstr ""
+"Поскольку контент так важен для SEO, вы должны сосредоточиться на том, чтобы"
+" дать издателям инструменты, чтобы легко его вставить. Важно, чтобы ваши "
+"фрагменты были «реагирующими на контент», что означает, что они должны "
+"соответствовать контенту издателя независимо от его размера."
 
 #: ../../howtos/themes.rst:980
 msgid ""
 "Let’s have a look to this example of a classic two column snippet, "
 "implemented in two different ways."
 msgstr ""
+"Давайте посмотрим на этот пример классического фрагмента из двух столбцов, "
+"реализованного двумя различными способами."
 
 #: ../../howtos/themes.rst:990
 msgid "**Bad**"
-msgstr ""
+msgstr "**Плохо**"
 
 #: ../../howtos/themes.rst:992
 msgid ""
-"Using fixed image, the publisher will be forced to limit the text in "
-"order to follow the layout."
+"Using fixed image, the publisher will be forced to limit the text in order "
+"to follow the layout."
 msgstr ""
+"Используя фиксированное изображение, издатель будет вынужден ограничить "
+"текст, чтобы следовать макету."
 
 #: ../../howtos/themes.rst:1002
 msgid "**Good**"
-msgstr ""
+msgstr "**Хорошо**"
 
 #: ../../howtos/themes.rst:1004
 msgid ""
-"Using background images that fit the column height, the publisher will be"
-" free to add the content regardless of the image’s height."
+"Using background images that fit the column height, the publisher will be "
+"free to add the content regardless of the image’s height."
 msgstr ""
+"Используя фоновые изображения, которые соответствуют высоте столбца, "
+"издатель может добавлять контент независимо от высоты изображения."
 
 #: ../../howtos/themes.rst:1009
 msgid "Page segmentation"
-msgstr ""
+msgstr "Сегментация страницы"
 
 #: ../../howtos/themes.rst:1011
 msgid ""
 "Basically, page segmentation means that a page is divided into several "
 "separate parts and these parts are treated as separate entries by search "
-"engines. When you design pages or snippets, you should be sure to use the"
-" right tags in order to facilitate search engine indexing."
+"engines. When you design pages or snippets, you should be sure to use the "
+"right tags in order to facilitate search engine indexing."
 msgstr ""
+"По сути, сегментация страницы означает, что страница разделена на несколько "
+"отдельных частей, и эти части рассматриваются поисковыми системами как "
+"отдельные записи. При разработке страниц или фрагментов вы должны "
+"обязательно использовать правильные теги, чтобы упростить индексацию в "
+"поисковых системах."
 
 #: ../../howtos/themes.rst:1015
 msgid "``<article>``"
-msgstr ""
+msgstr "`` <article> ``"
 
 #: ../../howtos/themes.rst:1015
 msgid ""
-"Specifies an independent block of content. Within it should be a piece of"
-" self-contained content that should make sense on its own. You can nest "
-"``<article>`` elements within one another. In this case, it’s implied "
-"that the nested elements are related to the outer ``<article>`` element."
+"Specifies an independent block of content. Within it should be a piece of "
+"self-contained content that should make sense on its own. You can nest "
+"``<article>`` elements within one another. In this case, it’s implied that "
+"the nested elements are related to the outer ``<article>`` element."
 msgstr ""
+"Определяет независимый блок контента. Внутри него должен быть фрагмент "
+"автономного контента, который должен иметь смысл сам по себе. Вы можете "
+"вкладывать <article> составляющие элементы друг в друге. В этом случае "
+"подразумевается, что вложенные элементы связаны с внешним `` <article> "
+"Элемент."
 
 #: ../../howtos/themes.rst:1018
 msgid "``<header>``"
-msgstr ""
+msgstr "`` <header> ``"
 
 #: ../../howtos/themes.rst:1018
 msgid ""
 "Indicates the header section of a self-contained block of content (an "
 "``<article>``)."
 msgstr ""
+"Указывает на раздел заголовка автономного блока контента (`` <article> ``)."
 
 #: ../../howtos/themes.rst:1021
 msgid "``<section>``"
-msgstr ""
+msgstr "`` <section> ``"
 
 #: ../../howtos/themes.rst:1021
 msgid ""
 "Is the snippet default tag and it specifies a subsection of a block of "
-"content. It can be used to split ``<article>`` content into several "
-"parts. It’s advisable to use a heading element (``<h1>`` – ``<h6>``) to "
-"define the section’s topic."
+"content. It can be used to split ``<article>`` content into several parts. "
+"It’s advisable to use a heading element (``<h1>`` – ``<h6>``) to define the "
+"section’s topic."
 msgstr ""
+"Является тегом фрагмента по умолчанию и определяет подраздел блока "
+"содержимого. Это может быть использовано для разделения `` <article> "
+"Содержание на несколько частей. Желательно использовать заголовочный элемент"
+" (`` <h1> `` - `` <h6> ``) чтобы определить тему раздела."
 
 #: ../../howtos/themes.rst:1031
 msgid "``<hgroup>``"
-msgstr ""
+msgstr "`` <hgroup> ``"
 
 #: ../../howtos/themes.rst:1024
 msgid ""
-"Is used to wrap a section of headings (``<h1>`` - ``<h6>``). A great "
-"example would be an article with both a headline and sub-headline at the "
-"top:"
+"Is used to wrap a section of headings (``<h1>`` - ``<h6>``). A great example"
+" would be an article with both a headline and sub-headline at the top:"
 msgstr ""
+"Используется для переноса раздела заголовков (`` <h1> `` - `` <h6> ``). "
+"Прекрасным примером будет статья с заголовком и подзаголовком вверху:"
 
 #: ../../howtos/themes.rst:1034
 msgid "Describe your page"
-msgstr ""
+msgstr "Опишите свою страницу"
 
 #: ../../howtos/themes.rst:1037
 msgid "Define keywords"
-msgstr ""
+msgstr "Определите ключевые слова"
 
 #: ../../howtos/themes.rst:1038
 msgid ""
@@ -1286,24 +1649,35 @@ msgid ""
 "keywords. You can define them for each page using the built-in “Promote” "
 "function found in the bar at the top."
 msgstr ""
+"Вы должны использовать соответствующие, релевантные ключевые слова и "
+"синонимы для этих ключевых слов. Вы можете определить их для каждой "
+"страницы, используя встроенную функцию «Продвигать», расположенную на панели"
+" вверху."
 
 #: ../../howtos/themes.rst:1041
 msgid "Define a title and a description"
-msgstr ""
+msgstr "Определите заголовок и описание"
 
 #: ../../howtos/themes.rst:1043
 msgid ""
-"Define them using the “Promote” function. Keep your page titles short and"
-" include the main keyword phrase for the page. Good titles evoke an "
-"emotional response, ask a question or promise something."
+"Define them using the “Promote” function. Keep your page titles short and "
+"include the main keyword phrase for the page. Good titles evoke an emotional"
+" response, ask a question or promise something."
 msgstr ""
+"Определите их, используя функцию «Продвигать». Делайте заголовки страниц "
+"короткими и включайте в них ключевое слово для этой страницы. Хорошие "
+"названия вызывают эмоциональный отклик, задают вопрос или обещают что-то."
 
 #: ../../howtos/themes.rst:1046
 msgid ""
-"Descriptions, while not important to search engine rankings, are "
-"extremely important in gaining user click-through. These are an "
-"opportunity to advertise content and to let people searching know exactly"
-" whether the given page contains the information they're looking for. It "
-"is important that titles and descriptions on each page are unique."
+"Descriptions, while not important to search engine rankings, are extremely "
+"important in gaining user click-through. These are an opportunity to "
+"advertise content and to let people searching know exactly whether the given"
+" page contains the information they're looking for. It is important that "
+"titles and descriptions on each page are unique."
 msgstr ""
-
+"Описания, хотя они и не важны для рейтинга в поисковых системах, чрезвычайно"
+" важны для получения кликов пользователей. Это возможность рекламировать "
+"контент и дать людям, которые ищут, точно знать, содержит ли данная страница"
+" информацию, которую они ищут. Важно, чтобы заголовки и описания на каждой "
+"странице были уникальными."

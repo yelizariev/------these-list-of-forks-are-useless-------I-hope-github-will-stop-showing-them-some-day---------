@@ -19,450 +19,549 @@ msgstr ""
 
 #: ../../reference/reports.rst:9
 msgid "QWeb Reports"
-msgstr ""
+msgstr "QWeb Reports"
 
 #: ../../reference/reports.rst:11
 msgid ""
-"Reports are written in HTML/QWeb, like all regular views in Odoo. You can"
-" use the usual :ref:`QWeb control flow tools <reference/qweb>`. The PDF "
+"Reports are written in HTML/QWeb, like all regular views in Odoo. You can "
+"use the usual :ref:`QWeb control flow tools <reference/qweb>`. The PDF "
 "rendering itself is performed by wkhtmltopdf_."
 msgstr ""
+"Отчеты пишутся в HTML / QWeb, как и все обычные представления в Odoo. Вы "
+"можете использовать обычные: ref: `QWeb control flow tools <reference/qweb> "
+"`. Сам рендеринг PDF выполняется wkhtmltopdf_."
 
 #: ../../reference/reports.rst:15
 msgid ""
-"If you want to create a report on a certain model, you will need to "
-"define this :ref:`reference/reports/report` and the "
-":ref:`reference/reports/templates` it will use. If you wish, you can also"
-" specify a specific :ref:`reference/reports/paper_formats` for this "
-"report. Finally, if you need access to more than your model, you can "
-"define a :ref:`reference/reports/custom_reports` class that gives you "
-"access to more models and records in the template."
+"If you want to create a report on a certain model, you will need to define "
+"this :ref:`reference/reports/report` and the "
+":ref:`reference/reports/templates` it will use. If you wish, you can also "
+"specify a specific :ref:`reference/reports/paper_formats` for this report. "
+"Finally, if you need access to more than your model, you can define a "
+":ref:`reference/reports/custom_reports` class that gives you access to more "
+"models and records in the template."
 msgstr ""
+"Если вы хотите создать отчет по определенной модели, вам нужно определить "
+"это: ref: `reference / reports / report` и: ref:` reference / reports / "
+"templates`, который он будет использовать. При желании вы также можете "
+"указать конкретный: ref: `reference / reports / paper_formats` для этого "
+"отчета. Наконец, если вам нужен доступ не только к вашей модели, вы можете "
+"определить класс: ref: `reference / reports / custom_reports`, который "
+"предоставит вам доступ к большему количеству моделей и записей в шаблоне."
 
 #: ../../reference/reports.rst:26
 msgid "Report"
-msgstr ""
+msgstr "отчет"
 
 #: ../../reference/reports.rst:28
 msgid ""
 "Every report must be declared by a :ref:`report action "
 "<reference/actions/report>`."
 msgstr ""
+"Каждый отчет должен быть объявлен действием: ref: `report "
+"<reference/actions/report> `."
 
 #: ../../reference/reports.rst:31
 msgid ""
 "For simplicity, a shortcut ``<report>`` element is available to define a "
 "report, rather than have to set up :ref:`the action "
-"<reference/actions/report>` and its surroundings manually. That "
-"``<report>`` can take the following attributes:"
+"<reference/actions/report>` and its surroundings manually. That ``<report>``"
+" can take the following attributes:"
 msgstr ""
+"Для простоты ярлык `` <report> Элемент `` доступен для определения отчета, а"
+" не для настройки: ref: `действие <reference/actions/report> и его "
+"окрестности вручную. Это `` <report> `` может принимать следующие атрибуты:"
 
 #: ../../reference/reports.rst:36
 msgid "``id``"
-msgstr ""
+msgstr "`` Id``"
 
 #: ../../reference/reports.rst:37
 msgid "the generated record's :term:`external id`"
-msgstr ""
+msgstr "сгенерированная запись: term: `external id`"
 
 #: ../../reference/reports.rst:39 ../../reference/reports.rst:238
 msgid "``name`` (mandatory)"
-msgstr ""
+msgstr "`` имя`` (обязательно)"
 
 #: ../../reference/reports.rst:39 ../../reference/reports.rst:238
 msgid ""
-"only useful as a mnemonic/description of the report when looking for one "
-"in a list of some sort"
+"only useful as a mnemonic/description of the report when looking for one in "
+"a list of some sort"
 msgstr ""
+"полезно только как мнемоника / описание отчета при поиске в списке какого-"
+"либо типа"
 
 #: ../../reference/reports.rst:41
 msgid "``model`` (mandatory)"
-msgstr ""
+msgstr "`` модель`` (обязательно)"
 
 #: ../../reference/reports.rst:42
 msgid "the model your report will be about"
-msgstr ""
+msgstr "модель вашего отчета"
 
 #: ../../reference/reports.rst:43
 msgid "``report_type`` (mandatory)"
-msgstr ""
+msgstr "`` report_type`` (обязательно)"
 
 #: ../../reference/reports.rst:44
 msgid "either ``qweb-pdf`` for PDF reports or ``qweb-html`` for HTML"
 msgstr ""
+"или `` qweb-pdf`` для отчетов в формате PDF или `` qweb-html`` для HTML"
 
 #: ../../reference/reports.rst:45
 msgid "``report_name``"
-msgstr ""
+msgstr "`` report_name``"
 
 #: ../../reference/reports.rst:46
 msgid "the name of your report (which will be the name of the PDF output)"
-msgstr ""
+msgstr "название вашего отчета (который будет именем вывода PDF)"
 
 #: ../../reference/reports.rst:48
 msgid "``groups``"
-msgstr ""
+msgstr "`` groups``"
 
 #: ../../reference/reports.rst:48
 msgid ""
-":class:`~odoo.fields.Many2many` field to the groups allowed to view/use "
-"the current report"
+":class:`~odoo.fields.Many2many` field to the groups allowed to view/use the "
+"current report"
 msgstr ""
+": class: `~ odoo.fields.Many2many` поле для групп, которым разрешено "
+"просматривать / использовать текущий отчет"
 
 #: ../../reference/reports.rst:53
 msgid "``attachment_use``"
-msgstr ""
+msgstr "`` attachment_use``"
 
 #: ../../reference/reports.rst:51
 msgid ""
 "if set to True, the report will be stored as an attachment of the record "
-"using the name generated by the ``attachment`` expression; you can use "
-"this if you need your report to be generated only once (for legal "
-"reasons, for example)"
+"using the name generated by the ``attachment`` expression; you can use this "
+"if you need your report to be generated only once (for legal reasons, for "
+"example)"
 msgstr ""
+"если установлено значение True, отчет будет сохранен как вложение записи, "
+"используя имя, сгенерированное выражением `` attachment``; Вы можете "
+"использовать это, если вам нужно, чтобы ваш отчет был сгенерирован только "
+"один раз (например, по юридическим причинам)"
 
 #: ../../reference/reports.rst:56
 msgid "``attachment``"
-msgstr ""
+msgstr "`` attachment``"
 
 #: ../../reference/reports.rst:56
 msgid ""
 "python expression that defines the name of the report; the record is "
 "acessible as the variable ``object``"
 msgstr ""
+"выражение python, определяющее имя отчета; запись доступна как переменная ``"
+" объект``"
 
 #: ../../reference/reports.rst:60
 msgid "``paperformat``"
-msgstr ""
+msgstr "`` Paperformat``"
 
 #: ../../reference/reports.rst:59
 msgid ""
-"external id of the paperformat you wish to use (defaults to the company's"
-" paperformat if not specified)"
+"external id of the paperformat you wish to use (defaults to the company's "
+"paperformat if not specified)"
 msgstr ""
+"внешний идентификатор формата бумаги, который вы хотите использовать (по "
+"умолчанию используется формат бумаги компании, если он не указан)"
 
 #: ../../reference/reports.rst:62 ../../reference/reports.rst:259
 #: ../../reference/reports.rst:314 ../../reference/reports.rst:324
 msgid "Example::"
-msgstr ""
+msgstr "Пример::"
 
 #: ../../reference/reports.rst:79
 msgid "Report template"
-msgstr ""
+msgstr "Шаблон отчета"
 
 #: ../../reference/reports.rst:83
 msgid "Minimal viable template"
-msgstr ""
+msgstr "Минимальный жизнеспособный шаблон"
 
 #: ../../reference/reports.rst:85
 msgid "A minimal template would look like::"
-msgstr ""
+msgstr "Минимальный шаблон будет выглядеть так:"
 
 #: ../../reference/reports.rst:100
 msgid ""
-"Calling ``external_layout`` will add the default header and footer on "
-"your report. The PDF body will be the content inside the ``<div "
-"class=\"page\">``. The template's ``id`` must be the name specified in "
-"the report declaration; for example ``account.report_invoice`` for the "
-"above report. Since this is a QWeb template, you can access all the "
-"fields of the ``docs`` objects received by the template."
+"Calling ``external_layout`` will add the default header and footer on your "
+"report. The PDF body will be the content inside the ``<div "
+"class=\"page\">``. The template's ``id`` must be the name specified in the "
+"report declaration; for example ``account.report_invoice`` for the above "
+"report. Since this is a QWeb template, you can access all the fields of the "
+"``docs`` objects received by the template."
 msgstr ""
+"Вызов `` external_layout`` добавит заголовок и нижний колонтитул по "
+"умолчанию в ваш отчет. Тело PDF будет содержимым внутри `` <div "
+"class=\"page\"> ``. `` Id`` шаблона должен быть именем, указанным в "
+"объявлении отчета; например, `` account.report_invoice`` для "
+"вышеприведенного отчета. Поскольку это шаблон QWeb, вы можете получить "
+"доступ ко всем полям объектов `` docs` &#39;, полученных шаблоном."
 
 #: ../../reference/reports.rst:107
 msgid "There are some specific variables accessible in reports, mainly:"
 msgstr ""
+"Есть несколько конкретных переменных, доступных в отчетах, в основном:"
 
 #: ../../reference/reports.rst:109
 msgid "``docs``"
-msgstr ""
+msgstr "`` docs``"
 
 #: ../../reference/reports.rst:110
 msgid "records for the current report"
-msgstr ""
+msgstr "записи для текущего отчета"
 
 #: ../../reference/reports.rst:111
 msgid "``doc_ids``"
-msgstr ""
+msgstr "`` doc_ids``"
 
 #: ../../reference/reports.rst:112
 msgid "list of ids for the ``docs`` records"
-msgstr ""
+msgstr "список идентификаторов для записей `` docs``"
 
 #: ../../reference/reports.rst:113
 msgid "``doc_model``"
-msgstr ""
+msgstr "`` doc_model``"
 
 #: ../../reference/reports.rst:114
 msgid "model for the ``docs`` records"
-msgstr ""
+msgstr "модель для записи `` документов``"
 
 #: ../../reference/reports.rst:115
 msgid "``time``"
-msgstr ""
+msgstr "`` Time``"
 
 #: ../../reference/reports.rst:116
 msgid "a reference to :mod:`python:time` from the Python standard library"
-msgstr ""
+msgstr "ссылка на: mod: `python: time` из стандартной библиотеки Python"
 
 #: ../../reference/reports.rst:117
 msgid "``user``"
-msgstr ""
+msgstr "`` user``"
 
 #: ../../reference/reports.rst:118
 msgid "``res.user`` record for the user printing the report"
-msgstr ""
+msgstr "`` res.user`` запись для пользователя, печатающего отчет"
 
 #: ../../reference/reports.rst:120
 msgid "``res_company``"
-msgstr ""
+msgstr "`` res_company``"
 
 #: ../../reference/reports.rst:120
 msgid "record for the current ``user``'s company"
-msgstr ""
+msgstr "запись для текущей `` пользователя`` компании"
 
 #: ../../reference/reports.rst:122
 msgid ""
-"If you wish to access other records/models in the template, you will need"
-" :ref:`a custom report <reference/reports/custom_reports>`."
+"If you wish to access other records/models in the template, you will need "
+":ref:`a custom report <reference/reports/custom_reports>`."
 msgstr ""
+"Если вы хотите получить доступ к другим записям / моделям в шаблоне, вам "
+"потребуется: ref: `пользовательский отчет <reference/reports/custom_reports>"
+" `."
 
 #: ../../reference/reports.rst:126
 msgid "Translatable Templates"
-msgstr ""
+msgstr "Переводимые шаблоны"
 
 #: ../../reference/reports.rst:128
 msgid ""
 "If you wish to translate reports (to the language of a partner, for "
 "example), you need to define two templates:"
 msgstr ""
+"Если вы хотите перевести отчеты (например, на язык партнера), вам нужно "
+"определить два шаблона:"
 
 #: ../../reference/reports.rst:131
 msgid "The main report template"
-msgstr ""
+msgstr "Основной шаблон отчета"
 
 #: ../../reference/reports.rst:132
 msgid "The translatable document"
-msgstr ""
+msgstr "Переводимый документ"
 
 #: ../../reference/reports.rst:134
 msgid ""
-"You can then call the translatable document from your main template with "
-"the attribute ``t-lang`` set to a language code (for example ``fr`` or "
-"``en_US``) or to a record field. You will also need to re-browse the "
-"related records with the proper context if you use fields that are "
-"translatable (like country names, sales conditions, etc.)"
+"You can then call the translatable document from your main template with the"
+" attribute ``t-lang`` set to a language code (for example ``fr`` or "
+"``en_US``) or to a record field. You will also need to re-browse the related"
+" records with the proper context if you use fields that are translatable "
+"(like country names, sales conditions, etc.)"
 msgstr ""
+"Затем вы можете вызвать переводимый документ из вашего основного шаблона с "
+"атрибутом `` t-lang``, для которого установлен код языка (например, `` fr`` "
+"или `` en_US``) или в поле записи. Вам также нужно будет повторно "
+"просмотреть связанные записи в соответствующем контексте, если вы "
+"используете переводимые поля (например, названия стран, условия продаж и т. "
+"Д.)"
 
 #: ../../reference/reports.rst:141
 msgid ""
-"If your report template does not use translatable record fields, re-"
-"browsing the record in another language is *not* necessary and will "
-"impact performances."
+"If your report template does not use translatable record fields, re-browsing"
+" the record in another language is *not* necessary and will impact "
+"performances."
 msgstr ""
+"Если в вашем шаблоне отчета не используются переводимые поля записей, "
+"повторный просмотр записи на другом языке * не * необходим и повлияет на "
+"производительность."
 
 #: ../../reference/reports.rst:144
-msgid "For example, let's look at the Sale Order report from the Sale module::"
+msgid ""
+"For example, let's look at the Sale Order report from the Sale module::"
 msgstr ""
+"Например, давайте посмотрим на отчет «Заказ на продажу» из модуля «Продажа»:"
 
 #: ../../reference/reports.rst:174
 msgid ""
 "The main template calls the translatable template with "
-"``doc.partner_id.lang`` as a ``t-lang`` parameter, so it will be rendered"
-" in the language of the partner. This way, each Sale Order will be "
-"printed in the language of the corresponding customer. If you wish to "
-"translate only the body of the document, but keep the header and footer "
-"in a default language, you could call the report's external layout this "
-"way::"
+"``doc.partner_id.lang`` as a ``t-lang`` parameter, so it will be rendered in"
+" the language of the partner. This way, each Sale Order will be printed in "
+"the language of the corresponding customer. If you wish to translate only "
+"the body of the document, but keep the header and footer in a default "
+"language, you could call the report's external layout this way::"
 msgstr ""
+"Основной шаблон вызывает переводимый шаблон с `` doc.partner_id.lang`` в "
+"качестве параметра `` t-lang``, поэтому он будет отображаться на языке "
+"партнера. Таким образом, каждый Заказ на продажу будет напечатан на языке "
+"соответствующего покупателя. Если вы хотите перевести только тело документа,"
+" но сохранить верхний и нижний колонтитулы на языке по умолчанию, вы можете "
+"вызвать внешний макет отчета следующим образом:"
 
 #: ../../reference/reports.rst:184
 msgid ""
-"Please take note that this works only when calling external templates, "
-"you will not be able to translate part of a document by setting a "
-"``t-lang`` attribute on an xml node other than ``t-call``. If you wish to"
-" translate part of a template, you can create an external template with "
-"this partial template and call it from the main one with the ``t-lang`` "
-"attribute."
+"Please take note that this works only when calling external templates, you "
+"will not be able to translate part of a document by setting a ``t-lang`` "
+"attribute on an xml node other than ``t-call``. If you wish to translate "
+"part of a template, you can create an external template with this partial "
+"template and call it from the main one with the ``t-lang`` attribute."
 msgstr ""
+"Обратите внимание, что это работает только при вызове внешних шаблонов, вы "
+"не сможете перевести часть документа, установив атрибут `` t-lang`` на узле "
+"xml, отличном от `` t-call``. Если вы хотите перевести часть шаблона, вы "
+"можете создать внешний шаблон с этим частичным шаблоном и вызвать его из "
+"основного с атрибутом `` t-lang``."
 
 #: ../../reference/reports.rst:192
 msgid "Barcodes"
-msgstr ""
+msgstr "штрихкоды"
 
 #: ../../reference/reports.rst:194
 msgid ""
-"Barcodes are images returned by a controller and can easily be embedded "
-"in reports thanks to the QWeb syntax (e.g. see "
+"Barcodes are images returned by a controller and can easily be embedded in "
+"reports thanks to the QWeb syntax (e.g. see "
 ":ref:`reference/qweb/attributes`):"
 msgstr ""
+"Штрих-коды - это изображения, возвращаемые контроллером, и они могут быть "
+"легко встроены в отчеты благодаря синтаксису QWeb (например, см .: ref: "
+"`reference / qweb / attribute`):"
 
 #: ../../reference/reports.rst:201
 msgid "More parameters can be passed as a query string"
-msgstr ""
+msgstr "Дополнительные параметры могут быть переданы в виде строки запроса"
 
 #: ../../reference/reports.rst:210
 msgid "Useful Remarks"
-msgstr ""
+msgstr "Полезные замечания"
 
 #: ../../reference/reports.rst:211
 msgid ""
 "Twitter Bootstrap and FontAwesome classes can be used in your report "
 "template"
 msgstr ""
+"Классы Twitter Bootstrap и FontAwesome можно использовать в шаблоне отчета"
 
 #: ../../reference/reports.rst:213
 msgid "Local CSS can be put directly in the template"
-msgstr ""
+msgstr "Локальный CSS можно поставить прямо в шаблон"
 
 #: ../../reference/reports.rst:214
 msgid ""
 "Global CSS can be inserted in the main report layout by inheriting its "
 "template and inserting your CSS::"
 msgstr ""
+"Глобальный CSS можно вставить в основной макет отчета, унаследовав его "
+"шаблон и вставив свой CSS ::"
 
 #: ../../reference/reports.rst:226
 msgid ""
 "If it appears that your PDF report is missing the styles, please check "
-":ref:`these instructions <reference/backend/reporting/printed-reports"
-"/pdf-without-styles>`."
+":ref:`these instructions <reference/backend/reporting/printed-reports/pdf-"
+"without-styles>`."
 msgstr ""
+"Если кажется, что в вашем отчете PDF отсутствуют стили, проверьте: ref: `эти"
+" инструкции <reference/backend/reporting/printed-reports/pdf-without-styles>"
+" `."
 
 #: ../../reference/reports.rst:232
 msgid "Paper Format"
-msgstr ""
+msgstr "Формат бумаги"
 
 #: ../../reference/reports.rst:234
 msgid ""
 "Paper formats are records of ``report.paperformat`` and can contain the "
 "following attributes:"
 msgstr ""
+"Бумажные форматы являются записями `` report.paperformat`` и могут содержать"
+" следующие атрибуты:"
 
 #: ../../reference/reports.rst:240
 msgid "``description``"
-msgstr ""
+msgstr "`` Description``"
 
 #: ../../reference/reports.rst:241
 msgid "a small description of your format"
-msgstr ""
+msgstr "небольшое описание вашего формата"
 
 #: ../../reference/reports.rst:244
 msgid "``format``"
-msgstr ""
+msgstr "`` format``"
 
 #: ../../reference/reports.rst:243
 msgid ""
-"either a predefined format (A0 to A9, B0 to B10, Legal, Letter, "
-"Tabloid,...) or ``custom``; A4 by default. You cannot use a non-custom "
-"format if you define the page dimensions."
+"either a predefined format (A0 to A9, B0 to B10, Legal, Letter, Tabloid,...)"
+" or ``custom``; A4 by default. You cannot use a non-custom format if you "
+"define the page dimensions."
 msgstr ""
+"либо предопределенный формат (от A0 до A9, от B0 до B10, Legal, Letter, "
+"Tabloid, ...) или `` custom``; A4 по умолчанию. Нельзя использовать "
+"нестандартный формат, если вы определяете размеры страницы."
 
 #: ../../reference/reports.rst:246
 msgid "``dpi``"
-msgstr ""
+msgstr "`` Dpi``"
 
 #: ../../reference/reports.rst:247
 msgid "output DPI; 90 by default"
-msgstr ""
+msgstr "выходной DPI; 90 по умолчанию"
 
 #: ../../reference/reports.rst:248
 msgid "``margin_top``, ``margin_bottom``, ``margin_left``, ``margin_right``"
 msgstr ""
+"`` margin_top``, `` margin_bottom``, `` margin_left``, `` margin_right``"
 
 #: ../../reference/reports.rst:249
 msgid "margin sizes in mm"
-msgstr ""
+msgstr "размеры полей в мм"
 
 #: ../../reference/reports.rst:250
 msgid "``page_height``, ``page_width``"
-msgstr ""
+msgstr "`` page_height``, `` page_width``"
 
 #: ../../reference/reports.rst:251
 msgid "page dimensions in mm"
-msgstr ""
+msgstr "размеры страницы в мм"
 
 #: ../../reference/reports.rst:252
 msgid "``orientation``"
-msgstr ""
+msgstr "`` Orientation``"
 
 #: ../../reference/reports.rst:253
 msgid "Landscape or Portrait"
-msgstr ""
+msgstr "Пейзаж или Портрет"
 
 #: ../../reference/reports.rst:254
 msgid "``header_line``"
-msgstr ""
+msgstr "`` Header_line``"
 
 #: ../../reference/reports.rst:255
 msgid "boolean to display a header line"
-msgstr ""
+msgstr "логическое значение для отображения строки заголовка"
 
 #: ../../reference/reports.rst:257
 msgid "``header_spacing``"
-msgstr ""
+msgstr "`` Header_spacing``"
 
 #: ../../reference/reports.rst:257
 msgid "header spacing in mm"
-msgstr ""
+msgstr "расстояние между жатками в мм"
 
 #: ../../reference/reports.rst:280
 msgid "Custom Reports"
-msgstr ""
+msgstr "Пользовательские отчеты"
 
 #: ../../reference/reports.rst:282
 msgid ""
-"The report model has a default ``get_html`` function that looks for a "
-"model named :samp:`report.{module.report_name}`. If it exists, it will "
-"use it to call the QWeb engine; otherwise a generic function will be "
-"used. If you wish to customize your reports by including more things in "
-"the template (like records of others models, for example), you can define"
-" this model, overwrite the function ``_get_report_values`` and pass "
-"objects in the ``docargs`` dictionary:"
+"The report model has a default ``get_html`` function that looks for a model "
+"named :samp:`report.{module.report_name}`. If it exists, it will use it to "
+"call the QWeb engine; otherwise a generic function will be used. If you wish"
+" to customize your reports by including more things in the template (like "
+"records of others models, for example), you can define this model, overwrite"
+" the function ``_get_report_values`` and pass objects in the ``docargs`` "
+"dictionary:"
 msgstr ""
+"Модель отчета имеет функцию `` get_html`` по умолчанию, которая ищет модель "
+"с именем: samp: `report. {Module.report_name}`. Если он существует, он будет"
+" использовать его для вызова механизма QWeb; в противном случае будет "
+"использоваться универсальная функция. Если вы хотите настроить отчеты, "
+"включив в шаблон больше элементов (например, записи других моделей), вы "
+"можете определить эту модель, перезаписать функцию `` _get_report_values`` и"
+" передать объекты в словарь `` docargs`` :"
 
 #: ../../reference/reports.rst:310
 msgid "Custom fonts"
-msgstr ""
+msgstr "Пользовательские шрифты"
 
 #: ../../reference/reports.rst:311
 msgid ""
-"If you want to use custom fonts you will need to add your custom font and"
-" the related less/CSS to the ``web.reports_assets_common`` assets bundle."
-" Adding your custom font(s) to ``web.assets_common`` or "
+"If you want to use custom fonts you will need to add your custom font and "
+"the related less/CSS to the ``web.reports_assets_common`` assets bundle. "
+"Adding your custom font(s) to ``web.assets_common`` or "
 "``web.assets_backend`` will not make your font available in QWeb reports."
 msgstr ""
+"Если вы хотите использовать пользовательские шрифты, вам нужно добавить свой"
+" собственный шрифт и связанный с ним less / CSS в пакет ресурсов `` "
+"web.reports_assets_common``. Добавление пользовательских шрифтов в `` "
+"web.assets_common`` или `` web.assets_backend`` не сделает ваш шрифт "
+"доступным в отчетах QWeb."
 
 #: ../../reference/reports.rst:322
 msgid ""
-"You will need to define your ``@font-face`` within this less file, even "
-"if you've used in another assets bundle (other than "
+"You will need to define your ``@font-face`` within this less file, even if "
+"you've used in another assets bundle (other than "
 "``web.reports_assets_common``)."
 msgstr ""
+"Вам нужно будет определить ваш `` @ font-face`` в этом меньшем файле, даже "
+"если вы использовали его в другом пакете ресурсов (кроме `` "
+"web.reports_assets_common``)."
 
 #: ../../reference/reports.rst:337
 msgid ""
-"After you've added the less into your assets bundle you can use the "
-"classes - in this example ``h1-title-big`` - in your custom QWeb report."
+"After you've added the less into your assets bundle you can use the classes "
+"- in this example ``h1-title-big`` - in your custom QWeb report."
 msgstr ""
+"После того, как вы добавили меньшее в свой пакет ресурсов, вы можете "
+"использовать классы - в этом примере `` h1-title-big`` - в своем "
+"пользовательском отчете QWeb."
 
 #: ../../reference/reports.rst:340
 msgid "Reports are web pages"
-msgstr ""
+msgstr "Отчеты являются веб-страницами"
 
 #: ../../reference/reports.rst:342
 msgid ""
-"Reports are dynamically generated by the report module and can be "
-"accessed directly via URL:"
+"Reports are dynamically generated by the report module and can be accessed "
+"directly via URL:"
 msgstr ""
+"Отчеты генерируются динамически модулем отчетов и могут быть доступны "
+"напрямую через URL:"
 
 #: ../../reference/reports.rst:345
 msgid ""
 "For example, you can access a Sale Order report in html mode by going to "
 "\\http://<server-address>/report/html/sale.report_saleorder/38"
 msgstr ""
+"Например, вы можете получить доступ к отчету о заказах на продажу в html-"
+"режиме, перейдя в \\ http: // <server-address> "
+"/report/html/sale.report_saleorder/38"
 
 #: ../../reference/reports.rst:348
 msgid ""
 "Or you can access the pdf version at \\http://<server-"
 "address>/report/pdf/sale.report_saleorder/38"
 msgstr ""
-
+"Или вы можете получить доступ к PDF-версии по адресу \\ http: // <server-"
+"address> /report/pdf/sale.report_saleorder/38"

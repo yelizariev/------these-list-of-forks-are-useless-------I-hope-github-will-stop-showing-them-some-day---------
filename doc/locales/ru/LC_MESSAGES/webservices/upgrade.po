@@ -19,290 +19,319 @@ msgstr ""
 
 #: ../../webservices/upgrade.rst:11
 msgid "Database Upgrade"
-msgstr ""
+msgstr "Обновление базы данных"
 
 #: ../../webservices/upgrade.rst:14
 msgid "Introduction"
-msgstr ""
+msgstr "Вступление"
 
 #: ../../webservices/upgrade.rst:16
 msgid ""
-"This document describes the API used to upgrade an Odoo database to a "
-"higher version."
+"This document describes the API used to upgrade an Odoo database to a higher"
+" version."
 msgstr ""
+"В этом документе описывается API, используемый для обновления базы данных "
+"Odoo до более поздней версии."
 
 #: ../../webservices/upgrade.rst:19
 msgid ""
-"It allows a database to be upgraded without ressorting to the html form "
-"at https://upgrade.odoo.com Although the database will follow the same "
-"process described on that form."
+"It allows a database to be upgraded without ressorting to the html form at "
+"https://upgrade.odoo.com Although the database will follow the same process "
+"described on that form."
 msgstr ""
+"Это позволяет обновлять базу данных без повторной сортировки в html-форму на"
+" https://upgrade.odoo.com, хотя база данных будет следовать тому же "
+"процессу, который описан в этой форме."
 
 #: ../../webservices/upgrade.rst:24
 msgid "The required steps are:"
-msgstr ""
+msgstr "Необходимые шаги:"
 
 #: ../../webservices/upgrade.rst:26
 msgid ":ref:`creating a request <upgrade-api-create-method>`"
-msgstr ""
+msgstr ": ref: `создание запроса <upgrade-api-create-method> `"
 
 #: ../../webservices/upgrade.rst:27
 msgid ":ref:`uploading a database dump <upgrade-api-upload-method>`"
-msgstr ""
+msgstr ": ref: `загрузка дампа базы данных <upgrade-api-upload-method> `"
 
 #: ../../webservices/upgrade.rst:28
 msgid ":ref:`running the upgrade process <upgrade-api-process-method>`"
-msgstr ""
+msgstr ": ref: `запуск процесса обновления <upgrade-api-process-method> `"
 
 #: ../../webservices/upgrade.rst:29
 msgid ""
 ":ref:`obtaining the status of the database request <upgrade-api-status-"
 "method>`"
 msgstr ""
+": ref: `получение статуса запроса базы данных <upgrade-api-status-method> `"
 
 #: ../../webservices/upgrade.rst:30
 msgid ""
-":ref:`downloading the upgraded database dump <upgrade-api-download-"
-"method>`"
+":ref:`downloading the upgraded database dump <upgrade-api-download-method>`"
 msgstr ""
+": ref: `скачивание обновленного дампа базы данных <upgrade-api-download-"
+"method> `"
 
 #: ../../webservices/upgrade.rst:33
 msgid "The methods"
-msgstr ""
+msgstr "Методы"
 
 #: ../../webservices/upgrade.rst:38
 msgid "Creating a database upgrade request"
-msgstr ""
+msgstr "Создание запроса на обновление базы данных"
 
 #: ../../webservices/upgrade.rst:40
 msgid "This action creates a database request with the following information:"
-msgstr ""
+msgstr "Это действие создает запрос к базе данных со следующей информацией:"
 
 #: ../../webservices/upgrade.rst:42
 msgid "your contract reference"
-msgstr ""
+msgstr "ссылка на ваш контракт"
 
 #: ../../webservices/upgrade.rst:43
 msgid "your email address"
-msgstr ""
+msgstr "Ваша электронная почта"
 
 #: ../../webservices/upgrade.rst:44
 msgid "the target version (the Odoo version you want to upgrade to)"
-msgstr ""
+msgstr "целевая версия (версия Odoo, которую вы хотите обновить)"
 
 #: ../../webservices/upgrade.rst:45
 msgid "the purpose of your request (test or production)"
-msgstr ""
+msgstr "цель вашего запроса (тест или производство)"
 
 #: ../../webservices/upgrade.rst:46
 msgid "the database dump name (required but purely informative)"
-msgstr ""
+msgstr "имя дампа базы данных (обязательно, но чисто информативно)"
 
 #: ../../webservices/upgrade.rst:47
 msgid "optionally the server timezone (for Odoo source version < 6.1)"
-msgstr ""
+msgstr "опционально часовой пояс сервера (для исходной версии Odoo &lt;6.1)"
 
 #: ../../webservices/upgrade.rst:50
 msgid "The ``create`` method"
-msgstr ""
+msgstr "Метод `` create``"
 
 #: ../../webservices/upgrade.rst:54
 msgid "Creates a database upgrade request"
-msgstr ""
+msgstr "Создает запрос на обновление базы данных."
 
 #: ../../webservices/upgrade.rst
 msgid "Параметры"
-msgstr ""
+msgstr "Параметры"
 
 #: ../../webservices/upgrade.rst:56
 msgid "(required) your enterprise contract reference"
-msgstr ""
+msgstr "(обязательно) ссылка на контракт вашего предприятия"
 
 #: ../../webservices/upgrade.rst:57
 msgid "(required) your email address"
-msgstr ""
+msgstr "(обязательно) ваш адрес электронной почты"
 
 #: ../../webservices/upgrade.rst:58
 msgid ""
 "(required) the Odoo version you want to upgrade to. Valid choices: 11.0, "
 "12.0, 13.0"
 msgstr ""
+"(требуется) версия Odoo, до которой вы хотите обновить. Допустимые варианты:"
+" 11,0, 12,0, 13,0"
 
 #: ../../webservices/upgrade.rst:59
 msgid ""
 "(required) the purpose of your upgrade database request. Valid choices: "
 "test, production."
 msgstr ""
+"(обязательно) цель вашего запроса на обновление базы данных. Допустимые "
+"варианты: тестирование, производство."
 
 #: ../../webservices/upgrade.rst:60
 msgid "(required) a purely informative name for you database dump file"
 msgstr ""
+"(обязательно) чисто информативное имя для вашего файла дампа базы данных"
 
 #: ../../webservices/upgrade.rst:61
 msgid ""
-"(optional) the timezone used by your server. Only for Odoo source version"
-" < 6.1"
+"(optional) the timezone used by your server. Only for Odoo source version < "
+"6.1"
 msgstr ""
+"(необязательно) часовой пояс, используемый вашим сервером. Только для "
+"исходной версии Odoo &lt;6.1"
 
 #: ../../webservices/upgrade.rst
 msgid "Результат"
-msgstr ""
+msgstr "Результат"
 
 #: ../../webservices/upgrade.rst:62 ../../webservices/upgrade.rst:207
 #: ../../webservices/upgrade.rst:264 ../../webservices/upgrade.rst:391
 #: ../../webservices/upgrade.rst:444 ../../webservices/upgrade.rst:495
 msgid "request result"
-msgstr ""
+msgstr "результат запроса"
 
 #: ../../webservices/upgrade.rst
 msgid "Тип результата"
-msgstr ""
+msgstr "Тип результата"
 
 #: ../../webservices/upgrade.rst:65
 msgid ""
-"The *create* method returns a JSON dictionary containing the following "
-"keys:"
-msgstr ""
+"The *create* method returns a JSON dictionary containing the following keys:"
+msgstr "Метод * create * возвращает словарь JSON, содержащий следующие ключи:"
 
 #: ../../webservices/upgrade.rst:70 ../../webservices/upgrade.rst:318
 msgid "``failures``"
-msgstr ""
+msgstr "`` Failures``"
 
 #: ../../webservices/upgrade.rst:72
 msgid "The list of errors."
-msgstr ""
+msgstr "Список ошибок."
 
 #: ../../webservices/upgrade.rst:74
 msgid ""
 "A list of dictionaries, each dictionary giving information about one "
-"particular error. Each dictionary can contain various keys depending of "
-"the type of error but you will always get the ``reason`` and the "
-"``message`` keys:"
+"particular error. Each dictionary can contain various keys depending of the "
+"type of error but you will always get the ``reason`` and the ``message`` "
+"keys:"
 msgstr ""
+"Список словарей, каждый словарь дает информацию об одной конкретной ошибке. "
+"Каждый словарь может содержать различные ключи в зависимости от типа ошибки,"
+" но вы всегда получите ключи `` reason`` и `` message``:"
 
 #: ../../webservices/upgrade.rst:78
 msgid "``reason``: the error type"
-msgstr ""
+msgstr "`` причина``: тип ошибки"
 
 #: ../../webservices/upgrade.rst:79
 msgid "``message``: a human friendly message"
-msgstr ""
+msgstr "`` message``: дружеское сообщение"
 
 #: ../../webservices/upgrade.rst:81
 msgid "Some possible keys:"
-msgstr ""
+msgstr "Некоторые возможные ключи:"
 
 #: ../../webservices/upgrade.rst:83
 msgid "``code``: a faulty value"
-msgstr ""
+msgstr "`` код``: ошибочное значение"
 
 #: ../../webservices/upgrade.rst:84
 msgid "``value``: a faulty value"
-msgstr ""
+msgstr "`` значение``: ошибочное значение"
 
 #: ../../webservices/upgrade.rst:85
 msgid "``expected``: a list of valid values"
-msgstr ""
+msgstr "`` Ожидаемый``: список допустимых значений"
 
 #: ../../webservices/upgrade.rst:87
 msgid "See a sample output aside."
-msgstr ""
+msgstr "Смотрите пример выходных данных в стороне."
 
 #: ../../webservices/upgrade.rst:117 ../../webservices/upgrade.rst:324
 msgid "``request``"
-msgstr ""
+msgstr "`` request``"
 
 #: ../../webservices/upgrade.rst:119
 msgid ""
-"If the *create* method is successful, the value associated to the "
-"*request* key will be a dictionary containing various information about "
-"the created request:"
+"If the *create* method is successful, the value associated to the *request* "
+"key will be a dictionary containing various information about the created "
+"request:"
 msgstr ""
+"Если метод * create * успешен, значение, связанное с ключом * request *, "
+"будет словарем, содержащим различную информацию о созданном запросе:"
 
 #: ../../webservices/upgrade.rst:122
 msgid "The most important keys are:"
-msgstr ""
+msgstr "Наиболее важные ключи:"
 
 #: ../../webservices/upgrade.rst:124
 msgid "``id``: the request id"
-msgstr ""
+msgstr "`` id``: идентификатор запроса"
 
 #: ../../webservices/upgrade.rst:125
 msgid "``key``: your private key for this request"
-msgstr ""
+msgstr "`` ключ``: ваш закрытый ключ для этого запроса"
 
 #: ../../webservices/upgrade.rst:127
 msgid ""
-"These 2 values will be requested by the other methods (upload, process "
-"and status)"
+"These 2 values will be requested by the other methods (upload, process and "
+"status)"
 msgstr ""
+"Эти 2 значения будут запрашиваться другими методами (загрузка, обработка и "
+"статус)"
 
 #: ../../webservices/upgrade.rst:129
 msgid ""
-"The other keys will be explained in the section describing the "
-":ref:`status method <upgrade-api-status-method>`."
+"The other keys will be explained in the section describing the :ref:`status "
+"method <upgrade-api-status-method>`."
 msgstr ""
+"Другие ключи будут объяснены в разделе, описывающем метод: ref: `status "
+"<upgrade-api-status-method> `."
 
 #: ../../webservices/upgrade.rst:133
 msgid "Sample script"
-msgstr ""
+msgstr "Пример сценария"
 
 #: ../../webservices/upgrade.rst:135
 msgid "Here are 2 examples of database upgrade request creation using:"
 msgstr ""
+"Вот 2 примера создания запроса на обновление базы данных с использованием:"
 
 #: ../../webservices/upgrade.rst:137
 msgid "one in the python programming language using the requests library"
 msgstr ""
+"один на языке программирования Python с использованием библиотеки запросов"
 
 #: ../../webservices/upgrade.rst:138
 msgid ""
-"one in the bash programming language using `curl <https://curl.haxx.se>`_"
-" (tool for transfering data using http) and `jq "
+"one in the bash programming language using `curl <https://curl.haxx.se>`_ "
+"(tool for transfering data using http) and `jq "
 "<https://stedolan.github.io/jq>`_ (JSON processor):"
 msgstr ""
+"один на языке программирования bash с использованием `curl "
+"<https://curl.haxx.se>`_ (инструмент для передачи данных с использованием "
+"http) и` jq <https://stedolan.github.io/jq>`_ (Процессор JSON):"
 
 #: ../../webservices/upgrade.rst:188
 msgid "Uploading your database dump"
-msgstr ""
+msgstr "Загрузка дампа вашей базы данных"
 
 #: ../../webservices/upgrade.rst:190
 msgid "There are 2 methods to upload your database dump:"
-msgstr ""
+msgstr "Есть 2 способа загрузить дамп базы данных:"
 
 #: ../../webservices/upgrade.rst:192
 msgid "the ``upload`` method using the HTTPS protocol"
-msgstr ""
+msgstr "метод `` загрузки`` с использованием протокола HTTPS"
 
 #: ../../webservices/upgrade.rst:193
 msgid "the ``request_sftp_access`` method using the SFTP protocol"
-msgstr ""
+msgstr "метод `` request_sftp_access`` с использованием протокола SFTP"
 
 #: ../../webservices/upgrade.rst:196
 msgid "The ``upload`` method"
-msgstr ""
+msgstr "Метод `` upload``"
 
 #: ../../webservices/upgrade.rst:198
 msgid ""
-"It's the most simple and most straightforward way of uploading your "
-"database dump. It uses the HTTPS protocol."
+"It's the most simple and most straightforward way of uploading your database"
+" dump. It uses the HTTPS protocol."
 msgstr ""
+"Это самый простой и простой способ загрузки дампа базы данных. Он использует"
+" протокол HTTPS."
 
 #: ../../webservices/upgrade.rst:203
 msgid "Uploads a database dump"
-msgstr ""
+msgstr "Загружает дамп базы данных"
 
 #: ../../webservices/upgrade.rst:205 ../../webservices/upgrade.rst:261
 #: ../../webservices/upgrade.rst:389 ../../webservices/upgrade.rst:442
 #: ../../webservices/upgrade.rst:493
 msgid "(required) your private key"
-msgstr ""
+msgstr "(обязательно) ваш закрытый ключ"
 
 #: ../../webservices/upgrade.rst:206 ../../webservices/upgrade.rst:262
 #: ../../webservices/upgrade.rst:390 ../../webservices/upgrade.rst:443
 #: ../../webservices/upgrade.rst:494
 msgid "(required) your request id"
-msgstr ""
+msgstr "(обязательно) идентификатор вашего запроса"
 
 #: ../../webservices/upgrade.rst:210 ../../webservices/upgrade.rst:267
 #: ../../webservices/upgrade.rst:394 ../../webservices/upgrade.rst:447
@@ -311,39 +340,48 @@ msgid ""
 "The request id and the private key are obtained using the :ref:`create "
 "method <upgrade-api-create-method>`"
 msgstr ""
+"Идентификатор запроса и закрытый ключ получены с помощью метода: ref: "
+"`create <upgrade-api-create-method> `"
 
 #: ../../webservices/upgrade.rst:213 ../../webservices/upgrade.rst:397
 #: ../../webservices/upgrade.rst:450
 msgid ""
-"The result is a JSON dictionary containing the list of ``failures``, "
-"which should be empty if everything went fine."
+"The result is a JSON dictionary containing the list of ``failures``, which "
+"should be empty if everything went fine."
 msgstr ""
+"В результате получается словарь JSON, содержащий список `` failures``, "
+"который должен быть пустым, если все прошло нормально."
 
 #: ../../webservices/upgrade.rst:249
 msgid "The ``request_sftp_access`` method"
-msgstr ""
+msgstr "Метод `` request_sftp_access``"
 
 #: ../../webservices/upgrade.rst:251
 msgid ""
-"This method is recommanded for big database dumps. It uses the SFTP "
-"protocol and supports resuming."
+"This method is recommanded for big database dumps. It uses the SFTP protocol"
+" and supports resuming."
 msgstr ""
+"Этот метод рекомендуется для больших дампов базы данных. Он использует "
+"протокол SFTP и поддерживает возобновление."
 
 #: ../../webservices/upgrade.rst:254
 msgid ""
-"It will create a temporary SFTP server where you can connect to and allow"
-" you to upload your database dump using an SFTP client."
+"It will create a temporary SFTP server where you can connect to and allow "
+"you to upload your database dump using an SFTP client."
 msgstr ""
+"Он создаст временный SFTP-сервер, к которому вы сможете подключиться, и "
+"позволит загружать дамп базы данных с помощью SFTP-клиента."
 
 #: ../../webservices/upgrade.rst:259
 msgid "Creates an SFTP server"
-msgstr ""
+msgstr "Создает SFTP-сервер"
 
 #: ../../webservices/upgrade.rst:263
 msgid ""
-"(required) the path to a file listing the ssh public keys you'd like to "
-"use"
+"(required) the path to a file listing the ssh public keys you'd like to use"
 msgstr ""
+"(обязательно) путь к файлу, в котором перечислены открытые ключи ssh, "
+"которые вы хотите использовать"
 
 #: ../../webservices/upgrade.rst:270
 msgid ""
@@ -351,61 +389,80 @@ msgid ""
 "standard ``authorized_keys`` file. This file should only contains public "
 "keys, blank lines or comments (lines starting with the ``#`` character)"
 msgstr ""
+"Файл с вашими открытыми ключами ssh должен быть примерно похож на "
+"стандартный файл `` половинный_клюзив``. Этот файл должен содержать только "
+"открытые ключи, пустые строки или комментарии (строки, начинающиеся с "
+"символа `` # ``)"
 
 #: ../../webservices/upgrade.rst:273
 msgid "Your database upgrade request should be in the ``draft`` state."
 msgstr ""
+"Ваш запрос на обновление базы данных должен быть в состоянии `` draft``."
 
 #: ../../webservices/upgrade.rst:275
 msgid ""
-"The ``request_sftp_access`` method returns a JSON dictionary containing "
-"the following keys:"
+"The ``request_sftp_access`` method returns a JSON dictionary containing the "
+"following keys:"
 msgstr ""
+"Метод `` request_sftp_access`` возвращает словарь JSON, содержащий следующие"
+" ключи:"
 
 #: ../../webservices/upgrade.rst:320
 msgid ""
-"The list of errors. See :ref:`failures <upgrade-api-json-failure>` for an"
-" explanation about the JSON dictionary returned in case of failure."
+"The list of errors. See :ref:`failures <upgrade-api-json-failure>` for an "
+"explanation about the JSON dictionary returned in case of failure."
 msgstr ""
+"Список ошибок. Смотрите: ref: `провалы <upgrade-api-json-failure> `для "
+"объяснения словаря JSON, возвращаемого в случае сбоя."
 
 #: ../../webservices/upgrade.rst:326
 msgid ""
-"If the call is successful, the value associated to the *request* key will"
-" be a dictionary containing your SFTP connexion parameters:"
+"If the call is successful, the value associated to the *request* key will be"
+" a dictionary containing your SFTP connexion parameters:"
 msgstr ""
+"Если вызов успешен, значение, связанное с ключом * request *, будет "
+"словарем, содержащим параметры соединения SFTP:"
 
 #: ../../webservices/upgrade.rst:329
 msgid "``hostname``: the host address to connect to"
-msgstr ""
+msgstr "`` hostname``: адрес хоста для подключения"
 
 #: ../../webservices/upgrade.rst:330
 msgid "``sftp_port``: the port to connect to"
-msgstr ""
+msgstr "`` sftp_port``: порт для подключения"
 
 #: ../../webservices/upgrade.rst:331
 msgid "``sftp_user``: the SFTP user to use for connecting"
-msgstr ""
+msgstr "`` sftp_user``: пользователь SFTP для подключения"
 
 #: ../../webservices/upgrade.rst:332
 msgid ""
-"``shared_file``: the filename you need to use (identical to the "
-"``filename`` value you have used when creating the request in the "
-":ref:`create method <upgrade-api-create-method>`.)"
+"``shared_file``: the filename you need to use (identical to the ``filename``"
+" value you have used when creating the request in the :ref:`create method "
+"<upgrade-api-create-method>`.)"
 msgstr ""
+"`` shared_file``: имя файла, которое вам нужно использовать (идентично "
+"значению `` filename``, которое вы использовали при создании запроса в "
+"методе: ref: `create <upgrade-api-create-method> `.)"
 
 #: ../../webservices/upgrade.rst:333
 msgid ""
 "``request_id``: the related upgrade request id (only informative, ,not "
 "required for the connection)"
 msgstr ""
+"`` request_id``: связанный идентификатор запроса на обновление (только "
+"информативный, не требуется для соединения)"
 
 #: ../../webservices/upgrade.rst:334
 msgid "``sample_command``: a sample command using the 'sftp' client"
 msgstr ""
+"`` sample_command``: пример команды с использованием клиента &#39;sftp&#39;"
 
 #: ../../webservices/upgrade.rst:336
 msgid "You should normally be able to connect using the sample command as is."
 msgstr ""
+"Обычно вы должны иметь возможность подключиться, используя пример команды, "
+"как есть."
 
 #: ../../webservices/upgrade.rst:338
 msgid ""
@@ -413,23 +470,30 @@ msgid ""
 "accessible and you will not be able to create new files in your shared "
 "environment on the SFTP server."
 msgstr ""
+"У вас будет доступ только к `` shared_file``. Другие файлы не будут "
+"доступны, и вы не сможете создавать новые файлы в общей среде на SFTP-"
+"сервере."
 
 #: ../../webservices/upgrade.rst:343
 msgid "Using the 'sftp' client"
-msgstr ""
+msgstr "Использование клиента &#39;sftp&#39;"
 
 #: ../../webservices/upgrade.rst:345
 msgid ""
-"Once you have successfully connected using your SFTP client, you can "
-"upload your database dump. Here is a sample session using the 'sftp' "
-"client:"
+"Once you have successfully connected using your SFTP client, you can upload "
+"your database dump. Here is a sample session using the 'sftp' client:"
 msgstr ""
+"После того, как вы успешно подключились с помощью SFTP-клиента, вы можете "
+"загрузить дамп базы данных. Вот пример сеанса с использованием клиента "
+"&#39;sftp&#39;:"
 
 #: ../../webservices/upgrade.rst:357
 msgid ""
-"If your connection is interrupted, you can continue your file transfer "
-"using the ``-a`` command line switch:"
+"If your connection is interrupted, you can continue your file transfer using"
+" the ``-a`` command line switch:"
 msgstr ""
+"Если ваше соединение прервано, вы можете продолжить передачу файла, "
+"используя ключ командной строки `` -a``:"
 
 #: ../../webservices/upgrade.rst:365
 msgid ""
@@ -437,331 +501,367 @@ msgid ""
 "database upgrade using a script, you can use a batch file or pipe your "
 "commands to 'sftp':"
 msgstr ""
+"Если вы не хотите вводить команду вручную и вам необходимо автоматизировать "
+"обновление базы данных с помощью сценария, вы можете использовать командный "
+"файл или передать ваши команды в &#39;sftp&#39;:"
 
 #: ../../webservices/upgrade.rst:372
 msgid ""
-"The ``-b`` parameter takes a filename. If the filename is ``-``, it reads"
-" the commands from standard input."
+"The ``-b`` parameter takes a filename. If the filename is ``-``, it reads "
+"the commands from standard input."
 msgstr ""
+"Параметр `` -b`` принимает имя файла. Если имя файла `` -``, он читает "
+"команды из стандартного ввода."
 
 #: ../../webservices/upgrade.rst:378
 msgid "Asking to process your request"
-msgstr ""
+msgstr "Просьба обработать ваш запрос"
 
 #: ../../webservices/upgrade.rst:380
 msgid "This action ask the Upgrade Platform to process your database dump."
 msgstr ""
+"Это действие запрашивает платформу обновления для обработки дампа базы "
+"данных."
 
 #: ../../webservices/upgrade.rst:383
 msgid "The ``process`` method"
-msgstr ""
+msgstr "Метод `` process``"
 
 #: ../../webservices/upgrade.rst:387
 msgid "Process a database dump"
-msgstr ""
+msgstr "Обработать дамп базы данных"
 
 #: ../../webservices/upgrade.rst:430
 msgid "Asking to skip the tests"
-msgstr ""
+msgstr "Просьба пропустить тесты"
 
 #: ../../webservices/upgrade.rst:432
 msgid ""
-"This action asks the Upgrade Platform to skip the tests for your request."
-" If you don't want Odoo to test and validate the migration, you can "
-"bypass the testing stage and directly get the migrated dump."
+"This action asks the Upgrade Platform to skip the tests for your request. If"
+" you don't want Odoo to test and validate the migration, you can bypass the "
+"testing stage and directly get the migrated dump."
 msgstr ""
+"Это действие требует от платформы обновления пропустить тесты по вашему "
+"запросу. Если вы не хотите, чтобы Odoo тестировал и проверял миграцию, вы "
+"можете обойти этап тестирования и сразу получить перенесенный дамп."
 
 #: ../../webservices/upgrade.rst:436
 msgid "The ``skip_test`` method"
-msgstr ""
+msgstr "Метод `` skip_test``"
 
 #: ../../webservices/upgrade.rst:440
 msgid ""
-"Skip the tests, deliver the upgraded dump, and set the state to "
-"'delivered'"
+"Skip the tests, deliver the upgraded dump, and set the state to 'delivered'"
 msgstr ""
+"Пропустите тесты, доставьте обновленный дамп и установите состояние "
+"«доставлено»."
 
 #: ../../webservices/upgrade.rst:482
 msgid "Obtaining your request status"
-msgstr ""
+msgstr "Получение статуса вашего запроса"
 
 #: ../../webservices/upgrade.rst:484
 msgid "This action ask the status of your database upgrade request."
 msgstr ""
+"Это действие запрашивает статус вашего запроса на обновление базы данных."
 
 #: ../../webservices/upgrade.rst:487
 msgid "The ``status`` method"
-msgstr ""
+msgstr "Метод `` status``"
 
 #: ../../webservices/upgrade.rst:491
 msgid "Ask the status of a database upgrade request"
-msgstr ""
+msgstr "Спросите статус запроса на обновление базы данных"
 
 #: ../../webservices/upgrade.rst:501
 msgid ""
-"The result is a JSON dictionary containing various information about your"
-" database upgrade request."
+"The result is a JSON dictionary containing various information about your "
+"database upgrade request."
 msgstr ""
+"В результате получается словарь JSON, содержащий различную информацию о "
+"вашем запросе на обновление базы данных."
 
 #: ../../webservices/upgrade.rst:531
 msgid "Sample output"
-msgstr ""
+msgstr "Образец вывода"
 
 #: ../../webservices/upgrade.rst:533
 msgid ""
-"The ``request`` key contains various useful information about your "
-"request:"
+"The ``request`` key contains various useful information about your request:"
 msgstr ""
+"Ключ `` request`` содержит различную полезную информацию о вашем запросе:"
 
 #: ../../webservices/upgrade.rst:535
 msgid "``id``"
-msgstr ""
+msgstr "`` Id``"
 
 #: ../../webservices/upgrade.rst:536
 msgid "the request id"
-msgstr ""
+msgstr "идентификатор запроса"
 
 #: ../../webservices/upgrade.rst:537
 msgid "``key``"
-msgstr ""
+msgstr "`` Key``"
 
 #: ../../webservices/upgrade.rst:538
 msgid "your private key"
-msgstr ""
+msgstr "ваш личный ключ"
 
 #: ../../webservices/upgrade.rst:539
 msgid "``email``"
-msgstr ""
+msgstr "`` email``"
 
 #: ../../webservices/upgrade.rst:540
 msgid "the email address you supplied when creating the request"
-msgstr ""
+msgstr "адрес электронной почты, который вы указали при создании запроса"
 
 #: ../../webservices/upgrade.rst:541
 msgid "``target``"
-msgstr ""
+msgstr "`` Target``"
 
 #: ../../webservices/upgrade.rst:542
 msgid "the target Odoo version you supplied when creating the request"
-msgstr ""
+msgstr "целевая версия Odoo, которую вы указали при создании запроса"
 
 #: ../../webservices/upgrade.rst:543
 msgid "``aim``"
-msgstr ""
+msgstr "`` aim``"
 
 #: ../../webservices/upgrade.rst:544
 msgid ""
-"the purpose (test, production) of your database upgrade request you "
-"supplied when creating the request"
+"the purpose (test, production) of your database upgrade request you supplied"
+" when creating the request"
 msgstr ""
+"цель (тестирование, производство) вашего запроса на обновление базы данных, "
+"который вы указали при создании запроса"
 
 #: ../../webservices/upgrade.rst:545
 msgid "``filename``"
-msgstr ""
+msgstr "`` Filename``"
 
 #: ../../webservices/upgrade.rst:546
 msgid "the filename you supplied when creating the request"
-msgstr ""
+msgstr "имя файла, которое вы указали при создании запроса"
 
 #: ../../webservices/upgrade.rst:547
 msgid "``timezone``"
-msgstr ""
+msgstr "`` Timezone``"
 
 #: ../../webservices/upgrade.rst:548
 msgid "the timezone you supplied when creating the request"
-msgstr ""
+msgstr "часовой пояс, который вы указали при создании запроса"
 
 #: ../../webservices/upgrade.rst:549
 msgid "``state``"
-msgstr ""
+msgstr "`` State``"
 
 #: ../../webservices/upgrade.rst:550
 msgid "the state of your request"
-msgstr ""
+msgstr "состояние вашего запроса"
 
 #: ../../webservices/upgrade.rst:551
 msgid "``issue_stage``"
-msgstr ""
+msgstr "`` issue_stage``"
 
 #: ../../webservices/upgrade.rst:552
 msgid "the stage of the issue we have create on Odoo main server"
-msgstr ""
+msgstr "этап выпуска у нас на главном сервере Odoo"
 
 #: ../../webservices/upgrade.rst:553
 msgid "``issue``"
-msgstr ""
+msgstr "`` issue``"
 
 #: ../../webservices/upgrade.rst:554
 msgid "the id of the issue we have create on Odoo main server"
-msgstr ""
+msgstr "идентификатор проблемы, которую мы создали на главном сервере Odoo"
 
 #: ../../webservices/upgrade.rst:555
 msgid "``status_url``"
-msgstr ""
+msgstr "`` Status_url``"
 
 #: ../../webservices/upgrade.rst:556
 msgid "the URL to access your database upgrade request html page"
 msgstr ""
+"URL-адрес для доступа к вашей HTML-странице запроса обновления базы данных"
 
 #: ../../webservices/upgrade.rst:557
 msgid "``notes_url``"
-msgstr ""
+msgstr "`` notes_url``"
 
 #: ../../webservices/upgrade.rst:558
 msgid "the URL to get the notes about your database upgrade"
-msgstr ""
+msgstr "URL, чтобы получить заметки об обновлении вашей базы данных"
 
 #: ../../webservices/upgrade.rst:559
 msgid "``original_sql_url``"
-msgstr ""
+msgstr "`` Original_sql_url``"
 
 #: ../../webservices/upgrade.rst:560
-msgid "the URL used to get your uploaded (not upgraded) database as an SQL stream"
+msgid ""
+"the URL used to get your uploaded (not upgraded) database as an SQL stream"
 msgstr ""
+"URL-адрес, используемый для получения загруженной (не обновленной) базы "
+"данных в виде потока SQL"
 
 #: ../../webservices/upgrade.rst:561
 msgid "``original_dump_url``"
-msgstr ""
+msgstr "`` Original_dump_url``"
 
 #: ../../webservices/upgrade.rst:562
 msgid ""
-"the URL used to get your uploaded (not upgraded) database as an archive "
-"file"
+"the URL used to get your uploaded (not upgraded) database as an archive file"
 msgstr ""
+"URL-адрес, используемый для получения загруженной (не обновленной) базы "
+"данных в виде файла архива"
 
 #: ../../webservices/upgrade.rst:563
 msgid "``upgraded_sql_url``"
-msgstr ""
+msgstr "`` Upgraded_sql_url``"
 
 #: ../../webservices/upgrade.rst:564
 msgid "the URL used to get your upgraded database as an SQL stream"
 msgstr ""
+"URL-адрес, используемый для получения обновленной базы данных в виде потока "
+"SQL"
 
 #: ../../webservices/upgrade.rst:565
 msgid "``upgraded_dump_url``"
-msgstr ""
+msgstr "`` Upgraded_dump_url``"
 
 #: ../../webservices/upgrade.rst:566
 msgid "the URL used to get your upgraded database as an archive file"
 msgstr ""
+"URL-адрес, используемый для получения обновленной базы данных в виде файла "
+"архива"
 
 #: ../../webservices/upgrade.rst:567
 msgid "``modules_url``"
-msgstr ""
+msgstr "`` modules_url``"
 
 #: ../../webservices/upgrade.rst:568
 msgid "the URL used to get your custom modules"
-msgstr ""
+msgstr "URL-адрес, используемый для получения ваших пользовательских модулей"
 
 #: ../../webservices/upgrade.rst:569
 msgid "``filesize``"
-msgstr ""
+msgstr "`` Filesize``"
 
 #: ../../webservices/upgrade.rst:570
 msgid "the size of your uploaded database file"
-msgstr ""
+msgstr "размер вашего загруженного файла базы данных"
 
 #: ../../webservices/upgrade.rst:571
 msgid "``database_uuid``"
-msgstr ""
+msgstr "`` database_uuid``"
 
 #: ../../webservices/upgrade.rst:572
 msgid "the Unique ID of your database"
-msgstr ""
+msgstr "Уникальный идентификатор вашей базы данных"
 
 #: ../../webservices/upgrade.rst:573
 msgid "``created_at``"
-msgstr ""
+msgstr "`` Created_at``"
 
 #: ../../webservices/upgrade.rst:574
 msgid "the date when you created the request"
-msgstr ""
+msgstr "дата, когда вы создали запрос"
 
 #: ../../webservices/upgrade.rst:575
 msgid "``estimated_time``"
-msgstr ""
+msgstr "`` Estimated_time``"
 
 #: ../../webservices/upgrade.rst:576
 msgid "an estimation of the time it takes to upgrade your database"
-msgstr ""
+msgstr "оценка времени, необходимого для обновления вашей базы данных"
 
 #: ../../webservices/upgrade.rst:577
 msgid "``processed_at``"
-msgstr ""
+msgstr "`` processed_at``"
 
 #: ../../webservices/upgrade.rst:578
 msgid "time when your database upgrade was started"
-msgstr ""
+msgstr "время начала обновления вашей базы данных"
 
 #: ../../webservices/upgrade.rst:579
 msgid "``elapsed``"
-msgstr ""
+msgstr "`` elapsed``"
 
 #: ../../webservices/upgrade.rst:580
 msgid "the time it takes to upgrade your database"
-msgstr ""
+msgstr "время, необходимое для обновления вашей базы данных"
 
 #: ../../webservices/upgrade.rst:581
 msgid "``filestore``"
-msgstr ""
+msgstr "`` Filestore``"
 
 #: ../../webservices/upgrade.rst:582
 msgid "your attachments were converted to the filestore"
-msgstr ""
+msgstr "ваши вложения были преобразованы в хранилище файлов"
 
 #: ../../webservices/upgrade.rst:583
 msgid "``customer_message``"
-msgstr ""
+msgstr "`` Customer_message``"
 
 #: ../../webservices/upgrade.rst:584
 msgid "an important message related to your request"
-msgstr ""
+msgstr "важное сообщение, связанное с вашим запросом"
 
 #: ../../webservices/upgrade.rst:585
 msgid "``database_version``"
-msgstr ""
+msgstr "`` database_version``"
 
 #: ../../webservices/upgrade.rst:586
 msgid "the guessed Odoo version of your uploaded (not upgraded) database"
 msgstr ""
+"предполагаемая версия Odoo вашей загруженной (не обновленной) базы данных"
 
 #: ../../webservices/upgrade.rst:587
 msgid "``postgresql``"
-msgstr ""
+msgstr "`` postgresql``"
 
 #: ../../webservices/upgrade.rst:588
-msgid "the guessed Postgresql version of your uploaded (not upgraded) database"
+msgid ""
+"the guessed Postgresql version of your uploaded (not upgraded) database"
 msgstr ""
+"предполагаемая версия Postgresql вашей загруженной (не обновленной) базы "
+"данных"
 
 #: ../../webservices/upgrade.rst:590
 msgid "``compressions``"
-msgstr ""
+msgstr "`` Compressions``"
 
 #: ../../webservices/upgrade.rst:590
 msgid "the compression methods used by your uploaded database"
-msgstr ""
+msgstr "методы сжатия, используемые вашей загруженной базой данных"
 
 #: ../../webservices/upgrade.rst:638
 msgid "Downloading your database dump"
-msgstr ""
+msgstr "Загрузка дампа вашей базы данных"
 
 #: ../../webservices/upgrade.rst:640
 msgid ""
 "Beside downloading your migrated database using the URL provided by the "
-":ref:`status method <upgrade-api-status-method>`, you can also use the "
-"SFTP protocol as described in the :ref:`request_sftp_access method "
-"<upgrade-api-request-sftp-access-method>`"
+":ref:`status method <upgrade-api-status-method>`, you can also use the SFTP "
+"protocol as described in the :ref:`request_sftp_access method <upgrade-api-"
+"request-sftp-access-method>`"
 msgstr ""
+"Помимо загрузки перенесенной базы данных с использованием URL-адреса, "
+"предоставленного методом: ref: `status <upgrade-api-status-method> `, вы "
+"также можете использовать протокол SFTP, как описано в методе: ref:` "
+"request_sftp_access <upgrade-api-request-sftp-access-method> `"
 
 #: ../../webservices/upgrade.rst:645
 msgid ""
-"The diffence is that you'll only be able to download the migrated "
-"database. No uploading will be possible."
+"The diffence is that you'll only be able to download the migrated database. "
+"No uploading will be possible."
 msgstr ""
+"Разница в том, что вы сможете загружать только перенесенную базу данных. "
+"Загрузка невозможна."
 
 #: ../../webservices/upgrade.rst:648
 msgid "Your database upgrade request should be in the ``done`` state."
 msgstr ""
+"Ваш запрос на обновление базы данных должен быть в состоянии `` done``."
 
 #: ../../webservices/upgrade.rst:650
 msgid ""
@@ -769,4 +869,6 @@ msgid ""
 "download your database dump. Here is a sample session using the 'sftp' "
 "client:"
 msgstr ""
-
+"После того, как вы успешно подключились с помощью SFTP-клиента, вы можете "
+"скачать дамп базы данных. Вот пример сеанса с использованием клиента "
+"&#39;sftp&#39;:"

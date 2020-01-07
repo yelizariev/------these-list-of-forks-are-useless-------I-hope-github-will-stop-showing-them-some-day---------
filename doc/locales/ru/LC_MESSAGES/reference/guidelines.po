@@ -19,487 +19,643 @@ msgstr ""
 
 #: ../../reference/guidelines.rst:9
 msgid "Odoo Guidelines"
-msgstr ""
+msgstr "Руководство Odoo"
 
 #: ../../reference/guidelines.rst:11
 msgid ""
-"This page introduces the Odoo Coding Guidelines. Those aim to improve the"
-" quality of Odoo Apps code. Indeed proper code improves readability, "
-"eases maintenance, helps debugging, lowers complexity and promotes "
-"reliability. These guidelines should be applied to every new module and "
-"to all new development."
+"This page introduces the Odoo Coding Guidelines. Those aim to improve the "
+"quality of Odoo Apps code. Indeed proper code improves readability, eases "
+"maintenance, helps debugging, lowers complexity and promotes reliability. "
+"These guidelines should be applied to every new module and to all new "
+"development."
 msgstr ""
+"На этой странице представлены рекомендации по кодированию Odoo. Они "
+"направлены на улучшение качества кода приложений Odoo. Действительно, "
+"правильный код улучшает читабельность, облегчает обслуживание, помогает при "
+"отладке, снижает сложность и повышает надежность. Эти рекомендации должны "
+"применяться к каждому новому модулю и ко всем новым разработкам."
 
 #: ../../reference/guidelines.rst:18
 msgid ""
-"When modifying existing files in **stable version** the original file "
-"style strictly supersedes any other style guidelines. In other words "
-"please never modify existing files in order to apply these guidelines. It"
-" avoids disrupting the revision history of code lines. Diff should be "
-"kept minimal. For more details, see our `pull request guide "
-"<https://odoo.com/submit-pr>`_."
+"When modifying existing files in **stable version** the original file style "
+"strictly supersedes any other style guidelines. In other words please never "
+"modify existing files in order to apply these guidelines. It avoids "
+"disrupting the revision history of code lines. Diff should be kept minimal. "
+"For more details, see our `pull request guide <https://odoo.com/submit-"
+"pr>`_."
 msgstr ""
+"При изменении существующих файлов в ** стабильной версии ** исходный стиль "
+"файла строго заменяет любые другие рекомендации по стилю. Другими словами, "
+"пожалуйста, никогда не изменяйте существующие файлы, чтобы применять эти "
+"рекомендации. Это позволяет избежать нарушения истории пересмотра строк "
+"кода. Дифф должен быть минимальным. Для получения более подробной информации"
+" см. Наше руководство по запросу запросов. <https://odoo.com/submit-pr>`_."
 
 #: ../../reference/guidelines.rst:26
 msgid ""
 "When modifying existing files in **master (development) version** apply "
-"those guidelines to existing code only for modified code or if most of "
-"the file is under revision. In other words modify existing files "
-"structure only if it is going under major changes. In that case first do "
-"a **move** commit then apply the changes related to the feature."
+"those guidelines to existing code only for modified code or if most of the "
+"file is under revision. In other words modify existing files structure only "
+"if it is going under major changes. In that case first do a **move** commit "
+"then apply the changes related to the feature."
 msgstr ""
+"При изменении существующих файлов в ** основной (разрабатываемой) версии ** "
+"примените эти рекомендации к существующему коду только для измененного кода "
+"или, если большая часть файла находится в стадии пересмотра. Другими "
+"словами, изменяйте структуру существующих файлов, только если она "
+"подвергается серьезным изменениям. В этом случае сначала сделайте коммит ** "
+"move **, затем примените изменения, связанные с этой функцией."
 
 #: ../../reference/guidelines.rst:33
 msgid "Module structure"
-msgstr ""
+msgstr "Модульная структура"
 
 #: ../../reference/guidelines.rst:36
 msgid "Directories"
-msgstr ""
+msgstr "Справочники"
 
 #: ../../reference/guidelines.rst:37
 msgid ""
-"A module is organized in important directories. Those contain the "
-"business logic; having a look at them should make you understand the "
-"purpose of the module."
+"A module is organized in important directories. Those contain the business "
+"logic; having a look at them should make you understand the purpose of the "
+"module."
 msgstr ""
+"Модуль организован в важных каталогах. Те содержат бизнес-логику; взгляд на "
+"них должен помочь вам понять назначение модуля."
 
 #: ../../reference/guidelines.rst:40
 msgid "*data/* : demo and data xml"
-msgstr ""
+msgstr "* data / *: демо и данные xml"
 
 #: ../../reference/guidelines.rst:41
 msgid "*models/* : models definition"
-msgstr ""
+msgstr "* модели / *: определение модели"
 
 #: ../../reference/guidelines.rst:42
 msgid "*controllers/* : contains controllers (HTTP routes)"
-msgstr ""
+msgstr "* controllers / *: содержит контроллеры (HTTP-маршруты)"
 
 #: ../../reference/guidelines.rst:43
 msgid "*views/* : contains the views and templates"
-msgstr ""
+msgstr "* views / *: содержит представления и шаблоны"
 
 #: ../../reference/guidelines.rst:44
 msgid ""
-"*static/* : contains the web assets, separated into *css/, js/, img/, "
-"lib/, ...*"
+"*static/* : contains the web assets, separated into *css/, js/, img/, lib/, "
+"...*"
 msgstr ""
+"* static / *: содержит веб-ресурсы, разделенные на * css /, js /, img /, lib"
+" /, ... *"
 
 #: ../../reference/guidelines.rst:46
 msgid "Other optional directories compose the module."
-msgstr ""
+msgstr "Другие дополнительные каталоги составляют модуль."
 
 #: ../../reference/guidelines.rst:48
 msgid ""
-"*wizard/* : regroups the transient models (``models.TransientModel``) and"
-" their views"
+"*wizard/* : regroups the transient models (``models.TransientModel``) and "
+"their views"
 msgstr ""
+"* wizard / *: группирует временные модели (`` models.TransientModel``) и их "
+"представления"
 
 #: ../../reference/guidelines.rst:49
 msgid ""
-"*report/* : contains the printable reports and models based on SQL views."
-" Python objects and XML views are included in this directory"
+"*report/* : contains the printable reports and models based on SQL views. "
+"Python objects and XML views are included in this directory"
 msgstr ""
+"* report / *: содержит печатные отчеты и модели, основанные на "
+"представлениях SQL. Python объекты и представления XML включены в этот "
+"каталог"
 
 #: ../../reference/guidelines.rst:50
 msgid "*tests/* : contains the Python tests"
-msgstr ""
+msgstr "* tests / *: содержит тесты Python"
 
 #: ../../reference/guidelines.rst:54
 msgid "File naming"
-msgstr ""
+msgstr "Наименование файла"
 
 #: ../../reference/guidelines.rst:56
 msgid ""
 "File naming is important to quickly find information through all odoo "
-"addons. This section explains how to name files in a standard odoo "
-"module. As an example we use a `plant nursery "
+"addons. This section explains how to name files in a standard odoo module. "
+"As an example we use a `plant nursery "
 "<https://github.com/tivisse/odoodays-2018/tree/master/plant_nursery>`_ "
 "application. It holds two main models *plant.nursery* and *plant.order*."
 msgstr ""
+"Наименование файлов важно для быстрого поиска информации через все "
+"дополнения odoo. В этом разделе объясняется, как называть файлы в "
+"стандартном модуле odoo. В качестве примера мы используем питомник растений "
+"<https://github.com/tivisse/odoodays-2018/tree/master/plant_nursery>`_ "
+"приложение. Он содержит две основные модели * plant.nursery * и * "
+"plant.order *."
 
 #: ../../reference/guidelines.rst:61
 msgid ""
-"Concerning *models*, split the business logic by sets of models belonging"
-" to a same main model. Each set lies in a given file named based on its "
-"main model. If there is only one model, its name is the same as the "
-"module name. Each inherited model should be in its own file to help "
-"understanding of impacted models."
+"Concerning *models*, split the business logic by sets of models belonging to"
+" a same main model. Each set lies in a given file named based on its main "
+"model. If there is only one model, its name is the same as the module name. "
+"Each inherited model should be in its own file to help understanding of "
+"impacted models."
 msgstr ""
+"Что касается * моделей *, разделите бизнес-логику на наборы моделей, "
+"принадлежащих к одной и той же основной модели. Каждый набор находится в "
+"данном файле с именем, основанным на его основной модели. Если существует "
+"только одна модель, ее имя совпадает с именем модуля. Каждая унаследованная "
+"модель должна быть в своем собственном файле, чтобы помочь понять затронутые"
+" модели."
 
 #: ../../reference/guidelines.rst:75
 msgid ""
-"Concerning *security* and access rights and rules two main files should "
-"be used. First one is the definition of access rights done in a "
+"Concerning *security* and access rights and rules two main files should be "
+"used. First one is the definition of access rights done in a "
 "``ir.model.access.csv`` file. User groups are defined in "
 "``<module>_groups.xml``. Access rules are defined in "
 "``<model>_security.xml``."
 msgstr ""
+"Что касается * безопасности *, прав доступа и правил, следует использовать "
+"два основных файла. Первый - это определение прав доступа, сделанное в файле"
+" `` ir.model.access.csv``. Группы пользователей определены в `` <module> "
+"_groups.xml``. Правила доступа определены в `` <model> _security.xml``."
 
 #: ../../reference/guidelines.rst:89
 msgid ""
-"Concerning *views*, backend views should be split like models and "
-"suffixed by ``_views.xml``. Backend views are list, form, kanban, "
-"activity, graph, pivot, .. views. To ease split by model in views main "
-"menus not linked to specific actions may be extracted into an optional "
-"``<module>_menus.xml`` file. Templates (QWeb pages used notably for "
-"portal / website display) and bundles (import of JS and CSS assets) are "
-"put in separate files. Those are respectively ``<model>_templates.xml`` "
-"and ``assets.xml`` files."
+"Concerning *views*, backend views should be split like models and suffixed "
+"by ``_views.xml``. Backend views are list, form, kanban, activity, graph, "
+"pivot, .. views. To ease split by model in views main menus not linked to "
+"specific actions may be extracted into an optional ``<module>_menus.xml`` "
+"file. Templates (QWeb pages used notably for portal / website display) and "
+"bundles (import of JS and CSS assets) are put in separate files. Those are "
+"respectively ``<model>_templates.xml`` and ``assets.xml`` files."
 msgstr ""
+"Что касается * views *, то внутренние представления должны быть разделены "
+"как модели и дополнены суффиксом `` _views.xml``. Бэкэнд-просмотры: список, "
+"форма, канбан, активность, график, сводка, .. представления. Для облегчения "
+"разделения по моделям в представлениях основные меню, не связанные с "
+"конкретными действиями, могут быть извлечены в необязательный `` <module> "
+"_menus.xml`` file. Шаблоны (страницы QWeb, используемые, в частности, для "
+"отображения портала / веб-сайта) и пакеты (импорт ресурсов JS и CSS) "
+"помещаются в отдельные файлы. Это соответственно `` <model> _templates.xml``"
+" и `` assets.xml`` файлы."
 
 #: ../../reference/guidelines.rst:109
 msgid ""
 "Concerning *data*, split them by purpose (demo or data) and main model. "
 "Filenames will be the main_model name suffixed by ``_demo.xml`` or "
-"``_data.xml``. For instance for an application having demo and data for "
-"its main model as well as subtypes, activities and mail templates all "
-"related to mail module:"
+"``_data.xml``. For instance for an application having demo and data for its "
+"main model as well as subtypes, activities and mail templates all related to"
+" mail module:"
 msgstr ""
+"Что касается * данных *, разделите их по назначению (демо или данные) и "
+"основной модели. Имена файлов будут именами main_model с суффиксом `` "
+"_demo.xml`` или `` _data.xml``. Например, для приложения, имеющего "
+"демонстрацию и данные для своей основной модели, а также подтипы, действия и"
+" почтовые шаблоны, связанные с почтовым модулем:"
 
 #: ../../reference/guidelines.rst:122
 msgid ""
 "Concerning *controllers*, generally all controllers belong to a single "
-"controller contained in a file named ``<module_name>.py``. An old "
-"convention in Odoo is to name this file ``main.py`` but it is considered "
-"as outdated. If you need to inherit an existing controller from another "
-"module do it in ``<inherited_module_name>.py``. For example adding portal"
-" controller in an application is done in ``portal.py``."
+"controller contained in a file named ``<module_name>.py``. An old convention"
+" in Odoo is to name this file ``main.py`` but it is considered as outdated. "
+"If you need to inherit an existing controller from another module do it in "
+"``<inherited_module_name>.py``. For example adding portal controller in an "
+"application is done in ``portal.py``."
 msgstr ""
+"Что касается * контроллеров *, то, как правило, все контроллеры принадлежат "
+"одному контроллеру, содержащемуся в файле с именем `` <module_name> .py``. "
+"Старое соглашение в Odoo - называть этот файл `` main.py``, но он считается "
+"устаревшим. Если вам нужно унаследовать существующий контроллер от другого "
+"модуля, сделайте это в `` <inherited_module_name> .py``. Например, "
+"добавление контроллера портала в приложение выполняется в `` portal.py``."
 
 #: ../../reference/guidelines.rst:136
 msgid ""
-"Concerning *static files*, Javascript files follow globally the same "
-"logic as python models. Each component should be in its own file with a "
-"meaningful name. For instance, the activity widgets are located in "
-"``activity.js`` of mail module. Subdirectories can also be created to "
-"structure the 'package' (see web module for more details). The same logic"
-" should be applied for the templates of JS widgets (static XML files) and"
-" for their styles (scss files). Don't link data (image, libraries) "
-"outside Odoo: do not use an URL to an image but copy it in the codebase "
-"instead."
+"Concerning *static files*, Javascript files follow globally the same logic "
+"as python models. Each component should be in its own file with a meaningful"
+" name. For instance, the activity widgets are located in ``activity.js`` of "
+"mail module. Subdirectories can also be created to structure the 'package' "
+"(see web module for more details). The same logic should be applied for the "
+"templates of JS widgets (static XML files) and for their styles (scss "
+"files). Don't link data (image, libraries) outside Odoo: do not use an URL "
+"to an image but copy it in the codebase instead."
 msgstr ""
+"Что касается * статических файлов *, файлы Javascript следуют во всем мире "
+"той же логике, что и модели Python. Каждый компонент должен быть в своем "
+"собственном файле со значимым именем. Например, виджеты активности находятся"
+" в `` activity.js`` почтового модуля. Подкаталоги также могут быть созданы "
+"для структурирования «пакета» (см. Веб-модуль для более подробной "
+"информации). Та же логика должна применяться к шаблонам виджетов JS "
+"(статические файлы XML) и к их стилям (файлы scss). Не связывайте данные "
+"(изображения, библиотеки) за пределами Odoo: не используйте URL-адрес "
+"изображения, вместо этого скопируйте его в кодовую базу."
 
 #: ../../reference/guidelines.rst:145
 msgid ""
-"Concerning *wizards*, naming convention is the same of for python models:"
-" ``<transient>.py`` and ``<transient>_views.xml``. Both are put in the "
-"wizard directory. This naming comes from old odoo applications using the "
-"wizard keyword for transient models."
+"Concerning *wizards*, naming convention is the same of for python models: "
+"``<transient>.py`` and ``<transient>_views.xml``. Both are put in the wizard"
+" directory. This naming comes from old odoo applications using the wizard "
+"keyword for transient models."
 msgstr ""
+"Что касается * волшебников *, соглашение об именах такое же, как и для "
+"моделей Python: `` <transient> .py`` и `` <transient> _views.xml``. Оба "
+"помещены в каталог мастера. Это наименование происходит от старых приложений"
+" odoo, использующих ключевое слово wizard для переходных моделей."
 
 #: ../../reference/guidelines.rst:157
 msgid ""
 "Concerning *statistics reports* done with python / SQL views and classic "
 "views naming is the following :"
 msgstr ""
+"Относительно * статистических отчетов *, сделанных с представлениями Python "
+"/ SQL и классическими представлениями, является следующее:"
 
 #: ../../reference/guidelines.rst:167
 msgid ""
 "Concerning *printable reports* which contain mainly data preparation and "
 "Qweb templates naming is the following :"
 msgstr ""
+"Что касается * печатных отчетов *, которые содержат в основном подготовку "
+"данных и имена шаблонов Qweb, это:"
 
 #: ../../reference/guidelines.rst:177
 msgid "The complete tree of our Odoo module therefore looks like"
-msgstr ""
+msgstr "Таким образом, полное дерево нашего модуля Odoo выглядит"
 
 #: ../../reference/guidelines.rst:236
 msgid ""
-"File names should only contain ``[a-z0-9_]`` (lowercase alphanumerics and"
-" ``_``)"
+"File names should only contain ``[a-z0-9_]`` (lowercase alphanumerics and "
+"``_``)"
 msgstr ""
+"Имена файлов должны содержать только `` [a-z0-9_] `` (строчные буквы и цифры"
+" и `` _``)"
 
 #: ../../reference/guidelines.rst:239
 msgid "Use correct file permissions : folder 755 and file 644."
-msgstr ""
+msgstr "Используйте правильные права доступа к файлу: папка 755 и файл 644."
 
 #: ../../reference/guidelines.rst:244
 msgid "XML files"
-msgstr ""
+msgstr "XML-файлы"
 
 #: ../../reference/guidelines.rst:247
 msgid "Format"
-msgstr ""
+msgstr "Формат"
 
 #: ../../reference/guidelines.rst:248
 msgid ""
-"To declare a record in XML, the **record** notation (using *<record>*) is"
-" recommended:"
+"To declare a record in XML, the **record** notation (using *<record>*) is "
+"recommended:"
 msgstr ""
+"Чтобы объявить запись в XML, запись ** запись ** (с использованием * "
+"<record> *) Рекомендовано:"
 
 #: ../../reference/guidelines.rst:250
 msgid "Place ``id`` attribute before ``model``"
-msgstr ""
+msgstr "Поместите атрибут `` id`` перед `` model``"
 
 #: ../../reference/guidelines.rst:251
 msgid ""
-"For field declaration, ``name`` attribute is first. Then place the "
-"*value* either in the ``field`` tag, either in the ``eval`` attribute, "
-"and finally other attributes (widget, options, ...) ordered by "
-"importance."
+"For field declaration, ``name`` attribute is first. Then place the *value* "
+"either in the ``field`` tag, either in the ``eval`` attribute, and finally "
+"other attributes (widget, options, ...) ordered by importance."
 msgstr ""
+"Для объявления поля атрибут `` name`` является первым. Затем поместите * "
+"значение * либо в тег `` field``, либо в атрибут `` eval``, и, наконец, в "
+"другие атрибуты (виджет, опции, ...), упорядоченные по важности."
 
 #: ../../reference/guidelines.rst:256
 msgid ""
 "Try to group the record by model. In case of dependencies between "
 "action/menu/views, this convention may not be applicable."
 msgstr ""
+"Попробуйте сгруппировать запись по модели. В случае зависимости между "
+"действием / меню / представлениями, это соглашение может не применяться."
 
 #: ../../reference/guidelines.rst:258
 msgid "Use naming convention defined at the next point"
-msgstr ""
+msgstr "Использовать соглашение об именах, определенное в следующей точке"
 
 #: ../../reference/guidelines.rst:259
 msgid ""
-"The tag *<data>* is only used to set not-updatable data with "
-"``noupdate=1``. If there is only not-updatable data in the file, the "
-"``noupdate=1`` can be set on the ``<odoo>`` tag and do not set a "
-"``<data>`` tag."
+"The tag *<data>* is only used to set not-updatable data with ``noupdate=1``."
+" If there is only not-updatable data in the file, the ``noupdate=1`` can be "
+"set on the ``<odoo>`` tag and do not set a ``<data>`` tag."
 msgstr ""
+"Тег * <data> * используется только для установки не обновляемых данных с "
+"помощью `` noupdate = 1``. Если в файле присутствуют только не обновляемые "
+"данные, для `` noupdate = 1`` можно указать `` <odoo> `` помечать и не "
+"устанавливать `` <data> `` тег."
 
 #: ../../reference/guidelines.rst:277
 msgid "Odoo supports custom tags acting as syntactic sugar:"
 msgstr ""
+"Odoo поддерживает пользовательские теги, действующие как синтаксический "
+"сахар:"
 
 #: ../../reference/guidelines.rst:279
 msgid "menuitem: use it as a shortcut to declare a ``ir.ui.menu``"
-msgstr ""
+msgstr "menuitem: используйте его как ярлык для объявления `` ir.ui.menu``"
 
 #: ../../reference/guidelines.rst:280
 msgid ""
-"template: use it to declare a QWeb View requiring only the ``arch`` "
-"section of the view."
+"template: use it to declare a QWeb View requiring only the ``arch`` section "
+"of the view."
 msgstr ""
+"template: используйте его для объявления представления QWeb, для которого "
+"требуется только раздел `` arch`` представления."
 
 #: ../../reference/guidelines.rst:281
-msgid "report: use to declare a :ref:`report action <reference/actions/report>`"
+msgid ""
+"report: use to declare a :ref:`report action <reference/actions/report>`"
 msgstr ""
+"report: используйте для объявления действия: ref: `report "
+"<reference/actions/report> `"
 
 #: ../../reference/guidelines.rst:282
 msgid "act_window: use it if the record notation can't do what you want"
 msgstr ""
+"act_window: используйте его, если запись записи не может делать то, что вы "
+"хотите"
 
 #: ../../reference/guidelines.rst:284
 msgid "The 4 first tags are preferred over the *record* notation."
-msgstr ""
+msgstr "4 первых тега предпочтительнее записи * record *."
 
 #: ../../reference/guidelines.rst:288
 msgid "XML IDs and naming"
-msgstr ""
+msgstr "XML-идентификаторы и наименования"
 
 #: ../../reference/guidelines.rst:291
 msgid "Security, View and Action"
-msgstr ""
+msgstr "Безопасность, Просмотр и Действие"
 
 #: ../../reference/guidelines.rst:293
 msgid "Use the following pattern :"
-msgstr ""
+msgstr "Используйте следующий шаблон:"
 
 #: ../../reference/guidelines.rst:295
 msgid ""
 "For a menu: :samp:`{<model_name>}_menu`, or "
 ":samp:`{<model_name>}_menu_{do_stuff}` for submenus."
 msgstr ""
+"Для меню:: samp: `{ <model_name> } _menu` или: samp: `{ <model_name> } "
+"_menu_ {do_stuff} `для подменю."
 
 #: ../../reference/guidelines.rst:296
 msgid ""
-"For a view: :samp:`{<model_name>}_view_{<view_type>}`, where *view_type* "
-"is ``kanban``, ``form``, ``tree``, ``search``, ..."
+"For a view: :samp:`{<model_name>}_view_{<view_type>}`, where *view_type* is "
+"``kanban``, ``form``, ``tree``, ``search``, ..."
 msgstr ""
+"Для просмотра:: samp: `{ <model_name> }_Посмотреть_{ <view_type> } `, где * "
+"view_type * - это` `kanban``,` `form``,` `tree``,` `search``, ..."
 
 #: ../../reference/guidelines.rst:298
 msgid ""
 "For an action: the main action respects :samp:`{<model_name>}_action`. "
-"Others are suffixed with :samp:`_{<detail>}`, where *detail* is a "
-"lowercase string briefly explaining the action. This is used only if "
-"multiple actions are declared for the model."
+"Others are suffixed with :samp:`_{<detail>}`, where *detail* is a lowercase "
+"string briefly explaining the action. This is used only if multiple actions "
+"are declared for the model."
 msgstr ""
+"Для действия: основное действие уважает: samp: `{ <model_name> } _Action`. "
+"Другие имеют суффикс: samp: `_ { <detail> } `, где * detail * - строчная "
+"строка, кратко объясняющая действие. Это используется, только если для "
+"модели объявлено несколько действий."
 
 #: ../../reference/guidelines.rst:302
 msgid ""
-"For window actions: suffix the action name by the specific view "
-"information like :samp:`{<model_name>}_action_view_{<view_type>}`."
+"For window actions: suffix the action name by the specific view information "
+"like :samp:`{<model_name>}_action_view_{<view_type>}`."
 msgstr ""
+"Для действий в окне: добавьте суффикс имени действия к определенной "
+"информации вида, например: samp: `{ <model_name> } {_Action_view_ "
+"<view_type> } `."
 
 #: ../../reference/guidelines.rst:304
 msgid ""
-"For a group: :samp:`{<model_name>}_group_{<group_name>}` where "
-"*group_name* is the name of the group, generally 'user', 'manager', ..."
+"For a group: :samp:`{<model_name>}_group_{<group_name>}` where *group_name* "
+"is the name of the group, generally 'user', 'manager', ..."
 msgstr ""
+"Для группы:: samp: `{ <model_name> } {_Group_ <group_name> } `где * "
+"имя_группы * - это имя группы, обычно« пользователь »,« менеджер », ..."
 
 #: ../../reference/guidelines.rst:306
 msgid ""
 "For a rule: :samp:`{<model_name>}_rule_{<concerned_group>}` where "
-"*concerned_group* is the short name of the concerned group ('user' for "
-"the 'model_name_group_user', 'public' for public user, 'company' for "
-"multi-company rules, ...)."
+"*concerned_group* is the short name of the concerned group ('user' for the "
+"'model_name_group_user', 'public' for public user, 'company' for multi-"
+"company rules, ...)."
 msgstr ""
+"Для правила:: samp: `{ <model_name> } {_Rule_ <concerned_group> } `where * "
+"related_group * - это короткое имя соответствующей группы (« user »для« "
+"model_name_group_user »,« public »для публичного пользователя,« company »для"
+" правил нескольких компаний, ...)."
 
 #: ../../reference/guidelines.rst:311
 msgid ""
-"Name should be identical to xml id with dots replacing underscores. "
-"Actions should have a real naming as it is used as display name."
+"Name should be identical to xml id with dots replacing underscores. Actions "
+"should have a real naming as it is used as display name."
 msgstr ""
+"Имя должно быть идентично идентификатору xml с точками, заменяющими "
+"подчеркивание. Действия должны иметь реальное имя, поскольку оно "
+"используется в качестве отображаемого имени."
 
 #: ../../reference/guidelines.rst:365
 msgid "Inheriting XML"
-msgstr ""
+msgstr "Наследование XML"
 
 #: ../../reference/guidelines.rst:367
 msgid ""
-"Xml Ids of inheriting views should use the same ID as the original "
-"record. It helps finding all inheritance at a glance. As final Xml Ids "
-"are prefixed by the module that creates them there is no overlap."
+"Xml Ids of inheriting views should use the same ID as the original record. "
+"It helps finding all inheritance at a glance. As final Xml Ids are prefixed "
+"by the module that creates them there is no overlap."
 msgstr ""
+"XML-идентификаторы наследующих представлений должны использовать тот же "
+"идентификатор, что и исходная запись. Это помогает найти все наследство с "
+"первого взгляда. Поскольку конечные идентификаторы Xml имеют префикс модуля,"
+" который их создает, перекрытия нет."
 
 #: ../../reference/guidelines.rst:371
 msgid ""
-"Naming should contain an ``.inherit.{details}`` suffix to ease "
-"understanding the override purpose when looking at its name."
+"Naming should contain an ``.inherit.{details}`` suffix to ease understanding"
+" the override purpose when looking at its name."
 msgstr ""
+"Именование должно содержать суффикс `` .inherit. {Details} ``, чтобы "
+"облегчить понимание цели переопределения при взгляде на его имя."
 
 #: ../../reference/guidelines.rst:382
 msgid ""
-"New primary views do not require the inherit suffix as those are new "
-"records based upon the first one."
+"New primary views do not require the inherit suffix as those are new records"
+" based upon the first one."
 msgstr ""
+"Новые первичные представления не требуют суффикса наследования, поскольку "
+"это новые записи, основанные на первом."
 
 #: ../../reference/guidelines.rst:397
 msgid "Python"
-msgstr ""
+msgstr "питон"
 
 #: ../../reference/guidelines.rst:400
 msgid "PEP8 options"
-msgstr ""
+msgstr "Варианты PEP8"
 
 #: ../../reference/guidelines.rst:402
 msgid ""
-"Using a linter can help show syntax and semantic warnings or errors. Odoo"
-" source code tries to respect Python standard, but some of them can be "
+"Using a linter can help show syntax and semantic warnings or errors. Odoo "
+"source code tries to respect Python standard, but some of them can be "
 "ignored."
 msgstr ""
+"Использование линтера может помочь показать синтаксические и семантические "
+"предупреждения или ошибки. Исходный код Odoo пытается соответствовать "
+"стандарту Python, но некоторые из них можно игнорировать."
 
 #: ../../reference/guidelines.rst:405
 msgid "E501: line too long"
-msgstr ""
+msgstr "E501: слишком длинная линия"
 
 #: ../../reference/guidelines.rst:406
 msgid "E301: expected 1 blank line, found 0"
-msgstr ""
+msgstr "E301: ожидается 1 пустая строка, найдено 0"
 
 #: ../../reference/guidelines.rst:407
 msgid "E302: expected 2 blank lines, found 1"
-msgstr ""
+msgstr "E302: ожидается 2 пустых строки, найдено 1"
 
 #: ../../reference/guidelines.rst:410
 msgid "Imports"
-msgstr ""
+msgstr "импорт"
 
 #: ../../reference/guidelines.rst:411
 msgid "The imports are ordered as"
-msgstr ""
+msgstr "Импорт упорядочен как"
 
 #: ../../reference/guidelines.rst:413
 msgid "External libraries (one per line sorted and split in python stdlib)"
 msgstr ""
+"Внешние библиотеки (по одной на строку, отсортированные и разбитые в python "
+"stdlib)"
 
 #: ../../reference/guidelines.rst:414
 msgid "Imports of ``odoo``"
-msgstr ""
+msgstr "Импорт `` odoo``"
 
 #: ../../reference/guidelines.rst:415
 msgid "Imports from Odoo modules (rarely, and only if necessary)"
-msgstr ""
+msgstr "Импорт из модулей Odoo (редко и только при необходимости)"
 
 #: ../../reference/guidelines.rst:417
 msgid "Inside these 3 groups, the imported lines are alphabetically sorted."
-msgstr ""
+msgstr "Внутри этих 3 групп импортированные строки отсортированы по алфавиту."
 
 #: ../../reference/guidelines.rst:435
 msgid "Idiomatics of Programming (Python)"
-msgstr ""
+msgstr "Идиоматика программирования (Python)"
 
 #: ../../reference/guidelines.rst:437
-msgid "Each python file should have ``# -*- coding: utf-8 -*-`` as first line."
+msgid ""
+"Each python file should have ``# -*- coding: utf-8 -*-`` as first line."
 msgstr ""
+"Каждый файл Python должен иметь `` # - * - coding: utf-8 - * - `` в качестве"
+" первой строки."
 
 #: ../../reference/guidelines.rst:438
 msgid ""
-"Always favor *readability* over *conciseness* or using the language "
-"features or idioms."
+"Always favor *readability* over *conciseness* or using the language features"
+" or idioms."
 msgstr ""
+"Всегда отдавайте предпочтение * читабельности *, а не * краткости * или "
+"использованию языковых функций или идиом."
 
 #: ../../reference/guidelines.rst:439
 msgid "Don't use ``.clone()``"
-msgstr ""
+msgstr "Не используйте `` .clone () ``"
 
 #: ../../reference/guidelines.rst:450
 msgid "Python dictionary : creation and update"
-msgstr ""
+msgstr "Словарь Python: создание и обновление"
 
 #: ../../reference/guidelines.rst:475
 msgid "Use meaningful variable/class/method names"
-msgstr ""
+msgstr "Используйте значимые имена переменных / классов / методов"
 
 #: ../../reference/guidelines.rst:476
 msgid ""
-"Useless variable : Temporary variables can make the code clearer by "
-"giving names to objects, but that doesn't mean you should create "
-"temporary variables all the time:"
+"Useless variable : Temporary variables can make the code clearer by giving "
+"names to objects, but that doesn't mean you should create temporary "
+"variables all the time:"
 msgstr ""
+"Бесполезная переменная: временные переменные могут сделать код более "
+"понятным, присваивая имена объектам, но это не значит, что вы должны "
+"постоянно создавать временные переменные:"
 
 #: ../../reference/guidelines.rst:488
 msgid "Multiple return points are OK, when they're simpler"
-msgstr ""
+msgstr "Несколько точек возврата в порядке, когда они проще"
 
 #: ../../reference/guidelines.rst:508
 msgid ""
-"Know your builtins : You should at least have a basic understanding of "
-"all the Python builtins (http://docs.python.org/library/functions.html)"
+"Know your builtins : You should at least have a basic understanding of all "
+"the Python builtins (http://docs.python.org/library/functions.html)"
 msgstr ""
+"Знайте свои встроенные функции: по крайней мере, вы должны иметь общее "
+"представление обо всех встроенных функциях Python "
+"(http://docs.python.org/library/functions.html)"
 
 #: ../../reference/guidelines.rst:516
 msgid ""
 "Also, ``if 'key' in my_dict`` and ``if my_dict.get('key')`` have very "
 "different meaning, be sure that you're using the right one."
 msgstr ""
+"Кроме того, `` if &#39;key&#39; в my_dict`` и `` if my_dict.get "
+"(&#39;key&#39;) `` имеют совершенно другое значение, убедитесь, что вы "
+"используете правильный."
 
 #: ../../reference/guidelines.rst:519
 msgid ""
-"Learn list comprehensions : Use list comprehension, dict comprehension, "
-"and basic manipulation using ``map``, ``filter``, ``sum``, ... They make "
-"the code easier to read."
+"Learn list comprehensions : Use list comprehension, dict comprehension, and "
+"basic manipulation using ``map``, ``filter``, ``sum``, ... They make the "
+"code easier to read."
 msgstr ""
+"Изучите понимание списка: используйте понимание списка, понимание слова и "
+"базовые манипуляции с использованием `` map``, `` filter``, `` sum``, ... "
+"Они делают код более легким для чтения."
 
 #: ../../reference/guidelines.rst:532
 msgid ""
-"Collections are booleans too : In python, many objects have \"boolean-"
-"ish\" value when evaluated in a boolean context (such as an if). Among "
-"these are collections (lists, dicts, sets, ...) which are \"falsy\" when "
-"empty and \"truthy\" when containing items:"
+"Collections are booleans too : In python, many objects have \"boolean-ish\" "
+"value when evaluated in a boolean context (such as an if). Among these are "
+"collections (lists, dicts, sets, ...) which are \"falsy\" when empty and "
+"\"truthy\" when containing items:"
 msgstr ""
+"Коллекции также являются логическими значениями: в python многие объекты "
+"имеют значение «boolean-ish» при оценке в логическом контексте (например, "
+"if). Среди них есть коллекции (списки, сообщения, наборы и т. Д.), Которые "
+"являются «ложными», когда они пустые, и «правдивыми», когда содержат "
+"элементы:"
 
 #: ../../reference/guidelines.rst:543
 msgid ""
 "So, you can write ``if some_collection:`` instead of ``if "
 "len(some_collection):``."
 msgstr ""
+"Таким образом, вы можете написать `` if some_collection: `` вместо `` if len"
+" (some_collection): ``."
 
 #: ../../reference/guidelines.rst:546
 msgid "Iterate on iterables"
-msgstr ""
+msgstr "Итерировать на итерации"
 
 #: ../../reference/guidelines.rst:560
 msgid "Use dict.setdefault"
-msgstr ""
+msgstr "Используйте dict.setdefault"
 
 #: ../../reference/guidelines.rst:576
 msgid ""
 "As a good developper, document your code (docstring on methods, simple "
 "comments for tricky part of code)"
 msgstr ""
+"Как хороший разработчик, документируйте свой код (документация по методам, "
+"простые комментарии для хитрой части кода)"
 
 #: ../../reference/guidelines.rst:578
 msgid ""
@@ -508,132 +664,181 @@ msgid ""
 "http://python.net/~goodger/projects/pycon/2007/idiomatic/handout.html (a "
 "little bit outdated, but quite relevant)"
 msgstr ""
+"В дополнение к этим рекомендациям, вы также можете найти следующую ссылку "
+"интересной: "
+"http://python.net/~goodger/projects/pycon/2007/idiomatic/handout.html "
+"(немного устаревшая, но весьма актуальная)"
 
 #: ../../reference/guidelines.rst:583
 msgid "Programming in Odoo"
-msgstr ""
+msgstr "Программирование в Odoo"
 
 #: ../../reference/guidelines.rst:585
 msgid ""
-"Avoid to create generators and decorators: only use the ones provided by "
-"the Odoo API."
+"Avoid to create generators and decorators: only use the ones provided by the"
+" Odoo API."
 msgstr ""
+"Избегайте создания генераторов и декораторов: используйте только те, которые"
+" предоставляются API Odoo."
 
 #: ../../reference/guidelines.rst:587
 msgid ""
-"As in python, use ``filtered``, ``mapped``, ``sorted``, ... methods to "
-"ease code reading and performance."
+"As in python, use ``filtered``, ``mapped``, ``sorted``, ... methods to ease "
+"code reading and performance."
 msgstr ""
+"Как и в python, используйте `` фильтрованный``, `` маппированный``, `` "
+"sorted``, ... методы, чтобы упростить чтение кода и производительность."
 
 #: ../../reference/guidelines.rst:592
 msgid "Make your method work in batch"
-msgstr ""
+msgstr "Сделайте так, чтобы ваш метод работал в пакетном режиме"
 
 #: ../../reference/guidelines.rst:593
 msgid ""
 "When adding a function, make sure it can process multiple records by "
 "iterating on self to treat each record."
 msgstr ""
+"При добавлении функции убедитесь, что она может обрабатывать несколько "
+"записей, итерируя себя для обработки каждой записи."
 
 #: ../../reference/guidelines.rst:602
 msgid ""
-"For performance issue, when developping a 'stat button' (for instance), "
-"do not perform a ``search`` or a ``search_count`` in a loop. It is "
-"recommended to use ``read_group`` method, to compute all value in only "
-"one request."
+"For performance issue, when developping a 'stat button' (for instance), do "
+"not perform a ``search`` or a ``search_count`` in a loop. It is recommended "
+"to use ``read_group`` method, to compute all value in only one request."
 msgstr ""
+"Из-за проблем с производительностью при разработке «кнопки stat» (например) "
+"не выполняйте «поиск» или «поиск по количеству» в цикле. Рекомендуется "
+"использовать метод `` read_group``, чтобы вычислить все значения только в "
+"одном запросе."
 
 #: ../../reference/guidelines.rst:617
 msgid "Propagate the context"
-msgstr ""
+msgstr "Распространять контекст"
 
 #: ../../reference/guidelines.rst:618
 msgid ""
-"The context is a ``frozendict`` that cannot be modified. To call a method"
-" with a different context, the ``with_context`` method should be used :"
+"The context is a ``frozendict`` that cannot be modified. To call a method "
+"with a different context, the ``with_context`` method should be used :"
 msgstr ""
+"Контекст - это `` frozendict``, который нельзя изменить. Для вызова метода с"
+" другим контекстом должен использоваться метод `` with_context``:"
 
 #: ../../reference/guidelines.rst:627
 msgid "Passing parameter in context can have dangerous side-effects."
-msgstr ""
+msgstr "Передача параметра в контексте может иметь опасные побочные эффекты."
 
 #: ../../reference/guidelines.rst:629
 msgid ""
-"Since the values are propagated automatically, some unexpected behavior "
-"may appear. Calling ``create()`` method of a model with "
-"*default_my_field* key in context will set the default value of "
-"*my_field* for the concerned model. But if during this creation, other "
-"objects (such as sale.order.line, on sale.order creation) having a field "
-"name *my_field* are created, their default value will be set too."
+"Since the values are propagated automatically, some unexpected behavior may "
+"appear. Calling ``create()`` method of a model with *default_my_field* key "
+"in context will set the default value of *my_field* for the concerned model."
+" But if during this creation, other objects (such as sale.order.line, on "
+"sale.order creation) having a field name *my_field* are created, their "
+"default value will be set too."
 msgstr ""
+"Поскольку значения распространяются автоматически, может возникнуть "
+"непредвиденное поведение. Вызов метода `` create () `` модели с ключом * "
+"default_my_field * в контексте установит значение по умолчанию * my_field * "
+"для соответствующей модели. Но если во время этого создания будут созданы "
+"другие объекты (такие как sale.order.line, при создании sale.order), имеющие"
+" имя поля * my_field *, их значение по умолчанию также будет установлено."
 
 #: ../../reference/guidelines.rst:635
 msgid ""
-"If you need to create a key context influencing the behavior of some "
-"object, choice a good name, and eventually prefix it by the name of the "
-"module to isolate its impact. A good example are the keys of ``mail`` "
-"module : *mail_create_nosubscribe*, *mail_notrack*, "
-"*mail_notify_user_signature*, ..."
+"If you need to create a key context influencing the behavior of some object,"
+" choice a good name, and eventually prefix it by the name of the module to "
+"isolate its impact. A good example are the keys of ``mail`` module : "
+"*mail_create_nosubscribe*, *mail_notrack*, *mail_notify_user_signature*, ..."
 msgstr ""
+"Если вам необходимо создать ключевой контекст, влияющий на поведение какого-"
+"либо объекта, выберите подходящее имя и, в конечном итоге, добавьте его к "
+"имени модуля, чтобы изолировать его влияние. Хорошим примером являются ключи"
+" модуля `` mail``: * mail_create_nosubscribe *, * mail_notrack *, * "
+"mail_notify_user_signature *, ..."
 
 #: ../../reference/guidelines.rst:642
 msgid "Do not bypass the ORM"
-msgstr ""
+msgstr "Не обходите ОРМ"
 
 #: ../../reference/guidelines.rst:643
 msgid ""
-"You should never use the database cursor directly when the ORM can do the"
-" same thing! By doing so you are bypassing all the ORM features, possibly"
-" the transactions, access rights and so on."
+"You should never use the database cursor directly when the ORM can do the "
+"same thing! By doing so you are bypassing all the ORM features, possibly the"
+" transactions, access rights and so on."
 msgstr ""
+"Вы никогда не должны использовать курсор базы данных напрямую, когда ORM "
+"может сделать то же самое! Тем самым вы обходите все функции ORM, возможно, "
+"транзакции, права доступа и так далее."
 
 #: ../../reference/guidelines.rst:647
 msgid ""
 "And chances are that you are also making the code harder to read and "
 "probably less secure."
 msgstr ""
+"И есть вероятность, что вы также затрудняете чтение кода и, вероятно, "
+"делаете его менее безопасным."
 
 #: ../../reference/guidelines.rst:666
 msgid "No SQL injections, please !"
-msgstr ""
+msgstr "Нет SQL-инъекций, пожалуйста!"
 
 #: ../../reference/guidelines.rst:667
 msgid ""
 "Care must be taken not to introduce SQL injections vulnerabilities when "
-"using manual SQL queries. The vulnerability is present when user input is"
-" either incorrectly filtered or badly quoted, allowing an attacker to "
-"introduce undesirable clauses to a SQL query (such as circumventing "
-"filters or executing UPDATE or DELETE commands)."
+"using manual SQL queries. The vulnerability is present when user input is "
+"either incorrectly filtered or badly quoted, allowing an attacker to "
+"introduce undesirable clauses to a SQL query (such as circumventing filters "
+"or executing UPDATE or DELETE commands)."
 msgstr ""
+"Необходимо соблюдать осторожность, чтобы не вводить уязвимости SQL-инъекций "
+"при использовании ручных SQL-запросов. Уязвимость возникает, когда "
+"пользовательский ввод либо неправильно фильтруется, либо неправильно "
+"цитируется, что позволяет злоумышленнику вводить нежелательные предложения в"
+" запрос SQL (например, обходить фильтры или выполнять команды UPDATE или "
+"DELETE)."
 
 #: ../../reference/guidelines.rst:673
 msgid ""
-"The best way to be safe is to never, NEVER use Python string "
-"concatenation (+) or string parameters interpolation (%) to pass "
-"variables to a SQL query string."
+"The best way to be safe is to never, NEVER use Python string concatenation "
+"(+) or string parameters interpolation (%) to pass variables to a SQL query "
+"string."
 msgstr ""
+"Лучший способ быть безопасным - никогда НИКОГДА не использовать конкатенацию"
+" строк Python (+) или интерполяцию строковых параметров (%) для передачи "
+"переменных в строку запроса SQL."
 
 #: ../../reference/guidelines.rst:676
 msgid ""
-"The second reason, which is almost as important, is that it is the job of"
-" the database abstraction layer (psycopg2) to decide how to format query "
-"parameters, not your job! For example psycopg2 knows that when you pass a"
-" list of values it needs to format them as a comma-separated list, "
-"enclosed in parentheses !"
+"The second reason, which is almost as important, is that it is the job of "
+"the database abstraction layer (psycopg2) to decide how to format query "
+"parameters, not your job! For example psycopg2 knows that when you pass a "
+"list of values it needs to format them as a comma-separated list, enclosed "
+"in parentheses !"
 msgstr ""
+"Вторая причина, которая почти так же важна, заключается в том, что именно "
+"уровень абстракции базы данных (psycopg2) решает, как форматировать "
+"параметры запроса, а не свою работу! Например, psycopg2 знает, что когда вы "
+"передаете список значений, он должен отформатировать их в виде списка через "
+"запятую, заключенного в скобки!"
 
 #: ../../reference/guidelines.rst:696
 msgid ""
-"This is very important, so please be careful also when refactoring, and "
-"most importantly do not copy these patterns!"
+"This is very important, so please be careful also when refactoring, and most"
+" importantly do not copy these patterns!"
 msgstr ""
+"Это очень важно, поэтому, пожалуйста, будьте осторожны при рефакторинге, и "
+"самое главное, не копируйте эти шаблоны!"
 
 #: ../../reference/guidelines.rst:699
 msgid ""
 "Here is a memorable example to help you remember what the issue is about "
-"(but do not copy the code there). Before continuing, please be sure to "
-"read the online documentation of pyscopg2 to learn of to use it properly:"
+"(but do not copy the code there). Before continuing, please be sure to read "
+"the online documentation of pyscopg2 to learn of to use it properly:"
 msgstr ""
+"Вот памятный пример, который поможет вам вспомнить, в чем проблема (но не "
+"копируйте код там). Прежде чем продолжить, обязательно прочитайте онлайн-"
+"документацию по pyscopg2, чтобы научиться правильно ее использовать:"
 
 #: ../../reference/guidelines.rst:703
 msgid ""
@@ -641,178 +846,246 @@ msgid ""
 "(http://initd.org/psycopg/docs/usage.html#the-problem-with-the-query-"
 "parameters)"
 msgstr ""
+"Проблема с параметрами запроса "
+"(http://initd.org/psycopg/docs/usage.html#the-problem-with-the-query-"
+"parameters)"
 
 #: ../../reference/guidelines.rst:704
 msgid ""
 "How to pass parameters with psycopg2 "
-"(http://initd.org/psycopg/docs/usage.html#passing-parameters-to-sql-"
-"queries)"
+"(http://initd.org/psycopg/docs/usage.html#passing-parameters-to-sql-queries)"
 msgstr ""
+"Как передать параметры с помощью psycopg2 "
+"(http://initd.org/psycopg/docs/usage.html#passing-parameters-to-sql-queries)"
 
 #: ../../reference/guidelines.rst:705
 msgid ""
-"Advanced parameter types (http://initd.org/psycopg/docs/usage.html"
-"#adaptation-of-python-values-to-sql-types)"
+"Advanced parameter types "
+"(http://initd.org/psycopg/docs/usage.html#adaptation-of-python-values-to-"
+"sql-types)"
 msgstr ""
+"Расширенные типы параметров "
+"(http://initd.org/psycopg/docs/usage.html#adaptation-of-python-values-to-"
+"sql-types)"
 
 #: ../../reference/guidelines.rst:709
 msgid "Think extendable"
-msgstr ""
+msgstr "Думайте расширяемый"
 
 #: ../../reference/guidelines.rst:711
 msgid ""
 "Functions and methods should not contain too much logic: having a lot of "
-"small and simple methods is more advisable than having few large and "
-"complex methods. A good rule of thumb is to split a method as soon as it "
-"has more than one responsibility (see "
+"small and simple methods is more advisable than having few large and complex"
+" methods. A good rule of thumb is to split a method as soon as it has more "
+"than one responsibility (see "
 "http://en.wikipedia.org/wiki/Single_responsibility_principle)."
 msgstr ""
+"Функции и методы не должны содержать слишком много логики: наличие большого "
+"количества маленьких и простых методов более целесообразно, чем "
+"использование нескольких больших и сложных методов. Хорошее практическое "
+"правило - разделять метод, как только он несет более одной ответственности "
+"(см. Http://en.wikipedia.org/wiki/Single_responsibility_principle)."
 
 #: ../../reference/guidelines.rst:716
 msgid ""
-"Hardcoding a business logic in a method should be avoided as it prevents "
-"to be easily extended by a submodule."
+"Hardcoding a business logic in a method should be avoided as it prevents to "
+"be easily extended by a submodule."
 msgstr ""
+"Следует избегать жесткого кодирования бизнес-логики в методе, поскольку она "
+"не позволяет легко расширяться подмодулем."
 
 #: ../../reference/guidelines.rst:742
 msgid ""
 "The above code is over extendable for the sake of example but the "
 "readability must be taken into account and a tradeoff must be made."
 msgstr ""
+"Приведенный выше код является чрезмерно расширяемым ради примера, но "
+"читабельность должна быть принята во внимание, и должен быть достигнут "
+"компромисс."
 
 #: ../../reference/guidelines.rst:745
 msgid ""
-"Also, name your functions accordingly: small and properly named functions"
-" are the starting point of readable/maintainable code and tighter "
+"Also, name your functions accordingly: small and properly named functions "
+"are the starting point of readable/maintainable code and tighter "
 "documentation."
 msgstr ""
+"Кроме того, назовите свои функции соответственно: маленькие и правильно "
+"названные функции являются отправной точкой читаемого / поддерживаемого кода"
+" и более плотной документации."
 
 #: ../../reference/guidelines.rst:748
 msgid ""
 "This recommendation is also relevant for classes, files, modules and "
 "packages. (See also http://en.wikipedia.org/wiki/Cyclomatic_complexity)"
 msgstr ""
+"Эта рекомендация также актуальна для классов, файлов, модулей и пакетов. "
+"(Смотрите также http://en.wikipedia.org/wiki/Cyclomatic_complexity)"
 
 #: ../../reference/guidelines.rst:753
 msgid "Never commit the transaction"
-msgstr ""
+msgstr "Никогда не совершайте транзакцию"
 
 #: ../../reference/guidelines.rst:754
 msgid ""
-"The Odoo framework is in charge of providing the transactional context "
-"for all RPC calls. The principle is that a new database cursor is opened "
-"at the beginning of each RPC call, and committed when the call has "
-"returned, just before transmitting the answer to the RPC client, "
-"approximately like this:"
+"The Odoo framework is in charge of providing the transactional context for "
+"all RPC calls. The principle is that a new database cursor is opened at the "
+"beginning of each RPC call, and committed when the call has returned, just "
+"before transmitting the answer to the RPC client, approximately like this:"
 msgstr ""
+"Платформа Odoo отвечает за обеспечение транзакционного контекста для всех "
+"вызовов RPC. Принцип заключается в том, что новый курсор базы данных "
+"открывается в начале каждого вызова RPC и фиксируется после его возврата, "
+"непосредственно перед передачей ответа клиенту RPC, примерно так:"
 
 #: ../../reference/guidelines.rst:775
 msgid ""
-"If any error occurs during the execution of the RPC call, the transaction"
-" is rolled back atomically, preserving the state of the system."
+"If any error occurs during the execution of the RPC call, the transaction is"
+" rolled back atomically, preserving the state of the system."
 msgstr ""
+"Если во время выполнения вызова RPC возникает какая-либо ошибка, транзакция "
+"откатывается атомарно, сохраняя состояние системы."
 
 #: ../../reference/guidelines.rst:778
 msgid ""
 "Similarly, the system also provides a dedicated transaction during the "
-"execution of tests suites, so it can be rolled back or not depending on "
-"the server startup options."
+"execution of tests suites, so it can be rolled back or not depending on the "
+"server startup options."
 msgstr ""
+"Аналогично, система также предоставляет выделенную транзакцию во время "
+"выполнения наборов тестов, поэтому ее можно откатить или нет, в зависимости "
+"от параметров запуска сервера."
 
 #: ../../reference/guidelines.rst:782
 msgid ""
-"The consequence is that if you manually call ``cr.commit()`` anywhere "
-"there is a very high chance that you will break the system in various "
-"ways, because you will cause partial commits, and thus partial and "
-"unclean rollbacks, causing among others:"
+"The consequence is that if you manually call ``cr.commit()`` anywhere there "
+"is a very high chance that you will break the system in various ways, "
+"because you will cause partial commits, and thus partial and unclean "
+"rollbacks, causing among others:"
 msgstr ""
+"Следствием этого является то, что если вы вручную вызываете `` cr.commit () "
+"`` в любом месте, существует очень высокая вероятность того, что вы сломаете"
+" систему различными способами, потому что вы будете вызывать частичные "
+"коммиты и, таким образом, частичные и нечистые откаты, вызывая среди другие:"
 
 #: ../../reference/guidelines.rst:787
 msgid "inconsistent business data, usually data loss"
-msgstr ""
+msgstr "противоречивые бизнес-данные, как правило, потеря данных"
 
 #: ../../reference/guidelines.rst:788
 msgid "workflow desynchronization, documents stuck permanently"
-msgstr ""
+msgstr "десинхронизация рабочего процесса, документы застряли навсегда"
 
 #: ../../reference/guidelines.rst:789
 msgid ""
 "tests that can't be rolled back cleanly, and will start polluting the "
-"database, and triggering error (this is true even if no error occurs "
-"during the transaction)"
+"database, and triggering error (this is true even if no error occurs during "
+"the transaction)"
 msgstr ""
+"тесты, которые не могут быть откатлены без ошибок, и начнут загрязнять базу "
+"данных, вызывая ошибку (это верно, даже если во время транзакции ошибки не "
+"возникало)"
 
 #: ../../reference/guidelines.rst:800
 msgid "Here is the very simple rule:"
-msgstr ""
+msgstr "Вот очень простое правило:"
 
 #: ../../reference/guidelines.rst:794
 msgid ""
 "You should **NEVER** call ``cr.commit()`` yourself, **UNLESS** you have "
-"created your own database cursor explicitly! And the situations where you"
-" need to do that are exceptional!"
+"created your own database cursor explicitly! And the situations where you "
+"need to do that are exceptional!"
 msgstr ""
+"Вы должны ** НИКОГДА ** не вызывать `` cr.commit () `` себя, ** ЕСЛИ НЕ ** "
+"вы явно создали свой собственный курсор базы данных! И ситуации, когда вам "
+"нужно это сделать, исключительны!"
 
 #: ../../reference/guidelines.rst:798
 msgid ""
-"And by the way if you did create your own cursor, then you need to handle"
-" error cases and proper rollback, as well as properly close the cursor "
-"when you're done with it."
+"And by the way if you did create your own cursor, then you need to handle "
+"error cases and proper rollback, as well as properly close the cursor when "
+"you're done with it."
 msgstr ""
+"И, кстати, если вы создали собственный курсор, то вам нужно обрабатывать "
+"ошибки и правильно выполнять откат, а также правильно закрывать курсор, "
+"когда вы закончите с ним."
 
 #: ../../reference/guidelines.rst:802
 msgid ""
-"And contrary to popular belief, you do not even need to call "
-"``cr.commit()`` in the following situations: - in the ``_auto_init()`` "
-"method of an *models.Model* object: this is taken care of by the addons "
-"initialization method, or by the ORM transaction when creating custom "
-"models - in reports: the ``commit()`` is handled by the framework too, so"
-" you can update the database even from within a report - within "
-"*models.Transient* methods: these methods are called exactly like regular"
-" *models.Model* ones, within a transaction and with the corresponding "
-"``cr.commit()/rollback()`` at the end - etc. (see general rule above if "
-"you have in doubt!)"
+"And contrary to popular belief, you do not even need to call ``cr.commit()``"
+" in the following situations: - in the ``_auto_init()`` method of an "
+"*models.Model* object: this is taken care of by the addons initialization "
+"method, or by the ORM transaction when creating custom models - in reports: "
+"the ``commit()`` is handled by the framework too, so you can update the "
+"database even from within a report - within *models.Transient* methods: "
+"these methods are called exactly like regular *models.Model* ones, within a "
+"transaction and with the corresponding ``cr.commit()/rollback()`` at the end"
+" - etc. (see general rule above if you have in doubt!)"
 msgstr ""
+"И вопреки распространенному мнению, вам даже не нужно вызывать `` cr.commit "
+"() `` в следующих ситуациях: - в методе `` _auto_init () `` объекта * "
+"models.Model *: это принято забота о методе инициализации аддонов или "
+"транзакции ORM при создании пользовательских моделей - в отчетах: `` commit "
+"() `` также обрабатывается фреймворком, поэтому вы можете обновить базу "
+"данных даже из отчета - внутри * models.Transient * методы: эти методы "
+"вызываются точно так же, как и обычные * models.Model *, внутри транзакции и"
+" с соответствующим `` cr.commit () / rollback () `` в конце - и т. д. (см. "
+"общее правило) выше, если у вас есть сомнения!)"
 
 #: ../../reference/guidelines.rst:814
 msgid ""
-"All ``cr.commit()`` calls outside of the server framework from now on "
-"must have an **explicit comment** explaining why they are absolutely "
-"necessary, why they are indeed correct, and why they do not break the "
-"transactions. Otherwise they can and will be removed !"
+"All ``cr.commit()`` calls outside of the server framework from now on must "
+"have an **explicit comment** explaining why they are absolutely necessary, "
+"why they are indeed correct, and why they do not break the transactions. "
+"Otherwise they can and will be removed !"
 msgstr ""
+"Все вызовы `` cr.commit () `` вне рамок сервера теперь должны иметь ** явный"
+" комментарий **, объясняющий, почему они абсолютно необходимы, почему они "
+"действительно правильные и почему они не нарушают транзакции. В противном "
+"случае они могут и будут удалены!"
 
 #: ../../reference/guidelines.rst:821
 msgid "Use translation method correctly"
-msgstr ""
+msgstr "Используйте метод перевода правильно"
 
 #: ../../reference/guidelines.rst:823
 msgid ""
-"Odoo uses a GetText-like method named \"underscore\" ``_( )`` to indicate"
-" that a static string used in the code needs to be translated at runtime "
+"Odoo uses a GetText-like method named \"underscore\" ``_( )`` to indicate "
+"that a static string used in the code needs to be translated at runtime "
 "using the language of the context. This pseudo-method is accessed within "
 "your code by importing as follows:"
 msgstr ""
+"Odoo использует GetText-подобный метод с именем «underscore» `` _ () ``, "
+"чтобы указать, что статическая строка, используемая в коде, должна быть "
+"переведена во время выполнения с использованием языка контекста. Этот "
+"псевдо-метод доступен в вашем коде путем импорта следующим образом:"
 
 #: ../../reference/guidelines.rst:832
 msgid ""
-"A few very important rules must be followed when using it, in order for "
-"it to work and to avoid filling the translations with useless junk."
+"A few very important rules must be followed when using it, in order for it "
+"to work and to avoid filling the translations with useless junk."
 msgstr ""
+"При его использовании необходимо соблюдать несколько очень важных правил, "
+"чтобы он работал и не заполнял переводы ненужным мусором."
 
 #: ../../reference/guidelines.rst:835
 msgid ""
 "Basically, this method should only be used for static strings written "
-"manually in the code, it will not work to translate field values, such as"
-" Product names, etc. This must be done instead using the translate flag "
-"on the corresponding field."
+"manually in the code, it will not work to translate field values, such as "
+"Product names, etc. This must be done instead using the translate flag on "
+"the corresponding field."
 msgstr ""
+"По сути, этот метод следует использовать только для статических строк, "
+"написанных вручную в коде, он не будет работать для перевода значений полей,"
+" таких как имена продуктов и т. Д. Это должно быть сделано вместо этого с "
+"использованием флага перевода в соответствующем поле."
 
 #: ../../reference/guidelines.rst:840
 msgid ""
-"The rule is very simple: calls to the underscore method should always be "
-"in the form ``_('literal string')`` and nothing else:"
+"The rule is very simple: calls to the underscore method should always be in "
+"the form ``_('literal string')`` and nothing else:"
 msgstr ""
+"Правило очень простое: вызовы метода подчеркивания должны всегда иметь форму"
+" `` _ (&#39;литерал&#39; &#39;) `` и ничего более:"
 
 #: ../../reference/guidelines.rst:884
 #, python-format
@@ -820,477 +1093,602 @@ msgid ""
 "Also, keep in mind that translators will have to work with the literal "
 "values that are passed to the underscore function, so please try to make "
 "them easy to understand and keep spurious characters and formatting to a "
-"minimum. Translators must be aware that formatting patterns such as %s or"
-" %d, newlines, etc. need to be preserved, but it's important to use these"
-" in a sensible and obvious manner:"
+"minimum. Translators must be aware that formatting patterns such as %s or "
+"%d, newlines, etc. need to be preserved, but it's important to use these in "
+"a sensible and obvious manner:"
 msgstr ""
+"Также имейте в виду, что переводчикам придется работать с литеральными "
+"значениями, которые передаются в функцию подчеркивания, поэтому постарайтесь"
+" упростить их понимание и свести к минимуму ложные символы и форматирование."
+" Переводчики должны знать, что шаблоны форматирования, такие как% s или% d, "
+"переводы строк и т. Д., Должны быть сохранены, но важно использовать их "
+"разумным и очевидным образом:"
 
 #: ../../reference/guidelines.rst:899
 msgid ""
 "In general in Odoo, when manipulating strings, prefer ``%`` over "
-"``.format()`` (when only one variable to replace in a string), and prefer"
-" ``%(varname)`` instead of position (when multiple variables have to be "
-"replaced). This makes the translation easier for the community "
-"translators."
+"``.format()`` (when only one variable to replace in a string), and prefer "
+"``%(varname)`` instead of position (when multiple variables have to be "
+"replaced). This makes the translation easier for the community translators."
 msgstr ""
+"В общем случае в Odoo при работе со строками предпочитайте ``% `` вместо `` "
+".format () `` (когда в строке следует заменить только одну переменную) и "
+"предпочитайте ``% (varname) `` вместо позиции ( когда несколько переменных "
+"должны быть заменены). Это облегчает перевод для сообщества переводчиков."
 
 #: ../../reference/guidelines.rst:906
 msgid "Symbols and Conventions"
-msgstr ""
+msgstr "Символы и условные обозначения"
 
 #: ../../reference/guidelines.rst:916
 msgid "Model name (using the dot notation, prefix by the module name) :"
 msgstr ""
+"Название модели (с использованием точечной нотации, префикса по имени "
+"модуля):"
 
 #: ../../reference/guidelines.rst:909
 msgid ""
-"When defining an Odoo Model : use singular form of the name "
-"(*res.partner* and *sale.order* instead of *res.partnerS* and "
-"*saleS.orderS*)"
+"When defining an Odoo Model : use singular form of the name (*res.partner* "
+"and *sale.order* instead of *res.partnerS* and *saleS.orderS*)"
 msgstr ""
+"При определении модели Odoo: используйте единственную форму имени (* "
+"res.partner * и * sale.order * вместо * res.partnerS * и * saleS.orderS *)"
 
 #: ../../reference/guidelines.rst:911
 msgid ""
 "When defining an Odoo Transient (wizard) : use "
 "``<related_base_model>.<action>`` where *related_base_model* is the base "
-"model (defined in *models/*) related to the transient, and *action* is "
-"the short name of what the transient do. Avoid the *wizard* word. For "
-"instance : ``account.invoice.make``, ``project.task.delegate.batch``, ..."
+"model (defined in *models/*) related to the transient, and *action* is the "
+"short name of what the transient do. Avoid the *wizard* word. For instance :"
+" ``account.invoice.make``, ``project.task.delegate.batch``, ..."
 msgstr ""
+"При определении Odoo Transient (мастер): используйте `` <related_base_model>"
+" , <action> `` where * related_base_model * - базовая модель (определенная в"
+" * models / *), связанная с переходным процессом, а * action * - краткое имя"
+" того, что делает переходный процесс. Избегайте слова &quot;волшебник&quot;."
+" Например: `` account.invoice.make``, `` project.task.delegate.batch``, ..."
 
 #: ../../reference/guidelines.rst:915
 msgid ""
 "When defining *report* model (SQL views e.i.) : use "
-"``<related_base_model>.report.<action>``, based on the Transient "
-"convention."
+"``<related_base_model>.report.<action>``, based on the Transient convention."
 msgstr ""
+"При определении модели * report * (SQL views ei): используйте `` "
+"<related_base_model> .report. <action> ``, основанный на соглашении о "
+"переходных процессах."
 
 #: ../../reference/guidelines.rst:918
 msgid "Odoo Python Class : use camelcase (Object-oriented style)."
 msgstr ""
+"Класс Odoo Python: используйте camelcase (объектно-ориентированный стиль)."
 
 #: ../../reference/guidelines.rst:929
 msgid "Variable name :"
-msgstr ""
+msgstr "Имя переменной:"
 
 #: ../../reference/guidelines.rst:927
 msgid "use camelcase for model variable"
-msgstr ""
+msgstr "использовать верблюд для переменной модели"
 
 #: ../../reference/guidelines.rst:928
 msgid "use underscore lowercase notation for common variable."
-msgstr ""
+msgstr "используйте подчеркивание в нижнем регистре для общей переменной."
 
 #: ../../reference/guidelines.rst:929
 msgid ""
-"suffix your variable name with *_id* or *_ids* if it contains a record id"
-" or list of id. Don't use ``partner_id`` to contain a record of "
-"res.partner"
+"suffix your variable name with *_id* or *_ids* if it contains a record id or"
+" list of id. Don't use ``partner_id`` to contain a record of res.partner"
 msgstr ""
+"добавьте суффикс имени вашей переменной * _id * или * _ids *, если он "
+"содержит идентификатор записи или список идентификаторов. Не используйте `` "
+"partner_id`` для хранения записи res.partner"
 
 #: ../../reference/guidelines.rst:937
 msgid ""
-"``One2Many`` and ``Many2Many`` fields should always have *_ids* as suffix"
-" (example: sale_order_line_ids)"
+"``One2Many`` and ``Many2Many`` fields should always have *_ids* as suffix "
+"(example: sale_order_line_ids)"
 msgstr ""
+"Поля `` One2Many`` и `` Many2Many`` всегда должны содержать * _ids * в "
+"качестве суффикса (пример: sale_order_line_ids)"
 
 #: ../../reference/guidelines.rst:938
 msgid ""
 "``Many2One`` fields should have *_id* as suffix (example : partner_id, "
 "user_id, ...)"
 msgstr ""
+"`` Many2One`` поля должны иметь * _id * в качестве суффикса (пример: "
+"partner_id, user_id, ...)"
 
 #: ../../reference/guidelines.rst:948
 msgid "Method conventions"
-msgstr ""
+msgstr "Соглашения о методах"
 
 #: ../../reference/guidelines.rst:940
 msgid "Compute Field : the compute method pattern is *_compute_<field_name>*"
 msgstr ""
+"Поле вычисления: шаблон метода вычисления - * _compute_ <field_name> *"
 
 #: ../../reference/guidelines.rst:941
 msgid "Search method : the search method pattern is *_search_<field_name>*"
-msgstr ""
+msgstr "Метод поиска: шаблон метода поиска - * _search_ <field_name> *"
 
 #: ../../reference/guidelines.rst:942
 msgid "Default method : the default method pattern is *_default_<field_name>*"
 msgstr ""
+"Метод по умолчанию: шаблон метода по умолчанию * _default_ <field_name> *"
 
 #: ../../reference/guidelines.rst:943
 msgid ""
-"Selection method: the selection method pattern is "
-"*_selection_<field_name>*"
-msgstr ""
+"Selection method: the selection method pattern is *_selection_<field_name>*"
+msgstr "Метод выбора: шаблон метода выбора * _selection_ <field_name> *"
 
 #: ../../reference/guidelines.rst:944
-msgid "Onchange method : the onchange method pattern is *_onchange_<field_name>*"
-msgstr ""
+msgid ""
+"Onchange method : the onchange method pattern is *_onchange_<field_name>*"
+msgstr "Метод Onchange: шаблон метода onchange: * _onchange_ <field_name> *"
 
 #: ../../reference/guidelines.rst:945
 msgid ""
 "Constraint method : the constraint method pattern is "
 "*_check_<constraint_name>*"
 msgstr ""
+"Метод ограничения: шаблон метода ограничения - * _check_ <constraint_name> *"
 
 #: ../../reference/guidelines.rst:946
 msgid ""
-"Action method : an object action method is prefix with *action_*. Since "
-"it uses only one record, add ``self.ensure_one()`` at the beginning of "
-"the method."
+"Action method : an object action method is prefix with *action_*. Since it "
+"uses only one record, add ``self.ensure_one()`` at the beginning of the "
+"method."
 msgstr ""
+"Метод действия: метод действия объекта имеет префикс * action_ *. Поскольку "
+"он использует только одну запись, добавьте `` self.ensure_one () `` в начале"
+" метода."
 
 #: ../../reference/guidelines.rst:959
 msgid "In a Model attribute order should be"
-msgstr ""
+msgstr "В атрибуте Model порядок должен быть"
 
 #: ../../reference/guidelines.rst:951
 msgid "Private attributes (``_name``, ``_description``, ``_inherit``, ...)"
-msgstr ""
+msgstr "Закрытые атрибуты (`` _name``, `` _description``, `` _inherit``, ...)"
 
 #: ../../reference/guidelines.rst:952
 msgid "Default method and ``_default_get``"
-msgstr ""
+msgstr "Метод по умолчанию и `` _default_get``"
 
 #: ../../reference/guidelines.rst:953
 msgid "Field declarations"
-msgstr ""
+msgstr "Полевые объявления"
 
 #: ../../reference/guidelines.rst:954
-msgid "Compute, inverse and search methods in the same order as field declaration"
+msgid ""
+"Compute, inverse and search methods in the same order as field declaration"
 msgstr ""
+"Вычислять, инвертировать и искать методы в том же порядке, что и объявление "
+"поля"
 
 #: ../../reference/guidelines.rst:955
 msgid ""
 "Selection method (methods used to return computed values for selection "
 "fields)"
 msgstr ""
+"Метод выбора (методы, используемые для возврата вычисленных значений для "
+"полей выбора)"
 
 #: ../../reference/guidelines.rst:956
 msgid ""
 "Constrains methods (``@api.constrains``) and onchange methods "
 "(``@api.onchange``)"
 msgstr ""
+"Методы ограничений (`` @ api.constrains``) и методы onchange (`` @ "
+"api.onchange``)"
 
 #: ../../reference/guidelines.rst:957
 msgid "CRUD methods (ORM overrides)"
-msgstr ""
+msgstr "Методы CRUD (переопределения ORM)"
 
 #: ../../reference/guidelines.rst:958
 msgid "Action methods"
-msgstr ""
+msgstr "Методы действия"
 
 #: ../../reference/guidelines.rst:959
 msgid "And finally, other business methods."
-msgstr ""
+msgstr "И, наконец, другие методы ведения бизнеса."
 
 #: ../../reference/guidelines.rst:1015
 msgid "Javascript and CSS"
-msgstr ""
+msgstr "Javascript и CSS"
 
 #: ../../reference/guidelines.rst:1018
 msgid "Static files organization"
-msgstr ""
+msgstr "Организация статических файлов"
 
 #: ../../reference/guidelines.rst:1020
 msgid ""
 "Odoo addons have some conventions on how to structure various files. We "
 "explain here in more details how web assets are supposed to be organized."
 msgstr ""
+"У аддонов Odoo есть некоторые соглашения о том, как структурировать "
+"различные файлы. Мы объясняем здесь более подробно, как веб-ресурсы должны "
+"быть организованы."
 
 #: ../../reference/guidelines.rst:1023
 msgid ""
-"The first thing to know is that the Odoo server will serve (statically) "
-"all files located in a *static/* folder, but prefixed with the addon "
-"name. So, for example, if a file is located in "
+"The first thing to know is that the Odoo server will serve (statically) all "
+"files located in a *static/* folder, but prefixed with the addon name. So, "
+"for example, if a file is located in "
 "*addons/web/static/src/js/some_file.js*, then it will be statically "
-"available at the url *your-odoo-"
-"server.com/web/static/src/js/some_file.js*"
+"available at the url *your-odoo-server.com/web/static/src/js/some_file.js*"
 msgstr ""
+"Первое, что нужно знать, это то, что сервер Odoo будет обслуживать "
+"(статически) все файлы, находящиеся в папке * static / *, но с префиксом "
+"имени дополнения. Так, например, если файл находится в * addons / web / "
+"static / src / js / some_file.js *, то он будет статически доступен по "
+"адресу * your-odoo-server.com / web / static / src /js/some_file.js*"
 
 #: ../../reference/guidelines.rst:1028
 msgid ""
-"The convention is to organize the code according to the following "
-"structure:"
+"The convention is to organize the code according to the following structure:"
 msgstr ""
+"Соглашение состоит в том, чтобы организовать код в соответствии со следующей"
+" структурой:"
 
 #: ../../reference/guidelines.rst:1030
 msgid "*static*: all static files in general"
-msgstr ""
+msgstr "* static *: все статические файлы в целом"
 
 #: ../../reference/guidelines.rst:1032
 msgid ""
-"*static/lib*: this is the place where js libs should be located, in a sub"
-" folder. So, for example, all files from the *jquery* library are in "
+"*static/lib*: this is the place where js libs should be located, in a sub "
+"folder. So, for example, all files from the *jquery* library are in "
 "*addons/web/static/lib/jquery*"
 msgstr ""
+"* static / lib *: это место, где должна находиться js-библиотека, в "
+"подпапке. Так, например, все файлы из библиотеки * jquery * находятся в * "
+"addons / web / static / lib / jquery *"
 
 #: ../../reference/guidelines.rst:1034
 msgid "*static/src*: the generic static source code folder"
-msgstr ""
+msgstr "* static / src *: общая статическая папка с исходным кодом"
 
 #: ../../reference/guidelines.rst:1036
 msgid "*static/src/css*: all css files"
-msgstr ""
+msgstr "* static / src / css *: все файлы css"
 
 #: ../../reference/guidelines.rst:1037
 msgid "*static/src/fonts*"
-msgstr ""
+msgstr "* Статический / SRC / шрифты *"
 
 #: ../../reference/guidelines.rst:1038
 msgid "*static/src/img*"
-msgstr ""
+msgstr "* Статический / SRC / IMG *"
 
 #: ../../reference/guidelines.rst:1039
 msgid "*static/src/js*"
-msgstr ""
+msgstr "* Статический / SRC / JS *"
 
 #: ../../reference/guidelines.rst:1041
 msgid "*static/src/js/tours*: end user tour files (tutorials, not tests)"
 msgstr ""
+"* static / src / js / tours *: файлы туров конечного пользователя (учебные "
+"пособия, а не тесты)"
 
 #: ../../reference/guidelines.rst:1043
 msgid "*static/src/scss*: scss files"
-msgstr ""
+msgstr "* static / src / scss *: файлы scss"
 
 #: ../../reference/guidelines.rst:1044
 msgid "*static/src/xml*: all qweb templates that will be rendered in JS"
 msgstr ""
+"* static / src / xml *: все шаблоны qweb, которые будут отображаться в JS"
 
 #: ../../reference/guidelines.rst:1046
 msgid "*static/tests*: this is where we put all test related files."
-msgstr ""
+msgstr "* static / tests *: сюда мы помещаем все файлы, связанные с тестами."
 
 #: ../../reference/guidelines.rst:1048
 msgid ""
 "*static/tests/tours*: this is where we put all tour test files (not "
 "tutorials)."
 msgstr ""
+"* static / tests / tours *: сюда мы помещаем все тестовые файлы туров (не "
+"учебники)."
 
 #: ../../reference/guidelines.rst:1051
 msgid "Javascript coding guidelines"
-msgstr ""
+msgstr "Руководство по кодированию Javascript"
 
 #: ../../reference/guidelines.rst:1053
 msgid "``use strict;`` is recommended for all javascript files"
-msgstr ""
+msgstr "`` используйте строгий; `` рекомендуется для всех файлов javascript"
 
 #: ../../reference/guidelines.rst:1054
 msgid "Use a linter (jshint, ...)"
-msgstr ""
+msgstr "Используйте линтер (jshint, ...)"
 
 #: ../../reference/guidelines.rst:1055
 msgid "Never add minified Javascript Libraries"
-msgstr ""
+msgstr "Никогда не добавляйте уменьшенные библиотеки Javascript"
 
 #: ../../reference/guidelines.rst:1056
 msgid "Use camelcase for class declaration"
-msgstr ""
+msgstr "Используйте camelcase для объявления класса"
 
 #: ../../reference/guidelines.rst:1058
 msgid ""
 "More precise JS guidelines are detailed in the `github wiki  "
-"<https://github.com/odoo/odoo/wiki/Javascript-coding-guidelines>`_. You "
-"may also have a look at existing API in Javascript by looking Javascript "
+"<https://github.com/odoo/odoo/wiki/Javascript-coding-guidelines>`_. You may "
+"also have a look at existing API in Javascript by looking Javascript "
 "References."
 msgstr ""
+"Более точные рекомендации JS подробно описаны в `github wiki "
+"<https://github.com/odoo/odoo/wiki/Javascript-coding-guidelines>`_. Вы также"
+" можете взглянуть на существующий API в Javascript, просмотрев ссылки на "
+"Javascript."
 
 #: ../../reference/guidelines.rst:1063
 msgid "CSS coding guidelines"
-msgstr ""
+msgstr "Руководство по кодированию CSS"
 
 #: ../../reference/guidelines.rst:1065
 msgid ""
-"Prefix all your classes with *o_<module_name>* where *module_name* is the"
-" technical name of the module ('sale', 'im_chat', ...) or the main route "
+"Prefix all your classes with *o_<module_name>* where *module_name* is the "
+"technical name of the module ('sale', 'im_chat', ...) or the main route "
 "reserved by the module (for website module mainly, i.e. : 'o_forum' for "
-"*website_forum* module). The only exception for this rule is the "
-"webclient: it simply uses *o_* prefix."
+"*website_forum* module). The only exception for this rule is the webclient: "
+"it simply uses *o_* prefix."
 msgstr ""
+"Префикс всех ваших классов с * o_ <module_name> * где * имя_модуля * - это "
+"техническое имя модуля («продажа», «im_chat», ...) или основной маршрут, "
+"зарезервированный модулем (в основном для модуля веб-сайта, то есть: "
+"«o_forum» для модуля * website_forum *) , Единственным исключением из этого "
+"правила является веб-клиент: он просто использует префикс * o_ *."
 
 #: ../../reference/guidelines.rst:1070
 msgid "Avoid using *id* tag"
-msgstr ""
+msgstr "Избегайте использования тега * id *"
 
 #: ../../reference/guidelines.rst:1071
 msgid "Use Bootstrap native classes"
-msgstr ""
+msgstr "Используйте Bootstrap нативные классы"
 
 #: ../../reference/guidelines.rst:1072
 msgid "Use underscore lowercase notation to name class"
-msgstr ""
+msgstr "Используйте нижнее подчеркивание для обозначения класса"
 
 #: ../../reference/guidelines.rst:1077
 msgid "Git"
-msgstr ""
+msgstr "Гит"
 
 #: ../../reference/guidelines.rst:1080
 msgid "Configure your git"
-msgstr ""
+msgstr "Настройте свой мерзавец"
 
 #: ../../reference/guidelines.rst:1082
 msgid ""
-"Based on ancestral experience and oral tradition, the following things go"
-" a long way towards making your commits more helpful:"
+"Based on ancestral experience and oral tradition, the following things go a "
+"long way towards making your commits more helpful:"
 msgstr ""
+"Исходя из опыта предков и устных традиций, следующие вещи имеют большое "
+"значение для того, чтобы сделать ваши коммиты более полезными:"
 
 #: ../../reference/guidelines.rst:1085
 msgid ""
-"Be sure to define both the user.email and user.name in your local git "
-"config"
+"Be sure to define both the user.email and user.name in your local git config"
 msgstr ""
+"Обязательно укажите и user.email, и user.name в вашей локальной конфигурации"
+" git"
 
 #: ../../reference/guidelines.rst:1091
 msgid ""
-"Be sure to add your full name to your Github profile here. Please feel "
-"fancy and add your team, avatar, your favorite quote, and whatnot ;-)"
+"Be sure to add your full name to your Github profile here. Please feel fancy"
+" and add your team, avatar, your favorite quote, and whatnot ;-)"
 msgstr ""
+"Не забудьте добавить свое полное имя в свой профиль Github здесь. "
+"Пожалуйста, чувствуйте себя модно и добавьте свою команду, аватар, свою "
+"любимую цитату и еще много чего ;-)"
 
 #: ../../reference/guidelines.rst:1095
 msgid "Commit message structure"
-msgstr ""
+msgstr "Зафиксировать структуру сообщения"
 
 #: ../../reference/guidelines.rst:1097
 msgid ""
 "Commit message has four parts: tag, module, short description and full "
-"description. Try to follow the preferred structure for your commit "
-"messages"
+"description. Try to follow the preferred structure for your commit messages"
 msgstr ""
+"Сообщение коммита состоит из четырех частей: тега, модуля, краткого описания"
+" и полного описания. Попытайтесь следовать предпочтительной структуре ваших "
+"сообщений коммита"
 
 #: ../../reference/guidelines.rst:1120
 msgid "Tag and module name"
-msgstr ""
+msgstr "Тег и название модуля"
 
 #: ../../reference/guidelines.rst:1122
-msgid "Tags are used to prefix your commit. They should be one of the following"
+msgid ""
+"Tags are used to prefix your commit. They should be one of the following"
 msgstr ""
+"Теги используются для префикса вашего коммита. Они должны быть одним из "
+"следующих"
 
 #: ../../reference/guidelines.rst:1124
 msgid ""
-"**[FIX]** for bug fixes: mostly used in stable version but also valid if "
-"you are fixing a recent bug in development version;"
+"**[FIX]** for bug fixes: mostly used in stable version but also valid if you"
+" are fixing a recent bug in development version;"
 msgstr ""
+"** [FIX] ** для исправления ошибок: в основном используется в стабильной "
+"версии, но также действует, если вы исправляете недавнюю ошибку в версии для"
+" разработчиков;"
 
 #: ../../reference/guidelines.rst:1126
 msgid "**[REF]** for refactoring: when a feature is heavily rewritten;"
-msgstr ""
+msgstr "** [REF] ** для рефакторинга: когда объект сильно переписан;"
 
 #: ../../reference/guidelines.rst:1127
 msgid "**[ADD]** for adding new modules;"
-msgstr ""
+msgstr "** [ДОБАВИТЬ] ** для добавления новых модулей;"
 
 #: ../../reference/guidelines.rst:1128
 msgid ""
 "**[REM]** for removing resources: removing dead code, removing views, "
 "removing modules, ...;"
 msgstr ""
+"** [REM] ** для удаления ресурсов: удаление мертвого кода, удаление "
+"представлений, удаление модулей, ...;"
 
 #: ../../reference/guidelines.rst:1130
 msgid ""
-"**[REV]** for reverting commits: if a commit causes issues or is not "
-"wanted reverting it is done using this tag;"
+"**[REV]** for reverting commits: if a commit causes issues or is not wanted "
+"reverting it is done using this tag;"
 msgstr ""
+"** [REV] ** для отмены фиксации: если фиксация вызывает проблемы или "
+"нежелательна, она выполняется с помощью этого тега;"
 
 #: ../../reference/guidelines.rst:1132
 msgid ""
-"**[MOV]** for moving files: use git move and do not change content of "
-"moved file otherwise Git may loose track and history of the file; also "
-"used when moving code from one file to another;"
+"**[MOV]** for moving files: use git move and do not change content of moved "
+"file otherwise Git may loose track and history of the file; also used when "
+"moving code from one file to another;"
 msgstr ""
+"** [MOV] ** для перемещения файлов: используйте git move и не изменяйте "
+"содержимое перемещенного файла, в противном случае Git может потерять трек и"
+" историю файла; также используется при перемещении кода из одного файла в "
+"другой;"
 
 #: ../../reference/guidelines.rst:1135
 msgid "**[REL]** for release commits: new major or minor stable versions;"
 msgstr ""
+"** [REL] ** для коммитов релиза: новые мажорные или минорные стабильные "
+"версии;"
 
 #: ../../reference/guidelines.rst:1136
 msgid ""
-"**[IMP]** for improvements: most of the changes done in development "
-"version are incremental improvements not related to another tag;"
+"**[IMP]** for improvements: most of the changes done in development version "
+"are incremental improvements not related to another tag;"
 msgstr ""
+"** [IMP] ** для улучшений: большинство изменений, внесенных в "
+"разрабатываемую версию, являются постепенными улучшениями, не связанными с "
+"другим тегом;"
 
 #: ../../reference/guidelines.rst:1138
 msgid ""
-"**[MERGE]** for merge commits: used in forward port of bug fixes but also"
-" as main commit for feature involving several separated commits;"
+"**[MERGE]** for merge commits: used in forward port of bug fixes but also as"
+" main commit for feature involving several separated commits;"
 msgstr ""
+"** [MERGE] ** для коммитов слияния: используется в прямом порте исправлений "
+"ошибок, но также как основной коммит для функции, включающей несколько "
+"отдельных коммитов;"
 
 #: ../../reference/guidelines.rst:1140
 msgid "**[CLA]** for signing the Odoo Individual Contributor License;"
-msgstr ""
+msgstr "** [CLA] ** для подписания Индивидуальной Лицензии Участника Odoo;"
 
 #: ../../reference/guidelines.rst:1141
 msgid "**[I18N]** for changes in translation files;"
-msgstr ""
+msgstr "** [I18N] ** для изменений в файлах перевода;"
 
 #: ../../reference/guidelines.rst:1143
 msgid ""
 "After tag comes the modified module name. Use the technical name as "
-"functional name may change with time. If several modules are modified, "
-"list them or use various to tell it is cross-modules. Unless really "
-"required or easier avoid modifying code across several modules in the "
-"same commit. Understanding module history may become difficult."
+"functional name may change with time. If several modules are modified, list "
+"them or use various to tell it is cross-modules. Unless really required or "
+"easier avoid modifying code across several modules in the same commit. "
+"Understanding module history may become difficult."
 msgstr ""
+"После тега следует измененное имя модуля. Используйте техническое имя, так "
+"как функциональное имя может меняться со временем. Если несколько модулей "
+"модифицированы, перечислите их или используйте различные, чтобы сказать, что"
+" это кросс-модули. Если это действительно не требуется или проще, избегайте "
+"модификации кода между несколькими модулями в одном коммите. Понимание "
+"истории модуля может стать затруднительным."
 
 #: ../../reference/guidelines.rst:1150
 msgid "Commit message header"
-msgstr ""
+msgstr "Зафиксировать заголовок сообщения"
 
 #: ../../reference/guidelines.rst:1152
 msgid ""
 "After tag and module name comes a meaningful commit message header. It "
-"should be self explanatory and include the reason behind the change. Do "
-"not use single words like \"bugfix\" or \"improvements\". Try to limit "
-"the header length to about 50 characters for readability."
+"should be self explanatory and include the reason behind the change. Do not "
+"use single words like \"bugfix\" or \"improvements\". Try to limit the "
+"header length to about 50 characters for readability."
 msgstr ""
+"После тега и имени модуля следует значимый заголовок сообщения коммита. Это "
+"должно быть самоочевидным и включать причину изменения. Не используйте "
+"отдельные слова, такие как «исправление ошибок» или «улучшения». Попробуйте "
+"ограничить длину заголовка примерно до 50 символов для удобства чтения."
 
 #: ../../reference/guidelines.rst:1157
 msgid ""
-"Commit message header should make a valid sentence once concatenated with"
-" ``if applied, this commit will <header>``. For example ``[IMP] base: "
-"prevent to archive users linked to active partners`` is correct as it "
-"makes a valid sentence ``if applied, this commit will prevent users to "
-"archive...``."
+"Commit message header should make a valid sentence once concatenated with "
+"``if applied, this commit will <header>``. For example ``[IMP] base: prevent"
+" to archive users linked to active partners`` is correct as it makes a valid"
+" sentence ``if applied, this commit will prevent users to archive...``."
 msgstr ""
+"Заголовок сообщения коммита должен составлять правильное предложение после "
+"объединения с ``, если применяется, этот коммит будет <header> ``. Например,"
+" `` [IMP] base: предотвращать архивирование пользователей, связанных с "
+"активными партнерами``, является правильным, поскольку оно делает правильное"
+" предложение ``, если оно применяется, эта фиксация не позволит "
+"пользователям архивировать ... ``."
 
 #: ../../reference/guidelines.rst:1163
 msgid "Commit message full description"
-msgstr ""
+msgstr "Подтвердить сообщение полное описание"
 
 #: ../../reference/guidelines.rst:1165
 msgid ""
 "In the message description specify the part of the code impacted by your "
-"changes (module name, lib, transversal object, ...) and a description of "
-"the changes."
+"changes (module name, lib, transversal object, ...) and a description of the"
+" changes."
 msgstr ""
+"В описании сообщения укажите часть кода, на которую повлияли ваши изменения "
+"(имя модуля, lib, трансверсальный объект, ...) и описание изменений."
 
 #: ../../reference/guidelines.rst:1168
 msgid ""
-"First explain WHY you are modifying code. What is important if someone "
-"goes back to your commit in about 4 decades (or 3 days) is why you did "
-"it. It is the purpose of the change."
+"First explain WHY you are modifying code. What is important if someone goes "
+"back to your commit in about 4 decades (or 3 days) is why you did it. It is "
+"the purpose of the change."
 msgstr ""
+"Сначала объясните, ПОЧЕМУ вы модифицируете код. Что важно, если кто-то "
+"вернется к вашему коммиту примерно через 4 десятилетия (или 3 дня), это то, "
+"почему вы это сделали. Это цель перемен."
 
 #: ../../reference/guidelines.rst:1172
 msgid ""
-"What you did can be found in the commit itself. If there was some "
-"technical choices involved it is a good idea to explain it also in the "
-"commit message after the why. For Odoo R&D developers \"PO team asked me "
-"to do it\" is not a valid why, by the way."
+"What you did can be found in the commit itself. If there was some technical "
+"choices involved it is a good idea to explain it also in the commit message "
+"after the why. For Odoo R&D developers \"PO team asked me to do it\" is not "
+"a valid why, by the way."
 msgstr ""
+"То, что вы сделали, можно найти в самом коммите. Если были какие-то "
+"технические решения, было бы полезно объяснить это также в сообщении "
+"фиксации после почему. Для разработчиков Odoo R &amp; D «команда ПО "
+"попросила меня сделать это», не вполне понятно почему, кстати."
 
 #: ../../reference/guidelines.rst:1176
 msgid ""
-"Please avoid commits which simultaneously impact multiple modules. Try to"
-" split into different commits where impacted modules are different. It "
-"will be helpful if we need to revert changes in a given module "
-"separately."
+"Please avoid commits which simultaneously impact multiple modules. Try to "
+"split into different commits where impacted modules are different. It will "
+"be helpful if we need to revert changes in a given module separately."
 msgstr ""
+"Пожалуйста, избегайте коммитов, которые одновременно влияют на несколько "
+"модулей. Попробуйте разделить на разные коммиты, в которых затронутые модули"
+" разные. Будет полезно, если нам нужно отменить изменения в данном модуле "
+"отдельно."
 
 #: ../../reference/guidelines.rst:1180
 msgid ""
-"Don't hesitate to be a bit verbose. Most people will only see your commit"
-" message and judge everything you did in your life just based on those "
-"few sentences. No pressure at all."
+"Don't hesitate to be a bit verbose. Most people will only see your commit "
+"message and judge everything you did in your life just based on those few "
+"sentences. No pressure at all."
 msgstr ""
+"Не стесняйтесь быть немного многословным. Большинство людей увидят только "
+"ваше сообщение о коммите и будут судить обо всем, что вы сделали в своей "
+"жизни, только на основании этих нескольких предложений. Никакого давления "
+"вообще."
 
 #: ../../reference/guidelines.rst:1184
 msgid ""
@@ -1298,22 +1696,30 @@ msgid ""
 "Take some time to calm down and write clear and understandable commit "
 "messages.**"
 msgstr ""
+"** Вы тратите несколько часов, дней или недель, работая над значимыми "
+"функциями. Потратьте некоторое время, чтобы успокоиться и написать ясные и "
+"понятные сообщения о коммите. **"
 
 #: ../../reference/guidelines.rst:1187
 msgid ""
-"If you are an Odoo R&D developer the WHY should be the purpose of the "
-"task you are working on. Full specifications make the core of the commit "
-"message. **If you are working on a task that lacks purpose and "
-"specifications please consider making them clear before continuing.**"
+"If you are an Odoo R&D developer the WHY should be the purpose of the task "
+"you are working on. Full specifications make the core of the commit message."
+" **If you are working on a task that lacks purpose and specifications please"
+" consider making them clear before continuing.**"
 msgstr ""
+"Если вы являетесь разработчиком Odoo R &amp; D, ПОЧЕМУ должно быть целью "
+"задачи, над которой вы работаете. Полные спецификации составляют ядро "
+"сообщения коммита. ** Если вы работаете над задачей, которая не имеет цели и"
+" спецификаций, пожалуйста, перед тем как продолжить, проясните их. **"
 
 #: ../../reference/guidelines.rst:1192
 msgid "Finally here are some examples of correct commit messages :"
-msgstr ""
+msgstr "Наконец, вот несколько примеров правильных сообщений о коммите:"
 
 #: ../../reference/guidelines.rst:1215
 msgid ""
-"Use the long description to explain the *why* not the *what*, the *what* "
-"can be seen in the diff"
+"Use the long description to explain the *why* not the *what*, the *what* can"
+" be seen in the diff"
 msgstr ""
-
+"Используйте длинное описание, чтобы объяснить * почему * не * что *, * что *"
+" можно увидеть в diff"

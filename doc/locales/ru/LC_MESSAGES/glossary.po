@@ -19,19 +19,19 @@ msgstr ""
 
 #: ../../glossary.rst:5
 msgid "Glossary"
-msgstr ""
+msgstr "глоссарий"
 
 #: ../../glossary.rst:8
 msgid "external id"
-msgstr ""
+msgstr "внешний идентификатор"
 
 #: ../../glossary.rst:9
 msgid "external identifier"
-msgstr ""
+msgstr "внешний идентификатор"
 
 #: ../../glossary.rst:10
 msgid "external identifiers"
-msgstr ""
+msgstr "внешние идентификаторы"
 
 #: ../../glossary.rst:12
 msgid ""
@@ -39,6 +39,9 @@ msgid ""
 "record regardless of its database identifier during data imports or "
 "export/import roundtrips."
 msgstr ""
+"Строковый идентификатор, хранящийся в `ir.model.data``, может использоваться"
+" для ссылки на запись независимо от ее идентификатора базы данных во время "
+"импорта данных или экспорта / импорта."
 
 #: ../../glossary.rst:16
 msgid ""
@@ -46,52 +49,67 @@ msgid ""
 "``account.invoice_graph``). From within a module, the :samp:`{module}.` "
 "prefix can be left out."
 msgstr ""
+"Внешние идентификаторы имеют вид: samp: `{module}. {Id}` (например, `` "
+"account.invoice_graph``). Внутри модуля префикс: samp: `{module} .` может "
+"быть опущен."
 
 #: ../../glossary.rst:20
 msgid ""
 "Sometimes referred to as \"xml id\" or ``xml_id`` as XML-based "
 ":ref:`reference/data` make extensive use of them."
 msgstr ""
+"Иногда их называют «xml id» или «xml_id» на основе XML: ref: `reference / "
+"data` широко используют их."
 
 #: ../../glossary.rst:22
 msgid "format string"
-msgstr ""
+msgstr "строка формата"
 
 #: ../../glossary.rst:24
 msgid ""
 "inspired by `jinja variables`_, format strings allow more easily mixing "
-"literal content and computed content (expressions): content between "
-"``{{`` and ``}}`` is interpreted as an expression and evaluated, other "
-"content is interpreted as literal strings and displayed as-is"
+"literal content and computed content (expressions): content between ``{{`` "
+"and ``}}`` is interpreted as an expression and evaluated, other content is "
+"interpreted as literal strings and displayed as-is"
 msgstr ""
+"Вдохновленные `jinja переменными`_, строки формата позволяют легче смешивать"
+" буквальный контент и вычисляемый контент (выражения): контент между` `{{` "
+"`и` `}}` `интерпретируется как выражение и оценивается, другой контент "
+"интерпретируется как буквенные строки и отображаются как есть"
 
 #: ../../glossary.rst:29
 msgid "GIS"
-msgstr ""
+msgstr "ГИС"
 
 #: ../../glossary.rst:30
 msgid "Geographic Information System"
-msgstr ""
+msgstr "Система географической информации"
 
 #: ../../glossary.rst:32
 msgid ""
 "any computer system or subsystem to capture, store, manipulate, analyze, "
 "manage or present spatial and geographical data."
 msgstr ""
+"любая компьютерная система или подсистема для сбора, хранения, обработки, "
+"анализа, управления или представления пространственных и географических "
+"данных."
 
 #: ../../glossary.rst:34
 msgid "minified"
-msgstr ""
+msgstr "Минимизированный"
 
 #: ../../glossary.rst:35
 msgid "minification"
-msgstr ""
+msgstr "минификация"
 
 #: ../../glossary.rst:37
 msgid ""
-"process of removing extraneous/non-necessary sections of files (comments,"
-" whitespace) and possibly recompiling them using equivalent but shorter "
-"structures (`ternary operator`_ instead of ``if/else``) in order to "
-"reduce network traffic"
+"process of removing extraneous/non-necessary sections of files (comments, "
+"whitespace) and possibly recompiling them using equivalent but shorter "
+"structures (`ternary operator`_ instead of ``if/else``) in order to reduce "
+"network traffic"
 msgstr ""
-
+"процесс удаления посторонних / ненужных разделов файлов (комментарии, "
+"пробелы) и, возможно, перекомпиляции их с использованием эквивалентных, но "
+"более коротких структур (`ternary operator`_ вместо` `if / else``) для "
+"уменьшения сетевого трафика"

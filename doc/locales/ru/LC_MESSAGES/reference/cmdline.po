@@ -19,45 +19,59 @@ msgstr ""
 
 #: ../../reference/cmdline.rst:7
 msgid "Command-line interface: odoo-bin"
-msgstr ""
+msgstr "Интерфейс командной строки: odoo-bin"
 
 #: ../../reference/cmdline.rst:12
 msgid "Running the server"
-msgstr ""
+msgstr "Запуск сервера"
 
 #: ../../reference/cmdline.rst:18
 msgid ""
 "database(s) used when installing or updating modules. Providing a comma-"
 "separated list restrict access to databases provided in list."
 msgstr ""
+"базы данных, используемые при установке или обновлении модулей. "
+"Предоставление списка через запятую ограничивает доступ к базам данных, "
+"указанным в списке."
 
 #: ../../reference/cmdline.rst:22
 msgid ""
 "For advanced database options, take a look :ref:`below "
 "<reference/cmdline/server/database>`."
 msgstr ""
+"Для расширенных параметров базы данных, посмотрите: ref: `ниже "
+"<reference/cmdline/server/database> `."
 
 #: ../../reference/cmdline.rst:26
 msgid ""
 "comma-separated list of modules to install before running the server "
 "(requires :option:`-d`)."
 msgstr ""
+"Разделенный запятыми список модулей, которые нужно установить перед запуском"
+" сервера (требуется: option: `-d`)."
 
 #: ../../reference/cmdline.rst:31
 msgid ""
 "comma-separated list of modules to update before running the server "
 "(requires :option:`-d`)."
 msgstr ""
+"Разделенный запятыми список модулей для обновления перед запуском сервера "
+"(требуется: option: `-d`)."
 
 #: ../../reference/cmdline.rst:36
 msgid ""
 "comma-separated list of directories in which modules are stored. These "
 "directories are scanned for modules."
 msgstr ""
+"разделенный запятыми список каталогов, в которых хранятся модули. Эти "
+"каталоги сканируются на наличие модулей."
 
 #: ../../reference/cmdline.rst:43
-msgid "provide an alternate :ref:`configuration file <reference/cmdline/config>`"
+msgid ""
+"provide an alternate :ref:`configuration file <reference/cmdline/config>`"
 msgstr ""
+"предоставить альтернативный: ref: `файл конфигурации "
+"<reference/cmdline/config> `"
 
 #: ../../reference/cmdline.rst:47
 msgid ""
@@ -65,85 +79,104 @@ msgid ""
 "(:file:`{$HOME}/.odoorc` by default, and can be overridden using "
 ":option:`-c`)."
 msgstr ""
+"сохраняет конфигурацию сервера в текущий файл конфигурации (по умолчанию:: "
+"file: `{$ HOME} /. odoorc` и может быть переопределен с помощью: option:` "
+"-c`)."
 
 #: ../../reference/cmdline.rst:53
 msgid ""
 "disables demo data loading for modules installed comma-separated, use "
 "``all`` for all modules."
 msgstr ""
+"отключает загрузку демонстрационных данных для модулей, установленных через "
+"запятую, используйте `` all`` для всех модулей."
 
 #: ../../reference/cmdline.rst:58
 msgid "runs tests after installing modules"
-msgstr ""
+msgstr "запускает тесты после установки модулей"
 
 #: ../../reference/cmdline.rst:62
 msgid "select the tests to run by using tags."
-msgstr ""
+msgstr "выберите тесты для запуска с помощью тегов."
 
 #: ../../reference/cmdline.rst:66
 msgid ""
 "Specify directory where to write screenshots when an HttpCase.browser_js "
 "test fails. It defaults to :file:`/tmp/odoo_tests/{db_name}/screenshots`"
 msgstr ""
+"Укажите каталог, в который нужно записывать снимки экрана при сбое теста "
+"HttpCase.browser_js. По умолчанию это: file: `/ tmp / odoo_tests / {db_name}"
+" / screenshots`"
 
 #: ../../reference/cmdline.rst:71
 msgid ""
-"Enable screencasts and specify directory where to write screencasts "
-"files. The ``ffmpeg`` utility needs to be installed to encode frames into"
-" a video file. Otherwise frames will be kept instead of the video file."
+"Enable screencasts and specify directory where to write screencasts files. "
+"The ``ffmpeg`` utility needs to be installed to encode frames into a video "
+"file. Otherwise frames will be kept instead of the video file."
 msgstr ""
+"Включите скринкасты и укажите каталог для записи файлов скринкастов. Для "
+"кодирования кадров в видеофайл необходимо установить утилиту `` ffmpeg``. В "
+"противном случае кадры будут сохранены вместо видеофайла."
 
 #: ../../reference/cmdline.rst:75
 msgid ""
-"``1``, ``t`` or ``true`` can be used to use the same directory as the "
-"above mentioned ``--screenshots`` option."
+"``1``, ``t`` or ``true`` can be used to use the same directory as the above "
+"mentioned ``--screenshots`` option."
 msgstr ""
+"`` 1``, `` t`` или `` true`` могут использоваться для использования того же "
+"каталога, что и вышеупомянутая опция `--screenshots``."
 
 #: ../../reference/cmdline.rst:81
 msgid "Database"
-msgstr ""
+msgstr "База данных"
 
 #: ../../reference/cmdline.rst:85
 msgid "database username, used to connect to PostgreSQL."
 msgstr ""
+"имя пользователя базы данных, используется для подключения к PostgreSQL."
 
 #: ../../reference/cmdline.rst:89
 msgid "database password, if using `password authentication`_."
-msgstr ""
+msgstr "пароль базы данных, если используется `аутентификация по паролю`_."
 
 #: ../../reference/cmdline.rst:93
 msgid "host for the database server"
-msgstr ""
+msgstr "хост для сервера базы данных"
 
 #: ../../reference/cmdline.rst:95
 msgid "``localhost`` on Windows"
-msgstr ""
+msgstr "`` localhost`` в Windows"
 
 #: ../../reference/cmdline.rst:96
 msgid "UNIX socket otherwise"
-msgstr ""
+msgstr "Сокет UNIX в противном случае"
 
 #: ../../reference/cmdline.rst:100
 msgid "port the database listens on, defaults to 5432"
-msgstr ""
+msgstr "порт, который прослушивает база данных, по умолчанию 5432"
 
 #: ../../reference/cmdline.rst:104
 msgid ""
 "hides databases that do not match ``<filter>``. The filter is a `regular "
 "expression`_, with the additions that:"
 msgstr ""
+"скрывает базы данных, которые не соответствуют `` <filter> ``. Фильтр "
+"является `регулярным выражением`_, с дополнениями, которые:"
 
 #: ../../reference/cmdline.rst:107
 msgid "``%h`` is replaced by the whole hostname the request is made on."
-msgstr ""
+msgstr "``% h`` заменяется на полное имя хоста, на которое сделан запрос."
 
 #: ../../reference/cmdline.rst:108
 #, python-format
 msgid ""
 "``%d`` is replaced by the subdomain the request is made on, with the "
-"exception of ``www`` (so domain ``odoo.com`` and ``www.odoo.com`` both "
-"match the database ``odoo``)."
+"exception of ``www`` (so domain ``odoo.com`` and ``www.odoo.com`` both match"
+" the database ``odoo``)."
 msgstr ""
+"``% d`` заменяется поддоменом, на который делается запрос, за исключением ``"
+" www`` (поэтому домен `` odoo.com`` и `` www.odoo.com`` оба соответствуют "
+"базе данных `` odoo``)."
 
 #: ../../reference/cmdline.rst:112
 #, python-format
@@ -152,39 +185,53 @@ msgid ""
 "databases (so domain ``odoo.com`` using ``(?i)%d`` matches the database "
 "``Odoo``)."
 msgstr ""
+"Эти операции чувствительны к регистру. Добавьте параметр `` (? I) `` для "
+"сопоставления всех баз данных (чтобы домен `` odoo.com`` с использованием ``"
+" (? I)% d`` совпадал с базой данных `` Odoo``)."
 
 #: ../../reference/cmdline.rst:116
 msgid ""
-"Since version 11, it's also possible to restrict access to a given "
-"database listen by using the --database parameter and specifying a comma-"
-"separated list of databases"
+"Since version 11, it's also possible to restrict access to a given database "
+"listen by using the --database parameter and specifying a comma-separated "
+"list of databases"
 msgstr ""
+"Начиная с версии 11, также можно ограничить доступ к данному прослушиванию "
+"базы данных, используя параметр --database и указав список баз данных через "
+"запятую"
 
 #: ../../reference/cmdline.rst:120
 msgid ""
-"When combining the two parameters, db-filter supersedes the comma-"
-"separated database list for restricting database list, while the comma-"
-"separated list is used for performing requested operations like upgrade "
-"of modules."
+"When combining the two parameters, db-filter supersedes the comma-separated "
+"database list for restricting database list, while the comma-separated list "
+"is used for performing requested operations like upgrade of modules."
 msgstr ""
+"При объединении двух параметров db-фильтр заменяет список баз данных через "
+"запятую для ограничения списка баз данных, а список через запятую "
+"используется для выполнения запрошенных операций, таких как обновление "
+"модулей."
 
 #: ../../reference/cmdline.rst:128
 msgid "Restrict access to databases whose name starts with 11"
-msgstr ""
+msgstr "Ограничить доступ к базам данных, имя которых начинается с 11"
 
 #: ../../reference/cmdline.rst:134
 msgid ""
-"Restrict access to only two databases, 11firstdatabase and "
-"11seconddatabase"
+"Restrict access to only two databases, 11firstdatabase and 11seconddatabase"
 msgstr ""
+"Ограничить доступ только к двум базам данных: 11firstdatabase и "
+"11seconddatabase"
 
 #: ../../reference/cmdline.rst:140
 msgid ""
-"Restrict access to only two databases, 11firstdatabase and "
-"11seconddatabase, and update base module on one database: "
-"11firstdatabase. If database 11seconddatabase doesn't exist, the database"
-" is created and base modules is installed"
+"Restrict access to only two databases, 11firstdatabase and 11seconddatabase,"
+" and update base module on one database: 11firstdatabase. If database "
+"11seconddatabase doesn't exist, the database is created and base modules is "
+"installed"
 msgstr ""
+"Ограничьте доступ только к двум базам данных, 11firstdatabase и "
+"11seconddatabase, и обновите базовый модуль для одной базы данных: "
+"11firstdatabase. Если база данных 11seconddatabase не существует, база "
+"данных создается и базовые модули устанавливаются"
 
 #: ../../reference/cmdline.rst:149
 msgid ""
@@ -192,210 +239,272 @@ msgid ""
 "module on one database: 11firstdatabase. If database 11seconddatabase "
 "doesn't exist, the database is created and base modules is installed"
 msgstr ""
+"Ограничьте доступ к базам данных, имя которых начинается с 11, и обновите "
+"базовый модуль для одной базы данных: 11firstdatabase. Если база данных "
+"11seconddatabase не существует, база данных создается и базовые модули "
+"устанавливаются"
 
 #: ../../reference/cmdline.rst:156
 msgid ""
-"when creating new databases from the database-management screens, use the"
-" specified `template database`_. Defaults to ``template0``."
+"when creating new databases from the database-management screens, use the "
+"specified `template database`_. Defaults to ``template0``."
 msgstr ""
+"при создании новых баз данных из экранов управления базами данных "
+"используйте указанный `шаблон базы данных`_. По умолчанию используется `` "
+"template0``."
 
 #: ../../reference/cmdline.rst:161
 msgid ""
 "Path to the PostgreSQL binaries that are used by the database manager to "
-"dump and restore databases. You have to specify this option only if these"
-" binaries are located in a non-standard directory."
+"dump and restore databases. You have to specify this option only if these "
+"binaries are located in a non-standard directory."
 msgstr ""
+"Путь к двоичным файлам PostgreSQL, которые используются менеджером баз "
+"данных для создания и восстановления баз данных. Вы должны указать эту "
+"опцию, только если эти двоичные файлы находятся в нестандартном каталоге."
 
 #: ../../reference/cmdline.rst:167
 msgid "Suppresses the ability to list databases available on the system"
-msgstr ""
+msgstr "Подавляет возможность перечисления баз данных, доступных в системе"
 
 #: ../../reference/cmdline.rst:171
 msgid ""
 "Control the SSL security of the connection between Odoo and PostgreSQL. "
-"Value should bve one of 'disable', 'allow', 'prefer', 'require', 'verify-"
-"ca' or 'verify-full' Default value is 'prefer'"
+"Value should bve one of 'disable', 'allow', 'prefer', 'require', 'verify-ca'"
+" or 'verify-full' Default value is 'prefer'"
 msgstr ""
+"Управляйте безопасностью SSL соединения между Odoo и PostgreSQL. Значение "
+"должно быть равно «отключить», «разрешить», «предпочесть», «потребовать», "
+"«проверить-ca» или «проверить-заполнить». Значение по умолчанию - "
+"«предпочесть»"
 
 #: ../../reference/cmdline.rst:179
 msgid "Emails"
-msgstr ""
+msgstr "Сообщения электронной почты"
 
 #: ../../reference/cmdline.rst:183
 msgid "Email address used as <FROM> when Odoo needs to send mails"
 msgstr ""
+"Адрес электронной почты используется как <FROM> когда Odoo нужно отправлять "
+"письма"
 
 #: ../../reference/cmdline.rst:187
 msgid "Address of the SMTP server to connect to in order to send mails"
-msgstr ""
+msgstr "Адрес SMTP-сервера для подключения для отправки писем"
 
 #: ../../reference/cmdline.rst:193
 msgid "If set, odoo should use SSL/STARTSSL SMTP connections"
 msgstr ""
+"Если установлено, odoo должен использовать SMTP-соединения SSL / STARTSSL"
 
 #: ../../reference/cmdline.rst:197
 msgid "Username to connect to the SMTP server"
-msgstr ""
+msgstr "Имя пользователя для подключения к SMTP-серверу"
 
 #: ../../reference/cmdline.rst:201
 msgid "Password to connect to the SMTP server"
-msgstr ""
+msgstr "Пароль для подключения к SMTP-серверу"
 
 #: ../../reference/cmdline.rst:206
 msgid "Internationalisation"
-msgstr ""
+msgstr "интернационализация"
 
 #: ../../reference/cmdline.rst:208
 msgid ""
-"Use these options to translate Odoo to another language. See i18n section"
-" of the user manual. Option '-d' is mandatory. Option '-l' is mandatory "
-"in case of importation"
+"Use these options to translate Odoo to another language. See i18n section of"
+" the user manual. Option '-d' is mandatory. Option '-l' is mandatory in case"
+" of importation"
 msgstr ""
+"Используйте эти опции для перевода Odoo на другой язык. Смотрите раздел i18n"
+" в руководстве пользователя. Опция -d обязательна. Опция &#39;-l&#39; "
+"обязательна в случае импорта"
 
 #: ../../reference/cmdline.rst:214
 msgid ""
-"specifies the languages (separated by commas) for the translations you "
-"want to be loaded"
+"specifies the languages (separated by commas) for the translations you want "
+"to be loaded"
 msgstr ""
+"указывает языки (разделенные запятыми) для переводов, которые вы хотите "
+"загрузить"
 
 #: ../../reference/cmdline.rst:219
 msgid ""
-"specify the language of the translation file. Use it with --i18n-export "
-"or --i18n-import"
+"specify the language of the translation file. Use it with --i18n-export or "
+"--i18n-import"
 msgstr ""
+"указать язык файла перевода. Используйте его с --i18n-export или "
+"--i18n-import"
 
 #: ../../reference/cmdline.rst:224
 msgid ""
 "export all sentences to be translated to a CSV file, a PO file or a TGZ "
 "archive and exit."
 msgstr ""
+"экспортировать все предложения для перевода в файл CSV, PO-файл или архив "
+"TGZ и выйти."
 
 #: ../../reference/cmdline.rst:229
 msgid ""
 "import a CSV or a PO file with translations and exit. The '-l' option is "
 "required."
 msgstr ""
+"импортировать файл CSV или PO с переводами и выйти. Опция -l обязательна."
 
 #: ../../reference/cmdline.rst:234
 msgid ""
-"overwrites existing translation terms on updating a module or importing a"
-" CSV or a PO file."
+"overwrites existing translation terms on updating a module or importing a "
+"CSV or a PO file."
 msgstr ""
+"перезаписывает существующие термины перевода при обновлении модуля или "
+"импорте файла CSV или PO."
 
 #: ../../reference/cmdline.rst:239
 msgid "specify modules to export. Use in combination with --i18n-export"
-msgstr ""
+msgstr "указать модули для экспорта. Использовать в сочетании с --i18n-export"
 
 #: ../../reference/cmdline.rst:244
 msgid "Advanced Options"
-msgstr ""
+msgstr "Расширенные настройки"
 
 #: ../../reference/cmdline.rst:249
 msgid "Developer features"
-msgstr ""
+msgstr "Особенности разработчика"
 
 #: ../../reference/cmdline.rst:253
 msgid "``all``: all the features below are activated"
-msgstr ""
+msgstr "`` all``: все функции ниже активированы"
 
 #: ../../reference/cmdline.rst:255
 msgid ""
-"``xml``: read template qweb from xml file directly instead of database. "
-"Once a template has been modified in database, it will be not be read "
-"from the xml file until the next update/init."
+"``xml``: read template qweb from xml file directly instead of database. Once"
+" a template has been modified in database, it will be not be read from the "
+"xml file until the next update/init."
 msgstr ""
+"`` xml``: читать шаблон qweb из файла xml напрямую, а не из базы данных. Как"
+" только шаблон был изменен в базе данных, он не будет считываться из файла "
+"xml до следующего обновления / init."
 
 #: ../../reference/cmdline.rst:259
 msgid ""
-"``reload``: restart server when python file are updated (may not be "
-"detected depending on the text editor used)"
+"``reload``: restart server when python file are updated (may not be detected"
+" depending on the text editor used)"
 msgstr ""
+"`` reload``: перезапустить сервер после обновления файла python (может не "
+"обнаруживаться в зависимости от используемого текстового редактора)"
 
 #: ../../reference/cmdline.rst:262
 msgid ""
 "``qweb``: break in the evaluation of qweb template when a node contains "
 "``t-debug='debugger'``"
 msgstr ""
+"`` qweb``: перерыв в оценке шаблона qweb, когда узел содержит `` t-debug = "
+"&#39;debugger&#39;``"
 
 #: ../../reference/cmdline.rst:264
 msgid ""
 "``(i)p(u)db``: start the chosen python debugger in the code when an "
 "unexpected error is raised before logging and returning the error."
 msgstr ""
+"`` (i) p (u) db``: запустить выбранный отладчик python в коде, когда "
+"возникла непредвиденная ошибка перед регистрацией и возвратом ошибки."
 
 #: ../../reference/cmdline.rst:271
 msgid "HTTP"
-msgstr ""
+msgstr "HTTP"
 
 #: ../../reference/cmdline.rst:275
 msgid ""
-"do not start the HTTP or long-polling workers (may still start :ref:`cron"
-" <reference/actions/cron>` workers)"
+"do not start the HTTP or long-polling workers (may still start :ref:`cron "
+"<reference/actions/cron>` workers)"
 msgstr ""
+"не запускайте HTTP или работников с длинным опросом (все равно можете "
+"запустить: ref: `cron <reference/actions/cron> работники)"
 
 #: ../../reference/cmdline.rst:278
 msgid ""
 "has no effect if :option:`--test-enable` is set, as tests require an "
 "accessible HTTP server"
 msgstr ""
+"не действует, если задано: option: `--test-enable`, так как тесты требуют "
+"доступного HTTP-сервера"
 
 #: ../../reference/cmdline.rst:283
 msgid ""
 "TCP/IP address on which the HTTP server listens, defaults to ``0.0.0.0`` "
 "(all addresses)"
 msgstr ""
+"TCP / IP-адрес, на котором слушает HTTP-сервер, по умолчанию `` 0.0.0.0`` "
+"(все адреса)"
 
 #: ../../reference/cmdline.rst:288
 msgid "Port on which the HTTP server listens, defaults to 8069."
-msgstr ""
+msgstr "Порт, по которому слушает HTTP-сервер, по умолчанию - 8069."
 
 #: ../../reference/cmdline.rst:292
 msgid ""
 "TCP port for long-polling connections in multiprocessing or gevent mode, "
 "defaults to 8072. Not used in default (threaded) mode."
 msgstr ""
+"Порт TCP для соединений с длительным опросом в многопроцессорном режиме или "
+"режиме Gevent, по умолчанию - 8072. Не используется в режиме по умолчанию "
+"(многопоточном)."
 
 #: ../../reference/cmdline.rst:297
 msgid ""
 "enables the use of ``X-Forwarded-*`` headers through `Werkzeug's proxy "
 "support`_."
 msgstr ""
+"позволяет использовать заголовки `` X-Forwarded- * `` через `поддержку "
+"прокси Werkzeug`_."
 
 #: ../../reference/cmdline.rst:300
 msgid "proxy mode *must not* be enabled outside of a reverse proxy scenario"
-msgstr ""
+msgstr "режим прокси * не должен * быть включен вне сценария обратного прокси"
 
 #: ../../reference/cmdline.rst:306
 msgid "Logging"
-msgstr ""
+msgstr "логирование"
 
 #: ../../reference/cmdline.rst:308
 msgid ""
-"By default, Odoo displays all logging of level_ ``info`` except for "
-"workflow logging (``warning`` only), and log output is sent to "
-"``stdout``. Various options are available to redirect logging to other "
-"destinations and to customize the amount of logging output."
+"By default, Odoo displays all logging of level_ ``info`` except for workflow"
+" logging (``warning`` only), and log output is sent to ``stdout``. Various "
+"options are available to redirect logging to other destinations and to "
+"customize the amount of logging output."
 msgstr ""
+"По умолчанию Odoo отображает все журналы уровня `` info``, кроме ведения "
+"журнала рабочего процесса (только `` warning``), и вывод журнала "
+"отправляется в `` stdout``. Доступны различные параметры для перенаправления"
+" ведения журнала в другие места назначения и для настройки объема вывода "
+"журнала."
 
 #: ../../reference/cmdline.rst:315
 msgid ""
-"sends logging output to the specified file instead of stdout. On Unix, "
-"the file `can be managed by external log rotation programs "
+"sends logging output to the specified file instead of stdout. On Unix, the "
+"file `can be managed by external log rotation programs "
 "<https://docs.python.org/3/library/logging.handlers.html#watchedfilehandler>`_"
 " and will automatically be reopened when replaced"
 msgstr ""
+"отправляет вывод журнала в указанный файл вместо стандартного вывода. В Unix"
+" файл `может управляться внешними программами ротации журналов "
+"<https://docs.python.org/3/library/logging.handlers.html#watchedfilehandler>`_"
+" и будет автоматически открыт при замене"
 
 #: ../../reference/cmdline.rst:322
 msgid ""
 "logs to the system's event logger: `syslog on unices "
-"<https://docs.python.org/3/library/logging.handlers.html#sysloghandler>`_"
-" and `the Event Log on Windows "
+"<https://docs.python.org/3/library/logging.handlers.html#sysloghandler>`_ "
+"and `the Event Log on Windows "
 "<https://docs.python.org/3/library/logging.handlers.html#nteventloghandler>`_."
 msgstr ""
+"регистрирует в системном журнале событий: `syslog on unices "
+"<https://docs.python.org/3/library/logging.handlers.html#sysloghandler>`_ и`"
+" Журнал событий в Windows "
+"<https://docs.python.org/3/library/logging.handlers.html#nteventloghandler>`_."
 
 #: ../../reference/cmdline.rst:325
 msgid "Neither is configurable"
-msgstr ""
+msgstr "Ни один не настраивается"
 
 #: ../../reference/cmdline.rst:329
 msgid ""
@@ -403,148 +512,184 @@ msgid ""
 "database. The database can be the name of a database in the \"current\" "
 "PostgreSQL, or `a PostgreSQL URI`_ for e.g. log aggregation."
 msgstr ""
+"регистрирует модель `` ir.logging`` (таблица `` ir_logging``) указанной базы"
+" данных. База данных может быть именем базы данных в «текущем» PostgreSQL "
+"или `URI PostgreSQL`_, например, для агрегации журналов."
 
 #: ../../reference/cmdline.rst:335
 msgid ""
-":samp:`{LOGGER}:{LEVEL}`, enables ``LOGGER`` at the provided ``LEVEL`` "
-"e.g. ``odoo.models:DEBUG`` will enable all logging messages at or above "
-"``DEBUG`` level in the models."
+":samp:`{LOGGER}:{LEVEL}`, enables ``LOGGER`` at the provided ``LEVEL`` e.g. "
+"``odoo.models:DEBUG`` will enable all logging messages at or above ``DEBUG``"
+" level in the models."
 msgstr ""
+": samp: `{LOGGER}: {LEVEL}`, включает `` LOGGER`` в указанном `` LEVEL``, "
+"например, `` odoo.models: DEBUG`` включит все сообщения регистрации в или "
+"выше `` DEBUG`` уровень в моделях."
 
 #: ../../reference/cmdline.rst:339
 msgid "The colon ``:`` is mandatory"
-msgstr ""
+msgstr "Двоеточие ``: `` обязательно"
 
 #: ../../reference/cmdline.rst:340
 msgid "The logger can be omitted to configure the root (default) handler"
 msgstr ""
+"Регистратор может быть опущен для настройки корневого (по умолчанию) "
+"обработчика"
 
 #: ../../reference/cmdline.rst:341
 msgid "If the level is omitted, the logger is set to ``INFO``"
-msgstr ""
+msgstr "Если уровень опущен, регистратор устанавливается на `` INFO``"
 
 #: ../../reference/cmdline.rst:343
 msgid "The option can be repeated to configure multiple loggers e.g."
 msgstr ""
+"Опцию можно повторить для настройки нескольких регистраторов, например"
 
 #: ../../reference/cmdline.rst:351
 msgid ""
 "enable DEBUG logging for RPC requests, equivalent to ``--log-"
 "handler=odoo.http.rpc.request:DEBUG``"
 msgstr ""
+"включить ведение журнала DEBUG для запросов RPC, эквивалентно `` --log-"
+"handler = odoo.http.rpc.request: DEBUG``"
 
 #: ../../reference/cmdline.rst:356
 msgid ""
 "enable DEBUG logging for RPC responses, equivalent to ``--log-"
 "handler=odoo.http.rpc.response:DEBUG``"
 msgstr ""
+"включить ведение журнала DEBUG для ответов RPC, эквивалентно `` --log-"
+"handler = odoo.http.rpc.response: DEBUG``"
 
 #: ../../reference/cmdline.rst:361
 msgid ""
-"enables DEBUG logging of HTTP requests and responses, equivalent to "
-"``--log-handler=odoo.http:DEBUG``"
+"enables DEBUG logging of HTTP requests and responses, equivalent to ``--log-"
+"handler=odoo.http:DEBUG``"
 msgstr ""
+"включает ведение журнала DEBUG HTTP-запросов и ответов, что эквивалентно `` "
+"--log-handler = odoo.http: DEBUG``"
 
 #: ../../reference/cmdline.rst:366
 msgid ""
 "enables DEBUG logging of SQL querying, equivalent to ``--log-"
 "handler=odoo.sql_db:DEBUG``"
 msgstr ""
+"включает ведение журнала DEBUG для SQL-запросов, что эквивалентно `` --log-"
+"handler = odoo.sql_db: DEBUG``"
 
 #: ../../reference/cmdline.rst:371
 msgid ""
-"Shortcut to more easily set predefined levels on specific loggers. "
-"\"real\" levels (``critical``, ``error``, ``warn``, ``debug``) are set on"
-" the ``odoo`` and ``werkzeug`` loggers (except for ``debug`` which is "
-"only set on ``odoo``)."
+"Shortcut to more easily set predefined levels on specific loggers. \"real\" "
+"levels (``critical``, ``error``, ``warn``, ``debug``) are set on the "
+"``odoo`` and ``werkzeug`` loggers (except for ``debug`` which is only set on"
+" ``odoo``)."
 msgstr ""
+"Ярлык для более легкой установки предопределенных уровней на определенных "
+"регистраторах. «реальные» уровни (`` критический``, `` ошибка``, `` warn``, "
+"`` debug``) установлены на регистраторах `` odoo`` и `` werkzeug`` (кроме ``"
+" debug``, который устанавливается только на `` odoo``)."
 
 #: ../../reference/cmdline.rst:376
 msgid ""
-"Odoo also provides debugging pseudo-levels which apply to different sets "
-"of loggers:"
+"Odoo also provides debugging pseudo-levels which apply to different sets of "
+"loggers:"
 msgstr ""
+"Odoo также предоставляет отладочные псевдоуровни, которые применяются к "
+"различным наборам регистраторов:"
 
 #: ../../reference/cmdline.rst:381
 msgid "``debug_sql``"
-msgstr ""
+msgstr "`` Debug_sql``"
 
 #: ../../reference/cmdline.rst:380
 msgid "sets the SQL logger to ``debug``"
-msgstr ""
+msgstr "устанавливает регистратор SQL в `` debug``"
 
 #: ../../reference/cmdline.rst:382
 msgid "equivalent to ``--log-sql``"
-msgstr ""
+msgstr "эквивалентно `` --log-sql``"
 
 #: ../../reference/cmdline.rst:385
 msgid "``debug_rpc``"
-msgstr ""
+msgstr "`` Debug_rpc``"
 
 #: ../../reference/cmdline.rst:384
 msgid "sets the ``odoo`` and HTTP request loggers to ``debug``"
 msgstr ""
+"устанавливает для `` odoo`` и регистраторов HTTP-запросов значение `` "
+"debug``"
 
 #: ../../reference/cmdline.rst:386
 msgid "equivalent to ``--log-level debug --log-request``"
-msgstr ""
+msgstr "эквивалентно `` --log-level debug --log-request``"
 
 #: ../../reference/cmdline.rst:391
 msgid "``debug_rpc_answer``"
-msgstr ""
+msgstr "`` Debug_rpc_answer``"
 
 #: ../../reference/cmdline.rst:388
 msgid "sets the ``odoo`` and HTTP request and response loggers to ``debug``"
 msgstr ""
+"устанавливает для `` odoo`` и HTTP-регистраторов запросов и ответов значение"
+" `` debug``"
 
 #: ../../reference/cmdline.rst:391
 msgid "equivalent to ``--log-level debug --log-request --log-response``"
-msgstr ""
+msgstr "эквивалентно `` --log-level debug --log-request --log-response``"
 
 #: ../../reference/cmdline.rst:395
 msgid ""
 "In case of conflict between :option:`--log-level` and :option:`--log-"
 "handler`, the latter is used"
 msgstr ""
+"В случае конфликта между: option: `--log-level` и: option:` --log-handler`, "
+"используется последний"
 
 #: ../../reference/cmdline.rst:401
 msgid "Multiprocessing"
-msgstr ""
+msgstr "многопроцессорная обработка"
 
 #: ../../reference/cmdline.rst:405
 msgid ""
-"if ``count`` is not 0 (the default), enables multiprocessing and sets up "
-"the specified number of HTTP workers (sub-processes processing HTTP and "
-"RPC requests)."
+"if ``count`` is not 0 (the default), enables multiprocessing and sets up the"
+" specified number of HTTP workers (sub-processes processing HTTP and RPC "
+"requests)."
 msgstr ""
+"если значение `` count`` не равно 0 (по умолчанию), включает "
+"многопроцессорность и устанавливает указанное количество рабочих HTTP "
+"(подпроцессы, обрабатывающие запросы HTTP и RPC)."
 
 #: ../../reference/cmdline.rst:409
 msgid "multiprocessing mode is only available on Unix-based systems"
-msgstr ""
+msgstr "многопроцессорный режим доступен только в Unix-системах"
 
 #: ../../reference/cmdline.rst:411
 msgid "A number of options allow limiting and recycling workers:"
-msgstr ""
+msgstr "Ряд опций позволяет ограничивать и перерабатывать работников:"
 
 #: ../../reference/cmdline.rst:415
 msgid ""
 "Number of requests a worker will process before being recycled and "
 "restarted."
 msgstr ""
+"Количество запросов, которые рабочий обработает перед тем, как их "
+"переработать и перезапустить."
 
 #: ../../reference/cmdline.rst:418
 msgid "Defaults to *8196*."
-msgstr ""
+msgstr "По умолчанию * 8196 *."
 
 #: ../../reference/cmdline.rst:422
 msgid ""
 "Maximum allowed virtual memory per worker. If the limit is exceeded, the "
 "worker is killed and recycled at the end of the current request."
 msgstr ""
+"Максимально допустимая виртуальная память на одного работника. Если лимит "
+"превышен, работник уничтожается и перерабатывается в конце текущего запроса."
 
 #: ../../reference/cmdline.rst:425
 msgid "Defaults to *2048MiB*."
-msgstr ""
+msgstr "По умолчанию * 2048MiB *."
 
 #: ../../reference/cmdline.rst:429
 msgid ""
@@ -552,94 +697,114 @@ msgid ""
 "immediately killed without waiting for the end of the current request "
 "processing."
 msgstr ""
+"Жесткий лимит на виртуальную память, любой работник, превышающий лимит, "
+"будет немедленно уничтожен, не дожидаясь окончания текущей обработки "
+"запроса."
 
 #: ../../reference/cmdline.rst:433
 msgid "Defaults to *2560MiB*."
-msgstr ""
+msgstr "По умолчанию * 2560MiB *."
 
 #: ../../reference/cmdline.rst:437
 msgid ""
 "Prevents the worker from using more than <limit> CPU seconds for each "
 "request. If the limit is exceeded, the worker is killed."
 msgstr ""
+"Предотвращает использование работником более <limit> Секунды процессора для "
+"каждого запроса. Если предел превышен, работник убит."
 
 #: ../../reference/cmdline.rst:440
 msgid "Defaults to *60*."
-msgstr ""
+msgstr "По умолчанию * 60 *."
 
 #: ../../reference/cmdline.rst:444
 msgid ""
 "Prevents the worker from taking longer than <limit> seconds to process a "
 "request. If the limit is exceeded, the worker is killed."
 msgstr ""
+"Предотвращает работника от принятия дольше, чем <limit> секунд, чтобы "
+"обработать запрос. Если предел превышен, работник убит."
 
 #: ../../reference/cmdline.rst:447
 msgid ""
 "Differs from :option:`--limit-time-cpu` in that this is a \"wall time\" "
 "limit including e.g. SQL queries."
 msgstr ""
+"Отличается от: option: `--limit-time-cpu` тем, что это ограничение&quot; "
+"времени стены &quot;, включая, например, запросы SQL."
 
 #: ../../reference/cmdline.rst:450
 msgid "Defaults to *120*."
-msgstr ""
+msgstr "По умолчанию * 120 *."
 
 #: ../../reference/cmdline.rst:454
 msgid ""
-"number of workers dedicated to :ref:`cron <reference/actions/cron>` jobs."
-" Defaults to *2*. The workers are threads in multi-threading mode and "
+"number of workers dedicated to :ref:`cron <reference/actions/cron>` jobs. "
+"Defaults to *2*. The workers are threads in multi-threading mode and "
 "processes in multi-processing mode."
 msgstr ""
+"количество работников, посвященных: ref: `cron <reference/actions/cron> "
+"рабочие места. По умолчанию * 2 *. Рабочие являются потоками в многопоточном"
+" режиме и обрабатывают в многопроцессорном режиме."
 
 #: ../../reference/cmdline.rst:457
 msgid ""
-"For multi-processing mode, this is in addition to the HTTP worker "
-"processes."
-msgstr ""
+"For multi-processing mode, this is in addition to the HTTP worker processes."
+msgstr "Для режима мультиобработки это в дополнение к рабочим процессам HTTP."
 
 #: ../../reference/cmdline.rst:462
 msgid "Configuration file"
-msgstr ""
+msgstr "Файл конфигурации"
 
 #: ../../reference/cmdline.rst:466
 msgid ""
-"Most of the command-line options can also be specified via a "
-"configuration file. Most of the time, they use similar names with the "
-"prefix ``-`` removed and other ``-`` are replaced by ``_`` e.g. :option"
-":`--db-template` becomes ``db_template``."
+"Most of the command-line options can also be specified via a configuration "
+"file. Most of the time, they use similar names with the prefix ``-`` removed"
+" and other ``-`` are replaced by ``_`` e.g. :option:`--db-template` becomes "
+"``db_template``."
 msgstr ""
+"Большинство параметров командной строки также можно указать через файл "
+"конфигурации. В большинстве случаев они используют похожие имена с удаленным"
+" префиксом `` -``, а другие `` -`` заменяются на `` _``, например: option: "
+"`--db-template` становится` `db_template`` ,"
 
 #: ../../reference/cmdline.rst:471
 msgid "Some conversions don't match the pattern:"
-msgstr ""
+msgstr "Некоторые преобразования не соответствуют шаблону:"
 
 #: ../../reference/cmdline.rst:473
 msgid ":option:`--db-filter` becomes ``dbfilter``"
-msgstr ""
+msgstr ": option: `--db-filter` становится` `dbfilter``"
 
 #: ../../reference/cmdline.rst:474
 msgid ":option:`--no-http` corresponds to the ``http_enable`` boolean"
-msgstr ""
+msgstr ": option: `--no-http` соответствует логическому` `http_enable``"
 
 #: ../../reference/cmdline.rst:475
 msgid ""
-"logging presets (all options starting with ``--log-`` except for :option"
-":`--log-handler` and :option:`--log-db`) just add content to "
+"logging presets (all options starting with ``--log-`` except for "
+":option:`--log-handler` and :option:`--log-db`) just add content to "
 "``log_handler``, use that directly in the configuration file"
 msgstr ""
+"предустановки ведения журнала (все опции, начинающиеся с `` --log-``, за "
+"исключением: option: `--log-handler` и: option:` --log-db`) просто добавляют"
+" содержимое в `` log_handler``, используйте что прямо в файле конфигурации"
 
 #: ../../reference/cmdline.rst:478
 msgid ":option:`--smtp` is stored as ``smtp_server``"
-msgstr ""
+msgstr ": option: `--smtp` хранится как` `smtp_server``"
 
 #: ../../reference/cmdline.rst:479
 msgid ":option:`--database` is stored as ``db_name``"
-msgstr ""
+msgstr ": option: `--database` хранится как` `db_name``"
 
 #: ../../reference/cmdline.rst:480
 msgid ""
-":option:`--i18n-import` and :option:`--i18n-export` aren't available at "
-"all from configuration files"
+":option:`--i18n-import` and :option:`--i18n-export` aren't available at all "
+"from configuration files"
 msgstr ""
+": option: `--i18n-import` и: option:` --i18n-export` вообще не доступны из "
+"файлов конфигурации"
 
 #: ../../reference/cmdline.rst:483
 msgid ""
@@ -648,10 +813,14 @@ msgid ""
 ":option:`--save <odoo-bin -s>` will save the current configuration state "
 "back to that file."
 msgstr ""
+"Файл конфигурации по умолчанию: file: `{$ HOME} /. Odoorc`, который можно "
+"переопределить, используя: option:` --config <odoo-bin -c> `. Указание: "
+"option: `--save <odoo-bin -s> `сохранит текущее состояние конфигурации "
+"обратно в этот файл."
 
 #: ../../reference/cmdline.rst:504
 msgid "Shell"
-msgstr ""
+msgstr "Ракушка"
 
 #: ../../reference/cmdline.rst:506
 msgid ""
@@ -659,46 +828,61 @@ msgid ""
 "environment. This enables direct interaction with the :ref:`orm "
 "<reference/orm>` and its functionalities."
 msgstr ""
+"Командная строка Odoo также позволяет запускать odoo как консольную среду "
+"Python. Это позволяет напрямую взаимодействовать с: ref: `orm "
+"<reference/orm> и его функциональные возможности."
 
 #: ../../reference/cmdline.rst:516
 msgid "Specify a preferred REPL to use in shell mode."
-msgstr ""
+msgstr "Укажите предпочитаемый REPL для использования в режиме оболочки."
 
 #: ../../reference/cmdline.rst:522
 msgid "Scaffolding"
-msgstr ""
+msgstr "подмости"
 
 #: ../../reference/cmdline.rst:526
 msgid ""
-"Scaffolding is the automated creation of a skeleton structure to simplify"
-" bootstrapping (of new modules, in the case of Odoo). While not necessary"
-" it avoids the tedium of setting up basic structures and looking up what "
-"all starting requirements are."
+"Scaffolding is the automated creation of a skeleton structure to simplify "
+"bootstrapping (of new modules, in the case of Odoo). While not necessary it "
+"avoids the tedium of setting up basic structures and looking up what all "
+"starting requirements are."
 msgstr ""
+"Scaffolding - это автоматическое создание каркасной структуры для упрощения "
+"начальной загрузки (новых модулей, в случае Odoo). Хотя в этом нет "
+"необходимости, это позволяет избежать утомительной настройки базовых "
+"структур и выяснения всех начальных требований."
 
 #: ../../reference/cmdline.rst:531
-msgid "Scaffolding is available via the :command:`odoo-bin scaffold` subcommand."
+msgid ""
+"Scaffolding is available via the :command:`odoo-bin scaffold` subcommand."
 msgstr ""
+"Строительные леса доступны через подкоманду: command: `odoo-bin scaffold`."
 
 #: ../../reference/cmdline.rst:535
 msgid ""
-"the name of the module to create, may munged in various manners to "
-"generate programmatic names (e.g. module directory name, model names, …)"
+"the name of the module to create, may munged in various manners to generate "
+"programmatic names (e.g. module directory name, model names, …)"
 msgstr ""
+"имя создаваемого модуля может быть изменено различными способами для "
+"генерации программных имен (например, имя каталога модуля, названия "
+"модели,…)"
 
 #: ../../reference/cmdline.rst:540
 msgid ""
 "directory in which to create the new module, defaults to the current "
 "directory"
 msgstr ""
+"каталог, в котором создается новый модуль, по умолчанию используется текущий"
+" каталог"
 
 #: ../../reference/cmdline.rst:545
 msgid ""
-"a template directory, files are passed through jinja2_ then copied to the"
-" ``destination`` directory"
+"a template directory, files are passed through jinja2_ then copied to the "
+"``destination`` directory"
 msgstr ""
+"каталог шаблонов, файлы передаются через jinja2_, затем копируются в каталог"
+" `` destination``"
 
 #: ../../reference/cmdline.rst:552
 msgid "This will create module *my_module* in directory */addons/*."
-msgstr ""
-
+msgstr "Это создаст модуль * my_module * в каталоге * / addons / *."
