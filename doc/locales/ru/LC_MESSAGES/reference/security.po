@@ -19,61 +19,79 @@ msgstr ""
 
 #: ../../reference/security.rst:7
 msgid "Security in Odoo"
-msgstr ""
+msgstr "Безопасность в Odoo"
 
 #: ../../reference/security.rst:9
 msgid ""
 "Aside from manually managing access using custom code, Odoo provides two "
 "main data-driven mechanisms to manage or restrict access to data."
 msgstr ""
+"Помимо ручного управления доступом с помощью пользовательского кода, Odoo "
+"предоставляет два основных механизма, управляемых данными, для управления "
+"или ограничения доступа к данным."
 
 #: ../../reference/security.rst:12
 msgid ""
 "Both mechanisms are linked to specific users through *groups*: a user "
-"belongs to any number of groups, and security mechanisms are associated "
-"to groups, thus applying security mechamisms to users."
+"belongs to any number of groups, and security mechanisms are associated to "
+"groups, thus applying security mechamisms to users."
 msgstr ""
+"Оба механизма связаны с конкретными пользователями через * группы *: "
+"пользователь принадлежит к любому количеству групп, а механизмы безопасности"
+" связаны с группами, таким образом применяя механизмы безопасности для "
+"пользователей."
 
 #: ../../reference/security.rst:19
 msgid "Access Control"
-msgstr ""
+msgstr "Контроль доступа"
 
 #: ../../reference/security.rst:21
 msgid ""
-"Managed by the ``ir.model.access`` records, defines access to a whole "
-"model."
+"Managed by the ``ir.model.access`` records, defines access to a whole model."
 msgstr ""
+"Управляется записями `` ir.model.access``, определяет доступ ко всей модели."
 
 #: ../../reference/security.rst:23
 msgid ""
 "Each access control has a model to which it grants permissions, the "
 "permissions it grants and optionally a group."
 msgstr ""
+"Каждый элемент управления доступом имеет модель, которой он предоставляет "
+"разрешения, разрешения, которые он предоставляет, и, необязательно, группу."
 
 #: ../../reference/security.rst:26
 msgid ""
 "Access controls are additive, for a given model a user has access all "
-"permissions granted to any of its groups: if the user belongs to one "
-"group which allows writing and another which allows deleting, they can "
-"both write and delete."
+"permissions granted to any of its groups: if the user belongs to one group "
+"which allows writing and another which allows deleting, they can both write "
+"and delete."
 msgstr ""
+"Контроль доступа является аддитивным, для данной модели пользователь имеет "
+"доступ ко всем разрешениям, предоставленным любой из его групп: если "
+"пользователь принадлежит к одной группе, которая разрешает запись, и другой,"
+" которая позволяет удалять, они могут как писать, так и удалять."
 
 #: ../../reference/security.rst:31
 msgid ""
-"If no group is specified, the access control applies to all users, "
-"otherwise it only applies to the members of the given group."
+"If no group is specified, the access control applies to all users, otherwise"
+" it only applies to the members of the given group."
 msgstr ""
+"Если группа не указана, контроль доступа применяется ко всем пользователям, "
+"в противном случае он применяется только к членам данной группы."
 
 #: ../../reference/security.rst:34
 msgid ""
-"Available permissions are creation (``perm_create``), searching and "
-"reading (``perm_read``), updating existing records (``perm_write``) and "
-"deleting existing records (``perm_unlink``)"
+"Available permissions are creation (``perm_create``), searching and reading "
+"(``perm_read``), updating existing records (``perm_write``) and deleting "
+"existing records (``perm_unlink``)"
 msgstr ""
+"Доступные разрешения: создание (`` perm_create``), поиск и чтение (`` "
+"perm_read``), обновление существующих записей (`` perm_write``) и удаление "
+"существующих записей (`` perm_unlink``)"
 
 #: ../../reference/security.rst:41
 msgid "Record Rules"
-msgstr ""
+msgstr "Правила записи"
 
 #: ../../reference/security.rst:43
 msgid ""
@@ -81,94 +99,124 @@ msgid ""
 "(create, read, update or delete) to be allowed. It is applied record-by-"
 "record after access control has been applied."
 msgstr ""
+"Правила записи - это условия, которым записи должны удовлетворять для "
+"разрешения операции (создание, чтение, обновление или удаление). Применяется"
+" запись за записью после контроля доступа."
 
 #: ../../reference/security.rst:47
 msgid "A record rule has:"
-msgstr ""
+msgstr "Правило записи имеет:"
 
 #: ../../reference/security.rst:49
 msgid "a model on which it applies"
-msgstr ""
+msgstr "модель, на которую он распространяется"
 
 #: ../../reference/security.rst:50
 msgid ""
-"a set of permissions to which it applies (e.g. if ``perm_read`` is set, "
-"the rule will only be checked when reading a record)"
+"a set of permissions to which it applies (e.g. if ``perm_read`` is set, the "
+"rule will only be checked when reading a record)"
 msgstr ""
+"набор разрешений, к которым он применяется (например, если установлено `` "
+"perm_read``, правило будет проверяться только при чтении записи)"
 
 #: ../../reference/security.rst:52
 msgid ""
-"a set of user groups to which the rule applies, if no group is specified "
-"the rule is *global*"
+"a set of user groups to which the rule applies, if no group is specified the"
+" rule is *global*"
 msgstr ""
+"набор групп пользователей, к которым применяется правило, если группа не "
+"указана, правило является * глобальным *"
 
 #: ../../reference/security.rst:54
 msgid ""
-"a :ref:`domain <reference/orm/domains>` used to check whether a given "
-"record matches the rule (and is accessible) or does not (and is not "
-"accessible). The domain is evaluated with two variables in context: "
-"``user`` is the current user's record and ``time`` is the `time module`_"
+"a :ref:`domain <reference/orm/domains>` used to check whether a given record"
+" matches the rule (and is accessible) or does not (and is not accessible). "
+"The domain is evaluated with two variables in context: ``user`` is the "
+"current user's record and ``time`` is the `time module`_"
 msgstr ""
+"a: ref: `домен <reference/orm/domains> `используется для проверки того, "
+"соответствует ли данная запись правилу (и доступна ли она) или нет (и "
+"недоступна). Домен оценивается двумя переменными в контексте: `` user`` - "
+"это запись текущего пользователя, а `` time`` - это `time module`_"
 
 #: ../../reference/security.rst:59
 msgid ""
 "Global rules and group rules (rules restricted to specific groups versus "
 "groups applying to all users) are used quite differently:"
 msgstr ""
+"Глобальные правила и правила групп (правила, ограниченные определенными "
+"группами по сравнению с группами, применяемыми ко всем пользователям) "
+"используются совершенно по-разному:"
 
 #: ../../reference/security.rst:62
 msgid ""
-"Global rules are subtractive, they *must all* be matched for a record to "
-"be accessible"
+"Global rules are subtractive, they *must all* be matched for a record to be "
+"accessible"
 msgstr ""
+"Глобальные правила являются вычитающими, они * должны все * совпадать, чтобы"
+" запись была доступна"
 
 #: ../../reference/security.rst:64
 msgid ""
 "Group rules are additive, if *any* of them matches (and all global rules "
 "match) then the record is accessible"
 msgstr ""
+"Групповые правила являются аддитивными, если * любое * из них совпадает (и "
+"все глобальные правила совпадают), тогда запись доступна"
 
 #: ../../reference/security.rst:67
 msgid ""
-"This means the first *group rule* restricts access, but any further "
-"*group rule* expands it, while *global rules* can only ever restrict "
-"access (or have no effect)."
+"This means the first *group rule* restricts access, but any further *group "
+"rule* expands it, while *global rules* can only ever restrict access (or "
+"have no effect)."
 msgstr ""
+"Это означает, что первое * групповое правило * ограничивает доступ, но любое"
+" дальнейшее * групповое правило * расширяет его, в то время как * глобальные"
+" правила * могут только когда-либо ограничивать доступ (или не иметь "
+"никакого эффекта)."
 
 #: ../../reference/security.rst:71
 msgid "record rules do not apply to the Administrator user"
-msgstr ""
+msgstr "правила записи не распространяются на администратора"
 
 #: ../../reference/security.rst:77
 msgid "Field Access"
-msgstr ""
+msgstr "Доступ к полю"
 
 #: ../../reference/security.rst:81
 msgid ""
-"An ORM :class:`~odoo.fields.Field` can have a ``groups`` attribute "
-"providing a list of groups (as a comma-separated string of "
-":term:`external identifiers`)."
+"An ORM :class:`~odoo.fields.Field` can have a ``groups`` attribute providing"
+" a list of groups (as a comma-separated string of :term:`external "
+"identifiers`)."
 msgstr ""
+"ORM: class: `~ odoo.fields.Field` может иметь атрибут` `groups``, "
+"предоставляющий список групп (в виде разделенной запятыми строки: term:` "
+"external identifiers`)."
 
 #: ../../reference/security.rst:85
 msgid ""
 "If the current user is not in one of the listed groups, he will not have "
 "access to the field:"
 msgstr ""
+"Если текущий пользователь не входит ни в одну из перечисленных групп, он не "
+"будет иметь доступа к полю:"
 
 #: ../../reference/security.rst:88
 msgid "restricted fields are automatically removed from requested views"
-msgstr ""
+msgstr "ограниченные поля автоматически удаляются из запрошенных просмотров"
 
 #: ../../reference/security.rst:89
 msgid ""
 "restricted fields are removed from :meth:`~odoo.models.Model.fields_get` "
 "responses"
 msgstr ""
+"ограниченные поля удаляются из ответов: meth: `~ "
+"odoo.models.Model.fields_get`"
 
 #: ../../reference/security.rst:91
 msgid ""
-"attempts to (explicitly) read from or write to restricted fields results "
-"in an access error"
+"attempts to (explicitly) read from or write to restricted fields results in "
+"an access error"
 msgstr ""
-
+"попытки (явного) чтения или записи в ограниченные поля приводят к ошибке "
+"доступа"

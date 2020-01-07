@@ -19,222 +19,280 @@ msgstr ""
 
 #: ../../reference/translations.rst:8
 msgid "Translating Modules"
-msgstr ""
+msgstr "Перевод модулей"
 
 #: ../../reference/translations.rst:10
-msgid "This section explains how to provide translation abilities to your module."
+msgid ""
+"This section explains how to provide translation abilities to your module."
 msgstr ""
+"В этом разделе объясняется, как предоставить переводческие возможности "
+"вашему модулю."
 
 #: ../../reference/translations.rst:12
 msgid ""
-"If you want to contribute to the translation of Odoo itself, please refer"
-" to the `Odoo Wiki page "
-"<https://github.com/odoo/odoo/wiki/Translations>`_."
+"If you want to contribute to the translation of Odoo itself, please refer to"
+" the `Odoo Wiki page <https://github.com/odoo/odoo/wiki/Translations>`_."
 msgstr ""
+"Если вы хотите внести свой вклад в перевод самого Odoo, пожалуйста, "
+"обратитесь к странице `Odoo Wiki "
+"<https://github.com/odoo/odoo/wiki/Translations> `_."
 
 #: ../../reference/translations.rst:16
 msgid "Exporting translatable term"
-msgstr ""
+msgstr "Экспортируемый переводимый термин"
 
 #: ../../reference/translations.rst:18
 msgid ""
 "A number of terms in your modules are \"implicitly translatable\" as a "
-"result, even if you haven't done any specific work towards translation "
-"you can export your module's translatable terms and may find content to "
-"work with."
+"result, even if you haven't done any specific work towards translation you "
+"can export your module's translatable terms and may find content to work "
+"with."
 msgstr ""
+"В результате ряд терминов в ваших модулях «неявно переводим», даже если вы "
+"не выполнили какую-либо конкретную работу по переводу, вы можете "
+"экспортировать переводимые термины вашего модуля и найти контент для работы."
 
 #: ../../reference/translations.rst:24
 msgid ""
-"Translations export is performed via the administration interface by "
-"logging into the backend interface and opening :menuselection:`Settings "
-"--> Translations --> Import / Export --> Export Translations`"
+"Translations export is performed via the administration interface by logging"
+" into the backend interface and opening :menuselection:`Settings --> "
+"Translations --> Import / Export --> Export Translations`"
 msgstr ""
+"Экспорт переводов выполняется через интерфейс администрирования, войдя в "
+"интерфейс бэкэнда и открыв: menuselection: `Настройки -&gt; Переводы -&gt; "
+"Импорт / Экспорт -&gt; Экспорт переводов&quot;"
 
 #: ../../reference/translations.rst:28
 msgid "leave the language to the default (new language/empty template)"
-msgstr ""
+msgstr "оставить язык по умолчанию (новый язык / пустой шаблон)"
 
 #: ../../reference/translations.rst:29
 msgid "select the `PO File`_ format"
-msgstr ""
+msgstr "выберите формат `PO File`_"
 
 #: ../../reference/translations.rst:30
 msgid "select your module"
-msgstr ""
+msgstr "выберите свой модуль"
 
 #: ../../reference/translations.rst:31
 msgid "click :guilabel:`Export` and download the file"
-msgstr ""
+msgstr "нажмите: guilabel: `Export` и загрузите файл"
 
 #: ../../reference/translations.rst:37
 msgid ""
-"This gives you a file called :file:`{yourmodule}.pot` which should be "
-"moved to the :file:`{yourmodule}/i18n/` directory. The file is a *PO "
-"Template* which simply lists translatable strings and from which actual "
-"translations (PO files) can be created. PO files can be created using "
-"msginit_, with a dedicated translation tool like POEdit_ or by simply "
-"copying the template to a new file called :file:`{language}.po`. "
-"Translation files should be put in :file:`{yourmodule}/i18n/`, next to "
-":file:`{yourmodule}.pot`, and will be automatically loaded by Odoo when "
-"the corresponding language is installed (via :menuselection:`Settings -->"
-" Translations --> Languages`)"
+"This gives you a file called :file:`{yourmodule}.pot` which should be moved "
+"to the :file:`{yourmodule}/i18n/` directory. The file is a *PO Template* "
+"which simply lists translatable strings and from which actual translations "
+"(PO files) can be created. PO files can be created using msginit_, with a "
+"dedicated translation tool like POEdit_ or by simply copying the template to"
+" a new file called :file:`{language}.po`. Translation files should be put in"
+" :file:`{yourmodule}/i18n/`, next to :file:`{yourmodule}.pot`, and will be "
+"automatically loaded by Odoo when the corresponding language is installed "
+"(via :menuselection:`Settings --> Translations --> Languages`)"
 msgstr ""
+"Это дает вам файл с именем: file: `{yourmodule} .pot`, который следует "
+"переместить в каталог: file:` {yourmodule} / i18n / `. Файл представляет "
+"собой * PO Template *, в котором просто перечисляются переводимые строки и "
+"из которого можно создавать фактические переводы (PO-файлы). PO-файлы могут "
+"быть созданы с помощью msginit_, с помощью специального инструмента "
+"перевода, такого как POEdit_, или просто скопировав шаблон в новый файл с "
+"именем: file: `{language} .po`. Файлы перевода должны быть помещены в: file:"
+" `{yourmodule} / i18n /`, рядом с: file: `{yourmodule} .pot`, и будут "
+"автоматически загружаться Odoo при установке соответствующего языка (через: "
+"menuselection:` Настройки -&gt; Переводы -&gt; Языки`)"
 
 #: ../../reference/translations.rst:47
 msgid ""
 "translations for all loaded languages are also installed or updated when "
 "installing or updating a module"
 msgstr ""
+"переводы для всех загруженных языков также устанавливаются или обновляются "
+"при установке или обновлении модуля"
 
 #: ../../reference/translations.rst:51
 msgid "Implicit exports"
-msgstr ""
+msgstr "Неявный экспорт"
 
 #: ../../reference/translations.rst:53
 msgid ""
-"Odoo automatically exports translatable strings from \"data\"-type "
-"content:"
+"Odoo automatically exports translatable strings from \"data\"-type content:"
 msgstr ""
+"Odoo автоматически экспортирует переводимые строки из содержимого типа "
+"«данные»:"
 
 #: ../../reference/translations.rst:55
 msgid ""
-"in non-QWeb views, all text nodes are exported as well as the content of "
-"the ``string``, ``help``, ``sum``, ``confirm`` and ``placeholder`` "
-"attributes"
+"in non-QWeb views, all text nodes are exported as well as the content of the"
+" ``string``, ``help``, ``sum``, ``confirm`` and ``placeholder`` attributes"
 msgstr ""
+"в представлениях, отличных от QWeb, экспортируются все текстовые узлы, а "
+"также содержимое атрибутов `` string``, `` help``, `` sum``, `` verify`` и "
+"`` placeholder``"
 
 #: ../../reference/translations.rst:58
 msgid ""
 "QWeb templates (both server-side and client-side), all text nodes are "
-"exported except inside ``t-translation=\"off\"`` blocks, the content of "
-"the ``title``, ``alt``, ``label`` and ``placeholder`` attributes are also"
-" exported"
+"exported except inside ``t-translation=\"off\"`` blocks, the content of the "
+"``title``, ``alt``, ``label`` and ``placeholder`` attributes are also "
+"exported"
 msgstr ""
+"Шаблоны QWeb (как на стороне сервера, так и на стороне клиента), "
+"экспортируются все текстовые узлы, кроме внутри блоков `` t-translation = "
+"&quot;off&quot; ``, содержимого `` title``, `` alt``, ` Атрибуты `label`` и`"
+" `placeholder`` также экспортируются"
 
 #: ../../reference/translations.rst:62
 msgid ""
 "for :class:`~odoo.fields.Field`, unless their model is marked with "
 "``_translate = False``:"
 msgstr ""
+"for: class: `~ odoo.fields.Field`, если их модель не помечена как` "
+"`_translate = False``:"
 
 #: ../../reference/translations.rst:65
 msgid "their ``string`` and ``help`` attributes are exported"
-msgstr ""
+msgstr "их атрибуты `` string`` и `` help`` экспортируются"
 
 #: ../../reference/translations.rst:66
 msgid "if ``selection`` is present and a list (or tuple), it's exported"
 msgstr ""
+"если присутствует `` selection`` и список (или кортеж), он экспортируется"
 
 #: ../../reference/translations.rst:67
 msgid ""
-"if their ``translate`` attribute is set to ``True``, all of their "
-"existing values (across all records) are exported"
+"if their ``translate`` attribute is set to ``True``, all of their existing "
+"values (across all records) are exported"
 msgstr ""
+"если их атрибут `` translate`` установлен на `` True``, все их существующие "
+"значения (по всем записям) экспортируются"
 
 #: ../../reference/translations.rst:69
 msgid ""
 "help/error messages of :attr:`~odoo.models.Model._constraints` and "
 ":attr:`~odoo.models.Model._sql_constraints` are exported"
 msgstr ""
+"Справка / сообщения об ошибках: attr: `~ odoo.models.Model._constraints` и: "
+"attr:` ~ odoo.models.Model._sql_constraints` экспортируются"
 
 #: ../../reference/translations.rst:73
 msgid "Explicit exports"
-msgstr ""
+msgstr "Явный экспорт"
 
 #: ../../reference/translations.rst:75
 msgid ""
-"When it comes to more \"imperative\" situations in Python code or "
-"Javascript code, Odoo cannot automatically export translatable terms so "
-"they must be marked explicitly for export. This is done by wrapping a "
-"literal string in a function call."
+"When it comes to more \"imperative\" situations in Python code or Javascript"
+" code, Odoo cannot automatically export translatable terms so they must be "
+"marked explicitly for export. This is done by wrapping a literal string in a"
+" function call."
 msgstr ""
+"Когда дело доходит до более «императивных» ситуаций в коде Python или коде "
+"Javascript, Odoo не может автоматически экспортировать переводимые термины, "
+"поэтому они должны быть явно помечены для экспорта. Это делается путем "
+"переноса литеральной строки в вызов функции."
 
 #: ../../reference/translations.rst:80
 msgid "In Python, the wrapping function is :func:`odoo._`::"
-msgstr ""
+msgstr "В Python функция обтекания выглядит так: func: `odoo._` ::"
 
 #: ../../reference/translations.rst:84
-msgid "In JavaScript, the wrapping function is generally :js:func:`odoo.web._t`:"
+msgid ""
+"In JavaScript, the wrapping function is generally :js:func:`odoo.web._t`:"
 msgstr ""
+"В JavaScript функция обертки обычно выглядит так: js: func: `odoo.web._t`:"
 
 #: ../../reference/translations.rst:92
 msgid ""
 "Only literal strings can be marked for exports, not expressions or "
-"variables. For situations where strings are formatted, this means the "
-"format string must be marked, not the formatted string"
+"variables. For situations where strings are formatted, this means the format"
+" string must be marked, not the formatted string"
 msgstr ""
+"Для экспорта могут быть помечены только литеральные строки, а не выражения "
+"или переменные. В ситуациях, когда строки форматируются, это означает, что "
+"строка формата должна быть помечена, а не форматированная строка"
 
 #: ../../reference/translations.rst:96
 msgid ""
 "The lazy version of `_` and `_t` is :func:`odoo._lt` in python and "
-":js:func:`odoo.web._lt` in javascript. The translation lookup is executed"
-" only at rendering and can be used to declare translatable properties in "
+":js:func:`odoo.web._lt` in javascript. The translation lookup is executed "
+"only at rendering and can be used to declare translatable properties in "
 "class methods of global variables."
 msgstr ""
+"Ленивая версия `_` и` _t` - это: func: `odoo._lt` в python и: js: func:` "
+"odoo.web._lt` в javascript. Поиск перевода выполняется только при рендеринге"
+" и может использоваться для объявления переводимых свойств в методах класса "
+"глобальных переменных."
 
 #: ../../reference/translations.rst:102
 msgid "Variables"
-msgstr ""
+msgstr "переменные"
 
 #: ../../reference/translations.rst:103
 msgid ""
 "**Don't** the extract may work but it will not translate the text "
 "correctly::"
 msgstr ""
+"** Не ** экстракт может работать, но он не будет правильно переводить текст "
+"::"
 
 #: ../../reference/translations.rst:107
 msgid "**Do** set the dynamic variables outside of the translation lookup::"
-msgstr ""
+msgstr "** Do ** установить динамические переменные вне поиска перевода ::"
 
 #: ../../reference/translations.rst:113
 msgid "Blocks"
-msgstr ""
+msgstr "Блоки"
 
 #: ../../reference/translations.rst:114
-msgid "**Don't** split your translation in several blocks or multiples lines::"
+msgid ""
+"**Don't** split your translation in several blocks or multiples lines::"
 msgstr ""
+"** Не ** разделяйте ваш перевод на несколько блоков или несколько строк ::"
 
 #: ../../reference/translations.rst:124
 msgid "**Do** keep in one block, giving the full context to translators::"
 msgstr ""
+"** Do ** держите в одном блоке, предоставляя полный контекст для "
+"переводчиков ::"
 
 #: ../../reference/translations.rst:135
 msgid "Plural"
-msgstr ""
+msgstr "множественное число"
 
 #: ../../reference/translations.rst:136
 msgid "**Don't** pluralize terms the English-way::"
-msgstr ""
+msgstr "** Не ** множить термины по-английски ::"
 
 #: ../../reference/translations.rst:142
 msgid "**Do** keep in mind every language has different plural forms::"
 msgstr ""
+"** Имейте в виду, что каждый язык имеет различные формы множественного "
+"числа:"
 
 #: ../../reference/translations.rst:150
 msgid "Read vs Run Time"
-msgstr ""
+msgstr "Читать против времени выполнения"
 
 #: ../../reference/translations.rst:152
 msgid "**Don't** invoke translation lookup at server launch::"
-msgstr ""
+msgstr "** Не ** вызывать поиск перевода при запуске сервера ::"
 
 #: ../../reference/translations.rst:165
 msgid "**Don't** invoke translation lookup when the javascript file is read::"
-msgstr ""
+msgstr "** Не ** вызывать перевод поиска, когда файл JavaScript читается ::"
 
 #: ../../reference/translations.rst:176
 msgid "**Do** use lazy translation lookup method::"
-msgstr ""
+msgstr "** Используйте ** метод поиска ленивых переводов ::"
 
 #: ../../reference/translations.rst:190
 msgid "or **do** evaluate dynamically the translatable content::"
-msgstr ""
+msgstr "или ** делать ** динамически оценивать переводимый контент ::"
 
 #: ../../reference/translations.rst:199
 msgid ""
-"**Do** in the case where the translation lookup is done when the JS file "
-"is *read*, use `_lt` instead of `_t` to translate the term when it is "
-"*used*::"
+"**Do** in the case where the translation lookup is done when the JS file is "
+"*read*, use `_lt` instead of `_t` to translate the term when it is *used*::"
 msgstr ""
-
+"** Выполните ** в случае, когда поиск перевода выполняется, когда файл JS * "
+"read *, используйте `_lt` вместо` _t`, чтобы перевести термин, когда он * "
+"используется * ::"

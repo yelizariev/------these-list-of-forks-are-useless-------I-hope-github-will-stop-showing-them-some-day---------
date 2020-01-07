@@ -19,5 +19,4 @@ msgstr ""
 
 #: ../../reference/javascript_api.rst:12
 msgid "Javascript API"
-msgstr ""
-
+msgstr "API Javascript"

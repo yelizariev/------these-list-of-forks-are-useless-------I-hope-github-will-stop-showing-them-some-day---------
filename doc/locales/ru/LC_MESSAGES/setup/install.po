@@ -19,413 +19,511 @@ msgstr ""
 
 #: ../../setup/install.rst:8
 msgid "Installing Odoo"
-msgstr ""
+msgstr "Установка Odoo"
 
 #: ../../setup/install.rst:10
 msgid ""
-"There are multiple ways to install Odoo, or not install it at all, "
-"depending on the intended use case."
+"There are multiple ways to install Odoo, or not install it at all, depending"
+" on the intended use case."
 msgstr ""
+"Существует несколько способов установить Odoo или не устанавливать его "
+"вообще, в зависимости от предполагаемого варианта использования."
 
 #: ../../setup/install.rst:13
 msgid "This documents attempts to describe most of the installation options."
-msgstr ""
+msgstr "Этот документ пытается описать большинство вариантов установки."
 
 #: ../../setup/install.rst:16
 msgid ":ref:`setup/install/online`"
-msgstr ""
+msgstr ": Ссылка: `Настройка / установка / online`"
 
 #: ../../setup/install.rst:16
 msgid "The easiest way to use Odoo in production or to try it."
 msgstr ""
+"Самый простой способ использовать Odoo в производстве или попробовать его."
 
 #: ../../setup/install.rst:20
 msgid ":ref:`setup/install/packaged`"
-msgstr ""
+msgstr ": Ссылка: `Настройка / установка / packaged`"
 
 #: ../../setup/install.rst:19
 msgid ""
-"Suitable for testing Odoo, developing modules and can be used for long-"
-"term production use with additional deployment and maintenance work."
+"Suitable for testing Odoo, developing modules and can be used for long-term "
+"production use with additional deployment and maintenance work."
 msgstr ""
+"Подходит для тестирования Odoo, разработки модулей и может использоваться "
+"для долгосрочного использования в производстве с дополнительными работами по"
+" развертыванию и обслуживанию."
 
 #: ../../setup/install.rst:25
 msgid ":ref:`setup/install/source`"
-msgstr ""
+msgstr ": Ссылка: `Настройка / установка / source`"
 
 #: ../../setup/install.rst:23
 msgid ""
-"Provides greater flexibility:  e.g. allow multiple running Odoo versions "
-"on the same system. Good for developing modules, can be used as base for "
+"Provides greater flexibility:  e.g. allow multiple running Odoo versions on "
+"the same system. Good for developing modules, can be used as base for "
 "production deployment."
 msgstr ""
+"Обеспечивает большую гибкость: например, позволяет запускать несколько "
+"версий Odoo в одной системе. Хорошо подходит для разработки модулей, может "
+"использоваться в качестве основы для развертывания производства."
 
 #: ../../setup/install.rst:30
 msgid ":ref:`setup/install/docker`"
-msgstr ""
+msgstr ": Ссылка: `Настройка / установка / docker`"
 
 #: ../../setup/install.rst:28
 msgid ""
 "If you usually use docker_ for development or deployment, an official "
 "docker_ base image is available."
 msgstr ""
+"Если вы обычно используете docker_ для разработки или развертывания, "
+"официальный базовый образ docker_ доступен."
 
 #: ../../setup/install.rst:35
 msgid "Editions"
-msgstr ""
+msgstr "издания"
 
 #: ../../setup/install.rst:37
 msgid ""
 "There are two different Editions_ of Odoo: the Community and Enterprise "
 "versions. Using the Enterprise version is possible on our SaaS_ and "
-"accessing the code is restricted to Enterprise customers and partners. "
-"The Community version is freely available to anyone."
+"accessing the code is restricted to Enterprise customers and partners. The "
+"Community version is freely available to anyone."
 msgstr ""
+"Существует две разные версии Odoo: версии для сообщества и для предприятий. "
+"Использование корпоративной версии возможно на нашем SaaS_, а доступ к коду "
+"ограничен для корпоративных клиентов и партнеров. Версия сообщества доступна"
+" всем."
 
 #: ../../setup/install.rst:42
 msgid ""
-"If you already use the Community version and wish to upgrade to "
-"Enterprise, please refer to :ref:`setup/enterprise` (except for "
+"If you already use the Community version and wish to upgrade to Enterprise, "
+"please refer to :ref:`setup/enterprise` (except for "
 ":ref:`setup/install/source`)."
 msgstr ""
+"Если вы уже используете версию Community и хотите обновить ее до Enterprise,"
+" обратитесь к: ref: `setup / enterprise` (за исключением: ref:` setup / "
+"install / source`)."
 
 #: ../../setup/install.rst:49
 msgid "Online"
-msgstr ""
+msgstr "В сети"
 
 #: ../../setup/install.rst:52
 msgid "Demo"
-msgstr ""
+msgstr "демонстрация"
 
 #: ../../setup/install.rst:54
 msgid ""
-"To simply get a quick idea of Odoo, demo_ instances are available. They "
-"are shared instances which only live for a few hours, and can be used to "
-"browse around and try things out with no commitment."
+"To simply get a quick idea of Odoo, demo_ instances are available. They are "
+"shared instances which only live for a few hours, and can be used to browse "
+"around and try things out with no commitment."
 msgstr ""
+"Чтобы просто получить краткое представление об Odoo, доступны примеры demo_."
+" Это общие экземпляры, которые живут всего несколько часов и могут быть "
+"использованы для просмотра и тестирования без каких-либо обязательств."
 
 #: ../../setup/install.rst:58
 msgid "Demo_ instances require no local installation, just a web browser."
-msgstr ""
+msgstr "Demo_ экземпляры не требуют локальной установки, только веб-браузер."
 
 #: ../../setup/install.rst:61
 msgid "SaaS"
-msgstr ""
+msgstr "SaaS"
 
 #: ../../setup/install.rst:63
 msgid ""
-"Trivial to start with, fully managed and migrated by Odoo S.A., Odoo's "
-"SaaS_ provides private instances and starts out free. It can be used to "
-"discover and test Odoo and do non-code customizations (i.e. incompatible "
-"with custom modules or the Odoo Apps Store) without having to install it "
-"locally."
+"Trivial to start with, fully managed and migrated by Odoo S.A., Odoo's SaaS_"
+" provides private instances and starts out free. It can be used to discover "
+"and test Odoo and do non-code customizations (i.e. incompatible with custom "
+"modules or the Odoo Apps Store) without having to install it locally."
 msgstr ""
+"Начав с простого, полностью управляемого и перенесенного Odoo SA, SaaS_ в "
+"Odoo предоставляет частные экземпляры и запускается бесплатно. Его можно "
+"использовать для обнаружения и тестирования Odoo и выполнения настроек, не "
+"связанных с кодом (т. Е. Несовместимых с пользовательскими модулями или "
+"магазином приложений Odoo), без необходимости его локальной установки."
 
 #: ../../setup/install.rst:68
 msgid "Can be used for both testing Odoo and long-term production use."
 msgstr ""
+"Может использоваться как для тестирования Odoo, так и для долгосрочного "
+"использования."
 
 #: ../../setup/install.rst:70
 msgid ""
-"Like demo_ instances, SaaS_ instances require no local installation, a "
-"web browser is sufficient."
+"Like demo_ instances, SaaS_ instances require no local installation, a web "
+"browser is sufficient."
 msgstr ""
+"Как и экземпляры demo_, экземпляры SaaS_ не требуют локальной установки, "
+"достаточно веб-браузера."
 
 #: ../../setup/install.rst:77
 msgid "Packaged installers"
-msgstr ""
+msgstr "Упакованные установщики"
 
 #: ../../setup/install.rst:79
 msgid ""
 "Odoo provides packaged installers for Windows, deb-based distributions "
-"(Debian, Ubuntu, …) and RPM-based distributions (Fedora, CentOS, RHEL, …)"
-" for both the Community and Enterprise versions."
+"(Debian, Ubuntu, …) and RPM-based distributions (Fedora, CentOS, RHEL, …) "
+"for both the Community and Enterprise versions."
 msgstr ""
+"Odoo предоставляет упакованные установщики для Windows, дистрибутивов на "
+"основе deb (Debian, Ubuntu, ...) и дистрибутивов на основе RPM (Fedora, "
+"CentOS, RHEL, ...) для версий Community и Enterprise."
 
 #: ../../setup/install.rst:83
 msgid ""
 "These packages automatically set up all dependencies (for the Community "
 "version), but may be difficult to keep up-to-date."
 msgstr ""
+"Эти пакеты автоматически устанавливают все зависимости (для версии "
+"Community), но их сложно поддерживать в актуальном состоянии."
 
 #: ../../setup/install.rst:86
 msgid ""
-"Official Community packages with all relevant dependency requirements are"
-" available on our nightly_ server. Both Communtiy and Enterprise packages"
-" can be downloaded from our download_ page (you must to be logged in as a"
-" paying customer or partner to download the Enterprise packages)."
+"Official Community packages with all relevant dependency requirements are "
+"available on our nightly_ server. Both Communtiy and Enterprise packages can"
+" be downloaded from our download_ page (you must to be logged in as a paying"
+" customer or partner to download the Enterprise packages)."
 msgstr ""
+"Официальные пакеты Сообщества со всеми соответствующими требованиями "
+"зависимости доступны на нашем nightly_ сервере. Пакеты Communtiy и "
+"Enterprise можно загрузить с нашей страницы download_ (для загрузки пакетов "
+"Enterprise необходимо войти в систему как платящий клиент или партнер)."
 
 #: ../../setup/install.rst:92 ../../setup/install.rst:278
 msgid "Windows"
-msgstr ""
+msgstr "Windows"
 
 #: ../../setup/install.rst:94
 msgid ""
 "Download the installer from our nightly_ server (Community only) or the "
 "Windows installer from the download_ page (any edition)"
 msgstr ""
+"Загрузите установщик с нашего ночного_ сервера (только для сообщества) или "
+"установщика Windows со страницы загрузки_ (любая версия)"
 
 #: ../../setup/install.rst:96
 msgid "Run the downloaded file"
-msgstr ""
+msgstr "Запустите загруженный файл"
 
 #: ../../setup/install.rst:98
 msgid ""
-"on Windows 8, you may see a warning titled \"Windows protected your PC\"."
-" Click :guilabel:`More Info` then :guilabel:`Run anyway`"
+"on Windows 8, you may see a warning titled \"Windows protected your PC\". "
+"Click :guilabel:`More Info` then :guilabel:`Run anyway`"
 msgstr ""
+"в Windows 8 может появиться предупреждение под названием «Windows защитил "
+"ваш компьютер». Нажмите: guilabel: `More Info` затем: guilabel:` Run anyway`"
 
 #: ../../setup/install.rst:102
 msgid "Accept the UAC_ prompt"
-msgstr ""
+msgstr "Принять приглашение UAC_"
 
 #: ../../setup/install.rst:103
 msgid "Go through the various installation steps"
-msgstr ""
+msgstr "Пройдите различные этапы установки"
 
 #: ../../setup/install.rst:105
 msgid "Odoo will automatically be started at the end of the installation."
-msgstr ""
+msgstr "Odoo будет автоматически запущен в конце установки."
 
 #: ../../setup/install.rst:108 ../../setup/install.rst:438
 msgid "Linux"
-msgstr ""
+msgstr "Linux"
 
 #: ../../setup/install.rst:111
 msgid "Debian/Ubuntu"
-msgstr ""
+msgstr "Debian / Ubuntu"
 
 #: ../../setup/install.rst:113
 msgid ""
-"Odoo 13.0 'deb' package currently supports `Debian Buster`_, `Ubuntu "
-"18.04`_ or above."
+"Odoo 13.0 'deb' package currently supports `Debian Buster`_, `Ubuntu 18.04`_"
+" or above."
 msgstr ""
+"Пакет deb для Odoo 13.0 в настоящее время поддерживает `Debian Buster`_,` "
+"Ubuntu 18.04`_ или выше."
 
 #: ../../setup/install.rst:116 ../../setup/install.rst:206
 #: ../../setup/install.rst:326 ../../setup/install.rst:494
 #: ../../setup/install.rst:664
 msgid "Prepare"
-msgstr ""
+msgstr "Подготовить"
 
 #: ../../setup/install.rst:118
 msgid ""
-"Odoo needs a `PostgreSQL`_ server to run properly. The default "
-"configuration for the Odoo 'deb' package is to use the PostgreSQL server "
-"on the same host as your Odoo instance. Execute the following command as "
-"root in order to install PostgreSQL server :"
+"Odoo needs a `PostgreSQL`_ server to run properly. The default configuration"
+" for the Odoo 'deb' package is to use the PostgreSQL server on the same host"
+" as your Odoo instance. Execute the following command as root in order to "
+"install PostgreSQL server :"
 msgstr ""
+"Для правильной работы Odoo необходим сервер `PostgreSQL`_. Конфигурация по "
+"умолчанию для пакета Odoo &#39;deb&#39; заключается в использовании сервера "
+"PostgreSQL на том же хосте, что и ваш экземпляр Odoo. Выполните следующую "
+"команду от имени пользователя root для установки сервера PostgreSQL:"
 
 #: ../../setup/install.rst:127 ../../setup/install.rst:217
 msgid ""
-"In order to print PDF reports, you must install wkhtmltopdf_ yourself: "
-"the version of wkhtmltopdf_ available in Debian repositories does not "
-"support headers and footers so it is not used as a direct dependency. The"
-" recommended version is 0.12.5 and is available on `the wkhtmltopdf "
-"download page`_, in the archive section. Previously recommended version "
-"0.12.1 is a good alternative. More details on the various versions and "
-"their respective quirks can be found in our `wiki "
+"In order to print PDF reports, you must install wkhtmltopdf_ yourself: the "
+"version of wkhtmltopdf_ available in Debian repositories does not support "
+"headers and footers so it is not used as a direct dependency. The "
+"recommended version is 0.12.5 and is available on `the wkhtmltopdf download "
+"page`_, in the archive section. Previously recommended version 0.12.1 is a "
+"good alternative. More details on the various versions and their respective "
+"quirks can be found in our `wiki "
 "<https://github.com/odoo/odoo/wiki/Wkhtmltopdf>`_."
 msgstr ""
+"Чтобы распечатать отчеты в формате PDF, вы должны установить wkhtmltopdf_ "
+"самостоятельно: версия wkhtmltopdf_, доступная в репозиториях Debian, не "
+"поддерживает верхние и нижние колонтитулы, поэтому она не используется в "
+"качестве прямой зависимости. Рекомендуемая версия - 0.12.5. Она доступна на "
+"`странице загрузки wkhtmltopdf`_ в разделе архива. Ранее рекомендованная "
+"версия 0.12.1 является хорошей альтернативой. Более подробную информацию о "
+"различных версиях и их причудах можно найти в нашей `wiki "
+"<https://github.com/odoo/odoo/wiki/Wkhtmltopdf> `_."
 
 #: ../../setup/install.rst:137 ../../setup/install.rst:227
 msgid "Repository"
-msgstr ""
+msgstr "вместилище"
 
 #: ../../setup/install.rst:139
 msgid ""
 "Odoo S.A. provides a repository that can be used with  Debian and Ubuntu "
-"distributions. It can be used to install Odoo Community Edition by "
-"executing the following commands as root:"
+"distributions. It can be used to install Odoo Community Edition by executing"
+" the following commands as root:"
 msgstr ""
+"Odoo SA предоставляет репозиторий, который можно использовать с "
+"дистрибутивами Debian и Ubuntu. Его можно использовать для установки Odoo "
+"Community Edition, выполнив следующие команды от имени root:"
 
 #: ../../setup/install.rst:149
 msgid ""
 "You can then use the usual ``apt-get upgrade`` command to keep your "
 "installation up-to-date."
 msgstr ""
+"Затем вы можете использовать обычную команду `` apt-get upgrade``, чтобы "
+"поддерживать вашу установку в актуальном состоянии."
 
 #: ../../setup/install.rst:151
 msgid "At this moment, there is no repository for the Enterprise Edition."
-msgstr ""
+msgstr "На данный момент репозитория для Enterprise Edition нет."
 
 #: ../../setup/install.rst:154
 msgid "Deb Package"
-msgstr ""
+msgstr "Деб Пакет"
 
 #: ../../setup/install.rst:156
 msgid ""
-"Instead of using the repository as described above, the 'deb' package can"
-" be downloaded here:"
+"Instead of using the repository as described above, the 'deb' package can be"
+" downloaded here:"
 msgstr ""
+"Вместо использования репозитория, как описано выше, пакет &#39;deb&#39; "
+"можно скачать здесь:"
 
 #: ../../setup/install.rst:159 ../../setup/install.rst:246
 msgid "Community Edition: `nightly`_"
-msgstr ""
+msgstr "Community Edition: `nightly`_"
 
 #: ../../setup/install.rst:160 ../../setup/install.rst:247
 msgid "Enterprise Edition `Download`_"
-msgstr ""
+msgstr "Enterprise Edition `Скачать`_"
 
 #: ../../setup/install.rst:162
 msgid "You can then use ``gdebi``:"
-msgstr ""
+msgstr "Затем вы можете использовать `` gdebi``:"
 
 #: ../../setup/install.rst:168
 msgid "Or ``dpkg``:"
-msgstr ""
+msgstr "Или `` dpkg``:"
 
 #: ../../setup/install.rst:176
 msgid ""
-"This will install Odoo as a service, create the necessary PostgreSQL_ "
-"user and automatically start the server."
+"This will install Odoo as a service, create the necessary PostgreSQL_ user "
+"and automatically start the server."
 msgstr ""
+"Это установит Odoo как сервис, создаст нужного пользователя PostgreSQL_ и "
+"автоматически запустит сервер."
 
 #: ../../setup/install.rst:179
 msgid ""
-"The python3-xlwt Debian package does not exists in Debian Buster nor "
-"Ubuntu 18.04. This python module is needed to export into xls format."
+"The python3-xlwt Debian package does not exists in Debian Buster nor Ubuntu "
+"18.04. This python module is needed to export into xls format."
 msgstr ""
+"Пакет Debian python3-xlwt не существует ни в Debian Buster, ни в Ubuntu "
+"18.04. Этот модуль python необходим для экспорта в формат xls."
 
 #: ../../setup/install.rst:182
 msgid ""
-"If you need the feature, you can install it manually. One way to do it, "
-"is simply using pip3 like this:"
+"If you need the feature, you can install it manually. One way to do it, is "
+"simply using pip3 like this:"
 msgstr ""
+"Если вам нужна эта функция, вы можете установить ее вручную. Один из "
+"способов сделать это - просто использовать pip3:"
 
 #: ../../setup/install.rst:189
 msgid ""
 "Debian 9 and Ubuntu do not provide a package for the python module "
-"num2words. Textual amounts will not be rendered by Odoo and this could "
-"cause problems with the \"l10n_mx_edi\" module."
+"num2words. Textual amounts will not be rendered by Odoo and this could cause"
+" problems with the \"l10n_mx_edi\" module."
 msgstr ""
+"Debian 9 и Ubuntu не предоставляют пакет для модуля Python num2words. "
+"Текстовые суммы не будут отображаться Odoo, и это может вызвать проблемы с "
+"модулем &quot;l10n_mx_edi&quot;."
 
 #: ../../setup/install.rst:194
 msgid "If you need this feature, you can install the python module like this:"
 msgstr ""
+"Если вам нужна эта функция, вы можете установить модуль python следующим "
+"образом:"
 
 #: ../../setup/install.rst:201
 msgid "Fedora"
-msgstr ""
+msgstr "мягкая фетровая шляпа"
 
 #: ../../setup/install.rst:203
 msgid "Odoo 13.0 'rpm' package supports Fedora 30."
-msgstr ""
+msgstr "Пакет Odoo 13.0 &#39;rpm&#39; поддерживает Fedora 30."
 
 #: ../../setup/install.rst:207
 msgid ""
-"Odoo needs a `PostgreSQL`_ server to run properly. Assuming that the "
-"'sudo' command is available and configured properly, run the following "
-"commands :"
+"Odoo needs a `PostgreSQL`_ server to run properly. Assuming that the 'sudo' "
+"command is available and configured properly, run the following commands :"
 msgstr ""
+"Для правильной работы Odoo необходим сервер `PostgreSQL`_. Предполагая, что "
+"команда &#39;sudo&#39; доступна и настроена правильно, выполните следующие "
+"команды:"
 
 #: ../../setup/install.rst:229
 msgid ""
 "Odoo S.A. provides a repository that can be used with the Fedora "
-"distibutions. It can be used to install Odoo Community Edition by "
-"executing the following commands:"
+"distibutions. It can be used to install Odoo Community Edition by executing "
+"the following commands:"
 msgstr ""
+"Odoo SA предоставляет репозиторий, который можно использовать с "
+"дистрибутивами Fedora. Его можно использовать для установки Odoo Community "
+"Edition, выполнив следующие команды:"
 
 #: ../../setup/install.rst:241
 msgid "RPM package"
-msgstr ""
+msgstr "RPM пакет"
 
 #: ../../setup/install.rst:243
 msgid ""
-"Instead of using the repository as described above, the 'rpm' package can"
-" be downloaded here:"
+"Instead of using the repository as described above, the 'rpm' package can be"
+" downloaded here:"
 msgstr ""
+"Вместо использования репозитория, как описано выше, пакет &#39;rpm&#39; "
+"можно скачать здесь:"
 
 #: ../../setup/install.rst:249
 msgid ""
 "Once downloaded, the package can be installed using the 'dnf' package "
 "manager:"
 msgstr ""
+"После загрузки пакет можно установить с помощью диспетчера пакетов "
+"&#39;dnf&#39;:"
 
 #: ../../setup/install.rst:261
 msgid "Source Install"
-msgstr ""
+msgstr "Источник Установить"
 
 #: ../../setup/install.rst:263
 msgid ""
-"The source \"installation\" is really about not installing Odoo, and "
-"running it directly from source instead."
+"The source \"installation\" is really about not installing Odoo, and running"
+" it directly from source instead."
 msgstr ""
+"«Установка» в исходном коде на самом деле заключается в том, чтобы не "
+"устанавливать Odoo, а вместо этого запускать его непосредственно из "
+"источника."
 
 #: ../../setup/install.rst:266
 msgid ""
-"This can be more convenient for module developers as the Odoo source is "
-"more easily accessible than using packaged installation (for information "
-"or to build this documentation and have it available offline)."
+"This can be more convenient for module developers as the Odoo source is more"
+" easily accessible than using packaged installation (for information or to "
+"build this documentation and have it available offline)."
 msgstr ""
+"Это может быть более удобным для разработчиков модулей, поскольку исходный "
+"код Odoo более доступен, чем при использовании пакетной установки (для "
+"информации или для создания этой документации и ее доступности в автономном "
+"режиме)."
 
 #: ../../setup/install.rst:270
 msgid ""
-"It also makes starting and stopping Odoo more flexible and explicit than "
-"the services set up by the packaged installations, and allows overriding "
-"settings using :ref:`command-line parameters <reference/cmdline>` without"
-" needing to edit a configuration file."
+"It also makes starting and stopping Odoo more flexible and explicit than the"
+" services set up by the packaged installations, and allows overriding "
+"settings using :ref:`command-line parameters <reference/cmdline>` without "
+"needing to edit a configuration file."
 msgstr ""
+"Это также делает запуск и остановку Odoo более гибким и явным, чем сервисы, "
+"установленные пакетными установками, и позволяет переопределять настройки с "
+"помощью: ref: `параметров командной строки <reference/cmdline> `без "
+"необходимости редактировать файл конфигурации."
 
 #: ../../setup/install.rst:274
 msgid ""
-"Finally it provides greater control over the system's set up, and allows "
-"to more easily keep (and run) multiple versions of Odoo side-by-side."
+"Finally it provides greater control over the system's set up, and allows to "
+"more easily keep (and run) multiple versions of Odoo side-by-side."
 msgstr ""
+"Наконец, он обеспечивает больший контроль над настройками системы и "
+"позволяет легче поддерживать (и запускать) несколько версий Odoo бок о бок."
 
 #: ../../setup/install.rst:281 ../../setup/install.rst:441
 #: ../../setup/install.rst:619
 msgid "Fetch the sources"
-msgstr ""
+msgstr "Получить источники"
 
 #: ../../setup/install.rst:283 ../../setup/install.rst:443
 #: ../../setup/install.rst:621
 msgid ""
-"There are two ways to obtain the source code of Odoo: as a zip "
-"**archive** or through **git**."
+"There are two ways to obtain the source code of Odoo: as a zip **archive** "
+"or through **git**."
 msgstr ""
+"Есть два способа получить исходный код Odoo: в виде zip ** архива ** или "
+"через ** git **."
 
 #: ../../setup/install.rst:286 ../../setup/install.rst:446
 #: ../../setup/install.rst:624
 msgid "Archive"
-msgstr ""
+msgstr "Архив"
 
 #: ../../setup/install.rst:288 ../../setup/install.rst:305
 #: ../../setup/install.rst:448 ../../setup/install.rst:465
 #: ../../setup/install.rst:626 ../../setup/install.rst:643
 msgid "Community Edition:"
-msgstr ""
+msgstr "Community Edition:"
 
 #: ../../setup/install.rst:290 ../../setup/install.rst:296
 #: ../../setup/install.rst:450 ../../setup/install.rst:456
 #: ../../setup/install.rst:628 ../../setup/install.rst:634
 msgid "`Official download page <download_>`_"
-msgstr ""
+msgstr "`Официальная страница загрузки <download_> `_"
 
 #: ../../setup/install.rst:291 ../../setup/install.rst:451
 #: ../../setup/install.rst:629
 msgid "`GitHub repository <community-repository_>`_"
-msgstr ""
+msgstr "`GitHub репозиторий <community-repository_> `_"
 
 #: ../../setup/install.rst:292 ../../setup/install.rst:452
 #: ../../setup/install.rst:630
 msgid "`Nightly server <nightly_>`_"
-msgstr ""
+msgstr "`Ночной сервер <nightly_> `_"
 
 #: ../../setup/install.rst:294 ../../setup/install.rst:454
 #: ../../setup/install.rst:632
 msgid "Enterprise Edition:"
-msgstr ""
+msgstr "Enterprise Edition:"
 
 #: ../../setup/install.rst:297 ../../setup/install.rst:457
 #: ../../setup/install.rst:635
 msgid "`GitHub repository <enterprise-repository_>`_"
-msgstr ""
+msgstr "`GitHub репозиторий <enterprise-repository_> `_"
 
 #: ../../setup/install.rst:300 ../../setup/install.rst:460
 #: ../../setup/install.rst:638
 msgid "Git"
-msgstr ""
+msgstr "Гит"
 
 #: ../../setup/install.rst:302 ../../setup/install.rst:462
 #: ../../setup/install.rst:640
@@ -433,28 +531,38 @@ msgid ""
 "The following requires git_ to be installed on your machine and that you "
 "have basic knowledge of git commands."
 msgstr ""
+"Следующее требует, чтобы git_ был установлен на вашем компьютере и имел "
+"базовые знания о командах git."
 
 #: ../../setup/install.rst:312 ../../setup/install.rst:472
 #: ../../setup/install.rst:650
 msgid "Enterprise Edition: (see :ref:`setup/install/editions` to get access)"
 msgstr ""
+"Enterprise Edition: (см.: Ref: `setup / install / editions` для получения "
+"доступа)"
 
 #: ../../setup/install.rst:318 ../../setup/install.rst:486
 #: ../../setup/install.rst:656
 msgid ""
 "**The Enterprise git repository does not contain the full Odoo source "
-"code**. It is only a collection of extra add-ons. The main server code is"
-" in the Community version. Running the Enterprise version actually means "
-"running the server from the Community version with the addons-path option"
-" set to the folder with the Enterprise version. You need to clone both "
-"the Community and Enterprise repository to have a working Odoo Enterprise"
-" installation."
+"code**. It is only a collection of extra add-ons. The main server code is in"
+" the Community version. Running the Enterprise version actually means "
+"running the server from the Community version with the addons-path option "
+"set to the folder with the Enterprise version. You need to clone both the "
+"Community and Enterprise repository to have a working Odoo Enterprise "
+"installation."
 msgstr ""
+"** Репозиторий Enterprise git не содержит полного исходного кода Odoo **. "
+"Это всего лишь набор дополнительных дополнений. Основной код сервера "
+"находится в версии сообщества. Запуск версии Enterprise фактически означает "
+"запуск сервера из версии Community с опцией addons-path, установленной в "
+"папку с версией Enterprise. Вам нужно клонировать репозиторий Community и "
+"Enterprise, чтобы иметь работающую установку Odoo Enterprise."
 
 #: ../../setup/install.rst:329 ../../setup/install.rst:497
 #: ../../setup/install.rst:667
 msgid "Python"
-msgstr ""
+msgstr "питон"
 
 #: ../../setup/install.rst:331
 msgid ""
@@ -462,12 +570,18 @@ msgid ""
 "installer <https://www.python.org/downloads/windows/>`_ to download and "
 "install Python 3 on your machine."
 msgstr ""
+"Для запуска Odoo требуется Python 3.6 или новее. Используйте официальный "
+"установщик `Python 3 &#39; <https://www.python.org/downloads/windows/> `_ "
+"для загрузки и установки Python 3 на вашем компьютере."
 
 #: ../../setup/install.rst:334
 msgid ""
-"During installation, check **Add Python 3 to PATH**, then click "
-"**Customize Installation** and make sure that **pip** is checked."
+"During installation, check **Add Python 3 to PATH**, then click **Customize "
+"Installation** and make sure that **pip** is checked."
 msgstr ""
+"Во время установки установите флажок ** Добавить Python 3 в PATH **, затем "
+"нажмите ** Настройка установки ** и убедитесь, что установлен флажок ** pip "
+"**."
 
 #: ../../setup/install.rst:337 ../../setup/install.rst:502
 #: ../../setup/install.rst:672
@@ -475,23 +589,28 @@ msgid ""
 "If Python 3 is already installed, make sure that it is 3.6 or above, as "
 "previous versions are not compatible with Odoo."
 msgstr ""
+"Если Python 3 уже установлен, убедитесь, что он версии 3.6 или выше, так как"
+" предыдущие версии не совместимы с Odoo."
 
 #: ../../setup/install.rst:344 ../../setup/install.rst:509
 #: ../../setup/install.rst:679
 msgid "Verify also that pip_ is installed for this version."
-msgstr ""
+msgstr "Убедитесь также, что pip_ установлен для этой версии."
 
 #: ../../setup/install.rst:351 ../../setup/install.rst:516
 #: ../../setup/install.rst:686
 msgid "PostgreSQL"
-msgstr ""
+msgstr "PostgreSQL"
 
 #: ../../setup/install.rst:353
 msgid ""
-"Odoo uses PostgreSQL as database management system. Download and install "
-"the `latest version of PostgreSQL "
+"Odoo uses PostgreSQL as database management system. Download and install the"
+" `latest version of PostgreSQL "
 "<https://www.postgresql.org/download/windows/>`_."
 msgstr ""
+"Odoo использует PostgreSQL в качестве системы управления базами данных. "
+"Загрузите и установите `последнюю версию PostgreSQL "
+"<https://www.postgresql.org/download/windows/> `_."
 
 #: ../../setup/install.rst:356 ../../setup/install.rst:521
 #: ../../setup/install.rst:691
@@ -499,58 +618,74 @@ msgid ""
 "By default, the only user is `postgres` but Odoo forbids connecting as "
 "`postgres`, so you need to create a new PostgreSQL user:"
 msgstr ""
+"По умолчанию единственным пользователем является `postgres`, но Odoo "
+"запрещает подключение как` postgres`, поэтому вам нужно создать нового "
+"пользователя PostgreSQL:"
 
 #: ../../setup/install.rst:359
 msgid ""
 "Add PostgreSQL's `bin` directory (by default: `C:\\\\Program "
 "Files\\\\PostgreSQL\\\\<version>\\\\bin`) to your `PATH`."
 msgstr ""
+"Добавить каталог `bin` PostgreSQL (по умолчанию: C: \\\\ Program Files \\\\ "
+"PostgreSQL \\\\ <version> \\\\ bin`) к вашему `PATH`."
 
 #: ../../setup/install.rst:361
 msgid "Create a postgres user with a password using the pg admin gui:"
 msgstr ""
+"Создайте пользователя postgres с паролем с помощью интерфейса администратора"
+" pg:"
 
 #: ../../setup/install.rst:363
 msgid "Open **pgAdminIII**."
-msgstr ""
+msgstr "Откройте ** pgAdminIII **."
 
 #: ../../setup/install.rst:364
 msgid "Double-click the server to create a connection."
-msgstr ""
+msgstr "Дважды щелкните сервер, чтобы создать соединение."
 
 #: ../../setup/install.rst:365
 msgid "Select :menuselection:`Edit --> New Object --> New Login Role`."
 msgstr ""
+"Выберите: menuselection: `Edit -&gt; New Object -&gt; New Login Role`."
 
 #: ../../setup/install.rst:366
 msgid "Enter the username in the **Role Name** field (e.g. `odoo`)."
-msgstr ""
+msgstr "Введите имя пользователя в поле ** Role Name ** (например, `odoo`)."
 
 #: ../../setup/install.rst:367
 msgid ""
 "Open the **Definition** tab and enter the password (e.g. ``odoo``), then "
 "click **OK**."
 msgstr ""
+"Откройте вкладку ** Definition ** и введите пароль (например, `` odoo``), "
+"затем нажмите ** OK **."
 
 #: ../../setup/install.rst:370 ../../setup/install.rst:533
 #: ../../setup/install.rst:703
 msgid "Dependencies"
-msgstr ""
+msgstr "зависимости"
 
 #: ../../setup/install.rst:372 ../../setup/install.rst:705
 msgid ""
-"Odoo dependencies are listed in the `requirements.txt` file located at "
-"the root of the Odoo community directory. Most of them can be installed "
-"with **pip**."
+"Odoo dependencies are listed in the `requirements.txt` file located at the "
+"root of the Odoo community directory. Most of them can be installed with "
+"**pip**."
 msgstr ""
+"Зависимости Odoo перечислены в файле `needs.txt`, расположенном в корне "
+"каталога сообщества Odoo. Большинство из них можно установить с помощью ** "
+"pip **."
 
 #: ../../setup/install.rst:375 ../../setup/install.rst:539
 #: ../../setup/install.rst:708
 msgid ""
-"It can be preferable to not mix python modules packages between different"
-" instances of Odoo or with your system. You can use virtualenv_ to create"
-" isolated Python environments."
+"It can be preferable to not mix python modules packages between different "
+"instances of Odoo or with your system. You can use virtualenv_ to create "
+"isolated Python environments."
 msgstr ""
+"Может быть предпочтительнее не смешивать пакеты модулей Python между "
+"различными экземплярами Odoo или с вашей системой. Вы можете использовать "
+"virtualenv_ для создания изолированных сред Python."
 
 #: ../../setup/install.rst:378 ../../setup/install.rst:555
 #: ../../setup/install.rst:711
@@ -558,6 +693,8 @@ msgid ""
 "Navigate to the path of your Odoo Community installation "
 "(`YourOdooCommunityPath`) and run **pip** on the requirements file:"
 msgstr ""
+"Перейдите к пути установки вашего сообщества Odoo (`YourOdooCommunityPath`) "
+"и запустите ** pip ** в файле требований:"
 
 #: ../../setup/install.rst:386 ../../setup/install.rst:568
 #: ../../setup/install.rst:730
@@ -565,37 +702,47 @@ msgid ""
 "Some dependencies cannot be installed through pip and require to be "
 "installed manually. In particular:"
 msgstr ""
+"Некоторые зависимости не могут быть установлены через pip и требуют "
+"установки вручную. Особенно:"
 
 #: ../../setup/install.rst:389
 msgid ""
 "`psycopg` must be installed with `this installer "
 "<http://www.stickpeople.com/projects/python/win-psycopg/>`_."
 msgstr ""
+"`psycopg` должен быть установлен с` этим установщиком "
+"<http://www.stickpeople.com/projects/python/win-psycopg/> `_."
 
 #: ../../setup/install.rst:391 ../../setup/install.rst:571
 #: ../../setup/install.rst:733
 msgid ""
-"`wkhtmltopdf` must be installed in version `0.12.5 <the wkhtmltopdf "
-"download page_>`_ for it to support headers and footers. See our `wiki "
-"<https://github.com/odoo/odoo/wiki/Wkhtmltopdf>`_ for more details on the"
-" various versions."
+"`wkhtmltopdf` must be installed in version `0.12.5 <the wkhtmltopdf download"
+" page_>`_ for it to support headers and footers. See our `wiki "
+"<https://github.com/odoo/odoo/wiki/Wkhtmltopdf>`_ for more details on the "
+"various versions."
 msgstr ""
+"`wkhtmltopdf` должен быть установлен в версии` 0.12.5 <the wkhtmltopdf "
+"download page_> `_ для поддержки верхних и нижних колонтитулов. Смотрите "
+"нашу вики <https://github.com/odoo/odoo/wiki/Wkhtmltopdf> `_ для более "
+"подробной информации о различных версиях."
 
 #: ../../setup/install.rst:396 ../../setup/install.rst:576
 #: ../../setup/install.rst:738
 msgid ""
-"For languages with right-to-left interface (such as Arabic or Hebrew), "
-"the package `rtlcss` is needed:"
+"For languages with right-to-left interface (such as Arabic or Hebrew), the "
+"package `rtlcss` is needed:"
 msgstr ""
+"Для языков с интерфейсом справа налево (таких как арабский или иврит) "
+"необходим пакет `rtlcss`:"
 
 #: ../../setup/install.rst:399
 msgid "Download and install `nodejs <https://nodejs.org/en/download/>`_."
-msgstr ""
+msgstr "Загрузите и установите `nodejs <https://nodejs.org/en/download/> `_."
 
 #: ../../setup/install.rst:400 ../../setup/install.rst:580
 #: ../../setup/install.rst:742
 msgid "Install `rtlcss`:"
-msgstr ""
+msgstr "Установите `rtlcss`:"
 
 #: ../../setup/install.rst:406
 msgid ""
@@ -603,133 +750,180 @@ msgid ""
 "`rtlcss.cmd` is located (typically: "
 "`C:\\\\Users\\\\<user>\\\\AppData\\\\Roaming\\\\npm\\\\`)."
 msgstr ""
+"Отредактируйте переменную системного окружения `PATH`, чтобы добавить папку,"
+" в которой находится` rtlcss.cmd` (обычно: `C: \\\\ Users \\\\ <user> \\\\ "
+"AppData \\\\ Roaming \\\\ НПМ \\\\ `)."
 
 #: ../../setup/install.rst:410 ../../setup/install.rst:587
 msgid "Running Odoo"
-msgstr ""
+msgstr "Бег Оду"
 
 #: ../../setup/install.rst:412 ../../setup/install.rst:589
 msgid ""
 "Once all dependencies are set up, Odoo can be launched by running `odoo-"
-"bin`, the command-line interface of the server. It is located at the root"
-" of the Odoo Community directory."
+"bin`, the command-line interface of the server. It is located at the root of"
+" the Odoo Community directory."
 msgstr ""
+"После того, как все зависимости установлены, Odoo может быть запущен с "
+"помощью `odoo-bin`, интерфейса командной строки сервера. Он находится в "
+"корне каталога сообщества Odoo."
 
 #: ../../setup/install.rst:415 ../../setup/install.rst:592
 msgid ""
-"To configure the server, you can either specify :ref:`command-line "
-"arguments <reference/cmdline/server>` or a :ref:`configuration file "
+"To configure the server, you can either specify :ref:`command-line arguments"
+" <reference/cmdline/server>` or a :ref:`configuration file "
 "<reference/cmdline/config>`."
 msgstr ""
+"Чтобы настроить сервер, вы можете указать: ref: `аргументы командной строки "
+"<reference/cmdline/server> `или файл конфигурации: ref:` "
+"<reference/cmdline/config> `."
 
 #: ../../setup/install.rst:418 ../../setup/install.rst:595
 msgid ""
-"For the Enterprise edition, you must add the path to the `enterprise` "
-"addons to the `addons-path` argument. Note that it must come before the "
-"other paths in `addons-path` for addons to be loaded correctly."
+"For the Enterprise edition, you must add the path to the `enterprise` addons"
+" to the `addons-path` argument. Note that it must come before the other "
+"paths in `addons-path` for addons to be loaded correctly."
 msgstr ""
+"Для редакции Enterprise вы должны добавить путь к аддонам `enterprise` к "
+"аргументу` addons-path`. Обратите внимание, что он должен идти перед другими"
+" путями в `addons-path` для правильной загрузки аддонов."
 
 #: ../../setup/install.rst:422 ../../setup/install.rst:599
 msgid "Common necessary configurations are:"
-msgstr ""
+msgstr "Общие необходимые конфигурации:"
 
 #: ../../setup/install.rst:424
 msgid "PostgreSQL user and password."
-msgstr ""
+msgstr "PostgreSQL пользователь и пароль."
 
 #: ../../setup/install.rst:425 ../../setup/install.rst:604
 msgid "Custom addon paths beyond the defaults, to load your own modules."
 msgstr ""
+"Пользовательские пути аддонов за пределами значений по умолчанию, чтобы "
+"загрузить свои собственные модули."
 
 #: ../../setup/install.rst:427 ../../setup/install.rst:606
 msgid "A typical way to run the server would be:"
-msgstr ""
+msgstr "Типичный способ запустить сервер:"
 
 #: ../../setup/install.rst:433
 msgid ""
 "Where `YourOdooCommunityPath` is the path of the Odoo Community "
 "installation, `dbuser` is the PostgreSQL login, `dbpassword` is the "
-"PostgreSQL password, `../mymodules` is a directory with additional addons"
-" and `mydb` is the default database to serve on `localhost:8069`."
+"PostgreSQL password, `../mymodules` is a directory with additional addons "
+"and `mydb` is the default database to serve on `localhost:8069`."
 msgstr ""
+"Где `YourOdooCommunityPath` - это путь установки сообщества Odoo,` dbuser` -"
+" это логин PostgreSQL, `dbpassword` - пароль PostgreSQL,` ../ mymodules` - "
+"каталог с дополнительными дополнениями, а `mydb` - база данных по умолчанию "
+"для служить на `localhost: 8069`."
 
 #: ../../setup/install.rst:478
 msgid ""
-"Those repositories are quite heavy so you might be interested only "
-"fetching the branch you need. See `branch"
+"Those repositories are quite heavy so you might be interested only fetching "
+"the branch you need. See `branch"
 msgstr ""
+"Эти репозитории довольно тяжелые, поэтому вам может быть интересно только "
+"получить нужную ветку. Смотрите `ветку"
 
 #: ../../setup/install.rst:481
 msgid ""
 "<https://git-scm.com/docs/git-clone#Documentation/git-clone.txt--"
 "bltnamegt>`_ and"
 msgstr ""
+"<https://git-scm.com/docs/git-clone#Documentation/git-clone.txt--bltnamegt> "
+"`_ и"
 
 #: ../../setup/install.rst:483
 msgid "`single branch"
-msgstr ""
+msgstr "`одиночная ветвь"
 
 #: ../../setup/install.rst:484
 msgid ""
-"<https://git-scm.com/docs/git-clone#Documentation/git-clone.txt---no-"
-"single-branch>`_"
+"<https://git-scm.com/docs/git-clone#Documentation/git-clone.txt---no-single-"
+"branch>`_"
 msgstr ""
+"<https://git-scm.com/docs/git-clone#Documentation/git-clone.txt---no-single-"
+"branch> `_"
 
 #: ../../setup/install.rst:499
 msgid ""
 "Odoo requires Python 3.6 or later to run. Use your package manager to "
 "download and install Python 3 on your machine if it is not already done."
 msgstr ""
+"Для запуска Odoo требуется Python 3.6 или новее. Используйте ваш менеджер "
+"пакетов для загрузки и установки Python 3 на вашем компьютере, если это еще "
+"не сделано."
 
 #: ../../setup/install.rst:518
 msgid ""
-"Odoo uses PostgreSQL as database management system. Use your package "
-"manager to download and install the latest version of PostgreSQL."
+"Odoo uses PostgreSQL as database management system. Use your package manager"
+" to download and install the latest version of PostgreSQL."
 msgstr ""
+"Odoo использует PostgreSQL в качестве системы управления базами данных. "
+"Используйте менеджер пакетов для загрузки и установки последней версии "
+"PostgreSQL."
 
 #: ../../setup/install.rst:529 ../../setup/install.rst:699
 msgid ""
-"Because your PostgreSQL user has the same name as your Unix login, you "
-"will be able to connect to the database without password."
+"Because your PostgreSQL user has the same name as your Unix login, you will "
+"be able to connect to the database without password."
 msgstr ""
+"Поскольку ваш пользователь PostgreSQL имеет то же имя, что и логин Unix, вы "
+"сможете подключиться к базе данных без пароля."
 
 #: ../../setup/install.rst:535
 msgid ""
-"Odoo dependencies are listed in the `requirements.txt` file located at "
-"the root of the Odoo community directory. Most of them can be installed "
-"with **pip** altough some libraries require installing other system "
-"package too."
+"Odoo dependencies are listed in the `requirements.txt` file located at the "
+"root of the Odoo community directory. Most of them can be installed with "
+"**pip** altough some libraries require installing other system package too."
 msgstr ""
+"Зависимости Odoo перечислены в файле `needs.txt`, расположенном в корне "
+"каталога сообщества Odoo. Большинство из них можно установить с помощью ** "
+"pip **, хотя некоторые библиотеки требуют установки другого системного "
+"пакета."
 
 #: ../../setup/install.rst:542
 msgid ""
-"On Debian/Ubuntu, the requirements file requires the following packages "
-"to be installated:"
+"On Debian/Ubuntu, the requirements file requires the following packages to "
+"be installated:"
 msgstr ""
+"В Debian / Ubuntu файл требований требует установки следующих пакетов:"
 
 #: ../../setup/install.rst:549
 msgid "Some installations require wheel to be installed via pip too:"
 msgstr ""
+"Некоторые установки требуют, чтобы колесо также устанавливалось через пипс:"
 
 #: ../../setup/install.rst:563
 msgid ""
-"For libraries using native code (Pillow, lxml, greenlet, gevent, "
-"psycopg2, ldap), it may be necessary to install development tools and "
-"native dependencies before pip is able to install the dependencies "
-"themselves. These are available in `-dev` or `-devel` packages for "
-"Python, PostgreSQL, libxml2, libxslt1, libevent, libsasl2 and libldap2."
+"For libraries using native code (Pillow, lxml, greenlet, gevent, psycopg2, "
+"ldap), it may be necessary to install development tools and native "
+"dependencies before pip is able to install the dependencies themselves. "
+"These are available in `-dev` or `-devel` packages for Python, PostgreSQL, "
+"libxml2, libxslt1, libevent, libsasl2 and libldap2."
 msgstr ""
+"Для библиотек, использующих нативный код (Pillow, lxml, greenlet, gevent, "
+"psycopg2, ldap), может потребоваться установить инструменты разработки и "
+"нативные зависимости, прежде чем pip сможет установить сами зависимости. Они"
+" доступны в пакетах `-dev` или` -devel` для Python, PostgreSQL, libxml2, "
+"libxslt1, libevent, libsasl2 и libldap2."
 
 #: ../../setup/install.rst:579
 msgid "Download and install **nodejs** and **npm** with your package manager."
 msgstr ""
+"Загрузите и установите ** nodejs ** и ** npm ** с вашим менеджером пакетов."
 
 #: ../../setup/install.rst:601
 msgid ""
 "PostgreSQL user and password. Odoo has no defaults beyond `psycopg2's "
-"defaults <http://initd.org/psycopg/docs/module.html>`_: connects over a "
-"UNIX socket on port `5432` with the current user and no password."
+"defaults <http://initd.org/psycopg/docs/module.html>`_: connects over a UNIX"
+" socket on port `5432` with the current user and no password."
 msgstr ""
+"PostgreSQL пользователь и пароль. У Odoo нет значений по умолчанию, кроме "
+"значений по умолчанию для psycopg2 "
+"<http://initd.org/psycopg/docs/module.html> `_: соединяется через сокет UNIX"
+" на порту` 5432` с текущим пользователем и без пароля."
 
 #: ../../setup/install.rst:612
 msgid ""
@@ -737,57 +931,73 @@ msgid ""
 "installation, `../mymodules` is a directory with additional addons and "
 "`mydb` is the default database to serve on `localhost:8069`."
 msgstr ""
+"Где `YourOdooCommunityPath` - это путь установки Сообщества Odoo,` ../ "
+"mymodules` - это каталог с дополнительными надстройками, а `mydb` - база "
+"данных по умолчанию для обслуживания на` localhost: 8069`."
 
 #: ../../setup/install.rst:616
 msgid "Mac OS"
-msgstr ""
+msgstr "Mac OS"
 
 #: ../../setup/install.rst:669
 msgid ""
-"Odoo requires Python 3.6 or later to run. Use your preferred package "
-"manager (homebrew_, macports_) to download and install Python 3 on your "
-"machine if it is not already done."
+"Odoo requires Python 3.6 or later to run. Use your preferred package manager"
+" (homebrew_, macports_) to download and install Python 3 on your machine if "
+"it is not already done."
 msgstr ""
+"Для запуска Odoo требуется Python 3.6 или новее. Используйте предпочитаемый "
+"менеджер пакетов (homebrew_, macports_), чтобы загрузить и установить Python"
+" 3 на свой компьютер, если это еще не сделано."
 
 #: ../../setup/install.rst:688
 msgid ""
 "Odoo uses PostgreSQL as database management system. Use `postgres.app "
-"<https://postgresapp.com>`_ to download and install the latest version of"
-" PostgreSQL."
+"<https://postgresapp.com>`_ to download and install the latest version of "
+"PostgreSQL."
 msgstr ""
+"Odoo использует PostgreSQL в качестве системы управления базами данных. "
+"Используйте `postgres.app <https://postgresapp.com> `_ для загрузки и "
+"установки последней версии PostgreSQL."
 
 #: ../../setup/install.rst:719
 msgid "Non-Python dependencies need to be installed with a package manager:"
 msgstr ""
+"Не-Python-зависимости должны быть установлены с помощью менеджера пакетов:"
 
 #: ../../setup/install.rst:721
 msgid "Download and install the **Command Line Tools**:"
-msgstr ""
+msgstr "Загрузите и установите ** Инструменты командной строки **:"
 
 #: ../../setup/install.rst:727
 msgid ""
 "Download and install the package manager of your choice (homebrew_, "
 "macports_)."
 msgstr ""
+"Загрузите и установите менеджер пакетов по вашему выбору (homebrew_, "
+"macports_)."
 
 #: ../../setup/install.rst:728
 msgid "Install non-python dependencies."
-msgstr ""
+msgstr "Установите не Python зависимости."
 
 #: ../../setup/install.rst:741
 msgid ""
 "Download and install **nodejs** with your preferred package manager "
 "(homebrew_, macports_)."
 msgstr ""
+"Загрузите и установите ** nodejs ** с вашим предпочтительным менеджером "
+"пакетов (homebrew_, macports_)."
 
 #: ../../setup/install.rst:752
 msgid "Docker"
-msgstr ""
+msgstr "докер"
 
 #: ../../setup/install.rst:754
 msgid ""
-"The full documentation on how to use Odoo with Docker can be found on the"
-" official Odoo `docker image <https://registry.hub.docker.com/_/odoo/>`_ "
+"The full documentation on how to use Odoo with Docker can be found on the "
+"official Odoo `docker image <https://registry.hub.docker.com/_/odoo/>`_ "
 "page."
 msgstr ""
-
+"Полную документацию по использованию Odoo с Docker можно найти на "
+"официальном образе Odoo `docker <https://registry.hub.docker.com/_/odoo/> `_"
+" страница."

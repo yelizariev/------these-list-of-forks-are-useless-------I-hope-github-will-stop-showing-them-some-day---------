@@ -19,17 +19,20 @@ msgstr ""
 
 #: ../../reference/mobile.rst:8
 msgid "Mobile JavaScript"
-msgstr ""
+msgstr "Мобильный JavaScript"
 
 #: ../../reference/mobile.rst:11
 msgid "Introduction"
-msgstr ""
+msgstr "Вступление"
 
 #: ../../reference/mobile.rst:13
 msgid ""
-"In Odoo 10.0 we released a mobile app which allows you to access all "
-"**Odoo apps** (even your customized modules)."
+"In Odoo 10.0 we released a mobile app which allows you to access all **Odoo "
+"apps** (even your customized modules)."
 msgstr ""
+"В Odoo 10.0 мы выпустили мобильное приложение, которое позволяет вам "
+"получить доступ ко всем ** приложениям Odoo ** (даже к вашим настроенным "
+"модулям)."
 
 #: ../../reference/mobile.rst:16
 msgid ""
@@ -37,51 +40,69 @@ msgid ""
 "components**. In other words it is a Odoo Web instance loaded inside a "
 "native, mobile, WebView container."
 msgstr ""
+"Приложение представляет собой комбинацию ** Odoo Web ** и ** Native Mobile "
+"компонентов **. Другими словами, это экземпляр Odoo Web, загруженный внутри "
+"собственного мобильного контейнера WebView."
 
 #: ../../reference/mobile.rst:19
 msgid ""
-"This page documents how you can access mobile native components like "
-"Camera, Vibration, Notification and Toast through Odoo Web (via "
-"JavaScript). For this, you do not need to be a mobile developer, if you "
-"know Odoo JavaScript API you can access all available mobile features."
+"This page documents how you can access mobile native components like Camera,"
+" Vibration, Notification and Toast through Odoo Web (via JavaScript). For "
+"this, you do not need to be a mobile developer, if you know Odoo JavaScript "
+"API you can access all available mobile features."
 msgstr ""
+"На этой странице описано, как получить доступ к собственным мобильным "
+"компонентам, таким как Камера, Вибрация, Уведомления и Тост, через Odoo Web "
+"(через JavaScript). Для этого вам не нужно быть разработчиком мобильных "
+"приложений. Если вы знакомы с Odoo JavaScript API, вы можете получить доступ"
+" ко всем доступным мобильным функциям."
 
 #: ../../reference/mobile.rst:24
 msgid "These features work with **Odoo Enterprise 10.0+** only"
-msgstr ""
+msgstr "Эти функции работают только с ** Odoo Enterprise 10.0 + **"
 
 #: ../../reference/mobile.rst:27
 msgid "How does it work?"
-msgstr ""
+msgstr "Как это работает?"
 
 #: ../../reference/mobile.rst:29
 msgid "Internal workings of the mobile application:"
-msgstr ""
+msgstr "Внутренние разработки мобильного приложения:"
 
 #: ../../reference/mobile.rst:33
 msgid ""
-"Of course, it is a web page that loads on a Mobile Native Web container. "
-"But it is integrated in such a way that you can access native resources "
-"from your web JavaScript."
+"Of course, it is a web page that loads on a Mobile Native Web container. But"
+" it is integrated in such a way that you can access native resources from "
+"your web JavaScript."
 msgstr ""
+"Конечно, это веб-страница, которая загружается в контейнер Mobile Native "
+"Web. Но он интегрирован таким образом, что вы можете получить доступ к "
+"собственным ресурсам из вашего веб-JavaScript."
 
 #: ../../reference/mobile.rst:37
 msgid ""
-"WebPages (Odoo Web) is on the top of each layer, where the second layer "
-"is a Bridge between Odoo Web (JS) and the native mobile components."
+"WebPages (Odoo Web) is on the top of each layer, where the second layer is a"
+" Bridge between Odoo Web (JS) and the native mobile components."
 msgstr ""
+"Веб-страницы (Odoo Web) находятся в верхней части каждого уровня, где второй"
+" уровень представляет собой мост между Odoo Web (JS) и собственными "
+"мобильными компонентами."
 
 #: ../../reference/mobile.rst:40
 msgid ""
 "When any call from JavaScript is triggered it passes through Bridge and "
 "Bridge passes it to the native invoker to perform that action."
 msgstr ""
+"Когда любой вызов из JavaScript запускается, он проходит через Bridge, а "
+"Bridge передает его нативному вызывающему для выполнения этого действия."
 
 #: ../../reference/mobile.rst:43
 msgid ""
 "When the native component has done its work, it is passed to the Bridge "
 "again and you get the output in JavaScript."
 msgstr ""
+"Когда нативный компонент выполнил свою работу, он снова передается в Bridge,"
+" и вы получаете вывод в JavaScript."
 
 #: ../../reference/mobile.rst:46
 msgid ""
@@ -89,48 +110,56 @@ msgid ""
 "requesting from the Native resources. For example the Camera or GPS "
 "Location."
 msgstr ""
+"Время обработки, занимаемое компонентом Native, зависит от того, что вы "
+"запрашиваете у ресурсов Native. Например, камера или местоположение GPS."
 
 #: ../../reference/mobile.rst:50
 msgid "How to use it?"
-msgstr ""
+msgstr "Как это использовать?"
 
 #: ../../reference/mobile.rst:52
 msgid ""
 "Just like the Odoo Web Framework, the Mobile API can be used anywhere by "
 "getting the object from **web_mobile.rpc**"
 msgstr ""
+"Как и в случае с Odoo Web Framework, Mobile API можно использовать где "
+"угодно, получая объект от ** web_mobile.rpc **"
 
 #: ../../reference/mobile.rst:57
 msgid ""
-"The mobile RPC object provides a list of methods that are available (this"
-" only works with the mobile app)."
+"The mobile RPC object provides a list of methods that are available (this "
+"only works with the mobile app)."
 msgstr ""
+"Мобильный объект RPC предоставляет список доступных методов (это работает "
+"только с мобильным приложением)."
 
 #: ../../reference/mobile.rst:60
 msgid "Check if the method is available and then execute it."
-msgstr ""
+msgstr "Проверьте, доступен ли метод, а затем выполните его."
 
 #: ../../reference/mobile.rst:63
 msgid "Methods"
-msgstr ""
+msgstr "методы"
 
 #: ../../reference/mobile.rst:65
 msgid ""
-"Each of the methods returns a JQuery Deffered object which returns a data"
-" JSON dictionary"
+"Each of the methods returns a JQuery Deffered object which returns a data "
+"JSON dictionary"
 msgstr ""
+"Каждый из методов возвращает объект JQuery Deffered, который возвращает "
+"словарь данных JSON"
 
 #: ../../reference/mobile.rst:69
 msgid "Show Toast in device"
-msgstr ""
+msgstr "Показать тост в устройстве"
 
 #: ../../reference/mobile.rst
 msgid "Параметры"
-msgstr ""
+msgstr "Параметры"
 
 #: ../../reference/mobile.rst:73
 msgid "**message** text to display"
-msgstr ""
+msgstr "** сообщение ** текст для отображения"
 
 #: ../../reference/mobile.rst:75
 msgid ""
@@ -138,115 +167,146 @@ msgid ""
 "only fills the amount of space required for the message and the current "
 "activity remains visible and interactive."
 msgstr ""
+"Тост обеспечивает простой отзыв об операции в небольшом всплывающем окне. Он"
+" только заполняет объем, необходимый для сообщения, и текущая активность "
+"остается видимой и интерактивной."
 
 #: ../../reference/mobile.rst:87
 msgid "Vibrating device"
-msgstr ""
+msgstr "Вибрационное устройство"
 
 #: ../../reference/mobile.rst:92
-msgid "Vibrates constantly for the specified period of time (in milliseconds)."
+msgid ""
+"Vibrates constantly for the specified period of time (in milliseconds)."
 msgstr ""
+"Постоянно вибрирует в течение указанного периода времени (в миллисекундах)."
 
 #: ../../reference/mobile.rst:95
 msgid "Vibrate mobile device with given duration."
-msgstr ""
+msgstr "Вибрировать мобильное устройство с заданной продолжительностью."
 
 #: ../../reference/mobile.rst:102
 msgid "Show snackbar with action"
-msgstr ""
+msgstr "Показать закусочную с действием"
 
 #: ../../reference/mobile.rst:106
 msgid ""
-"(*required*) **Message** to show in snackbar and action **button label** "
-"in Snackbar (optional)"
+"(*required*) **Message** to show in snackbar and action **button label** in "
+"Snackbar (optional)"
 msgstr ""
+"(* обязательно *) ** Сообщение ** для отображения в панели закусок и "
+"действие ** метка кнопки ** в панели закусок (необязательно)"
 
 #: ../../reference/mobile.rst
 msgid "Результат"
-msgstr ""
+msgstr "Результат"
 
 #: ../../reference/mobile.rst:107
 msgid ""
-"``True`` if the user clicks on the Action button, ``False`` if SnackBar "
-"auto dismissed after some time."
+"``True`` if the user clicks on the Action button, ``False`` if SnackBar auto"
+" dismissed after some time."
 msgstr ""
+"`` True``, если пользователь нажимает кнопку «Действие», `` False``, если "
+"SnackBar автоматически отключается через некоторое время."
 
 #: ../../reference/mobile.rst:109
 msgid ""
-"Snackbars provide lightweight feedback about an operation. They show a "
-"brief message at the bottom of the screen on mobile or in the lower left "
-"corner on larger devices. Snackbars appear above all the other elements "
-"on the screen and only one can be displayed at a time."
+"Snackbars provide lightweight feedback about an operation. They show a brief"
+" message at the bottom of the screen on mobile or in the lower left corner "
+"on larger devices. Snackbars appear above all the other elements on the "
+"screen and only one can be displayed at a time."
 msgstr ""
+"Закусочные обеспечивают легкую обратную связь об операции. Они показывают "
+"краткое сообщение в нижней части экрана на мобильном устройстве или в нижнем"
+" левом углу на более крупных устройствах. Закусочные панели отображаются над"
+" всеми остальными элементами на экране, и одновременно может отображаться "
+"только один элемент."
 
 #: ../../reference/mobile.rst:127
 msgid "Showing notification"
-msgstr ""
+msgstr "Отображение уведомления"
 
 #: ../../reference/mobile.rst:131
 msgid ""
-"**title** (first row) of the notification, **message** (second row) of "
-"the notification, in a standard notification."
+"**title** (first row) of the notification, **message** (second row) of the "
+"notification, in a standard notification."
 msgstr ""
+"** заголовок ** (первая строка) уведомления, ** сообщение ** (вторая строка)"
+" уведомления, в стандартном уведомлении."
 
 #: ../../reference/mobile.rst:133
 msgid ""
 "A notification is a message you can display to the user outside of your "
-"application's normal UI. When you tell the system to issue a "
-"notification, it first appears as an icon in the notification area. To "
-"see the details of the notification, the user opens the notification "
-"drawer. Both the notification area and the notification drawer are "
-"system-controlled areas that the user can view at any time."
+"application's normal UI. When you tell the system to issue a notification, "
+"it first appears as an icon in the notification area. To see the details of "
+"the notification, the user opens the notification drawer. Both the "
+"notification area and the notification drawer are system-controlled areas "
+"that the user can view at any time."
 msgstr ""
+"Уведомление - это сообщение, которое вы можете отобразить пользователю за "
+"пределами обычного пользовательского интерфейса вашего приложения. Когда вы "
+"сообщаете системе о выдаче уведомления, оно сначала отображается в виде "
+"значка в области уведомлений. Чтобы просмотреть подробности уведомления, "
+"пользователь открывает ящик уведомлений. Как область уведомлений, так и "
+"область уведомлений являются управляемыми системой областями, которые "
+"пользователь может просматривать в любое время."
 
 #: ../../reference/mobile.rst:148
 msgid "Create contact in device"
-msgstr ""
+msgstr "Создать контакт в устройстве"
 
 #: ../../reference/mobile.rst:152
 msgid ""
-"Dictionary with contact details. Possible keys (name, mobile, phone, fax,"
-" email, website, street, street2, country_id, state_id, city, zip, "
-"parent_id, function and image)"
+"Dictionary with contact details. Possible keys (name, mobile, phone, fax, "
+"email, website, street, street2, country_id, state_id, city, zip, parent_id,"
+" function and image)"
 msgstr ""
+"Словарь с контактными данными. Возможные ключи (имя, мобильный, телефон, "
+"факс, электронная почта, веб-сайт, улица, улица2, country_id, state_id, "
+"город, почтовый индекс, parent_id, функция и изображение)"
 
 #: ../../reference/mobile.rst:154
 msgid "Create a new device contact with the given contact details."
-msgstr ""
+msgstr "Создайте новый контакт устройства с указанными контактными данными."
 
 #: ../../reference/mobile.rst:181
 msgid "Scanning barcodes"
-msgstr ""
+msgstr "Сканирование штрих-кодов"
 
 #: ../../reference/mobile.rst:185
 msgid "Scanned ``code`` from any barcode"
-msgstr ""
+msgstr "Сканировал `` код`` с любого штрих-кода"
 
 #: ../../reference/mobile.rst:187
 msgid ""
 "The barcode API detects barcodes in real-time, on the device, in any "
 "orientation."
 msgstr ""
+"Штрих-код API обнаруживает штрих-коды в режиме реального времени, на "
+"устройстве, в любой ориентации."
 
 #: ../../reference/mobile.rst:189
 msgid "The barcode API can read the following barcode formats:"
-msgstr ""
+msgstr "Штрих-код API может считывать следующие форматы штрих-кода:"
 
 #: ../../reference/mobile.rst:191
 msgid ""
-"1D barcodes: EAN-13, EAN-8, UPC-A, UPC-E, Code-39, Code-93, Code-128, "
-"ITF, Codabar"
+"1D barcodes: EAN-13, EAN-8, UPC-A, UPC-E, Code-39, Code-93, Code-128, ITF, "
+"Codabar"
 msgstr ""
+"Штрих-коды 1D: EAN-13, EAN-8, UPC-A, UPC-E, Код-39, Код-93, Код-128, ITF, "
+"Codabar"
 
 #: ../../reference/mobile.rst:192
 msgid "2D barcodes: QR Code, Data Matrix, PDF-417, AZTEC"
-msgstr ""
+msgstr "2D штрих-коды: QR-код, матрица данных, PDF-417, AZTEC"
 
 #: ../../reference/mobile.rst:203
 msgid "Switching account in device"
-msgstr ""
+msgstr "Переключение аккаунта в устройстве"
 
 #: ../../reference/mobile.rst:207
 msgid "Use switchAccount to switch from one account to another on the device."
 msgstr ""
-
+"Используйте switchAccount для переключения с одной учетной записи на другую "
+"на устройстве."

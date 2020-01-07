@@ -19,435 +19,547 @@ msgstr ""
 
 #: ../../reference/mixins.rst:7
 msgid "Mixins and Useful Classes"
-msgstr ""
+msgstr "Mixins и полезные занятия"
 
 #: ../../reference/mixins.rst:9
 msgid ""
-"Odoo implements some useful classes and mixins that make it easy for you "
-"to add often-used behaviours on your objects. This guide will details "
-"most of them, with examples and use cases."
+"Odoo implements some useful classes and mixins that make it easy for you to "
+"add often-used behaviours on your objects. This guide will details most of "
+"them, with examples and use cases."
 msgstr ""
+"В Odoo реализованы некоторые полезные классы и миксины, которые позволяют "
+"легко добавлять часто используемые поведения в ваши объекты. В этом "
+"руководстве будут подробно описаны большинство из них, приведены примеры и "
+"варианты использования."
 
 #: ../../reference/mixins.rst:16
 msgid "Messaging features"
-msgstr ""
+msgstr "Функции обмена сообщениями"
 
 #: ../../reference/mixins.rst:21
 msgid "Messaging integration"
-msgstr ""
+msgstr "Интеграция обмена сообщениями"
 
 #: ../../reference/mixins.rst:24
 msgid "Basic messaging system"
-msgstr ""
+msgstr "Базовая система обмена сообщениями"
 
 #: ../../reference/mixins.rst:26
 msgid ""
 "Integrating messaging features to your model is extremely easy. Simply "
-"inheriting the ``mail.thread`` model and adding the messaging fields (and"
-" their appropriate widgets) to your form view will get you up and running"
-" in no time."
+"inheriting the ``mail.thread`` model and adding the messaging fields (and "
+"their appropriate widgets) to your form view will get you up and running in "
+"no time."
 msgstr ""
+"Интеграция функций обмена сообщениями в вашу модель чрезвычайно проста. "
+"Простое наследование модели `` mail.thread`` и добавление полей сообщений (и"
+" соответствующих им виджетов) в представление формы поможет вам быстро "
+"приступить к работе."
 
 #: ../../reference/mixins.rst:30 ../../reference/mixins.rst:204
 #: ../../reference/mixins.rst:276 ../../reference/mixins.rst:426
 #: ../../reference/mixins.rst:613 ../../reference/mixins.rst:742
 msgid "Example"
-msgstr ""
+msgstr "пример"
 
 #: ../../reference/mixins.rst:32
 msgid ""
 "Let's create a simplistic model representing a business trip. Since "
-"organizing this kind of trip usually involves a lot of people and a lot "
-"of discussion, let's add support for message exchange on the model."
+"organizing this kind of trip usually involves a lot of people and a lot of "
+"discussion, let's add support for message exchange on the model."
 msgstr ""
+"Давайте создадим упрощенную модель, представляющую командировку. Поскольку в"
+" организации такого рода поездок обычно участвует много людей и много "
+"дискуссий, давайте добавим поддержку обмена сообщениями в модели."
 
 #: ../../reference/mixins.rst:47
 msgid "In the form view:"
-msgstr ""
+msgstr "В виде формы:"
 
 #: ../../reference/mixins.rst:67
 msgid ""
 "Once you've added chatter support on your model, users can easily add "
-"messages or internal notes on any record of your model; every one of "
-"those will send a notification (to all followers for messages, to "
-"employee (*base.group_user*) users for internal notes). If your mail "
-"gateway and catchall address are correctly configured, these "
-"notifications will be sent by e-mail and can be replied-to directly from "
-"your mail client; the automatic routing system will route the answer to "
-"the correct thread."
+"messages or internal notes on any record of your model; every one of those "
+"will send a notification (to all followers for messages, to employee "
+"(*base.group_user*) users for internal notes). If your mail gateway and "
+"catchall address are correctly configured, these notifications will be sent "
+"by e-mail and can be replied-to directly from your mail client; the "
+"automatic routing system will route the answer to the correct thread."
 msgstr ""
+"После того, как вы добавили поддержку болтовни в свою модель, пользователи "
+"могут легко добавлять сообщения или внутренние заметки в любую запись вашей "
+"модели; каждый из них будет отправлять уведомление (всем подписчикам для "
+"сообщений, сотрудникам (* base.group_user *) пользователям для внутренних "
+"заметок). Если ваш почтовый шлюз и адрес переадресации настроены правильно, "
+"эти уведомления будут отправлены по электронной почте, и на них можно будет "
+"ответить прямо из вашего почтового клиента; автоматическая система "
+"маршрутизации перенаправит ответ на правильный поток."
 
 #: ../../reference/mixins.rst:75
 msgid ""
 "Server-side, some helper functions are there to help you easily send "
 "messages and to manage followers on your record:"
 msgstr ""
+"На стороне сервера есть некоторые вспомогательные функции, которые помогут "
+"вам легко отправлять сообщения и управлять подписчиками в вашей записи:"
 
 #: ../../reference/mixins.rst:79
 msgid "Posting messages"
-msgstr ""
+msgstr "Отправка сообщений"
 
 #: ../../reference/mixins.rst:82
 msgid ""
-"Post a new message in an existing thread, returning the new mail.message "
-"ID."
+"Post a new message in an existing thread, returning the new mail.message ID."
 msgstr ""
+"Опубликовать новое сообщение в существующей теме, возвращая новый "
+"идентификатор mail.message."
 
 #: ../../reference/mixins.rst
 msgid "Параметры"
-msgstr ""
+msgstr "Параметры"
 
 #: ../../reference/mixins.rst:85
 msgid "body of the message, usually raw HTML that will be sanitized"
-msgstr ""
+msgstr "тело сообщения, обычно необработанный HTML, который будет очищен"
 
 #: ../../reference/mixins.rst:87
 msgid "see mail_message.message_type field"
-msgstr ""
+msgstr "см. поле mail_message.message_type"
 
 #: ../../reference/mixins.rst:88
 msgid ""
 "handle reply to a previous message by adding the parent partners to the "
 "message in case of private discussion"
 msgstr ""
+"обрабатывать ответ на предыдущее сообщение, добавляя к сообщению "
+"родительских партнеров в случае приватного обсуждения"
 
 #: ../../reference/mixins.rst:90
 msgid ""
-"list of attachment tuples in the form ``(name,content)``, where content "
-"is NOT base64 encoded"
+"list of attachment tuples in the form ``(name,content)``, where content is "
+"NOT base64 encoded"
 msgstr ""
+"список кортежей вложений в виде `` (имя, контент) ``, где контент НЕ "
+"кодируется в base64"
 
 #: ../../reference/mixins.rst:92
 msgid ""
-"extra keyword arguments will be used as default column values for the new"
-" mail.message record"
+"extra keyword arguments will be used as default column values for the new "
+"mail.message record"
 msgstr ""
+"дополнительные аргументы ключевого слова будут использоваться в качестве "
+"значений столбца по умолчанию для новой записи mail.message"
 
 #: ../../reference/mixins.rst
 msgid "Результат"
-msgstr ""
+msgstr "Результат"
 
 #: ../../reference/mixins.rst:94
 msgid "ID of newly created mail.message"
-msgstr ""
+msgstr "ID вновь созданного mail.message"
 
 #: ../../reference/mixins.rst
 msgid "Тип результата"
-msgstr ""
+msgstr "Тип результата"
 
 #: ../../reference/mixins.rst:99
 msgid ""
 "Helper method to send a mail / post a message using a view_id to render "
 "using the ir.qweb engine. This method is stand alone, because there is "
-"nothing in template and composer that allows to handle views in batch. "
-"This method will probably disappear when templates handle ir ui views."
+"nothing in template and composer that allows to handle views in batch. This "
+"method will probably disappear when templates handle ir ui views."
 msgstr ""
+"Вспомогательный метод для отправки почты / публикации сообщения с "
+"использованием view_id для рендеринга с использованием механизма ir.qweb. "
+"Этот метод является автономным, поскольку в шаблоне и компоновщике нет "
+"ничего, что позволяло бы обрабатывать представления в пакетном режиме. Этот "
+"метод, вероятно, исчезнет, когда шаблоны будут обрабатывать пользовательские"
+" интерфейсы."
 
 #: ../../reference/mixins.rst:105
 msgid "external id or record of the view that should be sent"
 msgstr ""
+"внешний идентификатор или запись представления, которое должно быть "
+"отправлено"
 
 #: ../../reference/mixins.rst:110
 msgid "Helper method to send a mail with a template"
-msgstr ""
+msgstr "Вспомогательный метод для отправки почты с шаблоном"
 
 #: ../../reference/mixins.rst:112
 msgid "the id of the template to render to create the body of the message"
-msgstr ""
+msgstr "идентификатор шаблона для визуализации для создания тела сообщения"
 
 #: ../../reference/mixins.rst:113
 msgid ""
 "parameter to create a mail.compose.message wizzard (which inherit from "
 "mail.message)"
 msgstr ""
+"параметр для создания mail.compose.message wizzard (который наследуется от "
+"mail.message)"
 
 #: ../../reference/mixins.rst:116
 msgid "Receiving messages"
-msgstr ""
+msgstr "Получение сообщений"
 
 #: ../../reference/mixins.rst:117
 msgid ""
-"These methods are called when a new e-mail is processed by the mail "
-"gateway. These e-mails can either be new thread (if they arrive via an "
-":ref:`alias <reference/mixins/mail/alias>`) or simply replies from an "
-"existing thread. Overriding them allows you to set values on the thread's"
-" record depending on some values from the email itself (i.e. update a "
-"date or an e-mail address, add CC's addresses as followers, etc.)."
+"These methods are called when a new e-mail is processed by the mail gateway."
+" These e-mails can either be new thread (if they arrive via an :ref:`alias "
+"<reference/mixins/mail/alias>`) or simply replies from an existing thread. "
+"Overriding them allows you to set values on the thread's record depending on"
+" some values from the email itself (i.e. update a date or an e-mail address,"
+" add CC's addresses as followers, etc.)."
 msgstr ""
+"Эти методы вызываются, когда почтовый шлюз обрабатывает новое сообщение. Эти"
+" электронные письма могут быть новыми темами (если они приходят через: ref: "
+"`alias <reference/mixins/mail/alias> `) или просто отвечает из существующей "
+"темы. Переопределение их позволяет вам устанавливать значения в записи "
+"потока в зависимости от некоторых значений из самого электронного письма "
+"(например, обновлять дату или адрес электронной почты, добавлять адреса CC в"
+" качестве подписчиков и т. Д.)."
 
 #: ../../reference/mixins.rst:125
 msgid ""
 "Called by ``message_process`` when a new message is received for a given "
 "thread model, if the message did not belong to an existing thread."
 msgstr ""
+"Вызывается `` message_process`` при получении нового сообщения для данной "
+"модели потока, если сообщение не принадлежало существующему потоку."
 
 #: ../../reference/mixins.rst:129
 msgid ""
-"The default behavior is to create a new record of the corresponding model"
-" (based on some very basic info extracted from the message). Additional "
+"The default behavior is to create a new record of the corresponding model "
+"(based on some very basic info extracted from the message). Additional "
 "behavior may be implemented by overriding this method."
 msgstr ""
+"Поведение по умолчанию - создание новой записи соответствующей модели (на "
+"основе некоторой базовой информации, извлеченной из сообщения). "
+"Дополнительное поведение может быть реализовано путем переопределения этого "
+"метода."
 
 #: ../../reference/mixins.rst:133
 msgid ""
-"a map containing the email details and attachments. See "
-"``message_process`` and ``mail.message.parse`` for details"
+"a map containing the email details and attachments. See ``message_process`` "
+"and ``mail.message.parse`` for details"
 msgstr ""
+"карта, содержащая данные электронной почты и вложения. Подробности смотрите "
+"в `` message_process`` и `` mail.message.parse``"
 
 #: ../../reference/mixins.rst:135
 msgid ""
 "optional dictionary of additional field values to pass to create() when "
-"creating the new thread record; be careful, these values may override any"
-" other values coming from the message"
+"creating the new thread record; be careful, these values may override any "
+"other values coming from the message"
 msgstr ""
+"необязательный словарь дополнительных значений полей для передачи в create "
+"() при создании новой записи потока; будьте осторожны, эти значения могут "
+"переопределять любые другие значения, поступающие из сообщения"
 
 #: ../../reference/mixins.rst:140
 msgid "the id of the newly created thread object"
-msgstr ""
+msgstr "идентификатор недавно созданного объекта потока"
 
 #: ../../reference/mixins.rst:144
 msgid ""
-"Called by ``message_process`` when a new message is received for an "
-"existing thread. The default behavior is to update the record with "
-"``update_vals`` taken from the incoming email."
+"Called by ``message_process`` when a new message is received for an existing"
+" thread. The default behavior is to update the record with ``update_vals`` "
+"taken from the incoming email."
 msgstr ""
+"Вызывается `` message_process`` при получении нового сообщения для "
+"существующего потока. Поведение по умолчанию - обновлять запись с помощью ``"
+" update_vals``, взятых из входящей электронной почты."
 
 #: ../../reference/mixins.rst:148
 msgid "Additional behavior may be implemented by overriding this method."
 msgstr ""
+"Дополнительное поведение может быть реализовано путем переопределения этого "
+"метода."
 
 #: ../../reference/mixins.rst:151
 msgid ""
-"a map containing the email details and attachments; see "
-"``message_process`` and ``mail.message.parse()`` for details."
+"a map containing the email details and attachments; see ``message_process`` "
+"and ``mail.message.parse()`` for details."
 msgstr ""
+"карта, содержащая данные электронной почты и вложения; подробности смотрите "
+"в `` message_process`` и `` mail.message.parse () ``."
 
 #: ../../reference/mixins.rst:153
 msgid ""
-"a dict containing values to update records given their ids; if the dict "
-"is None or is void, no write operation is performed."
+"a dict containing values to update records given their ids; if the dict is "
+"None or is void, no write operation is performed."
 msgstr ""
+"дикт, содержащий значения для обновления записей с учетом их "
+"идентификаторов; если dict None или void, операция записи не выполняется."
 
 #: ../../reference/mixins.rst:155 ../../reference/mixins.rst:183
 #: ../../reference/mixins.rst:193
 msgid "True"
-msgstr ""
+msgstr "Правда"
 
 #: ../../reference/mixins.rst:158
 msgid "Followers management"
-msgstr ""
+msgstr "Управление подписчиками"
 
 #: ../../reference/mixins.rst:161
 msgid "Add partners to the records followers."
-msgstr ""
+msgstr "Добавьте партнеров в записи последователей."
 
 #: ../../reference/mixins.rst:163 ../../reference/mixins.rst:179
 msgid "IDs of the partners that will be subscribed to the record"
-msgstr ""
+msgstr "Идентификаторы партнеров, которые будут подписаны на запись"
 
 #: ../../reference/mixins.rst:165 ../../reference/mixins.rst:181
 msgid "IDs of the channels that will be subscribed to the record"
-msgstr ""
+msgstr "Идентификаторы каналов, которые будут подписаны на запись"
 
 #: ../../reference/mixins.rst:167
 msgid ""
 "IDs of the subtypes that the channels/partners will be subscribed to "
 "(defaults to the default subtypes if ``None``)"
 msgstr ""
+"Идентификаторы подтипов, на которые будут подписаны каналы / партнеры (по "
+"умолчанию используется подтипы по умолчанию, если `` None``)"
 
 #: ../../reference/mixins.rst:169
 msgid ""
 "if True, delete existing followers before creating new one using the "
 "subtypes given in the parameters"
 msgstr ""
+"если True, удалите существующих подписчиков перед созданием новых, используя"
+" подтипы, указанные в параметрах"
 
 #: ../../reference/mixins.rst:171
 msgid "Success/Failure"
-msgstr ""
+msgstr "Успех / Неудача"
 
 #: ../../reference/mixins.rst:177
 msgid "Remove partners from the record's followers."
-msgstr ""
+msgstr "Удалить партнеров из подписчиков записи."
 
 #: ../../reference/mixins.rst:189
 msgid "Wrapper on message_subscribe, using users."
-msgstr ""
+msgstr "Оболочка на message_subscribe, используя пользователей."
 
 #: ../../reference/mixins.rst:191
 msgid ""
 "IDs of the users that will be unsubscribed to the record; if None, "
 "unsubscribe the current user instead."
 msgstr ""
+"Идентификаторы пользователей, которые будут отписаны от записи; если нет, "
+"отмените подписку на текущего пользователя."
 
 #: ../../reference/mixins.rst:198
 msgid "Logging changes"
-msgstr ""
+msgstr "Регистрация изменений"
 
 #: ../../reference/mixins.rst:200
 msgid ""
-"The ``mail`` module adds a powerful tracking system on fields, allowing "
-"you to log changes to specific fields in the record's chatter. To add "
-"tracking to a field, simple set the tracking attribute to True."
+"The ``mail`` module adds a powerful tracking system on fields, allowing you "
+"to log changes to specific fields in the record's chatter. To add tracking "
+"to a field, simple set the tracking attribute to True."
 msgstr ""
+"Модуль `` mail`` добавляет мощную систему отслеживания полей, позволяя "
+"регистрировать изменения в определенных полях в записи записи. Чтобы "
+"добавить отслеживание в поле, просто установите для атрибута отслеживания "
+"значение True."
 
 #: ../../reference/mixins.rst:206
 msgid "Let's track changes on the name and responsible of our business trips:"
 msgstr ""
+"Давайте отследим изменения в названии и ответственных за наши командировки:"
 
 #: ../../reference/mixins.rst:220
 msgid ""
-"From now on, every change to a trip's name or responsible will log a note"
-" on the record. The ``name`` field will be displayed in the notification "
-"as well to give more context about the notification (even if the name did"
-" not change)."
+"From now on, every change to a trip's name or responsible will log a note on"
+" the record. The ``name`` field will be displayed in the notification as "
+"well to give more context about the notification (even if the name did not "
+"change)."
 msgstr ""
+"Отныне каждое изменение названия поездки или ответственного лица будет "
+"записывать запись в записи. Поле `` name`` также будет отображаться в "
+"уведомлении, чтобы дать больше контекста об уведомлении (даже если имя не "
+"изменилось)."
 
 #: ../../reference/mixins.rst:227
 msgid "Subtypes"
-msgstr ""
+msgstr "Подтипы"
 
 #: ../../reference/mixins.rst:229
 msgid ""
 "Subtypes give you more granular control over messages. Subtypes act as a "
-"classification system for notifications, allowing subscribers to a "
-"document to customize the subtype of notifications they wish to receive."
+"classification system for notifications, allowing subscribers to a document "
+"to customize the subtype of notifications they wish to receive."
 msgstr ""
+"Подтипы дают вам более детальный контроль над сообщениями. Подтипы действуют"
+" как система классификации уведомлений, позволяя подписчикам документа "
+"настраивать подтип уведомлений, которые они хотят получать."
 
 #: ../../reference/mixins.rst:233
 msgid ""
 "Subtypes are created as data in your module; the model has the following "
 "fields:"
 msgstr ""
+"Подтипы создаются как данные в вашем модуле; Модель имеет следующие поля:"
 
 #: ../../reference/mixins.rst:236
 msgid "``name`` (mandatory) - :class:`~odoo.fields.Char`"
-msgstr ""
+msgstr "`` name`` (обязательно) -: class: `~ odoo.fields.Char`"
 
 #: ../../reference/mixins.rst:236
 msgid ""
 "name of the subtype, will be displayed in the notification customization "
 "popup"
 msgstr ""
+"имя подтипа, будет отображаться во всплывающем окне настройки уведомлений"
 
 #: ../../reference/mixins.rst:239
 msgid "``description`` - :class:`~odoo.fields.Char`"
-msgstr ""
+msgstr "`` description`` -: class: `~ odoo.fields.Char`"
 
 #: ../../reference/mixins.rst:239
 msgid ""
-"description that will be added in the message posted for this subtype. If"
-" void, the name will be added instead"
+"description that will be added in the message posted for this subtype. If "
+"void, the name will be added instead"
 msgstr ""
+"описание, которое будет добавлено в сообщении, опубликованном для этого "
+"подтипа. Если void, имя будет добавлено вместо"
 
 #: ../../reference/mixins.rst:242
 msgid "``internal`` - :class:`~odoo.fields.Boolean`"
-msgstr ""
+msgstr "`` internal`` -: class: `~ odoo.fields.Boolean`"
 
 #: ../../reference/mixins.rst:242
 msgid ""
 "messages with internal subtypes will be visible only by employees, aka "
 "members of the ``base.group_user`` group"
 msgstr ""
+"сообщения с внутренними подтипами будут видны только сотрудникам, которые "
+"также являются членами группы `` base.group_user``"
 
 #: ../../reference/mixins.rst:247
 msgid "``parent_id`` - :class:`~odoo.fields.Many2one`"
-msgstr ""
+msgstr "`` parent_id`` - - class: `~ odoo.fields.Many2one`"
 
 #: ../../reference/mixins.rst:245
 msgid ""
-"link subtypes for automatic subscription; for example project subtypes "
-"are linked to task subtypes through this link. When someone is subscribed"
-" to a project, he will be subscribed to all tasks of this project with "
-"subtypes found using the parent subtype"
+"link subtypes for automatic subscription; for example project subtypes are "
+"linked to task subtypes through this link. When someone is subscribed to a "
+"project, he will be subscribed to all tasks of this project with subtypes "
+"found using the parent subtype"
 msgstr ""
+"подтипы ссылок для автоматической подписки; например, подтипы проекта "
+"связаны с подтипами задачи через эту ссылку. Когда кто-то подписан на "
+"проект, он будет подписан на все задачи этого проекта с подтипами, "
+"найденными с использованием родительского подтипа."
 
 #: ../../reference/mixins.rst:250
 msgid "``relation_field`` - :class:`~odoo.fields.Char`"
-msgstr ""
+msgstr "`` ratio_field`` -: class: `~ odoo.fields.Char`"
 
 #: ../../reference/mixins.rst:250
 msgid ""
-"as an example, when linking project and tasks subtypes, the relation "
-"field is the project_id field of tasks"
+"as an example, when linking project and tasks subtypes, the relation field "
+"is the project_id field of tasks"
 msgstr ""
+"Например, при связывании подтипов проекта и задач поле отношения - это поле "
+"задач project_id"
 
 #: ../../reference/mixins.rst:252
 msgid "``res_model`` - :class:`~odoo.fields.Char`"
-msgstr ""
+msgstr "`` res_model`` -: class: `~ odoo.fields.Char`"
 
 #: ../../reference/mixins.rst:253
-msgid "model the subtype applies to; if False, this subtype applies to all models"
+msgid ""
+"model the subtype applies to; if False, this subtype applies to all models"
 msgstr ""
+"модель, к которой относится подтип; если False, этот подтип применяется ко "
+"всем моделям"
 
 #: ../../reference/mixins.rst:254
 msgid "``default`` - :class:`~odoo.fields.Boolean`"
-msgstr ""
+msgstr "`` default`` -: class: `~ odoo.fields.Boolean`"
 
 #: ../../reference/mixins.rst:255
 msgid "wether the subtype is activated by default when subscribing"
-msgstr ""
+msgstr "Подтип активирован по умолчанию при подписке"
 
 #: ../../reference/mixins.rst:256
 msgid "``sequence`` - :class:`~odoo.fields.Integer`"
-msgstr ""
+msgstr "`` sequence`` -: class: `~ odoo.fields.Integer`"
 
 #: ../../reference/mixins.rst:257
 msgid "used to order subtypes in the notification customization popup"
 msgstr ""
+"используется для заказа подтипов во всплывающем окне настройки уведомлений"
 
 #: ../../reference/mixins.rst:260
 msgid "``hidden`` - :class:`~odoo.fields.Boolean`"
-msgstr ""
+msgstr "`` hidden`` -: class: `~ odoo.fields.Boolean`"
 
 #: ../../reference/mixins.rst:259
 msgid "wether the subtype is hidden in the notification customization popup"
-msgstr ""
+msgstr "Подтип скрыт во всплывающем окне настройки уведомлений"
 
 #: ../../reference/mixins.rst:262
 msgid ""
-"Interfacing subtypes with field tracking allows to subscribe to different"
-" kind of notifications depending on what might interest users. To do "
-"this, you can override the ``_track_subtype()`` function:"
+"Interfacing subtypes with field tracking allows to subscribe to different "
+"kind of notifications depending on what might interest users. To do this, "
+"you can override the ``_track_subtype()`` function:"
 msgstr ""
+"Сопряжение подтипов с полевым отслеживанием позволяет подписываться на "
+"различные виды уведомлений в зависимости от того, что может заинтересовать "
+"пользователей. Для этого вы можете переопределить функцию `` _track_subtype "
+"() ``:"
 
 #: ../../reference/mixins.rst:268 ../../reference/mixins.rst:350
 msgid ""
-"Give the subtype triggered by the changes on the record according to "
-"values that have been updated."
+"Give the subtype triggered by the changes on the record according to values "
+"that have been updated."
 msgstr ""
+"Укажите подтип, вызванный изменениями в записи, в соответствии со "
+"значениями, которые были обновлены."
 
 #: ../../reference/mixins.rst:271
 msgid ""
-"the original values of the record; only modified fields are present in "
-"the dict"
-msgstr ""
+"the original values of the record; only modified fields are present in the "
+"dict"
+msgstr "исходные значения записи; в поле присутствуют только измененные поля"
 
 #: ../../reference/mixins.rst:273 ../../reference/mixins.rst:392
 msgid "a subtype's full external id or False if no subtype is triggered"
 msgstr ""
+"полный внешний идентификатор подтипа или False, если подтип не запущен"
 
 #: ../../reference/mixins.rst:278
 msgid ""
-"Let's add a ``state`` field on our example class and trigger a "
-"notification with a specific subtype when this field change values."
+"Let's add a ``state`` field on our example class and trigger a notification "
+"with a specific subtype when this field change values."
 msgstr ""
+"Давайте добавим поле `` state`` в нашем примере класса и вызовем уведомление"
+" с определенным подтипом, когда это поле изменит значения."
 
 #: ../../reference/mixins.rst:281
 msgid "First, let's define our subtype:"
-msgstr ""
+msgstr "Сначала давайте определим наш подтип:"
 
 #: ../../reference/mixins.rst:293
 msgid ""
-"Then, we need to override the ``track_subtype()`` function. This function"
-" is called by the tracking system to know which subtype should be used "
-"depending on the change currently being applied. In our case, we want to "
-"use our shiny new subtype when the ``state`` field changes from *draft* "
-"to *confirmed*:"
+"Then, we need to override the ``track_subtype()`` function. This function is"
+" called by the tracking system to know which subtype should be used "
+"depending on the change currently being applied. In our case, we want to use"
+" our shiny new subtype when the ``state`` field changes from *draft* to "
+"*confirmed*:"
 msgstr ""
+"Затем нам нужно переопределить функцию `` track_subtype () ``. Эта функция "
+"вызывается системой отслеживания, чтобы узнать, какой подтип следует "
+"использовать в зависимости от применяемого в данный момент изменения. В "
+"нашем случае мы хотим использовать наш новый блестящий подтип, когда поле ``"
+" state`` изменяется с * чернового * на * подтвержденное *:"
 
 #: ../../reference/mixins.rst:324
 msgid "Customizing notifications"
-msgstr ""
+msgstr "Настройка уведомлений"
 
 #: ../../reference/mixins.rst:326
 msgid ""
@@ -457,917 +569,1229 @@ msgid ""
 "useful; however in most cases you don't want to display these buttons to "
 "portal users."
 msgstr ""
+"При отправке уведомлений подписчикам может оказаться полезным добавить в "
+"шаблон кнопки, позволяющие быстро выполнять действия непосредственно из "
+"электронной почты. Даже простая кнопка для прямой связи с представлением "
+"формы записи может быть полезна; однако в большинстве случаев вы не хотите "
+"показывать эти кнопки пользователям портала."
 
 #: ../../reference/mixins.rst:331
 msgid ""
 "The notification system allows customizing notification templates in the "
 "following ways:"
 msgstr ""
+"Система уведомлений позволяет настраивать шаблоны уведомлений следующими "
+"способами:"
 
 #: ../../reference/mixins.rst:334
 msgid ""
 "Display *Access Buttons*: these buttons are visible at the top of the "
-"notification e-mail and allow the recipient to directly access the form "
-"view of the record"
+"notification e-mail and allow the recipient to directly access the form view"
+" of the record"
 msgstr ""
+"Отображать * кнопки доступа *: эти кнопки отображаются в верхней части "
+"уведомления по электронной почте и позволяют получателю получить прямой "
+"доступ к представлению формы записи."
 
 #: ../../reference/mixins.rst:336
 msgid ""
 "Display *Follow Buttons*: these buttons allow the recipient to directly "
 "quickly subscribe from the record"
 msgstr ""
+"Отображать * следовать кнопкам *: эти кнопки позволяют получателю напрямую "
+"быстро подписаться на запись"
 
 #: ../../reference/mixins.rst:338
 msgid ""
-"Display *Unfollow Buttons*: these buttons allow the recipient to directly"
-" quickly unsubscribe from the record"
+"Display *Unfollow Buttons*: these buttons allow the recipient to directly "
+"quickly unsubscribe from the record"
 msgstr ""
+"Отображать * кнопки отмены подписки *: эти кнопки позволяют получателю сразу"
+" же быстро отписаться от записи"
 
 #: ../../reference/mixins.rst:340
 msgid ""
-"Display *Custom Action Buttons*: these buttons are calls to specific "
-"routes and allow you to make some useful actions directly available from "
-"the e-mail (i.e. converting a lead to an opportunity, validating an "
-"expense sheet for an Expense Manager, etc.)"
+"Display *Custom Action Buttons*: these buttons are calls to specific routes "
+"and allow you to make some useful actions directly available from the e-mail"
+" (i.e. converting a lead to an opportunity, validating an expense sheet for "
+"an Expense Manager, etc.)"
 msgstr ""
+"Отображение * кнопок настраиваемых действий *: эти кнопки служат для вызова "
+"определенных маршрутов и позволяют вам сделать некоторые полезные действия "
+"непосредственно доступными из электронной почты (например, преобразование "
+"потенциальной возможности в возможность, подтверждение таблицы расходов для "
+"менеджера расходов и т. Д.)"
 
 #: ../../reference/mixins.rst:345
 msgid ""
 "These buttons settings can be applied to different groups that you can "
 "define yourself by overriding the function ``_notification_recipients``."
 msgstr ""
+"Эти настройки кнопок можно применить к разным группам, которые вы можете "
+"определить самостоятельно, переопределив функцию `` "
+"_notification_recipients``."
 
 #: ../../reference/mixins.rst:353
 msgid "``mail.message`` record currently being sent"
-msgstr ""
+msgstr "`` mail.message`` запись в данный момент отправляется"
 
 #: ../../reference/mixins.rst:354
 msgid ""
 "list of tuple of the form (group_name, group_func,group_data) where:  "
 "group_name   is an identifier used only to be able to override and "
-"manipulate   groups. Default groups are ``user`` (recipients linked to an"
-" employee user),   ``portal`` (recipients linked to a portal user) and "
-"``customer`` (recipients not   linked to any user). An example of "
-"override use would be to add a group   linked to a res.groups like Hr "
-"Officers to set specific action buttons to   them. group_func   is a "
-"function pointer taking a partner record as parameter. This   method will"
-" be applied on recipients to know whether they belong to a given   group "
-"or not. Only first matching group is kept. Evaluation order is the   list"
-" order. group_data   is a dict containing parameters for the notification"
-" email with the following   possible keys - values:    - "
-"has_button_access       whether to display Access <Document> in email. "
-"True by default for       new groups, False for portal / customer.   - "
-"button_access       dict with url and title of the button   - "
-"has_button_follow       whether to display Follow in email (if recipient "
-"is not currently       following the thread). True by default for new "
-"groups, False for       portal / customer.   - button_follow       dict "
-"with url adn title of the button   - has_button_unfollow       whether to"
-" display Unfollow in email (if recipient is currently following the "
-"thread).       True by default for new groups, False for portal / "
-"customer.   - button_unfollow       dict with url and title of the button"
-"   - actions       list of action buttons to display in the notification "
-"email.       Each action is a dict containing url and title of the "
-"button."
+"manipulate   groups. Default groups are ``user`` (recipients linked to an "
+"employee user),   ``portal`` (recipients linked to a portal user) and "
+"``customer`` (recipients not   linked to any user). An example of override "
+"use would be to add a group   linked to a res.groups like Hr Officers to set"
+" specific action buttons to   them. group_func   is a function pointer "
+"taking a partner record as parameter. This   method will be applied on "
+"recipients to know whether they belong to a given   group or not. Only first"
+" matching group is kept. Evaluation order is the   list order. group_data   "
+"is a dict containing parameters for the notification email with the "
+"following   possible keys - values:    - has_button_access       whether to "
+"display Access <Document> in email. True by default for       new groups, "
+"False for portal / customer.   - button_access       dict with url and title"
+" of the button   - has_button_follow       whether to display Follow in "
+"email (if recipient is not currently       following the thread). True by "
+"default for new groups, False for       portal / customer.   - button_follow"
+"       dict with url adn title of the button   - has_button_unfollow       "
+"whether to display Unfollow in email (if recipient is currently following "
+"the thread).       True by default for new groups, False for portal / "
+"customer.   - button_unfollow       dict with url and title of the button   "
+"- actions       list of action buttons to display in the notification email."
+"       Each action is a dict containing url and title of the button."
 msgstr ""
+"список кортежей формы (имя_группы, группа_функций, данные_группы), где: "
+"имя_группы - это идентификатор, используемый только для возможности "
+"переопределения и управления группами. Группами по умолчанию являются `` "
+"user`` (получатели, связанные с пользователем сотрудника), `` portal`` "
+"(получатели, связанные с пользователем портала) и `` customer`` (получатели,"
+" не связанные ни с одним пользователем). Примером использования "
+"переопределения может быть добавление группы, связанной с res.groups, такой "
+"как Hr Officers, для установки для них определенных кнопок действий. "
+"group_func - указатель на функцию, принимающий запись партнера в качестве "
+"параметра. Этот метод будет применяться к получателям, чтобы узнать, "
+"принадлежат ли они к данной группе или нет. Сохраняется только первая "
+"подходящая группа. Порядок оценки - это порядок списка. group_data - это "
+"файл, содержащий параметры для уведомления по электронной почте со "
+"следующими возможными ключами - значениями: - has_button_access, отображать "
+"ли Access <Document> по электронной почте True по умолчанию для новых групп,"
+" False для портала / клиента. - button_access dict с URL и заголовком кнопки"
+" - has_button_follow, отображать ли Follow в письме (если получатель в "
+"данный момент не подписан на ветку). True по умолчанию для новых групп, "
+"False для портала / клиента. - button_follow диктует URL-адрес и заголовок "
+"кнопки - has_button_unfollow, отображать ли Unfollow в письме (если "
+"получатель в настоящее время следует за темой). True по умолчанию для новых "
+"групп, False для портала / клиента. - button_unfollow dict с URL-адресом и "
+"названием кнопки - список действий кнопок действий для отображения в "
+"уведомлении по электронной почте. Каждое действие является указанием, "
+"содержащим URL и заголовок кнопки."
 
 #: ../../reference/mixins.rst:354
 msgid "list of tuple of the form (group_name, group_func,group_data) where:"
 msgstr ""
+"список кортежей формы (имя_группы, группа_функций, данные_группы) где:"
 
 #: ../../reference/mixins.rst:361
 msgid "group_name"
-msgstr ""
+msgstr "имя группы"
 
 #: ../../reference/mixins.rst:357
 msgid ""
 "is an identifier used only to be able to override and manipulate groups. "
 "Default groups are ``user`` (recipients linked to an employee user), "
-"``portal`` (recipients linked to a portal user) and ``customer`` "
-"(recipients not linked to any user). An example of override use would be "
-"to add a group linked to a res.groups like Hr Officers to set specific "
-"action buttons to them."
+"``portal`` (recipients linked to a portal user) and ``customer`` (recipients"
+" not linked to any user). An example of override use would be to add a group"
+" linked to a res.groups like Hr Officers to set specific action buttons to "
+"them."
 msgstr ""
+"является идентификатором, используемым только для возможности "
+"переопределения и манипулирования группами. Группами по умолчанию являются "
+"`` user`` (получатели, связанные с пользователем сотрудника), `` portal`` "
+"(получатели, связанные с пользователем портала) и `` customer`` (получатели,"
+" не связанные ни с одним пользователем). Примером использования "
+"переопределения может быть добавление группы, связанной с res.groups, такой "
+"как Hr Officers, для установки для них определенных кнопок действий."
 
 #: ../../reference/mixins.rst:366
 msgid "group_func"
-msgstr ""
+msgstr "group_func"
 
 #: ../../reference/mixins.rst:364
 msgid ""
-"is a function pointer taking a partner record as parameter. This method "
-"will be applied on recipients to know whether they belong to a given "
-"group or not. Only first matching group is kept. Evaluation order is the "
-"list order."
+"is a function pointer taking a partner record as parameter. This method will"
+" be applied on recipients to know whether they belong to a given group or "
+"not. Only first matching group is kept. Evaluation order is the list order."
 msgstr ""
+"указатель на функцию, принимающий запись партнера в качестве параметра Этот "
+"метод будет применяться к получателям, чтобы узнать, принадлежат ли они к "
+"данной группе или нет. Сохраняется только первая подходящая группа. Порядок "
+"оценки - это порядок списка."
 
 #: ../../reference/mixins.rst:390
 msgid "group_data"
-msgstr ""
+msgstr "group_data"
 
 #: ../../reference/mixins.rst:369
 msgid ""
 "is a dict containing parameters for the notification email with the "
 "following possible keys - values:"
 msgstr ""
+"это дикт, содержащий параметры для уведомления по электронной почте со "
+"следующими возможными ключами - значениями:"
 
 #: ../../reference/mixins.rst:373
 msgid "has_button_access"
-msgstr ""
+msgstr "has_button_access"
 
 #: ../../reference/mixins.rst:373
 msgid ""
 "whether to display Access <Document> in email. True by default for new "
 "groups, False for portal / customer."
 msgstr ""
+"следует ли отображать Access <Document> по электронной почте True по "
+"умолчанию для новых групп, False для портала / клиента."
 
 #: ../../reference/mixins.rst:375
 msgid "button_access"
-msgstr ""
+msgstr "button_access"
 
 #: ../../reference/mixins.rst:376 ../../reference/mixins.rst:387
 msgid "dict with url and title of the button"
-msgstr ""
+msgstr "dict с URL и названием кнопки"
 
 #: ../../reference/mixins.rst:379
 msgid "has_button_follow"
-msgstr ""
+msgstr "has_button_follow"
 
 #: ../../reference/mixins.rst:378
 msgid ""
-"whether to display Follow in email (if recipient is not currently "
-"following the thread). True by default for new groups, False for portal /"
-" customer."
+"whether to display Follow in email (if recipient is not currently following "
+"the thread). True by default for new groups, False for portal / customer."
 msgstr ""
+"отображать ли Follow в письме (если получатель в данный момент не подписан "
+"на ветку). True по умолчанию для новых групп, False для портала / клиента."
 
 #: ../../reference/mixins.rst:381
 msgid "button_follow"
-msgstr ""
+msgstr "button_follow"
 
 #: ../../reference/mixins.rst:382
 msgid "dict with url adn title of the button"
-msgstr ""
+msgstr "dict с URL и заголовком кнопки"
 
 #: ../../reference/mixins.rst:384
 msgid "has_button_unfollow"
-msgstr ""
+msgstr "has_button_unfollow"
 
 #: ../../reference/mixins.rst:384
 msgid ""
-"whether to display Unfollow in email (if recipient is currently following"
-" the thread). True by default for new groups, False for portal / "
-"customer."
+"whether to display Unfollow in email (if recipient is currently following "
+"the thread). True by default for new groups, False for portal / customer."
 msgstr ""
+"отображать ли Отписаться по электронной почте (если получатель в настоящее "
+"время следует за темой). True по умолчанию для новых групп, False для "
+"портала / клиента."
 
 #: ../../reference/mixins.rst:386
 msgid "button_unfollow"
-msgstr ""
+msgstr "button_unfollow"
 
 #: ../../reference/mixins.rst:390
 msgid "actions"
-msgstr ""
+msgstr "действия"
 
 #: ../../reference/mixins.rst:389
 msgid ""
-"list of action buttons to display in the notification email. Each action "
-"is a dict containing url and title of the button."
+"list of action buttons to display in the notification email. Each action is "
+"a dict containing url and title of the button."
 msgstr ""
+"список кнопок действий для отображения в уведомлении по электронной почте. "
+"Каждое действие является указанием, содержащим URL и заголовок кнопки."
 
 #: ../../reference/mixins.rst:395
 msgid ""
-"The urls in the actions list can be generated automatically by calling "
-"the ``_notification_link_helper()`` function:"
+"The urls in the actions list can be generated automatically by calling the "
+"``_notification_link_helper()`` function:"
 msgstr ""
+"URL-адреса в списке действий могут быть сгенерированы автоматически путем "
+"вызова функции `` _notification_link_helper () ``:"
 
 #: ../../reference/mixins.rst:401
 msgid ""
-"Generate a link for the given type on the current record (or on a "
-"specific record if the kwargs ``model`` and ``res_id`` are set)."
+"Generate a link for the given type on the current record (or on a specific "
+"record if the kwargs ``model`` and ``res_id`` are set)."
 msgstr ""
+"Создайте ссылку для данного типа в текущей записи (или в конкретной записи, "
+"если установлены kwargs `` model`` и `` res_id``)."
 
 #: ../../reference/mixins.rst:404
 msgid ""
-"link type to be generated; can be any of these values:  ``view``   link "
-"to form view of the record ``assign``   assign the logged user to the "
+"link type to be generated; can be any of these values:  ``view``   link to "
+"form view of the record ``assign``   assign the logged user to the "
 "``user_id`` field of   the record (if it exists) ``follow``   self-"
-"explanatory ``unfollow``   self-explanatory ``method``   call a method on"
-" the record; the method's name should be   provided as the kwarg "
-"``method`` ``new``   open an empty form view for a new record; you can "
-"specify   a specific action by providing its id (database id or fully "
-"resolved   external id) in the kwarg ``action_id``"
+"explanatory ``unfollow``   self-explanatory ``method``   call a method on "
+"the record; the method's name should be   provided as the kwarg ``method`` "
+"``new``   open an empty form view for a new record; you can specify   a "
+"specific action by providing its id (database id or fully resolved   "
+"external id) in the kwarg ``action_id``"
 msgstr ""
+"тип ссылки для генерации; может быть любым из этих значений: `` view`` "
+"ссылка на представление формы записи `` assign`` присваивает "
+"зарегистрированному пользователю поле `` user_id`` записи (если оно "
+"существует) `` follow`` self -объяснительный `` unfollow`` самоочевидный `` "
+"метод`` вызывает метод записи; имя метода должно быть предоставлено в виде "
+"kwarg `` method`` `` new``, открывающего пустое представление формы для "
+"новой записи; Вы можете указать конкретное действие, указав его "
+"идентификатор (идентификатор базы данных или полностью разрешенный внешний "
+"идентификатор) в kwarg `` action_id``"
 
 #: ../../reference/mixins.rst:404
 msgid "link type to be generated; can be any of these values:"
-msgstr ""
+msgstr "тип ссылки для генерации; может быть любым из этих значений:"
 
 #: ../../reference/mixins.rst:406
 msgid "``view``"
-msgstr ""
+msgstr "`` View``"
 
 #: ../../reference/mixins.rst:407
 msgid "link to form view of the record"
-msgstr ""
+msgstr "ссылка на форму просмотра записи"
 
 #: ../../reference/mixins.rst:409
 msgid "``assign``"
-msgstr ""
+msgstr "`` assign``"
 
 #: ../../reference/mixins.rst:409
 msgid ""
-"assign the logged user to the ``user_id`` field of the record (if it "
-"exists)"
+"assign the logged user to the ``user_id`` field of the record (if it exists)"
 msgstr ""
+"назначить зарегистрированному пользователю поле `` user_id`` записи (если "
+"оно существует)"
 
 #: ../../reference/mixins.rst:411
 msgid "``follow``"
-msgstr ""
+msgstr "`` follow``"
 
 #: ../../reference/mixins.rst:412 ../../reference/mixins.rst:414
 msgid "self-explanatory"
-msgstr ""
+msgstr "сам за себя"
 
 #: ../../reference/mixins.rst:413
 msgid "``unfollow``"
-msgstr ""
+msgstr "`` Unfollow``"
 
 #: ../../reference/mixins.rst:416
 msgid "``method``"
-msgstr ""
+msgstr "`` Method``"
 
 #: ../../reference/mixins.rst:416
 msgid ""
 "call a method on the record; the method's name should be provided as the "
 "kwarg ``method``"
 msgstr ""
+"вызвать метод в записи; имя метода должно быть указано как kwarg `` method``"
 
 #: ../../reference/mixins.rst:421
 msgid "``new``"
-msgstr ""
+msgstr "`` New``"
 
 #: ../../reference/mixins.rst:419
 msgid ""
-"open an empty form view for a new record; you can specify a specific "
-"action by providing its id (database id or fully resolved external id) in"
-" the kwarg ``action_id``"
+"open an empty form view for a new record; you can specify a specific action "
+"by providing its id (database id or fully resolved external id) in the kwarg"
+" ``action_id``"
 msgstr ""
+"открыть пустой вид для новой записи; Вы можете указать конкретное действие, "
+"указав его идентификатор (идентификатор базы данных или полностью "
+"разрешенный внешний идентификатор) в kwarg `` action_id``"
 
 #: ../../reference/mixins.rst:423
 msgid "link of the type selected for the record"
-msgstr ""
+msgstr "ссылка типа, выбранного для записи"
 
 #: ../../reference/mixins.rst:428
 msgid ""
-"Let's add a custom button to the Business Trip state change notification;"
-" this button will reset the state to Draft and will be only visible to a "
+"Let's add a custom button to the Business Trip state change notification; "
+"this button will reset the state to Draft and will be only visible to a "
 "member of the (imaginary) group Travel Manager "
 "(``business.group_trip_manager``)"
 msgstr ""
+"Давайте добавим пользовательскую кнопку в уведомление об изменении состояния"
+" командировки; эта кнопка сбросит состояние на Черновик и будет видна только"
+" члену (воображаемой) группы Travel Manager (`` "
+"business.group_trip_manager``)"
 
 #: ../../reference/mixins.rst:467
 msgid ""
-"Note that that I could have defined my evaluation function outside of "
-"this method and define a global function to do it instead of a lambda, "
-"but for the sake of being more brief and less verbose in these "
-"documentation files that can sometimes be boring, I choose the former "
-"instead of the latter."
+"Note that that I could have defined my evaluation function outside of this "
+"method and define a global function to do it instead of a lambda, but for "
+"the sake of being more brief and less verbose in these documentation files "
+"that can sometimes be boring, I choose the former instead of the latter."
 msgstr ""
+"Обратите внимание, что я мог бы определить свою функцию оценки вне этого "
+"метода и определить глобальную функцию для ее выполнения вместо лямбды, но "
+"для того, чтобы быть более кратким и менее многословным в этих файлах "
+"документации, которые иногда могут быть скучными, я выбираю первый вместо "
+"второго."
 
 #: ../../reference/mixins.rst:473
 msgid "Overriding defaults"
-msgstr ""
+msgstr "Переопределяющие значения по умолчанию"
 
 #: ../../reference/mixins.rst:475
 msgid ""
-"There are several ways you can customize the behaviour of ``mail.thread``"
-" models, including (but not limited to):"
+"There are several ways you can customize the behaviour of ``mail.thread`` "
+"models, including (but not limited to):"
 msgstr ""
+"Существует несколько способов настроить поведение моделей `` mail.thread``, "
+"включая (но не ограничиваясь):"
 
 #: ../../reference/mixins.rst:480
 msgid "``_mail_post_access`` - :class:`~odoo.models.Model`  attribute"
-msgstr ""
+msgstr "Атрибут `` _mail_post_access`` -: class: `~ odoo.models.Model`"
 
 #: ../../reference/mixins.rst:479
 msgid ""
 "the required access rights to be able to post a message on the model; by "
 "default a ``write`` access is needed, can be set to ``read`` as well"
 msgstr ""
+"необходимые права доступа, чтобы иметь возможность разместить сообщение на "
+"модели; по умолчанию требуется доступ `` write``, также может быть "
+"установлено значение `` read``"
 
 #: ../../reference/mixins.rst:500
 msgid "Context keys:"
-msgstr ""
+msgstr "Контекстные ключи:"
 
 #: ../../reference/mixins.rst:483
 msgid ""
-"These context keys can be used to somewhat control ``mail.thread`` "
-"features like auto-subscription or field tracking during calls to "
-"``create()`` or ``write()`` (or any other method where it may be useful)."
+"These context keys can be used to somewhat control ``mail.thread`` features "
+"like auto-subscription or field tracking during calls to ``create()`` or "
+"``write()`` (or any other method where it may be useful)."
 msgstr ""
+"Эти контекстные ключи могут использоваться для некоторого управления "
+"функциями `` mail.thread``, такими как автоматическая подписка или "
+"отслеживание полей во время вызовов `` create () `` или `` write () `` (или "
+"любого другого метода, где это возможно быть полезным)."
 
 #: ../../reference/mixins.rst:487
 msgid ""
-"``mail_create_nosubscribe``: at create or message_post, do not subscribe "
-"the current user to the record thread"
+"``mail_create_nosubscribe``: at create or message_post, do not subscribe the"
+" current user to the record thread"
 msgstr ""
+"`` mail_create_nosubscribe``: при создании или message_post не подписывать "
+"текущего пользователя на поток записей"
 
 #: ../../reference/mixins.rst:489
 msgid ""
 "``mail_create_nolog``: at create, do not log the automatic '<Document> "
 "created' message"
 msgstr ""
+"`` mail_create_nolog``: при создании не регистрировать автоматическое &#39; "
+"<Document> создано сообщение"
 
 #: ../../reference/mixins.rst:491
 msgid ""
 "``mail_notrack``: at create and write, do not perform the value tracking "
 "creating messages"
 msgstr ""
+"`` mail_notrack``: при создании и записи не выполнять отслеживание значений "
+"при создании сообщений"
 
 #: ../../reference/mixins.rst:493
 msgid ""
-"``tracking_disable``: at create and write, perform no MailThread features"
-" (auto subscription, tracking, post, ...)"
+"``tracking_disable``: at create and write, perform no MailThread features "
+"(auto subscription, tracking, post, ...)"
 msgstr ""
+"`` tracking_disable``: при создании и записи не выполнять функции MailThread"
+" (автоматическая подписка, отслеживание, публикация, ...)"
 
 #: ../../reference/mixins.rst:495
 msgid "``mail_auto_delete``: auto delete mail notifications; True by default"
 msgstr ""
+"`` mail_auto_delete``: автоматическое удаление почтовых уведомлений; Правда "
+"по умолчанию"
 
 #: ../../reference/mixins.rst:496
 msgid ""
 "``mail_notify_force_send``: if less than 50 email notifications to send, "
 "send them directly instead of using the queue; True by default"
 msgstr ""
+"`` mail_notify_force_send``: если отправлено менее 50 уведомлений по "
+"электронной почте, отправляйте их напрямую вместо использования очереди; "
+"Правда по умолчанию"
 
 #: ../../reference/mixins.rst:498
 msgid ""
 "``mail_notify_user_signature``: add the current user signature in email "
 "notifications; True by default"
 msgstr ""
+"`` mail_notify_user_signature``: добавить подпись текущего пользователя в "
+"уведомления по электронной почте; Правда по умолчанию"
 
 #: ../../reference/mixins.rst:505
 msgid "Mail alias"
-msgstr ""
+msgstr "Почтовый псевдоним"
 
 #: ../../reference/mixins.rst:507
 msgid ""
 "Aliases are configurable email addresses that are linked to a specific "
 "record (which usually inherits the ``mail.alias.mixin`` model) that will "
-"create new records when contacted via e-mail. They are an easy way to "
-"make your system accessible from the outside, allowing users or customers"
-" to quickly create records in your database without needing to connect to"
-" Odoo directly."
+"create new records when contacted via e-mail. They are an easy way to make "
+"your system accessible from the outside, allowing users or customers to "
+"quickly create records in your database without needing to connect to Odoo "
+"directly."
 msgstr ""
+"Псевдонимы - это настраиваемые адреса электронной почты, которые связаны с "
+"определенной записью (которая обычно наследует модель `` "
+"mail.alias.mixin``), которая будет создавать новые записи при обращении по "
+"электронной почте. Это простой способ сделать вашу систему доступной извне, "
+"позволяя пользователям или клиентам быстро создавать записи в вашей базе "
+"данных без необходимости прямого подключения к Odoo."
 
 #: ../../reference/mixins.rst:514
 msgid "Aliases vs. Incoming Mail Gateway"
-msgstr ""
+msgstr "Псевдонимы и шлюз входящей почты"
 
 #: ../../reference/mixins.rst:516
 msgid ""
-"Some people use the Incoming Mail Gateway for this same purpose. You "
-"still need a correctly configured mail gateway to use aliases, however a "
-"single catchall domain will be sufficient since all routing will be done "
-"inside Odoo. Aliases have several advantages over Mail Gateways:"
+"Some people use the Incoming Mail Gateway for this same purpose. You still "
+"need a correctly configured mail gateway to use aliases, however a single "
+"catchall domain will be sufficient since all routing will be done inside "
+"Odoo. Aliases have several advantages over Mail Gateways:"
 msgstr ""
+"Некоторые люди используют шлюз входящей почты для этой же цели. Вам все еще "
+"нужен правильно настроенный почтовый шлюз для использования псевдонимов, "
+"однако будет достаточно одного домена перехвата, поскольку вся маршрутизация"
+" будет выполняться внутри Odoo. Псевдонимы имеют несколько преимуществ перед"
+" почтовыми шлюзами:"
 
 #: ../../reference/mixins.rst:524
 msgid "Easier to configure"
-msgstr ""
+msgstr "Проще настроить"
 
 #: ../../reference/mixins.rst:522
 msgid ""
-"A single incoming gateway can be used by many aliases; this avoids having"
-" to configure multiple emails on your domain name (all configuration is "
-"done inside Odoo)"
+"A single incoming gateway can be used by many aliases; this avoids having to"
+" configure multiple emails on your domain name (all configuration is done "
+"inside Odoo)"
 msgstr ""
+"Один входящий шлюз может использоваться многими псевдонимами; это избавляет "
+"от необходимости настраивать несколько электронных писем на вашем доменном "
+"имени (все настройки выполняются внутри Odoo)"
 
 #: ../../reference/mixins.rst:525
 msgid "No need for System access rights to configure aliases"
 msgstr ""
+"Нет необходимости в правах доступа к Системе для настройки псевдонимов"
 
 #: ../../reference/mixins.rst:526
 msgid "More coherent"
-msgstr ""
+msgstr "Более последовательный"
 
 #: ../../reference/mixins.rst:527
 msgid "Configurable on the related record, not in a Settings submenu"
-msgstr ""
+msgstr "Настраивается на связанной записи, а не в подменю настроек"
 
 #: ../../reference/mixins.rst:532
 msgid "Easier to override server-side"
-msgstr ""
+msgstr "Проще переопределить серверную часть"
 
 #: ../../reference/mixins.rst:529
 msgid ""
-"Mixin model is built to be extended from the start, allowing you to "
-"extract useful data from incoming e-mails more easily than with a mail "
-"gateway."
+"Mixin model is built to be extended from the start, allowing you to extract "
+"useful data from incoming e-mails more easily than with a mail gateway."
 msgstr ""
+"Модель Mixin построена так, чтобы расширяться с самого начала, что позволяет"
+" вам извлекать полезные данные из входящих писем легче, чем с помощью "
+"почтового шлюза."
 
 #: ../../reference/mixins.rst:535
 msgid "Alias support integration"
-msgstr ""
+msgstr "Псевдоним поддерживает интеграцию"
 
 #: ../../reference/mixins.rst:537
 msgid ""
 "Aliases are usually configured on a parent model which will then create "
-"specific record when contacted by e-mail. For example, Project have "
-"aliases to create tasks or issues, Sales Team have aliases to generate "
-"Leads."
+"specific record when contacted by e-mail. For example, Project have aliases "
+"to create tasks or issues, Sales Team have aliases to generate Leads."
 msgstr ""
+"Псевдонимы обычно настраиваются на родительской модели, которая затем "
+"создает конкретную запись при обращении по электронной почте. Например, у "
+"Project есть псевдонимы для создания задач или проблем, у Sales Team есть "
+"псевдонимы для создания потенциальных клиентов."
 
 #: ../../reference/mixins.rst:541
 msgid ""
 "The model that will be created by the alias **must** inherit the "
 "``mail_thread`` model."
 msgstr ""
+"Модель, которая будет создана псевдонимом **, должна ** наследовать модель "
+"`` mail_thread``."
 
 #: ../../reference/mixins.rst:544
 msgid ""
-"Alias support is added by inheriting ``mail.alias.mixin``; this mixin "
-"will generate a new ``mail.alias`` record for each record of the parent "
-"class that gets created (for example, every ``project.project`` record "
-"having its ``mail.alias`` record initialized on creation)."
+"Alias support is added by inheriting ``mail.alias.mixin``; this mixin will "
+"generate a new ``mail.alias`` record for each record of the parent class "
+"that gets created (for example, every ``project.project`` record having its "
+"``mail.alias`` record initialized on creation)."
 msgstr ""
+"Поддержка псевдонимов добавлена наследованием `` mail.alias.mixin``; этот "
+"миксин будет генерировать новую запись `` mail.alias`` для каждой "
+"создаваемой записи родительского класса (например, каждая запись `` "
+"project.project``, имеющая свою запись `` mail.alias``, инициализированную "
+"при создании) )."
 
 #: ../../reference/mixins.rst:549
 msgid ""
 "Aliases can also be created manually and supported by a simple "
 ":class:`~odoo.fields.Many2one` field. This guide assumes you wish a more "
-"complete integration with automatic creation of the alias, record-"
-"specific default values, etc."
+"complete integration with automatic creation of the alias, record-specific "
+"default values, etc."
 msgstr ""
+"Псевдонимы также можно создавать вручную и поддерживать с помощью простого "
+"поля: class: `~ odoo.fields.Many2one`. В этом руководстве предполагается, "
+"что вы хотите более полной интеграции с автоматическим созданием псевдонима,"
+" значений по умолчанию для конкретных записей и т. Д."
 
 #: ../../reference/mixins.rst:554
 msgid ""
-"Unlike ``mail.thread`` inheritance, the ``mail.alias.mixin`` **requires**"
-" some specific overrides to work correctly. These overrides will specify "
-"the values of the created alias, like the kind of record it must create "
-"and possibly some default values these records may have depending on the "
-"parent object:"
+"Unlike ``mail.thread`` inheritance, the ``mail.alias.mixin`` **requires** "
+"some specific overrides to work correctly. These overrides will specify the "
+"values of the created alias, like the kind of record it must create and "
+"possibly some default values these records may have depending on the parent "
+"object:"
 msgstr ""
+"В отличие от `` mail.thread`` наследования, `` mail.alias.mixin`` ** требует"
+" ** некоторых специальных переопределений для корректной работы. Эти "
+"переопределения будут указывать значения созданного псевдонима, такие как "
+"тип записи, которую он должен создать, и, возможно, некоторые значения по "
+"умолчанию, которые эти записи могут иметь в зависимости от родительского "
+"объекта:"
 
 #: ../../reference/mixins.rst:561
 msgid ""
-"Return the model name for the alias. Incoming emails that are not replies"
-" to existing records will cause the creation of a new record of this "
-"alias model. The value may depend on ``vals``, the dict of values passed "
-"to ``create`` when a record of this model is created."
+"Return the model name for the alias. Incoming emails that are not replies to"
+" existing records will cause the creation of a new record of this alias "
+"model. The value may depend on ``vals``, the dict of values passed to "
+"``create`` when a record of this model is created."
 msgstr ""
+"Верните название модели для псевдонима. Входящие электронные письма, которые"
+" не являются ответами на существующие записи, вызовут создание новой записи "
+"этой модели псевдонима. Значение может зависеть от `` vals``, значения, "
+"передаваемого в `` create`` при создании записи этой модели."
 
 #: ../../reference/mixins.rst:566
 msgid "values of the newly created record that will holding the alias"
-msgstr ""
+msgstr "значения вновь созданной записи, которая будет содержать псевдоним"
 
 #: ../../reference/mixins.rst:568
 msgid "model name"
-msgstr ""
+msgstr "наименование модели"
 
 #: ../../reference/mixins.rst:573
 msgid ""
 "Return values to create an alias, or to write on the alias after its "
 "creation. While not completely mandatory, it is usually required to make "
-"sure that newly created records will be linked to the alias' parent (i.e."
-" tasks getting created in the right project) by setting a dictionary of "
+"sure that newly created records will be linked to the alias' parent (i.e. "
+"tasks getting created in the right project) by setting a dictionary of "
 "default values in the alias' ``alias_defaults`` field."
 msgstr ""
+"Вернуть значения, чтобы создать псевдоним или записать псевдоним после его "
+"создания. Хотя это и не является полностью обязательным, обычно требуется "
+"убедиться, что вновь созданные записи будут связаны с родительским "
+"псевдонимом (т. Е. Задачи создаются в правильном проекте), установив словарь"
+" значений по умолчанию в псевдониме «alias_defaults». поле."
 
 #: ../../reference/mixins.rst:579
 msgid "dictionnary of values that will be written to the new alias"
-msgstr ""
+msgstr "словарь значений, которые будут записаны в новый псевдоним"
 
 #: ../../reference/mixins.rst:582
 msgid ""
-"The ``get_alias_values()`` override is particularly interesting as it "
-"allows you to modify the behaviour of your aliases easily. Among the "
-"fields that can be set on the alias, the following are of particular "
-"interest:"
+"The ``get_alias_values()`` override is particularly interesting as it allows"
+" you to modify the behaviour of your aliases easily. Among the fields that "
+"can be set on the alias, the following are of particular interest:"
 msgstr ""
+"Переопределение `` get_alias_values () `` особенно интересно, поскольку оно "
+"позволяет вам легко изменять поведение ваших псевдонимов. Среди полей, "
+"которые можно задать для псевдонима, следующие представляют особый интерес:"
 
 #: ../../reference/mixins.rst:587
 msgid "``alias_name`` - :class:`~odoo.fields.Char`"
-msgstr ""
+msgstr "`` alias_name`` -: class: `~ odoo.fields.Char`"
 
 #: ../../reference/mixins.rst:587
 msgid ""
 "name of the email alias, e.g. 'jobs' if you want to catch emails for "
 "<jobs@example.odoo.com>"
 msgstr ""
+"имя псевдонима электронной почты, например, «рабочие места», если вы хотите "
+"перехватить электронные письма для <jobs@example.odoo.com>"
 
 #: ../../reference/mixins.rst:592
 msgid "``alias_user_id`` - :class:`~odoo.fields.Many2one` (``res.users``)"
 msgstr ""
+"`` alias_user_id`` -: class: `~ odoo.fields.Many2one` (` `res.users``)"
 
 #: ../../reference/mixins.rst:590
 msgid ""
-"owner of records created upon receiving emails on this alias; if this "
-"field is not set the system will attempt to find the right owner based on"
-" the sender (From) address, or will use the Administrator account if no "
-"system user is found for that address"
+"owner of records created upon receiving emails on this alias; if this field "
+"is not set the system will attempt to find the right owner based on the "
+"sender (From) address, or will use the Administrator account if no system "
+"user is found for that address"
 msgstr ""
+"владелец записей, созданных при получении писем на этот псевдоним; если это "
+"поле не установлено, система будет пытаться найти подходящего владельца на "
+"основе адреса отправителя (От) или будет использовать учетную запись "
+"администратора, если системный пользователь не найден для этого адреса"
 
 #: ../../reference/mixins.rst:595
 msgid "``alias_defaults`` - :class:`~odoo.fields.Text`"
-msgstr ""
+msgstr "`` alias_defaults`` -: class: `~ odoo.fields.Text`"
 
 #: ../../reference/mixins.rst:595
 msgid ""
 "Python dictionary that will be evaluated to provide default values when "
 "creating new records for this alias"
 msgstr ""
+"Словарь Python, который будет оцениваться для предоставления значений по "
+"умолчанию при создании новых записей для этого псевдонима"
 
 #: ../../reference/mixins.rst:599
 msgid "``alias_force_thread_id`` - :class:`~odoo.fields.Integer`"
-msgstr ""
+msgstr "`` alias_force_thread_id`` -: class: `~ odoo.fields.Integer`"
 
 #: ../../reference/mixins.rst:598
 msgid ""
 "optional ID of a thread (record) to which all incoming messages will be "
-"attached, even if they did not reply to it; if set, this will disable the"
-" creation of new records completely"
+"attached, even if they did not reply to it; if set, this will disable the "
+"creation of new records completely"
 msgstr ""
+"необязательный идентификатор потока (записи), к которому будут "
+"присоединяться все входящие сообщения, даже если они не ответили на него; "
+"если установлено, это полностью отключит создание новых записей"
 
 #: ../../reference/mixins.rst:606
 msgid "``alias_contact`` - :class:`~odoo.fields.Selection`"
-msgstr ""
+msgstr "`` alias_contact`` -: class: `~ odoo.fields.Selection`"
 
 #: ../../reference/mixins.rst:602
 msgid "Policy to post a message on the document using the mailgateway"
-msgstr ""
+msgstr "Политика публикации сообщения в документе с помощью mailgateway"
 
 #: ../../reference/mixins.rst:604
 msgid "*everyone*: everyone can post"
-msgstr ""
+msgstr "* каждый *: каждый может оставлять сообщения"
 
 #: ../../reference/mixins.rst:605
 msgid "*partners*: only authenticated partners"
-msgstr ""
+msgstr "* партнеры *: только авторизованные партнеры"
 
 #: ../../reference/mixins.rst:606
 msgid ""
-"*followers*: only followers of the related document or members of "
-"following channels"
+"*followers*: only followers of the related document or members of following "
+"channels"
 msgstr ""
+"* последователи *: только подписчики соответствующего документа или "
+"участники следующих каналов"
 
 #: ../../reference/mixins.rst:608
 msgid ""
 "Note that aliases make use of :ref:`delegation inheritance "
-"<reference/orm/inheritance>`, which means that while the alias is stored "
-"in another table, you have access to all these fields directly from your "
-"parent object. This allows you to make your alias easily configurable "
-"from the record's form view."
+"<reference/orm/inheritance>`, which means that while the alias is stored in "
+"another table, you have access to all these fields directly from your parent"
+" object. This allows you to make your alias easily configurable from the "
+"record's form view."
 msgstr ""
+"Обратите внимание, что псевдонимы используют: ref: `делегирование "
+"наследования <reference/orm/inheritance> `, что означает, что хотя псевдоним"
+" хранится в другой таблице, у вас есть доступ ко всем этим полям "
+"непосредственно из вашего родительского объекта. Это позволяет вам легко "
+"настроить псевдоним из представления формы записи."
 
 #: ../../reference/mixins.rst:615
 msgid ""
-"Let's add aliases on our business trip class to create expenses on the "
-"fly via e-mail."
+"Let's add aliases on our business trip class to create expenses on the fly "
+"via e-mail."
 msgstr ""
+"Давайте добавим псевдонимы в наш класс командировки, чтобы создавать расходы"
+" на лету по электронной почте."
 
 #: ../../reference/mixins.rst:663
 msgid ""
-"We would like our alias to be easily configurable from the form view of "
-"our business trips, so let's add the following to our form view:"
+"We would like our alias to be easily configurable from the form view of our "
+"business trips, so let's add the following to our form view:"
 msgstr ""
+"Мы хотели бы, чтобы наш псевдоним был легко конфигурируемым из представления"
+" формы наших деловых поездок, поэтому давайте добавим следующее в наше "
+"представление формы:"
 
 #: ../../reference/mixins.rst:688
 msgid ""
-"Now we can change the alias address directly from the form view and "
-"change who can send e-mails to the alias."
+"Now we can change the alias address directly from the form view and change "
+"who can send e-mails to the alias."
 msgstr ""
+"Теперь мы можем изменить адрес псевдонима непосредственно из представления "
+"формы и изменить, кто может отправлять электронные письма на псевдоним."
 
 #: ../../reference/mixins.rst:691
 msgid ""
 "We can then override ``message_new()`` on our expense model to fetch the "
 "values from our email when the expense will be created:"
 msgstr ""
+"Затем мы можем переопределить `` message_new () `` в нашей модели расходов, "
+"чтобы получить значения из нашего электронного письма, когда счет будет "
+"создан:"
 
 #: ../../reference/mixins.rst:728
 msgid "Activities tracking"
-msgstr ""
+msgstr "Отслеживание деятельности"
 
 #: ../../reference/mixins.rst:730
 msgid ""
-"Activities are actions users have to take on a document like making a "
-"phone call or organizing a meeting. Activities come with the mail module "
-"as they are integrated in the Chatter but are *not bundled with "
-"mail.thread*. Activities are records of the ``mail.activity`` class, "
-"which have a type (``mail.activity.type``), name, description, scheduled "
-"time (among others). Pending activities are visible above the message "
-"history in the chatter widget."
+"Activities are actions users have to take on a document like making a phone "
+"call or organizing a meeting. Activities come with the mail module as they "
+"are integrated in the Chatter but are *not bundled with mail.thread*. "
+"Activities are records of the ``mail.activity`` class, which have a type "
+"(``mail.activity.type``), name, description, scheduled time (among others). "
+"Pending activities are visible above the message history in the chatter "
+"widget."
 msgstr ""
+"Действия - это действия, которые пользователи должны выполнять над "
+"документом, такие как телефонный звонок или организация встречи. Действия "
+"поставляются с почтовым модулем, поскольку они интегрированы в Chatter, но *"
+" не связаны с mail.thread *. Действия - это записи класса `` "
+"mail.activity``, которые имеют тип (`` mail.activity.type``), имя, описание,"
+" запланированное время (среди прочего). Ожидающие действия видны над "
+"историей сообщений в виджете болтовни."
 
 #: ../../reference/mixins.rst:737
 msgid ""
-"You can integrate activities using the ``mail.activity.mixin`` class on "
-"your object and the specific widgets to display them (via the field "
+"You can integrate activities using the ``mail.activity.mixin`` class on your"
+" object and the specific widgets to display them (via the field "
 "``activity_ids``) in the form view and kanban view of your records "
 "(``mail_activity`` and ``kanban_activity`` widgets, respectively)."
 msgstr ""
+"Вы можете интегрировать действия, используя класс `` mail.activity.mixin`` "
+"для вашего объекта и специальные виджеты для их отображения (через поле `` "
+"activity_ids``) в виде формы и представлении kanban ваших записей (`` "
+"mail_activity) Виджеты `` и `` kanban_activity`` соответственно)."
 
 #: ../../reference/mixins.rst:744
 msgid ""
 "Organizing a business trip is a tedious process and tracking needed "
 "activities like ordering plane tickets or a cab for the airport could be "
-"useful. To do so, we will add the activities mixin on our model and "
-"display the next planned activities in the message history of our trip."
+"useful. To do so, we will add the activities mixin on our model and display "
+"the next planned activities in the message history of our trip."
 msgstr ""
+"Организация деловой поездки - это утомительный процесс, и отслеживание "
+"необходимых действий, таких как заказ авиабилетов или такси в аэропорт, "
+"может быть полезным. Для этого мы добавим миксин действий в нашу модель и "
+"отобразим следующие запланированные действия в истории сообщений нашей "
+"поездки."
 
 #: ../../reference/mixins.rst:759
 msgid "We modify the form view of our trips to display their next activites:"
 msgstr ""
+"Мы изменяем вид формы наших поездок, чтобы отобразить их следующие действия:"
 
 #: ../../reference/mixins.rst:778 ../../reference/mixins.rst:854
 #: ../../reference/mixins.rst:1073
 msgid "You can find concrete examples of integration in the following models:"
-msgstr ""
+msgstr "Вы можете найти конкретные примеры интеграции в следующих моделях:"
 
 #: ../../reference/mixins.rst:780 ../../reference/mixins.rst:856
 msgid "``crm.lead`` in the CRM (*crm*) Application"
-msgstr ""
+msgstr "`` crm.lead`` в приложении CRM (* crm *)"
 
 #: ../../reference/mixins.rst:781
 msgid "``sale.order`` in the Sales (*sale*) Application"
-msgstr ""
+msgstr "`` sale.order`` в приложении Sales (* sale *)"
 
 #: ../../reference/mixins.rst:782
 msgid "``project.task`` in the Project (*poject*) Application"
-msgstr ""
+msgstr "`` project.task`` в приложении Project (* poject *)"
 
 #: ../../reference/mixins.rst:788
 msgid "Website features"
-msgstr ""
+msgstr "Особенности сайта"
 
 #: ../../reference/mixins.rst:793
 msgid "Visitor tracking"
-msgstr ""
+msgstr "Отслеживание посетителей"
 
 #: ../../reference/mixins.rst:795
 msgid ""
-"The ``utm.mixin`` class can be used to track online "
-"marketing/communication campaigns through arguments in links to specified"
-" resources. The mixin adds 3 fields to your model:"
+"The ``utm.mixin`` class can be used to track online marketing/communication "
+"campaigns through arguments in links to specified resources. The mixin adds "
+"3 fields to your model:"
 msgstr ""
+"Класс utm.mixin может использоваться для отслеживания онлайн-маркетинговых /"
+" коммуникационных кампаний с помощью аргументов в ссылках на указанные "
+"ресурсы. Миксин добавляет 3 поля к вашей модели:"
 
 #: ../../reference/mixins.rst:799
 msgid ""
-"``campaign_id``: :class:`~odoo.fields.Many2one` field to a "
-"``utm.campaign`` object (i.e. Christmas_Special, Fall_Collection, etc.)"
+"``campaign_id``: :class:`~odoo.fields.Many2one` field to a ``utm.campaign`` "
+"object (i.e. Christmas_Special, Fall_Collection, etc.)"
 msgstr ""
+"Поле `` campaign_id``:: class: `~ odoo.fields.Many2one` для объекта` "
+"`utm.campaign`` (т. е. Christmas_Special, Fall_Collection и т. д.)"
 
 #: ../../reference/mixins.rst:801
 msgid ""
 "``source_id``: :class:`~odoo.fields.Many2one` field to a ``utm.source`` "
 "object (i.e. Search Engine, mailing list, etc.)"
 msgstr ""
+"Поле `` source_id``:: class: `~ odoo.fields.Many2one` для объекта` "
+"`utm.source`` (т. е. поисковая система, список рассылки и т. д.)"
 
 #: ../../reference/mixins.rst:803
 msgid ""
 "``medium_id``: :class:`~odoo.fields.Many2one` field to a ``utm.medium`` "
 "object (i.e. Snail Mail, e-Mail, social network update, etc.)"
 msgstr ""
+"Поле `` medium_id``:: class: `~ odoo.fields.Many2one` для объекта` "
+"`utm.medium`` (например, Snail Mail, электронная почта, обновление "
+"социальной сети и т. д.)"
 
 #: ../../reference/mixins.rst:806
 msgid ""
 "These models have a single field ``name`` (i.e. they are simply there to "
 "distinguish campaigns but don't have any specific behaviour)."
 msgstr ""
+"Эти модели имеют одно поле `` имя`` (то есть они просто предназначены для "
+"различения кампаний, но не имеют определенного поведения)."
 
 #: ../../reference/mixins.rst:809
 msgid ""
 "Once a customer visits your website with these parameters set in the url "
 "(i.e. "
 "https://www.odoo.com/?campaign_id=mixin_talk&source_id=www.odoo.com&medium_id=website),"
-" three cookies are set in the visitor's website for these parameters. "
-"Once a object that inherits the utm.mixin is created from the website "
-"(i.e. lead form, job application, etc.), the utm.mixin code kicks in and "
-"fetches the values from the cookies to set them in the new record. Once "
-"this is done, you can then use the campaign/source/medium fields as any "
-"other field when defining reports and views (group by, etc.)."
+" three cookies are set in the visitor's website for these parameters. Once a"
+" object that inherits the utm.mixin is created from the website (i.e. lead "
+"form, job application, etc.), the utm.mixin code kicks in and fetches the "
+"values from the cookies to set them in the new record. Once this is done, "
+"you can then use the campaign/source/medium fields as any other field when "
+"defining reports and views (group by, etc.)."
 msgstr ""
+"Как только клиент заходит на ваш веб-сайт с этими параметрами, заданными в "
+"URL (т. Е. "
+"Https://www.odoo.com/?campaign_id=mixin_talk&amp;source_id=www.odoo.com&amp;medium_id=website),"
+" на веб-сайте посетителя устанавливаются три файла cookie для этих "
+"параметров. , Как только объект, который наследует utm.mixin, создается на "
+"веб-сайте (т. Е. Ведущая форма, заявка на работу и т. Д.), Код utm.mixin "
+"запускается и выбирает значения из файлов cookie, чтобы установить их в "
+"новой записи. Как только это будет сделано, вы можете использовать поля "
+"кампании / источника / среды как любое другое поле при определении отчетов и"
+" представлений (группировка по и т. Д.)."
 
 #: ../../reference/mixins.rst:818
 msgid ""
-"To extend this behaviour, simply add a relational field to a simple model"
-" (the model should support the *quick create* (i.e. call to ``create()`` "
-"with a single ``name`` value) and extend the function "
-"``tracking_fields()``:"
+"To extend this behaviour, simply add a relational field to a simple model "
+"(the model should support the *quick create* (i.e. call to ``create()`` with"
+" a single ``name`` value) and extend the function ``tracking_fields()``:"
 msgstr ""
+"Чтобы расширить это поведение, просто добавьте реляционное поле в простую "
+"модель (модель должна поддерживать * quick create * (то есть вызов `` create"
+" () `` с единственным значением `` name``) и расширить функцию ` "
+"`tracking_fields ()` `:"
 
 #: ../../reference/mixins.rst:847
 msgid ""
-"This will tell the system to create a cookie named *odoo_utm_my_field* "
-"with the value found in the url parameter ``my_field``; once a new record"
-" of this model is created by a call from a website form, the generic "
-"override of the ``create()`` method of ``utm.mixin`` will fetch the "
-"default values for this field from the cookie (and the "
-"``my_module.my_track`` record will be creatwed on the fly if it does not "
-"exist yet)."
+"This will tell the system to create a cookie named *odoo_utm_my_field* with "
+"the value found in the url parameter ``my_field``; once a new record of this"
+" model is created by a call from a website form, the generic override of the"
+" ``create()`` method of ``utm.mixin`` will fetch the default values for this"
+" field from the cookie (and the ``my_module.my_track`` record will be "
+"creatwed on the fly if it does not exist yet)."
 msgstr ""
+"Это скажет системе создать cookie с именем * odoo_utm_my_field * со "
+"значением, найденным в параметре url `` my_field``; как только новая запись "
+"этой модели будет создана с помощью вызова из формы веб-сайта, общее "
+"переопределение метода `` create () `` для `` utm.mixin`` извлечет значения "
+"по умолчанию для этого поля из файла cookie ( и запись `` "
+"my_module.my_track`` будет создана на лету, если она еще не существует)."
 
 #: ../../reference/mixins.rst:857
-msgid "``hr.applicant`` in the Recruitment Process (*hr_recruitment*) Application"
-msgstr ""
+msgid ""
+"``hr.applicant`` in the Recruitment Process (*hr_recruitment*) Application"
+msgstr "`` hr.applicant`` в приложении процесса найма (* hr_recruitment *)"
 
 #: ../../reference/mixins.rst:858 ../../reference/mixins.rst:1076
 msgid ""
 "``helpdesk.ticket`` in the Helpdesk (*helpdesk* - Odoo Enterprise only) "
 "Application"
 msgstr ""
+"`` helpdesk.ticket`` в приложении Helpdesk (* helpdesk * - только для Odoo "
+"Enterprise)"
 
 #: ../../reference/mixins.rst:863
 msgid "Website visibility"
-msgstr ""
+msgstr "Видимость сайта"
 
 #: ../../reference/mixins.rst:865
 msgid ""
-"You can quite easily add a website visibility toggle on any of your "
-"record. While this mixin is quite easy to implement manually, it is the "
-"most often-used after the ``mail.thread`` inheritance; a testament to its"
-" usefulness. The typical use case for this mixin is any object that has a"
-" frontend-page; being able to control the visibility of the page allows "
-"you to take your time while editing the page and only publish it when "
-"you're satisfied."
+"You can quite easily add a website visibility toggle on any of your record. "
+"While this mixin is quite easy to implement manually, it is the most often-"
+"used after the ``mail.thread`` inheritance; a testament to its usefulness. "
+"The typical use case for this mixin is any object that has a frontend-page; "
+"being able to control the visibility of the page allows you to take your "
+"time while editing the page and only publish it when you're satisfied."
 msgstr ""
+"Вы можете довольно легко добавить переключатель видимости веб-сайта к любой "
+"вашей записи. Хотя этот миксин довольно легко реализовать вручную, он "
+"наиболее часто используется после наследования `` mail.thread``; "
+"свидетельство его полезности. Типичным вариантом использования этого миксина"
+" является любой объект, имеющий страницу внешнего интерфейса; возможность "
+"контролировать видимость страницы позволяет вам не торопиться при "
+"редактировании страницы и публиковать ее только тогда, когда вы довольны."
 
 #: ../../reference/mixins.rst:872
 msgid ""
 "To include the functionnality, you only need to inherit "
 "``website.published.mixin``:"
 msgstr ""
+"Чтобы включить функциональность, вам нужно только унаследовать `` "
+"website.published.mixin``:"
 
 #: ../../reference/mixins.rst:881
 msgid "This mixin adds 2 fields on your model:"
-msgstr ""
+msgstr "Этот миксин добавляет 2 поля вашей модели:"
 
 #: ../../reference/mixins.rst:883
 msgid ""
-"``website_published``: :class:`~odoo.fields.Boolean` field which "
-"represents the status of the publication"
+"``website_published``: :class:`~odoo.fields.Boolean` field which represents "
+"the status of the publication"
 msgstr ""
+"`` website_published``:: class: `~ odoo.fields.Boolean` поле, которое "
+"представляет статус публикации"
 
 #: ../../reference/mixins.rst:885
 msgid ""
-"``website_url``: :class:`~odoo.fields.Char` field which represents the "
-"URL through which the object is accessed"
+"``website_url``: :class:`~odoo.fields.Char` field which represents the URL "
+"through which the object is accessed"
 msgstr ""
+"`` website_url``::: class: `~ odoo.fields.Char` поле, которое представляет "
+"URL, через который осуществляется доступ к объекту"
 
 #: ../../reference/mixins.rst:888
 msgid ""
-"Note that this last field is a computed field and must be implemented for"
-" your class:"
+"Note that this last field is a computed field and must be implemented for "
+"your class:"
 msgstr ""
+"Обратите внимание, что это последнее поле является вычисляемым полем и "
+"должно быть реализовано для вашего класса:"
 
 #: ../../reference/mixins.rst:896
 msgid ""
 "Once the mechanism is in place, you just have to adapt your frontend and "
-"backend views to make it accessible. In the backend, adding a button in "
-"the button box is usually the way to go:"
+"backend views to make it accessible. In the backend, adding a button in the "
+"button box is usually the way to go:"
 msgstr ""
+"Как только механизм будет создан, вам просто нужно адаптировать внешний и "
+"внешний вид, чтобы сделать его доступным. В бэкэнде добавление кнопки в поле"
+" кнопок обычно является следующим способом:"
 
 #: ../../reference/mixins.rst:907
 msgid ""
-"In the frontend, some security checks are needed to avoid showing "
-"'Edition' buttons to website visitors:"
+"In the frontend, some security checks are needed to avoid showing 'Edition' "
+"buttons to website visitors:"
 msgstr ""
+"Во внешнем интерфейсе некоторые проверки безопасности необходимы, чтобы не "
+"показывать посетителям сайта кнопки «Редакция»:"
 
 #: ../../reference/mixins.rst:921
 msgid ""
 "Note that you must pass your object as the variable ``object`` to the "
 "template; in this example, the ``blog.post`` record was passed as the "
-"``blog_post`` variable to the ``qweb`` rendering engine, it is necessary "
-"to specify this to the publish management template. The ``publish_edit`` "
-"variable allow the frontend button to link to the backend (allowing you "
-"to switch from frontend to backend and vice-versa easily); if set, you "
-"must specify the full external id of the action you want to call in the "
-"backend in the ``action`` variable (note that a Form View must exist for "
-"the model)."
+"``blog_post`` variable to the ``qweb`` rendering engine, it is necessary to "
+"specify this to the publish management template. The ``publish_edit`` "
+"variable allow the frontend button to link to the backend (allowing you to "
+"switch from frontend to backend and vice-versa easily); if set, you must "
+"specify the full external id of the action you want to call in the backend "
+"in the ``action`` variable (note that a Form View must exist for the model)."
 msgstr ""
+"Обратите внимание, что вы должны передать свой объект как переменную `` "
+"object`` в шаблон; в этом примере запись `` blog.post`` была передана как "
+"переменная `` blog_post`` движку рендеринга `` qweb``, необходимо указать "
+"это в шаблоне управления публикацией. Переменная `` publish_edit`` позволяет"
+" кнопке внешнего интерфейса связываться с внутренним интерфейсом (что "
+"позволяет легко переключаться с внешнего интерфейса на внутренний и "
+"наоборот); если установлено, вы должны указать полный внешний идентификатор "
+"действия, которое вы хотите вызвать в бэкэнде, в переменной `` action`` "
+"(обратите внимание, что представление формы должно существовать для модели)."
 
 #: ../../reference/mixins.rst:930
 msgid ""
-"The action ``website_publish_button`` is defined in the mixin and adapts "
-"its behaviour to your object: if the class has a valid ``website_url`` "
-"compute function, the user is redirected to the frontend when he clicks "
-"on the button; the user can then publish the page directly from the "
-"frontend. This ensures that no online publication can happen by accident."
-" If there is not compute function, the boolean ``website_published`` is "
-"simply triggered."
+"The action ``website_publish_button`` is defined in the mixin and adapts its"
+" behaviour to your object: if the class has a valid ``website_url`` compute "
+"function, the user is redirected to the frontend when he clicks on the "
+"button; the user can then publish the page directly from the frontend. This "
+"ensures that no online publication can happen by accident. If there is not "
+"compute function, the boolean ``website_published`` is simply triggered."
 msgstr ""
+"Действие `` website_publish_button`` определено в mixin и адаптирует его "
+"поведение к вашему объекту: если у класса есть допустимая вычислительная "
+"функция `` website_url``, пользователь перенаправляется на веб-интерфейс, "
+"когда нажимает кнопку; пользователь может опубликовать страницу прямо из "
+"внешнего интерфейса. Это гарантирует, что никакая онлайн-публикация не может"
+" произойти случайно. Если нет функции вычисления, логический `` "
+"website_published`` просто запускается."
 
 #: ../../reference/mixins.rst:940
 msgid "Website metadata"
-msgstr ""
+msgstr "Метаданные сайта"
 
 #: ../../reference/mixins.rst:942
 msgid ""
 "This simple mixin simply allows you to easily inject metadata in your "
 "frontend pages."
 msgstr ""
+"Этот простой миксин позволяет вам легко вставлять метаданные в ваши страницы"
+" интерфейса."
 
 #: ../../reference/mixins.rst:952
 msgid "This mixin adds 3 fields on your model:"
-msgstr ""
+msgstr "Этот миксин добавляет 3 поля вашей модели:"
 
 #: ../../reference/mixins.rst:954
 msgid ""
-"``website_meta_title``: :class:`~odoo.fields.Char` field that allow you "
-"to set an additional title to your page"
+"``website_meta_title``: :class:`~odoo.fields.Char` field that allow you to "
+"set an additional title to your page"
 msgstr ""
+"Поле `` website_meta_title``:: class: `~ odoo.fields.Char`, которое "
+"позволяет вам задать дополнительный заголовок для вашей страницы."
 
 #: ../../reference/mixins.rst:956
 msgid ""
-"``website_meta_description``: :class:`~odoo.fields.Char` field that "
-"contains a short description of the page (sometimes used in search "
-"engines results)"
+"``website_meta_description``: :class:`~odoo.fields.Char` field that contains"
+" a short description of the page (sometimes used in search engines results)"
 msgstr ""
+"Поле `` website_meta_description``:: class: `~ odoo.fields.Char`, которое "
+"содержит краткое описание страницы (иногда используется в результатах "
+"поисковых систем)."
 
 #: ../../reference/mixins.rst:958
 msgid ""
-"``website_meta_keywords``: :class:`~odoo.fields.Char` field that contains"
-" some keywords to help your page to be classified more precisely by "
-"search engines; the \"Promote\" tool will help you select lexically-"
-"related keywords easily"
+"``website_meta_keywords``: :class:`~odoo.fields.Char` field that contains "
+"some keywords to help your page to be classified more precisely by search "
+"engines; the \"Promote\" tool will help you select lexically-related "
+"keywords easily"
 msgstr ""
+"Поле `` website_meta_keywords``:: class: `~ odoo.fields.Char`, которое "
+"содержит несколько ключевых слов, которые помогают вашей странице более "
+"точно классифицироваться поисковыми системами; инструмент «Содействие» "
+"поможет вам легко выбрать ключевые слова, связанные с лексикой"
 
 #: ../../reference/mixins.rst:962
 msgid ""
-"These fields are editable in the frontend using the \"Promote\" tool from"
-" the Editor toolbar. Setting these fields can help search engines to "
-"better index your pages. Note that search engines do not base their "
-"results only on these metadata; the best SEO practice should still be to "
-"get referenced by reliable sources."
+"These fields are editable in the frontend using the \"Promote\" tool from "
+"the Editor toolbar. Setting these fields can help search engines to better "
+"index your pages. Note that search engines do not base their results only on"
+" these metadata; the best SEO practice should still be to get referenced by "
+"reliable sources."
 msgstr ""
+"Эти поля доступны для редактирования во внешнем интерфейсе с помощью "
+"инструмента «Продвижение» на панели инструментов редактора. Установка этих "
+"полей может помочь поисковым системам лучше индексировать ваши страницы. "
+"Обратите внимание, что поисковые системы не основывают свои результаты "
+"только на этих метаданных; лучшая практика SEO должна по-прежнему получать "
+"ссылки из надежных источников."
 
 #: ../../reference/mixins.rst:970
 msgid "Others"
-msgstr ""
+msgstr "другие"
 
 #: ../../reference/mixins.rst:975
 msgid "Customer Rating"
-msgstr ""
+msgstr "Рейтинг клиентов"
 
 #: ../../reference/mixins.rst:977
 msgid ""
-"The rating mixin allows sending email to ask for customer rating, "
-"automatic transitioning in a kanban processes and aggregating statistics "
-"on your ratings."
+"The rating mixin allows sending email to ask for customer rating, automatic "
+"transitioning in a kanban processes and aggregating statistics on your "
+"ratings."
 msgstr ""
+"Миксин рейтинга позволяет отправлять электронные письма с просьбой о "
+"рейтинге клиентов, автоматический переход в канбан-процессы и агрегирование "
+"статистики по вашим рейтингам."
 
 #: ../../reference/mixins.rst:981
 msgid "Adding rating on your model"
-msgstr ""
+msgstr "Добавление рейтинга на вашу модель"
 
 #: ../../reference/mixins.rst:983
 msgid "To add rating support, simply inherit the ``rating.mixin`` model:"
 msgstr ""
+"Чтобы добавить поддержку рейтинга, просто унаследуйте модель `` "
+"rating.mixin``:"
 
 #: ../../reference/mixins.rst:994
 msgid "The behaviour of the mixin adapts to your model:"
-msgstr ""
+msgstr "Поведение миксина адаптируется к вашей модели:"
 
 #: ../../reference/mixins.rst:996
 msgid ""
-"The ``rating.rating`` record will be linked to the ``partner_id`` field "
-"of your model (if the field is present)."
+"The ``rating.rating`` record will be linked to the ``partner_id`` field of "
+"your model (if the field is present)."
 msgstr ""
+"Запись `` rating.rating`` будет связана с полем `` partner_id`` вашей модели"
+" (если поле присутствует)."
 
 #: ../../reference/mixins.rst:999
 msgid ""
 "this behaviour can be overridden with the function "
 "``rating_get_partner_id()`` if you use another field than ``partner_id``"
 msgstr ""
+"это поведение может быть переопределено функцией `` rating_get_partner_id ()"
+" ``, если вы используете другое поле, кроме `` partner_id``"
 
 #: ../../reference/mixins.rst:1002
 msgid ""
 "The ``rating.rating`` record will be linked to the partner of the "
-"``user_id`` field of your model (if the field is present) (i.e. the "
-"partner who is rated)"
+"``user_id`` field of your model (if the field is present) (i.e. the partner "
+"who is rated)"
 msgstr ""
+"Запись `` rating.rating`` будет связана с партнером поля `` user_id`` вашей "
+"модели (если поле присутствует) (т.е. с партнером, который получил оценку)"
 
 #: ../../reference/mixins.rst:1005
 msgid ""
 "this behaviour can be overridden with the function "
-"``rating_get_rated_partner_id()`` if you use another field than "
-"``user_id`` (note that the function must return a ``res.partner``, for "
-"``user_id`` the system automatically fetches the partner of the user)"
+"``rating_get_rated_partner_id()`` if you use another field than ``user_id`` "
+"(note that the function must return a ``res.partner``, for ``user_id`` the "
+"system automatically fetches the partner of the user)"
 msgstr ""
+"это поведение можно переопределить с помощью функции `` "
+"rating_get_rated_partner_id () ``, если вы используете другое поле, кроме ``"
+" user_id`` (обратите внимание, что функция должна возвращать `` "
+"res.partner``, для `` user_id`` системы) автоматически выбирает партнера "
+"пользователя)"
 
 #: ../../reference/mixins.rst:1010
 msgid ""
-"The chatter history will display the rating event (if your model inherits"
-" from ``mail.thread``)"
+"The chatter history will display the rating event (if your model inherits "
+"from ``mail.thread``)"
 msgstr ""
+"История болтовни будет отображать рейтинговое событие (если ваша модель "
+"наследует от `` mail.thread``)"
 
 #: ../../reference/mixins.rst:1014
 msgid "Send rating requests by e-mail"
-msgstr ""
+msgstr "Отправить запрос на оценку по электронной почте"
 
 #: ../../reference/mixins.rst:1016
 msgid ""
-"If you wish to send emails to request a rating, simply generate an e-mail"
-" with links to the rating object. A very basic email template could look "
-"like this:"
+"If you wish to send emails to request a rating, simply generate an e-mail "
+"with links to the rating object. A very basic email template could look like"
+" this:"
 msgstr ""
+"Если вы хотите отправлять электронные письма для запроса рейтинга, просто "
+"создайте электронное письмо со ссылками на объект рейтинга. Очень простой "
+"шаблон электронной почты может выглядеть так:"
 
 #: ../../reference/mixins.rst:1040
 msgid ""
@@ -1375,20 +1799,27 @@ msgid ""
 "allowing them to provide a feedback on their interaction with your users "
 "(including a free-text feedback message)."
 msgstr ""
+"Затем ваш клиент получит электронное письмо со ссылками на простую веб-"
+"страницу, которая позволит ему оставить отзыв об их взаимодействии с вашими "
+"пользователями (включая сообщение с произвольным текстом)."
 
 #: ../../reference/mixins.rst:1044
 msgid ""
 "You can then quite easily integrate your ratings with your form view by "
 "defining an action for the ratings:"
 msgstr ""
+"Затем вы можете довольно легко интегрировать свои оценки с представлением "
+"формы, определив действие для оценок:"
 
 #: ../../reference/mixins.rst:1070
 msgid ""
 "Note that there are default views (kanban,pivot,graph) for ratings which "
 "allow you a quick bird's eye view of your customer ratings."
 msgstr ""
+"Обратите внимание, что существуют рейтинги по умолчанию (kanban, pivot, "
+"graph) для рейтингов, которые позволяют вам быстро увидеть рейтинг ваших "
+"клиентов."
 
 #: ../../reference/mixins.rst:1075
 msgid "``project.task`` in the Project (*rating_project*) Application"
-msgstr ""
-
+msgstr "`` project.task`` в приложении Project (* rating_project *)"

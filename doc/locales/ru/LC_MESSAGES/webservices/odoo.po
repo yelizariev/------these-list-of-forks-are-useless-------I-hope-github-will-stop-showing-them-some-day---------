@@ -19,118 +19,153 @@ msgstr ""
 
 #: ../../webservices/odoo.rst:9
 msgid "External API"
-msgstr ""
+msgstr "Внешний API"
 
 #: ../../webservices/odoo.rst:11
 msgid ""
-"Odoo is usually extended internally via modules, but many of its features"
-" and all of its data are also available from the outside for external "
+"Odoo is usually extended internally via modules, but many of its features "
+"and all of its data are also available from the outside for external "
 "analysis or integration with various tools. Part of the "
 ":ref:`reference/orm/model` API is easily available over XML-RPC_ and "
 "accessible from a variety of languages."
 msgstr ""
+"Обычно Odoo расширяется с помощью модулей, но многие его функции и все "
+"данные также доступны извне для внешнего анализа или интеграции с различными"
+" инструментами. Часть API: ref: `reference / orm / model` легко доступна "
+"через XML-RPC_ и доступна на разных языках."
 
 #: ../../webservices/odoo.rst:27
 msgid "Connection"
-msgstr ""
+msgstr "соединение"
 
 #: ../../webservices/odoo.rst:92
 msgid "Configuration"
-msgstr ""
+msgstr "конфигурация"
 
 #: ../../webservices/odoo.rst:94
 msgid ""
 "If you already have an Odoo server installed, you can just use its "
 "parameters"
 msgstr ""
+"Если у вас уже установлен сервер Odoo, вы можете просто использовать его "
+"параметры"
 
 #: ../../webservices/odoo.rst:99
 msgid ""
-"For Odoo Online instances (<domain>.odoo.com), users are created without "
-"a *local* password (as a person you are logged in via the Odoo Online "
-"authentication system, not by the instance itself). To use XML-RPC on "
-"Odoo Online instances, you will need to set a password on the user "
-"account you want to use:"
+"For Odoo Online instances (<domain>.odoo.com), users are created without a "
+"*local* password (as a person you are logged in via the Odoo Online "
+"authentication system, not by the instance itself). To use XML-RPC on Odoo "
+"Online instances, you will need to set a password on the user account you "
+"want to use:"
 msgstr ""
+"Для экземпляров Odoo Online ( <domain> .odoo.com), пользователи создаются "
+"без * локального * пароля (как пользователь, вошедший в систему через "
+"систему аутентификации Odoo Online, а не сам экземпляр). Чтобы использовать "
+"XML-RPC на экземплярах Odoo Online, вам необходимо установить пароль для "
+"учетной записи пользователя, которую вы хотите использовать:"
 
 #: ../../webservices/odoo.rst:105
 msgid "Log in your instance with an administrator account"
-msgstr ""
+msgstr "Войдите в свой экземпляр с учетной записью администратора"
 
 #: ../../webservices/odoo.rst:106
 msgid "Go to :menuselection:`Settings --> Users --> Users`"
 msgstr ""
+"Перейдите: menuselection: `Настройки -&gt; Пользователи -&gt; Пользователи`"
 
 #: ../../webservices/odoo.rst:107
 msgid "Click on the user you want to use for XML-RPC access"
 msgstr ""
+"Нажмите на пользователя, которого вы хотите использовать для доступа к XML-"
+"RPC"
 
 #: ../../webservices/odoo.rst:108
 msgid "Click the :guilabel:`Change Password` button"
-msgstr ""
+msgstr "Нажмите кнопку: guilabel: `Изменить пароль`"
 
 #: ../../webservices/odoo.rst:109
 msgid ""
-"Set a :guilabel:`New Password` value then click :guilabel:`Change "
-"Password`."
+"Set a :guilabel:`New Password` value then click :guilabel:`Change Password`."
 msgstr ""
+"Установите значение: guilabel: `Новый пароль`, затем нажмите: guilabel:` "
+"Изменить пароль`."
 
 #: ../../webservices/odoo.rst:112
 msgid ""
 "The *server url* is the instance's domain (e.g. "
 "*https://mycompany.odoo.com*), the *database name* is the name of the "
-"instance (e.g. *mycompany*). The *username* is the configured user's "
-"login as shown by the *Change Password* screen."
+"instance (e.g. *mycompany*). The *username* is the configured user's login "
+"as shown by the *Change Password* screen."
 msgstr ""
+"* Server url * - это домен экземпляра (например, * https: "
+"//mycompany.odoo.com*), * имя базы данных * - это имя экземпляра (например, "
+"* mycompany *). * Username * - это настроенное имя пользователя, как "
+"показано на экране * Change Password *."
 
 #: ../../webservices/odoo.rst:150
 msgid "demo"
-msgstr ""
+msgstr "демонстрация"
 
 #: ../../webservices/odoo.rst:152
 msgid ""
-"To make exploration simpler, you can also ask https://demo.odoo.com for a"
-" test database:"
+"To make exploration simpler, you can also ask https://demo.odoo.com for a "
+"test database:"
 msgstr ""
+"Чтобы упростить исследование, вы также можете запросить у "
+"https://demo.odoo.com тестовую базу данных:"
 
 #: ../../webservices/odoo.rst:184
 msgid ""
 "These examples use the `Ripcord <https://code.google.com/p/ripcord/>`_ "
-"library, which provides a simple XML-RPC API. Ripcord requires that `XML-"
-"RPC support be enabled "
-"<https://php.net/manual/en/xmlrpc.installation.php>`_ in your PHP "
-"installation."
+"library, which provides a simple XML-RPC API. Ripcord requires that `XML-RPC"
+" support be enabled <https://php.net/manual/en/xmlrpc.installation.php>`_ in"
+" your PHP installation."
 msgstr ""
+"Эти примеры используют `Ripcord <https://code.google.com/p/ripcord/> `_ "
+"библиотека, предоставляющая простой XML-RPC API. Ripcord требует, чтобы была"
+" включена поддержка XML-RPC "
+"<https://php.net/manual/en/xmlrpc.installation.php> `_ в вашей установке "
+"PHP."
 
 #: ../../webservices/odoo.rst:190
 msgid ""
 "Since calls are performed over `HTTPS "
 "<https://en.wikipedia.org/wiki/HTTP_Secure>`_, it also requires that the "
-"`OpenSSL extension <https://php.net/manual/en/openssl.installation.php>`_"
-" be enabled."
+"`OpenSSL extension <https://php.net/manual/en/openssl.installation.php>`_ be"
+" enabled."
 msgstr ""
+"Поскольку вызовы выполняются через HTTPS "
+"<https://en.wikipedia.org/wiki/HTTP_Secure> `_, также требуется, чтобы "
+"расширение` OpenSSL <https://php.net/manual/en/openssl.installation.php> `_ "
+"быть включен."
 
 #: ../../webservices/odoo.rst:213
 msgid ""
 "These examples use the `Apache XML-RPC library "
 "<https://ws.apache.org/xmlrpc/>`_"
 msgstr ""
+"В этих примерах используется библиотека Apache XML-RPC "
+"<https://ws.apache.org/xmlrpc/> `_"
 
 #: ../../webservices/odoo.rst:216
 msgid ""
-"The examples do not include imports as these imports couldn't be pasted "
-"in the code."
+"The examples do not include imports as these imports couldn't be pasted in "
+"the code."
 msgstr ""
+"Примеры не включают импорт, так как этот импорт не может быть вставлен в "
+"код."
 
 #: ../../webservices/odoo.rst:220
 msgid "Logging in"
-msgstr ""
+msgstr "Происходит вход в систему"
 
 #: ../../webservices/odoo.rst:222
 msgid ""
 "Odoo requires users of the API to be authenticated before they can query "
 "most data."
 msgstr ""
+"Odoo требует, чтобы пользователи API проходили аутентификацию, прежде чем "
+"они смогут запрашивать большинство данных."
 
 #: ../../webservices/odoo.rst:225
 msgid ""
@@ -139,187 +174,246 @@ msgid ""
 "information. To verify if the connection information is correct before "
 "trying to authenticate, the simplest call is to ask for the server's "
 "version. The authentication itself is done through the ``authenticate`` "
-"function and returns a user identifier (``uid``) used in authenticated "
-"calls instead of the login."
+"function and returns a user identifier (``uid``) used in authenticated calls"
+" instead of the login."
 msgstr ""
+"Конечная точка `` xmlrpc / 2 / common`` предоставляет мета-вызовы, которые "
+"не требуют аутентификации, такие как сама аутентификация или получение "
+"информации о версии. Чтобы проверить правильность информации о соединении "
+"перед попыткой аутентификации, самый простой вызов - запросить версию "
+"сервера. Сама аутентификация выполняется с помощью функции `` authenticate``"
+" и возвращает идентификатор пользователя (`` uid``), используемый в "
+"аутентифицированных вызовах вместо входа в систему."
 
 #: ../../webservices/odoo.rst:293
 msgid "Calling methods"
-msgstr ""
+msgstr "Вызов методов"
 
 #: ../../webservices/odoo.rst:295
 msgid ""
-"The second endpoint is ``xmlrpc/2/object``, is used to call methods of "
-"odoo models via the ``execute_kw`` RPC function."
+"The second endpoint is ``xmlrpc/2/object``, is used to call methods of odoo "
+"models via the ``execute_kw`` RPC function."
 msgstr ""
+"Вторая конечная точка - `` xmlrpc / 2 / object``, используется для вызова "
+"методов моделей odoo через функцию RPC `` execute_kw``."
 
 #: ../../webservices/odoo.rst:298
 msgid "Each call to ``execute_kw`` takes the following parameters:"
-msgstr ""
+msgstr "Каждый вызов `` execute_kw`` принимает следующие параметры:"
 
 #: ../../webservices/odoo.rst:300
 msgid "the database to use, a string"
-msgstr ""
+msgstr "база данных для использования, строка"
 
 #: ../../webservices/odoo.rst:301
 msgid "the user id (retrieved through ``authenticate``), an integer"
 msgstr ""
+"идентификатор пользователя (полученный через `` authenticate``), целое число"
 
 #: ../../webservices/odoo.rst:302
 msgid "the user's password, a string"
-msgstr ""
+msgstr "пароль пользователя, строка"
 
 #: ../../webservices/odoo.rst:303
 msgid "the model name, a string"
-msgstr ""
+msgstr "название модели, строка"
 
 #: ../../webservices/odoo.rst:304
 msgid "the method name, a string"
-msgstr ""
+msgstr "имя метода, строка"
 
 #: ../../webservices/odoo.rst:305
 msgid "an array/list of parameters passed by position"
-msgstr ""
+msgstr "массив / список параметров, переданных по позиции"
 
 #: ../../webservices/odoo.rst:306
 msgid "a mapping/dict of parameters to pass by keyword (optional)"
 msgstr ""
+"сопоставление / определение параметров для передачи по ключевому слову "
+"(необязательно)"
 
 #: ../../webservices/odoo.rst:310
 msgid ""
 "For instance to see if we can read the ``res.partner`` model we can call "
 "``check_access_rights`` with ``operation`` passed by position and "
-"``raise_exception`` passed by keyword (in order to get a true/false "
-"result rather than true/error):"
+"``raise_exception`` passed by keyword (in order to get a true/false result "
+"rather than true/error):"
 msgstr ""
+"Например, чтобы увидеть, можем ли мы прочитать модель `` res.partner``, мы "
+"можем вызвать `` check_access_rights`` с `` operation``, переданным по "
+"позиции, и с `` yield_exception``, переданным по ключевому слову (чтобы "
+"получить истинное значение / ложный результат, а не истина / ошибка):"
 
 #: ../../webservices/odoo.rst:361
 msgid "List records"
-msgstr ""
+msgstr "Список записей"
 
 #: ../../webservices/odoo.rst:363
-msgid "Records can be listed and filtered via :meth:`~odoo.models.Model.search`."
+msgid ""
+"Records can be listed and filtered via :meth:`~odoo.models.Model.search`."
 msgstr ""
+"Записи могут быть перечислены и отфильтрованы с помощью: meth: `~ "
+"odoo.models.Model.search`."
 
 #: ../../webservices/odoo.rst:365
 msgid ""
 ":meth:`~odoo.models.Model.search` takes a mandatory :ref:`domain "
-"<reference/orm/domains>` filter (possibly empty), and returns the "
-"database identifiers of all records matching the filter. To list customer"
-" companies for instance:"
+"<reference/orm/domains>` filter (possibly empty), and returns the database "
+"identifiers of all records matching the filter. To list customer companies "
+"for instance:"
 msgstr ""
+": meth: `~ odoo.models.Model.search` принимает обязательный: ref:` домен "
+"<reference/orm/domains> `filter (возможно, пустой) и возвращает "
+"идентификаторы базы данных всех записей, соответствующих фильтру. Для "
+"перечисления компаний-клиентов, например:"
 
 #: ../../webservices/odoo.rst:408
 msgid "Pagination"
-msgstr ""
+msgstr "пагинация"
 
 #: ../../webservices/odoo.rst:410
 msgid ""
 "By default a search will return the ids of all records matching the "
-"condition, which may be a huge number. ``offset`` and ``limit`` "
-"parameters are available to only retrieve a subset of all matched "
-"records."
+"condition, which may be a huge number. ``offset`` and ``limit`` parameters "
+"are available to only retrieve a subset of all matched records."
 msgstr ""
+"По умолчанию поиск возвращает идентификаторы всех записей, соответствующих "
+"условию, которое может быть огромным числом. Параметры `` offset`` и `` "
+"limit`` доступны только для извлечения подмножества всех сопоставленных "
+"записей."
 
 #: ../../webservices/odoo.rst:456
 msgid "Count records"
-msgstr ""
+msgstr "Подсчет записей"
 
 #: ../../webservices/odoo.rst:458
 msgid ""
 "Rather than retrieve a possibly gigantic list of records and count them, "
 ":meth:`~odoo.models.Model.search_count` can be used to retrieve only the "
 "number of records matching the query. It takes the same :ref:`domain "
-"<reference/orm/domains>` filter as :meth:`~odoo.models.Model.search` and "
-"no other parameter."
+"<reference/orm/domains>` filter as :meth:`~odoo.models.Model.search` and no "
+"other parameter."
 msgstr ""
+"Вместо того, чтобы извлекать возможно гигантский список записей и "
+"подсчитывать их,: meth: `~ odoo.models.Model.search_count` может "
+"использоваться для получения только того количества записей, которые "
+"соответствуют запросу. Требуется то же самое: ref: `domain "
+"<reference/orm/domains> `filter as: meth:` ~ odoo.models.Model.search` и "
+"никаких других параметров."
 
 #: ../../webservices/odoo.rst:503
 msgid ""
-"calling ``search`` then ``search_count`` (or the other way around) may "
-"not yield coherent results if other users are using the server: stored "
-"data could have changed between the calls"
+"calling ``search`` then ``search_count`` (or the other way around) may not "
+"yield coherent results if other users are using the server: stored data "
+"could have changed between the calls"
 msgstr ""
+"вызов `` search`` затем `` search_count`` (или наоборот) может не дать "
+"согласованных результатов, если другие пользователи используют сервер: "
+"сохраненные данные могли измениться между вызовами"
 
 #: ../../webservices/odoo.rst:508
 msgid "Read records"
-msgstr ""
+msgstr "Читать записи"
 
 #: ../../webservices/odoo.rst:510
 msgid ""
-"Record data is accessible via the :meth:`~odoo.models.Model.read` method,"
-" which takes a list of ids (as returned by "
-":meth:`~odoo.models.Model.search`) and optionally a list of fields to "
-"fetch. By default, it will fetch all the fields the current user can "
-"read, which tends to be a huge amount."
+"Record data is accessible via the :meth:`~odoo.models.Model.read` method, "
+"which takes a list of ids (as returned by :meth:`~odoo.models.Model.search`)"
+" and optionally a list of fields to fetch. By default, it will fetch all the"
+" fields the current user can read, which tends to be a huge amount."
 msgstr ""
+"Данные записи доступны через метод: meth: `~ odoo.models.Model.read`, "
+"который принимает список идентификаторов (возвращаемых: meth:` ~ "
+"odoo.models.Model.search`) и, необязательно, список поля для извлечения. По "
+"умолчанию он извлекает все поля, которые может прочитать текущий "
+"пользователь, что обычно составляет огромное количество."
 
 #: ../../webservices/odoo.rst:578
 msgid "Conversedly, picking only three fields deemed interesting."
-msgstr ""
+msgstr "И наоборот, выбор только трех полей считается интересным."
 
 #: ../../webservices/odoo.rst:618
 msgid "even if the ``id`` field is not requested, it is always returned"
-msgstr ""
+msgstr "даже если поле `` id`` не запрашивается, оно всегда возвращается"
 
 #: ../../webservices/odoo.rst:621
 msgid "Listing record fields"
-msgstr ""
+msgstr "Список полей записи"
 
 #: ../../webservices/odoo.rst:623
 msgid ""
 ":meth:`~odoo.models.Model.fields_get` can be used to inspect a model's "
 "fields and check which ones seem to be of interest."
 msgstr ""
+": meth: `~ odoo.models.Model.fields_get` может использоваться для проверки "
+"полей модели и проверки, какие из них представляются интересными."
 
 #: ../../webservices/odoo.rst:626
 msgid ""
-"Because it returns a large amount of meta-information (it is also used by"
-" client programs) it should be filtered before printing, the most "
-"interesting items for a human user are ``string`` (the field's label), "
-"``help`` (a help text if available) and ``type`` (to know which values to"
-" expect, or to send when updating a record):"
+"Because it returns a large amount of meta-information (it is also used by "
+"client programs) it should be filtered before printing, the most interesting"
+" items for a human user are ``string`` (the field's label), ``help`` (a help"
+" text if available) and ``type`` (to know which values to expect, or to send"
+" when updating a record):"
 msgstr ""
+"Поскольку он возвращает большое количество метаинформации (она также "
+"используется клиентскими программами), ее следует отфильтровать перед "
+"печатью, наиболее интересными элементами для пользователя являются `` "
+"строка`` (метка поля), `` help` `(текст справки, если он доступен) и` "
+"`type`` (чтобы узнать, какие значения следует ожидать или отправить при "
+"обновлении записи):"
 
 #: ../../webservices/odoo.rst:705
 msgid "Search and read"
-msgstr ""
+msgstr "Ищите и читайте"
 
 #: ../../webservices/odoo.rst:707
 msgid ""
 "Because it is a very common task, Odoo provides a "
-":meth:`~odoo.models.Model.search_read` shortcut which as its name "
-"suggests is equivalent to a :meth:`~odoo.models.Model.search` followed by"
-" a :meth:`~odoo.models.Model.read`, but avoids having to perform two "
-"requests and keep ids around."
+":meth:`~odoo.models.Model.search_read` shortcut which as its name suggests "
+"is equivalent to a :meth:`~odoo.models.Model.search` followed by a "
+":meth:`~odoo.models.Model.read`, but avoids having to perform two requests "
+"and keep ids around."
 msgstr ""
+"Поскольку это очень распространенная задача, Odoo предоставляет ярлык: meth:"
+" `~ odoo.models.Model.search_read`, который, как следует из его названия, "
+"эквивалентен: meth:` ~ odoo.models.Model.search`, за которым следует : meth:"
+" `~ odoo.models.Model.read`, но избегает необходимости выполнять два запроса"
+" и сохранять идентификаторы."
 
 #: ../../webservices/odoo.rst:713
 msgid ""
-"Its arguments are similar to :meth:`~odoo.models.Model.search`'s, but it "
-"can also take a list of ``fields`` (like :meth:`~odoo.models.Model.read`,"
-" if that list is not provided it will fetch all fields of matched "
-"records):"
+"Its arguments are similar to :meth:`~odoo.models.Model.search`'s, but it can"
+" also take a list of ``fields`` (like :meth:`~odoo.models.Model.read`, if "
+"that list is not provided it will fetch all fields of matched records):"
 msgstr ""
+"Его аргументы похожи на: meth: `~ odoo.models.Model.search`, но могут также "
+"принимать список` `полей`` (например: meth:` ~ odoo.models.Model.read`, если"
+" этот список не предоставлен, он извлечет все поля совпадающих записей):"
 
 #: ../../webservices/odoo.rst:794
 msgid "Create records"
-msgstr ""
+msgstr "Создать записи"
 
 #: ../../webservices/odoo.rst:796
 msgid ""
-"Records of a model are created using :meth:`~odoo.models.Model.create`. "
-"The method will create a single record and return its database "
-"identifier."
+"Records of a model are created using :meth:`~odoo.models.Model.create`. The "
+"method will create a single record and return its database identifier."
 msgstr ""
+"Записи модели создаются с использованием: meth: `~ "
+"odoo.models.Model.create`. Метод создаст одну запись и вернет ее "
+"идентификатор базы данных."
 
 #: ../../webservices/odoo.rst:799
 msgid ""
-":meth:`~odoo.models.Model.create` takes a mapping of fields to values, "
-"used to initialize the record. For any field which has a default value "
-"and is not set through the mapping argument, the default value will be "
-"used."
+":meth:`~odoo.models.Model.create` takes a mapping of fields to values, used "
+"to initialize the record. For any field which has a default value and is not"
+" set through the mapping argument, the default value will be used."
 msgstr ""
+": meth: `~ odoo.models.Model.create` принимает сопоставление полей со "
+"значениями, используемыми для инициализации записи. Для любого поля, которое"
+" имеет значение по умолчанию и не задано с помощью аргумента отображения, "
+"будет использоваться значение по умолчанию."
 
 #: ../../webservices/odoo.rst:839
 msgid ""
@@ -327,30 +421,41 @@ msgid ""
 ":class:`~odoo.fields.Integer`, string for :class:`~odoo.fields.Char` or "
 ":class:`~odoo.fields.Text`),"
 msgstr ""
+"в то время как большинство типов значений соответствуют ожидаемым (целое "
+"число для: class: `~ odoo.fields.Integer`, строка для: class:` ~ "
+"odoo.fields.Char` или: class: `~ odoo.fields.Text`) ,"
 
 #: ../../webservices/odoo.rst:843
 msgid ""
 ":class:`~odoo.fields.Date`, :class:`~odoo.fields.Datetime` and "
 ":class:`~odoo.fields.Binary` fields use string values"
 msgstr ""
+": class: `~ odoo.fields.Date`,: class:` ~ odoo.fields.Datetime` и: class: `~"
+" odoo.fields.Binary` используют строковые значения"
 
 #: ../../webservices/odoo.rst:845
 msgid ""
 ":class:`~odoo.fields.One2many` and :class:`~odoo.fields.Many2many` use a "
-"special command protocol detailed in :meth:`the documentation to the "
-"write method <odoo.models.Model.write>`."
+"special command protocol detailed in :meth:`the documentation to the write "
+"method <odoo.models.Model.write>`."
 msgstr ""
+": class: `~ odoo.fields.One2many` и: class:` ~ odoo.fields.Many2many` "
+"используют специальный протокол команд, подробно описанный в: meth: "
+"`документация к методу записи <odoo.models.Model.write> `."
 
 #: ../../webservices/odoo.rst:850
 msgid "Update records"
-msgstr ""
+msgstr "Обновить записи"
 
 #: ../../webservices/odoo.rst:852
 msgid ""
-"Records can be updated using :meth:`~odoo.models.Model.write`, it takes a"
-" list of records to update and a mapping of updated fields to values "
-"similar to :meth:`~odoo.models.Model.create`."
+"Records can be updated using :meth:`~odoo.models.Model.write`, it takes a "
+"list of records to update and a mapping of updated fields to values similar "
+"to :meth:`~odoo.models.Model.create`."
 msgstr ""
+"Записи могут быть обновлены с помощью: meth: `~ odoo.models.Model.write`, "
+"для обновления требуется список записей и сопоставление обновленных полей со"
+" значениями, похожими на: meth:` ~ odoo.models.Model.create` ,"
 
 #: ../../webservices/odoo.rst:856
 msgid ""
@@ -359,219 +464,263 @@ msgid ""
 "perform \"computed\" updates (where the value being set depends on an "
 "existing value of a record)."
 msgstr ""
+"Несколько записей могут обновляться одновременно, но все они получат "
+"одинаковые значения для устанавливаемых полей. В настоящее время невозможно "
+"выполнить «вычисленные» обновления (где устанавливаемое значение зависит от "
+"существующего значения записи)."
 
 #: ../../webservices/odoo.rst:911
 msgid "Delete records"
-msgstr ""
+msgstr "Удалить записи"
 
 #: ../../webservices/odoo.rst:913
 msgid ""
 "Records can be deleted in bulk by providing their ids to "
 ":meth:`~odoo.models.Model.unlink`."
 msgstr ""
+"Записи могут быть удалены массово, указав их идентификаторы: meth: `~ "
+"odoo.models.Model.unlink`."
 
 #: ../../webservices/odoo.rst:962
 msgid "Inspection and introspection"
-msgstr ""
+msgstr "Инспекция и самоанализ"
 
 #: ../../webservices/odoo.rst:969
 msgid ""
-"While we previously used :meth:`~odoo.models.Model.fields_get` to query a"
-" model and have been using an arbitrary model from the start, Odoo stores"
-" most model metadata inside a few meta-models which allow both querying "
-"the system and altering models and fields (with some limitations) on the "
-"fly over XML-RPC."
+"While we previously used :meth:`~odoo.models.Model.fields_get` to query a "
+"model and have been using an arbitrary model from the start, Odoo stores "
+"most model metadata inside a few meta-models which allow both querying the "
+"system and altering models and fields (with some limitations) on the fly "
+"over XML-RPC."
 msgstr ""
+"В то время как мы ранее использовали: meth: `~ odoo.models.Model.fields_get`"
+" для запроса модели и с самого начала использовали произвольную модель, Odoo"
+" хранит большинство метаданных модели в нескольких мета-моделях, которые "
+"позволяют как запрашивать систему, так и изменение моделей и полей (с "
+"некоторыми ограничениями) на лету через XML-RPC."
 
 #: ../../webservices/odoo.rst:978
 msgid "``ir.model``"
-msgstr ""
+msgstr "`` ir.model``"
 
 #: ../../webservices/odoo.rst:980
 msgid "Provides information about Odoo models via its various fields"
-msgstr ""
+msgstr "Предоставляет информацию о моделях Odoo через различные поля"
 
 #: ../../webservices/odoo.rst:982 ../../webservices/odoo.rst:1131
 msgid "``name``"
-msgstr ""
+msgstr "`` Name``"
 
 #: ../../webservices/odoo.rst:983
 msgid "a human-readable description of the model"
-msgstr ""
+msgstr "удобочитаемое описание модели"
 
 #: ../../webservices/odoo.rst:984
 msgid "``model``"
-msgstr ""
+msgstr "`` model``"
 
 #: ../../webservices/odoo.rst:985
 msgid "the name of each model in the system"
-msgstr ""
+msgstr "название каждой модели в системе"
 
 #: ../../webservices/odoo.rst:987 ../../webservices/odoo.rst:1138
 msgid "``state``"
-msgstr ""
+msgstr "`` State``"
 
 #: ../../webservices/odoo.rst:987
 msgid ""
-"whether the model was generated in Python code (``base``) or by creating "
-"an ``ir.model`` record (``manual``)"
+"whether the model was generated in Python code (``base``) or by creating an "
+"``ir.model`` record (``manual``)"
 msgstr ""
+"была ли модель сгенерирована в коде Python (`` base``) или путем создания "
+"записи `` ir.model`` (`` manual``)"
 
 #: ../../webservices/odoo.rst:990
 msgid "``field_id``"
-msgstr ""
+msgstr "`` field_id``"
 
 #: ../../webservices/odoo.rst:990
 msgid ""
 "list of the model's fields through a :class:`~odoo.fields.One2many` to "
 ":ref:`reference/webservice/inspection/fields`"
 msgstr ""
+"список полей модели через: class: `~ odoo.fields.One2many` to: ref:` "
+"reference / webservice / inspection / fields`"
 
 #: ../../webservices/odoo.rst:993
 msgid "``view_ids``"
-msgstr ""
+msgstr "`` View_ids``"
 
 #: ../../webservices/odoo.rst:993
 msgid ""
-":class:`~odoo.fields.One2many` to the :ref:`reference/views` defined for "
-"the model"
+":class:`~odoo.fields.One2many` to the :ref:`reference/views` defined for the"
+" model"
 msgstr ""
+": class: `~ odoo.fields.One2many` в: ref:` reference / views`, определенный "
+"для модели"
 
 #: ../../webservices/odoo.rst:997
 msgid "``access_ids``"
-msgstr ""
+msgstr "`` Access_ids``"
 
 #: ../../webservices/odoo.rst:996
 msgid ""
-":class:`~odoo.fields.One2many` relation to the "
-":ref:`reference/security/acl` set on the model"
+":class:`~odoo.fields.One2many` relation to the :ref:`reference/security/acl`"
+" set on the model"
 msgstr ""
+": class: `~ odoo.fields.One2many` отношение к: ref:` reference / security / "
+"acl`, установленному в модели"
 
 #: ../../webservices/odoo.rst:999
 msgid "``ir.model`` can be used to"
-msgstr ""
+msgstr "`` ir.model`` может быть использован для"
 
 #: ../../webservices/odoo.rst:1001
 msgid ""
-"query the system for installed models (as a precondition to operations on"
-" the model or to explore the system's content)"
+"query the system for installed models (as a precondition to operations on "
+"the model or to explore the system's content)"
 msgstr ""
+"запросить у системы установленные модели (в качестве предварительного "
+"условия для операций с моделью или для изучения содержимого системы)"
 
 #: ../../webservices/odoo.rst:1003
 msgid ""
 "get information about a specific model (generally by listing the fields "
 "associated with it)"
 msgstr ""
+"получить информацию о конкретной модели (обычно перечисляя поля, связанные с"
+" ней)"
 
 #: ../../webservices/odoo.rst:1005
 msgid "create new models dynamically over RPC"
-msgstr ""
+msgstr "динамически создавать новые модели через RPC"
 
 #: ../../webservices/odoo.rst:1009
 msgid "\"custom\" model names must start with ``x_``"
-msgstr ""
+msgstr "«пользовательские» названия моделей должны начинаться с `` x_``"
 
 #: ../../webservices/odoo.rst:1010
 msgid ""
-"the ``state`` must be provided and ``manual``, otherwise the model will "
-"not be loaded"
+"the ``state`` must be provided and ``manual``, otherwise the model will not "
+"be loaded"
 msgstr ""
+"необходимо указать `` state`` и `` manual``, иначе модель не будет загружена"
 
 #: ../../webservices/odoo.rst:1012
 msgid "it is not possible to add new *methods* to a custom model, only fields"
 msgstr ""
+"невозможно добавить новые * методы * в пользовательскую модель, только поля"
 
 #: ../../webservices/odoo.rst:1016
 msgid ""
-"a custom model will initially contain only the \"built-in\" fields "
-"available on all models:"
+"a custom model will initially contain only the \"built-in\" fields available"
+" on all models:"
 msgstr ""
+"Пользовательская модель изначально будет содержать только «встроенные» поля,"
+" доступные на всех моделях:"
 
 #: ../../webservices/odoo.rst:1123
 msgid "``ir.model.fields``"
-msgstr ""
+msgstr "`` ir.model.fields``"
 
 #: ../../webservices/odoo.rst:1125
 msgid ""
 "Provides information about the fields of Odoo models and allows adding "
 "custom fields without using Python code"
 msgstr ""
+"Предоставляет информацию о полях моделей Odoo и позволяет добавлять "
+"пользовательские поля без использования кода Python"
 
 #: ../../webservices/odoo.rst:1129
 msgid "``model_id``"
-msgstr ""
+msgstr "`` model_id``"
 
 #: ../../webservices/odoo.rst:1129
 msgid ""
 ":class:`~odoo.fields.Many2one` to "
 ":ref:`reference/webservice/inspection/models` to which the field belongs"
 msgstr ""
+": class: `~ odoo.fields.Many2one` to: ref:` reference / webservice / "
+"inspection / models`, к которому относится поле"
 
 #: ../../webservices/odoo.rst:1132
 msgid "the field's technical name (used in ``read`` or ``write``)"
-msgstr ""
+msgstr "техническое имя поля (используется в `` read`` или `` write``)"
 
 #: ../../webservices/odoo.rst:1133
 msgid "``field_description``"
-msgstr ""
+msgstr "`` field_description``"
 
 #: ../../webservices/odoo.rst:1134
 msgid "the field's user-readable label (e.g. ``string`` in ``fields_get``)"
-msgstr ""
+msgstr "удобочитаемая метка поля (например, `` строка`` в `` fields_get``)"
 
 #: ../../webservices/odoo.rst:1135
 msgid "``ttype``"
-msgstr ""
+msgstr "`` Ttype``"
 
 #: ../../webservices/odoo.rst:1136
 msgid "the :ref:`type <reference/orm/fields>` of field to create"
-msgstr ""
+msgstr "тип: ref: ` <reference/orm/fields> `поля для создания"
 
 #: ../../webservices/odoo.rst:1138
 msgid ""
 "whether the field was created via Python code (``base``) or via "
 "``ir.model.fields`` (``manual``)"
 msgstr ""
+"было ли поле создано с помощью кода Python (`` base``) или с помощью `` "
+"ir.model.fields`` (`` manual``)"
 
 #: ../../webservices/odoo.rst:1140
 msgid "``required``, ``readonly``, ``translate``"
-msgstr ""
+msgstr "`` обязательно``, `` только для чтения``, `` перевести``"
 
 #: ../../webservices/odoo.rst:1141
 msgid "enables the corresponding flag on the field"
-msgstr ""
+msgstr "включает соответствующий флаг на поле"
 
 #: ../../webservices/odoo.rst:1143
 msgid "``groups``"
-msgstr ""
+msgstr "`` groups``"
 
 #: ../../webservices/odoo.rst:1143
 msgid ""
 ":ref:`field-level access control <reference/security/fields>`, a "
 ":class:`~odoo.fields.Many2many` to ``res.groups``"
 msgstr ""
+": ref: `контроль доступа на уровне поля <reference/security/fields> `, a: "
+"class:` ~ odoo.fields.Many2many` to `` res.groups``"
 
 #: ../../webservices/odoo.rst:1147
 msgid ""
-"``selection``, ``size``, ``on_delete``, ``relation``, ``relation_field``,"
-" ``domain``"
+"``selection``, ``size``, ``on_delete``, ``relation``, ``relation_field``, "
+"``domain``"
 msgstr ""
+"`` selection``, `` size``, `` on_delete``, `` отношение``, `` ratio_field``,"
+" `` domain``"
 
 #: ../../webservices/odoo.rst:1146
 msgid ""
 "type-specific properties and customizations, see :ref:`the fields "
 "documentation <reference/orm/fields>` for details"
 msgstr ""
+"специфичные для типа свойства и настройки, см .: ref: `документация полей "
+"<reference/orm/fields> `для деталей"
 
 #: ../../webservices/odoo.rst:1149
 msgid ""
-"Like custom models, only new fields created with ``state=\"manual\"`` are"
-" activated as actual fields on the model."
+"Like custom models, only new fields created with ``state=\"manual\"`` are "
+"activated as actual fields on the model."
 msgstr ""
+"Как и в случае пользовательских моделей, только новые поля, созданные с "
+"помощью `` state = &quot;manual&quot; ``, активируются как фактические поля "
+"в модели."
 
 #: ../../webservices/odoo.rst:1152
 msgid ""
-"computed fields can not be added via ``ir.model.fields``, some field "
-"meta-information (defaults, onchange) can not be set either"
+"computed fields can not be added via ``ir.model.fields``, some field meta-"
+"information (defaults, onchange) can not be set either"
 msgstr ""
-
+"Вычисляемые поля не могут быть добавлены через `` ir.model.fields``, "
+"некоторые метаинформации поля (по умолчанию, onchange) также не могут быть "
+"установлены"

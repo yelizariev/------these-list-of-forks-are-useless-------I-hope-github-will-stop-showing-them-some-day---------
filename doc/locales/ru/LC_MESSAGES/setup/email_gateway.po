@@ -19,69 +19,82 @@ msgstr ""
 
 #: ../../setup/email_gateway.rst:5
 msgid "Odoo email gateway"
-msgstr ""
+msgstr "Почтовый шлюз Odoo"
 
 #: ../../setup/email_gateway.rst:7
 msgid ""
-"The Odoo mail gateway allows you to inject directly all the received "
-"emails in Odoo."
+"The Odoo mail gateway allows you to inject directly all the received emails "
+"in Odoo."
 msgstr ""
+"Почтовый шлюз Odoo позволяет напрямую вводить все полученные электронные "
+"письма в Odoo."
 
 #: ../../setup/email_gateway.rst:9
 msgid ""
-"Its principle is straightforward: your SMTP server executes the "
-"\"mailgate\" script for every new incoming email."
+"Its principle is straightforward: your SMTP server executes the \"mailgate\""
+" script for every new incoming email."
 msgstr ""
+"Его принцип прост: ваш SMTP-сервер выполняет скрипт «mailgate» для каждого "
+"нового входящего письма."
 
 #: ../../setup/email_gateway.rst:11
 msgid ""
-"The script takes care of connecting to your Odoo database through XML-"
-"RPC, and send the emails via the MailThread.message_process() feature."
+"The script takes care of connecting to your Odoo database through XML-RPC, "
+"and send the emails via the MailThread.message_process() feature."
 msgstr ""
+"Сценарий заботится о подключении к вашей базе данных Odoo через XML-RPC и "
+"отправляет электронные письма с помощью функции MailThread.message_process "
+"()."
 
 #: ../../setup/email_gateway.rst:14
 msgid "Prerequisites"
-msgstr ""
+msgstr "Предпосылки"
 
 #: ../../setup/email_gateway.rst:15
 msgid "Administrator access to the Odoo database."
-msgstr ""
+msgstr "Доступ администратора к базе данных Odoo."
 
 #: ../../setup/email_gateway.rst:16
 msgid "Your own mail server such as Postfix or Exim."
-msgstr ""
+msgstr "Ваш собственный почтовый сервер, такой как Postfix или Exim."
 
 #: ../../setup/email_gateway.rst:17
 msgid "Technical knowledge on how to configure an email server."
-msgstr ""
+msgstr "Технические знания о том, как настроить почтовый сервер."
 
 #: ../../setup/email_gateway.rst:20
 msgid "For Postfix"
-msgstr ""
+msgstr "Для Postfix"
 
 #: ../../setup/email_gateway.rst:21
 msgid "In you alias config (/etc/aliases):"
-msgstr ""
+msgstr "В вашей конфигурации псевдонима (/ etc / aliases):"
 
 #: ../../setup/email_gateway.rst:27
 msgid ""
-"Resources - `Postfix <http://www.postfix.org/documentation.html>` - "
-"`Postfix aliases <http://www.postfix.org/aliases.5.html>` - `Postfix "
-"virtual <http://www.postfix.org/virtual.8.html>`"
+"Resources - `Postfix <http://www.postfix.org/documentation.html>` - `Postfix"
+" aliases <http://www.postfix.org/aliases.5.html>` - `Postfix virtual "
+"<http://www.postfix.org/virtual.8.html>`"
 msgstr ""
+"Ресурсы - `Postfix <http://www.postfix.org/documentation.html> `-` "
+"Постфиксные псевдонимы <http://www.postfix.org/aliases.5.html> `-` Постфикс "
+"виртуальный <http://www.postfix.org/virtual.8.html> `"
 
 #: ../../setup/email_gateway.rst:34
 msgid "For Exim"
-msgstr ""
+msgstr "Для exim"
 
 #: ../../setup/email_gateway.rst:39
 msgid "Resources - `Exim <https://www.exim.org/docs.html>`"
-msgstr ""
+msgstr "Ресурсы - `Exim <https://www.exim.org/docs.html> `"
 
 #: ../../setup/email_gateway.rst:43
 msgid ""
 "If you don't have access/manage your email server, use `inbound "
-"messages<https://www.odoo.com/documentation/user/13.0/discuss/email_servers.html"
-"#how-to-manage-inbound-messages>`."
+"messages<https://www.odoo.com/documentation/user/13.0/discuss/email_servers.html#how-"
+"to-manage-inbound-messages>`."
 msgstr ""
-
+"Если у вас нет доступа / управления почтовым сервером, используйте `входящие"
+" сообщения "
+"<https://www.odoo.com/documentation/user/13.0/discuss/email_servers.html#how-"
+"to-manage-inbound-messages> `."

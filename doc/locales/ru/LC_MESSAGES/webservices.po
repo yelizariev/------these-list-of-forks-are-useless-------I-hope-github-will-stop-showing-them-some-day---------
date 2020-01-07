@@ -19,5 +19,4 @@ msgstr ""
 
 #: ../../webservices.rst:6
 msgid "Web Services"
-msgstr ""
-
+msgstr "Веб сервисы"

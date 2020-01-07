@@ -19,226 +19,263 @@ msgstr ""
 
 #: ../../reference/module.rst:5
 msgid "Module Manifests"
-msgstr ""
+msgstr "Манифесты модулей"
 
 #: ../../reference/module.rst:12
 msgid "Manifest"
-msgstr ""
+msgstr "манифест"
 
 #: ../../reference/module.rst:14
 msgid ""
-"The manifest file serves to declare a python package as an Odoo module "
-"and to specify module metadata."
+"The manifest file serves to declare a python package as an Odoo module and "
+"to specify module metadata."
 msgstr ""
+"Файл манифеста служит для объявления пакета Python как модуля Odoo и для "
+"указания метаданных модуля."
 
 #: ../../reference/module.rst:17
 msgid ""
 "It is a file called ``__manifest__.py`` and contains a single Python "
 "dictionary, where each key specifies module metadatum."
 msgstr ""
+"Это файл с именем `` __manifest __. Py`` и содержит один словарь Python, где"
+" каждый ключ определяет метаданные модуля."
 
 #: ../../reference/module.rst:41
 msgid "Available manifest fields are:"
-msgstr ""
+msgstr "Доступные поля манифеста:"
 
 #: ../../reference/module.rst:43
 msgid "``name`` (``str``, required)"
-msgstr ""
+msgstr "`` name`` (`` str``, обязательно)"
 
 #: ../../reference/module.rst:44
 msgid "the human-readable name of the module"
-msgstr ""
+msgstr "удобочитаемое имя модуля"
 
 #: ../../reference/module.rst:45
 msgid "``version`` (``str``)"
-msgstr ""
+msgstr "`` версия`` (`` str``)"
 
 #: ../../reference/module.rst:46
 msgid "this module's version, should follow `semantic versioning`_ rules"
 msgstr ""
+"версия этого модуля должна следовать правилам `семантического контроля "
+"версий__"
 
 #: ../../reference/module.rst:47
 msgid "``description`` (``str``)"
-msgstr ""
+msgstr "`` описание`` (`` str``)"
 
 #: ../../reference/module.rst:48
 msgid "extended description for the module, in reStructuredText"
-msgstr ""
+msgstr "расширенное описание для модуля, в reStructuredText"
 
 #: ../../reference/module.rst:49
 msgid "``author`` (``str``)"
-msgstr ""
+msgstr "`` author`` (`` str``)"
 
 #: ../../reference/module.rst:50
 msgid "name of the module author"
-msgstr ""
+msgstr "имя автора модуля"
 
 #: ../../reference/module.rst:51
 msgid "``website`` (``str``)"
-msgstr ""
+msgstr "`` website`` (`` str``)"
 
 #: ../../reference/module.rst:52
 msgid "website URL for the module author"
-msgstr ""
+msgstr "URL сайта для автора модуля"
 
 #: ../../reference/module.rst:66
 msgid "``license`` (``str``, defaults: ``LGPL-3``)"
-msgstr ""
+msgstr "`` license`` (`` str``, по умолчанию: `` LGPL-3``)"
 
 #: ../../reference/module.rst:54
 msgid "distribution license for the module. Possible values:"
-msgstr ""
+msgstr "лицензия на распространение модуля. Возможные значения:"
 
 #: ../../reference/module.rst:57
 msgid "`GPL-2`"
-msgstr ""
+msgstr "`GPL-2`"
 
 #: ../../reference/module.rst:58
 msgid "`GPL-2 or any later version`"
-msgstr ""
+msgstr "`GPL-2 или любая более поздняя версия`"
 
 #: ../../reference/module.rst:59
 msgid "`GPL-3`"
-msgstr ""
+msgstr "`GPL-3`"
 
 #: ../../reference/module.rst:60
 msgid "`GPL-3 or any later version`"
-msgstr ""
+msgstr "`GPL-3 или более поздняя версия`"
 
 #: ../../reference/module.rst:61
 msgid "`AGPL-3`"
-msgstr ""
+msgstr "`AGPL-3`"
 
 #: ../../reference/module.rst:62
 msgid "`LGPL-3`"
-msgstr ""
+msgstr "`LGPL-3`"
 
 #: ../../reference/module.rst:63
 msgid "`Other OSI approved licence`"
-msgstr ""
+msgstr "`Другая лицензия, утвержденная OSI`"
 
 #: ../../reference/module.rst:64
 msgid "`OEEL-1` (Odoo Enterprise Edition License v1.0)"
-msgstr ""
+msgstr "`OEEL-1` (лицензия Odoo Enterprise Edition v1.0)"
 
 #: ../../reference/module.rst:65
 msgid "`OPL-1` (Odoo Proprietary License v1.0)"
-msgstr ""
+msgstr "`OPL-1` (Собственная лицензия Odoo v1.0)"
 
 #: ../../reference/module.rst:66
 msgid "`Other proprietary`"
-msgstr ""
+msgstr "«Другие проприетарные»"
 
 #: ../../reference/module.rst:74
 msgid "``category`` (``str``, default: ``Uncategorized``)"
-msgstr ""
+msgstr "`` category`` (`` str``, по умолчанию: `` Uncategorized``)"
 
 #: ../../reference/module.rst:69
-msgid "classification category within Odoo, rough business domain for the module."
+msgid ""
+"classification category within Odoo, rough business domain for the module."
 msgstr ""
+"классификационная категория в пределах Odoo, грубая бизнес-область для "
+"модуля."
 
 #: ../../reference/module.rst:71
 msgid ""
-"Although using `existing categories`_ is recommended, the field is "
-"freeform and unknown categories are created on-the-fly. Category "
-"hierarchies can be created using the separator ``/`` e.g. ``Foo / Bar`` "
-"will create a category ``Foo``, a category ``Bar`` as child category of "
-"``Foo``, and will set ``Bar`` as the module's category."
+"Although using `existing categories`_ is recommended, the field is freeform "
+"and unknown categories are created on-the-fly. Category hierarchies can be "
+"created using the separator ``/`` e.g. ``Foo / Bar`` will create a category "
+"``Foo``, a category ``Bar`` as child category of ``Foo``, and will set "
+"``Bar`` as the module's category."
 msgstr ""
+"Хотя рекомендуется использовать `существующие категории`_, поле имеет "
+"произвольную форму, и неизвестные категории создаются на лету. Иерархии "
+"категорий могут быть созданы с использованием разделителя `` / ``, например "
+"`` Foo / Bar``, создаст категорию `` Foo``, категорию `` Bar`` в качестве "
+"дочерней категории `` Foo`` и будет установите `` Bar`` в качестве категории"
+" модуля."
 
 #: ../../reference/module.rst:81
 msgid "``depends`` (``list(str)``)"
-msgstr ""
+msgstr "`` selected`` (`` list (str) ``)"
 
 #: ../../reference/module.rst:77
 msgid ""
 "Odoo modules which must be loaded before this one, either because this "
-"module uses features they create or because it alters resources they "
-"define."
+"module uses features they create or because it alters resources they define."
 msgstr ""
+"Модули Odoo, которые должны быть загружены до этого, либо потому, что этот "
+"модуль использует функции, которые они создают, либо потому, что он изменяет"
+" ресурсы, которые они определяют."
 
 #: ../../reference/module.rst:81
 msgid ""
-"When a module is installed, all of its dependencies are installed before "
-"it. Likewise dependencies are loaded before a module is loaded."
+"When a module is installed, all of its dependencies are installed before it."
+" Likewise dependencies are loaded before a module is loaded."
 msgstr ""
+"Когда модуль установлен, все его зависимости устанавливаются перед ним. "
+"Аналогично, зависимости загружаются до загрузки модуля."
 
 #: ../../reference/module.rst:84
 msgid "``data`` (``list(str)``)"
-msgstr ""
+msgstr "`` data`` (`` list (str) ``)"
 
 #: ../../reference/module.rst:84
 msgid ""
 "List of data files which must always be installed or updated with the "
 "module. A list of paths from the module root directory"
 msgstr ""
+"Список файлов данных, которые всегда должны быть установлены или обновлены "
+"вместе с модулем. Список путей из корневого каталога модуля"
 
 #: ../../reference/module.rst:87
 msgid "``demo`` (``list(str)``)"
-msgstr ""
+msgstr "`` demo`` (`` list (str) ``)"
 
 #: ../../reference/module.rst:87
 msgid ""
 "List of data files which are only installed or updated in *demonstration "
 "mode*"
 msgstr ""
+"Список файлов данных, которые устанавливаются или обновляются только в * "
+"демонстрационном режиме *"
 
 #: ../../reference/module.rst:98
 msgid "``auto_install`` (``bool``, default: ``False``)"
-msgstr ""
+msgstr "`` auto_install`` (`` bool``, по умолчанию: `` False``)"
 
 #: ../../reference/module.rst:90
 msgid ""
 "If ``True``, this module will automatically be installed if all of its "
 "dependencies are installed."
 msgstr ""
+"Если `` True``, этот модуль будет автоматически установлен, если установлены"
+" все его зависимости."
 
 #: ../../reference/module.rst:93
 msgid ""
-"It is generally used for \"link modules\" implementing synergic "
-"integration between two otherwise independent modules."
+"It is generally used for \"link modules\" implementing synergic integration "
+"between two otherwise independent modules."
 msgstr ""
+"Обычно используется для «модулей связи», реализующих синергетическую "
+"интеграцию между двумя независимыми модулями."
 
 #: ../../reference/module.rst:96
 msgid ""
-"For instance ``sale_crm`` depends on both ``sale`` and ``crm`` and is set"
-" to ``auto_install``. When both ``sale`` and ``crm`` are installed, it "
+"For instance ``sale_crm`` depends on both ``sale`` and ``crm`` and is set to"
+" ``auto_install``. When both ``sale`` and ``crm`` are installed, it "
 "automatically adds CRM campaigns tracking to sale orders without either "
 "``sale`` or ``crm`` being aware of one another"
 msgstr ""
+"Например, `` sale_crm`` зависит от `` sale`` и `` crm`` и имеет значение `` "
+"auto_install``. Когда установлены `` sale`` и `` crm``, он автоматически "
+"добавляет отслеживание CRM-кампаний в заказы на продажу без того, чтобы `` "
+"sale`` или `` crm`` знали друг о друге"
 
 #: ../../reference/module.rst:111
 msgid "``external_dependencies`` (``dict(key=list(str))``)"
-msgstr ""
+msgstr "`` external_dependencies`` (`` dict (key = list (str)) ``)"
 
 #: ../../reference/module.rst:101
 msgid "A dictionary containing python and/or binary dependencies."
-msgstr ""
+msgstr "Словарь, содержащий питон и / или бинарные зависимости."
 
 #: ../../reference/module.rst:103
 msgid ""
 "For python dependencies, the ``python`` key must be defined for this "
-"dictionary and a list of python modules to be imported should be assigned"
-" to it."
+"dictionary and a list of python modules to be imported should be assigned to"
+" it."
 msgstr ""
+"Для зависимостей python ключ `` python`` должен быть определен для этого "
+"словаря, и ему должен быть присвоен список импортируемых модулей python."
 
 #: ../../reference/module.rst:107
 msgid ""
-"For binary dependencies, the ``bin`` key must be defined for this "
-"dictionary and a list of binary executable names should be assigned to "
-"it."
+"For binary dependencies, the ``bin`` key must be defined for this dictionary"
+" and a list of binary executable names should be assigned to it."
 msgstr ""
+"Для двоичных зависимостей ключ `` bin`` должен быть определен для этого "
+"словаря, и ему должен быть назначен список имен исполняемых двоичных файлов."
 
 #: ../../reference/module.rst:110
 msgid ""
-"The module won't be installed if either the python module is not "
-"installed in the host machine or the binary executable is not found "
-"within the host machine's PATH environment variable."
+"The module won't be installed if either the python module is not installed "
+"in the host machine or the binary executable is not found within the host "
+"machine's PATH environment variable."
 msgstr ""
+"Модуль не будет установлен, если модуль Python не установлен на хост-машине "
+"или двоичный исполняемый файл не найден в переменной окружения PATH хост-"
+"машины."
 
 #: ../../reference/module.rst:115
 msgid "``application`` (``bool``, default: ``False``)"
-msgstr ""
+msgstr "`` application`` (`` bool``, по умолчанию: `` False``)"
 
 #: ../../reference/module.rst:114
 msgid ""
@@ -246,77 +283,95 @@ msgid ""
 "(``True``) or is just a technical module (``False``) that provides some "
 "extra functionality to an existing application module."
 msgstr ""
+"Должен ли модуль рассматриваться как полноценное приложение (`` True``) или "
+"просто как технический модуль (`` False``), который предоставляет некоторую "
+"дополнительную функциональность существующему модулю приложения."
 
 #: ../../reference/module.rst:118
 msgid "``css`` (``list(str)``)"
-msgstr ""
+msgstr "`` css`` (`` list (str) ``)"
 
 #: ../../reference/module.rst:118
 msgid ""
-"Specify css files with custom rules to be imported, these files should be"
-" located in ``static/src/css`` inside the module."
+"Specify css files with custom rules to be imported, these files should be "
+"located in ``static/src/css`` inside the module."
 msgstr ""
+"Укажите файлы css с настраиваемыми правилами для импорта, эти файлы должны "
+"находиться в `` static / src / css`` внутри модуля."
 
 #: ../../reference/module.rst:120
 msgid "``images`` (``list(str)``)"
-msgstr ""
+msgstr "`` images`` (`` list (str) ``)"
 
 #: ../../reference/module.rst:121
 msgid "Specify image files to be used by the module."
-msgstr ""
+msgstr "Укажите файлы изображений, которые будут использоваться модулем."
 
 #: ../../reference/module.rst:122
 msgid "``installable`` (``bool`` default: ``True``)"
-msgstr ""
+msgstr "`` installable`` (`` bool`` default: `` True``)"
 
 #: ../../reference/module.rst:123
 msgid ""
-"Whether a user should be able to install the module from the Web UI or "
-"not."
+"Whether a user should be able to install the module from the Web UI or not."
 msgstr ""
+"Должен ли пользователь иметь возможность установить модуль из веб-интерфейса"
+" или нет."
 
 #: ../../reference/module.rst:125
 msgid "``maintainer`` (``str``)"
-msgstr ""
+msgstr "`` сопровождающий`` (`` str``)"
 
 #: ../../reference/module.rst:125
 msgid ""
-"Person or entity in charge of the maintenance of this module, by default "
-"it is assumed that the author is the maintainer."
+"Person or entity in charge of the maintenance of this module, by default it "
+"is assumed that the author is the maintainer."
 msgstr ""
+"Физическое или юридическое лицо, отвечающее за обслуживание этого модуля, по"
+" умолчанию предполагается, что автор является сопровождающим."
 
 #: ../../reference/module.rst:142
 msgid "``{pre_init, post_init, uninstall}_hook`` (``str``)"
-msgstr ""
+msgstr "`` {pre_init, post_init, uninstall} _hook`` (`` str``)"
 
 #: ../../reference/module.rst:128
 msgid ""
-"Hooks for module installation/uninstallation, their value should be a "
-"string representing the name of a function defined inside the module's "
+"Hooks for module installation/uninstallation, their value should be a string"
+" representing the name of a function defined inside the module's "
 "``__init__.py``."
 msgstr ""
+"Хуки для установки / удаления модуля, их значением должна быть строка, "
+"представляющая имя функции, определенной внутри модуля `` __init __. Py``."
 
 #: ../../reference/module.rst:132
 msgid ""
 "``pre_init_hook`` takes a cursor as its only argument, this function is "
 "executed prior to the module's installation."
 msgstr ""
+"`` pre_init_hook`` принимает курсор в качестве единственного аргумента, эта "
+"функция выполняется перед установкой модуля."
 
 #: ../../reference/module.rst:135
 msgid ""
 "``post_init_hook`` takes a cursor and a registry as its arguments, this "
 "function is executed right after the module's installation."
 msgstr ""
+"`` post_init_hook`` принимает курсор и реестр в качестве аргументов, эта "
+"функция выполняется сразу после установки модуля."
 
 #: ../../reference/module.rst:138
 msgid ""
 "``uninstall_hook`` takes a cursor and a registry as its arguments, this "
 "function is executed after the module's uninstallation."
 msgstr ""
+"`` uninstall_hook`` принимает курсор и реестр в качестве аргументов, эта "
+"функция выполняется после удаления модуля."
 
 #: ../../reference/module.rst:141
 msgid ""
-"These hooks should only be used when setup/cleanup required for this "
-"module is either extremely difficult or impossible through the api."
+"These hooks should only be used when setup/cleanup required for this module "
+"is either extremely difficult or impossible through the api."
 msgstr ""
-
+"Эти хуки должны использоваться только тогда, когда настройка / очистка, "
+"необходимая для этого модуля, либо чрезвычайно сложна, либо невозможна через"
+" API."

@@ -19,7 +19,8 @@ msgstr ""
 
 #: ../../_extensions/autojsdoc/parser/tests/README.rst:3
 msgid ""
-"These files should be run via pytest_, simply install pytest and from the"
-" top of the Odoo project run ``pytest doc/_extensions``."
+"These files should be run via pytest_, simply install pytest and from the "
+"top of the Odoo project run ``pytest doc/_extensions``."
 msgstr ""
-
+"Эти файлы должны быть запущены через pytest_, просто установите pytest и в "
+"верхней части проекта Odoo запустите `` pytest doc / _extensions``."

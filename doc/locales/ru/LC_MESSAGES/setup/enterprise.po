@@ -19,62 +19,71 @@ msgstr ""
 
 #: ../../setup/enterprise.rst:7
 msgid "From Community to Enterprise"
-msgstr ""
+msgstr "От сообщества к предприятию"
 
 #: ../../setup/enterprise.rst:9
 msgid ""
-"Depending on your current installation, there are multiple ways to "
-"upgrade your community version. In any case the basic guidelines are:"
+"Depending on your current installation, there are multiple ways to upgrade "
+"your community version. In any case the basic guidelines are:"
 msgstr ""
+"В зависимости от текущей установки существует несколько способов обновить "
+"версию сообщества. В любом случае основные рекомендации:"
 
 #: ../../setup/enterprise.rst:13 ../../setup/enterprise.rst:32
 #: ../../setup/enterprise.rst:64 ../../setup/enterprise.rst:81
 msgid "Backup your community database"
-msgstr ""
+msgstr "Резервное копирование базы данных сообщества"
 
 #: ../../setup/enterprise.rst:18 ../../setup/enterprise.rst:63
 msgid "Shutdown your server"
-msgstr ""
+msgstr "Выключите ваш сервер"
 
 #: ../../setup/enterprise.rst:20
 msgid "Install the web_enterprise module"
-msgstr ""
+msgstr "Установите модуль web_enterprise"
 
 #: ../../setup/enterprise.rst:22
 msgid "Restart your server"
-msgstr ""
+msgstr "Перезагрузите ваш сервер"
 
 #: ../../setup/enterprise.rst:24
 msgid "Enter your Odoo Enterprise Subscription code"
-msgstr ""
+msgstr "Введите код вашей подписки на Odoo Enterprise"
 
 #: ../../setup/enterprise.rst:30
 msgid "On Linux, using an installer"
-msgstr ""
+msgstr "В Linux, используя установщик"
 
 #: ../../setup/enterprise.rst:34
 msgid "Stop the odoo service"
-msgstr ""
+msgstr "Остановить службу odoo"
 
 #: ../../setup/enterprise.rst:40
-msgid "Install the enterprise .deb (it should install over the community package)"
+msgid ""
+"Install the enterprise .deb (it should install over the community package)"
 msgstr ""
+"Установите корпоративный .deb (он должен быть установлен поверх пакета "
+"сообщества)"
 
 #: ../../setup/enterprise.rst:46
 msgid "Update your database to the enterprise packages using"
-msgstr ""
+msgstr "Обновите базу данных до корпоративных пакетов, используя"
 
 #: ../../setup/enterprise.rst:52
 msgid ""
-"You should be able to connect to your Odoo Enterprise instance using your"
-" usual mean of identification. You can then link your database with your "
-"Odoo Enterprise Subscription by entering the code you received by e-mail "
-"in the form input"
+"You should be able to connect to your Odoo Enterprise instance using your "
+"usual mean of identification. You can then link your database with your Odoo"
+" Enterprise Subscription by entering the code you received by e-mail in the "
+"form input"
 msgstr ""
+"Вы должны иметь возможность подключиться к своему экземпляру Odoo "
+"Enterprise, используя обычное средство идентификации. Затем вы можете "
+"связать свою базу данных с подпиской Odoo Enterprise, введя код, полученный "
+"по электронной почте, в форме ввода"
 
 #: ../../setup/enterprise.rst:58
 msgid "On Linux, using the source code"
-msgstr ""
+msgstr "В Linux, используя исходный код"
 
 #: ../../setup/enterprise.rst:60
 msgid ""
@@ -82,38 +91,51 @@ msgid ""
 "probably have your own favourite. You may need to adapt sections to your "
 "usual workflow."
 msgstr ""
+"Есть много способов запустить ваш сервер при использовании источников, и у "
+"вас, вероятно, есть свой любимый. Возможно, вам придется адаптировать "
+"разделы к вашему обычному рабочему процессу."
 
 #: ../../setup/enterprise.rst:65
 msgid ""
 "Update the ``--addons-path`` parameter of your launch command (see "
 ":ref:`setup/install/source`)"
 msgstr ""
+"Обновите параметр `` --addons-path`` вашей команды запуска (см .: ref: "
+"`setup / install / source`)"
 
 #: ../../setup/enterprise.rst:66
 msgid "Install the web_enterprise module by using"
-msgstr ""
+msgstr "Установите модуль web_enterprise с помощью"
 
 #: ../../setup/enterprise.rst:72
 msgid "Depending on the size of your database, this may take some time."
 msgstr ""
+"В зависимости от размера вашей базы данных, это может занять некоторое "
+"время."
 
 #: ../../setup/enterprise.rst:74
 msgid ""
-"Restart your server with the updated addons path of point 3. You should "
-"be able to connect to your instance. You can then link your database with"
-" your Odoo Enterprise Subscription by entering the code you received by "
-"e-mail in the form input"
+"Restart your server with the updated addons path of point 3. You should be "
+"able to connect to your instance. You can then link your database with your "
+"Odoo Enterprise Subscription by entering the code you received by e-mail in "
+"the form input"
 msgstr ""
+"Перезагрузите сервер с обновленным путем добавления аддонов из пункта 3. Вы "
+"должны иметь возможность подключиться к своему экземпляру. Затем вы можете "
+"связать свою базу данных с подпиской Odoo Enterprise, введя код, полученный "
+"по электронной почте, в форме ввода"
 
 #: ../../setup/enterprise.rst:79
 msgid "On Windows"
-msgstr ""
+msgstr "На винде"
 
 #: ../../setup/enterprise.rst:83
 msgid ""
-"Uninstall Odoo Community (using the Uninstall executable in the "
-"installation folder) - PostgreSQL will remain installed"
+"Uninstall Odoo Community (using the Uninstall executable in the installation"
+" folder) - PostgreSQL will remain installed"
 msgstr ""
+"Удалить Odoo Community (используя исполняемый файл Uninstall в папке "
+"установки) - PostgreSQL останется установленным"
 
 #: ../../setup/enterprise.rst:89
 msgid ""
@@ -122,19 +144,28 @@ msgid ""
 "installation (this folder still contains the PostgreSQL installation). "
 "Uncheck ``Start Odoo`` at the end of the installation"
 msgstr ""
+"Запустите установщик Odoo Enterprise и выполните обычные действия. При "
+"выборе пути установки вы можете указать папку установки сообщества (эта "
+"папка все еще содержит установку PostgreSQL). Снимите флажок `` Start Odoo``"
+" в конце установки"
 
 #: ../../setup/enterprise.rst:97
 msgid ""
-"Using a command window, update your Odoo Database using this command "
-"(from the Odoo installation path, in the server subfolder)"
+"Using a command window, update your Odoo Database using this command (from "
+"the Odoo installation path, in the server subfolder)"
 msgstr ""
+"Используя командное окно, обновите базу данных Odoo, используя эту команду "
+"(из пути установки Odoo, в подпапке сервера)"
 
 #: ../../setup/enterprise.rst:104
 msgid ""
-"No need to manually launch the server, the service is running. You should"
-" be able to connect to your Odoo Enterprise instance using your usual "
-"mean of identification. You can then link your database with your Odoo "
-"Enterprise Subscription by entering the code you received by e-mail in "
-"the form input"
+"No need to manually launch the server, the service is running. You should be"
+" able to connect to your Odoo Enterprise instance using your usual mean of "
+"identification. You can then link your database with your Odoo Enterprise "
+"Subscription by entering the code you received by e-mail in the form input"
 msgstr ""
-
+"Не нужно вручную запускать сервер, служба запущена. Вы должны иметь "
+"возможность подключиться к своему экземпляру Odoo Enterprise, используя "
+"обычное средство идентификации. Затем вы можете связать свою базу данных с "
+"подпиской Odoo Enterprise, введя код, полученный по электронной почте, в "
+"форме ввода"

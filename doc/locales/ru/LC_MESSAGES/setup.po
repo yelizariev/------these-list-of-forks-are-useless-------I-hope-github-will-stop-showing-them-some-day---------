@@ -19,5 +19,4 @@ msgstr ""
 
 #: ../../setup.rst:5
 msgid "Setting Up"
-msgstr ""
-
+msgstr "Настройка"

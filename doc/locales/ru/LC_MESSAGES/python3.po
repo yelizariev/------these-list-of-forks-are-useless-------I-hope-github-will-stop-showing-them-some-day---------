@@ -19,164 +19,221 @@ msgstr ""
 
 #: ../../python3.rst:5
 msgid "Python 3 compatibility/conversions"
-msgstr ""
+msgstr "Python 3 совместимость / преобразования"
 
 #: ../../python3.rst:7
 msgid ""
-"Official compatibility: Odoo 11 will be the first LTS release to "
-"introduce Python 3 compatibility, starting with Python 3.5. It will also "
-"be the first LTS release to drop official support for Python 2."
+"Official compatibility: Odoo 11 will be the first LTS release to introduce "
+"Python 3 compatibility, starting with Python 3.5. It will also be the first "
+"LTS release to drop official support for Python 2."
 msgstr ""
+"Официальная совместимость: Odoo 11 будет первым выпуском LTS, который "
+"представит совместимость с Python 3, начиная с Python 3.5. Это также будет "
+"первый релиз LTS, в котором прекращена официальная поддержка Python 2."
 
 #: ../../python3.rst:11
 msgid ""
 "Rationale: Python 3 has been around since 2008, and all Python libraries "
-"used by the official Odoo distribution have been ported and are "
-"considered stable. Most supported platforms have a Python 3.5 package, or"
-" a similar way to deploy it. Preserving dual compatibility is therefore "
-"considered unnecessary, and would represent a significant overhead in "
-"testing for the lifetime of Odoo 11."
+"used by the official Odoo distribution have been ported and are considered "
+"stable. Most supported platforms have a Python 3.5 package, or a similar way"
+" to deploy it. Preserving dual compatibility is therefore considered "
+"unnecessary, and would represent a significant overhead in testing for the "
+"lifetime of Odoo 11."
 msgstr ""
+"Обоснование: Python 3 существует с 2008 года, и все библиотеки Python, "
+"используемые официальным дистрибутивом Odoo, были портированы и считаются "
+"стабильными. Большинство поддерживаемых платформ имеют пакет Python 3.5 или "
+"аналогичный способ его развертывания. Поэтому сохранение двойной "
+"совместимости считается ненужным, и это может привести к значительным "
+"накладным расходам при тестировании на протяжении всего жизненного цикла "
+"Odoo 11."
 
 #: ../../python3.rst:18
 msgid ""
 "Python 2 and Python 3 are somewhat different language, but following "
-"backports, forward ports and cross-compatibility library it is possible "
-"to use a subset of Python 2 and Python 3 in order to have a system "
-"compatible with both."
+"backports, forward ports and cross-compatibility library it is possible to "
+"use a subset of Python 2 and Python 3 in order to have a system compatible "
+"with both."
 msgstr ""
+"Python 2 и Python 3 - это несколько другой язык, но после обратных портов, "
+"прямых портов и библиотеки перекрестной совместимости можно использовать "
+"подмножество Python 2 и Python 3, чтобы система была совместима с обоими."
 
 #: ../../python3.rst:23
 msgid ""
-"Here are a few useful steps or reminders to make Python 2 code compatible"
-" with Python 3."
+"Here are a few useful steps or reminders to make Python 2 code compatible "
+"with Python 3."
 msgstr ""
+"Вот несколько полезных шагов или напоминаний, чтобы сделать код Python 2 "
+"совместимым с Python 3."
 
 #: ../../python3.rst:28
 msgid ""
-"This is not a general-purpose guide for porting Python 2 to Python 3, "
-"it's a guide to write 2/3-compatible Odoo code. It does not go through "
-"all the changes in Python but rather through issues which have been found"
-" in the standard Odoo distribution in order to show how to evolve such "
-"code such that it works on both Python 2 and Python 3."
+"This is not a general-purpose guide for porting Python 2 to Python 3, it's a"
+" guide to write 2/3-compatible Odoo code. It does not go through all the "
+"changes in Python but rather through issues which have been found in the "
+"standard Odoo distribution in order to show how to evolve such code such "
+"that it works on both Python 2 and Python 3."
 msgstr ""
+"Это не общее руководство по переносу Python 2 на Python 3, это руководство "
+"по написанию 2/3-совместимого кода Odoo. В нем не все изменения в Python, а "
+"скорее проблемы, которые были обнаружены в стандартном дистрибутиве Odoo, "
+"чтобы показать, как развивать такой код так, чтобы он работал как на Python "
+"2, так и на Python 3."
 
 #: ../../python3.rst:34
 msgid "References/useful documents:"
-msgstr ""
+msgstr "Ссылки / полезные документы:"
 
 #: ../../python3.rst:36
 msgid ""
-"`What's new in Python 3? "
-"<https://docs.python.org/3.0/whatsnew/3.0.html>`_ covers many of the "
-"changes between Python 2 and Python 3, though it is missing a number of "
-"changes which `were backported to Python 2.7 "
+"`What's new in Python 3? <https://docs.python.org/3.0/whatsnew/3.0.html>`_ "
+"covers many of the changes between Python 2 and Python 3, though it is "
+"missing a number of changes which `were backported to Python 2.7 "
 "<https://docs.python.org/2.7/whatsnew/2.7.html#python-3-1-features>`_ as "
-"well as :ref:`some feature reintroductions <p3support>` of later Python 3"
-" revisions"
+"well as :ref:`some feature reintroductions <p3support>` of later Python 3 "
+"revisions"
 msgstr ""
+"`Что нового в Python 3? <https://docs.python.org/3.0/whatsnew/3.0.html> `_ "
+"охватывает многие изменения между Python 2 и Python 3, хотя в нем "
+"отсутствует ряд изменений, которые` были перенесены в Python 2.7 "
+"<https://docs.python.org/2.7/whatsnew/2.7.html#python-3-1-features> `_ а "
+"также: ref:` повторное введение некоторых функций <p3support> `более поздних"
+" версий Python 3"
 
 #: ../../python3.rst:41
 msgid ""
-"`How do I port to Python 3? <https://eev.ee/blog/2016/07/31/python-faq-"
-"how-do-i-port-to-python-3/>`_"
+"`How do I port to Python 3? <https://eev.ee/blog/2016/07/31/python-faq-how-"
+"do-i-port-to-python-3/>`_"
 msgstr ""
+"`Как мне портировать на Python 3? <https://eev.ee/blog/2016/07/31/python-"
+"faq-how-do-i-port-to-python-3/> `_"
 
 #: ../../python3.rst:42
 msgid "`Python-Future <http://python-future.org/index.html>`_"
-msgstr ""
+msgstr "`Python-будущее <http://python-future.org/index.html> `_"
 
 #: ../../python3.rst:43
 msgid ""
 "`Porting Python 2 code to Python 3 "
 "<https://docs.python.org/3/howto/pyporting.html>`_"
 msgstr ""
+"`Портирование кода Python 2 на Python 3 "
+"<https://docs.python.org/3/howto/pyporting.html> `_"
 
 #: ../../python3.rst:44
 msgid ""
-"`Porting to Python 3: A Guide <http://lucumr.pocoo.org/2010/2/11/porting-"
-"to-python-3-a-guide/>`_ (a bit outdated but useful for the extensive "
-"comments on strings and IO)"
+"`Porting to Python 3: A Guide <http://lucumr.pocoo.org/2010/2/11/porting-to-"
+"python-3-a-guide/>`_ (a bit outdated but useful for the extensive comments "
+"on strings and IO)"
 msgstr ""
+"`Портирование на Python 3: Руководство "
+"<http://lucumr.pocoo.org/2010/2/11/porting-to-python-3-a-guide/> `_ (немного"
+" устаревший, но полезный для подробных комментариев к строкам и IO)"
 
 #: ../../python3.rst:49
 msgid "Versions Support"
-msgstr ""
+msgstr "Поддержка версий"
 
 #: ../../python3.rst:51
 msgid ""
 "A cross compatible Odoo would only support Python 2.7 and Python 3.5 and "
-"above: Python 2.7 backported some Python 3 features, and Python 2 "
-"features were reintroduced in various Python 3 in order to make "
-"conversion easier. Python 3.6 adds great features (f-strings, ...) and "
-"performance improvements (ordered compact dicts) but does not seem to "
-"reintroduce compatibility features whereas:"
+"above: Python 2.7 backported some Python 3 features, and Python 2 features "
+"were reintroduced in various Python 3 in order to make conversion easier. "
+"Python 3.6 adds great features (f-strings, ...) and performance improvements"
+" (ordered compact dicts) but does not seem to reintroduce compatibility "
+"features whereas:"
 msgstr ""
+"Кросс-совместимый Odoo будет поддерживать только Python 2.7 и Python 3.5 и "
+"выше: Python 2.7 перенес некоторые функции Python 3, а функции Python 2 были"
+" повторно введены в различные версии Python 3, чтобы упростить "
+"преобразование. В Python 3.6 добавлены отличные функции (f-strings, ...) и "
+"улучшения производительности (упорядоченные компактные символы), но, похоже,"
+" не вводятся функции совместимости, тогда как:"
 
 #: ../../python3.rst:58
 msgid "Python 3.5 reintroduced ``%`` for bytes/bytestrings (:pep:`461`)"
 msgstr ""
+"Python 3.5 повторно ввел ``% `` для байтов / строк байтов (: pep: `461`)"
 
 #: ../../python3.rst:59
 msgid ""
-"Python 3.4 has no specific compatibility improvement but is the lowest P3"
-" version for PyLint"
+"Python 3.4 has no specific compatibility improvement but is the lowest P3 "
+"version for PyLint"
 msgstr ""
+"Python 3.4 не имеет особых улучшений совместимости, но является самой низкой"
+" версией P3 для PyLint"
 
 #: ../../python3.rst:61
 msgid "Python 3.3 reintroduced the \"u\" prefix for proper (unicode) strings"
 msgstr ""
+"Python 3.3 повторно ввел префикс &quot;u&quot; для правильных (юникод) строк"
 
 #: ../../python3.rst:62
 msgid ""
 "Python 3.2 made ``range`` views more list-like (backported to 2.7)and "
 "reintroduced ``callable``"
 msgstr ""
+"Python 3.2 сделал `` range`` более похожим на список (перенесен в 2.7) и "
+"повторно ввел `` callable``"
 
 #: ../../python3.rst:67
 msgid "Semantics changes"
-msgstr ""
+msgstr "Изменения семантики"
 
 #: ../../python3.rst:70
 msgid "Dict & set iteration order (\"Hash Randomisation\")"
-msgstr ""
+msgstr "Укажите и установите порядок итераций («Рандомизация хэшей»)"
 
 #: ../../python3.rst:72
 msgid ""
 "In Python 2, the iteration order depends on the value's hash (modulo the "
 "collection's capacity and conflict resolution), which provides a spec-"
 "undefined but implementation-defined order. While that's not supposed to "
-"happen, it turns out code may depend on the specific order of iteration "
-"over a hash collection (``dict`` or ``set``)."
+"happen, it turns out code may depend on the specific order of iteration over"
+" a hash collection (``dict`` or ``set``)."
 msgstr ""
+"В Python 2 порядок итераций зависит от хэша значения (по модулю емкости "
+"коллекции и разрешения конфликтов), который обеспечивает не определенный "
+"спецификацией, но определенный реализацией порядок. Хотя этого и не должно "
+"быть, оказывается, что код может зависеть от конкретного порядка итерации по"
+" коллекции хешей (`` dict`` или `` set``)."
 
 #: ../../python3.rst:78
 msgid ""
-"Python 3.3 enables `hash randomisation`_ by default (this can be "
-"optionally enabled on previous versions including Python 2 by providing "
-"the ``-R`` command-line parameter), which means *the order of iteration "
-"changes from one run to the next*."
+"Python 3.3 enables `hash randomisation`_ by default (this can be optionally "
+"enabled on previous versions including Python 2 by providing the ``-R`` "
+"command-line parameter), which means *the order of iteration changes from "
+"one run to the next*."
 msgstr ""
+"В Python 3.3 по умолчанию включена `hash randomisation`_ (это можно "
+"дополнительно включить в предыдущих версиях, включая Python 2, предоставив "
+"параметр командной строки` `-R``), что означает * порядок итерации "
+"изменяется от одного запуска к следующий*."
 
 #: ../../python3.rst:83
 msgid "When discovered, this can be fixed by one of:"
-msgstr ""
+msgstr "Когда обнаружено, это может быть исправлено одним из:"
 
 #: ../../python3.rst:85
 msgid ""
 "making iteration steps properly independent (removing the dependency of "
 "order of iteration)"
 msgstr ""
+"правильное независимое выполнение шагов итерации (устранение зависимости "
+"порядка итерации)"
 
 #: ../../python3.rst:87
 msgid ""
-"using different checking method (e.g. when serialising sets or "
-"dictionaries and checking against the specific serialised value)"
+"using different checking method (e.g. when serialising sets or dictionaries "
+"and checking against the specific serialised value)"
 msgstr ""
+"использование другого метода проверки (например, при сериализации наборов "
+"или словарей и проверке по конкретному сериализованному значению)"
 
 #: ../../python3.rst:89
 msgid "fixing dependencies"
-msgstr ""
+msgstr "исправление зависимостей"
 
 #: ../../python3.rst:90
 msgid ""
@@ -184,186 +241,242 @@ msgid ""
 "instead of a regular one, they guarantee order of iteration is order of "
 "insertion"
 msgstr ""
+"используя `` collection.OrderedDict`` или `` odoo.tools.misc.OrderedSet`` "
+"вместо обычного, они гарантируют порядок итерации в порядке вставки"
 
 #: ../../python3.rst:92
 msgid ""
-"sorting the collection's items before iterating over them (this may "
-"require adding some sort of iteration key to the items)"
+"sorting the collection's items before iterating over them (this may require "
+"adding some sort of iteration key to the items)"
 msgstr ""
+"сортировка элементов коллекции перед итерацией по ним (для этого может "
+"потребоваться добавить какой-либо ключ итерации к элементам)"
 
 #: ../../python3.rst:96
 msgid "Moved and removed"
-msgstr ""
+msgstr "Перемещено и удалено"
 
 #: ../../python3.rst:99
 msgid "Standard Library Modules"
-msgstr ""
+msgstr "Стандартные библиотечные модули"
 
 #: ../../python3.rst:101
 msgid ""
-"Python 3 reorganised, moved or removed a number of modules in the "
-"standard library:"
+"Python 3 reorganised, moved or removed a number of modules in the standard "
+"library:"
 msgstr ""
+"Python 3 реорганизовал, переместил или удалил ряд модулей в стандартной "
+"библиотеке:"
 
 #: ../../python3.rst:104
 msgid ""
-"``StringIO`` and ``cStringIO`` were removed, you can use ``io.BytesIO`` "
-"and ``io.StringIO`` to replace them in a cross-version manner "
-"(``io.BytesIO`` for binary data, ``io.StringIO`` for text/unicode data)."
+"``StringIO`` and ``cStringIO`` were removed, you can use ``io.BytesIO`` and "
+"``io.StringIO`` to replace them in a cross-version manner (``io.BytesIO`` "
+"for binary data, ``io.StringIO`` for text/unicode data)."
 msgstr ""
+"`` StringIO`` и `` cStringIO`` были удалены, вы можете использовать `` "
+"io.BytesIO`` и `` io.StringIO`` для их перекрестной замены (`` io.BytesIO`` "
+"для двоичные данные, `` io.StringIO`` для данных текста / Unicode)."
 
 #: ../../python3.rst:107
 msgid ""
 "``urllib``, ``urllib2`` and ``urlparse`` were redistributed across "
 "``urllib.parse`` and ``urllib.request``."
 msgstr ""
+"`` urllib``, `` urllib2`` и `` urlparse`` были перераспределены между `` "
+"urllib.parse`` и `` urllib.request``."
 
 #: ../../python3.rst:110
 msgid ""
 "Since `requests`_ and `werkzeug`_ are already hard dependencies of Odoo, "
-"replace ``urllib[2].urlopen``/``urllib2.Request`` uses by `requests`_, "
-"and ``urlparse`` and a few utilty functions (``urllib.quote``, "
-"``urllib.urlencode``) are available through ``werkzeug.urls``, a backport"
-" of Python 3's ``urllib.parse``."
+"replace ``urllib[2].urlopen``/``urllib2.Request`` uses by `requests`_, and "
+"``urlparse`` and a few utilty functions (``urllib.quote``, "
+"``urllib.urlencode``) are available through ``werkzeug.urls``, a backport of"
+" Python 3's ``urllib.parse``."
 msgstr ""
+"Поскольку `запросы`_ и` werkzeug`_ уже являются жесткими зависимостями Odoo,"
+" замените `` urllib [2] .urlopen`` / `` urllib2.Request`` на `запросы`_, а "
+"также` `urlparse`` и несколько утилит (`` urllib.quote``, `` "
+"urllib.urlencode``) доступны через `` werkzeug.urls``, бэкпорт Python 3 `` "
+"urllib.parse``."
 
 #: ../../python3.rst:116
 msgid "`requests`_ does not raise by default on non-200 responses"
-msgstr ""
+msgstr "`request`_ не поднимается по умолчанию для не 200 ответов"
 
 #: ../../python3.rst:118
 msgid ""
-"``cgi.escape`` (HTML escaping) is deprecated in Python 3, prefer Odoo's "
-"own :func:`odoo.tools.misc.html_encode`."
+"``cgi.escape`` (HTML escaping) is deprecated in Python 3, prefer Odoo's own "
+":func:`odoo.tools.misc.html_encode`."
 msgstr ""
+"`` cgi.escape`` (экранирование HTML) устарело в Python 3, предпочитайте "
+"собственный Odoo: func: `odoo.tools.misc.html_encode`."
 
 #: ../../python3.rst:120
 msgid ""
 "Most of ``types``'s content has been stripped out in Python 3: only "
 "\"internal\" interpreter types (e.g. CodeType, FrameType, ...) have been "
-"left in, other types can be obtained directly from the corresponding "
-"builtin or by getting the ``type()`` of a literal value."
+"left in, other types can be obtained directly from the corresponding builtin"
+" or by getting the ``type()`` of a literal value."
 msgstr ""
+"Большая часть содержимого `` types`` была удалена в Python 3: остались "
+"только «внутренние» типы интерпретаторов (например, CodeType, FrameType, "
+"...), другие типы могут быть получены непосредственно из соответствующей "
+"встроенной или путем получения `` type () `` литерального значения."
 
 #: ../../python3.rst:126
 msgid "Absolute Imports (:pep:`328`)"
-msgstr ""
+msgstr "Абсолютный импорт (: pep: `328`)"
 
 #: ../../python3.rst:130
 msgid ""
 "In Python 3, ``import foo`` can only import from a \"top-level\" library "
-"(absolute path). If trying to import a sibling or sub-module you *must* "
-"use an explicitly *relative import* e.g. ``from . import foo`` or ``from "
-".foo import bar``."
+"(absolute path). If trying to import a sibling or sub-module you *must* use "
+"an explicitly *relative import* e.g. ``from . import foo`` or ``from .foo "
+"import bar``."
 msgstr ""
+"В Python 3 `` import foo`` может импортировать только из библиотеки "
+"«верхнего уровня» (абсолютный путь). Если вы пытаетесь импортировать "
+"родственный или подчиненный модуль, вы * должны * использовать явно * "
+"относительный импорт *, например, `` from. import foo`` или `` из .foo "
+"import bar``."
 
 #: ../../python3.rst:135
 msgid ""
-"In Python 2 ``import`` statements are ambiguous: if a file ``a.py`` "
-"contains ``import b``, the import system will first check if there's a "
-"``b.py`` file next to it before checking if there is a package called "
-"that on the PYTHONPATH."
+"In Python 2 ``import`` statements are ambiguous: if a file ``a.py`` contains"
+" ``import b``, the import system will first check if there's a ``b.py`` file"
+" next to it before checking if there is a package called that on the "
+"PYTHONPATH."
 msgstr ""
+"В Python 2 `` import`` операторы неоднозначны: если файл `` a.py`` содержит "
+"`` import b``, система импорта сначала проверит, есть ли рядом файл `` "
+"b.py`` перед проверкой, есть ли пакет, который называется это на PYTHONPATH."
 
 #: ../../python3.rst:140
 msgid ""
-"Furthermore if a sibling file is named the same as top-level package, the"
-" library becomes inaccessible to both the file itself ans siblings, this "
-"has actually happened in Odoo with :mod:`odoo.tools.mimetypes`."
+"Furthermore if a sibling file is named the same as top-level package, the "
+"library becomes inaccessible to both the file itself ans siblings, this has "
+"actually happened in Odoo with :mod:`odoo.tools.mimetypes`."
 msgstr ""
+"Кроме того, если одноуровневый файл назван так же, как и пакет верхнего "
+"уровня, библиотека становится недоступной как для самого файла, так и для "
+"братьев и сестер, это на самом деле произошло в Odoo с: mod: "
+"`odoo.tools.mimetypes`."
 
 #: ../../python3.rst:144
 msgid ""
 "Additionally, relative imports allow navigating \"up\" the tree by using "
 "multiple leading ``.``."
 msgstr ""
+"Кроме того, относительный импорт позволяет перемещаться вверх по дереву, "
+"используя несколько ведущих `` .``."
 
 #: ../../python3.rst:149
 msgid ""
-"Explicitly relative imports are always available in Python 2, and should "
-"be used everywhere."
+"Explicitly relative imports are always available in Python 2, and should be "
+"used everywhere."
 msgstr ""
+"Явно относительный импорт всегда доступен в Python 2 и должен использоваться"
+" везде."
 
 #: ../../python3.rst:152
 msgid ""
-"You can ensure you are not using any implicitly relative import by adding"
-" ``from __future__ import absolute_import`` at the top of your files, or "
-"by running the ``relative-import`` PyLint."
+"You can ensure you are not using any implicitly relative import by adding "
+"``from __future__ import absolute_import`` at the top of your files, or by "
+"running the ``relative-import`` PyLint."
 msgstr ""
+"Вы можете убедиться, что не используете какой-либо неявный относительный "
+"импорт, добавив `` из __future__ import absolute_import`` вверху ваших "
+"файлов или запустив `` относительный-импорт`` PyLint."
 
 #: ../../python3.rst:157
 msgid "Exception Handlers"
-msgstr ""
+msgstr "Обработчики исключений"
 
 #: ../../python3.rst:161
 msgid ""
 "All exception handlers must be converted to ``except ... as ..``. Valid "
 "forms are::"
 msgstr ""
+"Все обработчики исключений должны быть преобразованы в `` кроме ... как "
+"..``. Допустимые формы:"
 
 #: ../../python3.rst:169
 msgid "In Python 2, ``except`` statements are of the form::"
-msgstr ""
+msgstr "В Python 2 операторы `` кроме`` имеют вид ::"
 
 #: ../../python3.rst:173 ../../python3.rst:188
 msgid "or::"
-msgstr ""
+msgstr "или::"
 
 #: ../../python3.rst:177
 msgid ""
-"But because the name is optional, this gets confusing and people can "
-"stumble into the first form when trying for the second and write::"
+"But because the name is optional, this gets confusing and people can stumble"
+" into the first form when trying for the second and write::"
 msgstr ""
+"Но поскольку имя является необязательным, это сбивает с толку, и люди могут "
+"наткнуться на первую форму при попытке второй и написать ::"
 
 #: ../../python3.rst:182
 msgid "which will *not* yield the expected result."
-msgstr ""
+msgstr "который * не * даст ожидаемый результат."
 
 #: ../../python3.rst:184
 msgid "Python 3 changes this syntax to::"
-msgstr ""
+msgstr "Python 3 изменяет этот синтаксис на ::"
 
 #: ../../python3.rst:192
 msgid ""
-"This form was implemented in Python 2.5 and is thus compatible across the"
-" board."
+"This form was implemented in Python 2.5 and is thus compatible across the "
+"board."
 msgstr ""
+"Эта форма была реализована в Python 2.5 и, таким образом, совместима по всем"
+" направлениям."
 
 #: ../../python3.rst:196
 msgid "Operators & keywords"
-msgstr ""
+msgstr "Операторы и ключевые слова"
 
 #: ../../python3.rst:198
 msgid ""
-"The backtick operator ```foo``` must be converted to an explicit call to "
-"the ``repr()`` builtin"
+"The backtick operator ```foo``` must be converted to an explicit call to the"
+" ``repr()`` builtin"
 msgstr ""
+"Оператор обратного вызова `` `foo``` должен быть преобразован в явный вызов "
+"встроенного` `repr ()` `"
 
 #: ../../python3.rst:201
 msgid "The ``<>`` operator must be replaced by ``!=``"
-msgstr ""
+msgstr "Оператор `` &lt;&gt; `` должен быть заменен на ``! = ``"
 
 #: ../../python3.rst:203
 msgid ""
-"These two operators were long recommended against/deprecated in Python 2,"
-" Python 3 removed them from the language."
+"These two operators were long recommended against/deprecated in Python 2, "
+"Python 3 removed them from the language."
 msgstr ""
+"Эти два оператора долгое время рекомендовались к / исключались в Python 2, "
+"Python 3 удалил их из языка."
 
 #: ../../python3.rst:208
 msgid "``exec`` is now a builtin"
-msgstr ""
+msgstr "`` exec`` теперь встроен"
 
 #: ../../python3.rst:210
 msgid ""
-"In Python 2, ``exec`` is a statement/keyword. Much like ``print``, it's "
-"been converted to a builtin function in Python 3. However because the "
-"Python 2 version can take a tuple parameter it is easy to convert the odd"
-" ``exec`` statement to the following cross-language forms::"
+"In Python 2, ``exec`` is a statement/keyword. Much like ``print``, it's been"
+" converted to a builtin function in Python 3. However because the Python 2 "
+"version can take a tuple parameter it is easy to convert the odd ``exec`` "
+"statement to the following cross-language forms::"
 msgstr ""
+"В Python 2 `` exec`` является оператором / ключевым словом. Как и `` "
+"print``, он был преобразован во встроенную функцию в Python 3. Однако, "
+"поскольку версия Python 2 может принимать параметр кортежа, легко "
+"преобразовать нечетный оператор `` exec`` в следующие кросс-языковые формы "
+"::"
 
 #: ../../python3.rst:220
 msgid "List/iteration builtins and methods"
-msgstr ""
+msgstr "Встроенный список и итерация и методы"
 
 #: ../../python3.rst:222
 msgid ""
@@ -371,237 +484,313 @@ msgid ""
 "were converted to return *iterators* or *views*, with the corresponding "
 "redundant methods or functions having been *removed entirely*:"
 msgstr ""
+"В Python 3 ряд встроенных функций и методов, ранее возвращавших * списки *, "
+"были преобразованы в возвращаемые * итераторы * или * представления * с "
+"соответствующими избыточными методами или функциями, которые были * "
+"полностью удалены *:"
 
 #: ../../python3.rst:226
 msgid ""
 "In Python 3, ``map``, ``filter`` and ``zip`` return iterators, "
-"``itertools.imap``, ``itertools.ifilter`` and ``itertools.izip`` have "
-"been removed."
+"``itertools.imap``, ``itertools.ifilter`` and ``itertools.izip`` have been "
+"removed."
 msgstr ""
+"В Python 3 `` map``, `` filter`` и `` zip`` возвращают итераторы, `` "
+"itertools.imap``, `` itertools.ifilter`` и `` itertools.izip`` были удалены "
+","
 
 #: ../../python3.rst:232
 msgid ""
-"When possible, use comprehensions (list, generator, ...) rather than "
-"``map`` or ``filter``."
+"When possible, use comprehensions (list, generator, ...) rather than ``map``"
+" or ``filter``."
 msgstr ""
+"Когда это возможно, используйте понимания (список, генератор, ...) вместо ``"
+" map`` или `` filter``."
 
 #: ../../python3.rst:235
 msgid ""
 "In Python 3, ``dict.keys``, ``dict.values`` and ``dict.items`` return "
-"*views* rather than lists, and the ``iter*`` and ``view*`` methods have "
-"been removed."
+"*views* rather than lists, and the ``iter*`` and ``view*`` methods have been"
+" removed."
 msgstr ""
+"В Python 3 `` dict.keys``, `` dict.values`` и `` dict.items`` возвращают * "
+"представления *, а не списки, а `` iter * `` и `` view * `` методы были "
+"удалены."
 
 #: ../../python3.rst:241
 msgid ""
-"When the result of the above methods is used for more than a one-shot "
-"loop (e.g. to be included in returned value), or when the dict needs to "
-"be modified during iteration, wrap the calls in a ``list()``."
+"When the result of the above methods is used for more than a one-shot loop "
+"(e.g. to be included in returned value), or when the dict needs to be "
+"modified during iteration, wrap the calls in a ``list()``."
 msgstr ""
+"Когда результат описанных выше методов используется для более чем "
+"одноразового цикла (например, для включения в возвращаемое значение) или "
+"когда нужно изменить dict во время итерации, оберните вызовы в `` list () ``"
+" ,"
 
 #: ../../python3.rst:246
 msgid "builtins"
-msgstr ""
+msgstr "встроенные команды"
 
 #: ../../python3.rst:249
 msgid "``cmp``"
-msgstr ""
+msgstr "`` cmp``"
 
 #: ../../python3.rst:251
 msgid "The ``cmp`` builtin function has been removed from Python 3."
-msgstr ""
+msgstr "Встроенная функция `` cmp`` была удалена из Python 3."
 
 #: ../../python3.rst:253
 msgid ""
-"Most of its uses are in ``cmp=`` parameters to sort functions where it "
-"can usually be replaced by a key function."
+"Most of its uses are in ``cmp=`` parameters to sort functions where it can "
+"usually be replaced by a key function."
 msgstr ""
+"Большая часть его использования в параметрах `` cmp = `` для сортировки "
+"функций, где ее обычно можно заменить ключевой функцией."
 
 #: ../../python3.rst:255
 msgid ""
-"Other uses found were obtaining the sign of an item (``cmp(item, 0)``), "
-"this can be replicated using the standard library's ``math.copysign`` "
-"e.g. ``math.copysign(1, item)`` will return ``1.0`` if ``item`` is "
-"positive and ``-1.0`` if ``item`` is negative."
+"Other uses found were obtaining the sign of an item (``cmp(item, 0)``), this"
+" can be replicated using the standard library's ``math.copysign`` e.g. "
+"``math.copysign(1, item)`` will return ``1.0`` if ``item`` is positive and "
+"``-1.0`` if ``item`` is negative."
 msgstr ""
+"Другими найденными случаями использования было получение знака элемента (`` "
+"cmp (item, 0) ``), это можно воспроизвести с помощью `` math.copysign`` "
+"стандартной библиотеки, например `` math.copysign (1, item) ` `вернет` "
+"`1.0``, если` `item`` положительно, и` `-1.0``, если` `item`` отрицательно."
 
 #: ../../python3.rst:261
 msgid "``execfile``"
-msgstr ""
+msgstr "`` execfile``"
 
 #: ../../python3.rst:263
 msgid ""
 "``execfile(path)`` has been removed completely from Python 3 but it is "
 "trivially replaceable in all cases by::"
 msgstr ""
+"`` execfile (path) `` был полностью удален из Python 3, но во всех случаях "
+"его можно заменить тривиально:"
 
 #: ../../python3.rst:268
-msgid "of a variant thereof (see :ref:`exec changes <changed-exec>` for details)"
-msgstr ""
+msgid ""
+"of a variant thereof (see :ref:`exec changes <changed-exec>` for details)"
+msgstr "его варианта (см .: ref: `exec changes <changed-exec> `для деталей)"
 
 #: ../../python3.rst:271
 msgid "``file``"
-msgstr ""
+msgstr "`` File``"
 
 #: ../../python3.rst:273
 msgid ""
-"The ``file`` builtin has been removed in Python 3. Generally, it can just"
-" be replaced by the ``open`` builtin, although you may want to use "
-"``io.open`` which is more flexible and better handles the binary/text "
-"dichotomy, :ref:`a big issue in cross-version Python <changed-strings>`."
+"The ``file`` builtin has been removed in Python 3. Generally, it can just be"
+" replaced by the ``open`` builtin, although you may want to use ``io.open`` "
+"which is more flexible and better handles the binary/text dichotomy, :ref:`a"
+" big issue in cross-version Python <changed-strings>`."
 msgstr ""
+"Встроенный файл `` file`` был удален в Python 3. Обычно его можно заменить "
+"встроенным модулем `` open``, хотя вы можете использовать `` io.open``, "
+"который более гибок и лучше обрабатывает двоичная / текстовая дихотомия: "
+"ref: `большая проблема в кросс-версии Python <changed-strings> `."
 
 #: ../../python3.rst:280
-msgid "In Python 3, the ``open`` builtin is actually an alias for ``io.open``."
+msgid ""
+"In Python 3, the ``open`` builtin is actually an alias for ``io.open``."
 msgstr ""
+"В Python 3 встроенный `` open`` на самом деле является псевдонимом для `` "
+"io.open``."
 
 #: ../../python3.rst:283
 msgid "``long``"
-msgstr ""
+msgstr "`` Long``"
 
 #: ../../python3.rst:285
 msgid ""
-"In Python 2, integers can be either ``int`` or ``long``. Python 3 unifies"
-" this under the single ``int`` type."
+"In Python 2, integers can be either ``int`` or ``long``. Python 3 unifies "
+"this under the single ``int`` type."
 msgstr ""
+"В Python 2 целые числа могут быть либо `` int``, либо `` long``. Python 3 "
+"объединяет это под единым типом `` int``."
 
 #: ../../python3.rst:290
 msgid "the ``L`` suffix for integer literals must be removed"
-msgstr ""
+msgstr "суффикс `` L`` для целочисленных литералов должен быть удален"
 
 #: ../../python3.rst:291
 msgid "calls to ``long`` must be replaced by calls to ``int``"
-msgstr ""
+msgstr "вызовы `` long`` должны быть заменены вызовами `` int``"
 
 #: ../../python3.rst:294
 msgid ""
-"the ``L`` suffix on numbers is unsupported in Python 3, and unnecessary "
-"in Python 2 as \"overflowing\" integer literals will implicitly "
-"instantiate long."
+"the ``L`` suffix on numbers is unsupported in Python 3, and unnecessary in "
+"Python 2 as \"overflowing\" integer literals will implicitly instantiate "
+"long."
 msgstr ""
+"суффикс `` L`` для чисел не поддерживается в Python 3 и не нужен в Python 2,"
+" так как «переполнение» целочисленных литералов неявно создает экземпляр "
+"long."
 
 #: ../../python3.rst:296
 msgid ""
-"in Python 2, a call to ``int()`` will implicitly create a ``long`` object"
-" if necessary."
+"in Python 2, a call to ``int()`` will implicitly create a ``long`` object if"
+" necessary."
 msgstr ""
+"в Python 2 вызов `` int () `` неявно создаст объект `` long`` при "
+"необходимости."
 
 #: ../../python3.rst:298
 msgid ""
-"type-testing is the last and bigger issue as in Python 2 ``long`` is not "
-"a subtype of ``int`` (nor the reverse), and ``isinstance(value, (int, "
-"long))`` is thus generally necessary to catch all integrals."
+"type-testing is the last and bigger issue as in Python 2 ``long`` is not a "
+"subtype of ``int`` (nor the reverse), and ``isinstance(value, (int, long))``"
+" is thus generally necessary to catch all integrals."
 msgstr ""
+"тестирование типов является последней и более важной проблемой, поскольку в "
+"Python 2 `` long`` не является подтипом `` int`` (и наоборот), а `` "
+"isinstance (value, (int, long)) `` is при этом вообще необходимо "
+"перехватывать все интегралы."
 
 #: ../../python3.rst:303
 msgid "``reduce``"
-msgstr ""
+msgstr "`` Reduce``"
 
 #: ../../python3.rst:305
 msgid ""
 "In Python 3, ``reduce`` has been demoted from builtin to "
-"``functools.reduce``. However this is because *most uses of ``reduce`` "
-"can be replaced by ``sum``, ``all``, ``any``* or a list comprehension for"
-" a more readable and faster result."
+"``functools.reduce``. However this is because *most uses of ``reduce`` can "
+"be replaced by ``sum``, ``all``, ``any``* or a list comprehension for a more"
+" readable and faster result."
 msgstr ""
+"В Python 3 `` redu`` был понижен со встроенного до `` functools.reduce``. "
+"Однако это объясняется тем, что * большинство случаев использования `` "
+"redu`` можно заменить на `` sum``, `` all``, `` any`` * или понимание списка"
+" для более удобочитаемого и быстрого результата."
 
 #: ../../python3.rst:310
 msgid ""
-"It is easy enough to just add ``from functools import reduce`` to the "
-"file and compatible with Python 2.6 and later, but consider whether you "
-"get better code by replacing it with some other method altogether."
+"It is easy enough to just add ``from functools import reduce`` to the file "
+"and compatible with Python 2.6 and later, but consider whether you get "
+"better code by replacing it with some other method altogether."
 msgstr ""
+"Достаточно просто добавить `` из функции импорта-сокращения functools`` к "
+"файлу и совместимо с Python 2.6 и более поздними версиями, но подумайте, "
+"получите ли вы лучший код, полностью заменив его другим методом."
 
 #: ../../python3.rst:315
 msgid "``xrange``"
-msgstr ""
+msgstr "`` xrange``"
 
 #: ../../python3.rst:317
 msgid "In Python 3, ``range()`` behaves the same as Python 2's ``xrange``."
 msgstr ""
+"В Python 3 `` range () `` ведет себя так же, как `` xrange`` в Python 2."
 
 #: ../../python3.rst:319
 msgid ""
-"For cross-version code, you can just use ``range()`` everywhere: while "
-"this will incur a slight allocation cost on Python 2, Python 3's "
-"``range`` supports the entire Sequence protocol and thus behaves very "
-"much like a regular list or tuple."
+"For cross-version code, you can just use ``range()`` everywhere: while this "
+"will incur a slight allocation cost on Python 2, Python 3's ``range`` "
+"supports the entire Sequence protocol and thus behaves very much like a "
+"regular list or tuple."
 msgstr ""
+"Для кросс-версии кода вы можете просто использовать `` range () `` везде: в "
+"то время как это приведет к небольшим затратам на распределение в Python 2, "
+"`` range`` в Python 3 поддерживает весь протокол Sequence и, таким образом, "
+"ведет себя очень похоже на обычный список или кортеж."
 
 #: ../../python3.rst:325
 msgid "Removed/renamed methods"
-msgstr ""
+msgstr "Удаленные / переименованные методы"
 
 #: ../../python3.rst:329
 msgid ""
 "the ``has_key`` method on dicts must be replaced by use of the ``in`` "
 "operator e.g. ``foo.has_key(bar)`` becomes ``bar in foo``."
 msgstr ""
+"метод `` has_key`` для dicts должен быть заменен использованием оператора ``"
+" in``, например `` foo.has_key (bar) `` становится `` bar в foo``."
 
 #: ../../python3.rst:332
 msgid ""
-"``in`` for dicts was introduced in Python 2.3, leading to ``has_key`` "
-"being redundant, and removed in Python 3."
+"``in`` for dicts was introduced in Python 2.3, leading to ``has_key`` being "
+"redundant, and removed in Python 3."
 msgstr ""
+"`` in`` для dicts была введена в Python 2.3, что привело к избыточности `` "
+"has_key`` и удалено в Python 3."
 
 #: ../../python3.rst:336
 msgid "Minor syntax changes"
-msgstr ""
+msgstr "Незначительные изменения синтаксиса"
 
 #: ../../python3.rst:338
 msgid ""
-"the ability to unpack a parameter (in the parameter declaration list) has"
-" been removed in Python 3 e.g.::"
+"the ability to unpack a parameter (in the parameter declaration list) has "
+"been removed in Python 3 e.g.::"
 msgstr ""
+"возможность распаковывать параметр (в списке объявлений параметров) была "
+"удалена в Python 3, например:"
 
 #: ../../python3.rst:344
 msgid "is now invalid"
-msgstr ""
+msgstr "сейчас недействителен"
 
 #: ../../python3.rst:346
 msgid ""
 "octal literals must be prefixed by ``0o`` (or ``0O``). Following the C "
-"family, in Python 2 an octal literal simply has a leading 0, which can be"
-" confusing and easy to get wrong when e.g. padding for readability (e.g. "
+"family, in Python 2 an octal literal simply has a leading 0, which can be "
+"confusing and easy to get wrong when e.g. padding for readability (e.g. "
 "``0013`` would be the decimal 11 rather than 13)."
 msgstr ""
+"восьмеричные литералы должны начинаться с префикса `` 0o`` (или `` 0O``). "
+"Следуя семейству C, в Python 2 восьмеричный литерал просто имеет начальный "
+"0, что может сбить с толку и легко ошибиться, например, при заполнении для "
+"читаемости (например, `` 0013`` будет десятичным 11, а не 13)."
 
 #: ../../python3.rst:351
 msgid ""
 "In Python 3, leading zeroes followed by neither a 0 nor a period is an "
-"error, octal literals now follow the hexadecimal convention with a ``0o``"
-" prefix."
+"error, octal literals now follow the hexadecimal convention with a ``0o`` "
+"prefix."
 msgstr ""
+"В Python 3 начальные нули, за которыми не следуют ни 0, ни точка, являются "
+"ошибкой, восьмеричные литералы теперь следуют шестнадцатеричному соглашению "
+"с префиксом `` 0o``."
 
 #: ../../python3.rst:358
 msgid "Bytes/String/Text: The Big One"
-msgstr ""
+msgstr "Байт / Строка / Текст: Большой"
 
 #: ../../python3.rst:360
 msgid ""
 "The most impactful Python 3 change by far is to the text model: for "
 "historical reasons the distinction Python 2's bytestrings "
-"(``bytes``/``str``) and text strings (``unicode``) is fuzzy and it will "
-"try to implicitly convert between one and the other using the ASCII "
-"encoding."
+"(``bytes``/``str``) and text strings (``unicode``) is fuzzy and it will try "
+"to implicitly convert between one and the other using the ASCII encoding."
 msgstr ""
+"Наиболее значительным изменением Python 3 на сегодняшний день является "
+"текстовая модель: по историческим причинам различие между байтовыми строками"
+" Python 2 (`` bytes`` / `` str``) и текстовыми строками (`` unicode``) "
+"нечетко и будет попытаться неявно преобразовать между ними, используя "
+"кодировку ASCII."
 
 #: ../../python3.rst:365
 msgid ""
 "Python 3 changes this, it removes the implicit conversions, removes APIs "
-"which contribute to the fuzz and tends to strictly segregate other to "
-"work on either bytes or text."
+"which contribute to the fuzz and tends to strictly segregate other to work "
+"on either bytes or text."
 msgstr ""
+"Python 3 меняет это, он удаляет неявные преобразования, удаляет API, которые"
+" вносят вклад в фазу, и имеет тенденцию строго отделять других для работы с "
+"байтами или текстом."
 
 #: ../../python3.rst:369
 msgid ""
 "This is fundamentally good and mostly sensible, but it means lots of "
 "breakage:"
 msgstr ""
+"Это в принципе хорошо и в основном разумно, но это означает много поломок:"
 
 #: ../../python3.rst:372
 msgid "the builtins"
-msgstr ""
+msgstr "встроенные"
 
 #: ../../python3.rst:374
 msgid ""
@@ -609,24 +798,29 @@ msgid ""
 "corresponds to *text* strings (the old ``unicode``) with ``bytes`` being "
 "bytestrings in both languages [#bytes]_."
 msgstr ""
+"Python 3 удаляет как `` unicode``, так и `` basestring``, а `` str`` теперь "
+"соответствует * text * строкам (старый `` unicode``), причем `` bytes`` "
+"являются байтовыми строками на обоих языках [ #bytes] _."
 
 #: ../../python3.rst:378
 msgid "Both versions have the following prefixes for string literals:"
-msgstr ""
+msgstr "Обе версии имеют следующие префиксы для строковых литералов:"
 
 #: ../../python3.rst:380
 msgid "``b'foo'`` is a bytestring (``bytes`` object)."
-msgstr ""
+msgstr "`` b&#39;foo&#39;`` - это строка байтов (объект `` bytes``)."
 
 #: ../../python3.rst:382
 msgid ""
-"``'foo'`` is that version's ``str`` type, which may be either a "
-"bytestring or a text string [#native-string]_."
+"``'foo'`` is that version's ``str`` type, which may be either a bytestring "
+"or a text string [#native-string]_."
 msgstr ""
+"`` &#39;foo&#39;`` - это тип `` str`` этой версии, который может быть либо "
+"строкой байта, либо текстовой строкой [# native-string] _."
 
 #: ../../python3.rst:385
 msgid "``u'foo'`` is that version's text string."
-msgstr ""
+msgstr "`` u&#39;foo&#39;`` - текстовая строка этой версии."
 
 #: ../../python3.rst:387
 msgid ""
@@ -634,47 +828,63 @@ msgid ""
 "literals unless you *specifically* need a \"native string\" [#native-"
 "string]_."
 msgstr ""
+"Для лучшей совместимости между версиями вам следует избегать строковых "
+"литералов без префикса, если вам * не требуется * &quot;собственная "
+"строка&quot; [# native-string] _."
 
 #: ../../python3.rst:391
 msgid "``open``"
-msgstr ""
+msgstr "`` open``"
 
 #: ../../python3.rst:395
 msgid ""
 "the ``open`` builtin should always be explicitly used in binary mode "
 "(``rb``, ``wb``, ...)"
 msgstr ""
+"встроенная команда `` open`` всегда должна явно использоваться в двоичном "
+"режиме (`` rb``, `` wb``, ...)"
 
 #: ../../python3.rst:398
 msgid "To read *text* files, use ``io.open``."
-msgstr ""
+msgstr "Чтобы читать * текстовые * файлы, используйте `` io.open``."
 
 #: ../../python3.rst:400
 msgid ""
 "On both P2 and P3, ``open`` defaults to returning *native strings* in "
-"default (\"text\") mode, however in P3 that means it actually decodes the"
-" file's bytes using whatever encoding was set up (default: UTF-8) while "
-"on Python 2 it has no concept of encoding."
+"default (\"text\") mode, however in P3 that means it actually decodes the "
+"file's bytes using whatever encoding was set up (default: UTF-8) while on "
+"Python 2 it has no concept of encoding."
 msgstr ""
+"И на P2, и на P3 по умолчанию `` open`` возвращает * собственные строки * в "
+"режиме по умолчанию («текст»), однако в P3 это означает, что он фактически "
+"декодирует байты файла, используя любую кодировку (по умолчанию: UTF-8). ) в"
+" то время как на Python 2 у него нет понятия кодирования."
 
 #: ../../python3.rst:405
 msgid ""
 "Using ``open`` in binary mode provides bytestrings on both versions and "
-"works fine. To read *text* files, use ``io.open`` and provide an explicit"
-" encoding."
+"works fine. To read *text* files, use ``io.open`` and provide an explicit "
+"encoding."
 msgstr ""
+"Использование `` open`` в двоичном режиме предоставляет строки для обеих "
+"версий и работает нормально. Для чтения * текстовых * файлов используйте `` "
+"io.open`` и предоставьте явную кодировку."
 
 #: ../../python3.rst:409
 msgid "base64"
-msgstr ""
+msgstr "base64"
 
 #: ../../python3.rst:411
 msgid ""
-"base64 is a bytes->bytes conversion. bytes->bytes codecs were removed "
-"from the \"native\" encoding/decoding system which is now exclusively for"
-" bytes<->text conversions: text is *encoded* to bytes and bytes are "
-"*decoded* to text."
+"base64 is a bytes->bytes conversion. bytes->bytes codecs were removed from "
+"the \"native\" encoding/decoding system which is now exclusively for "
+"bytes<->text conversions: text is *encoded* to bytes and bytes are *decoded*"
+" to text."
 msgstr ""
+"base64 - это преобразование байтов-&gt; байтов. кодеки bytes-&gt; bytes были"
+" удалены из «родной» системы кодирования / декодирования, которая теперь "
+"предназначена исключительно для преобразования байтов &lt;-&gt; текста: "
+"текст * кодируется * в байты, а байты * декодируются * в текст."
 
 #: ../../python3.rst:417
 msgid ""
@@ -682,60 +892,86 @@ msgid ""
 "migrated to using ``base64.b64encode`` and ``base64.b64decode`` "
 "respectively."
 msgstr ""
+"оба `` bytes.encode (&#39;base64&#39;) `` и `` bytes.decode "
+"(&#39;base64&#39;) `` должны быть перенесены в `` base64.b64encode`` и `` "
+"base64.b64decode`` соответственно."
 
 #: ../../python3.rst:422
 msgid "csv"
-msgstr ""
+msgstr "CSV"
 
 #: ../../python3.rst:424
 msgid ""
-"``csv`` is a fairly vicious one: not only is it not a very good format, "
-"the Python 2 and Python 3 versions of the library are text-model "
-"incompatible in significant ways:"
+"``csv`` is a fairly vicious one: not only is it not a very good format, the "
+"Python 2 and Python 3 versions of the library are text-model incompatible in"
+" significant ways:"
 msgstr ""
+"`` csv`` довольно порочный: он не только не очень хороший формат, но и "
+"версии библиотеки Python 2 и Python 3 несовместимы по текстовой модели:"
 
 #: ../../python3.rst:428
 msgid ""
 "Python 2's CSV only works on *ascii-compatible byte streams* (it has no "
 "encoding support at all) and extracts bytestring values"
 msgstr ""
+"CSV-версия Python 2 работает только с * ascii-совместимыми потоками байтов *"
+" (вообще не имеет поддержки кодирования) и извлекает значения строки байтов"
 
 #: ../../python3.rst:430
 msgid "Python 3's CSV only works on *text streams* and extract text values"
 msgstr ""
+"CSV в Python 3 работает только с * текстовыми потоками * и извлекает "
+"текстовые значения"
 
 #: ../../python3.rst:431
 msgid "And ``io`` doesn't provide \"native string\" streaming facilities."
 msgstr ""
+"И `` io`` не предоставляет возможности потоковой передачи &quot;родной "
+"строки&quot;."
 
 #: ../../python3.rst:433
 msgid ""
-"However with respect to Odoo it turns out most or all uses of ``csv`` fit"
-" inside a model of *byte stream to and from text values*."
+"However with respect to Odoo it turns out most or all uses of ``csv`` fit "
+"inside a model of *byte stream to and from text values*."
 msgstr ""
+"Однако в отношении Odoo выясняется, что большинство или все случаи "
+"использования `` csv`` подходят внутри модели * потока байтов к текстовым "
+"значениям и из них *."
 
 #: ../../python3.rst:436
 msgid ""
 "The latter is thus a model implemented by cross-version wrappers "
 ":func:`odoo.tools.pycompat.csv_reader` and "
-":func:`odoo.tools.pycompat.csv_writer`: they take a *UTF-8 byte stream* "
-"and read or write *text* values."
+":func:`odoo.tools.pycompat.csv_writer`: they take a *UTF-8 byte stream* and "
+"read or write *text* values."
 msgstr ""
+"Таким образом, последняя представляет собой модель, реализованную кросс-"
+"версиями упаковщиков: func: `odoo.tools.pycompat.csv_reader` и: func:` "
+"odoo.tools.pycompat.csv_writer`: они принимают поток байтов * UTF-8 * и "
+"читают или напишите * текст * значения."
 
 #: ../../python3.rst:449
 msgid ""
-"with the caveat that Python 3 makes them less text-y and more byte-y e.g."
-" in Python 2 ``b\"foo\"[0]`` is ``b\"f\"``, but in Python 3 it's ``102`` "
-"(the value of the first byte), you'll want to *slice* bytestrings for "
+"with the caveat that Python 3 makes them less text-y and more byte-y e.g. in"
+" Python 2 ``b\"foo\"[0]`` is ``b\"f\"``, but in Python 3 it's ``102`` (the "
+"value of the first byte), you'll want to *slice* bytestrings for "
 "compatibility."
 msgstr ""
+"с оговоркой, что Python 3 делает их меньше text-y и больше byte-y, например,"
+" в Python 2 `` b &quot;foo&quot; [0] `` is `` b &quot;f&quot; ``, но в "
+"Python 3 это `` 102 `` (значение первого байта), вы захотите * slice * "
+"bytestrings для совместимости."
 
 #: ../../python3.rst:456
 msgid ""
-"this is important because some API/contexts take a *native string* rather"
-" than either bytes or text. The ``csv`` module of the standard library is"
-" one such problematic API (it is also notoriously problematic for its "
-"terrible support of non-ascii-compatible encodings in Python 2). "
+"this is important because some API/contexts take a *native string* rather "
+"than either bytes or text. The ``csv`` module of the standard library is one"
+" such problematic API (it is also notoriously problematic for its terrible "
+"support of non-ascii-compatible encodings in Python 2). "
 "``email.message_from_string`` is an other one."
 msgstr ""
-
+"это важно, потому что некоторые API / контексты принимают * собственную "
+"строку *, а не байты или текст. Модуль `` csv`` стандартной библиотеки "
+"является одним из таких проблемных API (он также общеизвестно проблематичен "
+"из-за своей ужасной поддержки не-ascii-совместимых кодировок в Python 2). ``"
+" email.message_from_string`` - другой."
