@@ -310,7 +310,7 @@ msgid ""
 ":func:`odoo.tools.misc.html_encode`."
 msgstr ""
 "`` cgi.escape`` (экранирование HTML) устарело в Python 3, предпочитайте "
-"собственный Odoo: func: `odoo.tools.misc.html_encode`."
+"собственный Odoo :func:`odoo.tools.misc.html_encode`."
 
 #: ../../python3.rst:120
 msgid ""
@@ -946,9 +946,9 @@ msgid ""
 "read or write *text* values."
 msgstr ""
 "Таким образом, последняя представляет собой модель, реализованную кросс-"
-"версиями упаковщиков: func: `odoo.tools.pycompat.csv_reader` и: func:` "
-"odoo.tools.pycompat.csv_writer`: они принимают поток байтов * UTF-8 * и "
-"читают или напишите * текст * значения."
+"версиями упаковщиков :func:`odoo.tools.pycompat.csv_reader` и "
+":func:`odoo.tools.pycompat.csv_reader`: они принимают поток байтов * UTF-8 *"
+" и читают или напишите * текст * значения."
 
 #: ../../python3.rst:449
 msgid ""

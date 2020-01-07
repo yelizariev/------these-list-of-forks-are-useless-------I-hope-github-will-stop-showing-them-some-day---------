@@ -295,9 +295,9 @@ msgid ""
 "``at_install`` is now a flag, you can use :func:`tagged` to add/remove it, "
 "although ``tagged`` only works on test classes"
 msgstr ""
-"`` at_install`` теперь является флагом, вы можете использовать: func: "
-"`tagged`, чтобы добавить / удалить его, хотя` `tagged`` работает только на "
-"тестовых классах"
+"`` at_install`` теперь является флагом, вы можете использовать "
+":func:`tagged`, чтобы добавить / удалить его, хотя` `tagged`` работает "
+"только на тестовых классах"
 
 #: odoo.tests.common.post_install:1 of
 msgid ""
@@ -322,9 +322,9 @@ msgid ""
 "``post_install`` is now a flag, you can use :func:`tagged` to add/remove it,"
 " although ``tagged`` only works on test classes"
 msgstr ""
-"`` post_install`` теперь является флагом, вы можете использовать: func: "
-"`tagged`, чтобы добавить / удалить его, хотя` `tagged`` работает только на "
-"тестовых классах"
+"`` post_install`` теперь является флагом, вы можете использовать "
+":func:`tagged`, чтобы добавить / удалить его, хотя` `tagged`` работает "
+"только на тестовых классах"
 
 #: ../../reference/testing.rst:71
 msgid ""
@@ -596,7 +596,7 @@ msgid ""
 "When writing tests, the :func:`~odoo.tests.common.tagged` decorator can be "
 "used on **test classes** to add or remove tags."
 msgstr ""
-"При написании тестов декоратор: func: `~ odoo.tests.common.tagged` можно "
+"При написании тестов декоратор :func:`~odoo.tests.common.tagged` можно "
 "использовать в ** тестовых классах ** для добавления или удаления тегов."
 
 #: ../../reference/testing.rst:132
@@ -608,7 +608,7 @@ msgid ""
 ":func:`~odoo.tests.common.tagged` is a class decorator, it has no effect on "
 "functions or methods"
 msgstr ""
-": func: `~ odoo.tests.common.tagged` это декоратор класса, он не влияет на "
+" :func:`~odoo.tests.common.tagged` это декоратор класса, он не влияет на "
 "функции или методы"
 
 #: ../../reference/testing.rst:137

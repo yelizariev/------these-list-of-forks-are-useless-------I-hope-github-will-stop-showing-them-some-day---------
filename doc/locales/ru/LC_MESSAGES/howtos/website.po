@@ -455,9 +455,9 @@ msgid ""
 ":func:`~odoo.http.route` decorator which takes a routing string and a number"
 " of attributes to customise its behavior or security."
 msgstr ""
-"Методы контроллера связаны с * rout * через декоратор: func: `~ "
-"odoo.http.route`, который принимает строку маршрутизации и ряд атрибутов для"
-" настройки его поведения или безопасности."
+"Методы контроллера связаны с * rout * через декоратор "
+":func:`~odoo.http.route`, который принимает строку маршрутизации и ряд "
+"атрибутов для настройки его поведения или безопасности."
 
 #: ../../howtos/website.rst:237
 msgid ""

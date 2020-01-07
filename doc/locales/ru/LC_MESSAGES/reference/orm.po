@@ -909,9 +909,9 @@ msgid ""
 " convert to a `datetime.datetime`."
 msgstr ""
 "Класс полей Date и Datetime имеет вспомогательные методы для попытки "
-"преобразования в совместимый тип:: func: `~ odoo.fields.Date.to_date` "
-"преобразует в объект` datetime.date`, а: func: `~ odoo.fields. "
-"Datetime.to_datetime` преобразуется в `datetime.datetime`."
+"преобразования в совместимый тип: :func:`~odoo.fields.Date.to_date` "
+"преобразует в объект` datetime.date`, а :func:`~odoo.fields.Date.to_date` "
+"преобразуется в `datetime.datetime`."
 
 #: ../../reference/orm.rst:160 ../../reference/orm.rst:771
 #: odoo.exceptions.AccessDenied:7 odoo.exceptions.AccessError:3
@@ -1382,7 +1382,7 @@ msgstr ""
 "Поля могут быть вычислены (вместо чтения прямо из базы данных) с помощью "
 "параметра `` compute``. ** Он должен присвоить вычисленное значение полю **."
 " Если он использует значения других * полей *, он должен указывать эти поля,"
-" используя: func: `~ odoo.api.depends`. ::"
+" используя :func:`~odoo.api.depends`. ::"
 
 #: ../../reference/orm.rst:230
 msgid "dependencies can be dotted paths when using sub-fields::"
@@ -3517,10 +3517,10 @@ msgid ""
 "call methods on their result, or to use set operations."
 msgstr ""
 "Наборы записей являются итеративными, поэтому для преобразования доступны "
-"обычные инструменты Python (: func: `python: map`,: func:` python: sorted`,:"
-" func: `~ python: itertools.ifilter`, ...), однако они возвращают или a "
-":class:`python:list` или a: term:` python: iterator`, исключая возможность "
-"вызова методов для их результата или использования операций над множествами."
+"обычные инструменты Python ( :func:`python:map`, :func:`python:map`, "
+":func:`python:map`, ...), однако они возвращают или a :class:`python:list` "
+"или a: term:` python: iterator`, исключая возможность вызова методов для их "
+"результата или использования операций над множествами."
 
 #: ../../reference/orm.rst:847
 msgid ""

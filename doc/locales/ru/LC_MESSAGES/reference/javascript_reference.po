@@ -1376,7 +1376,7 @@ msgstr ""
 "или `` document.querySelectorAll (селектор) ``, обычно приводят к "
 "непреднамеренному или неправильному поведению. Odoo Web :class:`~Widget` "
 "имеет атрибут, обеспечивающий его корень DOM (: attr:` ~ Widget. $ El`), и "
-"ярлык для непосредственного выбора узлов (: func: `~ Widget. $`)."
+"ярлык для непосредственного выбора узлов ( :func:`~Widget.$`)."
 
 #: ../../reference/javascript_reference.rst:804
 msgid ""

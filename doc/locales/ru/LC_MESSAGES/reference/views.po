@@ -1322,7 +1322,7 @@ msgstr ""
 
 #: ../../reference/views.rst:553
 msgid "Use :func:`odoo.api.onchange` on the model"
-msgstr "Используйте: func: `odoo.api.onchange` на модели"
+msgstr "Используйте :func:`odoo.api.onchange` на модели"
 
 #: ../../reference/views.rst:556
 msgid "dynamic meta-parameters based on record values"

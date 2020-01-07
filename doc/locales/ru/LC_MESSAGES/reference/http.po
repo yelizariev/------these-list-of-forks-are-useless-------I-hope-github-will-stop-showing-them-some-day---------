@@ -53,7 +53,7 @@ msgid ""
 msgstr ""
 "Контроллеры создаются путем :ref:`inheriting <python:tut-inheritance>`from "
 ":class:`~odoo.http.Controller`. Маршруты определяются через методы, "
-"украшенные: func: `~ odoo.http.route` ::"
+"украшенные :func:`~odoo.http.route` ::"
 
 #: ../../reference/http.rst:28
 msgid ""
@@ -70,7 +70,7 @@ msgid ""
 "(and route) visible: if the method is redefined without decorating, it will "
 "be \"unpublished\""
 msgstr ""
-"декорация с помощью: func: `~ odoo.http.route` необходима для того, чтобы "
+"декорация с помощью :func:`~odoo.http.route` необходима для того, чтобы "
 "метод (и маршрут) был видимым: если метод переопределен без декорации, он "
 "будет« неопубликован »"
 
