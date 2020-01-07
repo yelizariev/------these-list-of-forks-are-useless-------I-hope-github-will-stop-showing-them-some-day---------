@@ -1,0 +1,429 @@
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ru">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css?family=Work+Sans:500,600" rel="stylesheet">
+  
+    <title>Руководство для нескольких компаний &#8212; Документация odoo 13.0</title>
+    <link rel="stylesheet" href="../_static/style.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/patchqueue.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script type="text/javascript" src="../_static/jquery.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap.js"></script>
+    <script type="text/javascript" src="../_static/doc.js"></script>
+    <script type="text/javascript" src="../_static/jquery.noconflict.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <script type="text/javascript" src="../_static/patchqueue.js"></script><link rel="canonical" href="" />
+  
+    <link rel="index" title="Алфавитный указатель" href="../genindex.html" />
+    <link rel="search" title="Поиск" href="../search.html" />
+    <link rel="next" title="Веб сервисы" href="../webservices.html" />
+    <link rel="prev" title="Профилирование кода Odoo" href="profilecode.html" /> 
+  </head><body><header class="o_main_header o_has_sub_nav o_inverted ">
+<!-- 
+    <div class="o_main_header_main">
+      <a class="pull-left o_logo" href="/"></a>
+      <a href="#" class="o_mobile_menu_toggle visible-xs-block pull-right">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="mdi-navigation-menu"></span>
+      </a>
+      <div class="o_header_buttons">
+        <a href="http://www.odoo.com/trial" class="btn btn-primary">Start Now</a>
+      </div>
+      <ul class="o_primary_nav">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle">Apps</a>
+          <div class="dropdown-menu o_secondary_nav">
+            <div class="container">
+              <div class="row">
+                <div class="col-sm-3 o_website_apps">
+                  <div class="o_nav_app_family">
+                    <span></span> Websites
+                    <div>Build great user experience</div>
+                  </div>
+                  <ul>
+                    <li><a href="https://www.odoo.com/page/website-builder">Website Builder</a></li>
+                    <li><a href="https://www.odoo.com/page/e-commerce">eCommerce</a></li>
+                    <li><a href="https://www.odoo.com/page/blog-engine">Blogs</a></li>
+                    <li><a href="https://www.odoo.com/page/community-builder">Forums</a></li>
+                    <li><a href="https://www.odoo.com/page/slides">Slides</a></li>
+                    <li><a href="https://adspike.odoo.com">SEA</a></li>
+                  </ul>
+                </div>
+                <div class="col-sm-3 o_sale_apps">
+                  <div class="o_nav_app_family">
+                    <span></span> Sales
+                    <div>Boost your success rate</div>
+                  </div>
+                  <ul>
+                    <li><a href="https://www.odoo.com/page/sales">Sales</a></li>
+                    <li><a href="https://www.odoo.com/page/crm">CRM</a></li>
+                    <li><a href="https://www.odoo.com/page/billing">Invoicing</a></li>
+                    <li class="dropdown">
+                      <a href="#0" class="dropdown-toggle">Point of Sale</a>
+                      <ul>
+                        <li><a href="https://www.odoo.com/page/point-of-sale">Shops</a></li>
+                        <li><a href="https://www.odoo.com/page/pos-restaurant">Restaurants</a></li>
+                      </ul>
+                    </li>
+                    <li><a href="https://www.odoo.com/page/subscriptions">Subscriptions</a></li>
+                    <li><a href="https://www.odoo.com/page/sign">Sign</a></li>
+                  </ul>
+                </div>
+                <div class="col-sm-3 o_operation_apps">
+                  <div class="o_nav_app_family">
+                    <span></span> Operations
+                    <div>It's all about efficiency</div>
+                  </div>
+                  <ul>
+                    <li><a href="https://www.odoo.com/page/accounting">Accounting</a></li>
+                    <li><a href="https://www.odoo.com/page/project-management">Project</a></li>
+                    <li class="dropdown">
+                      <a href="#0" class="dropdown-toggle">Human Resources</a>
+                      <ul>
+                        <li><a href="https://www.odoo.com/page/recruitment">Recruitment</a></li>
+                        <li><a href="https://www.odoo.com/page/employees">Employees</a></li>
+                        <li><a href="https://www.odoo.com/page/expenses">Expenses</a></li>
+                        <li><a href="https://www.odoo.com/page/appraisal">Appraisal</a></li>
+                        <li><a href="https://www.odoo.com/page/fleet">Fleet</a></li>
+                        <li><a href="https://www.odoo.com/page/leaves">Leaves</a></li>
+                      </ul>
+                    </li>
+                    <li><a href="https://www.odoo.com/page/warehouse">Inventory</a></li>
+                    <li><a href="https://www.odoo.com/page/purchase">Purchase</a></li>
+                    <li class="dropdown">
+                      <a href="#0" class="dropdown-toggle">Manufacturing</a>
+                      <ul>
+                        <li><a href="https://www.odoo.com/page/manufacturing">MRP</a></li>
+                        <li><a href="https://www.odoo.com/page/plm">PLM</a></li>
+                        <li><a href="https://www.odoo.com/page/maintenance">Maintenance</a></li>
+                        <li><a href="https://www.odoo.com/page/quality">Quality</a></li>
+                      </ul>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-sm-3 o_productivity_apps">
+                  <div class="o_nav_app_family">
+                    <span></span> Productivity Tools
+                    <div>Great Tools = Happy People</div>
+                  </div>
+                  <ul>
+                    <li class="dropdown">
+                      <a href="#0" class="dropdown-toggle">Communication</a>
+                      <ul>
+                        <li><a href="https://www.odoo.com/page/discuss">Discuss</a></li>
+                        <li><a href="https://www.odoo.com/page/discuss-groups">Mailing Lists</a></li>
+                        <li><a href="https://www.odoo.com/page/notes">Notes</a></li>
+                        <li><a href="#">Help desk</a></li>
+                        <li><a href="#">Appointment</a></li>
+                      </ul>
+                    </li>
+                    <li><a href="https://www.odoo.com/page/timesheet">Timesheet</a></li>
+                    <li><a href="https://www.odoo.com/page/email-marketing">Email Marketing</a></li>
+                    <li><a href="https://www.odoo.com/page/events">Events</a></li>
+                    <li><a href="https://www.odoo.com/page/survey">Survey</a></li>
+                    <li><a href="https://www.odoo.com/page/live-chat">Live Chat</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <a href="http://www.odoo.com/apps/modules" class="o_store_link"><i class="fa fa-cube fa-fw"></i> Third party apps</a>
+          </div>
+        </li>
+        <li><a href="https://www.odoo.com/page/tour">Tour</a></li>
+        <li><a href="https://www.odoo.com/pricing">Pricing</a></li>
+        <li><a href="https://www.odoo.com/page/docs">Docs</a></li>
+      </ul>
+    </div>
+-->
+    <nav class="navbar o_sub_nav">
+      <div class="container">
+        <div class="navbar-header visible-xs">
+            <button type="button" class="navbar-toggle collapsed text-left btn-block" data-toggle="collapse" data-target="#o_sub-menu" aria-expanded="false">
+              Navigate
+              <span class="mdi-hardware-keyboard-arrow-down pull-right"></span>
+            </button>
+        </div>
+
+        <div class="collapse navbar-collapse" id="o_sub-menu">
+          <ol class="o_breadcrumb breadcrumb nav navbar-left">
+              
+              
+
+
+
+
+
+    
+        
+            <li><a href="../index.html">Developer Doc</a></li>
+        
+    
+    <li class="active"><a href="#">Руководство для нескольких компаний</a></li>
+
+              
+          </ol>
+
+          <div class="call-to-action navbar-right hidden-xs">
+            <a href="http://www.odoo.com/trial" class="btn btn-primary">Start Now</a>
+          </div>
+
+          <ul class="navbar-nav navbar-right nav o_sub_nav_actions">
+            
+              <li class="divider"></li>
+            
+
+            
+            
+
+
+            
+          </ul>
+
+          <ul class="nav navbar-nav navbar-right">
+            
+
+            
+            
+<!--
+<li><a href="https://www.odoo.com/documentation/user/13.0/index.html">User</a></li>
+<li><a href="https://www.odoo.com/documentation/13.0/index.html">Developer</a></li>
+<li><a href="https://www.odoo.com/documentation/13.0/setup/install.html">Installation</a></li>
+<li><a href="https://odoo.com/slides">eLearning</a></li>
+<li><a href="https://www.odoo.com/page/odoo-white-paper">White Papers</a></li>
+<li><a href="https://www.odoo.com/page/legal">Legal</a></li>
+-->
+            
+
+            
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header><div id="wrap" class="">
+    
+    
+    
+    <figure class="card top has_banner">
+      <span class="card-img" style="background-image: url('../_static/banners/company.jpg');"></span>
+      <div class="container text-center">
+        <h1> Руководство для нескольких компаний </h1>
+      </div>
+    </figure>
+    
+    
+    
+      <main class="container ">
+        
+        <div class="o_content row">
+          
+          <aside>
+            <div class="navbar-aside text-center">
+              <ul class="nav text-left list-group"><li class="list-group-item"><a href="#company-dependent-fields" class="ripple reference internal">Зависимые от компании поля</a></li><li class="list-group-item"><a href="#multi-company-consistency" class="ripple reference internal">Многопрофильность</a></li><li class="list-group-item"><a href="#default-company" class="ripple reference internal">Компания по умолчанию</a></li><li class="list-group-item"><a href="#views" class="ripple reference internal">Взгляды</a></li><li class="list-group-item"><a href="#security-rules" class="ripple reference internal">Правила безопасности</a></li></ul>
+              
+              <p class="gith-container"><a href="https://github.com/odoo/odoo/edit/13.0/doc/howtos/company.rst" class="gith-link">
+                  Edit on GitHub
+              </a></p>
+              
+            </div>
+          </aside>
+          
+          <article class="doc-body ">
+            
+            
+  <section id="multi-company-guidelines"><i id="reference-howtos-company"></i><div role="alert" class="alert-warning alert"><h3 class="alert-title">Предупреждение</h3><p >Этот урок требует хорошего знания Odoo. Пожалуйста, обратитесь к :ref:<a href="#id1"><span id="id2" class="problematic">`</span></a>basic tutorial &lt;howto/base&gt;`сначала, если нужно.</p></div><p >Начиная с версии 13.0, пользователь может войти в несколько компаний одновременно. Это позволяет пользователю получать доступ к информации от нескольких компаний, а также создавать / редактировать записи в среде нескольких компаний.</p><p >Если не обрабатывается правильно, это может быть источником многих противоречивых поведений нескольких компаний. Например, пользователь, вошедший в обе компании A и B, может создать заказ на продажу в компании A и добавить в него продукты, принадлежащие компании B. Только когда пользователь выйдет из компании B, ошибки доступа возникнут для заказа на продажу.</p><p >Для правильного управления поведением нескольких компаний ORM Odoo предоставляет несколько функций:</p><ul ><li ><a href="#howto-company-company-dependent" class="internal reference"><span class="std std-ref">Company-dependent fields</span></a></li><li ><a href="#howto-company-check-company" class="internal reference"><span class="std std-ref">Multi-company consistency</span></a></li><li ><a href="#howto-company-default-company" class="internal reference"><span class="std std-ref">Default company</span></a></li><li >: Ссылка: <a href="#id1"><span id="id2" class="problematic">`</span></a>Просмотров &lt;howto/company/views&gt; `</li><li ><a href="#howto-company-security" class="internal reference"><span class="std std-ref">Security rules</span></a></li></ul></section><section id="company-dependent-fields"><i id="howto-company-company-dependent"></i><h2 >Зависимые от компании поля</h2><p >Когда запись доступна из нескольких компаний, мы должны ожидать, что для данного поля будут назначены разные значения в зависимости от компании, из которой установлено значение.</p><p >Чтобы поле одной и той же записи поддерживало несколько значений, оно должно быть определено с атрибутом <code >company_dependent</code>, установленным в` True`.</p><div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">odoo</span> <span class="kn">import</span> <span class="n">api</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">models</span>
+
+<span class="k">class</span> <span class="nc">Record</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;record.public&#39;</span>
+
+    <span class="n">info</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Text</span><span class="p">()</span>
+    <span class="n">company_info</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Text</span><span class="p">(</span><span class="n">company_dependent</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">display_info</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Text</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s1">&#39;Infos&#39;</span><span class="p">,</span> <span class="n">compute</span><span class="o">=</span><span class="s1">&#39;_compute_display_info&#39;</span><span class="p">)</span>
+
+    <span class="nd">@api</span><span class="o">.</span><span class="n">depends_context</span><span class="p">(</span><span class="s1">&#39;force_company&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_compute_display_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="n">record</span><span class="o">.</span><span class="n">display_info</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">info</span> <span class="o">+</span> <span class="n">record</span><span class="o">.</span><span class="n">company_info</span>
+</pre></div>
+</div>
+<div role="alert" class="alert-info alert"><h3 class="alert-title">Примечание</h3><p >Метод <code >_compute_display_info</code> декорирован с помощью метода 'depen_context (' force_company ')` (см .: attr: <code >~ odoo.api.depends_context</code>), чтобы обеспечить пересчет вычисляемого поля в зависимости от принудительной / текущей компании (контекст` force_company`) ключ или <code >self.env.company</code>).</p></div><p >Когда поле, зависящее от компании, читается, текущая компания используется для получения его значения. Другими словами, если пользователь вошел в компании A и B с A в качестве основной компании и создал запись для компании B, значения зависимых от компании полей будут равны компании A.</p><p >Чтобы прочитать значения зависимых от компании полей, установленных из другой компании, отличной от текущей, в контекстном ключе <code >force_company</code> должен быть указан идентификатор нужной компании.</p><div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># Accessed as main company (self.env.company)</span>
+<span class="n">val</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">company_dependent_field</span>
+
+<span class="c1"># Accessed as desired company (company_B)</span>
+<span class="n">val</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">with_context</span><span class="p">(</span><span class="n">force_company</span><span class="o">=</span><span class="n">company_B</span><span class="o">.</span><span class="n">id</span><span class="p">)</span><span class="o">.</span><span class="n">company_dependent_field</span>
+</pre></div>
+</div>
+</section><section id="multi-company-consistency"><i id="howto-company-check-company"></i><h2 >Многопрофильность</h2><p >Когда запись делится между несколькими компаниями посредством поля <code >company_id</code>, мы должны позаботиться о том, чтобы ее нельзя было связать с записью другой компании через поле реляционных данных. Например, мы не хотим, чтобы заказ на продажу и его счет принадлежали разным компаниям.</p><p >Чтобы обеспечить согласованность действий нескольких компаний, вы должны:</p><ul ><li >Установите атрибут класса <code >_check_company_auto</code> в` True`.</li><li >Определите реляционные поля с атрибутом <code >check_company</code>, установленным в` True`, если их модель имеет поле <code >company_id</code>.</li></ul><p >Для каждого <a href="../reference/orm.html#odoo.models.Model.create" title="odoo.models.Model.create" class="internal reference"><code class="py-meth py xref">create()</code></a> и <a href="../reference/orm.html#odoo.models.Model.create" title="odoo.models.Model.create" class="internal reference"><code class="py-meth py xref">create()</code></a> будут выполняться автоматические проверки для обеспечения согласованности записи в нескольких компаниях.</p><div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">odoo</span> <span class="kn">import</span> <span class="n">fields</span><span class="p">,</span> <span class="n">models</span>
+
+<span class="k">class</span> <span class="nc">Record</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;record.shareable&#39;</span>
+    <span class="n">_check_company_auto</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="n">company_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Many2one</span><span class="p">(</span><span class="s1">&#39;res.company&#39;</span><span class="p">)</span>
+    <span class="n">other_record_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Many2one</span><span class="p">(</span><span class="s1">&#39;other.record&#39;</span><span class="p">,</span> <span class="n">check_company</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div role="alert" class="alert-info alert"><h3 class="alert-title">Примечание</h3><p >Поле <code >company_id</code> не должно быть определено с помощью` check_company = True`.</p></div><section class="code-method"><h6 id="odoo.models.Model._check_company"><code>Model._check_company(<em>fnames=None</em>)<a href="https://github.com/odoo/odoo/blob/13.0/odoo/models.py#L3111" class="alert-link reference external"><span class="viewcode-link">[исходный код]</span></a></code></h6><p >Проверьте компании значения указанных названий полей.</p><div class="code-fields"><div class="code-field"><div class="code-field-name">Параметры</div><div class="code-field-body"><strong >fnames</strong> (<a href="https://docs.python.org/3/library/stdtypes.html#list" title="(в Python v3.8)" class="alert-link reference external"><code >list</code></a>) – имена реляционных полей для проверки</div></div><div class="code-field"><div class="code-field-name">Исключение</div><div class="code-field-body"><a href="../reference/orm.html#odoo.exceptions.UserError" title="odoo.exceptions.UserError" class="internal alert-link reference"><strong >UserError</strong></a> – если значение <code >company_id</code> значения какого-либо поля отсутствует в` [False, self.company_id] <code >(или</code> self` if <code class="py-class py xref">res_company</code>).</div></div></div><p >Для <code class="py-class py xref">res_users</code> реляционных полей, проверяет, находится ли звукозаписывающая компания в полях` company_ids`.</p><p >Пользователь с основной компанией A, имеющий доступ к компаниям A и B, может быть назначен или связан с записями в компании B.</p></section><div role="alert" class="alert-warning alert"><h3 class="alert-title">Предупреждение</h3><p >Функция check_company выполняет строгую проверку! Это означает, что если запись не имеет <code >company_id</code> (то есть поле не является обязательным), она не может быть связана с записью, для которой установлен` company_id`.</p></div><div role="alert" class="alert-info alert"><h3 class="alert-title">Примечание</h3><p >Если домен не определен в поле и для <code >check_company</code> установлено значение` True`, добавляется домен по умолчанию: <a href="#id1"><span id="id2" class="problematic">`</span></a>['|', '(' company_id ',' = ', False), (' company_id ',' = ', company_id)] `</p></div></section><section id="default-company"><i id="howto-company-default-company"></i><h2 >Компания по умолчанию</h2><p >Когда поле 'company_id` является обязательным для модели, рекомендуется установить компанию по умолчанию. Это облегчает процесс настройки для пользователя или даже гарантирует его действительность, когда компания скрыта от просмотра. Действительно, компания обычно скрыта, если у пользователя нет доступа к нескольким компаниям (т. Е. Когда у пользователя нет группы <code >base.group_multi_company</code>).</p><div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">odoo</span> <span class="kn">import</span> <span class="n">api</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">models</span>
+
+<span class="k">class</span> <span class="nc">Record</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;record.restricted&#39;</span>
+    <span class="n">_check_company_auto</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="n">company_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Many2one</span><span class="p">(</span>
+        <span class="s1">&#39;res.company&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">company</span>
+    <span class="p">)</span>
+    <span class="n">other_record_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Many2one</span><span class="p">(</span><span class="s1">&#39;other.record&#39;</span><span class="p">,</span> <span class="n">check_company</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</section><section id="views"><i id="howto-company-views"></i><h2 >Взгляды</h2><p >Как указано в <a href="#howto-company-default-company" class="internal reference"><span class="std std-ref">above</span></a>, компания обычно скрыта от просмотра, если пользователь не имеет доступа к нескольким компаниям. Это проверено с группой <code >base.group_multi_company</code>.</p><div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;record</span> <span class="na">model=</span><span class="s">&quot;ir.ui.view&quot;</span> <span class="na">id=</span><span class="s">&quot;record_form_view&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;name&quot;</span><span class="nt">&gt;</span>record.restricted.form<span class="nt">&lt;/field&gt;</span>
+    <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;model&quot;</span><span class="nt">&gt;</span>record.restricted<span class="nt">&lt;/field&gt;</span>
+    <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;arch&quot;</span> <span class="na">type=</span><span class="s">&quot;xml&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;form&gt;</span>
+            <span class="nt">&lt;sheet&gt;</span>
+                <span class="nt">&lt;group&gt;</span>
+                    <span class="nt">&lt;group&gt;</span>
+                        <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;company_id&quot;</span> <span class="na">groups=</span><span class="s">&quot;base.group_multi_company&quot;</span><span class="nt">/&gt;</span>
+                        <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;other_record_id&quot;</span><span class="nt">/&gt;</span>
+                    <span class="nt">&lt;/group&gt;</span>
+                <span class="nt">&lt;/group&gt;</span>
+            <span class="nt">&lt;/sheet&gt;</span>
+        <span class="nt">&lt;/form&gt;</span>
+    <span class="nt">&lt;/field&gt;</span>
+<span class="nt">&lt;/record&gt;</span>
+</pre></div>
+</div>
+</section><section id="security-rules"><i id="howto-company-security"></i><h2 >Правила безопасности</h2><p >При работе с записями, которые распространяются между компаниями или ограничиваются одной компанией, мы должны следить за тем, чтобы у пользователя не было доступа к записям, принадлежащим другим компаниям.</p><p >Это достигается с помощью правил безопасности, основанных на <code >company_ids</code>, который содержит текущие компании пользователя (компании, которые пользователь проверил в виджете для нескольких компаний).</p><div class="highlight-xml"><div class="highlight"><pre><span></span><span class="c">&lt;!-- Shareable Records --&gt;</span>
+<span class="nt">&lt;record</span> <span class="na">model=</span><span class="s">&quot;ir.rule&quot;</span> <span class="na">id=</span><span class="s">&quot;record_shared_company_rule&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;name&quot;</span><span class="nt">&gt;</span>Shared Record: multi-company<span class="nt">&lt;/field&gt;</span>
+    <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;model_id&quot;</span> <span class="na">ref=</span><span class="s">&quot;model_record_shared&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;global&quot;</span> <span class="na">eval=</span><span class="s">&quot;True&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;domain_force&quot;</span><span class="nt">&gt;</span>
+        [&#39;|&#39;, (&#39;company_id&#39;, &#39;=&#39;, False), (&#39;company_id&#39;, &#39;in&#39;, company_ids)]
+    <span class="nt">&lt;/field&gt;</span>
+<span class="nt">&lt;/record&gt;</span>
+</pre></div>
+</div>
+<div class="highlight-xml"><div class="highlight"><pre><span></span><span class="c">&lt;!-- Company-restricted Records --&gt;</span>
+<span class="nt">&lt;record</span> <span class="na">model=</span><span class="s">&quot;ir.rule&quot;</span> <span class="na">id=</span><span class="s">&quot;record_restricted_company_rule&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;name&quot;</span><span class="nt">&gt;</span>Restricted Record: multi-company<span class="nt">&lt;/field&gt;</span>
+    <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;model_id&quot;</span> <span class="na">ref=</span><span class="s">&quot;model_record_restricted&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;global&quot;</span> <span class="na">eval=</span><span class="s">&quot;True&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;domain_force&quot;</span><span class="nt">&gt;</span>
+        [(&#39;company_id&#39;, &#39;in&#39;, company_ids)]
+    <span class="nt">&lt;/field&gt;</span>
+<span class="nt">&lt;/record&gt;</span>
+</pre></div>
+</div>
+</section>
+
+          </article>
+        </div>
+        
+        <div id="mask"></div>
+      </main>
+  </div>
+
+  <div class="floating_action_container">
+    <a id="floating_action" class="ripple" href="#">
+      <i class="mdi-action-explore"></i>
+    </a>
+    <div id="floating_action_menu">
+      <span class="bubble"></span>
+      <ul class="list-group content">
+        <li class="list-group-item ripple"><a>Cras justo odio</a></li>
+        <li class="list-group-item ripple"><a>Dapibus ac facilisis in</a></li>
+        <li class="list-group-item ripple"><a>Morbi leo risus</a></li>
+        <li class="list-group-item ripple"><a>Porta ac consectetur ac</a></li>
+        <li class="list-group-item ripple"><a>Vestibulum at eros</a></li>
+      </ul>
+    </div>
+  </div>
+<!-- 
+  <footer>
+    <div id="footer" class="container">
+      <span class="o_logo o_logo_inverse center-block o_footer_logo"></span>
+      <div class="row">
+        <div class="col-sm-7 col-md-7 col-lg-6">
+          <div class="row">
+            <div class="col-xs-6 col-sm-4">
+              <span class="menu_title">Community</span>
+              <ul>
+                <li><a href="https://github.com/odoo/odoo">Github</a></li>
+                <li><a href="http://www.odoo.com/page/download">Download</a></li>
+                <li class="divider"></li>
+                <li><a href="http://runbot.odoo.com/runbot/repo/git-github-com-odoo-enterprise-7">Runbot</a></li>
+                <li><a href="https://github.com/odoo/odoo/wiki/Translations">Translations</a></li>
+                <li class="divider"></li>
+                <li><a href="http://www.odoo.com/page/odoo-community">Mailing Lists</a></li>
+                <li><a href="http://www.odoo.com/forum/help-1">Forum</a></li>
+              </ul>
+            </div>
+            <div class="col-xs-6 col-sm-4">
+              <span class="menu_title">Services</span>
+              <ul>
+                <li><a href="https://www.odoo.sh">Odoo Cloud Platform</a></li>
+                <li class="divider"></li>
+                <li><a href="http://www.odoo.com/help">Support</a></li>
+                <li><a href="https://upgrade.odoo.com">Upgrade</a></li>
+                <li class="divider"></li>
+                <li><a href="http://www.odoo.com/partners">Find a partner</a></li>
+                <li><a href="http://www.odoo.com/page/become-a-partner">Become a partner</a></li>
+                <li class="divider"></li>
+                <li><a href="http://training.odoo.com/courses/odoo-functional">Training Center</a></li>
+                <li><a href="http://www.odoo.com/page/education-program">Education</a></li>
+                <li class="divider"></li>
+                <li><a href="http://www.odoo.com/page/security">Security</a></li>
+              </ul>
+            </div>
+            <div class="col-xs-12 col-sm-4 mb64">
+              <span class="menu_title">About us</span>
+              <ul>
+                <li><a href="http://www.odoo.com/page/about-us">Our company</a></li>
+                <li><a href="http://www.odoo.com/page/contactus">Contact</a></li>
+                <li class="divider" />
+                <li><a href="http://www.odoo.com/event">Events</a></li>
+                <li><a href="http://www.odoo.com/blog">Blog</a></li>
+                <li><a href="http://www.odoo.com/blog/6">Customers</a></li>
+                <li class="divider" />
+                <li><a href="http://www.odoo.com/jobs">Jobs</a></li>
+                <li class="divider" />
+                <li><a href="http://www.odoo.com/page/legal">Legal</a> | <a href="http://www.odoo.com/privacy">Privacy</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-5 col-md-4 col-md-offset-1 col-lg-5 col-lg-offset-1">
+          <p>
+            <small>
+              Odoo is a suite of open source business apps that cover all your company needs: CRM, eCommerce, accounting, inventory, point of sale, project management, etc.
+              <br/><br/>
+              Odoo's unique value proposition is to be at the same time very easy to use and fully integrated.
+            </small>
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="o_footer_bottom">
+      <div class="container">
+        <a class="small" href="http://www.odoo.com/page/website-builder">Website made with <span class="o_logo o_logo_inverse o_logo_15"></span></a>
+        <div class="social-links pull-right">
+          <a href="http://www.odoo.com/web/about/facebook"><i class="fa fa-facebook"></i></a>
+          <a href="http://www.odoo.com/web/about/twitter"><i class="fa fa-twitter"></i></a>
+          <a href="http://www.odoo.com/web/about/linkedin"><i class="fa fa-linkedin"></i></a>
+          <a href="mailto:info@odoo.com"><i class="fa fa-envelope"></i></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+  -->
+  </body>
+</html>

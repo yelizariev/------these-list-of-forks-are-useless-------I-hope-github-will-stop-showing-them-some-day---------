@@ -1,0 +1,475 @@
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ru">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css?family=Work+Sans:500,600" rel="stylesheet">
+  
+    <title>QWeb Reports &#8212; Документация odoo 13.0</title>
+    <link rel="stylesheet" href="../_static/style.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/patchqueue.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script type="text/javascript" src="../_static/jquery.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap.js"></script>
+    <script type="text/javascript" src="../_static/doc.js"></script>
+    <script type="text/javascript" src="../_static/jquery.noconflict.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <script type="text/javascript" src="../_static/patchqueue.js"></script><link rel="canonical" href="" />
+  
+    <link rel="index" title="Алфавитный указатель" href="../genindex.html" />
+    <link rel="search" title="Поиск" href="../search.html" />
+    <link rel="next" title="Mixins и полезные занятия" href="mixins.html" />
+    <link rel="prev" title="Перевод модулей" href="translations.html" /> 
+  </head><body><header class="o_main_header o_has_sub_nav o_inverted ">
+<!-- 
+    <div class="o_main_header_main">
+      <a class="pull-left o_logo" href="/"></a>
+      <a href="#" class="o_mobile_menu_toggle visible-xs-block pull-right">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="mdi-navigation-menu"></span>
+      </a>
+      <div class="o_header_buttons">
+        <a href="http://www.odoo.com/trial" class="btn btn-primary">Start Now</a>
+      </div>
+      <ul class="o_primary_nav">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle">Apps</a>
+          <div class="dropdown-menu o_secondary_nav">
+            <div class="container">
+              <div class="row">
+                <div class="col-sm-3 o_website_apps">
+                  <div class="o_nav_app_family">
+                    <span></span> Websites
+                    <div>Build great user experience</div>
+                  </div>
+                  <ul>
+                    <li><a href="https://www.odoo.com/page/website-builder">Website Builder</a></li>
+                    <li><a href="https://www.odoo.com/page/e-commerce">eCommerce</a></li>
+                    <li><a href="https://www.odoo.com/page/blog-engine">Blogs</a></li>
+                    <li><a href="https://www.odoo.com/page/community-builder">Forums</a></li>
+                    <li><a href="https://www.odoo.com/page/slides">Slides</a></li>
+                    <li><a href="https://adspike.odoo.com">SEA</a></li>
+                  </ul>
+                </div>
+                <div class="col-sm-3 o_sale_apps">
+                  <div class="o_nav_app_family">
+                    <span></span> Sales
+                    <div>Boost your success rate</div>
+                  </div>
+                  <ul>
+                    <li><a href="https://www.odoo.com/page/sales">Sales</a></li>
+                    <li><a href="https://www.odoo.com/page/crm">CRM</a></li>
+                    <li><a href="https://www.odoo.com/page/billing">Invoicing</a></li>
+                    <li class="dropdown">
+                      <a href="#0" class="dropdown-toggle">Point of Sale</a>
+                      <ul>
+                        <li><a href="https://www.odoo.com/page/point-of-sale">Shops</a></li>
+                        <li><a href="https://www.odoo.com/page/pos-restaurant">Restaurants</a></li>
+                      </ul>
+                    </li>
+                    <li><a href="https://www.odoo.com/page/subscriptions">Subscriptions</a></li>
+                    <li><a href="https://www.odoo.com/page/sign">Sign</a></li>
+                  </ul>
+                </div>
+                <div class="col-sm-3 o_operation_apps">
+                  <div class="o_nav_app_family">
+                    <span></span> Operations
+                    <div>It's all about efficiency</div>
+                  </div>
+                  <ul>
+                    <li><a href="https://www.odoo.com/page/accounting">Accounting</a></li>
+                    <li><a href="https://www.odoo.com/page/project-management">Project</a></li>
+                    <li class="dropdown">
+                      <a href="#0" class="dropdown-toggle">Human Resources</a>
+                      <ul>
+                        <li><a href="https://www.odoo.com/page/recruitment">Recruitment</a></li>
+                        <li><a href="https://www.odoo.com/page/employees">Employees</a></li>
+                        <li><a href="https://www.odoo.com/page/expenses">Expenses</a></li>
+                        <li><a href="https://www.odoo.com/page/appraisal">Appraisal</a></li>
+                        <li><a href="https://www.odoo.com/page/fleet">Fleet</a></li>
+                        <li><a href="https://www.odoo.com/page/leaves">Leaves</a></li>
+                      </ul>
+                    </li>
+                    <li><a href="https://www.odoo.com/page/warehouse">Inventory</a></li>
+                    <li><a href="https://www.odoo.com/page/purchase">Purchase</a></li>
+                    <li class="dropdown">
+                      <a href="#0" class="dropdown-toggle">Manufacturing</a>
+                      <ul>
+                        <li><a href="https://www.odoo.com/page/manufacturing">MRP</a></li>
+                        <li><a href="https://www.odoo.com/page/plm">PLM</a></li>
+                        <li><a href="https://www.odoo.com/page/maintenance">Maintenance</a></li>
+                        <li><a href="https://www.odoo.com/page/quality">Quality</a></li>
+                      </ul>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-sm-3 o_productivity_apps">
+                  <div class="o_nav_app_family">
+                    <span></span> Productivity Tools
+                    <div>Great Tools = Happy People</div>
+                  </div>
+                  <ul>
+                    <li class="dropdown">
+                      <a href="#0" class="dropdown-toggle">Communication</a>
+                      <ul>
+                        <li><a href="https://www.odoo.com/page/discuss">Discuss</a></li>
+                        <li><a href="https://www.odoo.com/page/discuss-groups">Mailing Lists</a></li>
+                        <li><a href="https://www.odoo.com/page/notes">Notes</a></li>
+                        <li><a href="#">Help desk</a></li>
+                        <li><a href="#">Appointment</a></li>
+                      </ul>
+                    </li>
+                    <li><a href="https://www.odoo.com/page/timesheet">Timesheet</a></li>
+                    <li><a href="https://www.odoo.com/page/email-marketing">Email Marketing</a></li>
+                    <li><a href="https://www.odoo.com/page/events">Events</a></li>
+                    <li><a href="https://www.odoo.com/page/survey">Survey</a></li>
+                    <li><a href="https://www.odoo.com/page/live-chat">Live Chat</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <a href="http://www.odoo.com/apps/modules" class="o_store_link"><i class="fa fa-cube fa-fw"></i> Third party apps</a>
+          </div>
+        </li>
+        <li><a href="https://www.odoo.com/page/tour">Tour</a></li>
+        <li><a href="https://www.odoo.com/pricing">Pricing</a></li>
+        <li><a href="https://www.odoo.com/page/docs">Docs</a></li>
+      </ul>
+    </div>
+-->
+    <nav class="navbar o_sub_nav">
+      <div class="container">
+        <div class="navbar-header visible-xs">
+            <button type="button" class="navbar-toggle collapsed text-left btn-block" data-toggle="collapse" data-target="#o_sub-menu" aria-expanded="false">
+              Navigate
+              <span class="mdi-hardware-keyboard-arrow-down pull-right"></span>
+            </button>
+        </div>
+
+        <div class="collapse navbar-collapse" id="o_sub-menu">
+          <ol class="o_breadcrumb breadcrumb nav navbar-left">
+              
+              
+
+
+
+
+
+    
+        
+            <li><a href="../index.html">Developer Doc</a></li>
+        
+    
+    <li class="active"><a href="#">QWeb Reports</a></li>
+
+              
+          </ol>
+
+          <div class="call-to-action navbar-right hidden-xs">
+            <a href="http://www.odoo.com/trial" class="btn btn-primary">Start Now</a>
+          </div>
+
+          <ul class="navbar-nav navbar-right nav o_sub_nav_actions">
+            
+              <li class="divider"></li>
+            
+
+            
+            
+
+
+            
+          </ul>
+
+          <ul class="nav navbar-nav navbar-right">
+            
+
+            
+            
+<!--
+<li><a href="https://www.odoo.com/documentation/user/13.0/index.html">User</a></li>
+<li><a href="https://www.odoo.com/documentation/13.0/index.html">Developer</a></li>
+<li><a href="https://www.odoo.com/documentation/13.0/setup/install.html">Installation</a></li>
+<li><a href="https://odoo.com/slides">eLearning</a></li>
+<li><a href="https://www.odoo.com/page/odoo-white-paper">White Papers</a></li>
+<li><a href="https://www.odoo.com/page/legal">Legal</a></li>
+-->
+            
+
+            
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header><div id="wrap" class="">
+    
+    
+    
+    <figure class="card top has_banner">
+      <span class="card-img" style="background-image: url('../_static/banners/reports.jpg');"></span>
+      <div class="container text-center">
+        <h1> QWeb Reports </h1>
+      </div>
+    </figure>
+    
+    
+    
+      <main class="container ">
+        
+        <div class="o_content row">
+          
+          <aside>
+            <div class="navbar-aside text-center">
+              <ul class="nav text-left list-group"><li class="list-group-item"><a href="#report" class="ripple reference internal">отчет</a></li><li class="list-group-item"><a href="#report-template" class="ripple reference internal">Шаблон отчета</a><ul ><li class="list-group-item"><a href="#minimal-viable-template" class="ripple reference internal">Минимальный жизнеспособный шаблон</a></li><li class="list-group-item"><a href="#translatable-templates" class="ripple reference internal">Переводимые шаблоны</a></li><li class="list-group-item"><a href="#barcodes" class="ripple reference internal">штрихкоды</a></li><li class="list-group-item"><a href="#useful-remarks" class="ripple reference internal">Полезные замечания</a></li></ul></li><li class="list-group-item"><a href="#paper-format" class="ripple reference internal">Формат бумаги</a></li><li class="list-group-item"><a href="#custom-reports" class="ripple reference internal">Пользовательские отчеты</a></li><li class="list-group-item"><a href="#custom-fonts" class="ripple reference internal">Пользовательские шрифты</a></li><li class="list-group-item"><a href="#reports-are-web-pages" class="ripple reference internal">Отчеты являются веб-страницами</a></li></ul>
+              
+              <p class="gith-container"><a href="https://github.com/odoo/odoo/edit/13.0/doc/reference/reports.rst" class="gith-link">
+                  Edit on GitHub
+              </a></p>
+              
+            </div>
+          </aside>
+          
+          <article class="doc-body ">
+            
+            
+  <section id="qweb-reports"><i id="reference-reports"></i><p >Отчеты пишутся в HTML / QWeb, как и все обычные представления в Odoo. Вы можете использовать обычные <a href="qweb.html#reference-qweb" class="internal reference"><span class="std std-ref">QWeb control flow tools</span></a>. Сам рендеринг PDF выполняется <a href="https://wkhtmltopdf.org" class="reference external">wkhtmltopdf</a>.</p><p >Если вы хотите создать отчет по определенной модели, вам нужно определить это <a href="#reference-reports-report" class="internal reference"><span class="std std-ref">отчет</span></a> и <a href="#reference-reports-report" class="internal reference"><span class="std std-ref">отчет</span></a>, который он будет использовать. При желании вы также можете указать конкретный <a href="#reference-reports-report" class="internal reference"><span class="std std-ref">отчет</span></a> для этого отчета. Наконец, если вам нужен доступ не только к вашей модели, вы можете определить класс <a href="#reference-reports-report" class="internal reference"><span class="std std-ref">отчет</span></a>, который предоставит вам доступ к большему количеству моделей и записей в шаблоне.</p></section><section id="report"><i id="reference-reports-report"></i><h2 >отчет</h2><p >Каждый отчет должен быть объявлен действием <a href="actions.html#reference-actions-report" class="internal reference"><span class="std std-ref">report action</span></a>.</p><p >Для простоты ярлык `` &lt;report&gt; Элемент `` доступен для определения отчета, а не для настройки <span class="std std-ref xref">the action &lt;reference/actions/report&gt;`</span> &lt;report&gt; `` может принимать следующие атрибуты:</p><dl ><dt >`` Id``</dt><dd >сгенерированная запись: term: <code >external id</code></dd><dt >`` имя`` (обязательно)</dt><dd >полезно только как мнемоника / описание отчета при поиске в списке какого-либо типа</dd><dt >`` модель`` (обязательно)</dt><dd >модель вашего отчета</dd><dt >`` report_type`` (обязательно)</dt><dd >или `` qweb-pdf`` для отчетов в формате PDF или `` qweb-html`` для HTML</dd><dt >`` report_name``</dt><dd >название вашего отчета (который будет именем вывода PDF)</dd><dt >`` groups``</dt><dd ><a href="orm.html#odoo.fields.Many2many" title="odoo.fields.Many2many" class="internal reference"><code class="py-class py xref">Many2many</code></a> field to the groups allowed to view/use
+the current report</dd><dt >`` attachment_use``</dt><dd >если установлено значение True, отчет будет сохранен как вложение записи, используя имя, сгенерированное выражением `` attachment``; Вы можете использовать это, если вам нужно, чтобы ваш отчет был сгенерирован только один раз (например, по юридическим причинам)</dd><dt >`` attachment``</dt><dd >выражение python, определяющее имя отчета; запись доступна как переменная `` объект``</dd><dt >`` Paperformat``</dt><dd >внешний идентификатор формата бумаги, который вы хотите использовать (по умолчанию используется формат бумаги компании, если он не указан)</dd></dl><p >Пример:</p><div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;report</span>
+    <span class="na">id=</span><span class="s">&quot;account_invoices&quot;</span>
+    <span class="na">model=</span><span class="s">&quot;account.invoice&quot;</span>
+    <span class="na">string=</span><span class="s">&quot;Invoices&quot;</span>
+    <span class="na">report_type=</span><span class="s">&quot;qweb-pdf&quot;</span>
+    <span class="na">name=</span><span class="s">&quot;account.report_invoice&quot;</span>
+    <span class="na">file=</span><span class="s">&quot;account.report_invoice&quot;</span>
+    <span class="na">attachment_use=</span><span class="s">&quot;True&quot;</span>
+    <span class="na">attachment=</span><span class="s">&quot;(object.state in (&#39;open&#39;,&#39;paid&#39;)) and</span>
+<span class="s">        (&#39;INV&#39;+(object.number or &#39;&#39;).replace(&#39;/&#39;,&#39;&#39;)+&#39;.pdf&#39;)&quot;</span>
+<span class="nt">/&gt;</span>
+</pre></div>
+</div>
+</section><section id="report-template"><i id="reference-reports-templates"></i><h2 >Шаблон отчета</h2></section><section id="minimal-viable-template"><h3 >Минимальный жизнеспособный шаблон</h3><p >Минимальный шаблон будет выглядеть так:</p><div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;template</span> <span class="na">id=</span><span class="s">&quot;report_invoice&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;t</span> <span class="na">t-call=</span><span class="s">&quot;web.html_container&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;t</span> <span class="na">t-foreach=</span><span class="s">&quot;docs&quot;</span> <span class="na">t-as=</span><span class="s">&quot;o&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;t</span> <span class="na">t-call=</span><span class="s">&quot;web.external_layout&quot;</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;page&quot;</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;h2&gt;</span>Report title<span class="nt">&lt;/h2&gt;</span>
+                    <span class="nt">&lt;p&gt;</span>This object&#39;s name is <span class="nt">&lt;span</span> <span class="na">t-field=</span><span class="s">&quot;o.name&quot;</span><span class="nt">/&gt;&lt;/p&gt;</span>
+                <span class="nt">&lt;/div&gt;</span>
+            <span class="nt">&lt;/t&gt;</span>
+        <span class="nt">&lt;/t&gt;</span>
+    <span class="nt">&lt;/t&gt;</span>
+<span class="nt">&lt;/template&gt;</span>
+</pre></div>
+</div>
+<p >Вызов `` external_layout`` добавит заголовок и нижний колонтитул по умолчанию в ваш отчет. Тело PDF будет содержимым внутри `` &lt;div class=»page»&gt; <code >. `` Id</code> шаблона должен быть именем, указанным в объявлении отчета; например, `` account.report_invoice`` для вышеприведенного отчета. Поскольку это шаблон QWeb, вы можете получить доступ ко всем полям объектов `` docs` ', полученных шаблоном.</p><p >Есть несколько конкретных переменных, доступных в отчетах, в основном:</p><dl ><dt >`` docs``</dt><dd >записи для текущего отчета</dd><dt >`` doc_ids``</dt><dd >список идентификаторов для записей `` docs``</dd><dt >`` doc_model``</dt><dd >модель для записи `` документов``</dd><dt >`` Time``</dt><dd >ссылка на: mod: <code >python: time</code> из стандартной библиотеки Python</dd><dt >`` user``</dt><dd >`` res.user`` запись для пользователя, печатающего отчет</dd><dt >`` res_company``</dt><dd >запись для текущей `` пользователя`` компании</dd></dl><p >Если вы хотите получить доступ к другим записям / моделям в шаблоне, вам потребуется <a href="#reference-reports-custom-reports" class="internal reference"><span class="std std-ref">a custom report</span></a>.</p></section><section id="translatable-templates"><h3 >Переводимые шаблоны</h3><p >Если вы хотите перевести отчеты (например, на язык партнера), вам нужно определить два шаблона:</p><ul ><li >Основной шаблон отчета</li><li >Переводимый документ</li></ul><p >Затем вы можете вызвать переводимый документ из вашего основного шаблона с атрибутом `` t-lang``, для которого установлен код языка (например, `` fr`` или `` en_US``) или в поле записи. Вам также нужно будет повторно просмотреть связанные записи в соответствующем контексте, если вы используете переводимые поля (например, названия стран, условия продаж и т. Д.)</p><div role="alert" class="alert-warning alert"><h3 class="alert-title">Предупреждение</h3><p >Если в вашем шаблоне отчета не используются переводимые поля записей, повторный просмотр записи на другом языке * не * необходим и повлияет на производительность.</p></div><p >Например, давайте посмотрим на отчет «Заказ на продажу» из модуля «Продажа»:</p><div class="highlight-xml"><div class="highlight"><pre><span></span><span class="c">&lt;!-- Main template --&gt;</span>
+<span class="nt">&lt;template</span> <span class="na">id=</span><span class="s">&quot;report_saleorder&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;t</span> <span class="na">t-call=</span><span class="s">&quot;web.html_container&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;t</span> <span class="na">t-foreach=</span><span class="s">&quot;docs&quot;</span> <span class="na">t-as=</span><span class="s">&quot;doc&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;t</span> <span class="na">t-call=</span><span class="s">&quot;sale.report_saleorder_document&quot;</span> <span class="na">t-lang=</span><span class="s">&quot;doc.partner_id.lang&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/t&gt;</span>
+    <span class="nt">&lt;/t&gt;</span>
+<span class="nt">&lt;/template&gt;</span>
+
+<span class="c">&lt;!-- Translatable template --&gt;</span>
+<span class="nt">&lt;template</span> <span class="na">id=</span><span class="s">&quot;report_saleorder_document&quot;</span><span class="nt">&gt;</span>
+    <span class="c">&lt;!-- Re-browse of the record with the partner lang --&gt;</span>
+    <span class="nt">&lt;t</span> <span class="na">t-set=</span><span class="s">&quot;doc&quot;</span> <span class="na">t-value=</span><span class="s">&quot;doc.with_context(lang=doc.partner_id.lang)&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;t</span> <span class="na">t-call=</span><span class="s">&quot;web.external_layout&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;page&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;oe_structure&quot;</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;row&quot;</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;col-6&quot;</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;strong</span> <span class="na">t-if=</span><span class="s">&quot;doc.partner_shipping_id == doc.partner_invoice_id&quot;</span><span class="nt">&gt;</span>Invoice and shipping address:<span class="nt">&lt;/strong&gt;</span>
+                    <span class="nt">&lt;strong</span> <span class="na">t-if=</span><span class="s">&quot;doc.partner_shipping_id != doc.partner_invoice_id&quot;</span><span class="nt">&gt;</span>Invoice address:<span class="nt">&lt;/strong&gt;</span>
+                    <span class="nt">&lt;div</span> <span class="na">t-field=</span><span class="s">&quot;doc.partner_invoice_id&quot;</span> <span class="na">t-options=</span><span class="s">&quot;{&amp;quot;no_marker&amp;quot;: True}&quot;</span><span class="nt">/&gt;</span>
+                <span class="nt">&lt;...&gt;</span>
+            <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;oe_structure&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/div&gt;</span>
+    <span class="nt">&lt;/t&gt;</span>
+<span class="nt">&lt;/template&gt;</span>
+</pre></div>
+</div>
+<p >Основной шаблон вызывает переводимый шаблон с `` doc.partner_id.lang`` в качестве параметра `` t-lang``, поэтому он будет отображаться на языке партнера. Таким образом, каждый Заказ на продажу будет напечатан на языке соответствующего покупателя. Если вы хотите перевести только тело документа, но сохранить верхний и нижний колонтитулы на языке по умолчанию, вы можете вызвать внешний макет отчета следующим образом:</p><div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;t</span> <span class="na">t-call=</span><span class="s">&quot;web.external_layout&quot;</span> <span class="na">t-lang=</span><span class="s">&quot;en_US&quot;</span><span class="nt">&gt;</span>
+</pre></div>
+</div>
+<div role="alert" class="alert-info alert"><h3 class="alert-title">Совет</h3><p >Обратите внимание, что это работает только при вызове внешних шаблонов, вы не сможете перевести часть документа, установив атрибут `` t-lang`` на узле xml, отличном от `` t-call``. Если вы хотите перевести часть шаблона, вы можете создать внешний шаблон с этим частичным шаблоном и вызвать его из основного с атрибутом `` t-lang``.</p></div></section><section id="barcodes"><h3 >штрихкоды</h3><p >Штрих-коды - это изображения, возвращаемые контроллером, и они могут быть легко встроены в отчеты благодаря синтаксису QWeb (например, см . <a href="qweb.html#reference-qweb-attributes" class="internal reference"><span class="std std-ref">атрибуты</span></a>):</p><div class="highlight-html"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">img</span> <span class="na">t-att-src</span><span class="o">=</span><span class="s">&quot;&#39;/report/barcode/QR/%s&#39; % &#39;My text in qr code&#39;&quot;</span><span class="p">/&gt;</span>
+</pre></div>
+</div>
+<p >Дополнительные параметры могут быть переданы в виде строки запроса</p><div class="highlight-html"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">img</span> <span class="na">t-att-src</span><span class="o">=</span><span class="s">&quot;&#39;/report/barcode/?</span>
+<span class="s">    type=%s&amp;value=%s&amp;width=%s&amp;height=%s&#39;%(&#39;QR&#39;, &#39;text&#39;, 200, 200)&quot;</span><span class="p">/&gt;</span>
+</pre></div>
+</div>
+</section><section id="useful-remarks"><h3 >Полезные замечания</h3><ul ><li >Классы Twitter Bootstrap и FontAwesome можно использовать в шаблоне отчета</li><li >Локальный CSS можно поставить прямо в шаблон</li><li ><p >Глобальный CSS можно вставить в основной макет отчета, унаследовав его шаблон и вставив свой CSS</p><div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;template</span> <span class="na">id=</span><span class="s">&quot;report_saleorder_style&quot;</span> <span class="na">inherit_id=</span><span class="s">&quot;report.style&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;xpath</span> <span class="na">expr=</span><span class="s">&quot;.&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;t&gt;</span>
+      .example-css-class {
+        background-color: red;
+      }
+    <span class="nt">&lt;/t&gt;</span>
+  <span class="nt">&lt;/xpath&gt;</span>
+<span class="nt">&lt;/template&gt;</span>
+</pre></div>
+</div>
+</li><li >Если кажется, что в вашем отчете PDF отсутствуют стили, проверьте <a href="../howtos/backend.html#reference-backend-reporting-printed-reports-pdf-without-styles" class="internal reference"><span class="std std-ref">these instructions</span></a>.</li></ul></section><section id="paper-format"><i id="reference-reports-paper-formats"></i><h2 >Формат бумаги</h2><p >Бумажные форматы являются записями `` report.paperformat`` и могут содержать следующие атрибуты:</p><dl ><dt >`` имя`` (обязательно)</dt><dd >полезно только как мнемоника / описание отчета при поиске в списке какого-либо типа</dd><dt >`` Description``</dt><dd >небольшое описание вашего формата</dd><dt >`` format``</dt><dd >либо предопределенный формат (от A0 до A9, от B0 до B10, Legal, Letter, Tabloid, …) или `` custom``; A4 по умолчанию. Нельзя использовать нестандартный формат, если вы определяете размеры страницы.</dd><dt >`` Dpi``</dt><dd >выходной DPI; 90 по умолчанию</dd><dt >`` margin_top``, `` margin_bottom``, `` margin_left``, `` margin_right``</dt><dd >размеры полей в мм</dd><dt >`` page_height``, `` page_width``</dt><dd >размеры страницы в мм</dd><dt >`` Orientation``</dt><dd >Пейзаж или Портрет</dd><dt >`` Header_line``</dt><dd >логическое значение для отображения строки заголовка</dd><dt >`` Header_spacing``</dt><dd >расстояние между жатками в мм</dd></dl><p >Пример:</p><div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;record</span> <span class="na">id=</span><span class="s">&quot;paperformat_frenchcheck&quot;</span> <span class="na">model=</span><span class="s">&quot;report.paperformat&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;name&quot;</span><span class="nt">&gt;</span>French Bank Check<span class="nt">&lt;/field&gt;</span>
+    <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;default&quot;</span> <span class="na">eval=</span><span class="s">&quot;True&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;format&quot;</span><span class="nt">&gt;</span>custom<span class="nt">&lt;/field&gt;</span>
+    <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;page_height&quot;</span><span class="nt">&gt;</span>80<span class="nt">&lt;/field&gt;</span>
+    <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;page_width&quot;</span><span class="nt">&gt;</span>175<span class="nt">&lt;/field&gt;</span>
+    <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;orientation&quot;</span><span class="nt">&gt;</span>Portrait<span class="nt">&lt;/field&gt;</span>
+    <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;margin_top&quot;</span><span class="nt">&gt;</span>3<span class="nt">&lt;/field&gt;</span>
+    <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;margin_bottom&quot;</span><span class="nt">&gt;</span>3<span class="nt">&lt;/field&gt;</span>
+    <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;margin_left&quot;</span><span class="nt">&gt;</span>3<span class="nt">&lt;/field&gt;</span>
+    <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;margin_right&quot;</span><span class="nt">&gt;</span>3<span class="nt">&lt;/field&gt;</span>
+    <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;header_line&quot;</span> <span class="na">eval=</span><span class="s">&quot;False&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;header_spacing&quot;</span><span class="nt">&gt;</span>3<span class="nt">&lt;/field&gt;</span>
+    <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;dpi&quot;</span><span class="nt">&gt;</span>80<span class="nt">&lt;/field&gt;</span>
+<span class="nt">&lt;/record&gt;</span>
+</pre></div>
+</div>
+</section><section id="custom-reports"><i id="reference-reports-custom-reports"></i><h2 >Пользовательские отчеты</h2><p >Модель отчета имеет функцию `` get_html`` по умолчанию, которая ищет модель с именем: samp: <code >report. {Module.report_name}</code>. Если он существует, он будет использовать его для вызова механизма QWeb; в противном случае будет использоваться универсальная функция. Если вы хотите настроить отчеты, включив в шаблон больше элементов (например, записи других моделей), вы можете определить эту модель, перезаписать функцию `` _get_report_values`` и передать объекты в словарь `` docargs`` :</p><div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">odoo</span> <span class="kn">import</span> <span class="n">api</span><span class="p">,</span> <span class="n">models</span>
+
+<span class="k">class</span> <span class="nc">ParticularReport</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">AbstractModel</span><span class="p">):</span>
+    <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;report.module.report_name&#39;</span>
+
+    <span class="nd">@api</span><span class="o">.</span><span class="n">model</span>
+    <span class="k">def</span> <span class="nf">_get_report_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">docids</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">report_obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="s1">&#39;ir.actions.report&#39;</span><span class="p">]</span>
+        <span class="n">report</span> <span class="o">=</span> <span class="n">report_obj</span><span class="o">.</span><span class="n">_get_report_from_name</span><span class="p">(</span><span class="s1">&#39;module.report_name&#39;</span><span class="p">)</span>
+        <span class="n">docargs</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;doc_ids&#39;</span><span class="p">:</span> <span class="n">docids</span><span class="p">,</span>
+            <span class="s1">&#39;doc_model&#39;</span><span class="p">:</span> <span class="n">report</span><span class="o">.</span><span class="n">model</span><span class="p">,</span>
+            <span class="s1">&#39;docs&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">docargs</span>
+</pre></div>
+</div>
+</section><section id="custom-fonts"><i id="reference-reports-custom-fonts"></i><h2 >Пользовательские шрифты</h2><p >Если вы хотите использовать пользовательские шрифты, вам нужно добавить свой собственный шрифт и связанный с ним less / CSS в пакет ресурсов `` web.reports_assets_common``. Добавление пользовательских шрифтов в `` web.assets_common`` или `` web.assets_backend`` не сделает ваш шрифт доступным в отчетах QWeb.</p><p >Пример:</p><div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;template</span> <span class="na">id=</span><span class="s">&quot;report_assets_common_custom_fonts&quot;</span> <span class="na">name=</span><span class="s">&quot;Custom QWeb fonts&quot;</span> <span class="na">inherit_id=</span><span class="s">&quot;web.report_assets_common&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;xpath</span> <span class="na">expr=</span><span class="s">&quot;.&quot;</span> <span class="na">position=</span><span class="s">&quot;inside&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">&quot;/your_module/static/src/less/fonts.less&quot;</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">type=</span><span class="s">&quot;text/less&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/xpath&gt;</span>
+<span class="nt">&lt;/template&gt;</span>
+</pre></div>
+</div>
+<p >Вам нужно будет определить ваш `` @ font-face`` в этом меньшем файле, даже если вы использовали его в другом пакете ресурсов (кроме `` web.reports_assets_common``).</p><p >Пример:</p><div class="highlight-xml"><div class="highlight"><pre><span></span>@font-face {
+    font-family: &#39;MonixBold&#39;;
+    src: local(&#39;MonixBold&#39;), local(&#39;MonixBold&#39;), url(/your_module/static/src/fonts/MonixBold-Regular.otf) format(&#39;opentype&#39;);
+}
+
+.h1-title-big {
+    font-family: MonixBold;
+    font-size: 60px;
+    color: #3399cc;
+}
+</pre></div>
+</div>
+<p >После того, как вы добавили меньшее в свой пакет ресурсов, вы можете использовать классы - в этом примере `` h1-title-big`` - в своем пользовательском отчете QWeb.</p></section><section id="reports-are-web-pages"><h2 >Отчеты являются веб-страницами</h2><p >Отчеты генерируются динамически модулем отчетов и могут быть доступны напрямую через URL:</p><p >Например, вы можете получить доступ к отчету о заказах на продажу в html-режиме, перейдя в http: // &lt;server-address&gt; /report/html/sale.report_saleorder/38</p><p >Или вы можете получить доступ к PDF-версии по адресу http: // &lt;server-address&gt; /report/pdf/sale.report_saleorder/38</p></section>
+
+          </article>
+        </div>
+        
+        <div id="mask"></div>
+      </main>
+  </div>
+
+  <div class="floating_action_container">
+    <a id="floating_action" class="ripple" href="#">
+      <i class="mdi-action-explore"></i>
+    </a>
+    <div id="floating_action_menu">
+      <span class="bubble"></span>
+      <ul class="list-group content">
+        <li class="list-group-item ripple"><a>Cras justo odio</a></li>
+        <li class="list-group-item ripple"><a>Dapibus ac facilisis in</a></li>
+        <li class="list-group-item ripple"><a>Morbi leo risus</a></li>
+        <li class="list-group-item ripple"><a>Porta ac consectetur ac</a></li>
+        <li class="list-group-item ripple"><a>Vestibulum at eros</a></li>
+      </ul>
+    </div>
+  </div>
+<!-- 
+  <footer>
+    <div id="footer" class="container">
+      <span class="o_logo o_logo_inverse center-block o_footer_logo"></span>
+      <div class="row">
+        <div class="col-sm-7 col-md-7 col-lg-6">
+          <div class="row">
+            <div class="col-xs-6 col-sm-4">
+              <span class="menu_title">Community</span>
+              <ul>
+                <li><a href="https://github.com/odoo/odoo">Github</a></li>
+                <li><a href="http://www.odoo.com/page/download">Download</a></li>
+                <li class="divider"></li>
+                <li><a href="http://runbot.odoo.com/runbot/repo/git-github-com-odoo-enterprise-7">Runbot</a></li>
+                <li><a href="https://github.com/odoo/odoo/wiki/Translations">Translations</a></li>
+                <li class="divider"></li>
+                <li><a href="http://www.odoo.com/page/odoo-community">Mailing Lists</a></li>
+                <li><a href="http://www.odoo.com/forum/help-1">Forum</a></li>
+              </ul>
+            </div>
+            <div class="col-xs-6 col-sm-4">
+              <span class="menu_title">Services</span>
+              <ul>
+                <li><a href="https://www.odoo.sh">Odoo Cloud Platform</a></li>
+                <li class="divider"></li>
+                <li><a href="http://www.odoo.com/help">Support</a></li>
+                <li><a href="https://upgrade.odoo.com">Upgrade</a></li>
+                <li class="divider"></li>
+                <li><a href="http://www.odoo.com/partners">Find a partner</a></li>
+                <li><a href="http://www.odoo.com/page/become-a-partner">Become a partner</a></li>
+                <li class="divider"></li>
+                <li><a href="http://training.odoo.com/courses/odoo-functional">Training Center</a></li>
+                <li><a href="http://www.odoo.com/page/education-program">Education</a></li>
+                <li class="divider"></li>
+                <li><a href="http://www.odoo.com/page/security">Security</a></li>
+              </ul>
+            </div>
+            <div class="col-xs-12 col-sm-4 mb64">
+              <span class="menu_title">About us</span>
+              <ul>
+                <li><a href="http://www.odoo.com/page/about-us">Our company</a></li>
+                <li><a href="http://www.odoo.com/page/contactus">Contact</a></li>
+                <li class="divider" />
+                <li><a href="http://www.odoo.com/event">Events</a></li>
+                <li><a href="http://www.odoo.com/blog">Blog</a></li>
+                <li><a href="http://www.odoo.com/blog/6">Customers</a></li>
+                <li class="divider" />
+                <li><a href="http://www.odoo.com/jobs">Jobs</a></li>
+                <li class="divider" />
+                <li><a href="http://www.odoo.com/page/legal">Legal</a> | <a href="http://www.odoo.com/privacy">Privacy</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-5 col-md-4 col-md-offset-1 col-lg-5 col-lg-offset-1">
+          <p>
+            <small>
+              Odoo is a suite of open source business apps that cover all your company needs: CRM, eCommerce, accounting, inventory, point of sale, project management, etc.
+              <br/><br/>
+              Odoo's unique value proposition is to be at the same time very easy to use and fully integrated.
+            </small>
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="o_footer_bottom">
+      <div class="container">
+        <a class="small" href="http://www.odoo.com/page/website-builder">Website made with <span class="o_logo o_logo_inverse o_logo_15"></span></a>
+        <div class="social-links pull-right">
+          <a href="http://www.odoo.com/web/about/facebook"><i class="fa fa-facebook"></i></a>
+          <a href="http://www.odoo.com/web/about/twitter"><i class="fa fa-twitter"></i></a>
+          <a href="http://www.odoo.com/web/about/linkedin"><i class="fa fa-linkedin"></i></a>
+          <a href="mailto:info@odoo.com"><i class="fa fa-envelope"></i></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+  -->
+  </body>
+</html>

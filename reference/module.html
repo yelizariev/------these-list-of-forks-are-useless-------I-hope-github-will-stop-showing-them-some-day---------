@@ -1,0 +1,365 @@
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ru">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css?family=Work+Sans:500,600" rel="stylesheet">
+  
+    <title>Манифесты модулей &#8212; Документация odoo 13.0</title>
+    <link rel="stylesheet" href="../_static/style.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/patchqueue.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script type="text/javascript" src="../_static/jquery.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap.js"></script>
+    <script type="text/javascript" src="../_static/doc.js"></script>
+    <script type="text/javascript" src="../_static/jquery.noconflict.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <script type="text/javascript" src="../_static/patchqueue.js"></script><link rel="canonical" href="" />
+  
+    <link rel="index" title="Алфавитный указатель" href="../genindex.html" />
+    <link rel="search" title="Поиск" href="../search.html" />
+    <link rel="next" title="Интерфейс командной строки: odoo-bin" href="cmdline.html" />
+    <link rel="prev" title="Взгляды" href="views.html" /> 
+  </head><body><header class="o_main_header o_has_sub_nav o_inverted ">
+<!-- 
+    <div class="o_main_header_main">
+      <a class="pull-left o_logo" href="/"></a>
+      <a href="#" class="o_mobile_menu_toggle visible-xs-block pull-right">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="mdi-navigation-menu"></span>
+      </a>
+      <div class="o_header_buttons">
+        <a href="http://www.odoo.com/trial" class="btn btn-primary">Start Now</a>
+      </div>
+      <ul class="o_primary_nav">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle">Apps</a>
+          <div class="dropdown-menu o_secondary_nav">
+            <div class="container">
+              <div class="row">
+                <div class="col-sm-3 o_website_apps">
+                  <div class="o_nav_app_family">
+                    <span></span> Websites
+                    <div>Build great user experience</div>
+                  </div>
+                  <ul>
+                    <li><a href="https://www.odoo.com/page/website-builder">Website Builder</a></li>
+                    <li><a href="https://www.odoo.com/page/e-commerce">eCommerce</a></li>
+                    <li><a href="https://www.odoo.com/page/blog-engine">Blogs</a></li>
+                    <li><a href="https://www.odoo.com/page/community-builder">Forums</a></li>
+                    <li><a href="https://www.odoo.com/page/slides">Slides</a></li>
+                    <li><a href="https://adspike.odoo.com">SEA</a></li>
+                  </ul>
+                </div>
+                <div class="col-sm-3 o_sale_apps">
+                  <div class="o_nav_app_family">
+                    <span></span> Sales
+                    <div>Boost your success rate</div>
+                  </div>
+                  <ul>
+                    <li><a href="https://www.odoo.com/page/sales">Sales</a></li>
+                    <li><a href="https://www.odoo.com/page/crm">CRM</a></li>
+                    <li><a href="https://www.odoo.com/page/billing">Invoicing</a></li>
+                    <li class="dropdown">
+                      <a href="#0" class="dropdown-toggle">Point of Sale</a>
+                      <ul>
+                        <li><a href="https://www.odoo.com/page/point-of-sale">Shops</a></li>
+                        <li><a href="https://www.odoo.com/page/pos-restaurant">Restaurants</a></li>
+                      </ul>
+                    </li>
+                    <li><a href="https://www.odoo.com/page/subscriptions">Subscriptions</a></li>
+                    <li><a href="https://www.odoo.com/page/sign">Sign</a></li>
+                  </ul>
+                </div>
+                <div class="col-sm-3 o_operation_apps">
+                  <div class="o_nav_app_family">
+                    <span></span> Operations
+                    <div>It's all about efficiency</div>
+                  </div>
+                  <ul>
+                    <li><a href="https://www.odoo.com/page/accounting">Accounting</a></li>
+                    <li><a href="https://www.odoo.com/page/project-management">Project</a></li>
+                    <li class="dropdown">
+                      <a href="#0" class="dropdown-toggle">Human Resources</a>
+                      <ul>
+                        <li><a href="https://www.odoo.com/page/recruitment">Recruitment</a></li>
+                        <li><a href="https://www.odoo.com/page/employees">Employees</a></li>
+                        <li><a href="https://www.odoo.com/page/expenses">Expenses</a></li>
+                        <li><a href="https://www.odoo.com/page/appraisal">Appraisal</a></li>
+                        <li><a href="https://www.odoo.com/page/fleet">Fleet</a></li>
+                        <li><a href="https://www.odoo.com/page/leaves">Leaves</a></li>
+                      </ul>
+                    </li>
+                    <li><a href="https://www.odoo.com/page/warehouse">Inventory</a></li>
+                    <li><a href="https://www.odoo.com/page/purchase">Purchase</a></li>
+                    <li class="dropdown">
+                      <a href="#0" class="dropdown-toggle">Manufacturing</a>
+                      <ul>
+                        <li><a href="https://www.odoo.com/page/manufacturing">MRP</a></li>
+                        <li><a href="https://www.odoo.com/page/plm">PLM</a></li>
+                        <li><a href="https://www.odoo.com/page/maintenance">Maintenance</a></li>
+                        <li><a href="https://www.odoo.com/page/quality">Quality</a></li>
+                      </ul>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-sm-3 o_productivity_apps">
+                  <div class="o_nav_app_family">
+                    <span></span> Productivity Tools
+                    <div>Great Tools = Happy People</div>
+                  </div>
+                  <ul>
+                    <li class="dropdown">
+                      <a href="#0" class="dropdown-toggle">Communication</a>
+                      <ul>
+                        <li><a href="https://www.odoo.com/page/discuss">Discuss</a></li>
+                        <li><a href="https://www.odoo.com/page/discuss-groups">Mailing Lists</a></li>
+                        <li><a href="https://www.odoo.com/page/notes">Notes</a></li>
+                        <li><a href="#">Help desk</a></li>
+                        <li><a href="#">Appointment</a></li>
+                      </ul>
+                    </li>
+                    <li><a href="https://www.odoo.com/page/timesheet">Timesheet</a></li>
+                    <li><a href="https://www.odoo.com/page/email-marketing">Email Marketing</a></li>
+                    <li><a href="https://www.odoo.com/page/events">Events</a></li>
+                    <li><a href="https://www.odoo.com/page/survey">Survey</a></li>
+                    <li><a href="https://www.odoo.com/page/live-chat">Live Chat</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <a href="http://www.odoo.com/apps/modules" class="o_store_link"><i class="fa fa-cube fa-fw"></i> Third party apps</a>
+          </div>
+        </li>
+        <li><a href="https://www.odoo.com/page/tour">Tour</a></li>
+        <li><a href="https://www.odoo.com/pricing">Pricing</a></li>
+        <li><a href="https://www.odoo.com/page/docs">Docs</a></li>
+      </ul>
+    </div>
+-->
+    <nav class="navbar o_sub_nav">
+      <div class="container">
+        <div class="navbar-header visible-xs">
+            <button type="button" class="navbar-toggle collapsed text-left btn-block" data-toggle="collapse" data-target="#o_sub-menu" aria-expanded="false">
+              Navigate
+              <span class="mdi-hardware-keyboard-arrow-down pull-right"></span>
+            </button>
+        </div>
+
+        <div class="collapse navbar-collapse" id="o_sub-menu">
+          <ol class="o_breadcrumb breadcrumb nav navbar-left">
+              
+              
+
+
+
+
+
+    
+        
+            <li><a href="../index.html">Developer Doc</a></li>
+        
+    
+    <li class="active"><a href="#">Манифесты модулей</a></li>
+
+              
+          </ol>
+
+          <div class="call-to-action navbar-right hidden-xs">
+            <a href="http://www.odoo.com/trial" class="btn btn-primary">Start Now</a>
+          </div>
+
+          <ul class="navbar-nav navbar-right nav o_sub_nav_actions">
+            
+              <li class="divider"></li>
+            
+
+            
+            
+
+
+            
+          </ul>
+
+          <ul class="nav navbar-nav navbar-right">
+            
+
+            
+            
+<!--
+<li><a href="https://www.odoo.com/documentation/user/13.0/index.html">User</a></li>
+<li><a href="https://www.odoo.com/documentation/13.0/index.html">Developer</a></li>
+<li><a href="https://www.odoo.com/documentation/13.0/setup/install.html">Installation</a></li>
+<li><a href="https://odoo.com/slides">eLearning</a></li>
+<li><a href="https://www.odoo.com/page/odoo-white-paper">White Papers</a></li>
+<li><a href="https://www.odoo.com/page/legal">Legal</a></li>
+-->
+            
+
+            
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header><div id="wrap" class="">
+    
+    
+    
+    <figure class="card top has_banner">
+      <span class="card-img" style="background-image: url('../_static/banners/module.jpg');"></span>
+      <div class="container text-center">
+        <h1> Манифесты модулей </h1>
+      </div>
+    </figure>
+    
+    
+    
+      <main class="container ">
+        
+        <div class="o_content row">
+          
+          <aside>
+            <div class="navbar-aside text-center">
+              <ul class="nav text-left list-group"><li class="list-group-item"><a href="#manifest" class="ripple reference internal">манифест</a></li></ul>
+              
+              <p class="gith-container"><a href="https://github.com/odoo/odoo/edit/13.0/doc/reference/module.rst" class="gith-link">
+                  Edit on GitHub
+              </a></p>
+              
+            </div>
+          </aside>
+          
+          <article class="doc-body ">
+            
+            
+  <section id="module-manifests"></section><section id="manifest"><i id="reference-module-manifest"></i><h2 >манифест</h2><p >Файл манифеста служит для объявления пакета Python как модуля Odoo и для указания метаданных модуля.</p><p >Это файл с именем `` __manifest __. Py`` и содержит один словарь Python, где каждый ключ определяет метаданные модуля.</p><div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s2">&quot;A Module&quot;</span><span class="p">,</span>
+    <span class="s1">&#39;version&#39;</span><span class="p">:</span> <span class="s1">&#39;1.0&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;depends&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;base&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;author&#39;</span><span class="p">:</span> <span class="s2">&quot;Author Name&quot;</span><span class="p">,</span>
+    <span class="s1">&#39;category&#39;</span><span class="p">:</span> <span class="s1">&#39;Category&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">    Description text</span>
+<span class="s2">    &quot;&quot;&quot;</span><span class="p">,</span>
+    <span class="c1"># data files always loaded at installation</span>
+    <span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s1">&#39;views/mymodule_view.xml&#39;</span><span class="p">,</span>
+    <span class="p">],</span>
+    <span class="c1"># data files containing optionally loaded demonstration data</span>
+    <span class="s1">&#39;demo&#39;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s1">&#39;demo/demo_data.xml&#39;</span><span class="p">,</span>
+    <span class="p">],</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p >Доступные поля манифеста:</p><dl ><dt >`` name`` (`` str``, обязательно)</dt><dd >удобочитаемое имя модуля</dd><dt >`` версия`` (`` str``)</dt><dd >версия этого модуля должна следовать правилам <a href="#id1"><span id="id2" class="problematic">`</span></a>семантического контроля <a href="#id1"><span id="id2" class="problematic">версий__</span></a></dd><dt >`` описание`` (`` str``)</dt><dd >расширенное описание для модуля, в reStructuredText</dd><dt >`` author`` (`` str``)</dt><dd >имя автора модуля</dd><dt >`` website`` (`` str``)</dt><dd >URL сайта для автора модуля</dd><dt >`` license`` (`` str``, по умолчанию: `` LGPL-3``)</dt><dd ><p >лицензия на распространение модуля. Возможные значения:</p><ul ><li ><code >GPL-2</code></li><li ><code >GPL-2 или любая более поздняя версия</code></li><li ><code >GPL-3</code></li><li ><code >GPL-3 или более поздняя версия</code></li><li ><code >AGPL-3</code></li><li ><code >LGPL-3</code></li><li ><code >Другая лицензия, утвержденная OSI</code></li><li ><code >OEEL-1</code> (лицензия Odoo Enterprise Edition v1.0)</li><li ><code >OPL-1</code> (Собственная лицензия Odoo v1.0)</li><li >«Другие проприетарные»</li></ul></dd><dt >`` category`` (`` str``, по умолчанию: `` Uncategorized``)</dt><dd ><p >классификационная категория в пределах Odoo, грубая бизнес-область для модуля.</p><p >Хотя рекомендуется использовать <a href="https://github.com/odoo/odoo/blob/13.0/odoo/addons/base/data/ir_module_category_data.xml" class="reference external">существующие категории</a>, поле имеет произвольную форму, и неизвестные категории создаются на лету. Иерархии категорий могут быть созданы с использованием разделителя `` / <code >, например `` Foo / Bar</code>, создаст категорию `` Foo``, категорию `` Bar`` в качестве дочерней категории `` Foo`` и будет установите `` Bar`` в качестве категории модуля.</p></dd><dt >`` selected`` (`` list (str) <a href="#id1"><span id="id2" class="problematic">``</span></a>)</dt><dd ><p >Модули Odoo, которые должны быть загружены до этого, либо потому, что этот модуль использует функции, которые они создают, либо потому, что он изменяет ресурсы, которые они определяют.</p><p >Когда модуль установлен, все его зависимости устанавливаются перед ним. Аналогично, зависимости загружаются до загрузки модуля.</p></dd><dt >`` data`` (`` list (str) <a href="#id1"><span id="id2" class="problematic">``</span></a>)</dt><dd >Список файлов данных, которые всегда должны быть установлены или обновлены вместе с модулем. Список путей из корневого каталога модуля</dd><dt >`` demo`` (`` list (str) <a href="#id1"><span id="id2" class="problematic">``</span></a>)</dt><dd >Список файлов данных, которые устанавливаются или обновляются только в * демонстрационном режиме *</dd><dt >`` auto_install`` (`` bool``, по умолчанию: `` False``)</dt><dd ><p >Если `` True``, этот модуль будет автоматически установлен, если установлены все его зависимости.</p><p >Обычно используется для «модулей связи», реализующих синергетическую интеграцию между двумя независимыми модулями.</p><p >Например, `` sale_crm`` зависит от `` sale`` и `` crm`` и имеет значение `` auto_install``. Когда установлены `` sale`` и `` crm``, он автоматически добавляет отслеживание CRM-кампаний в заказы на продажу без того, чтобы `` sale`` или `` crm`` знали друг о друге</p></dd><dt >`` external_dependencies`` (`` dict (key = list (str)) <a href="#id1"><span id="id2" class="problematic">``</span></a>)</dt><dd ><p >Словарь, содержащий питон и / или бинарные зависимости.</p><p >Для зависимостей python ключ `` python`` должен быть определен для этого словаря, и ему должен быть присвоен список импортируемых модулей python.</p><p >Для двоичных зависимостей ключ `` bin`` должен быть определен для этого словаря, и ему должен быть назначен список имен исполняемых двоичных файлов.</p><p >Модуль не будет установлен, если модуль Python не установлен на хост-машине или двоичный исполняемый файл не найден в переменной окружения PATH хост-машины.</p></dd><dt >`` application`` (`` bool``, по умолчанию: `` False``)</dt><dd >Должен ли модуль рассматриваться как полноценное приложение (`` True``) или просто как технический модуль (`` False``), который предоставляет некоторую дополнительную функциональность существующему модулю приложения.</dd><dt >`` css`` (`` list (str) <a href="#id1"><span id="id2" class="problematic">``</span></a>)</dt><dd >Укажите файлы css с настраиваемыми правилами для импорта, эти файлы должны находиться в `` static / src / css`` внутри модуля.</dd><dt >`` images`` (`` list (str) <a href="#id1"><span id="id2" class="problematic">``</span></a>)</dt><dd >Укажите файлы изображений, которые будут использоваться модулем.</dd><dt >`` installable`` (`` bool`` default: `` True``)</dt><dd >Должен ли пользователь иметь возможность установить модуль из веб-интерфейса или нет.</dd><dt >`` сопровождающий`` (`` str``)</dt><dd >Физическое или юридическое лицо, отвечающее за обслуживание этого модуля, по умолчанию предполагается, что автор является сопровождающим.</dd><dt >`` {pre_init, post_init, uninstall} _hook`` (`` str``)</dt><dd ><p >Хуки для установки / удаления модуля, их значением должна быть строка, представляющая имя функции, определенной внутри модуля `` __init __. Py``.</p><p >`` pre_init_hook`` принимает курсор в качестве единственного аргумента, эта функция выполняется перед установкой модуля.</p><p >`` post_init_hook`` принимает курсор и реестр в качестве аргументов, эта функция выполняется сразу после установки модуля.</p><p >`` uninstall_hook`` принимает курсор и реестр в качестве аргументов, эта функция выполняется после удаления модуля.</p><p >Эти хуки должны использоваться только тогда, когда настройка / очистка, необходимая для этого модуля, либо чрезвычайно сложна, либо невозможна через API.</p></dd></dl></section>
+
+          </article>
+        </div>
+        
+        <div id="mask"></div>
+      </main>
+  </div>
+
+  <div class="floating_action_container">
+    <a id="floating_action" class="ripple" href="#">
+      <i class="mdi-action-explore"></i>
+    </a>
+    <div id="floating_action_menu">
+      <span class="bubble"></span>
+      <ul class="list-group content">
+        <li class="list-group-item ripple"><a>Cras justo odio</a></li>
+        <li class="list-group-item ripple"><a>Dapibus ac facilisis in</a></li>
+        <li class="list-group-item ripple"><a>Morbi leo risus</a></li>
+        <li class="list-group-item ripple"><a>Porta ac consectetur ac</a></li>
+        <li class="list-group-item ripple"><a>Vestibulum at eros</a></li>
+      </ul>
+    </div>
+  </div>
+<!-- 
+  <footer>
+    <div id="footer" class="container">
+      <span class="o_logo o_logo_inverse center-block o_footer_logo"></span>
+      <div class="row">
+        <div class="col-sm-7 col-md-7 col-lg-6">
+          <div class="row">
+            <div class="col-xs-6 col-sm-4">
+              <span class="menu_title">Community</span>
+              <ul>
+                <li><a href="https://github.com/odoo/odoo">Github</a></li>
+                <li><a href="http://www.odoo.com/page/download">Download</a></li>
+                <li class="divider"></li>
+                <li><a href="http://runbot.odoo.com/runbot/repo/git-github-com-odoo-enterprise-7">Runbot</a></li>
+                <li><a href="https://github.com/odoo/odoo/wiki/Translations">Translations</a></li>
+                <li class="divider"></li>
+                <li><a href="http://www.odoo.com/page/odoo-community">Mailing Lists</a></li>
+                <li><a href="http://www.odoo.com/forum/help-1">Forum</a></li>
+              </ul>
+            </div>
+            <div class="col-xs-6 col-sm-4">
+              <span class="menu_title">Services</span>
+              <ul>
+                <li><a href="https://www.odoo.sh">Odoo Cloud Platform</a></li>
+                <li class="divider"></li>
+                <li><a href="http://www.odoo.com/help">Support</a></li>
+                <li><a href="https://upgrade.odoo.com">Upgrade</a></li>
+                <li class="divider"></li>
+                <li><a href="http://www.odoo.com/partners">Find a partner</a></li>
+                <li><a href="http://www.odoo.com/page/become-a-partner">Become a partner</a></li>
+                <li class="divider"></li>
+                <li><a href="http://training.odoo.com/courses/odoo-functional">Training Center</a></li>
+                <li><a href="http://www.odoo.com/page/education-program">Education</a></li>
+                <li class="divider"></li>
+                <li><a href="http://www.odoo.com/page/security">Security</a></li>
+              </ul>
+            </div>
+            <div class="col-xs-12 col-sm-4 mb64">
+              <span class="menu_title">About us</span>
+              <ul>
+                <li><a href="http://www.odoo.com/page/about-us">Our company</a></li>
+                <li><a href="http://www.odoo.com/page/contactus">Contact</a></li>
+                <li class="divider" />
+                <li><a href="http://www.odoo.com/event">Events</a></li>
+                <li><a href="http://www.odoo.com/blog">Blog</a></li>
+                <li><a href="http://www.odoo.com/blog/6">Customers</a></li>
+                <li class="divider" />
+                <li><a href="http://www.odoo.com/jobs">Jobs</a></li>
+                <li class="divider" />
+                <li><a href="http://www.odoo.com/page/legal">Legal</a> | <a href="http://www.odoo.com/privacy">Privacy</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-5 col-md-4 col-md-offset-1 col-lg-5 col-lg-offset-1">
+          <p>
+            <small>
+              Odoo is a suite of open source business apps that cover all your company needs: CRM, eCommerce, accounting, inventory, point of sale, project management, etc.
+              <br/><br/>
+              Odoo's unique value proposition is to be at the same time very easy to use and fully integrated.
+            </small>
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="o_footer_bottom">
+      <div class="container">
+        <a class="small" href="http://www.odoo.com/page/website-builder">Website made with <span class="o_logo o_logo_inverse o_logo_15"></span></a>
+        <div class="social-links pull-right">
+          <a href="http://www.odoo.com/web/about/facebook"><i class="fa fa-facebook"></i></a>
+          <a href="http://www.odoo.com/web/about/twitter"><i class="fa fa-twitter"></i></a>
+          <a href="http://www.odoo.com/web/about/linkedin"><i class="fa fa-linkedin"></i></a>
+          <a href="mailto:info@odoo.com"><i class="fa fa-envelope"></i></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+  -->
+  </body>
+</html>
