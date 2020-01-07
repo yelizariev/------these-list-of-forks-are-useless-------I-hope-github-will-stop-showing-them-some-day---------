@@ -326,7 +326,7 @@ msgid ""
 "ssl.html>`_"
 msgstr ""
 "`PostgreSQL Doc <https://www.postgresql.org/docs/current/static/libpq-"
-"ssl.html> `_"
+"ssl.html>`_"
 
 #: ../../setup/deploy.rst:183
 msgid "Builtin server"

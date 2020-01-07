@@ -286,8 +286,8 @@ msgid ""
 "<https://stedolan.github.io/jq>`_ (JSON processor):"
 msgstr ""
 "один на языке программирования bash с использованием `curl "
-"<https://curl.haxx.se> `_ (инструмент для передачи данных с использованием "
-"http) и` jq <https://stedolan.github.io/jq> `_ (Процессор JSON):"
+"<https://curl.haxx.se>`_ (инструмент для передачи данных с использованием "
+"http) и` jq <https://stedolan.github.io/jq>`_ (Процессор JSON):"
 
 #: ../../webservices/upgrade.rst:188
 msgid "Uploading your database dump"

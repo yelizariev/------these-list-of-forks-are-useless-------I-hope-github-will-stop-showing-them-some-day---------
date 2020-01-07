@@ -35,7 +35,7 @@ msgid ""
 msgstr ""
 "Если вы хотите внести свой вклад в перевод самого Odoo, пожалуйста, "
 "обратитесь к странице `Odoo Wiki "
-"<https://github.com/odoo/odoo/wiki/Translations> `_."
+"<https://github.com/odoo/odoo/wiki/Translations>`_."
 
 #: ../../reference/translations.rst:16
 msgid "Exporting translatable term"
@@ -98,8 +98,8 @@ msgstr ""
 "перевода, такого как POEdit_, или просто скопировав шаблон в новый файл с "
 "именем: file: `{language} .po`. Файлы перевода должны быть помещены в: file:"
 " `{yourmodule} / i18n /`, рядом с: file: `{yourmodule} .pot`, и будут "
-"автоматически загружаться Odoo при установке соответствующего языка (через: "
-"menuselection:` Настройки -&gt; Переводы -&gt; Языки`)"
+"автоматически загружаться Odoo при установке соответствующего языка (через "
+":menuselection:`Settings --> Translations --> Languages`)"
 
 #: ../../reference/translations.rst:47
 msgid ""

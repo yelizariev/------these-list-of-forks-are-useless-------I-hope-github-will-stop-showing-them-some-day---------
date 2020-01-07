@@ -70,8 +70,7 @@ msgstr "Войдите в свой экземпляр с учетной запи
 
 #: ../../webservices/odoo.rst:106
 msgid "Go to :menuselection:`Settings --> Users --> Users`"
-msgstr ""
-"Перейдите: menuselection: `Настройки -&gt; Пользователи -&gt; Пользователи`"
+msgstr "Перейдите :menuselection:`Settings --> Users --> Users`"
 
 #: ../../webservices/odoo.rst:107
 msgid "Click on the user you want to use for XML-RPC access"
@@ -121,11 +120,10 @@ msgid ""
 " support be enabled <https://php.net/manual/en/xmlrpc.installation.php>`_ in"
 " your PHP installation."
 msgstr ""
-"Эти примеры используют `Ripcord <https://code.google.com/p/ripcord/> `_ "
+"Эти примеры используют `Ripcord <https://code.google.com/p/ripcord/>`_ "
 "библиотека, предоставляющая простой XML-RPC API. Ripcord требует, чтобы была"
 " включена поддержка XML-RPC "
-"<https://php.net/manual/en/xmlrpc.installation.php> `_ в вашей установке "
-"PHP."
+"<https://php.net/manual/en/xmlrpc.installation.php>`_ в вашей установке PHP."
 
 #: ../../webservices/odoo.rst:190
 msgid ""
@@ -135,8 +133,8 @@ msgid ""
 " enabled."
 msgstr ""
 "Поскольку вызовы выполняются через HTTPS "
-"<https://en.wikipedia.org/wiki/HTTP_Secure> `_, также требуется, чтобы "
-"расширение` OpenSSL <https://php.net/manual/en/openssl.installation.php> `_ "
+"<https://en.wikipedia.org/wiki/HTTP_Secure>`_, также требуется, чтобы "
+"расширение` OpenSSL <https://php.net/manual/en/openssl.installation.php>`_ "
 "быть включен."
 
 #: ../../webservices/odoo.rst:213
@@ -145,7 +143,7 @@ msgid ""
 "<https://ws.apache.org/xmlrpc/>`_"
 msgstr ""
 "В этих примерах используется библиотека Apache XML-RPC "
-"<https://ws.apache.org/xmlrpc/> `_"
+"<https://ws.apache.org/xmlrpc/>`_"
 
 #: ../../webservices/odoo.rst:216
 msgid ""

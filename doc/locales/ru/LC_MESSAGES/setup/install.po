@@ -282,7 +282,7 @@ msgstr ""
 "`странице загрузки wkhtmltopdf`_ в разделе архива. Ранее рекомендованная "
 "версия 0.12.1 является хорошей альтернативой. Более подробную информацию о "
 "различных версиях и их причудах можно найти в нашей `wiki "
-"<https://github.com/odoo/odoo/wiki/Wkhtmltopdf> `_."
+"<https://github.com/odoo/odoo/wiki/Wkhtmltopdf>`_."
 
 #: ../../setup/install.rst:137 ../../setup/install.rst:227
 msgid "Repository"
@@ -498,17 +498,17 @@ msgstr "Community Edition:"
 #: ../../setup/install.rst:450 ../../setup/install.rst:456
 #: ../../setup/install.rst:628 ../../setup/install.rst:634
 msgid "`Official download page <download_>`_"
-msgstr "`Официальная страница загрузки <download_> `_"
+msgstr "`Официальная страница загрузки <download_>`_"
 
 #: ../../setup/install.rst:291 ../../setup/install.rst:451
 #: ../../setup/install.rst:629
 msgid "`GitHub repository <community-repository_>`_"
-msgstr "`GitHub репозиторий <community-repository_> `_"
+msgstr "`GitHub репозиторий <community-repository_>`_"
 
 #: ../../setup/install.rst:292 ../../setup/install.rst:452
 #: ../../setup/install.rst:630
 msgid "`Nightly server <nightly_>`_"
-msgstr "`Ночной сервер <nightly_> `_"
+msgstr "`Ночной сервер <nightly_>`_"
 
 #: ../../setup/install.rst:294 ../../setup/install.rst:454
 #: ../../setup/install.rst:632
@@ -518,7 +518,7 @@ msgstr "Enterprise Edition:"
 #: ../../setup/install.rst:297 ../../setup/install.rst:457
 #: ../../setup/install.rst:635
 msgid "`GitHub repository <enterprise-repository_>`_"
-msgstr "`GitHub репозиторий <enterprise-repository_> `_"
+msgstr "`GitHub репозиторий <enterprise-repository_>`_"
 
 #: ../../setup/install.rst:300 ../../setup/install.rst:460
 #: ../../setup/install.rst:638
@@ -571,8 +571,8 @@ msgid ""
 "install Python 3 on your machine."
 msgstr ""
 "Для запуска Odoo требуется Python 3.6 или новее. Используйте официальный "
-"установщик `Python 3 &#39; <https://www.python.org/downloads/windows/> `_ "
-"для загрузки и установки Python 3 на вашем компьютере."
+"установщик `Python 3 &#39; <https://www.python.org/downloads/windows/>`_ для"
+" загрузки и установки Python 3 на вашем компьютере."
 
 #: ../../setup/install.rst:334
 msgid ""
@@ -610,7 +610,7 @@ msgid ""
 msgstr ""
 "Odoo использует PostgreSQL в качестве системы управления базами данных. "
 "Загрузите и установите `последнюю версию PostgreSQL "
-"<https://www.postgresql.org/download/windows/> `_."
+"<https://www.postgresql.org/download/windows/>`_."
 
 #: ../../setup/install.rst:356 ../../setup/install.rst:521
 #: ../../setup/install.rst:691
@@ -646,8 +646,7 @@ msgstr "Дважды щелкните сервер, чтобы создать с
 
 #: ../../setup/install.rst:365
 msgid "Select :menuselection:`Edit --> New Object --> New Login Role`."
-msgstr ""
-"Выберите: menuselection: `Edit -&gt; New Object -&gt; New Login Role`."
+msgstr "Выберите :menuselection:`Edit --> New Object --> New Login Role`."
 
 #: ../../setup/install.rst:366
 msgid "Enter the username in the **Role Name** field (e.g. `odoo`)."
@@ -711,7 +710,7 @@ msgid ""
 "<http://www.stickpeople.com/projects/python/win-psycopg/>`_."
 msgstr ""
 "`psycopg` должен быть установлен с` этим установщиком "
-"<http://www.stickpeople.com/projects/python/win-psycopg/> `_."
+"<http://www.stickpeople.com/projects/python/win-psycopg/>`_."
 
 #: ../../setup/install.rst:391 ../../setup/install.rst:571
 #: ../../setup/install.rst:733
@@ -722,9 +721,9 @@ msgid ""
 "various versions."
 msgstr ""
 "`wkhtmltopdf` должен быть установлен в версии` 0.12.5 <the wkhtmltopdf "
-"download page_> `_ для поддержки верхних и нижних колонтитулов. Смотрите "
-"нашу вики <https://github.com/odoo/odoo/wiki/Wkhtmltopdf> `_ для более "
-"подробной информации о различных версиях."
+"download page_>`_ для поддержки верхних и нижних колонтитулов. Смотрите нашу"
+" вики <https://github.com/odoo/odoo/wiki/Wkhtmltopdf>`_ для более подробной "
+"информации о различных версиях."
 
 #: ../../setup/install.rst:396 ../../setup/install.rst:576
 #: ../../setup/install.rst:738
@@ -737,7 +736,7 @@ msgstr ""
 
 #: ../../setup/install.rst:399
 msgid "Download and install `nodejs <https://nodejs.org/en/download/>`_."
-msgstr "Загрузите и установите `nodejs <https://nodejs.org/en/download/> `_."
+msgstr "Загрузите и установите `nodejs <https://nodejs.org/en/download/>`_."
 
 #: ../../setup/install.rst:400 ../../setup/install.rst:580
 #: ../../setup/install.rst:742
@@ -831,8 +830,8 @@ msgid ""
 "<https://git-scm.com/docs/git-clone#Documentation/git-clone.txt--"
 "bltnamegt>`_ and"
 msgstr ""
-"<https://git-scm.com/docs/git-clone#Documentation/git-clone.txt--bltnamegt> "
-"`_ и"
+"<https://git-scm.com/docs/git-clone#Documentation/git-clone.txt--"
+"bltnamegt>`_ и"
 
 #: ../../setup/install.rst:483
 msgid "`single branch"
@@ -844,7 +843,7 @@ msgid ""
 "branch>`_"
 msgstr ""
 "<https://git-scm.com/docs/git-clone#Documentation/git-clone.txt---no-single-"
-"branch> `_"
+"branch>`_"
 
 #: ../../setup/install.rst:499
 msgid ""
@@ -922,8 +921,8 @@ msgid ""
 msgstr ""
 "PostgreSQL пользователь и пароль. У Odoo нет значений по умолчанию, кроме "
 "значений по умолчанию для psycopg2 "
-"<http://initd.org/psycopg/docs/module.html> `_: соединяется через сокет UNIX"
-" на порту` 5432` с текущим пользователем и без пароля."
+"<http://initd.org/psycopg/docs/module.html>`_: соединяется через сокет UNIX "
+"на порту` 5432` с текущим пользователем и без пароля."
 
 #: ../../setup/install.rst:612
 msgid ""
@@ -956,7 +955,7 @@ msgid ""
 "PostgreSQL."
 msgstr ""
 "Odoo использует PostgreSQL в качестве системы управления базами данных. "
-"Используйте `postgres.app <https://postgresapp.com> `_ для загрузки и "
+"Используйте `postgres.app <https://postgresapp.com>`_ для загрузки и "
 "установки последней версии PostgreSQL."
 
 #: ../../setup/install.rst:719
@@ -999,5 +998,5 @@ msgid ""
 "page."
 msgstr ""
 "Полную документацию по использованию Odoo с Docker можно найти на "
-"официальном образе Odoo `docker <https://registry.hub.docker.com/_/odoo/> `_"
-" страница."
+"официальном образе Odoo `docker <https://registry.hub.docker.com/_/odoo/>`_ "
+"страница."

@@ -90,7 +90,7 @@ msgid ""
 msgstr ""
 "Этот документ на самом деле не объясняет никаких понятий. Это больше "
 "поваренная книга. Для более подробной информации, пожалуйста, обратитесь к "
-"справочной странице по javascript (см .: doc: `javascript_reference`)"
+"справочной странице по javascript (см . :doc:`javascript_reference`)"
 
 #: ../../reference/javascript_cheatsheet.rst:39
 msgid "Creating a new field widget"

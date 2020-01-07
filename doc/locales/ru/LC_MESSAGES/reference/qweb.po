@@ -644,7 +644,7 @@ msgid ""
 "ba5ffd4df8111d1b83fc194b97ebecf837add454>`_"
 msgstr ""
 "`relativedelta <https://labix.org/python-dateutil#head-"
-"ba5ffd4df8111d1b83fc194b97ebecf837add454> `_"
+"ba5ffd4df8111d1b83fc194b97ebecf837add454>`_"
 
 #: ../../reference/qweb.rst:411
 msgid "see module"

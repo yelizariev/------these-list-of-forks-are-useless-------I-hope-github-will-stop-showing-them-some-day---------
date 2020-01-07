@@ -1940,7 +1940,7 @@ msgid ""
 msgstr ""
 "Поле `` one2many`` или `` many2many`` не может изменить себя через onchange."
 " Это ограничение веб-клиента - смотрите `# 2693 "
-"<https://github.com/odoo/odoo/issues/2693> `_."
+"<https://github.com/odoo/odoo/issues/2693>`_."
 
 #: odoo.api.returns:1 of
 msgid "Return a decorator for methods that return instances of ``model``."

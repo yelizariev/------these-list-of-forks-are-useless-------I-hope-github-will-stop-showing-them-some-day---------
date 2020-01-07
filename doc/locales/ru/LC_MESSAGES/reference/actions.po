@@ -157,8 +157,8 @@ msgid ""
 "Specifies that the action will appear in the :menuselection:`Action` "
 "contextual menu of the bound model."
 msgstr ""
-"Указывает, что действие будет отображаться в контекстном меню: "
-"menuselection: `Action` связанной модели."
+"Указывает, что действие будет отображаться в контекстном меню "
+":menuselection:`Action` связанной модели."
 
 #: ../../reference/actions.rst:55
 msgid "``report``"
@@ -169,7 +169,7 @@ msgid ""
 "Specifies that the action will appear in the :menuselection:`Print` "
 "contextual menu of the bound model."
 msgstr ""
-"Указывает, что действие появится в контекстном меню: menuselection: `Print` "
+"Указывает, что действие появится в контекстном меню :menuselection:`Print` "
 "связанной модели."
 
 #: ../../reference/actions.rst:60

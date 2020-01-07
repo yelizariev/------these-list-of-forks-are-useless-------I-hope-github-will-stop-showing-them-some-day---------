@@ -525,8 +525,8 @@ msgid ""
 "After that, navigate to the Odoo **Website** module, go to "
 ":menuselection:`Configuration --> Settings`."
 msgstr ""
-"После этого перейдите к модулю Odoo ** Website **, перейдите по адресу: "
-"menuselection: `Конфигурация -&gt; Настройки`."
+"После этого перейдите к модулю Odoo ** Website **, перейдите по адресу "
+":menuselection:`Configuration --> Settings`."
 
 #: ../../howtos/themes.rst:283
 msgid ""
@@ -568,8 +568,8 @@ msgid ""
 "name.  Inspect the page using your browser."
 msgstr ""
 "Чтобы проверить макет по умолчанию, просто создайте новую страницу с помощью"
-" конструктора веб-сайтов. Нажмите на: menuselection: `Content -&gt; New "
-"Page` и добавьте имя страницы. Проверьте страницу, используя ваш браузер."
+" конструктора веб-сайтов. Нажмите на :menuselection:`Content --> New Page` и"
+" добавьте имя страницы. Проверьте страницу, используя ваш браузер."
 
 #: ../../howtos/themes.rst:311
 msgid "Extend the default Header"

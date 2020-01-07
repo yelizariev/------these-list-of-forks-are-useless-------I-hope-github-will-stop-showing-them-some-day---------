@@ -27,7 +27,7 @@ msgid ""
 "<http://docs.python.org/2/tutorial/>`_"
 msgstr ""
 "Это руководство предполагает &quot;базовые знания Python&quot; "
-"<http://docs.python.org/2/tutorial/> `_"
+"<http://docs.python.org/2/tutorial/>`_"
 
 #: ../../howtos/website.rst:13
 msgid "This guide assumes :ref:`an installed Odoo <setup/install>`"
@@ -95,7 +95,7 @@ msgstr "создать новую базу данных, включая демо
 
 #: ../../howtos/website.rst:53
 msgid "to go :menuselection:`Settings --> Modules --> Modules`"
-msgstr "to go: menuselection: `Настройки -&gt; Модули -&gt; Модули`"
+msgstr "to go :menuselection:`Settings --> Modules --> Modules`"
 
 #: ../../howtos/website.rst:54
 msgid ""
@@ -184,8 +184,8 @@ msgid ""
 "and clicking :guilabel:`Upgrade`."
 msgstr ""
 "Наконец, перезапустите Odoo и обновите данные модуля (чтобы установить "
-"шаблон), перейдя по адресу: menuselection: `Настройки -&gt; Модули -&gt; "
-"Модули -&gt; Академия` и нажав: guilabel:` Upgrade`."
+"шаблон), перейдя по адресу :menuselection:`Settings --> Modules --> Modules "
+"--> Academy` и нажав: guilabel:` Upgrade`."
 
 #: ../../howtos/website.rst:104
 msgid ""
@@ -424,9 +424,9 @@ msgid ""
 "a template code editor (:menuselection:`Customize --> HTML Editor`) where "
 "you can see and edit all templates used for the current page"
 msgstr ""
-"редактор кода шаблона (: menuselection: `Customize -&gt; HTML Editor`), где "
-"вы можете просматривать и редактировать все шаблоны, используемые для "
-"текущей страницы"
+"редактор кода шаблона ( :menuselection:`Customize --> HTML Editor`), где вы "
+"можете просматривать и редактировать все шаблоны, используемые для текущей "
+"страницы"
 
 #: ../../howtos/website.rst:225
 msgid ""
@@ -625,7 +625,7 @@ msgid ""
 "Administrator` in the menu (or :guilabel:`Sign In` if you're signed out)."
 msgstr ""
 "Администрация Odoo была кратко замечена в разделе «поддержка сайта». Мы "
-"можем вернуться к нему, используя: menuselection: `Administrator -&gt; "
+"можем вернуться к нему, используя :menuselection:`Administrator --> "
 "Administrator` в меню (или: guilabel:` Sign In`, если вы вышли из системы)."
 
 #: ../../howtos/website.rst:328
@@ -948,7 +948,7 @@ msgstr ""
 "Поскольку наши курсы бесплатны, нет причин показывать их цену на странице "
 "магазина, поэтому мы собираемся изменить представление и скрыть цену, если "
 "она равна 0. Первая задача - выяснить, в каком представлении отображается "
-"цена, это может быть сделано через: menuselection: `Customize -&gt; HTML "
+"цена, это может быть сделано через :menuselection:`Customize --> HTML "
 "Editor`, который позволяет нам читать различные шаблоны, используемые при "
 "визуализации страницы. Пройдя по нескольким из них, «Товар» выглядит "
 "вероятным виновником."
@@ -986,7 +986,7 @@ msgid ""
 " and off."
 msgstr ""
 "Второе, что мы изменим, - это сделаем боковую панель категорий продуктов "
-"видимой по умолчанию:: menuselection: `Customize -&gt; Product Categories` "
+"видимой по умолчанию: :menuselection:`Customize --> Product Categories` "
 "позволяет включать и отключать дерево категорий продуктов (используется для "
 "фильтрации основного дисплея)."
 
