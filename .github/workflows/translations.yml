@@ -41,6 +41,7 @@ jobs:
         commit_author_name: Marc Demo (Github Actions)
         commit_author_email: i18n-bot@it-projects.info
         branch: master
+        repository: dst
         commit_message: |
           :alien: update translation files
 
