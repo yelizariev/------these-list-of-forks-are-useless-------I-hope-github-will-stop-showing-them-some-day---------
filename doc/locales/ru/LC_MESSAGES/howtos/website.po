@@ -26,7 +26,7 @@ msgid ""
 "This guide assumes `basic knowledge of Python "
 "<http://docs.python.org/2/tutorial/>`_"
 msgstr ""
-"Это руководство предполагает &quot;базовые знания Python&quot; "
+"Это руководство предполагает `базовые знания Python` "
 "<http://docs.python.org/2/tutorial/>`_"
 
 #: ../../howtos/website.rst:13
@@ -400,8 +400,8 @@ msgid ""
 msgstr ""
 "Макет веб-сайта также обеспечивает поддержку инструментов редактирования: "
 "нажмите: guilabel: `Sign In` (в правом верхнем углу), введите учетные данные"
-" (по умолчанию` `admin`` /` `admin``)&quot;, затем нажмите: guilabel: `Войти"
-" &#39;."
+" (по умолчанию` `admin`` /` `admin``)`, затем нажмите: guilabel: `Войти "
+"&#39;."
 
 #: ../../howtos/website.rst:217
 msgid ""
@@ -1011,7 +1011,7 @@ msgid ""
 " to *active=\"True\"*:"
 msgstr ""
 "Нам просто нужно изменить запись * Product Categories * и установить для нее"
-" значение по умолчанию * active = &quot;True&quot; *:"
+" значение по умолчанию * active = `True` *:"
 
 #: ../../howtos/website.rst:504
 msgid ""

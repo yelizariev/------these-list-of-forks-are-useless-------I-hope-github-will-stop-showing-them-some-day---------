@@ -1145,8 +1145,8 @@ msgstr ""
 "При определении Odoo Transient (мастер): используйте `` <related_base_model>"
 " , <action> `` where * related_base_model * - базовая модель (определенная в"
 " * models / *), связанная с переходным процессом, а * action * - краткое имя"
-" того, что делает переходный процесс. Избегайте слова &quot;волшебник&quot;."
-" Например: `` account.invoice.make``, `` project.task.delegate.batch``, ..."
+" того, что делает переходный процесс. Избегайте слова `волшебник`. Например:"
+" `` account.invoice.make``, `` project.task.delegate.batch``, ..."
 
 #: ../../reference/guidelines.rst:915
 msgid ""

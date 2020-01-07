@@ -166,8 +166,7 @@ msgstr ""
 
 #: ../../python3.rst:61
 msgid "Python 3.3 reintroduced the \"u\" prefix for proper (unicode) strings"
-msgstr ""
-"Python 3.3 повторно ввел префикс &quot;u&quot; для правильных (юникод) строк"
+msgstr "Python 3.3 повторно ввел префикс `u` для правильных (юникод) строк"
 
 #: ../../python3.rst:62
 msgid ""
@@ -829,8 +828,8 @@ msgid ""
 "string]_."
 msgstr ""
 "Для лучшей совместимости между версиями вам следует избегать строковых "
-"литералов без префикса, если вам * не требуется * &quot;собственная "
-"строка&quot; [# native-string] _."
+"литералов без префикса, если вам * не требуется * `собственная строка` [# "
+"native-string] _."
 
 #: ../../python3.rst:391
 msgid "``open``"
@@ -926,8 +925,7 @@ msgstr ""
 #: ../../python3.rst:431
 msgid "And ``io`` doesn't provide \"native string\" streaming facilities."
 msgstr ""
-"И `` io`` не предоставляет возможности потоковой передачи &quot;родной "
-"строки&quot;."
+"И `` io`` не предоставляет возможности потоковой передачи `родной строки`."
 
 #: ../../python3.rst:433
 msgid ""
@@ -958,9 +956,9 @@ msgid ""
 "compatibility."
 msgstr ""
 "с оговоркой, что Python 3 делает их меньше text-y и больше byte-y, например,"
-" в Python 2 `` b &quot;foo&quot; [0] `` is `` b &quot;f&quot; ``, но в "
-"Python 3 это `` 102 `` (значение первого байта), вы захотите * slice * "
-"bytestrings для совместимости."
+" в Python 2 `` b `foo` [0] `` is `` b `f` ``, но в Python 3 это `` 102 `` "
+"(значение первого байта), вы захотите * slice * bytestrings для "
+"совместимости."
 
 #: ../../python3.rst:456
 msgid ""

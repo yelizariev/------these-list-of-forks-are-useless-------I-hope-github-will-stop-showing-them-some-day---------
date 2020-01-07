@@ -710,8 +710,7 @@ msgid ""
 "activated as actual fields on the model."
 msgstr ""
 "Как и в случае пользовательских моделей, только новые поля, созданные с "
-"помощью `` state = &quot;manual&quot; ``, активируются как фактические поля "
-"в модели."
+"помощью `` state = `manual` ``, активируются как фактические поля в модели."
 
 #: ../../webservices/odoo.rst:1152
 msgid ""

@@ -356,8 +356,7 @@ msgstr ""
 
 #: odoo.tests.common.Form:7 of
 msgid "call default_get and the relevant onchanges on \"creation\""
-msgstr ""
-"вызовите default_get и соответствующие изменения на &quot;создание&quot;"
+msgstr "вызовите default_get и соответствующие изменения на `создание`"
 
 #: odoo.tests.common.Form:8 of
 msgid "call the relevant onchanges on setting fields"

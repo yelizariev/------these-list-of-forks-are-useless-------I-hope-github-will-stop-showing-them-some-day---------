@@ -560,8 +560,8 @@ msgid ""
 "if set to ``\"True\"``, the template is a website page (linkable to, "
 "deletable)"
 msgstr ""
-"если установлено значение `` &quot;True&quot; ``, шаблон является страницей "
-"веб-сайта (ссылка на которую можно удалить)"
+"если установлено значение `` `True` ``, шаблон является страницей веб-сайта "
+"(ссылка на которую можно удалить)"
 
 #: ../../reference/data.rst:259
 msgid "``optional``"

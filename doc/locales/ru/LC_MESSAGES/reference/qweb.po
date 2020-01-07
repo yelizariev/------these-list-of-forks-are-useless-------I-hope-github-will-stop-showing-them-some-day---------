@@ -266,8 +266,8 @@ msgstr ": samp: `{$ as} _parity` (устарело)"
 #: ../../reference/qweb.rst:168
 msgid "either ``\"even\"`` or ``\"odd\"``, the parity of the current iteration round"
 msgstr ""
-"либо `` &#39;четное&#39; `` или `` &quot;нечетное&quot; ``, четность "
-"текущего раунда итерации"
+"либо `` &#39;четное&#39; `` или `` `нечетное` ``, четность текущего раунда "
+"итерации"
 
 #: ../../reference/qweb.rst:170
 msgid ":samp:`{$as}_even` (deprecated)"
@@ -508,9 +508,9 @@ msgid ""
 "website's rich text edition."
 msgstr ""
 "Директива `` t-field`` может использоваться только при выполнении доступа к "
-"полю (`` ab``) для &quot;умной&quot; записи (результат метода `` browse``). "
-"Он может автоматически форматировать в зависимости от типа поля и "
-"интегрируется в расширенную текстовую версию веб-сайта."
+"полю (`` ab``) для `умной` записи (результат метода `` browse``). Он может "
+"автоматически форматировать в зависимости от типа поля и интегрируется в "
+"расширенную текстовую версию веб-сайта."
 
 #: ../../reference/qweb.rst:351
 msgid ""
@@ -539,8 +539,7 @@ msgstr ""
 
 #: ../../reference/qweb.rst:363
 msgid "is equivalent to ``importlib.import_module(\"pdb\").set_trace()``"
-msgstr ""
-"эквивалентно `` importlib.import_module (&quot;pdb&quot;). set_trace () ``"
+msgstr "эквивалентно `` importlib.import_module (`pdb`). set_trace () ``"
 
 #: ../../reference/qweb.rst:366 ../../reference/qweb.rst:544
 msgid "Helpers"

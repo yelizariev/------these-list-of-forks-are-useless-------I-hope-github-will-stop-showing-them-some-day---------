@@ -370,7 +370,7 @@ msgid ""
 msgstr ""
 "Debian 9 и Ubuntu не предоставляют пакет для модуля Python num2words. "
 "Текстовые суммы не будут отображаться Odoo, и это может вызвать проблемы с "
-"модулем &quot;l10n_mx_edi&quot;."
+"модулем `l10n_mx_edi`."
 
 #: ../../setup/install.rst:194
 msgid "If you need this feature, you can install the python module like this:"

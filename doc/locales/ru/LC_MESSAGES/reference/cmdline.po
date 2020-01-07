@@ -730,8 +730,8 @@ msgid ""
 "Differs from :option:`--limit-time-cpu` in that this is a \"wall time\" "
 "limit including e.g. SQL queries."
 msgstr ""
-"Отличается от: option: `--limit-time-cpu` тем, что это ограничение&quot; "
-"времени стены &quot;, включая, например, запросы SQL."
+"Отличается от: option: `--limit-time-cpu` тем, что это ограничение` времени "
+"стены `, включая, например, запросы SQL."
 
 #: ../../reference/cmdline.rst:450
 msgid "Defaults to *120*."

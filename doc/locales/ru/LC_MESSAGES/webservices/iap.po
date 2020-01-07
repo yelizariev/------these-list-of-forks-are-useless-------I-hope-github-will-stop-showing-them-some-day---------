@@ -323,8 +323,8 @@ msgid ""
 "click Create and provide the informations of your service."
 msgstr ""
 "Войдите в систему, затем перейдите по адресу :menuselection:`My Account --> "
-"Your In-App Services`, нажмите&quot; Создать &quot;и предоставьте информацию"
-" о вашей службе."
+"Your In-App Services`, нажмите` Создать `и предоставьте информацию о вашей "
+"службе."
 
 #: ../../webservices/iap.rst:178
 msgid "The service has *seven* important fields:"
@@ -1115,4 +1115,4 @@ msgstr "Отменит авторизованную транзакцию."
 
 #: ../../webservices/iap.rst:731
 msgid "Will capture the amount ``credit`` on the given transaction."
-msgstr "Захватит сумму &quot;кредит&quot; по данной транзакции."
+msgstr "Захватит сумму `кредит` по данной транзакции."

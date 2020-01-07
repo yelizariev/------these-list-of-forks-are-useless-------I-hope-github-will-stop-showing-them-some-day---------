@@ -405,8 +405,8 @@ msgid ""
 "will use the \"my_specific_view\" view even if that's not the default view "
 "for the model."
 msgstr ""
-"будет использовать представление &quot;my_specific_view&quot;, даже если это"
-" не представление по умолчанию для модели."
+"будет использовать представление `my_specific_view`, даже если это не "
+"представление по умолчанию для модели."
 
 #: ../../reference/actions.rst:169
 msgid ""
