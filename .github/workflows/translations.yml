@@ -1,0 +1,47 @@
+name: Translations
+
+on: [push]
+
+jobs:
+  update-files:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Clone Source
+      uses: actions/checkout@v2
+      with:
+        path: src
+    - name: Clone Master
+      uses: actions/checkout@v2
+      with:
+        ref: master
+        path: dst
+    - name: Set up Python
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.6
+    - name: Install dependencies
+      run: |
+        apt install libxml2-dev  libxslt1-dev libldap2-dev libsasl2-dev
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install sphinx sphinx_rtd_theme sphinx-intl
+    - name: Rebuild Dev Docs
+      run: |
+        cd doc
+        sphinx-build -b gettext . _build/gettext
+        sphinx-intl update -p _build/gettext -l ru
+        cp -a _build/html/. ../../dst
+
+    - name: Commit changes
+      uses: yelizariev/git-auto-commit-action@custom-author-and-token2
+      with:
+        commit_author_name: Marc Demo (Github Actions)
+        commit_author_email: i18n-bot@it-projects.info
+        branch: master
+        commit_message: |
+          :alien: update translation files
+
+          Sent from Github Actions (see .github/workflows/translations.yml )
+        github_token: ${{ secrets.MY_GITHUB_TOKEN }}

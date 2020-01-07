@@ -1,0 +1,861 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Odoo S.A.
+# This file is distributed under the same license as the odoo package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2020.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: odoo 13.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-01-07 15:02+0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.3.4\n"
+
+#: ../../setup/deploy.rst:5
+msgid "Deploying Odoo"
+msgstr ""
+
+#: ../../setup/deploy.rst:7
+msgid ""
+"This document describes basic steps to set up Odoo in production or on an"
+" internet-facing server. It follows :ref:`installation <setup/install>`, "
+"and is not generally necessary for a development systems that is not "
+"exposed on the internet."
+msgstr ""
+
+#: ../../setup/deploy.rst:12
+msgid ""
+"If you are setting up a public server, be sure to check our "
+":ref:`security` recommandations!"
+msgstr ""
+
+#: ../../setup/deploy.rst:18
+msgid "dbfilter"
+msgstr ""
+
+#: ../../setup/deploy.rst:20
+msgid ""
+"Odoo is a multi-tenant system: a single Odoo system may run and serve a "
+"number of database instances. It is also highly customizable, with "
+"customizations (starting from the modules being loaded) depending on the "
+"\"current database\"."
+msgstr ""
+
+#: ../../setup/deploy.rst:24
+msgid ""
+"This is not an issue when working with the backend (web client) as a "
+"logged-in company user: the database can be selected when logging in, and"
+" customizations loaded afterwards."
+msgstr ""
+
+#: ../../setup/deploy.rst:28
+msgid ""
+"However it is an issue for non-logged users (portal, website) which "
+"aren't bound to a database: Odoo needs to know which database should be "
+"used to load the website page or perform the operation. If multi-tenancy "
+"is not used that is not an issue, there's only one database to use, but "
+"if there are multiple databases accessible Odoo needs a rule to know "
+"which one it should use."
+msgstr ""
+
+#: ../../setup/deploy.rst:34
+#, python-format
+msgid ""
+"That is one of the purposes of :option:`--db-filter <odoo-bin --db-"
+"filter>`: it specifies how the database should be selected based on the "
+"hostname (domain) that is being requested. The value is a `regular "
+"expression`_, possibly including the dynamically injected hostname "
+"(``%h``) or the first subdomain (``%d``) through which the system is "
+"being accessed."
+msgstr ""
+
+#: ../../setup/deploy.rst:40
+msgid ""
+"For servers hosting multiple databases in production, especially if "
+"``website`` is used, dbfilter **must** be set, otherwise a number of "
+"features will not work correctly."
+msgstr ""
+
+#: ../../setup/deploy.rst:45
+msgid "Configuration samples"
+msgstr ""
+
+#: ../../setup/deploy.rst:47
+msgid "Show only databases with names beginning with 'mycompany'"
+msgstr ""
+
+#: ../../setup/deploy.rst:49 ../../setup/deploy.rst:61
+#: ../../setup/deploy.rst:156 ../../setup/deploy.rst:282
+msgid "in ``/etc/odoo.conf`` set:"
+msgstr ""
+
+#: ../../setup/deploy.rst:56
+msgid ""
+"Show only databases matching the first subdomain after ``www``: for "
+"example the database \"mycompany\" will be shown if the incoming request "
+"was sent to ``www.mycompany.com`` or ``mycompany.co.uk``, but not for "
+"``www2.mycompany.com`` or ``helpdesk.mycompany.com``."
+msgstr ""
+
+#: ../../setup/deploy.rst:69
+msgid ""
+"Setting a proper :option:`--db-filter <odoo-bin --db-filter>` is an "
+"important part of securing your deployment. Once it is correctly working "
+"and only matching a single database per hostname, it is strongly "
+"recommended to block access to the database manager screens, and to use "
+"the ``--no-database-list`` startup paramater to prevent listing your "
+"databases, and to block access to the database management screens. See "
+"also security_."
+msgstr ""
+
+#: ../../setup/deploy.rst:79
+msgid "PostgreSQL"
+msgstr ""
+
+#: ../../setup/deploy.rst:81
+msgid ""
+"By default, PostgreSQL only allows connection over UNIX sockets and "
+"loopback connections (from \"localhost\", the same machine the PostgreSQL"
+" server is installed on)."
+msgstr ""
+
+#: ../../setup/deploy.rst:85
+msgid ""
+"UNIX socket is fine if you want Odoo and PostgreSQL to execute on the "
+"same machine, and is the default when no host is provided, but if you "
+"want Odoo and PostgreSQL to execute on different machines [#different-"
+"machines]_ it will need to `listen to network interfaces`_ [#remote-"
+"socket]_, either:"
+msgstr ""
+
+#: ../../setup/deploy.rst:90
+msgid ""
+"Only accept loopback connections and `use an SSH tunnel`_ between the "
+"machine on which Odoo runs and the one on which PostgreSQL runs, then "
+"configure Odoo to connect to its end of the tunnel"
+msgstr ""
+
+#: ../../setup/deploy.rst:93
+msgid ""
+"Accept connections to the machine on which Odoo is installed, possibly "
+"over ssl (see `PostgreSQL connection settings`_ for details), then "
+"configure Odoo to connect over the network"
+msgstr ""
+
+#: ../../setup/deploy.rst:98 ../../setup/deploy.rst:148
+#: ../../setup/deploy.rst:237 ../../setup/deploy.rst:277
+msgid "Configuration sample"
+msgstr ""
+
+#: ../../setup/deploy.rst:100
+msgid "Allow tcp connection on localhost"
+msgstr ""
+
+#: ../../setup/deploy.rst:101
+msgid "Allow tcp connection from 192.168.1.x network"
+msgstr ""
+
+#: ../../setup/deploy.rst:103
+msgid "in ``/etc/postgresql/9.5/main/pg_hba.conf`` set:"
+msgstr ""
+
+#: ../../setup/deploy.rst:111
+msgid "in ``/etc/postgresql/9.5/main/postgresql.conf`` set:"
+msgstr ""
+
+#: ../../setup/deploy.rst:122
+msgid "Configuring Odoo"
+msgstr ""
+
+#: ../../setup/deploy.rst:124
+msgid ""
+"Out of the box, Odoo connects to a local postgres over UNIX socket via "
+"port 5432. This can be overridden using :ref:`the database options "
+"<reference/cmdline/server/database>` when your Postgres deployment is not"
+" local and/or does not use the installation defaults."
+msgstr ""
+
+#: ../../setup/deploy.rst:129
+msgid ""
+"The :ref:`packaged installers <setup/install/packaged>` will "
+"automatically create a new user (``odoo``) and set it as the database "
+"user."
+msgstr ""
+
+#: ../../setup/deploy.rst:132
+msgid ""
+"The database management screens are protected by the ``admin_passwd`` "
+"setting. This setting can only be set using configuration files, and is "
+"simply checked before performing database alterations. It should be set "
+"to a randomly generated value to ensure third parties can not use this "
+"interface."
+msgstr ""
+
+#: ../../setup/deploy.rst:137
+msgid ""
+"All database operations use the :ref:`database options "
+"<reference/cmdline/server/database>`, including the database management "
+"screen. For the database management screen to work requires that the "
+"PostgreSQL user have ``createdb`` right."
+msgstr ""
+
+#: ../../setup/deploy.rst:141
+msgid ""
+"Users can always drop databases they own. For the database management "
+"screen to be completely non-functional, the PostgreSQL user needs to be "
+"created with ``no-createdb`` and the database must be owned by a "
+"different PostgreSQL user."
+msgstr ""
+
+#: ../../setup/deploy.rst:145
+msgid "the PostgreSQL user *must not* be a superuser"
+msgstr ""
+
+#: ../../setup/deploy.rst:150
+msgid "connect to a PostgreSQL server on 192.168.1.2"
+msgstr ""
+
+#: ../../setup/deploy.rst:151
+msgid "port 5432"
+msgstr ""
+
+#: ../../setup/deploy.rst:152
+msgid "using an 'odoo' user account,"
+msgstr ""
+
+#: ../../setup/deploy.rst:153
+msgid "with 'pwd' as a password"
+msgstr ""
+
+#: ../../setup/deploy.rst:154
+msgid "filtering only db with a name beginning with 'mycompany'"
+msgstr ""
+
+#: ../../setup/deploy.rst:171
+msgid "SSL Between Odoo and PostgreSQL"
+msgstr ""
+
+#: ../../setup/deploy.rst:173
+msgid ""
+"Since Odoo 11.0, you can enforce ssl connection between Odoo and "
+"PostgreSQL. in Odoo the db_sslmode control the ssl security of the "
+"connection with value choosed out of 'disable', 'allow', 'prefer', "
+"'require', 'verify-ca' or 'verify-full'"
+msgstr ""
+
+#: ../../setup/deploy.rst:178
+msgid ""
+"`PostgreSQL Doc <https://www.postgresql.org/docs/current/static/libpq-"
+"ssl.html>`_"
+msgstr ""
+
+#: ../../setup/deploy.rst:183
+msgid "Builtin server"
+msgstr ""
+
+#: ../../setup/deploy.rst:185
+msgid ""
+"Odoo includes built-in HTTP servers, using either multithreading or "
+"multiprocessing."
+msgstr ""
+
+#: ../../setup/deploy.rst:188
+msgid ""
+"For production use, it is recommended to use the multiprocessing server "
+"as it increases stability, makes somewhat better use of computing "
+"resources and can be better monitored and resource-restricted."
+msgstr ""
+
+#: ../../setup/deploy.rst:192
+msgid ""
+"Multiprocessing is enabled by configuring :option:`a non-zero number of "
+"worker processes <odoo-bin --workers>`, the number of workers should be "
+"based on the number of cores in the machine (possibly with some room for "
+"cron workers depending on how much cron work is predicted)"
+msgstr ""
+
+#: ../../setup/deploy.rst:196
+msgid ""
+"Worker limits can be configured based on the hardware configuration to "
+"avoid resources exhaustion"
+msgstr ""
+
+#: ../../setup/deploy.rst:199
+msgid "multiprocessing mode currently isn't available on Windows"
+msgstr ""
+
+#: ../../setup/deploy.rst:203
+msgid "Worker number calculation"
+msgstr ""
+
+#: ../../setup/deploy.rst:205
+msgid "Rule of thumb : (#CPU * 2) + 1"
+msgstr ""
+
+#: ../../setup/deploy.rst:206
+msgid "Cron workers need CPU"
+msgstr ""
+
+#: ../../setup/deploy.rst:207
+msgid "1 worker ~= 6 concurrent users"
+msgstr ""
+
+#: ../../setup/deploy.rst:210
+msgid "memory size calculation"
+msgstr ""
+
+#: ../../setup/deploy.rst:212
+#, python-format
+msgid ""
+"We consider 20% of the requests are heavy requests, while 80% are simpler"
+" ones"
+msgstr ""
+
+#: ../../setup/deploy.rst:213
+msgid ""
+"A heavy worker, when all computed field are well designed, SQL requests "
+"are well designed, ... is estimated to consume around 1Go of RAM"
+msgstr ""
+
+#: ../../setup/deploy.rst:214
+msgid ""
+"A lighter worker, in the same scenario, is estimated to consume around "
+"150MB of RAM"
+msgstr ""
+
+#: ../../setup/deploy.rst:216
+msgid ""
+"Needed RAM = #worker * ( (light_worker_ratio * "
+"light_worker_ram_estimation) + (heavy_worker_ratio * "
+"heavy_worker_ram_estimation) )"
+msgstr ""
+
+#: ../../setup/deploy.rst:219 ../../setup/deploy.rst:376
+msgid "LiveChat"
+msgstr ""
+
+#: ../../setup/deploy.rst:221
+msgid ""
+"In multiprocessing, a dedicated LiveChat worker is automatically started "
+"and listening on :option:`the longpolling port <odoo-bin --longpolling-"
+"port>` but the client will not connect to it."
+msgstr ""
+
+#: ../../setup/deploy.rst:225
+msgid ""
+"Instead you must have a proxy redirecting requests whose URL starts with "
+"``/longpolling/`` to the longpolling port. Other request should be "
+"proxied to the :option:`normal HTTP port <odoo-bin --http-port>`"
+msgstr ""
+
+#: ../../setup/deploy.rst:229
+msgid ""
+"To achieve such a thing, you'll need to deploy a reverse proxy in front "
+"of Odoo, like nginx or apache. When doing so, you'll need to forward some"
+" more http Headers to Odoo, and activate the proxy_mode in Odoo "
+"configuration to have Odoo read those headers."
+msgstr ""
+
+#: ../../setup/deploy.rst:239
+msgid "Server with 4 CPU, 8 Thread"
+msgstr ""
+
+#: ../../setup/deploy.rst:240
+msgid "60 concurrent users"
+msgstr ""
+
+#: ../../setup/deploy.rst:242
+msgid "60 users / 6 = 10 <- theorical number of worker needed"
+msgstr ""
+
+#: ../../setup/deploy.rst:243
+msgid "(4 * 2) + 1 = 9 <- theorical maximal number of worker"
+msgstr ""
+
+#: ../../setup/deploy.rst:244
+msgid ""
+"We'll use 8 workers + 1 for cron. We'll also use a monitoring system to "
+"measure cpu load, and check if it's between 7 and 7.5 ."
+msgstr ""
+
+#: ../../setup/deploy.rst:245
+msgid "RAM = 9 * ((0.8*150) + (0.2*1024)) ~= 3Go RAM for Odoo"
+msgstr ""
+
+#: ../../setup/deploy.rst:247
+msgid "in ``/etc/odoo.conf``:"
+msgstr ""
+
+#: ../../setup/deploy.rst:263
+msgid "HTTPS"
+msgstr ""
+
+#: ../../setup/deploy.rst:265
+msgid ""
+"Whether it's accessed via website/web client or web service, Odoo "
+"transmits authentication information in cleartext. This means a secure "
+"deployment of Odoo must use HTTPS\\ [#switching]_. SSL termination can be"
+" implemented via just about any SSL termination proxy, but requires the "
+"following setup:"
+msgstr ""
+
+#: ../../setup/deploy.rst:270
+msgid ""
+"Enable Odoo's :option:`proxy mode <odoo-bin --proxy-mode>`. This should "
+"only be enabled when Odoo is behind a reverse proxy"
+msgstr ""
+
+#: ../../setup/deploy.rst:271
+msgid "Set up the SSL termination proxy (`Nginx termination example`_)"
+msgstr ""
+
+#: ../../setup/deploy.rst:272
+msgid "Set up the proxying itself (`Nginx proxying example`_)"
+msgstr ""
+
+#: ../../setup/deploy.rst:273
+msgid ""
+"Your SSL termination proxy should also automatically redirect non-secure "
+"connections to the secure port"
+msgstr ""
+
+#: ../../setup/deploy.rst:279
+msgid "Redirect http requests to https"
+msgstr ""
+
+#: ../../setup/deploy.rst:280
+msgid "Proxy requests to odoo"
+msgstr ""
+
+#: ../../setup/deploy.rst:288
+msgid "in ``/etc/nginx/sites-enabled/odoo.conf`` set:"
+msgstr ""
+
+#: ../../setup/deploy.rst:350
+msgid "Odoo as a WSGI Application"
+msgstr ""
+
+#: ../../setup/deploy.rst:352
+msgid ""
+"It is also possible to mount Odoo as a standard WSGI_ application. Odoo "
+"provides the base for a WSGI launcher script as ``odoo-wsgi.example.py``."
+" That script should be customized (possibly after copying it from the "
+"setup directory) to correctly set the configuration directly in "
+":mod:`odoo.tools.config` rather than through the command-line or a "
+"configuration file."
+msgstr ""
+
+#: ../../setup/deploy.rst:358
+msgid ""
+"However the WSGI server will only expose the main HTTP endpoint for the "
+"web client, website and webservice API. Because Odoo does not control the"
+" creation of workers anymore it can not setup cron or livechat workers"
+msgstr ""
+
+#: ../../setup/deploy.rst:363
+msgid "Cron Workers"
+msgstr ""
+
+#: ../../setup/deploy.rst:365
+msgid "To run cron jobs for an Odoo deployment as a WSGI application requires"
+msgstr ""
+
+#: ../../setup/deploy.rst:367
+msgid "A classical Odoo (run via ``odoo-bin``)"
+msgstr ""
+
+#: ../../setup/deploy.rst:368
+msgid ""
+"Connected to the database in which cron jobs have to be run (via :option"
+":`odoo-bin -d`)"
+msgstr ""
+
+#: ../../setup/deploy.rst:370
+msgid ""
+"Which should not be exposed to the network. To ensure cron runners are "
+"not network-accessible, it is possible to disable the built-in HTTP "
+"server entirely with :option:`odoo-bin --no-http` or setting "
+"``http_enable = False`` in the configuration file"
+msgstr ""
+
+#: ../../setup/deploy.rst:378
+msgid ""
+"The second problematic subsystem for WSGI deployments is the LiveChat: "
+"where most HTTP connections are relatively short and quickly free up "
+"their worker process for the next request, LiveChat require a long-lived "
+"connection for each client in order to implement near-real-time "
+"notifications."
+msgstr ""
+
+#: ../../setup/deploy.rst:383
+msgid ""
+"This is in conflict with the process-based worker model, as it will tie "
+"up worker processes and prevent new users from accessing the system. "
+"However, those long-lived connections do very little and mostly stay "
+"parked waiting for notifications."
+msgstr ""
+
+#: ../../setup/deploy.rst:388
+msgid "The solutions to support livechat/motifications in a WSGI application are:"
+msgstr ""
+
+#: ../../setup/deploy.rst:390
+msgid ""
+"Deploy a threaded version of Odoo (instread of a process-based preforking"
+" one) and redirect only requests to URLs starting with ``/longpolling/`` "
+"to that Odoo, this is the simplest and the longpolling URL can double up "
+"as the cron instance."
+msgstr ""
+
+#: ../../setup/deploy.rst:394
+msgid ""
+"Deploy an evented Odoo via ``odoo-gevent`` and proxy requests starting "
+"with ``/longpolling/`` to :option:`the longpolling port <odoo-bin "
+"--longpolling-port>`."
+msgstr ""
+
+#: ../../setup/deploy.rst:399
+msgid "Serving Static Files"
+msgstr ""
+
+#: ../../setup/deploy.rst:401
+msgid ""
+"For development convenience, Odoo directly serves all static files in its"
+" modules. This may not be ideal when it comes to performances, and static"
+" files should generally be served by a static HTTP server."
+msgstr ""
+
+#: ../../setup/deploy.rst:405
+msgid ""
+"Odoo static files live in each module's ``static/`` folder, so static "
+"files can be served by intercepting all requests to "
+":samp:`/{MODULE}/static/{FILE}`, and looking up the right module (and "
+"file) in the various addons paths."
+msgstr ""
+
+#: ../../setup/deploy.rst:416
+msgid "Security"
+msgstr ""
+
+#: ../../setup/deploy.rst:418
+msgid ""
+"For starters, keep in mind that securing an information system is a "
+"continuous process, not a one-shot operation. At any moment, you will "
+"only be as secure as the weakest link in your environment."
+msgstr ""
+
+#: ../../setup/deploy.rst:422
+msgid ""
+"So please do not take this section as the ultimate list of measures that "
+"will prevent all security problems. It's only intended as a summary of "
+"the first important things you should be sure to include in your security"
+" action plan. The rest will come from best security practices for your "
+"operating system and distribution, best practices in terms of users, "
+"passwords, and access control management, etc."
+msgstr ""
+
+#: ../../setup/deploy.rst:428
+msgid ""
+"When deploying an internet-facing server, please be sure to consider the "
+"following security-related topics:"
+msgstr ""
+
+#: ../../setup/deploy.rst:431
+msgid ""
+"Always set a strong super-admin admin password, and restrict access to "
+"the database management pages as soon as the system is set up. See "
+":ref:`db_manager_security`."
+msgstr ""
+
+#: ../../setup/deploy.rst:434
+msgid ""
+"Choose unique logins and strong passwords for all administrator accounts "
+"on all databases. Do not use 'admin' as the login. Do not use those "
+"logins for day-to-day operations, only for controlling/managing the "
+"installation. *Never* use any default passwords like admin/admin, even "
+"for test/staging databases."
+msgstr ""
+
+#: ../../setup/deploy.rst:439
+msgid ""
+"Do **not** install demo data on internet-facing servers. Databases with "
+"demo data contain default logins and passwords that can be used to get "
+"into your systems and cause significant trouble, even on staging/dev "
+"systems."
+msgstr ""
+
+#: ../../setup/deploy.rst:443
+msgid ""
+"Use appropriate database filters ( :option:`--db-filter <odoo-bin --db-"
+"filter>`) to restrict the visibility of your databases according to the "
+"hostname. See :ref:`db_filter`. You may also use :option:`-d <odoo-bin "
+"-d>` to provide your own (comma-separated) list of available databases to"
+" filter from, instead of letting the system fetch them all from the "
+"database backend."
+msgstr ""
+
+#: ../../setup/deploy.rst:450
+msgid ""
+"Once your ``db_name`` and ``db_filter`` are configured and only match a "
+"single database per hostname, you should set ``list_db`` configuration "
+"option to ``False``, to prevent listing databases entirely, and to block "
+"access to the database management screens (this is also exposed as the "
+":option:`--no-database-list <odoo-bin --no-database-list>` command-line "
+"option)"
+msgstr ""
+
+#: ../../setup/deploy.rst:456
+msgid ""
+"Make sure the PostgreSQL user (:option:`--db_user <odoo-bin --db_user>`) "
+"is *not* a super-user, and that your databases are owned by a different "
+"user. For example they could be owned by the ``postgres`` super-user if "
+"you are using a dedicated non-privileged ``db_user``. See also "
+":ref:`setup/deploy/odoo`."
+msgstr ""
+
+#: ../../setup/deploy.rst:461
+msgid ""
+"Keep installations updated by regularly installing the latest builds, "
+"either via GitHub or by downloading the latest version from "
+"https://www.odoo.com/page/download or http://nightly.odoo.com"
+msgstr ""
+
+#: ../../setup/deploy.rst:465
+msgid ""
+"Configure your server in multi-process mode with proper limits matching "
+"your typical usage (memory/CPU/timeouts). See also :ref:`builtin_server`."
+msgstr ""
+
+#: ../../setup/deploy.rst:468
+msgid ""
+"Run Odoo behind a web server providing HTTPS termination with a valid SSL"
+" certificate, in order to prevent eavesdropping on cleartext "
+"communications. SSL certificates are cheap, and many free options exist. "
+"Configure the web proxy to limit the size of requests, set appropriate "
+"timeouts, and then enable the :option:`proxy mode <odoo-bin --proxy-"
+"mode>` option. See also :ref:`https_proxy`."
+msgstr ""
+
+#: ../../setup/deploy.rst:475
+msgid ""
+"If you need to allow remote SSH access to your servers, make sure to set "
+"a strong password for **all** accounts, not just `root`. It is strongly "
+"recommended to entirely disable password-based authentication, and only "
+"allow public key authentication. Also consider restricting access via a "
+"VPN, allowing only trusted IPs in the firewall, and/or running a brute-"
+"force detection system such as `fail2ban` or equivalent."
+msgstr ""
+
+#: ../../setup/deploy.rst:481
+msgid ""
+"Consider installing appropriate rate-limiting on your proxy or firewall, "
+"to prevent brute-force attacks and denial of service attacks. See also "
+":ref:`login_brute_force` for specific measures."
+msgstr ""
+
+#: ../../setup/deploy.rst:485
+msgid ""
+"Many network providers provide automatic mitigation for Distributed "
+"Denial of Service attacks (DDOS), but this is often an optional service, "
+"so you should consult with them."
+msgstr ""
+
+#: ../../setup/deploy.rst:489
+msgid ""
+"Whenever possible, host your public-facing demo/test/staging instances on"
+" different machines than the production ones. And apply the same security"
+" precautions as for production."
+msgstr ""
+
+#: ../../setup/deploy.rst:493
+msgid ""
+"If you are hosting multiple customers, isolate customer data and files "
+"from each other using containers or appropriate \"jail\" techniques."
+msgstr ""
+
+#: ../../setup/deploy.rst:496
+msgid ""
+"Setup daily backups of your databases and filestore data, and copy them "
+"to a remote archiving server that is not accessible from the server "
+"itself."
+msgstr ""
+
+#: ../../setup/deploy.rst:503
+msgid "Blocking Brute Force Attacks"
+msgstr ""
+
+#: ../../setup/deploy.rst:504
+msgid ""
+"For internet-facing deployments, brute force attacks on user passwords "
+"are very common, and this threat should not be neglected for Odoo "
+"servers. Odoo emits a log entry whenever a login attempt is performed, "
+"and reports the result: success or failure, along with the target login "
+"and source IP."
+msgstr ""
+
+#: ../../setup/deploy.rst:508
+msgid "The log entries will have the following form."
+msgstr ""
+
+#: ../../setup/deploy.rst:510
+msgid "Failed login::"
+msgstr ""
+
+#: ../../setup/deploy.rst:514
+msgid "Successful login::"
+msgstr ""
+
+#: ../../setup/deploy.rst:519
+msgid ""
+"These logs can be easily analyzed by an intrusion prevention system such "
+"as `fail2ban`."
+msgstr ""
+
+#: ../../setup/deploy.rst:521
+msgid ""
+"For example, the following fail2ban filter definition should match a "
+"failed login::"
+msgstr ""
+
+#: ../../setup/deploy.rst:528
+msgid ""
+"This could be used with a jail definition to block the attacking IP on "
+"HTTP(S)."
+msgstr ""
+
+#: ../../setup/deploy.rst:530
+msgid ""
+"Here is what it could look like for blocking the IP for 15 minutes when "
+"10 failed login attempts are detected from the same IP within 1 minute::"
+msgstr ""
+
+#: ../../setup/deploy.rst:547
+msgid "Database Manager Security"
+msgstr ""
+
+#: ../../setup/deploy.rst:549
+msgid ":ref:`setup/deploy/odoo` mentioned ``admin_passwd`` in passing."
+msgstr ""
+
+#: ../../setup/deploy.rst:551
+msgid ""
+"This setting is used on all database management screens (to create, "
+"delete, dump or restore databases)."
+msgstr ""
+
+#: ../../setup/deploy.rst:554
+msgid ""
+"If the management screens must not be accessible at all, you should set "
+"``list_db`` configuration option to ``False``, to block access to all the"
+" database selection and management screens."
+msgstr ""
+
+#: ../../setup/deploy.rst:560
+msgid ""
+"It is strongly recommended to disable the Database Manager for any "
+"internet-facing system! It is meant as a development/demo tool, to make "
+"it easy to quickly create and manage databases. It is not designed for "
+"use in production, and may even expose dangerous features to attackers. "
+"It is also not designed to handle large databases, and may trigger memory"
+" limits."
+msgstr ""
+
+#: ../../setup/deploy.rst:566
+msgid ""
+"On production systems, database management operations should always be "
+"performed by the system administrator, including provisioning of new "
+"databases and automated backups."
+msgstr ""
+
+#: ../../setup/deploy.rst:569
+msgid ""
+"Be sure to setup an appropriate ``db_name`` parameter (and optionally, "
+"``db_filter`` too) so that the system can determine the target database "
+"for each request, otherwise users will be blocked as they won't be "
+"allowed to choose the database themselves."
+msgstr ""
+
+#: ../../setup/deploy.rst:574
+msgid ""
+"If the management screens must only be accessible from a selected set of "
+"machines, use the proxy server's features to block access to all routes "
+"starting with ``/web/database`` except (maybe) ``/web/database/selector``"
+" which displays the database-selection screen."
+msgstr ""
+
+#: ../../setup/deploy.rst:578
+msgid ""
+"If the database-management screen should be left accessible, the "
+"``admin_passwd`` setting must be changed from its ``admin`` default: this"
+" password is checked before allowing database-alteration operations."
+msgstr ""
+
+#: ../../setup/deploy.rst:582
+msgid "It should be stored securely, and should be generated randomly e.g."
+msgstr ""
+
+#: ../../setup/deploy.rst:588
+msgid "which will generate a 32 characters pseudorandom printable string."
+msgstr ""
+
+#: ../../setup/deploy.rst:591
+msgid "Supported Browsers"
+msgstr ""
+
+#: ../../setup/deploy.rst:593
+msgid ""
+"Odoo is supported by multiple browsers for each of its versions. No "
+"distinction is made according to the browser version in order to be up-"
+"to-date. Odoo is supported on the current browser version. We support the"
+" following browsers:"
+msgstr ""
+
+#: ../../setup/deploy.rst:598
+msgid "Mozilla Firefox"
+msgstr ""
+
+#: ../../setup/deploy.rst:599
+msgid "Google Chrome"
+msgstr ""
+
+#: ../../setup/deploy.rst:600
+msgid "Safari"
+msgstr ""
+
+#: ../../setup/deploy.rst:601
+msgid "Microsoft Edge"
+msgstr ""
+
+#: ../../setup/deploy.rst:605
+msgid "Since Odoo 13.0, ES6 is supported.  Therefore, IE support is dropped."
+msgstr ""
+
+#: ../../setup/deploy.rst:609
+msgid ""
+"to have multiple Odoo installations use the same PostgreSQL database, or "
+"to provide more computing resources to both software."
+msgstr ""
+
+#: ../../setup/deploy.rst:612
+msgid ""
+"technically a tool like socat_ can be used to proxy UNIX sockets across "
+"networks, but that is mostly for software which can only be used over "
+"UNIX sockets"
+msgstr ""
+
+#: ../../setup/deploy.rst:616
+msgid ""
+"or be accessible only over an internal packet-switched network, but that "
+"requires secured switches, protections against `ARP spoofing`_ and "
+"precludes usage of WiFi. Even over secure packet-switched networks, "
+"deployment over HTTPS is recommended, and possible costs are lowered as "
+"\"self-signed\" certificates are easier to deploy on a controlled "
+"environment than over the internet."
+msgstr ""
+

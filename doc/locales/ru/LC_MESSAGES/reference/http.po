@@ -1,0 +1,485 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Odoo S.A.
+# This file is distributed under the same license as the odoo package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2020.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: odoo 13.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-01-07 15:02+0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.3.4\n"
+
+#: ../../reference/http.rst:7
+msgid "Web Controllers"
+msgstr ""
+
+#: ../../reference/http.rst:10
+msgid "Controllers"
+msgstr ""
+
+#: ../../reference/http.rst:12
+msgid ""
+"Controllers need to provide extensibility, much like "
+":class:`~odoo.models.Model`, but can't use the same mechanism as the pre-"
+"requisites (a database with loaded modules) may not be available yet "
+"(e.g. no database created, or no database selected)."
+msgstr ""
+
+#: ../../reference/http.rst:17
+msgid ""
+"Controllers thus provide their own extension mechanism, separate from "
+"that of models:"
+msgstr ""
+
+#: ../../reference/http.rst:20
+msgid ""
+"Controllers are created by :ref:`inheriting <python:tut-inheritance>` "
+"from :class:`~odoo.http.Controller`. Routes are defined through methods "
+"decorated with :func:`~odoo.http.route`::"
+msgstr ""
+
+#: ../../reference/http.rst:28
+msgid ""
+"To *override* a controller, :ref:`inherit <python:tut-inheritance>` from "
+"its class and override relevant methods, re-exposing them if necessary::"
+msgstr ""
+
+#: ../../reference/http.rst:37
+msgid ""
+"decorating with :func:`~odoo.http.route` is necessary to keep the method "
+"(and route) visible: if the method is redefined without decorating, it "
+"will be \"unpublished\""
+msgstr ""
+
+#: ../../reference/http.rst:40
+msgid ""
+"the decorators of all methods are combined, if the overriding method's "
+"decorator has no argument all previous ones will be kept, any provided "
+"argument will override previously defined ones e.g.::"
+msgstr ""
+
+#: ../../reference/http.rst:49
+msgid ""
+"will change ``/some_url`` from public authentication to user (requiring a"
+" log-in)"
+msgstr ""
+
+#: ../../reference/http.rst:53
+msgid "API"
+msgstr ""
+
+#: ../../reference/http.rst:58
+msgid "Routing"
+msgstr ""
+
+#: odoo.http.route:1 of
+msgid ""
+"Decorator marking the decorated method as being a handler for requests. "
+"The method must be part of a subclass of ``Controller``."
+msgstr ""
+
+#: odoo.http.HttpRequest.make_response odoo.http.HttpRequest.render
+#: odoo.http.Response odoo.http.WebRequest odoo.http.WebRequest.csrf_token
+#: odoo.http.route of
+msgid "Параметры"
+msgstr ""
+
+#: odoo.http.route:4 of
+msgid ""
+"string or array. The route part that will determine which http requests "
+"will match the decorated method. Can be a single string or an array of "
+"strings. See werkzeug's routing documentation for the format of route "
+"expression ( http://werkzeug.pocoo.org/docs/routing/ )."
+msgstr ""
+
+#: odoo.http.route:9 of
+msgid "The type of request, can be ``'http'`` or ``'json'``."
+msgstr ""
+
+#: odoo.http.route:10 of
+msgid ""
+"The type of authentication method, can on of the following:  * ``user``: "
+"The user must be authenticated and the current request   will perform "
+"using the rights of the user. * ``public``: The user may or may not be "
+"authenticated. If she isn't,   the current request will perform using the"
+" shared Public user. * ``none``: The method is always active, even if "
+"there is no   database. Mainly used by the framework and authentication"
+"   modules. There request code will not have any facilities to access   "
+"the database nor have any configuration indicating the current   database"
+" nor the current user."
+msgstr ""
+
+#: odoo.http.route:10 of
+msgid "The type of authentication method, can on of the following:"
+msgstr ""
+
+#: odoo.http.route:12 of
+msgid ""
+"``user``: The user must be authenticated and the current request will "
+"perform using the rights of the user."
+msgstr ""
+
+#: odoo.http.route:14 of
+msgid ""
+"``public``: The user may or may not be authenticated. If she isn't, the "
+"current request will perform using the shared Public user."
+msgstr ""
+
+#: odoo.http.route:16 of
+msgid ""
+"``none``: The method is always active, even if there is no database. "
+"Mainly used by the framework and authentication modules. There request "
+"code will not have any facilities to access the database nor have any "
+"configuration indicating the current database nor the current user."
+msgstr ""
+
+#: odoo.http.route:21 of
+msgid ""
+"A sequence of http methods this route applies to. If not specified, all "
+"methods are allowed."
+msgstr ""
+
+#: odoo.http.route:23 of
+msgid "The Access-Control-Allow-Origin cors directive value."
+msgstr ""
+
+#: odoo.http.route:24 of
+msgid ""
+"Whether CSRF protection should be enabled for the route.  Defaults to "
+"``True``. See :ref:`CSRF Protection <csrf>` for more."
+msgstr ""
+
+#: odoo.http.route:24 of
+msgid "Whether CSRF protection should be enabled for the route."
+msgstr ""
+
+#: odoo.http.route:26 of
+msgid "Defaults to ``True``. See :ref:`CSRF Protection <csrf>` for more."
+msgstr ""
+
+#: odoo.http.route:31 of
+msgid "CSRF Protection"
+msgstr ""
+
+#: odoo.http.route:36 of
+msgid ""
+"Odoo implements token-based `CSRF protection "
+"<https://en.wikipedia.org/wiki/CSRF>`_."
+msgstr ""
+
+#: odoo.http.route:39 of
+msgid ""
+"CSRF protection is enabled by default and applies to *UNSAFE* HTTP "
+"methods as defined by :rfc:`7231` (all methods other than ``GET``, "
+"``HEAD``, ``TRACE`` and ``OPTIONS``)."
+msgstr ""
+
+#: odoo.http.route:43 of
+msgid ""
+"CSRF protection is implemented by checking requests using unsafe methods "
+"for a value called ``csrf_token`` as part of the request's form data. "
+"That value is removed from the form as part of the validation and does "
+"not have to be taken in account by your own form processing."
+msgstr ""
+
+#: odoo.http.route:49 of
+msgid ""
+"When adding a new controller for an unsafe method (mostly POST for e.g. "
+"forms):"
+msgstr ""
+
+#: odoo.http.route:52 of
+msgid ""
+"if the form is generated in Python, a csrf token is available via "
+":meth:`request.csrf_token() <odoo.http.WebRequest.csrf_token`, the "
+":data:`~odoo.http.request` object is available by default in QWeb "
+"(python) templates, it may have to be added explicitly if you are not "
+"using QWeb."
+msgstr ""
+
+#: odoo.http.route:59 of
+msgid ""
+"if the form is generated in Javascript, the CSRF token is added by "
+"default to the QWeb (js) rendering context as ``csrf_token`` and is "
+"otherwise available as ``csrf_token`` on the ``web.core`` module:"
+msgstr ""
+
+#: odoo.http.route:68 of
+msgid ""
+"if the endpoint can be called by external parties (not from Odoo) as e.g."
+" it is a REST API or a `webhook "
+"<https://en.wikipedia.org/wiki/Webhook>`_, CSRF protection must be "
+"disabled on the endpoint. If possible, you may want to implement other "
+"methods of request validation (to ensure it is not called by an unrelated"
+" third-party)."
+msgstr ""
+
+#: ../../reference/http.rst:65
+msgid "Request"
+msgstr ""
+
+#: ../../reference/http.rst:67
+msgid ""
+"The request object is automatically set on :data:`odoo.http.request` at "
+"the start of the request"
+msgstr ""
+
+#: odoo.http.WebRequest:1 of
+msgid ""
+"Parent class for all Odoo Web request types, mostly deals with "
+"initialization and setup of the request object (the dispatching itself "
+"has to be handled by the subclasses)"
+msgstr ""
+
+#: odoo.http.WebRequest:5 of
+msgid "a wrapped werkzeug Request object"
+msgstr ""
+
+#: odoo.http.WebRequest:10 of
+msgid ""
+"the original :class:`werkzeug.wrappers.Request` object provided to the "
+"request"
+msgstr ""
+
+#: odoo.http.WebRequest:15 of
+msgid ""
+":class:`~collections.Mapping` of request parameters, not generally useful"
+" as they're provided directly to the handler method as keyword arguments"
+msgstr ""
+
+#: odoo.http.WebRequest.cr:1 of
+msgid ":class:`~odoo.sql_db.Cursor` initialized for the current method call."
+msgstr ""
+
+#: odoo.http.WebRequest.cr:3 of
+msgid ""
+"Accessing the cursor when the current request uses the ``none`` "
+"authentication will raise an exception."
+msgstr ""
+
+#: odoo.http.WebRequest.context:1 of
+msgid ":class:`~collections.Mapping` of context values for the current request"
+msgstr ""
+
+#: odoo.http.WebRequest.env:1 of
+msgid "The :class:`~odoo.api.Environment` bound to current request."
+msgstr ""
+
+#: odoo.http.WebRequest.session:1 of
+msgid ""
+":class:`OpenERPSession` holding the HTTP session data for the current "
+"http session"
+msgstr ""
+
+#: odoo.http.WebRequest.registry:1 of
+msgid ""
+"The registry to the database linked to this request. Can be ``None`` if "
+"the current request uses the ``none`` authentication."
+msgstr ""
+
+#: odoo.http.WebRequest.registry:6 of
+msgid "use :attr:`.env`"
+msgstr ""
+
+#: odoo.http.WebRequest.db:1 of
+msgid ""
+"The database linked to this request. Can be ``None`` if the current "
+"request uses the ``none`` authentication."
+msgstr ""
+
+#: odoo.http.WebRequest.csrf_token:1 of
+msgid "Generates and returns a CSRF token for the current session"
+msgstr ""
+
+#: odoo.http.WebRequest.csrf_token:3 of
+msgid ""
+"the CSRF token should only be valid for the specified duration (in "
+"second), by default 1h, ``None`` for the token to be valid as long as the"
+" current user's session is."
+msgstr ""
+
+#: odoo.http.WebRequest.csrf_token of
+msgid "Результат"
+msgstr ""
+
+#: odoo.http.WebRequest.csrf_token:8 of
+msgid "ASCII token string"
+msgstr ""
+
+#: odoo.http.HttpRequest:1 of
+msgid "Handler for the ``http`` request type."
+msgstr ""
+
+#: odoo.http.HttpRequest:3 of
+msgid ""
+"matched routing parameters, query string parameters, form_ parameters and"
+" files are passed to the handler method as keyword arguments."
+msgstr ""
+
+#: odoo.http.HttpRequest:6 of
+msgid "In case of name conflict, routing parameters have priority."
+msgstr ""
+
+#: odoo.http.HttpRequest:8 of
+msgid "The handler method's result can be:"
+msgstr ""
+
+#: odoo.http.HttpRequest:10 of
+msgid ""
+"a falsy value, in which case the HTTP response will be an `HTTP 204`_ (No"
+" Content)"
+msgstr ""
+
+#: odoo.http.HttpRequest:12 of
+msgid "a werkzeug Response object, which is returned as-is"
+msgstr ""
+
+#: odoo.http.HttpRequest:13 of
+msgid ""
+"a ``str`` or ``unicode``, will be wrapped in a Response object and "
+"interpreted as HTML"
+msgstr ""
+
+#: odoo.http.HttpRequest.make_response:1 of
+msgid ""
+"Helper for non-HTML responses, or HTML responses with custom response "
+"headers or cookies."
+msgstr ""
+
+#: odoo.http.HttpRequest.make_response:4 of
+msgid ""
+"While handlers can just return the HTML markup of a page they want to "
+"send as a string if non-HTML data is returned they need to create a "
+"complete response object, or the returned data will not be correctly "
+"interpreted by the clients."
+msgstr ""
+
+#: odoo.http.HttpRequest.make_response:9 of
+msgid "response body"
+msgstr ""
+
+#: odoo.http.HttpRequest.make_response:10 of
+msgid "HTTP headers to set on the response"
+msgstr ""
+
+#: odoo.http.HttpRequest.make_response:12 of
+msgid "cookies to set on the client"
+msgstr ""
+
+#: odoo.http.HttpRequest.not_found:1 of
+msgid ""
+"Shortcut for a `HTTP 404 "
+"<http://tools.ietf.org/html/rfc7231#section-6.5.4>`_ (Not Found) response"
+msgstr ""
+
+#: odoo.http.HttpRequest.render:1 of
+msgid "Lazy render of a QWeb template."
+msgstr ""
+
+#: odoo.http.HttpRequest.render:3 of
+msgid ""
+"The actual rendering of the given template will occur at then end of the "
+"dispatching. Meanwhile, the template and/or qcontext can be altered or "
+"even replaced by a static response."
+msgstr ""
+
+#: odoo.http.HttpRequest.render:7 odoo.http.Response:7 of
+msgid "template to render"
+msgstr ""
+
+#: odoo.http.HttpRequest.render:8 odoo.http.Response:8 of
+msgid "Rendering context to use"
+msgstr ""
+
+#: odoo.http.HttpRequest.render:9 of
+msgid ""
+"whether the template rendering should be deferred until the last possible"
+" moment"
+msgstr ""
+
+#: odoo.http.HttpRequest.render:11 of
+msgid "forwarded to werkzeug's Response object"
+msgstr ""
+
+#: odoo.http.JsonRequest:1 of
+msgid ""
+"Request handler for `JSON-RPC 2 <http://www.jsonrpc.org/specification>`_ "
+"over HTTP"
+msgstr ""
+
+#: odoo.http.JsonRequest:4 of
+msgid "``method`` is ignored"
+msgstr ""
+
+#: odoo.http.JsonRequest:5 of
+msgid ""
+"``params`` must be a JSON object (not an array) and is passed as keyword "
+"arguments to the handler method"
+msgstr ""
+
+#: odoo.http.JsonRequest:7 of
+msgid ""
+"the handler method's result is returned as JSON-RPC ``result`` and "
+"wrapped in the `JSON-RPC Response "
+"<http://www.jsonrpc.org/specification#response_object>`_"
+msgstr ""
+
+#: odoo.http.JsonRequest:11 of
+msgid "Sucessful request::"
+msgstr ""
+
+#: odoo.http.JsonRequest:23 of
+msgid "Request producing a error::"
+msgstr ""
+
+#: ../../reference/http.rst:79
+msgid "Response"
+msgstr ""
+
+#: odoo.http.Response:1 of
+msgid "Response object passed through controller route chain."
+msgstr ""
+
+#: odoo.http.Response:3 of
+msgid ""
+"In addition to the :class:`werkzeug.wrappers.Response` parameters, this "
+"class's constructor can take the following additional parameters for QWeb"
+" Lazy Rendering."
+msgstr ""
+
+#: odoo.http.Response:9 of
+msgid ""
+"User id to use for the ir.ui.view render call, ``None`` to use the "
+"request's user (the default)"
+msgstr ""
+
+#: odoo.http.Response:12 of
+msgid ""
+"these attributes are available as parameters on the Response object and "
+"can be altered at any time before rendering"
+msgstr ""
+
+#: odoo.http.Response:15 of
+msgid ""
+"Also exposes all the attributes and methods of "
+":class:`werkzeug.wrappers.Response`."
+msgstr ""
+
+#: odoo.http.Response.render:1 of
+msgid "Renders the Response's template, returns the result"
+msgstr ""
+
+#: odoo.http.Response.flatten:1 of
+msgid ""
+"Forces the rendering of the response's template, sets the result as "
+"response body and unsets :attr:`.template`"
+msgstr ""
+

@@ -1,0 +1,322 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Odoo S.A.
+# This file is distributed under the same license as the odoo package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2020.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: odoo 13.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-01-07 15:02+0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.3.4\n"
+
+#: ../../reference/module.rst:5
+msgid "Module Manifests"
+msgstr ""
+
+#: ../../reference/module.rst:12
+msgid "Manifest"
+msgstr ""
+
+#: ../../reference/module.rst:14
+msgid ""
+"The manifest file serves to declare a python package as an Odoo module "
+"and to specify module metadata."
+msgstr ""
+
+#: ../../reference/module.rst:17
+msgid ""
+"It is a file called ``__manifest__.py`` and contains a single Python "
+"dictionary, where each key specifies module metadatum."
+msgstr ""
+
+#: ../../reference/module.rst:41
+msgid "Available manifest fields are:"
+msgstr ""
+
+#: ../../reference/module.rst:43
+msgid "``name`` (``str``, required)"
+msgstr ""
+
+#: ../../reference/module.rst:44
+msgid "the human-readable name of the module"
+msgstr ""
+
+#: ../../reference/module.rst:45
+msgid "``version`` (``str``)"
+msgstr ""
+
+#: ../../reference/module.rst:46
+msgid "this module's version, should follow `semantic versioning`_ rules"
+msgstr ""
+
+#: ../../reference/module.rst:47
+msgid "``description`` (``str``)"
+msgstr ""
+
+#: ../../reference/module.rst:48
+msgid "extended description for the module, in reStructuredText"
+msgstr ""
+
+#: ../../reference/module.rst:49
+msgid "``author`` (``str``)"
+msgstr ""
+
+#: ../../reference/module.rst:50
+msgid "name of the module author"
+msgstr ""
+
+#: ../../reference/module.rst:51
+msgid "``website`` (``str``)"
+msgstr ""
+
+#: ../../reference/module.rst:52
+msgid "website URL for the module author"
+msgstr ""
+
+#: ../../reference/module.rst:66
+msgid "``license`` (``str``, defaults: ``LGPL-3``)"
+msgstr ""
+
+#: ../../reference/module.rst:54
+msgid "distribution license for the module. Possible values:"
+msgstr ""
+
+#: ../../reference/module.rst:57
+msgid "`GPL-2`"
+msgstr ""
+
+#: ../../reference/module.rst:58
+msgid "`GPL-2 or any later version`"
+msgstr ""
+
+#: ../../reference/module.rst:59
+msgid "`GPL-3`"
+msgstr ""
+
+#: ../../reference/module.rst:60
+msgid "`GPL-3 or any later version`"
+msgstr ""
+
+#: ../../reference/module.rst:61
+msgid "`AGPL-3`"
+msgstr ""
+
+#: ../../reference/module.rst:62
+msgid "`LGPL-3`"
+msgstr ""
+
+#: ../../reference/module.rst:63
+msgid "`Other OSI approved licence`"
+msgstr ""
+
+#: ../../reference/module.rst:64
+msgid "`OEEL-1` (Odoo Enterprise Edition License v1.0)"
+msgstr ""
+
+#: ../../reference/module.rst:65
+msgid "`OPL-1` (Odoo Proprietary License v1.0)"
+msgstr ""
+
+#: ../../reference/module.rst:66
+msgid "`Other proprietary`"
+msgstr ""
+
+#: ../../reference/module.rst:74
+msgid "``category`` (``str``, default: ``Uncategorized``)"
+msgstr ""
+
+#: ../../reference/module.rst:69
+msgid "classification category within Odoo, rough business domain for the module."
+msgstr ""
+
+#: ../../reference/module.rst:71
+msgid ""
+"Although using `existing categories`_ is recommended, the field is "
+"freeform and unknown categories are created on-the-fly. Category "
+"hierarchies can be created using the separator ``/`` e.g. ``Foo / Bar`` "
+"will create a category ``Foo``, a category ``Bar`` as child category of "
+"``Foo``, and will set ``Bar`` as the module's category."
+msgstr ""
+
+#: ../../reference/module.rst:81
+msgid "``depends`` (``list(str)``)"
+msgstr ""
+
+#: ../../reference/module.rst:77
+msgid ""
+"Odoo modules which must be loaded before this one, either because this "
+"module uses features they create or because it alters resources they "
+"define."
+msgstr ""
+
+#: ../../reference/module.rst:81
+msgid ""
+"When a module is installed, all of its dependencies are installed before "
+"it. Likewise dependencies are loaded before a module is loaded."
+msgstr ""
+
+#: ../../reference/module.rst:84
+msgid "``data`` (``list(str)``)"
+msgstr ""
+
+#: ../../reference/module.rst:84
+msgid ""
+"List of data files which must always be installed or updated with the "
+"module. A list of paths from the module root directory"
+msgstr ""
+
+#: ../../reference/module.rst:87
+msgid "``demo`` (``list(str)``)"
+msgstr ""
+
+#: ../../reference/module.rst:87
+msgid ""
+"List of data files which are only installed or updated in *demonstration "
+"mode*"
+msgstr ""
+
+#: ../../reference/module.rst:98
+msgid "``auto_install`` (``bool``, default: ``False``)"
+msgstr ""
+
+#: ../../reference/module.rst:90
+msgid ""
+"If ``True``, this module will automatically be installed if all of its "
+"dependencies are installed."
+msgstr ""
+
+#: ../../reference/module.rst:93
+msgid ""
+"It is generally used for \"link modules\" implementing synergic "
+"integration between two otherwise independent modules."
+msgstr ""
+
+#: ../../reference/module.rst:96
+msgid ""
+"For instance ``sale_crm`` depends on both ``sale`` and ``crm`` and is set"
+" to ``auto_install``. When both ``sale`` and ``crm`` are installed, it "
+"automatically adds CRM campaigns tracking to sale orders without either "
+"``sale`` or ``crm`` being aware of one another"
+msgstr ""
+
+#: ../../reference/module.rst:111
+msgid "``external_dependencies`` (``dict(key=list(str))``)"
+msgstr ""
+
+#: ../../reference/module.rst:101
+msgid "A dictionary containing python and/or binary dependencies."
+msgstr ""
+
+#: ../../reference/module.rst:103
+msgid ""
+"For python dependencies, the ``python`` key must be defined for this "
+"dictionary and a list of python modules to be imported should be assigned"
+" to it."
+msgstr ""
+
+#: ../../reference/module.rst:107
+msgid ""
+"For binary dependencies, the ``bin`` key must be defined for this "
+"dictionary and a list of binary executable names should be assigned to "
+"it."
+msgstr ""
+
+#: ../../reference/module.rst:110
+msgid ""
+"The module won't be installed if either the python module is not "
+"installed in the host machine or the binary executable is not found "
+"within the host machine's PATH environment variable."
+msgstr ""
+
+#: ../../reference/module.rst:115
+msgid "``application`` (``bool``, default: ``False``)"
+msgstr ""
+
+#: ../../reference/module.rst:114
+msgid ""
+"Whether the module should be considered as a fully-fledged application "
+"(``True``) or is just a technical module (``False``) that provides some "
+"extra functionality to an existing application module."
+msgstr ""
+
+#: ../../reference/module.rst:118
+msgid "``css`` (``list(str)``)"
+msgstr ""
+
+#: ../../reference/module.rst:118
+msgid ""
+"Specify css files with custom rules to be imported, these files should be"
+" located in ``static/src/css`` inside the module."
+msgstr ""
+
+#: ../../reference/module.rst:120
+msgid "``images`` (``list(str)``)"
+msgstr ""
+
+#: ../../reference/module.rst:121
+msgid "Specify image files to be used by the module."
+msgstr ""
+
+#: ../../reference/module.rst:122
+msgid "``installable`` (``bool`` default: ``True``)"
+msgstr ""
+
+#: ../../reference/module.rst:123
+msgid ""
+"Whether a user should be able to install the module from the Web UI or "
+"not."
+msgstr ""
+
+#: ../../reference/module.rst:125
+msgid "``maintainer`` (``str``)"
+msgstr ""
+
+#: ../../reference/module.rst:125
+msgid ""
+"Person or entity in charge of the maintenance of this module, by default "
+"it is assumed that the author is the maintainer."
+msgstr ""
+
+#: ../../reference/module.rst:142
+msgid "``{pre_init, post_init, uninstall}_hook`` (``str``)"
+msgstr ""
+
+#: ../../reference/module.rst:128
+msgid ""
+"Hooks for module installation/uninstallation, their value should be a "
+"string representing the name of a function defined inside the module's "
+"``__init__.py``."
+msgstr ""
+
+#: ../../reference/module.rst:132
+msgid ""
+"``pre_init_hook`` takes a cursor as its only argument, this function is "
+"executed prior to the module's installation."
+msgstr ""
+
+#: ../../reference/module.rst:135
+msgid ""
+"``post_init_hook`` takes a cursor and a registry as its arguments, this "
+"function is executed right after the module's installation."
+msgstr ""
+
+#: ../../reference/module.rst:138
+msgid ""
+"``uninstall_hook`` takes a cursor and a registry as its arguments, this "
+"function is executed after the module's uninstallation."
+msgstr ""
+
+#: ../../reference/module.rst:141
+msgid ""
+"These hooks should only be used when setup/cleanup required for this "
+"module is either extremely difficult or impossible through the api."
+msgstr ""
+

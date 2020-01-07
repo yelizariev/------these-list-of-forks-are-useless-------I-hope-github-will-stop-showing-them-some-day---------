@@ -1,0 +1,2940 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Odoo S.A.
+# This file is distributed under the same license as the odoo package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2020.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: odoo 13.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-01-07 15:02+0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.3.4\n"
+
+#: ../../reference/javascript_reference.rst:9
+msgid "Javascript Reference"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:11
+msgid ""
+"This document presents the Odoo Javascript framework. This framework is "
+"not a large application in term of lines of code, but it is quite "
+"generic, because it is basically a machine to turn a declarative "
+"interface description into a live application, able to interact with "
+"every model and records in the database.  It is even possible to use the "
+"web client to modify the interface of the web client."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:18
+msgid ""
+"An html version of all js docstrings in Odoo is available at: :ref:`JS "
+"API <api/js>`"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:22
+msgid "Overview"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:24
+msgid "The Javascript framework is designed to work with three main use cases:"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:26
+msgid ""
+"the *web client*: this is the private web application, where one can view"
+" and edit business data. This is a single page application (the page is "
+"never reloaded, only the new data is fetched from the server whenever it "
+"is needed)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:29
+msgid ""
+"the *website*: this is the public part of Odoo.  It allows an "
+"unidentified user to browse some content, to shop or to perform many "
+"actions, as a client. This is a classical website: various routes with "
+"controllers and some javascript to make it work."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:33
+msgid ""
+"the *point of sale*: this is the interface for the point of sale. It is a"
+" specialized single page application."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:36
+msgid ""
+"Some javascript code is common to these three use cases, and is bundled "
+"together (see below in the assets section).  This document will focus "
+"mostly on the web client design."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:41
+msgid "Web client"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:44
+msgid "Single Page Application"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:46
+msgid ""
+"In short, the *webClient*, instance of *WebClient* is the root component "
+"of the whole user interface.  Its responsibility is to orchestrate all "
+"various subcomponents, and to provide services, such as rpcs, local "
+"storage and more."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:50
+msgid ""
+"In runtime, the web client is a single page application. It does not need"
+" to request a full page from the server each time the user perform an "
+"action. Instead, it only requests what it needs, and then "
+"replaces/updates the view. Also, it manages the url: it is kept in sync "
+"with the web client state."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:55
+msgid ""
+"It means that while a user is working on Odoo, the web client class (and "
+"the action manager) actually creates and destroys many sub components. "
+"The state is highly dynamic, and each widget could be destroyed at any "
+"time."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:60
+msgid "Overview of web client JS code"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:62
+msgid ""
+"Here, we give a very quick overview on the web client code, in the "
+"*web/static/src/js* addon. Note that it is deliberately not exhaustive. "
+"We only cover the most important files/folders."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:66
+msgid ""
+"*boot.js*: this is the file that defines the module system.  It needs to "
+"be loaded first."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:68
+msgid ""
+"*core/*: this is a collection of lower level building blocks. Notably, it"
+" contains the class system, the widget system, concurrency utilities, and"
+" many other class/functions."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:71
+msgid ""
+"*chrome/*: in this folder, we have most large widgets which make up most "
+"of the user interface."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:73
+msgid ""
+"*chrome/abstract_web_client.js* and *chrome/web_client.js*: together, "
+"these files define the WebClient widget, which is the root widget for the"
+" web client."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:75
+msgid ""
+"*chrome/action_manager.js*: this is the code that will convert an action "
+"into a widget (for example a kanban or a form view)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:77
+msgid ""
+"*chrome/search_X.js* all these files define the search view (it is not a "
+"view in the point of view of the web client, only from the server point "
+"of view)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:79
+msgid "*fields*: all main view field widgets are defined here"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:80
+msgid "*views*: this is where the views are located"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:83
+msgid "Assets Management"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:85
+msgid ""
+"Managing assets in Odoo is not as straightforward as it is in some other "
+"apps. One of the reason is that we have a variety of situations where "
+"some, but not all the assets are required.  For example, the needs of the"
+" web client, the point of sale, the website or even the mobile "
+"application are different.  Also, some assets may be large, but are "
+"seldom needed.  In that case, we sometimes want them to be loaded lazily."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:92
+msgid ""
+"The main idea is that we define a set of *bundles* in xml.  A bundle is "
+"here defined as a collection of files (javascript, css, scss). In Odoo, "
+"the most important bundles are defined in the file "
+"*addons/web/views/webclient_templates.xml*. It looks like this:"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:107
+msgid ""
+"The files in a bundle can then be inserted into a template by using the "
+"*t-call-assets* directive:"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:115
+msgid ""
+"Here is what happens when a template is rendered by the server with these"
+" directives:"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:117
+msgid ""
+"all the *scss* files described in the bundle are compiled into css files."
+" A file named *file.scss* will be compiled in a file named "
+"*file.scss.css*."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:124
+msgid "if we are in *debug=assets* mode,"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:121
+msgid ""
+"the *t-call-assets* directive with the *t-js* attribute set to false will"
+" be replaced by a list of stylesheet tags pointing to the css files"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:123
+msgid ""
+"the *t-call-assets* directive with the *t-css* attribute set to false "
+"will be replaced by a list of script tags pointing to the js files"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:129
+msgid "if we are not in *debug=assets* mode,"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:127
+msgid ""
+"the css files will be concatenated and minified, then a stylesheet tag is"
+" generated"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:129
+msgid "the js files are concatenated and minified, then a script tag is generated"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:131
+msgid ""
+"Note that the assets files are cached, so in theory, a browser should "
+"only load them once."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:135
+msgid "Main bundles"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:136
+msgid ""
+"When the Odoo server is started, it checks the timestamp of each file in "
+"a bundle, and if necessary, will create/recreate the corresponding "
+"bundles."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:139
+msgid "Here are some important bundles that most developers will need to know:"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:141
+msgid ""
+"*web.assets_common*: this bundle contains most assets which are common to"
+" the web client, the website, and also the point of sale. This is "
+"supposed to contain lower level building blocks for the odoo framework.  "
+"Note that it contains the *boot.js* file, which defines the odoo module "
+"system."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:146
+msgid ""
+"*web.assets_backend*: this bundle contains the code specific to the web "
+"client (notably the web client/action manager/views)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:149
+msgid ""
+"*web.assets_frontend*: this bundle is about all that is specific to the "
+"public website: ecommerce, forum, blog, event management, ..."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:154
+msgid "Adding files in an asset bundle"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:156
+msgid ""
+"The proper way to add a file located in *addons/web* to a bundle is "
+"simple: it is just enough to add a *script* or a *stylesheet* tag to the "
+"bundle in the file *webclient_templates.xml*.  But when we work in a "
+"different addon, we need to add a file from that addon.  In that case, it"
+" should be done in three steps:"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:161
+msgid "add a *assets.xml* file in the *views/* folder"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:162
+msgid "add the string 'views/assets.xml' in the 'data' key in the manifest file"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:163
+msgid ""
+"create an inherited view of the desired bundle, and add the file(s) with "
+"an xpath expression. For example,"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:178
+msgid ""
+"Note that the files in a bundle are all loaded immediately when the user "
+"loads the odoo web client.  This means that the files are transferred "
+"through the network everytime (except when the browser cache is active)."
+"  In some cases, it may be better to lazyload some assets.  For example, "
+"if a widget requires a large library, and that widget is not a core part "
+"of the experience, then it may be a good idea to only load the library "
+"when the widget is actually created. The widget class has actually "
+"builtin support just for this use case. (see section "
+":ref:`reference/javascript_reference/qweb`)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:188
+msgid "What to do if a file is not loaded/updated"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:190
+msgid ""
+"There are many different reasons why a file may not be properly loaded.  "
+"Here are a few things you can try to solve the issue:"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:193
+msgid ""
+"once the server is started, it does not know if an asset file has been "
+"modified.  So, you can simply restart the server to regenerate the "
+"assets."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:195
+msgid ""
+"check the console (in the dev tools, usually opened with F12) to make "
+"sure there are no obvious errors"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:197
+msgid ""
+"try to add a console.log at the beginning of your file (before any module"
+" definition), so you can see if a file has been loaded or not"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:199
+msgid ""
+"in the user interface, in debug mode (INSERT LINK HERE TO DEBUG MODE), "
+"there is an option to force the server to update its assets files."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:201
+msgid ""
+"use the *debug=assets* mode.  This will actually bypass the asset bundles"
+" (note that it does not actually solve the issue. The server still uses "
+"outdated bundles)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:203
+msgid ""
+"finally, the most convenient way to do it, for a developer, is to start "
+"the server with the *--dev=all* option. This activates the file watcher "
+"options, which will automatically invalidate assets when necessary.  Note"
+" that it does not work very well if the OS is Windows."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:207
+msgid "remember to refresh your page!"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:208
+msgid "or maybe to save your code file..."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:211
+msgid ""
+"Once an asset file has been recreated, you need to refresh the page, to "
+"reload the proper files (if that does not work, the files may be cached)."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:216
+msgid "Javascript Module System"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:218
+msgid ""
+"Once we are able to load our javascript files into the browser, we need "
+"to make sure they are loaded in the correct order.  In order to do that, "
+"Odoo has defined a small module system (located in the file "
+"*addons/web/static/src/js/boot.js*, which needs to be loaded first)."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:223
+msgid ""
+"The Odoo module system, inspired by AMD, works by defining the function "
+"*define* on the global odoo object. We then define each javascript module"
+" by calling that function.  In the Odoo framework, a module is a piece of"
+" code that will be executed as soon as possible.  It has a name and "
+"potentially some dependencies.  When its dependencies are loaded, a "
+"module will then be loaded as well.  The value of the module is then the "
+"return value of the function defining the module."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:231
+msgid "As an example, it may look like this:"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:256
+msgid ""
+"An alternative way to define a module is to give explicitly a list of "
+"dependencies in the second argument."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:271
+msgid ""
+"If some dependencies are missing/non ready, then the module will simply "
+"not be loaded.  There will be a warning in the console after a few "
+"seconds."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:274
+msgid ""
+"Note that circular dependencies are not supported. It makes sense, but it"
+" means that one needs to be careful."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:278
+msgid "Defining a module"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:280
+msgid "The *odoo.define* method is given three arguments:"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:282
+msgid ""
+"*moduleName*: the name of the javascript module.  It should be a unique "
+"string. The convention is to have the name of the odoo addon followed by "
+"a specific description. For example, 'web.Widget' describes a module "
+"defined in the *web* addon, which exports a *Widget* class (because the "
+"first letter is capitalized)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:287
+msgid ""
+"If the name is not unique, an exception will be thrown and displayed in "
+"the console."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:290
+msgid ""
+"*dependencies*: the second argument is optional. If given, it should be a"
+" list of strings, each corresponding to a javascript module.  This "
+"describes the dependencies that are required to be loaded before the "
+"module is executed. If the dependencies are not explicitly given here, "
+"then the module system will extract them from the function by calling "
+"toString on it, then using a regexp to find all *require* statements."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:308
+msgid ""
+"finally, the last argument is a function which defines the module. Its "
+"return value is the value of the module, which may be passed to other "
+"modules requiring it.  Note that there is a small exception for "
+"asynchronous modules, see the next section."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:313
+msgid "If an error happens, it will be logged (in debug mode) in the console:"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:315
+msgid ""
+"``Missing dependencies``: These modules do not appear in the page. It is "
+"possible that the JavaScript file is not in the page or that the module "
+"name is wrong"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:318
+msgid "``Failed modules``: A javascript error is detected"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:320
+msgid ""
+"``Rejected modules``: The module returns a rejected Promise. It (and its "
+"dependent modules) is not loaded."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:323
+msgid "``Rejected linked modules``: Modules who depend on a rejected module"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:325
+msgid "``Non loaded modules``: Modules who depend on a missing or a failed module"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:331
+msgid "Asynchronous modules"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:333
+msgid ""
+"It can happen that a module needs to perform some work before it is "
+"ready.  For example, it could do a rpc to load some data.  In that case, "
+"the module can simply return a promise.  In that case, the module system "
+"will simply wait for the promise to complete before registering the "
+"module."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:353
+msgid "Best practices"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:355
+msgid ""
+"remember the convention for a module name: *addon name* suffixed with "
+"*module name*."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:357
+msgid ""
+"declare all your dependencies at the top of the module. Also, they should"
+" be sorted alphabetically by module name. This makes it easier to "
+"understand your module."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:359
+msgid "declare all exported values at the end"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:360
+msgid ""
+"try to avoid exporting too many things from one module.  It is usually "
+"better to simply export one thing in one (small/smallish) module."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:362
+msgid ""
+"asynchronous modules can be used to simplify some use cases. For example,"
+" the *web.dom_ready* module returns a promise which will be resolved when"
+" the dom is actually ready. So, another module that needs the DOM could "
+"simply have a *require('web.dom_ready')* statement somewhere, and the "
+"code will only be executed when the DOM is ready."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:367
+msgid ""
+"try to avoid defining more than one module in one file.  It may be "
+"convenient in the short term, but this is actually harder to maintain."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:372
+msgid "Class System"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:374
+msgid ""
+"Odoo was developed before ECMAScript 6 classes were available.  In "
+"Ecmascript 5, the standard way to define a class is to define a function "
+"and to add methods on its prototype object.  This is fine, but it is "
+"slightly complex when we want to use inheritance, mixins."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:379
+msgid ""
+"For these reasons, Odoo decided to use its own class system, inspired by "
+"John Resig. The base Class is located in *web.Class*, in the file "
+"*class.js*."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:383
+msgid "Creating a subclass"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:385
+msgid ""
+"Let us discuss how classes are created.  The main mechanism is to use the"
+" *extend* method (this is more or less the equivalent of *extend* in ES6 "
+"classes)."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:407
+msgid ""
+"In this example, the *init* function is the constructor.  It will be "
+"called when an instance is created.  Making an instance is done by using "
+"the *new* keyword."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:411
+msgid "Inheritance"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:413
+msgid ""
+"It is convenient to be able to inherit an existing class.  This is simply"
+" done by using the *extend* method on the superclass.  When a method is "
+"called, the framework will secretly rebind a special method: *_super* to "
+"the currently called method.  This allows us to use *this._super* "
+"whenever we need to call a parent method."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:438
+msgid "Mixins"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:440
+msgid ""
+"The odoo Class system does not support multiple inheritance, but for "
+"those cases when we need to share some behaviour, we have a mixin system:"
+" the *extend* method can actually take an arbitrary number of arguments, "
+"and will combine all of them in the new class."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:460
+msgid ""
+"In this example, the *Hamster* class is a subclass of Animal, but it also"
+" mix the DanceMixin in."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:465
+msgid "Patching an existing class"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:467
+msgid ""
+"It is not common, but we sometimes need to modify another class *in "
+"place*. The goal is to have a mechanism to change a class and all "
+"future/present instances. This is done by using the *include* method:"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:483
+msgid ""
+"This is obviously a dangerous operation and should be done with care.  "
+"But with the way Odoo is structured, it is sometimes necessary in one "
+"addon to modify the behavior of a widget/class defined in another addon."
+"  Note that it will modify all instances of the class, even if they have "
+"already been created."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:490
+msgid "Widgets"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:492
+msgid ""
+"The *Widget* class is really an important building block of the user "
+"interface. Pretty much everything in the user interface is under the "
+"control of a widget. The Widget class is defined in the module "
+"*web.Widget*, in *widget.js*."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:496
+msgid "In short, the features provided by the Widget class include:"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:498
+msgid "parent/child relationships between widgets (*PropertiesMixin*)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:500
+msgid "extensive lifecycle management with safety features (e.g."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:500
+msgid ""
+"automatically destroying children widgets during the destruction of a "
+"parent)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:502
+msgid "automatic rendering with :ref:`qweb <reference/qweb>`"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:503
+msgid ""
+"various utility functions to help interacting with the outside "
+"environment."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:505
+msgid "Here is an example of a basic counter widget:"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:526
+msgid ""
+"For this example, assume that the template *some.template* (and is "
+"properly loaded: the template is in a file, which is properly defined in "
+"the *qweb* key in the module manifest) is given by:"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:537
+msgid "This example widget can be used in the following manner:"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:546
+msgid ""
+"This example illustrates a few of the features of the *Widget* class, "
+"including the event system, the template system, the constructor with the"
+" initial *parent* argument."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:550
+msgid "Widget Lifecycle"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:552
+msgid ""
+"Like many component systems, the widget class has a well defined "
+"lifecycle. The usual lifecycle is the following: *init* is called, then "
+"*willStart*, then the rendering takes place, then *start* and finally "
+"*destroy*."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:558
+msgid ""
+"this is the constructor.  The init method is supposed to initialize the "
+"base state of the widget. It is synchronous and can be overridden to take"
+" more parameters from the widget's creator/parent"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst
+msgid "Параметры"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:562
+msgid ""
+"the new widget's parent, used to handle automatic destruction and event "
+"propagation. Can be ``null`` for the widget to have no parent."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:569
+msgid ""
+"this method will be called once by the framework when a widget is created"
+" and in the process of being appended to the DOM.  The *willStart* method"
+" is a hook that should return a promise.  The JS framework will wait for "
+"this promise to complete before moving on to the rendering step.  Note "
+"that at this point, the widget does not have a DOM root element.  The "
+"*willStart* hook is mostly useful to perform some asynchronous work, such"
+" as fetching data from the server"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:578
+msgid ""
+"This step is automatically done by the framework.  What happens is that "
+"the framework checks if a template key is defined on the widget.  If that"
+" is the case, then it will render that template with the *widget* key "
+"bound to the widget in the rendering context (see the example above: we "
+"use *widget.count* in the QWeb template to read the value from the "
+"widget). If no template is defined, we read the *tagName* key and create "
+"a corresponding DOM element. When the rendering is done, we set the "
+"result as the $el property of the widget. After this, we automatically "
+"bind all events in the events and custom_events keys."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:590
+msgid ""
+"when the rendering is complete, the framework will automatically call the"
+" *start* method.  This is useful to perform some specialized post-"
+"rendering work.  For example, setting up a library."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:594
+msgid "Must return a promise to indicate when its work is done."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst
+msgid "Результат"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:596
+msgid "promise"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:600
+msgid ""
+"This is always the final step in the life of a widget.  When a widget is "
+"destroyed, we basically perform all necessary cleanup operations: "
+"removing the widget from the component tree, unbinding all events, ..."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:604
+msgid ""
+"Automatically called when the widget's parent is destroyed, must be "
+"called explicitly if the widget has no parent or if it is removed but its"
+" parent remains."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:608
+msgid ""
+"Note that the willStart and start method are not necessarily called.  A "
+"widget can be created (the *init* method will be called) and then "
+"destroyed (*destroy* method) without ever having been appended to the "
+"DOM.  If that is the case, the willStart and start will not even be "
+"called."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:614
+msgid "Widget API"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:618
+msgid ""
+"Used if the widget has no template defined. Defaults to ``div``, will be "
+"used as the tag name to create the DOM element to set as the widget's DOM"
+" root. It is possible to further customize this generated DOM root with "
+"the following attributes:"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:626
+msgid ""
+"Used to generate an ``id`` attribute on the generated DOM root. Note that"
+" this is rarely needed, and is probably not a good idea if a widget can "
+"be used more than once."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:632
+msgid ""
+"Used to generate a ``class`` attribute on the generated DOM root. Note "
+"that it can actually contain more than one css class: *'some-class other-"
+"class'*"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:638
+msgid ""
+"Mapping (object literal) of attribute names to attribute values. Each of "
+"these k:v pairs will be set as a DOM attribute on the generated DOM root."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:644
+msgid ""
+"raw DOM element set as root to the widget (only available after the start"
+" lifecycle method)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:649
+msgid ""
+"jQuery wrapper around :attr:`~Widget.el`. (only available after the start"
+" lifecycle method)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:654
+msgid ""
+"Should be set to the name of a :ref:`QWeb template <reference/qweb>`. If "
+"set, the template will be rendered after the widget has been initialized "
+"but before it has been started. The root element generated by the "
+"template will be set as the DOM root of the widget."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:661
+msgid ""
+"List of paths to xml files that need to be loaded before the widget can "
+"be rendered. This will not induce loading anything that has already been "
+"loaded. This is useful when you want to load your templates lazily, or if"
+" you want to share a widget between the website and the web client "
+"interface."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:675
+msgid ""
+"Events are a mapping of an event selector (an event name and an optional "
+"CSS selector separated by a space) to a callback. The callback can be the"
+" name of a widget's method or a function object. In either case, the "
+"``this`` will be set to the widget:"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:689
+msgid ""
+"The selector is used for jQuery's event delegation, the callback will "
+"only be triggered for descendants of the DOM root matching the selector. "
+"If the selector is left out (only an event name is specified), the event "
+"will be set directly on the widget's DOM root."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:695
+msgid ""
+"Note: the use of an inline function is discouraged, and will probably be "
+"removed sometimes in the future."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:700
+msgid ""
+"this is almost the same as the *events* attribute, but the keys are "
+"arbitrary strings.  They represent business events triggered by some sub "
+"widgets.  When an event is triggered, it will 'bubble up' the widget tree"
+" (see the section on component communication for more details)."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:707
+msgid "``true`` if the widget is being or has been destroyed, ``false`` otherwise"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:712
+msgid "Applies the CSS selector specified as parameter to the widget's DOM root:"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:719
+msgid "is functionally identical to:"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:725
+msgid "CSS selector"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:726
+msgid "jQuery object"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:728
+msgid "this helper method is similar to ``Backbone.View.$``"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:732
+msgid ""
+"Re-sets the widget's DOM root to the provided element, also handles re-"
+"setting the various aliases of the DOM root as well as unsetting and re-"
+"setting delegated events."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:736
+msgid "a DOM element or jQuery object to set as the widget's DOM root"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:741
+msgid "Inserting a widget in the DOM"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:745
+msgid ""
+"Renders the widget and inserts it as the last child of the target, uses "
+"`.appendTo()`_"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:750
+msgid ""
+"Renders the widget and inserts it as the first child of the target, uses "
+"`.prependTo()`_"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:755
+msgid ""
+"Renders the widget and inserts it as the preceding sibling of the target,"
+" uses `.insertAfter()`_"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:760
+msgid ""
+"Renders the widget and inserts it as the following sibling of the target,"
+" uses `.insertBefore()`_"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:763
+msgid ""
+"All of these methods accept whatever the corresponding jQuery method "
+"accepts (CSS selectors, DOM nodes or jQuery objects). They all return a "
+"promise and are charged with three tasks:"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:767
+msgid "rendering the widget's root element via"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:768
+msgid ":func:`~Widget.renderElement`"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:769
+msgid "inserting the widget's root element in the DOM using whichever jQuery"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:770
+msgid "method they match"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:771
+msgid "starting the widget, and returning the result of starting it"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:774
+msgid "Widget Guidelines"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:786
+msgid "Identifiers (``id`` attribute) should be avoided. In generic applications"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:777
+msgid ""
+"and modules, ``id`` limits the re-usability of components and tends to "
+"make code more brittle. Most of the time, they can be replaced with "
+"nothing, classes or keeping a reference to a DOM node or jQuery element."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:781
+msgid ""
+"If an ``id`` is absolutely necessary (because a third-party library "
+"requires one), the id should be partially generated using "
+"``_.uniqueId()`` e.g.:"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:788
+msgid ""
+"Avoid predictable/common CSS class names. Class names such as \"content\""
+" or \"navigation\" might match the desired meaning/semantics, but it is "
+"likely an other developer will have the same need, creating a naming "
+"conflict and unintended behavior. Generic class names should be prefixed "
+"with e.g. the name of the component they belong to (creating \"informal\""
+" namespaces, much as in C or Objective-C)."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:795
+msgid ""
+"Global selectors should be avoided. Because a component may be used "
+"several times in a single page (an example in Odoo is dashboards), "
+"queries should be restricted to a given component's scope. Unfiltered "
+"selections such as ``$(selector)`` or "
+"``document.querySelectorAll(selector)`` will generally lead to unintended"
+" or incorrect behavior.  Odoo Web's :class:`~Widget` has an attribute "
+"providing its DOM root (:attr:`~Widget.$el`), and a shortcut to select "
+"nodes directly (:func:`~Widget.$`)."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:804
+msgid ""
+"More generally, never assume your components own or controls anything "
+"beyond its own personal :attr:`~Widget.$el` (so, avoid using a reference "
+"to the parent widget)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:808
+msgid "Html templating/rendering should use QWeb unless absolutely trivial."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:810
+msgid ""
+"All interactive components (components displaying information to the "
+"screen or intercepting DOM events) must inherit from :class:`~Widget` and"
+" correctly implement and use its API and life cycle."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:814
+msgid "Make sure to wait for start to be finished before using $el e.g.:"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:846
+msgid "QWeb Template Engine"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:848
+msgid ""
+"The web client uses the :doc:`qweb` template engine to render widgets "
+"(unless they override the *renderElement* method to do something else). "
+"The Qweb JS template engine is based on XML, and is mostly compatible "
+"with the python implementation."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:853
+msgid ""
+"Now, let us explain how the templates are loaded.  Whenever the web "
+"client starts, a rpc is made to the */web/webclient/qweb* route.  The "
+"server will then return a list of all templates defined in data files for"
+" each installed modules. The correct files are listed in the *qweb* entry"
+" in each module manifest."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:858
+msgid ""
+"The web client will wait for that list of template to be loaded, before "
+"starting its first widget."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:861
+msgid ""
+"This mechanism works quite well for our needs, but sometimes, we want to "
+"lazy load a template.  For example, imagine that we have a widget which "
+"is rarely used.  In that case, maybe we prefer to not load its template "
+"in the main file, in order to make the web client slightly lighter.  In "
+"that case, we can use the *xmlDependencies* key of the Widget:"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:879
+msgid ""
+"With this, the *Counter* widget will load the xmlDependencies files in "
+"its *willStart* method, so the template will be ready when the rendering "
+"is performed."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:884
+msgid "Event system"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:886
+msgid ""
+"There are currently two event systems supported by Odoo: a simple system "
+"which allows adding listeners and triggering events, and a more complete "
+"system that also makes events 'bubble up'."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:890
+msgid ""
+"Both of these event systems are implemented in the "
+"*EventDispatcherMixin*, in the file *mixins.js*. This mixin is included "
+"in the *Widget* class."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:894
+msgid "Base Event system"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:896
+msgid ""
+"This event system was historically the first.  It implements a simple bus"
+" pattern. We have 4 main methods:"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:899
+msgid "*on*: this is used to register a listener on an event."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:900
+msgid "*off*: useful to remove events listener."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:901
+msgid "*once*: this is used to register a listener that will only be called once."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:902
+msgid "*trigger*: trigger an event. This will cause each listeners to be called."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:904
+msgid "Here is an example on how this event system could be used:"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:929
+msgid ""
+"the use of this event system is discouraged, we plan to replace each "
+"*trigger* method by the *trigger_up* method from the extended event "
+"system"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:933
+msgid "Extended Event System"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:935
+msgid ""
+"The custom event widgets is a more advanced system, which mimic the DOM "
+"events API.  Whenever an event is triggered, it will 'bubble up' the "
+"component tree, until it reaches the root widget, or is stopped."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:939
+msgid ""
+"*trigger_up*: this is the method that will create a small *OdooEvent* and"
+" dispatch it in the component tree.  Note that it will start with the "
+"component that triggered the event"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:942
+msgid ""
+"*custom_events*: this is the equivalent of the *event* dictionary, but "
+"for odoo events."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:945
+msgid ""
+"The OdooEvent class is very simple.  It has three public attributes: "
+"*target* (the widget that triggered the event), *name* (the event name) "
+"and *data* (the payload).  It also has 2 methods: *stopPropagation* and "
+"*is_stopped*."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:949
+msgid "The previous example can be updated to use the custom event system:"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:976
+msgid "Registries"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:978
+msgid ""
+"A common need in the Odoo ecosystem is to extend/change the behaviour of "
+"the base system from the outside (by installing an application, i.e. a "
+"different module).  For example, one may need to add a new widget type in"
+" some views.  In that case, and many others, the usual process is to "
+"create the desired component, then add it to a registry (registering "
+"step), to make the rest of the web client aware of its existence."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:985
+msgid "There are a few registries available in the system:"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1000
+msgid ""
+"field registry (exported by 'web.field_registry'). The field registry "
+"contains"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:988
+msgid ""
+"all field widgets known to the web client.  Whenever a view (typically, "
+"form, or list/kanban) needs a field widget, this is where it will look. A"
+" typical use case look like this:"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1000
+msgid "Note that each value should be a subclass of *AbstractField*"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1004
+msgid "view registry: this registry contains all JS views known to the web client"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1003
+msgid ""
+"(and in particular, the view manager).  Each value of this registry "
+"should be a subclass of *AbstractView*"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1010
+msgid ""
+"action registry: we keep track of all client actions in this registry.  "
+"This"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1007
+msgid ""
+"is where the action manager looks up whenever it needs to create a client"
+" action.  In version 11, each value should simply be a subclass of "
+"*Widget*. However, in version 12, the values are required to be "
+"*AbstractAction*."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1013
+msgid "Communication between widgets"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1015
+msgid "There are many ways to communicate between components."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1023
+msgid "From a parent to its child:"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1018
+msgid ""
+"this is a simple case. The parent widget can simply call a method on its "
+"child:"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1050
+msgid "From a widget to its parent/some ancestor:"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1026
+msgid ""
+"in this case, the widget's job is simply to notify its environment that "
+"something happened.  Since we do not want the widget to have a reference "
+"to its parent (this would couple the widget with its parent's "
+"implementation), the best way to proceed is usually to trigger an event, "
+"which will bubble up the component tree, by using the ``trigger_up`` "
+"method:"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1036
+msgid ""
+"This event will be triggered on the widget, then will bubble up and be "
+"eventually caught by some upstream widget:"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1081
+msgid "Cross component:"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1053
+msgid ""
+"Cross component communication can be achieved by using a bus.  This is "
+"not the preferred form of communication, because it has the disadvantage "
+"of making the code harder to maintain.  However, it has the advantage of "
+"decoupling the components.  In that case, this is simply done by "
+"triggering and listening to events on a bus.  For example:"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1080
+msgid ""
+"In this example, we use the bus exported by *web.core*, but this is not "
+"required. A bus could be created for a specific purpose."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1084
+msgid "Services"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1086
+msgid ""
+"In version 11.0, we introduced the notion of *service*.  The main idea is"
+" to give to sub components a controlled way to access their environment, "
+"in a way that allow the framework enough control, and which is testable."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1090
+msgid ""
+"The service system is organized around three ideas: services, service "
+"providers and widgets.  The way it works is that widgets trigger (with "
+"*trigger_up*) events, these events bubble up to a service provider, which"
+" will ask a service to perform a task, then maybe return an answer."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1096
+msgid "Service"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1098
+msgid ""
+"A service is an instance of the *AbstractService* class.  It basically "
+"only has a name and a few methods.  Its job is to perform some work, "
+"typically something depending on the environment."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1102
+msgid ""
+"For example, we have the *ajax* service (job is to perform a rpc), the "
+"*localStorage* (interact with the browser local storage) and many others."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1105
+msgid "Here is a simplified example on how the ajax service is implemented:"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1118
+msgid "This service is named 'ajax' and define one method, *rpc*."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1121
+msgid "Service Provider"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1123
+msgid ""
+"For services to work, it is necessary that we have a service provider "
+"ready to dispatch the custom events.  In the *backend* (web client), this"
+" is done by the main web client instance. Note that the code for the "
+"service provider comes from the *ServiceProviderMixin*."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1130
+msgid "Widget"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1132
+msgid ""
+"The widget is the part that requests a service.  In order to do that, it "
+"simply triggers an event *call_service* (typically by using the helper "
+"function *call*). This event will bubble up and communicate the intent to"
+" the rest of the system."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1136
+msgid ""
+"In practice, some functions are so frequently called that we have some "
+"helpers functions to make them easier to use. For example, the *_rpc* "
+"method is a helper that helps making a rpc."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1152
+msgid ""
+"If a widget is destroyed, it will be detached from the main component "
+"tree and will not have a parent.  In that case, the events will not "
+"bubble up, which means that the work will not be done.  This is usually "
+"exactly what we want from a destroyed widget."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1158
+msgid "RPCs"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1160
+msgid ""
+"The rpc functionality is supplied by the ajax service.  But most people "
+"will probably only interact with the *_rpc* helpers."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1163
+msgid ""
+"There are typically two usecases when working on Odoo: one may need to "
+"call a method on a (python) model (this goes through a controller "
+"*call_kw*), or one may need to directly call a controller (available on "
+"some route)."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1167
+msgid "Calling a method on a python model:"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1177
+msgid "Directly calling a controller:"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1187
+msgid "Notifications"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1189
+msgid ""
+"The Odoo framework has a standard way to communicate various informations"
+" to the user: notifications, which are displayed on the top right of the "
+"user interface."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1192
+msgid "There are two types of notifications:"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1194
+msgid ""
+"*notification*: useful to display some feedback.  For example, whenever a"
+" user unsubscribed to a channel."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1197
+msgid ""
+"*warning*: useful to display some important/urgent information.  "
+"Typically most kind of (recoverable) errors in the system."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1200
+msgid ""
+"Also, notifications can be used to ask a question to the user without "
+"disturbing its workflow.  Imagine a phone call received through VOIP: a "
+"sticky notification could be displayed with two buttons *Accept* and "
+"*Decline*."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1205
+msgid "Notification system"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1207
+msgid "The notification system in Odoo is designed with the following components:"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1209
+msgid ""
+"a *Notification* widget: this is a simple widget that is meant to be "
+"created and displayed with the desired information"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1212
+msgid ""
+"a *NotificationService*: a service whose responsibility is to create and "
+"destroy notifications whenever a request is done (with a custom_event). "
+"Note that the web client is a service provider."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1216
+msgid ""
+"a client action *display_notification*: this allows to trigger the "
+"display of a notification from python (e.g. in the method called when the"
+" user clicked on a button of type object)."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1220
+msgid "two helper functions in *ServiceMixin*: *do_notify* and *do_warn*"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1224
+msgid "Displaying a notification"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1225
+msgid ""
+"The most common way to display a notification is by using two methods "
+"that come from the *ServiceMixin*:"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1241
+msgid "*do_notify(title, message, sticky, className)*:"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1229
+msgid "Display a notification of type *notification*."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1231
+#: ../../reference/javascript_reference.rst:1246
+msgid "*title*: string. This will be displayed on the top as a title"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1233
+#: ../../reference/javascript_reference.rst:1248
+msgid "*message*: string, the content of the notification"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1235
+#: ../../reference/javascript_reference.rst:1250
+msgid ""
+"*sticky*: boolean, optional. If true, the notification will stay until "
+"the user dismisses it.  Otherwise, the notification will be automatically"
+" closed after a short delay."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1239
+#: ../../reference/javascript_reference.rst:1254
+msgid ""
+"*className*: string, optional.  This is a css class name that will be "
+"automatically added to the notification.  This could be useful for "
+"styling purpose, even though its use is discouraged."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1256
+msgid "*do_warn(title, message, sticky, className)*:"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1244
+msgid "Display a notification of type *warning*."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1258
+msgid "Here are two examples on how to use these methods:"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1267
+msgid "Here an example in python:"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1284
+msgid "Systray"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1286
+msgid ""
+"The Systray is the right part of the menu bar in the interface, where the"
+" web client displays a few widgets, such as a messaging menu."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1289
+msgid ""
+"When the SystrayMenu is created by the menu, it will look for all "
+"registered widgets and add them as a sub widget at the proper place."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1292
+msgid ""
+"There is currently no specific API for systray widgets.  They are "
+"supposed to be simple widgets, and can communicate with their environment"
+" just like other widgets with the *trigger_up* method."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1297
+msgid "Adding a new Systray Item"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1299
+msgid ""
+"There is no systray registry.  The proper way to add a widget is to add "
+"it to the class variable SystrayMenu.items."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1314
+msgid "Ordering"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1316
+msgid ""
+"Before adding the widget to himself, the Systray Menu will sort the items"
+" by a sequence property. If that property is not present on the "
+"prototype, it will use 50 instead.  So, to position a systray item to be "
+"on the right, one can set a very high sequence number (and conversely, a "
+"low number to put it on the left)."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1328
+msgid "Translation management"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1330
+msgid ""
+"Some translations are made on the server side (basically all text strings"
+" rendered or processed by the server), but there are strings in the "
+"static files that need to be translated.  The way it currently works is "
+"the following:"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1334
+msgid ""
+"each translatable string is tagged with the special function *_t* "
+"(available in the JS module *web.core*"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1336
+msgid "these strings are used by the server to generate the proper PO files"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1337
+msgid ""
+"whenever the web client is loaded, it will call the route "
+"*/web/webclient/translations*, which returns a list of all translatable "
+"terms"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1339
+msgid ""
+"in runtime, whenever the function *_t* is called, it will look up in this"
+" list in order to find a translation, and return it or the original "
+"string if none is found."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1343
+msgid ""
+"Note that translations are explained in more details, from the server "
+"point of view, in the document :doc:`translations`."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1346
+msgid ""
+"There are two important functions for the translations in javascript: "
+"*_t* and *_lt*.  The difference is that *_lt* is lazily evaluated."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1365
+msgid ""
+"In this example, the *_lt* is necessary because the translations are not "
+"ready when the module is loaded."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1368
+msgid ""
+"Note that translation functions need some care.  The string given in "
+"argument should not be dynamic."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1372
+msgid "Session"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1374
+msgid ""
+"There is a specific module provided by the web client which contains some"
+" information specific to the user current *session*.  Some notable keys "
+"are"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1377
+msgid "uid: the current user ID (its ID as a *res.users*)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1378
+msgid "user_name: the user name, as a string"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1379
+msgid "the user context (user ID, language and timezone)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1380
+msgid "partner_id: the ID of the partner associated to the current user"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1381
+msgid "db: the name of the database currently being in use"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1384
+msgid "Adding information to the session"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1386
+msgid ""
+"When the /web route is loaded, the server will inject some session "
+"information in the template a script tag. The information will be read "
+"from the method *session_info* of the model *ir.http*.  So, if one wants "
+"to add a specific information, it can be done by overriding the "
+"session_info method and adding it to the dictionary."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1406
+msgid "Now, the value can be obtained in javascript by reading it in the session:"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1414
+msgid ""
+"Note that this mechanism is designed to reduce the amount of "
+"communication needed by the web client to be ready.  It is more "
+"appropriate for data which is cheap to compute (a slow session_info call "
+"will delay the loading for the web client for everyone), and for data "
+"which is required early in the initialization process."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1421
+msgid "Views"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1423
+msgid ""
+"The word 'view' has more than one meaning. This section is about the "
+"design of the javascript code of the views, not the structure of the "
+"*arch* or anything else."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1427
+msgid ""
+"In 2017, Odoo replaced the previous view code with a new architecture.  "
+"The main need was to separate the rendering logic from the model logic."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1431
+msgid ""
+"Views (in a generic sense) are now described with  4 pieces: a View, a "
+"Controller, a Renderer and a Model.  The API of these 4 pieces is "
+"described in the AbstractView, AbstractController, AbstractRenderer and "
+"AbstractModel classes."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1452
+msgid ""
+"the View is the factory. Its job is to get a set of fields, arch, context"
+" and some other parameters, then to construct a Controller/Renderer/Model"
+" triplet."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1455
+msgid ""
+"The view's role is to properly setup each piece of the MVC pattern, with "
+"the correct information.  Usually, it has to process the arch string and "
+"extract the data necessary for each other parts of the view."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1459
+msgid ""
+"Note that the view is a class, not a widget.  Once its job has been done,"
+" it can be discarded."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1462
+msgid ""
+"the Renderer has one job: representing the data being viewed in a DOM "
+"element. Each view can render the data in a different way.  Also, it "
+"should listen on appropriate user actions and notify its parent (the "
+"Controller) if necessary."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1466
+msgid "The Renderer is the V in the MVC pattern."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1468
+msgid ""
+"the Model: its job is to fetch and hold the state of the view.  Usually, "
+"it represents in some way a set of records in the database.  The Model is"
+" the owner of the 'business data'. It is the M in the MVC pattern."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1472
+msgid ""
+"the Controller: its job is to coordinate the renderer and the model.  "
+"Also, it is the main entry point for the rest of the web client.  For "
+"example, when the user changes something in the search view, the *update*"
+" method of the controller will be called with the appropriate "
+"information."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1477
+msgid "It is the C in the MVC pattern."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1480
+msgid ""
+"The JS code for the views has been designed to be usable outside of the "
+"context of a view manager/action manager.  They could be used in a client"
+" action, or, they could be displayed in the public website (with some "
+"work on the assets)."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1487
+msgid "Field Widgets"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1489
+msgid ""
+"A good part of the web client experience is about editing and creating "
+"data. Most of that work is done with the help of field widgets, which are"
+" aware of the field type and of the specific details on how a value "
+"should be displayed and edited."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1494
+msgid "AbstractField"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1496
+msgid ""
+"The *AbstractField* class is the base class for all widgets in a view, "
+"for all views that support them (currently: Form, List, Kanban)."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1499
+msgid ""
+"There are many differences between the v11 field widgets and the previous"
+" versions. Let us mention the most important ones:"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1502
+msgid ""
+"the widgets are shared between all views (well, Form/List/Kanban). No "
+"need to duplicate the implementation anymore.  Note that it is possible "
+"to have a specialized version of a widget for a view, by prefixing it "
+"with the view name in the view registry: *list.many2one* will be chosen "
+"in priority over *many2one*."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1506
+msgid ""
+"the widgets are no longer the owner of the field value.  They only "
+"represent the data and communicate with the rest of the view."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1508
+msgid ""
+"the widgets do no longer need to be able to switch between edit and "
+"readonly mode.  Now, when such a change is necessary, the widget will be "
+"destroyed and rerendered again.  It is not a problem, since they do not "
+"own their value anyway"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1512
+msgid ""
+"the field widgets can be used outside of a view.  Their API is slightly "
+"awkward, but they are designed to be standalone."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1516
+msgid "Decorations"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1518
+msgid ""
+"Like the list view, field widgets have a simple support for decorations. "
+"The goal of decorations is to have a simple way to specify a text color "
+"depending on the record current state.  For example,"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1526
+msgid "The valid decoration names are:"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1528
+msgid "decoration-bf"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1529
+msgid "decoration-it"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1530
+msgid "decoration-danger"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1531
+msgid "decoration-info"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1532
+msgid "decoration-muted"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1533
+msgid "decoration-primary"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1534
+msgid "decoration-success"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1535
+msgid "decoration-warning"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1537
+msgid ""
+"Each decoration *decoration-X* will be mapped to a css class *text-X*, "
+"which is a standard bootstrap css class (except for *text-it* and *text-"
+"bf*, which are handled by odoo and correspond to italic and bold, "
+"respectively).  Note that the value of the decoration attribute should be"
+" a valid python expression, which will be evaluated with the record as "
+"evaluation context."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1544
+msgid "Non relational fields"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1546
+msgid ""
+"We document here all non relational fields available by default, in no "
+"particular order."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1571
+msgid "integer (FieldInteger)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1550
+msgid "This is the default field type for fields of type *integer*."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1552
+#: ../../reference/javascript_reference.rst:1715
+msgid "Supported field types: *integer*"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1554
+#: ../../reference/javascript_reference.rst:1586
+#: ../../reference/javascript_reference.rst:1649
+#: ../../reference/javascript_reference.rst:1662
+#: ../../reference/javascript_reference.rst:1675
+#: ../../reference/javascript_reference.rst:1694
+#: ../../reference/javascript_reference.rst:1774
+#: ../../reference/javascript_reference.rst:1849
+#: ../../reference/javascript_reference.rst:1893
+#: ../../reference/javascript_reference.rst:1912
+#: ../../reference/javascript_reference.rst:1944
+#: ../../reference/javascript_reference.rst:1965
+#: ../../reference/javascript_reference.rst:2024
+#: ../../reference/javascript_reference.rst:2054
+#: ../../reference/javascript_reference.rst:2107
+#: ../../reference/javascript_reference.rst:2125
+#: ../../reference/javascript_reference.rst:2164
+msgid "Options:"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1556
+#: ../../reference/javascript_reference.rst:1588
+msgid "type: setting the input type (*text* by default, can be set on *number*)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1558
+#: ../../reference/javascript_reference.rst:1590
+msgid ""
+"On edit mode, the field is rendered as an input with the HTML attribute "
+"type setted on *number* (so user can benefit the native support, "
+"especially on mobile). In this case, the default formatting is disabled "
+"to avoid incompability."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1567
+#: ../../reference/javascript_reference.rst:1599
+msgid "step: set the step to the value up and down when the user click on buttons"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1567
+#: ../../reference/javascript_reference.rst:1599
+msgid "(only for input of type number, 1 by default)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1603
+msgid "float (FieldFloat)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1574
+msgid "This is the default field type for fields of type *float*."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1576
+#: ../../reference/javascript_reference.rst:1610
+#: ../../reference/javascript_reference.rst:1617
+#: ../../reference/javascript_reference.rst:1626
+msgid "Supported field types: *float*"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1578
+#: ../../reference/javascript_reference.rst:2048
+#: ../../reference/javascript_reference.rst:2102
+msgid "Attributes:"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1580
+msgid "digits: displayed precision"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1610
+msgid "float_time (FieldFloatTime)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1606
+msgid ""
+"The goal of this widget is to display properly a float value that "
+"represents a time interval (in hours).  So, for example, 0.5 should be "
+"formatted as 0:30, or 4.75 correspond to 4:45."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1617
+msgid "float_factor (FieldFloatFactor)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1613
+msgid ""
+"This widget aims to display properly a float value that converted using a"
+" factor given in its options. So, for example, the value saved in "
+"database is 0.5 and the factor is 3, the widget value should be formatted"
+" as 1.5."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1630
+msgid "float_toggle (FieldFloatToggle)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1620
+msgid ""
+"The goal of this widget is to replace the input field by a button "
+"containing a range of possible values (given in the options). Each click "
+"allows the user to loop in the range. The purpose here is to restrict the"
+" field value to a predefined selection. Also, the widget support the "
+"factor conversion as the *float_factor* widget (Range values should be "
+"the result of the conversion)."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1635
+msgid "boolean (FieldBoolean)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1633
+msgid "This is the default field type for fields of type *boolean*."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1635
+#: ../../reference/javascript_reference.rst:1881
+#: ../../reference/javascript_reference.rst:1891
+#: ../../reference/javascript_reference.rst:1963
+msgid "Supported field types: *boolean*"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1640
+msgid "char (FieldChar)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1638
+msgid "This is the default field type for fields of type *char*."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1640
+#: ../../reference/javascript_reference.rst:1722
+#: ../../reference/javascript_reference.rst:1730
+#: ../../reference/javascript_reference.rst:1736
+#: ../../reference/javascript_reference.rst:1756
+#: ../../reference/javascript_reference.rst:1763
+#: ../../reference/javascript_reference.rst:1982
+msgid "Supported field types: *char*"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1655
+msgid "date (FieldDate)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1643
+msgid ""
+"This is the default field type for fields of type *date*. Note that it "
+"also works with datetime fields.  It uses the session timezone when "
+"formatting dates."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1647
+#: ../../reference/javascript_reference.rst:1660
+#: ../../reference/javascript_reference.rst:1673
+msgid "Supported field types: *date*, *datetime*"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1651
+#: ../../reference/javascript_reference.rst:1664
+msgid "datepicker: extra settings for the datepicker_ widget."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1668
+msgid "datetime (FieldDateTime)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1658
+msgid "This is the default field type for fields of type *datetime*."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1685
+msgid "daterange (FieldDateRange)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1671
+msgid "This widget allow user to select start and end date into single picker."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1677
+msgid ""
+"related_start_date: apply on end date field to get start date value which"
+" is used to display range in the picker."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1679
+msgid ""
+"related_end_date: apply on start date field to get end date value which "
+"is used to display range in the picker."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1681
+msgid "picker_options: extra settings for picker."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1700
+msgid "monetary (FieldMonetary)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1688
+msgid ""
+"This is the default field type for fields of type 'monetary'. It is used "
+"to display a currency.  If there is a currency fields given in option, it"
+" will use that, otherwise it will fall back to the default currency (in "
+"the session)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1692
+msgid "Supported field types: *monetary*, *float*"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1696
+msgid "currency_field: another field name which should be a many2one on currency."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1706
+msgid "text (FieldText)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1703
+msgid "This is the default field type for fields of type *text*."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1705
+msgid "Supported field types: *text*"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1716
+msgid "handle (HandleWidget)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1709
+msgid ""
+"This field's job is to be displayed as a *handle*, and allows reordering "
+"the various records by drag and dropping them."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1712
+msgid "It has to be specified on the field by which records are sorted."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1713
+msgid ""
+"Having more than one field with a handle widget on the same list is not "
+"supported."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1722
+msgid "email (FieldEmail)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1719
+msgid ""
+"This field displays email address.  The main reason to use it is that it "
+"is rendered as an anchor tag with the proper href, in readonly mode."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1730
+msgid "phone (FieldPhone)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1725
+msgid ""
+"This field displays a phone number.  The main reason to use it is that it"
+" is rendered as an anchor tag with the proper href, in readonly mode, but"
+" only in some cases: we only want to make it clickable if the device can "
+"call this particular number."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1744
+msgid "url (UrlWidget)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1733
+msgid ""
+"This field displays an url (in readonly mode). The main reason to use it "
+"is that it is rendered as an anchor tag with the proper css classes and "
+"href."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1738
+msgid ""
+"Also, the text of the anchor tag can be customized with the *text* "
+"attribute (it won't change the href value)."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1756
+msgid "domain (FieldDomain)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1747
+msgid ""
+"The \"Domain\" field allows the user to construct a technical-prefix "
+"domain thanks to a tree-like interface and see the selected records in "
+"real time. In debug mode, an input is also there to be able to enter the "
+"prefix char domain directly (or to build advanced domains the tree-like "
+"interface does not allow to)."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1753
+msgid ""
+"Note that this is limited to 'static' domain (no dynamic expression, or "
+"access to context variable)."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1763
+msgid "link_button (LinkButton)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1759
+msgid ""
+"The LinkButton widget actually simply displays a span with an icon and "
+"the text value as content. The link is clickable and will open a new "
+"browser window with its value as url."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1782
+msgid "image (FieldBinaryImage)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1766
+msgid ""
+"This widget is used to represent a binary value as an image. In some "
+"cases, the server returns a 'bin_size' instead of the real image (a "
+"bin_size is a string representing a file size, such as 6.5kb).  In that "
+"case, the widget will make an image with a source attribute corresponding"
+" to an image on the server."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1772
+#: ../../reference/javascript_reference.rst:1787
+msgid "Supported field types: *binary*"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1776
+msgid ""
+"preview_image: if the image is only loaded as a 'bin_size', then this "
+"option is useful to inform the web client that the default field name is "
+"not the name of the current field, but the name of another field."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1797
+msgid "binary (FieldBinaryFile)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1785
+msgid "Generic widget to allow saving/downloading a binary file."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1789
+msgid "Attribute:"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1791
+msgid ""
+"filename: saving a binary file will lose its file name, since it only "
+"saves the binary value. The filename can be saved in another field. To do"
+" that, an attribute filename should be set to a field present in the "
+"view."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1806
+msgid "priority (PriorityWidget)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1800
+msgid ""
+"This widget is rendered as a set of stars, allowing the user to click on "
+"it to select a value or not. This is useful for example to mark a task as"
+" high priority."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1804
+msgid "Note that this widget also works in 'readonly' mode, which is unusual."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1806
+#: ../../reference/javascript_reference.rst:1823
+#: ../../reference/javascript_reference.rst:1847
+#: ../../reference/javascript_reference.rst:1866
+#: ../../reference/javascript_reference.rst:1875
+#: ../../reference/javascript_reference.rst:2005
+msgid "Supported field types: *selection*"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1818
+msgid "attachment_image (AttachmentImage)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1809
+msgid ""
+"Image widget for many2one fields.  If the field is set, this widget will "
+"be rendered as an image with the proper src url. This widget does not "
+"have a different behaviour in edit or readonly mode, it is only useful to"
+" view an image."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1814
+#: ../../reference/javascript_reference.rst:2046
+#: ../../reference/javascript_reference.rst:2078
+#: ../../reference/javascript_reference.rst:2089
+#: ../../reference/javascript_reference.rst:2095
+msgid "Supported field types: *many2one*"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1841
+msgid "image_selection (ImageSelection)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1821
+msgid "Allow the user to select a value by clicking on an image."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1825
+msgid ""
+"Options: a dictionary with a mapping from a selection value to an object "
+"with the url for an image (*image_link*) and a preview image "
+"(*preview_link*)."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1828
+msgid "Note that this option is not optional!"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1857
+msgid "label_selection (LabelSelection)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1844
+msgid ""
+"This widget renders a simple non-editable label.  This is only useful to "
+"display some information, not to edit it."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1851
+msgid "classes: a mapping from a selection value to a css class"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1870
+msgid "state_selection (StateSelectionWidget)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1860
+msgid ""
+"This is a specialized selection widget. It assumes that the record has "
+"some hardcoded fields, present in the view: *stage_id*, *legend_normal*, "
+"*legend_blocked*, *legend_done*.  This is mostly used to display and "
+"change the state of a task in a project, with additional information "
+"displayed in the dropdown."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1875
+msgid "kanban_state_selection (StateSelectionWidget)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1873
+msgid "This is exactly the same widget as state_selection"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1881
+msgid "boolean_favorite (FavoriteWidget)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1878
+msgid ""
+"This widget is displayed as an empty (or not) star, depending on a "
+"boolean value. Note that it also can be edited in readonly mode."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1900
+msgid "boolean_button (FieldBooleanButton)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1884
+msgid ""
+"The Boolean Button widget is meant to be used in a stat button in a form "
+"view. The goal is to display a nice button with the current state of a "
+"boolean field (for example, 'Active'), and allow the user to change that "
+"field when clicking on it."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1889
+msgid "Note that it also can be edited in readonly mode."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1895
+msgid ""
+"terminology: it can be either 'active', 'archive', 'close' or a "
+"customized mapping with the keys *string_true*, *string_false*, "
+"*hover_true*, *hover_false*"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1904
+msgid "boolean_toggle (BooleanToggle)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1903
+msgid ""
+"Displays a toggle switch to represent a boolean. This is a subfield of "
+"FieldBoolean, mostly used to have a different look."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1925
+msgid "statinfo (StatInfo)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1907
+msgid ""
+"This widget is meant to represent statistical information in a *stat "
+"button*. It is basically just a label with a number."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1910
+#: ../../reference/javascript_reference.rst:1933
+#: ../../reference/javascript_reference.rst:1942
+msgid "Supported field types: *integer, float*"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1914
+msgid ""
+"label_field: if given, the widget will use the value of the label_field "
+"as text."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1937
+msgid "percentpie (FieldPercentPie)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1928
+msgid ""
+"This widget is meant to represent statistical information in a *stat "
+"button*. This is similar to a statinfo widget, but the information is "
+"represented in a *pie* chart (empty to full).  Note that the value is "
+"interpreted as a percentage (a number between 0 and 100)."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1956
+msgid "progressbar (FieldProgressBar)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1940
+msgid "Represent a value as a progress bar (from 0 to some value)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1946
+msgid "editable: boolean if value is editable"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1947
+msgid ""
+"current_value: get the current_value from the field that must be present "
+"in the view"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1948
+msgid ""
+"max_value: get the max_value from the field that must be present in the "
+"view"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1949
+msgid "edit_max_value: boolean if the max_value is editable"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1950
+msgid ""
+"title: title of the bar, displayed on top of the bar --> not translated, "
+"use parameter (not option) \"title\" instead"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1974
+msgid "toggle_button (FieldToggleBoolean)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1959
+msgid ""
+"This widget is intended to be used on boolean fields. It toggles a button"
+" switching between a green bullet / gray bullet. It also set up a "
+"tooltip, depending on the value and some options."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1967
+msgid "active: the string for the tooltip that should be set when boolean is true"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1968
+msgid "inactive: the tooltip that should be set when boolean is false"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1992
+msgid "dashboard_graph (JournalDashboardGraph)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1977
+msgid ""
+"This is a more specialized widget, useful to display a graph representing"
+" a set of data.  For example, it is used in the accounting dashboard "
+"kanban view."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1980
+msgid "It assumes that the field is a JSON serialization of a set of data."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1984
+msgid "Attribute"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1986
+msgid "graph_type: string, can be either 'line' or 'bar'"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1998
+msgid "ace (AceEditor)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1995
+msgid ""
+"This widget is intended to be used on Text fields. It provides Ace Editor"
+" for editing XML and Python."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:1998
+msgid "Supported field types: *char, text*"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2001
+msgid "Relational fields"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2009
+msgid "a string which is used to display some info when no value is selected"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2031
+msgid "radio (FieldRadio)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2016
+msgid ""
+"This is a subfield of FielSelection, but specialized to display all the "
+"valid choices as radio buttons."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2019
+msgid ""
+"Note that if used on a many2one records, then more rpcs will be done to "
+"fetch the name_gets of the related records."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2022
+#: ../../reference/javascript_reference.rst:2037
+#: ../../reference/javascript_reference.rst:2176
+msgid "Supported field types: *selection, many2one*"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2026
+msgid "horizontal: if true, radio buttons will be displayed horizontally."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2041
+msgid "selection_badge (FieldSelectionBadge)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2034
+msgid ""
+"This is a subfield of FieldSelection, but specialized to display all the "
+"valid choices as rectangular badges."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2069
+msgid "many2one (FieldMany2One)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2044
+msgid "Default widget for many2one fields."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2050
+msgid ""
+"can_create: allow the creation of related records (take precedence over "
+"no_create option)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2052
+msgid "can_write: allow the edition of related records (default: true)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2056
+msgid "no_create: prevent the creation of related records"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2057
+msgid "quick_create: allow the quick creation of related records (default: true)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2058
+msgid ""
+"no_quick_create: prevent the quick creation of related records (don't ask"
+" me)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2059
+msgid "no_create_edit: same as no_create, maybe..."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2060
+msgid ""
+"create_name_field: when creating a related record, if this option is set,"
+" the value of the *create_name_field* will be filled with the value of "
+"the input (default: *name*)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2061
+msgid ""
+"always_reload: boolean, default to false.  If true, the widget will "
+"always do an additional name_get to fetch its name value.  This is used "
+"for the situations where the name_get method is overridden (please do not"
+" do that)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2064
+msgid ""
+"no_open: boolean, default to false.  If set to true, the many2one will "
+"not redirect on the record when clicking on it (in readonly mode)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2078
+msgid "list.many2one (ListFieldMany2One)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2072
+msgid "Default widget for many2one fields (in list view)."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2074
+msgid ""
+"Specialization of many2one field for list views.  The main reason is that"
+" we need to render many2one fields (in readonly mode) as a text, which "
+"does not allow opening the related records."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2089
+msgid "many2one_barcode (FieldMany2OneBarcode)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2081
+msgid ""
+"Widget for many2one fields allows to open the camera from a mobile device"
+" (Android/iOS) to scan a barcode."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2083
+msgid ""
+"Specialization of many2one field where the user is allowed to use the "
+"native camera to scan a barcode. Then it uses name_search to search this "
+"value."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2086
+msgid ""
+"If this widget is set and user is not using the mobile application, it "
+"will fallback to regular many2one (FieldMany2One)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2095
+msgid "kanban.many2one (KanbanFieldMany2One)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2092
+msgid ""
+"Default widget for many2one fields (in kanban view). We need to disable "
+"all edition in kanban views."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2110
+msgid "many2many (FieldMany2Many)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2098
+msgid "Default widget for many2many fields."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2100
+#: ../../reference/javascript_reference.rst:2118
+#: ../../reference/javascript_reference.rst:2123
+#: ../../reference/javascript_reference.rst:2144
+#: ../../reference/javascript_reference.rst:2149
+#: ../../reference/javascript_reference.rst:2155
+msgid "Supported field types: *many2many*"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2104
+msgid "mode: string, default view to display"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2105
+msgid "domain: restrict the data to a specific domain"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2109
+msgid ""
+"create_text: allow the customization of the text displayed when adding a "
+"new record"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2118
+msgid "many2many_binary (FieldMany2ManyBinaryMultiFiles)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2113
+msgid ""
+"This widget helps the user to upload or delete one or more files at the "
+"same time."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2116
+msgid "Note that this widget is specific to the model 'ir.attachment'."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2138
+msgid "many2many_tags (FieldMany2ManyTags)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2121
+msgid "Display many2many as a list of tags."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2127
+msgid ""
+"color_field: the name of a numeric field, which should be present in the "
+"view.  A color will be chosen depending on its value."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2134
+msgid ""
+"no_edit_color: set to True to remove the possibility to change the color "
+"of the tags (default: False)."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2144
+msgid "form.many2many_tags (FormFieldMany2ManyTags)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2141
+msgid ""
+"Specialization of many2many_tags widget for form views. It has some extra"
+" code to allow editing the color of a tag."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2149
+msgid "kanban.many2many_tags (KanbanFieldMany2ManyTags)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2147
+msgid "Specialization of many2many_tags widget for kanban views."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2155
+msgid "many2many_checkboxes (FieldMany2ManyCheckBoxes)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2152
+msgid ""
+"This field displays a list of checkboxes and allow the user to select a "
+"subset of the choices."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2170
+msgid "one2many (FieldOne2Many)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2158
+msgid "Default widget for one2many fields."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2160
+msgid "It usually displays data in a sub list view, or a sub kanban view."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2162
+msgid "Supported field types: *one2many*"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2166
+msgid "create_text: a string that is used to customize the 'Add' label/text."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2176
+msgid "statusbar (FieldStatus)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2173
+msgid ""
+"This is a really specialized widget for the form views. It is the bar on "
+"top of many forms which represent a flow, and allow selecting a specific "
+"state."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2184
+msgid "reference (FieldReference)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2179
+msgid ""
+"The FieldReference is a combination of a select (for the model) and a "
+"FieldMany2One (for its value).  It allows the selection of a record on an"
+" arbitrary model."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2183
+msgid "Supported field types: *char, reference*"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2187
+msgid "Client actions"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2189
+msgid ""
+"The idea of a client action is a customized widget that is integrated in "
+"the web client interface, just like a *act_window_action*.  This is "
+"useful when you need a component that is not closely linked to an "
+"existing view or a specific model.  For example, the Discuss application "
+"is actually a client action."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2195
+msgid ""
+"A client action is a term that has various meanings, depending on the "
+"context:"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2197
+msgid ""
+"from the perspective of the server, it is a record of the model "
+"*ir_action*, with a field *tag* of type char"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2199
+msgid ""
+"from the perspective of the web client, it is a widget, which inherit "
+"from the class AbstractAction, and is supposed to be registered in the "
+"action registry under the corresponding key (from the field char)"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2203
+msgid ""
+"Whenever a menu item is associated to a client action, opening it will "
+"simply fetch the action definition from the server, then lookup into its "
+"action registry to get the Widget definition at the appropriate key, and "
+"finally, it will instantiate and append the widget to the proper place in"
+" the DOM."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2209
+msgid "Adding a client action"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2211
+msgid ""
+"A client action is a widget which will control the part of the screen "
+"below the menu bar.  It can have a control panel, if necessary.  Defining"
+" a client action can be done in two steps: implementing a new widget, and"
+" registering the widget in the action registry."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2230
+msgid "Implementing a new client action:"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2217
+msgid "This is done by creating a widget:"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2228
+msgid ""
+"Do not add the controlpanel mixin if you do not need it.  Note that some "
+"code is needed to interact with the control panel (via the "
+"``update_control_panel`` method given by the mixin)."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2253
+msgid "Registering the client action:"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2233
+msgid ""
+"As usual, we need to make the web client aware of the mapping between "
+"client actions and the actual class:"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2243
+msgid ""
+"Then, to use the client action in the web client, we need to create a "
+"client action record (a record of the model ``ir.actions.client``) with "
+"the proper ``tag`` attribute:"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2256
+msgid "Using the control panel mixin"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2258
+msgid ""
+"By default, the AbstractAction class does not include the control panel "
+"mixin. This means that a client action does not display a control panel."
+"  In order to do that, several steps should be done."
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2262
+msgid "add ControlPanelMixin in the widget:"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2272
+msgid ""
+"call the method *update_control_panel* whenever we need to update the "
+"control panel. For example:"
+msgstr ""
+
+#: ../../reference/javascript_reference.rst:2299
+msgid "For more information, look into the *control_panel.js* file."
+msgstr ""
+

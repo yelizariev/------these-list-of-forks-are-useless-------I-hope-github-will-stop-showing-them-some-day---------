@@ -1,0 +1,471 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Odoo S.A.
+# This file is distributed under the same license as the odoo package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2020.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: odoo 13.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-01-07 15:02+0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.3.4\n"
+
+#: ../../reference/javascript_cheatsheet.rst:7
+msgid "Javascript Cheatsheet"
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:9
+msgid ""
+"There are many ways to solve a problem in JavaScript, and in Odoo.  "
+"However, the Odoo framework was designed to be extensible (this is a "
+"pretty big constraint), and some common problems have a nice standard "
+"solution.  The standard solution has probably the advantage of being easy"
+" to understand for an odoo developers, and will probably keep working "
+"when Odoo is modified."
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:15
+msgid ""
+"This document tries to explain the way one could solve some of these "
+"issues. Note that this is not a reference.  This is just a random "
+"collection of recipes, or explanations on how to proceed in some cases."
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:20
+msgid ""
+"First of all, remember that the first rule of customizing odoo with JS "
+"is: *try to do it in python*.  This may seem strange, but the python "
+"framework is quite extensible, and many behaviours can be done simply "
+"with a touch of xml or python.  This has usually a lower cost of "
+"maintenance than working with JS:"
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:25
+msgid ""
+"the JS framework tends to change more, so JS code needs to be more "
+"frequently updated"
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:27
+msgid ""
+"it is often more difficult to implement a customized behaviour if it "
+"needs to communicate with the server and properly integrate with the "
+"javascript framework. There are many small details taken care by the "
+"framework that customized code needs to replicate.  For example, "
+"responsiveness, or updating the url, or displaying data without "
+"flickering."
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:34
+msgid ""
+"This document does not really explain any concepts. This is more a "
+"cookbook.  For more details, please consult the javascript reference page"
+" (see :doc:`javascript_reference`)"
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:39
+msgid "Creating a new field widget"
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:41
+msgid ""
+"This is probably a really common usecase: we want to display some "
+"information in a form view in a really specific (maybe business "
+"dependent) way.  For example, assume that we want to change the text "
+"color depending on some business condition."
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:45
+msgid ""
+"This can be done in three steps: creating a new widget, registering it in"
+" the field registry, then adding the widget to the field in the form view"
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:59
+msgid "creating a new widget:"
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:49
+msgid "This can be done by extending a widget:"
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:69
+msgid "registering it in the field registry:"
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:62
+msgid ""
+"The web client needs to know the mapping between a widget name and its "
+"actual class.  This is done by a registry:"
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:78
+msgid "adding the widget in the form view"
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:76
+msgid ""
+"Note that only the form, list and kanban views use this field widgets "
+"registry. These views are tightly integrated, because the list and kanban"
+" views can appear inside a form view)."
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:81
+msgid "Modifying an existing field widget"
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:83
+msgid ""
+"Another use case is that we want to modify an existing field widget.  For"
+" example, the voip addon in odoo need to modify the FieldPhone widget to "
+"add the possibility to easily call the given number on voip. This is done"
+" by *including* the FieldPhone widget, so there is no need to change any "
+"existing form view."
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:88
+msgid ""
+"Field Widgets (instances of (subclass of) AbstractField) are like every "
+"other widgets, so they can be monkey patched. This looks like this:"
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:110
+msgid ""
+"Note that there is no need to add the widget to the registry, since it is"
+" already registered."
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:114
+msgid "Modifying a main widget from the interface"
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:116
+msgid ""
+"Another common usecase is the need to customize some elements from the "
+"user interface.  For example, adding a message in the home menu.  The "
+"usual process in this case is again to *include* the widget.  This is the"
+" only way to do it, since there are no registries for those widgets."
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:121
+msgid "This is usually done with code looking like this:"
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:137
+msgid "Creating a new view (from scratch)"
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:139
+msgid ""
+"Creating a new view is a more advanced topic.  This cheatsheet will only "
+"highlight the steps that will probably need to be done (in no particular "
+"order):"
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:142
+msgid "adding a new view type to the field ``type`` of ``ir.ui.view``::"
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:149
+msgid ""
+"adding the new view type to the field ``view_mode`` of "
+"``ir.actions.act_window.view``::"
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:180
+msgid "creating the four main pieces which makes a view (in JavaScript):"
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:158
+msgid ""
+"we need a view (a subclass of ``AbstractView``, this is the factory), a "
+"renderer (from ``AbstractRenderer``), a controller (from "
+"``AbstractController``) and a model (from ``AbstractModel``).  I suggest "
+"starting by simply extending the superclasses:"
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:190
+msgid "adding the view to the registry:"
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:183
+msgid ""
+"As usual, the mapping between a view type and the actual class needs to "
+"be updated:"
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:197
+msgid "implementing the four main classes:"
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:193
+msgid ""
+"The ``View`` class needs to parse the ``arch`` field and setup the other "
+"three classes.  The ``Renderer`` is in charge of representing the data in"
+" the user interface, the ``Model`` is supposed to talk to the server, to "
+"load data and process it.  And the ``Controller`` is there to coordinate,"
+" to talk to the web client, ..."
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:211
+msgid "creating some views in the database:"
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:214
+msgid "Customizing an existing view"
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:216
+msgid ""
+"Assume we need to create a custom version of a generic view.  For "
+"example, a kanban view with some extra *ribbon-like* widget on top (to "
+"display some specific custom information). In that case, this can be done"
+" with 3 steps: extend the kanban view (which also probably mean extending"
+" controllers/renderers and/or models), then registering the view in the "
+"view registry, and finally, using the view in the kanban arch (a specific"
+" example is the helpdesk dashboard)."
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:246
+msgid "extending a view:"
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:224
+msgid "Here is what it could look like:"
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:255
+msgid "adding it to the view registry:"
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:249
+msgid ""
+"as usual, we need to inform the web client of the mapping between the "
+"name of the views and the actual class."
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:274
+msgid "using it in an actual view:"
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:258
+msgid ""
+"we now need to inform the web client that a specific ``ir.ui.view`` needs"
+" to use our new class.  Note that this is a web client specific concern."
+"  From the point of view of the server, we still have a kanban view.  The"
+" proper way to do this is by using a special attribute ``js_class`` "
+"(which will be renamed someday into ``widget``, because this is really "
+"not a good name) on the root node of the arch:"
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:278
+msgid ""
+"Note: you can change the way the view interprets the arch structure.  "
+"However, from the server point of view, this is still a view of the same "
+"base type, subjected to the same rules (rng validation, for example).  "
+"So, your views still need to have a valid arch field."
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:284
+msgid "Promises and asynchronous code"
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:286
+#, python-format
+msgid ""
+"For a very good and complete introduction to promises, please read this "
+"excellent article https://github.com/getify/You-Dont-Know-JS/blob/1st-"
+"ed/async%20%26%20performance/ch3.md"
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:289
+msgid "Creating new Promises"
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:308
+msgid "turn a constant into a promise"
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:291
+msgid ""
+"There are 2 static functions on Promise that create a resolved or "
+"rejected promise based on a constant:"
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:307
+msgid ""
+"Note that even if the promises are created already resolved or rejected, "
+"the `then` or `catch` handlers will still be called asynchronously."
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:321
+msgid "based on an already asynchronous code"
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:311
+msgid ""
+"Suppose that in a function you must do a rpc, and when it is completed "
+"set the result on this. The `this._rpc` is a function that returns a "
+"`Promise`."
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:351
+msgid "for callback based function"
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:324
+msgid ""
+"Suppose that you were using a function `this.close` that takes as "
+"parameter a callback that is called when the closing is finished. Now "
+"suppose that you are doing that in a method that must send a promise that"
+" is resolved when the closing is finished."
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:337
+msgid ""
+"line 2: we save the `this` into a variable so that in an inner function, "
+"we can access the scope of our component"
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:339
+msgid ""
+"line 3: we create and return a new promise. The constructor of a promise "
+"takes a function as parameter. This function itself has 2 parameters that"
+" we called here `resolve` and `reject`"
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:339
+msgid ""
+"`resolve` is a function that, when called, puts the promise in the "
+"resolved state."
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:340
+msgid ""
+"`reject` is a function that, when called, puts the promise in the "
+"rejected state. We do not use reject here and it can be omitted."
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:341
+msgid ""
+"line 4: we are calling the function close on our object. It takes a "
+"function as parameter (the callback) and it happens that resolve is "
+"already a function, so we can pass it directly. To be clearer, we could "
+"have written:"
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:367
+msgid ""
+"creating a promise generator (calling one promise after the other *in "
+"sequence* and waiting for the last one)"
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:354
+msgid ""
+"Suppose that you need to loop over an array, do an operation *in "
+"sequence* and resolve a promise when the last operation is done."
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:368
+msgid "This way, the promise you return is effectively the last promise."
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:383
+msgid ""
+"creating a promise, then resolving it outside the scope of its definition"
+" (anti-pattern)"
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:370
+msgid ""
+"we do not recommend using this, but sometimes it is useful. Think "
+"carefully for alternatives first..."
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:386
+msgid "Waiting for Promises"
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:405
+msgid "waiting for a number of Promises"
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:388
+msgid ""
+"if you have multiple promises that all need to be waited, you can convert"
+" them into a single promise that will be resolved when all the promises "
+"are resolved using Promise.all(arrayOfPromises)."
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:420
+msgid "waiting for a part of a promise chain, but not another part"
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:408
+msgid ""
+"If you have an asynchronous process that you want to wait to do "
+"something, but you also want to return to the caller before that "
+"something is done."
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:423
+msgid "Error handling"
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:447
+msgid "in general in promises"
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:426
+msgid ""
+"The general idea is that a promise should not be rejected for control "
+"flow, but should only be rejected for errors. When that is the case, you "
+"would have multiple resolutions of your promise with, for instance status"
+" codes that you would have to check in the `then` handlers and a single "
+"`catch` handler at the end of the promise chain."
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:487
+msgid "in Odoo specifically"
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:450
+msgid ""
+"In Odoo, it happens that we use promise rejection for control flow, like "
+"in mutexes and other concurrency primitives defined in module "
+"`web.concurrency` We also want to execute the catch for *business* "
+"reasons, but not when there is a coding error in the definition of the "
+"promise or of the handlers. For this, we have introduced the concept of "
+"`guardedCatch`. It is called like `catch` but not when the rejected "
+"reason is an error"
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:490
+msgid "Testing asynchronous code"
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:544
+msgid "using promises in tests"
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:493
+msgid ""
+"In the tests code, we support the latest version of Javascript, including"
+" primitives like `async` and `await`. This makes using and waiting for "
+"promises very easy. Most helper methods also return a promise (either by "
+"being marked `async` or by returning a promise directly."
+msgstr ""
+
+#: ../../reference/javascript_cheatsheet.rst:545
+msgid ""
+"as you can see, the nicer form is to use `async/await` as it is clearer "
+"and shorter to write."
+msgstr ""
+
