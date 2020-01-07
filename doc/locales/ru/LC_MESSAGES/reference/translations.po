@@ -146,8 +146,8 @@ msgid ""
 "for :class:`~odoo.fields.Field`, unless their model is marked with "
 "``_translate = False``:"
 msgstr ""
-"for: class: `~ odoo.fields.Field`, если их модель не помечена как` "
-"`_translate = False``:"
+"for :class:`~odoo.fields.Field`, если их модель не помечена как` `_translate"
+" = False``:"
 
 #: ../../reference/translations.rst:65
 msgid "their ``string`` and ``help`` attributes are exported"

@@ -39,8 +39,8 @@ msgid ""
 "For advanced database options, take a look :ref:`below "
 "<reference/cmdline/server/database>`."
 msgstr ""
-"Для расширенных параметров базы данных, посмотрите: ref: `ниже "
-"<reference/cmdline/server/database> `."
+"Для расширенных параметров базы данных, посмотрите :ref:`below "
+"<reference/cmdline/server/database>`."
 
 #: ../../reference/cmdline.rst:26
 msgid ""
@@ -70,8 +70,8 @@ msgstr ""
 msgid ""
 "provide an alternate :ref:`configuration file <reference/cmdline/config>`"
 msgstr ""
-"предоставить альтернативный: ref: `файл конфигурации "
-"<reference/cmdline/config> `"
+"предоставить альтернативный :ref:`configuration file "
+"<reference/cmdline/config>`"
 
 #: ../../reference/cmdline.rst:47
 msgid ""
