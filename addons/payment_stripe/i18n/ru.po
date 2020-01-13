@@ -181,7 +181,7 @@ msgstr "Секретный ключ Stripe"
 #: code:addons/payment_stripe/models/payment.py:172
 #, python-format
 msgid "Stripe gave us the following info about the problem: '%s'"
-msgstr "Stripe предоставил нам такую информацию о проблеме &#39;% s&#39;"
+msgstr "Stripe предоставил нам такую информацию о проблеме '% s'"
 
 #. module: payment_stripe
 #: code:addons/payment_stripe/models/payment.py:184

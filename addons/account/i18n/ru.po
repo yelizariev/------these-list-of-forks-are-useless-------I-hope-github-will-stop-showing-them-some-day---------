@@ -225,8 +225,8 @@ msgstr ""
 "{object.number}%</strong> else: invoice% endif% if object.origin: (with "
 "reference: $ {object.origin})% endif в сумме <strong>$ {format_amount "
 "(object.amount_total, object.currency_id)}</strong> от $ "
-"{object.company_id.name}. % If object.state == &#39;paid `Этот счет уже "
-"оплачен. % Else: Совершите платеж как можно скорее. % endif <br/><br/> Не "
+"{object.company_id.name}. % If object.state == 'paid `Этот счет уже оплачен."
+" % Else: Совершите платеж как можно скорее. % endif <br/><br/> Не "
 "стесняйтесь связаться с нами, если у вас есть вопросы. </p></div>"
 
 #. module: account

@@ -44,8 +44,7 @@ msgstr ""
 #: code:addons/web_editor/static/src/xml/editor.xml:44
 #, python-format
 msgid "'Title tag' is shown as a tooltip when you hover the picture."
-msgstr ""
-"`Title tag &#39;отображается как подсказка при наведении на изображение."
+msgstr "`Title tag 'отображается как подсказка при наведении на изображение."
 
 #. module: web_editor
 #. openerp-web

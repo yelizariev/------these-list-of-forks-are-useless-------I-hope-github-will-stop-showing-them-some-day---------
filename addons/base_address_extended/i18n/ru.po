@@ -68,10 +68,10 @@ msgid ""
 "%(street_number2)s: the door number"
 msgstr ""
 "Формат использования улиц этой страны. Вы можете использовать стиль строки "
-"python со всеми полями улице (например, используйте &#39;% (street_name) s,%"
-" (street_number) s&#39; если вы хотите отобразить название улицы, а затем "
-"через запятую номер дома)% (street_name) s: название улицы% (street_number) "
-"s: номер дома% (street_number2) s: номер дверей"
+"python со всеми полями улице (например, используйте '% (street_name) s,% "
+"(street_number) s' если вы хотите отобразить название улицы, а затем через "
+"запятую номер дома)% (street_name) s: название улицы% (street_number) s: "
+"номер дома% (street_number2) s: номер дверей"
 
 #. module: base_address_extended
 #: model:ir.model.fields,field_description:base_address_extended.field_res_partner__street_number

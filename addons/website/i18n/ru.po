@@ -2346,7 +2346,7 @@ msgstr "Скрыть эту страницу от результатов пои�
 #: code:addons/website/static/src/xml/website.contentMenu.xml:56
 #, python-format
 msgid "Hint: Simply type '#' to create a container menu"
-msgstr "Подсказка: введите &#39;#&#39;, чтобы создать меню контейнера"
+msgstr "Подсказка: введите '#', чтобы создать меню контейнера"
 
 #. module: website
 #. openerp-web
@@ -4922,7 +4922,7 @@ msgstr "Ваше описание слишком короткий."
 #. module: website
 #: model_terms:ir.ui.view,arch_db:website.list_website_pages
 msgid "Your search '"
-msgstr "Ваш поиск &#39;"
+msgstr "Ваш поиск '"
 
 #. module: website
 #: model:ir.model.fields,field_description:website.field_res_config_settings__social_youtube

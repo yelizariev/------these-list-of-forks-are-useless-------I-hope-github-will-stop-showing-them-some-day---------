@@ -35,8 +35,8 @@ msgstr "${(object.name or '').replace('/','_')}"
 msgid ""
 "${object.company_id.name} Delivery Order (Ref ${object.name or 'n/a' })"
 msgstr ""
-"$ {Object.company_id.name} Заказ на доставку (Ref $ {object.name or &#39;n /"
-" a&#39;})"
+"$ {Object.company_id.name} Заказ на доставку (Ref $ {object.name or 'n / "
+"a'})"
 
 #. module: delivery
 #: model:mail.template,body_html:delivery.mail_template_data_delivery_confirmation
