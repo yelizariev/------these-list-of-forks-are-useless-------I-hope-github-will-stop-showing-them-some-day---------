@@ -3705,8 +3705,8 @@ msgid ""
 "The order was not confirmed despite response from the acquirer (%s): order "
 "total is %r but acquirer replied with %r."
 msgstr ""
-"Заказ не подтвержден, несмотря ответа эквайера (%s): сумма заказа% r но "
-"эквайер ответил с% r."
+"Заказ не подтвержден, несмотря ответа эквайера (%s): сумма заказа %r но "
+"эквайер ответил с %r."
 
 #. module: sale
 #: model:ir.model.fields,help:sale.field_sale_order__reference

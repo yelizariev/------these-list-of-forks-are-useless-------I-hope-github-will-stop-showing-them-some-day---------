@@ -2726,7 +2726,7 @@ msgstr "Неверный адрес электронной почты"
 #: code:addons/mail/models/mail_blacklist.py:35
 #, python-format
 msgid "Invalid email address %r"
-msgstr "Неверный адрес электронной почты% r"
+msgstr "Неверный адрес электронной почты %r"
 
 #. module: mail
 #: code:addons/mail/models/mail_alias.py:88

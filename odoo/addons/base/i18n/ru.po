@@ -10584,7 +10584,7 @@ msgstr "Отмена обновления"
 #: code:addons/models.py:2118
 #, python-format
 msgid "Cannot aggregate field %r."
-msgstr "Невозможно агрегировать поле% r."
+msgstr "Невозможно агрегировать поле %r."
 
 #. module: base
 #: code:addons/base/models/ir_translation.py:256
@@ -14250,7 +14250,7 @@ msgstr "Поле \"Тип\" не может быть изменено на мо�
 #, python-format
 msgid "Field %r used in attributes must be present in view but is missing:"
 msgstr ""
-"Поле% r использовано в атрибутах, должно быть видимым, но отсутствующим:"
+"Поле %r использовано в атрибутах, должно быть видимым, но отсутствующим:"
 
 #. module: base
 #: model:ir.model.fields,field_description:base.field_ir_model_fields__help
@@ -16489,7 +16489,7 @@ msgstr "Ошибочный параметр 'Группировать'"
 #: code:addons/models.py:2120
 #, python-format
 msgid "Invalid aggregation function %r."
-msgstr "Недействительна функция агрегации% r."
+msgstr "Недействительна функция агрегации %r."
 
 #. module: base
 #: code:addons/base/models/ir_fields.py:330
@@ -16517,7 +16517,7 @@ msgstr "Недействительно поле%s .%s"
 #: code:addons/models.py:2110
 #, python-format
 msgid "Invalid field specification %r."
-msgstr "Недействительна спецификация поля% r."
+msgstr "Недействительна спецификация поля %r."
 
 #. module: base
 #: sql_constraint:ir.ui.view:0
@@ -21291,7 +21291,7 @@ msgstr "Разрешение вывода (точек на дюйм)"
 #: code:addons/models.py:2132
 #, python-format
 msgid "Output name %r is used twice."
-msgstr "Название выхода% r используется дважды."
+msgstr "Название выхода %r используется дважды."
 
 #. module: base
 #: model:ir.model.fields,field_description:base.field_base_language_import__overwrite
