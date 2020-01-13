@@ -1,7 +1,7 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
 # * stock
-# 
+#
 # Translators:
 # Denis Trepalin <zekarious@gmail.com>, 2018
 # Max Belyanin <maxbelyanin@gmail.com>, 2018
@@ -18,7 +18,7 @@
 # Андрей Гусев <gaussgss@gmail.com>, 2019
 # Konstantin Korovin <korovin74@gmail.com>, 2019
 # Ivan Yelizariev <yelizariev@it-projects.info>, 2020
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
@@ -27,10 +27,10 @@ msgstr ""
 "PO-Revision-Date: 2018-08-24 09:25+0000\n"
 "Last-Translator: Ivan Yelizariev <yelizariev@it-projects.info>, 2020\n"
 "Language-Team: Russian (https://www.transifex.com/odoo/teams/41243/ru/)\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Language: ru\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 
 #. module: stock
@@ -177,7 +177,7 @@ msgid ""
 "<br>A need is created in <b>%s</b> and a rule will be triggered to fulfill "
 "it."
 msgstr ""
-"<br> Необходимость создается <b>в% s</b> и запускаться правило для его "
+"<br> Необходимость создается <b>в%s</b> и запускаться правило для его "
 "выполнения."
 
 #. module: stock
@@ -894,7 +894,7 @@ msgstr "Не могу найти ни одного места хранения �
 #: code:addons/stock/models/stock_warehouse.py:256
 #, python-format
 msgid "Can't find any generic route %s."
-msgstr "Невозможно найти общий маршрут% s."
+msgstr "Невозможно найти общий маршрут%s."
 
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.stock_scrap_form_view2
@@ -2812,14 +2812,14 @@ msgstr "Есть ли величина редактированной"
 #, python-format
 msgid ""
 "It is not possible to reserve more products of %s than you have in stock."
-msgstr "Невозможно заказать больше товаров% s чем у вас на складе."
+msgstr "Невозможно заказать больше товаров%s чем у вас на складе."
 
 #. module: stock
 #: code:addons/stock/models/stock_quant.py:266
 #, python-format
 msgid ""
 "It is not possible to unreserve more products of %s than you have in stock."
-msgstr "Невозможно восстановить больше товаров% s чем у вас на складе."
+msgstr "Невозможно восстановить больше товаров%s чем у вас на складе."
 
 #. module: stock
 #: model:ir.model.fields,help:stock.field_stock_move__product_packaging
@@ -3563,8 +3563,8 @@ msgid ""
 "No procurement rule found in location \"%s\" for product \"%s\".\n"
 " Check routes configuration."
 msgstr ""
-"В местонахождение не найдено ни одного правила закупок `% s` для товара `% "
-"s`. Проверьте настройки маршрутов."
+"В местонахождение не найдено ни одного правила закупок `%s` для товара `%s`."
+" Проверьте настройки маршрутов."
 
 #. module: stock
 #: code:addons/stock/wizard/stock_picking_return.py:59
@@ -3580,7 +3580,7 @@ msgstr ""
 #: code:addons/stock/models/stock_rule.py:172
 #, python-format
 msgid "No source location defined on stock rule: %s!"
-msgstr "Местонахождение источника не определено по правилу запаса:% s!"
+msgstr "Местонахождение источника не определено по правилу запаса:%s!"
 
 #. module: stock
 #: selection:stock.move,priority:0 selection:stock.picking,priority:0
@@ -5027,7 +5027,7 @@ msgstr "Вернуть строку комплектования"
 #: code:addons/stock/wizard/stock_picking_return.py:103
 #, python-format
 msgid "Return of %s"
-msgstr "Возвращение% s"
+msgstr "Возвращение%s"
 
 #. module: stock
 #: code:addons/stock/wizard/stock_picking_return.py:153
@@ -5894,7 +5894,7 @@ msgid ""
 "The backorder <a href=# data-oe-model=stock.picking data-oe-id=%d>%s</a> has"
 " been created."
 msgstr ""
-"Обратное заказ <a href=# data-oe-model=stock.picking data-oe-id=%d>% s</a> "
+"Обратное заказ <a href=# data-oe-model=stock.picking data-oe-id=%d>%s</a> "
 "был создан."
 
 #. module: stock
@@ -5983,8 +5983,8 @@ msgid ""
 "                                   rounding precision of your unit of "
 "measure."
 msgstr ""
-"Выполненная количество для товара `% s` не соблюдает точного округления, "
-"определенного на единицу измерения `% s`. Пожалуйста, измените проделанной "
+"Выполненная количество для товара `%s` не соблюдает точного округления, "
+"определенного на единицу измерения `%s`. Пожалуйста, измените проделанной "
 "количество или точность округления единицы измерения."
 
 #. module: stock
@@ -6182,7 +6182,7 @@ msgstr ""
 #: code:addons/stock/models/stock_move_line.py:74
 #, python-format
 msgid "This lot %s is incompatible with this product %s"
-msgstr "Эта партия% s несовместима с этим товаром% s"
+msgstr "Эта партия%s несовместима с этим товаром%s"
 
 #. module: stock
 #: model_terms:ir.actions.act_window,help:stock.stock_move_action
@@ -6893,8 +6893,8 @@ msgid ""
 "When products are needed in <b>%s</b>, <br/> <b>%s</b> are created from "
 "<b>%s</b> to fulfill the need."
 msgstr ""
-"Когда товары необходимые <b>в% s,</b> <br/> <b>% s</b> <b>создается% s</b> "
-"для удовлетворения потребности."
+"Когда товары необходимые <b>в%s,</b> <br/> <b>%s</b> <b>создается%s</b> для "
+"удовлетворения потребности."
 
 #. module: stock
 #: code:addons/stock/models/stock_rule.py:114
@@ -6903,8 +6903,8 @@ msgid ""
 "When products arrive in <b>%s</b>, <br/> <b>%s</b> are created to send them "
 "in <b>%s</b>."
 msgstr ""
-"Когда товары поступают <b>в% s,</b> <br/> <b>% s</b> создан для их "
-"<b>отправки% s.</b>"
+"Когда товары поступают <b>в%s,</b> <br/> <b>%s</b> создан для их "
+"<b>отправки%s.</b>"
 
 #. module: stock
 #: model:ir.model.fields,help:stock.field_stock_picking__is_locked
@@ -7069,7 +7069,7 @@ msgstr "Вы можете удалить только черновик пере�
 #, python-format
 msgid "You can only process 1.0 %s of products with unique serial number."
 msgstr ""
-"Вы можете обработать только 1.0% s товаров с уникальным серийным номером."
+"Вы можете обработать только 1.0%s товаров с уникальным серийным номером."
 
 #. module: stock
 #: code:addons/stock/models/stock_move.py:1014
@@ -7134,9 +7134,9 @@ msgid ""
 " one."
 msgstr ""
 "Вы не можете иметь два корректировки рекламных ресурсов в состоянии "
-"`Прогресс` с тем же товаром (% s), то же место, тот же пакет, тот же "
-"владелец и та же партия. Сначала проверьте первую корректировки запасов "
-"перед созданием другого."
+"`Прогресс` с тем же товаром (%s), то же место, тот же пакет, тот же владелец"
+" и та же партия. Сначала проверьте первую корректировки запасов перед "
+"созданием другого."
 
 #. module: stock
 #: code:addons/stock/models/stock_move.py:1134
@@ -7315,7 +7315,7 @@ msgstr "Сначала нужно установить количество, к�
 #: code:addons/stock/models/stock_picking.py:712
 #, python-format
 msgid "You need to supply a Lot/Serial number for product %s."
-msgstr "Вам необходимо предоставить партийный / серийный номер для товара% s."
+msgstr "Вам необходимо предоставить партийный / серийный номер для товара%s."
 
 #. module: stock
 #: code:addons/stock/models/product.py:394
