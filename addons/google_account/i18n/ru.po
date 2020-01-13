@@ -36,18 +36,6 @@ msgid "Display Name"
 msgstr "Отображаемое Имя"
 
 #. module: google_account
-#: code:addons/google_account/models/google_service.py:203
-#, python-format
-msgid "Error while requesting Google Services"
-msgstr ""
-
-#. module: google_account
-#: code:addons/google_account/models/google_service.py:199
-#, python-format
-msgid "Error while requesting Google Services: %s"
-msgstr ""
-
-#. module: google_account
 #: model:ir.model,name:google_account.model_google_service
 msgid "Google Service"
 msgstr "Сервис Google"
@@ -109,16 +97,10 @@ msgstr ""
 "авторизации недействителен или уже устарел [%s]"
 
 #. module: google_account
-#: code:addons/google_account/models/google_service.py:204
+#: code:addons/google_account/models/google_service.py:193
 #, python-format
 msgid "Something went wrong with your request to google"
 msgstr "Что-то пошло не так с вашим запросом к google"
-
-#. module: google_account
-#: code:addons/google_account/models/google_service.py:200
-#, python-format
-msgid "Something went wrong with your request to google: %s"
-msgstr ""
 
 #. module: google_account
 #: code:addons/google_account/models/google_service.py:131
