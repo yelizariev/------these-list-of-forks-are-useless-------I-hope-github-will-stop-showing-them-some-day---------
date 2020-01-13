@@ -61,7 +61,7 @@ msgstr "%d сообщений"
 #: code:addons/mail/static/src/js/activity.js:89
 #, python-format
 msgid "%d days overdue"
-msgstr "% D дней просрочено"
+msgstr " %d дней просрочено"
 
 #. module: mail
 #: code:addons/mail/models/mail_template.py:249
@@ -1877,7 +1877,7 @@ msgstr "Дата исполнения в"
 #: code:addons/mail/static/src/js/activity.js:95
 #, python-format
 msgid "Due in %d days"
-msgstr "Через% d дней"
+msgstr "Через %d дней"
 
 #. module: mail
 #: model:ir.model.fields,field_description:mail.field_ir_actions_server__activity_date_deadline_range_type

@@ -44,7 +44,7 @@ msgstr ""
 #: code:addons/auth_password_policy/models/res_users.py:30
 #, python-format
 msgid "Passwords must have at least %d characters, got %d."
-msgstr "Пароль должен иметь по крайней мере% d символов, полученные% d."
+msgstr "Пароль должен иметь по крайней мере %d символов, полученные %d."
 
 #. module: auth_password_policy
 #. openerp-web
@@ -68,21 +68,21 @@ msgstr "Пользователи"
 #: code:addons/auth_password_policy/static/src/js/password_gauge.js:28
 #, python-format
 msgid "at least %d character classes"
-msgstr "по крайней мере% d классов символов"
+msgstr "по крайней мере %d классов символов"
 
 #. module: auth_password_policy
 #. openerp-web
 #: code:addons/auth_password_policy/static/src/js/password_gauge.js:22
 #, python-format
 msgid "at least %d characters"
-msgstr "по крайней мере% d символов"
+msgstr "по крайней мере %d символов"
 
 #. module: auth_password_policy
 #. openerp-web
 #: code:addons/auth_password_policy/static/src/js/password_gauge.js:25
 #, python-format
 msgid "at least %d words"
-msgstr "по крайней мере% d слов"
+msgstr "по крайней мере %d слов"
 
 #. module: auth_password_policy
 #. openerp-web
