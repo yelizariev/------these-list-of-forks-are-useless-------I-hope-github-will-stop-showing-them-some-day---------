@@ -42,7 +42,7 @@ msgstr "&nbsp;"
 #: code:addons/board/static/src/js/favorite_menu.js:103
 #, python-format
 msgid "'%s' added to dashboard"
-msgstr "«%s» добавлено на панель"
+msgstr "« %s » добавлено на панель"
 
 #. module: board
 #. openerp-web

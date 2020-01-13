@@ -24,7 +24,7 @@ msgstr ""
 #: code:addons/document/static/src/js/document.js:77
 #, python-format
 msgid "%s (%s)"
-msgstr "%s (%s)"
+msgstr " %s (%s)"
 
 #. module: document
 #: model:ir.model,name:document.model_ir_attachment

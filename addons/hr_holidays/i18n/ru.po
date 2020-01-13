@@ -85,25 +85,25 @@ msgstr "%g оставаясь вне %g"
 #: code:addons/hr_holidays/models/hr_leave.py:428
 #, python-format
 msgid "%s : %.2f day(s)"
-msgstr "%s : %.2f дней"
+msgstr " %s : %.2f дней"
 
 #. module: hr_holidays
 #: code:addons/hr_holidays/models/hr_leave.py:466
 #, python-format
 msgid "%s : %.2f hour(s)"
-msgstr "%s:%.2f час (ы)"
+msgstr " %s:%.2f час (ы)"
 
 #. module: hr_holidays
 #: code:addons/hr_holidays/models/hr_leave.py:440
 #, python-format
 msgid "%s on %s : %.2f day(s)"
-msgstr "%s on %s : %.2f день(ей)"
+msgstr " %s on %s : %.2f день(ей)"
 
 #. module: hr_holidays
 #: code:addons/hr_holidays/models/hr_leave.py:481
 #, python-format
 msgid "%s on %s : %.2f hour(s)"
-msgstr "%s на%s:%.2f час (ы)"
+msgstr " %s на %s:%.2f час (ы)"
 
 #. module: hr_holidays
 #: model_terms:ir.ui.view,arch_db:hr_holidays.report_holidayssummary
@@ -642,7 +642,7 @@ msgstr "Второе утверждение распределения"
 #: code:addons/hr_holidays/models/hr_leave_allocation.py:302
 #, python-format
 msgid "Allocation of %s : %.2f %s to %s"
-msgstr "Начисление%s:%.2f%s в%s"
+msgstr "Начисление %s:%.2f %s в %s "
 
 #. module: hr_holidays
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_department__allocation_to_approve_count
@@ -2571,7 +2571,7 @@ msgstr "Год(ы)"
 #: code:addons/hr_holidays/models/hr_leave_allocation.py:326
 #, python-format
 msgid "You can allocate %s only between %s and %s"
-msgstr "Вы можете забронировать%s только между%s и%s"
+msgstr "Вы можете забронировать %s только между %s и %s "
 
 #. module: hr_holidays
 #: code:addons/hr_holidays/models/hr_leave.py:397
@@ -2583,19 +2583,19 @@ msgstr "Вы не можете иметь 2 отпуска, которые пе�
 #: code:addons/hr_holidays/models/hr_leave.py:520
 #, python-format
 msgid "You can take %s from %s"
-msgstr "Вы можете взять%s из%s"
+msgstr "Вы можете взять %s из %s "
 
 #. module: hr_holidays
 #: code:addons/hr_holidays/models/hr_leave.py:515
 #, python-format
 msgid "You can take %s only between %s and %s"
-msgstr "Вы можете взять%s только между%s и%s"
+msgstr "Вы можете взять %s только между %s и %s "
 
 #. module: hr_holidays
 #: code:addons/hr_holidays/models/hr_leave.py:525
 #, python-format
 msgid "You can take %s until %s"
-msgstr "Вы можете взять%s в%s"
+msgstr "Вы можете взять %s в %s "
 
 #. module: hr_holidays
 #: code:addons/hr_holidays/models/hr_leave.py:576
@@ -2616,7 +2616,7 @@ msgstr "Вы должны выбрать по крайней мере одно �
 #, python-format
 msgid "You must be either %s's manager or Leave manager to approve this leave"
 msgstr ""
-"Вы должны быть менеджером%s или менеджером отпусков, чтобы утвердить этот "
+"Вы должны быть менеджером %s или менеджером отпусков, чтобы утвердить этот "
 "отпуск"
 
 #. module: hr_holidays

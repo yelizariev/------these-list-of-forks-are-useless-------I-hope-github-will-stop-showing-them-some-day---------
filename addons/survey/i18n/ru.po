@@ -43,7 +43,7 @@ msgstr "$ {Object.title}: Опросы"
 #: code:addons/survey/models/survey.py:122
 #, python-format
 msgid "%s (copy)"
-msgstr "%s (копия)"
+msgstr " %s (копия)"
 
 #. module: survey
 #: model_terms:ir.ui.view,arch_db:survey.page
@@ -1091,7 +1091,7 @@ msgstr "Выполняется"
 #: code:addons/survey/wizard/survey_email_compose_message.py:72
 #, python-format
 msgid "Incorrect Email Address: %s"
-msgstr "Некорректное Адрес электронной почты: %s"
+msgstr "Некорректное Адрес электронной почты: %s "
 
 #. module: survey
 #: model:ir.model.fields,help:survey.field_survey_mail_compose_message__parent_id

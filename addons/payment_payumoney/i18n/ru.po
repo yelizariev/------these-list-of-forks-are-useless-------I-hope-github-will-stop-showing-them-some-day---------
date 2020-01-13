@@ -64,19 +64,19 @@ msgstr "PayUmoney"
 #, python-format
 msgid "PayUmoney: invalid shasign, received %s, computed %s, for data %s"
 msgstr ""
-"PayUmoney: недопустимый shasign, получил %s, вычисленный %s, для данных %s"
+"PayUmoney: недопустимый shasign, получил %s, вычисленный %s, для данных %s "
 
 #. module: payment_payumoney
 #: code:addons/payment_payumoney/models/payment.py:102
 #, python-format
 msgid "PayUmoney: received data for reference %s; multiple orders found"
-msgstr "PayUmoney: получил данные для справки %s; найдено несколько заказов"
+msgstr "PayUmoney: получил данные для справки %s ; найдено несколько заказов"
 
 #. module: payment_payumoney
 #: code:addons/payment_payumoney/models/payment.py:99
 #, python-format
 msgid "PayUmoney: received data for reference %s; no order found"
-msgstr "PayUmoney: получил данные для справки %s; заказы не найдены"
+msgstr "PayUmoney: получил данные для справки %s ; заказы не найдены"
 
 #. module: payment_payumoney
 #: code:addons/payment_payumoney/models/payment.py:94

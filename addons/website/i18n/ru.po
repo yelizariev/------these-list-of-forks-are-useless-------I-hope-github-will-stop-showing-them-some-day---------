@@ -51,7 +51,7 @@ msgstr "\" предупреждение с"
 #: code:addons/website/models/website.py:388
 #, python-format
 msgid "%s (id:%s)"
-msgstr "%s (id:%s)"
+msgstr " %s (id:%s)"
 
 #. module: website
 #: model_terms:ir.ui.view,arch_db:website.show_website_info
@@ -1740,7 +1740,7 @@ msgstr "Вы хотите редактировать данные компани
 #: code:addons/website/static/src/js/menu/new_content.js:28
 #, python-format
 msgid "Do you want to install the \"%s\" App?"
-msgstr "Хотите установить модуль `%s`?"
+msgstr "Хотите установить модуль ` %s `?"
 
 #. module: website
 #: model_terms:ir.ui.view,arch_db:website.res_config_settings_view_form
@@ -1972,7 +1972,7 @@ msgstr "появление"
 #: code:addons/website/static/src/js/menu/new_content.js:26
 #, python-format
 msgid "Failed to install \"%s\""
-msgstr "Не удалось установить `%s`"
+msgstr "Не удалось установить ` %s `"
 
 #. module: website
 #: model_terms:ir.ui.view,arch_db:website.snippet_options
@@ -2545,7 +2545,7 @@ msgstr "установлена тема"
 #: code:addons/website/static/src/js/menu/new_content.js:29
 #, python-format
 msgid "Installing \"%s\""
-msgstr "Установление `%s`"
+msgstr "Установление ` %s `"
 
 #. module: website
 #. openerp-web
@@ -3321,13 +3321,13 @@ msgstr "Страница"
 #: code:addons/website/models/website.py:305
 #, python-format
 msgid "Page <b>%s</b> contains a link to this page"
-msgstr "Страница <b>%s</b> содержит ссылку на эту страницу"
+msgstr "Страница <b> %s </b> содержит ссылку на эту страницу"
 
 #. module: website
 #: code:addons/website/models/website.py:369
 #, python-format
 msgid "Page <b>%s</b> is calling this file"
-msgstr "<b>Страница%s</b> вызывает этот файл"
+msgstr "<b>Страница %s </b> вызывает этот файл"
 
 #. module: website
 #: model:ir.model.fields,field_description:website.field_website_page__website_indexed
@@ -3976,13 +3976,13 @@ msgstr "Шаблон"
 #: code:addons/website/models/website.py:320
 #, python-format
 msgid "Template <b>%s (id:%s)</b> contains a link to this page"
-msgstr "Шаблон <b>%s (id:%s)</b> содержит ссылку на эту страницу"
+msgstr "Шаблон <b> %s (id:%s)</b> содержит ссылку на эту страницу"
 
 #. module: website
 #: code:addons/website/models/website.py:387
 #, python-format
 msgid "Template <b>%s (id:%s)</b> is calling this file"
-msgstr "<b>Шаблон%s (id:%s)</b> вызывает этот файл"
+msgstr "<b>Шаблон %s (id:%s)</b> вызывает этот файл"
 
 #. module: website
 #: model_terms:ir.ui.view,arch_db:website.500
@@ -4190,7 +4190,7 @@ msgstr ""
 #: code:addons/website/models/website.py:333
 #, python-format
 msgid "This page is in the menu <b>%s</b>"
-msgstr "Эта страница находится в меню <b>%s</b>"
+msgstr "Эта страница находится в меню <b> %s </b>"
 
 #. module: website
 #: model_terms:ir.ui.view,arch_db:website.one_page_line
@@ -4272,7 +4272,7 @@ msgstr "Верхнее меню"
 #: code:addons/website/models/website.py:177
 #, python-format
 msgid "Top Menu for Website %s"
-msgstr "Верхнее меню сайта%s"
+msgstr "Верхнее меню сайта %s "
 
 #. module: website
 #: model_terms:ir.ui.view,arch_db:website.http_error_debug

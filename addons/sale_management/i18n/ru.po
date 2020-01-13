@@ -107,7 +107,7 @@ msgid ""
 "Before archiving \"%s\" please select another default template in the "
 "settings."
 msgstr ""
-"Выберите в настройках другой типичный шаблон перед архивированием `%s`."
+"Выберите в настройках другой типичный шаблон перед архивированием ` %s `."
 
 #. module: sale_management
 #: model:ir.model,name:sale_management.model_res_config_settings

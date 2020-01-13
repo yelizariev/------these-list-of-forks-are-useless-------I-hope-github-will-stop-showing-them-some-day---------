@@ -137,7 +137,7 @@ msgstr "Поле сериализации"
 #: code:addons/base_sparse_field/models/models.py:39
 #, python-format
 msgid "Serialization field `%s` not found for sparse field `%s`!"
-msgstr "Поле сериализации `%s` не найдено для разреженного поля`%s`!"
+msgstr "Поле сериализации ` %s ` не найдено для разреженного поля` %s `!"
 
 #. module: base_sparse_field
 #: model:ir.model,name:base_sparse_field.model_sparse_fields_test

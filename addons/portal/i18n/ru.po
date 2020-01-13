@@ -36,7 +36,7 @@ msgstr "%d дней просрочено"
 #: code:addons/portal/controllers/portal.py:277
 #, python-format
 msgid "%s is not the reference of a report"
-msgstr "%s не является ссылкой для отчета"
+msgstr " %s не является ссылкой для отчета"
 
 #. module: portal
 #: model_terms:ir.ui.view,arch_db:portal.portal_show_sign_in
@@ -409,7 +409,7 @@ msgstr ""
 #: code:addons/portal/controllers/portal.py:272
 #, python-format
 msgid "Invalid report type: %s"
-msgstr "Неверный тип отчета: %s"
+msgstr "Неверный тип отчета: %s "
 
 #. module: portal
 #: model:ir.model.fields,field_description:portal.field_portal_wizard__welcome_message
@@ -550,7 +550,7 @@ msgstr "Предыдущий"
 #: code:addons/portal/static/src/js/portal_chatter.js:109
 #, python-format
 msgid "Published on %s"
-msgstr "Опубликовано %s"
+msgstr "Опубликовано %s "
 
 #. module: portal
 #: model:ir.model.fields,field_description:portal.field_portal_share__partner_ids
@@ -707,7 +707,7 @@ msgstr "Номер НДС"
 #: code:addons/portal/models/portal_mixin.py:83
 #, python-format
 msgid "View %s"
-msgstr "Посмотреть %s"
+msgstr "Посмотреть %s "
 
 #. module: portal
 #: model:ir.model.fields,field_description:portal.field_account_analytic_account__website_message_ids
@@ -774,7 +774,7 @@ msgstr "Напишите сообщение..."
 #: code:addons/portal/wizard/portal_share.py:71
 #, python-format
 msgid "You are invited to access %s"
-msgstr "Вам предоставлен доступ %s"
+msgstr "Вам предоставлен доступ %s "
 
 #. module: portal
 #: model_terms:ir.ui.view,arch_db:portal.portal_share_template

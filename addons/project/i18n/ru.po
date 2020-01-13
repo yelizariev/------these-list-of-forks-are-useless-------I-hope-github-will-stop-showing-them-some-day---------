@@ -66,7 +66,7 @@ msgstr "% В"
 #: code:addons/project/models/project.py:624
 #, python-format
 msgid "%s (copy)"
-msgstr "%s (копия)"
+msgstr " %s (копия)"
 
 #. module: project
 #: model_terms:ir.ui.view,arch_db:project.edit_project
@@ -708,7 +708,7 @@ msgstr ""
 "Общайтесь с клиентами по задачам с помощью шлюза электронной почты. "
 "Прикрепите дизайн логотипа к задаче, чтобы информация переходила от "
 "дизайнеров к работникам, которые печатают футболки. Организуйте приоритеты "
-"среди заказов%s, используя иконку."
+"среди заказов %s, используя иконку."
 
 #. module: project
 #: model:ir.model.fields,field_description:project.field_project_project__company_id
@@ -913,7 +913,7 @@ msgid ""
 msgstr ""
 "Клиенты предлагают отзывы по электронной почте; Odoo создает задачи "
 "автоматически, и вы можете общаться непосредственно в этой задаче. Ваши "
-"менеджеры решают, какие отзывы принять%s а какие отзывы переместить в "
+"менеджеры решают, какие отзывы принять %s а какие отзывы переместить в "
 "колонку `Отклонено`."
 
 #. module: project
@@ -2289,7 +2289,7 @@ msgstr "Рейтинги"
 #: code:addons/project/models/project.py:388
 #, python-format
 msgid "Ratings of %s"
-msgstr "Рейтинги %s"
+msgstr "Рейтинги %s "
 
 #. module: project
 #: code:addons/project/models/project.py:32

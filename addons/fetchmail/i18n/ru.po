@@ -55,7 +55,7 @@ msgstr "Подтверждено"
 #: code:addons/fetchmail/models/fetchmail.py:136
 #, python-format
 msgid "Connection test failed: %s"
-msgstr "Проверка соединения не удалась: %s"
+msgstr "Проверка соединения не удалась: %s "
 
 #. module: fetchmail
 #: model:ir.model.fields,help:fetchmail.field_fetchmail_server__is_ssl

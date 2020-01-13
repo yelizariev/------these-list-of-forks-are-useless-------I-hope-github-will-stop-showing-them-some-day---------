@@ -1282,7 +1282,7 @@ msgstr "SCSS (CSS)"
 #: code:addons/web_editor/static/src/js/widgets/ace.js:364
 #, python-format
 msgid "SCSS file: %s"
-msgstr "Файл SCSS:%s"
+msgstr "Файл SCSS:%s "
 
 #. module: web_editor
 #. openerp-web
@@ -1433,7 +1433,7 @@ msgstr "Таблица"
 #: code:addons/web_editor/static/src/js/widgets/ace.js:362
 #, python-format
 msgid "Template ID: %s"
-msgstr "ID шаблона: %s"
+msgstr "ID шаблона: %s "
 
 #. module: web_editor
 #. openerp-web

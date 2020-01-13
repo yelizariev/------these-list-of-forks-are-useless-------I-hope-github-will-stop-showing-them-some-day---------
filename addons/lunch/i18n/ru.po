@@ -1121,7 +1121,7 @@ msgid ""
 "%s and %s)"
 msgstr ""
 "Проверить заказ для одной компании на время отправки электронных писем "
-"(смешанные заказы от%s и%s)"
+"(смешанные заказы от %s и %s)"
 
 #. module: lunch
 #: code:addons/lunch/models/lunch.py:239
@@ -1131,7 +1131,7 @@ msgid ""
 "%s and %s)"
 msgstr ""
 "Проверить заказ для одной валюты на время отправки электронных писем "
-"(смешанные заказы от%s и%s)"
+"(смешанные заказы от %s и %s)"
 
 #. module: lunch
 #: code:addons/lunch/models/lunch.py:229
@@ -1141,7 +1141,7 @@ msgid ""
 "%s and %s)"
 msgstr ""
 "Проверить заказ для одного поставщика на время отправки электронных писем "
-"(смешанные заказы от%s и%s)"
+"(смешанные заказы от %s и %s)"
 
 #. module: lunch
 #: model:ir.model.fields,field_description:lunch.field_lunch_alert__partner_id
@@ -1162,7 +1162,7 @@ msgstr "Заказ поставщика по дате"
 #: code:addons/lunch/models/lunch.py:192
 #, python-format
 msgid "Vendor(s) '%s' is not available today"
-msgstr "Поставщик (ы) `%s` не доступен (и) сегодня"
+msgstr "Поставщик (ы) ` %s ` не доступен (и) сегодня"
 
 #. module: lunch
 #: model:ir.model.fields,field_description:lunch.field_lunch_alert__wednesday

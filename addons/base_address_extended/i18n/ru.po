@@ -115,4 +115,4 @@ msgstr "Формат улицы..."
 #: code:addons/base_address_extended/models/base_address_extended.py:113
 #, python-format
 msgid "Unrecognized field %s in street format."
-msgstr "Не распознанное поле %sв формате улицы"
+msgstr "Не распознанное поле %s в формате улицы"

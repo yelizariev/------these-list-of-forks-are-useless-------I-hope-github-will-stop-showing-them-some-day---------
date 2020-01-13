@@ -2576,7 +2576,7 @@ msgstr "Вопросы"
 #: code:addons/website_forum/models/forum.py:542
 #, python-format
 msgid "Re: %s"
-msgstr "Re: %s"
+msgstr "Re: %s "
 
 #. module: website_forum
 #: model_terms:ir.ui.view,arch_db:website_forum.post_description_full
@@ -3028,7 +3028,7 @@ msgstr ""
 #: code:addons/website_forum/models/forum.py:411
 #, python-format
 msgid "This forum does not allow %s"
-msgstr "Этот форум не позволяет %s"
+msgstr "Этот форум не позволяет %s "
 
 #. module: website_forum
 #: model_terms:ir.ui.view,arch_db:website_forum.header

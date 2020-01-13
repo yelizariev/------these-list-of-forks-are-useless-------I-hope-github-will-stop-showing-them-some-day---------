@@ -1337,7 +1337,7 @@ msgstr "Новые претенденты"
 #: code:addons/hr_recruitment/models/hr_recruitment.py:447
 #, python-format
 msgid "New Employee %s Hired"
-msgstr "Новый нанятый сотрудник %s"
+msgstr "Новый нанятый сотрудник %s "
 
 #. module: hr_recruitment
 #: model:ir.model.fields,field_description:hr_recruitment.field_hr_department__new_hired_employee

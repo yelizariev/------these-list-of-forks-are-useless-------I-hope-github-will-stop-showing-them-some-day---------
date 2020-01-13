@@ -7326,7 +7326,7 @@ msgstr ""
 #: code:addons/base/models/ir_ui_view.py:1091
 #, python-format
 msgid " - %r in %s=%r"
-msgstr " - %r in %s=%r"
+msgstr " - %r in %s =%r"
 
 #. module: base
 #: model:ir.module.module,description:base.module_inter_company_rules
@@ -7385,7 +7385,7 @@ msgstr "%M — Минуты [00—59].\""
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.res_lang_form
 msgid "%S - Seconds [00,61].\""
-msgstr "%s  — Секунды [00—61].\""
+msgstr " %s  — Секунды [00—61].\""
 
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.res_lang_form
@@ -7430,7 +7430,7 @@ msgstr "%p — Эквивалентно AM или PM.\""
 #: code:addons/base/models/res_users.py:507
 #, python-format
 msgid "%s (copy)"
-msgstr "%s (копия)"
+msgstr " %s (копия)"
 
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.res_lang_form
@@ -8630,7 +8630,7 @@ msgstr "Кредитный перевод ABA"
 #: code:addons/fields.py:1770
 #, python-format
 msgid "ASCII characters are required for %s in %s"
-msgstr "Символы ASCII необходимые для%s  в%s "
+msgstr "Символы ASCII необходимые для %s  в %s "
 
 #. module: base
 #: model:ir.model.fields,field_description:base.field_res_partner_title__shortcut
@@ -9927,7 +9927,7 @@ msgstr "B9 23 33 x 62 мм"
 #: code:addons/translate.py:1076
 #, python-format
 msgid "Bad file format: %s"
-msgstr "Неверный формат файла %s"
+msgstr "Неверный формат файла %s "
 
 #. module: base
 #: model:res.country,name:base.bs
@@ -11331,7 +11331,7 @@ msgid ""
 " %s"
 msgstr ""
 "Ошибка подключения! Вот что мы получили:\n"
-"%s"
+" %s "
 
 #. module: base
 #: code:addons/base/models/ir_mail_server.py:196
@@ -12583,7 +12583,7 @@ msgid ""
 "%s"
 msgstr ""
 "Отмена этой опции удалит следующие модули\n"
-"%s"
+" %s "
 
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.onboarding_container
@@ -14085,7 +14085,7 @@ msgid ""
 "Failed to encode the address %s\n"
 "from mail header:\n"
 "%s"
-msgstr "Не удалось кодировать адрес%s  из заголовка письма:%s "
+msgstr "Не удалось кодировать адрес %s  из заголовка письма:%s "
 
 #. module: base
 #: model:ir.actions.server,name:base.demo_failure_action
@@ -14336,7 +14336,7 @@ msgstr "Поля:"
 #: code:addons/base/models/ir_model.py:645
 #, python-format
 msgid "Fields: %s"
-msgstr "Поля: %s"
+msgstr "Поля: %s "
 
 #. module: base
 #: model:res.country,name:base.fj
@@ -14399,7 +14399,7 @@ msgstr ""
 "Файл не импортирован из-за несоответствия формата или искаженного файла. (Допустимые форматы: .csv, .po, .pot)\n"
 "\n"
 "Технические подробности:\n"
-"%s"
+" %s "
 
 #. module: base
 #: model:ir.model.fields,field_description:base.field_ir_attachment__datas_fname
@@ -16511,7 +16511,7 @@ msgstr ""
 #: code:addons/base/models/ir_default.py:69
 #, python-format
 msgid "Invalid field %s.%s"
-msgstr "Недействительно поле%s .%s"
+msgstr "Недействительно поле %s . %s "
 
 #. module: base
 #: code:addons/models.py:2110
@@ -16574,13 +16574,13 @@ msgstr "Неправильный тип"
 #: code:addons/base/models/ir_default.py:71
 #, python-format
 msgid "Invalid value for %s.%s: %s"
-msgstr "Недопустимое значение для%s .%s:%s "
+msgstr "Недопустимое значение для %s . %s:%s "
 
 #. module: base
 #: code:addons/base/models/ir_ui_view.py:353
 #, python-format
 msgid "Invalid view %s definition in %s"
-msgstr "Недействителен просмотр%s  определение в%s "
+msgstr "Недействителен просмотр %s  определение в %s "
 
 #. module: base
 #: code:addons/base/models/ir_ui_view.py:355
@@ -16588,7 +16588,7 @@ msgstr "Недействителен просмотр%s  определение 
 msgid ""
 "Invalid view %s definition in %s \n"
 "%s"
-msgstr "Недействителен просмотр%s  определение в%s %s "
+msgstr "Недействителен просмотр %s  определение в %s %s "
 
 #. module: base
 #: model:ir.module.category,name:base.module_category_warehouse_management
@@ -17627,7 +17627,7 @@ msgid ""
 "%s: %s"
 msgstr ""
 "Доставка почты через SMTP сервер '%s' неудачна.\n"
-"%s %s"
+" %s %s "
 
 #. module: base
 #: model:ir.model.fields,field_description:base.field_ir_sequence_date_range__sequence_id
@@ -18111,7 +18111,7 @@ msgid ""
 " instead(Method %s)"
 msgstr ""
 "Методы, начинающиеся с `get_default_`, устарели. Переопределите `get_values`"
-" вместо (метод%s )"
+" вместо (метод %s )"
 
 #. module: base
 #: code:addons/base/models/res_config.py:605
@@ -18121,7 +18121,7 @@ msgid ""
 " (Method %s)"
 msgstr ""
 "Методы, которые начинаются с `set_`, устарели. Переопределите `set_values` "
-"вместо (метод%s )"
+"вместо (метод %s )"
 
 #. module: base
 #: model:ir.module.module,summary:base.module_l10n_mx_edi
@@ -18258,7 +18258,7 @@ msgstr "Модель %s не существует!"
 #: code:addons/base/models/ir_model.py:194
 #, python-format
 msgid "Model '%s' contains module data and cannot be removed."
-msgstr "Модель `%s ` содержит данные модуля и не может быть удалена."
+msgstr "Модель ` %s ` содержит данные модуля и не может быть удалена."
 
 #. module: base
 #: model:ir.model,name:base.model_ir_model_access
@@ -18429,7 +18429,7 @@ msgid ""
 " %s"
 msgstr ""
 "Не удалось загрузить модуль %s: файл %s не может быть обработан:\n"
-" %s"
+" %s "
 
 #. module: base
 #: model:ir.model.fields,help:base.field_ir_translation__module
@@ -18445,7 +18445,7 @@ msgstr "Модули"
 #: code:addons/base/models/ir_module.py:404
 #, python-format
 msgid "Modules \"%s\" and \"%s\" are incompatible."
-msgstr "Модули `%s ` и `%s ` несовместимы."
+msgstr "Модули ` %s ` и ` %s ` несовместимы."
 
 #. module: base
 #: model:res.country,name:base.md
@@ -23831,7 +23831,7 @@ msgstr "Сортировать"
 #: code:addons/models.py:3978
 #, python-format
 msgid "Sorting field %s not found on model %s"
-msgstr "Поле сортировки %s не найдено в модели %s"
+msgstr "Поле сортировки %s не найдено в модели %s "
 
 #. module: base
 #: model:ir.model.fields,field_description:base.field_ir_actions_act_window__src_model
@@ -25497,7 +25497,7 @@ msgstr "Следующие документы будут потеряны нав
 #: code:addons/base/wizard/base_module_upgrade.py:69
 #, python-format
 msgid "The following modules are not installed or unknown: %s"
-msgstr "Следующие модули не установлены или неизвестны: %s"
+msgstr "Следующие модули не установлены или неизвестны: %s "
 
 #. module: base
 #: model:ir.model.fields,help:base.field_res_country__name
@@ -25660,7 +25660,7 @@ msgid ""
 "\n"
 "Can not separate file to save as attachment because the report's template does not contains the attributes 'data-oe-model' and 'data-oe-id' on the div with 'article' classname."
 msgstr ""
-"Шаблон отчета `%s ` неправильный, обратитесь к администратору. Невозможно "
+"Шаблон отчета ` %s ` неправильный, обратитесь к администратору. Невозможно "
 "отделить файл для сохранения как вложения, поскольку шаблон отчета не "
 "содержит атрибутов `data-oe-model` и `data-oe-id` на div с именем `article`."
 
@@ -25777,7 +25777,7 @@ msgid ""
 "The value for the field '%s' already exists (this is probably '%s' in the "
 "current model)."
 msgstr ""
-"Значение для поля `%s ` уже существует (вероятно, `%s ` в текущем модуль)."
+"Значение для поля ` %s ` уже существует (вероятно, ` %s ` в текущем модуль)."
 
 #. module: base
 #: code:addons/base/models/ir_qweb_fields.py:405
@@ -25792,7 +25792,7 @@ msgid ""
 "The values for the fields '%s' already exist (they are probably '%s' in the "
 "current model)."
 msgstr ""
-"Значения для полей `%s ` уже существуют (они, вероятно, является `%s ` в "
+"Значения для полей ` %s ` уже существуют (они, вероятно, является ` %s ` в "
 "текущей модели)."
 
 #. module: base
@@ -26309,7 +26309,7 @@ msgid ""
 "%s"
 msgstr ""
 "Недопустимый перевод:\n"
-"%s"
+" %s "
 
 #. module: base
 #: model:ir.ui.menu,name:base.menu_translation
@@ -26569,7 +26569,7 @@ msgid ""
 "%s"
 msgstr ""
 "Нельзя установить модуль \"%s\" так, как не удовлетворена внешняя "
-"зависимость: %s"
+"зависимость: %s "
 
 #. module: base
 #: code:addons/base/models/ir_module.py:343
@@ -26579,7 +26579,7 @@ msgid ""
 "%s"
 msgstr ""
 "Не удалось обработать модуль \"%s\" так, как внешняя зависимость не "
-"удовлетворена: %s"
+"удовлетворена: %s "
 
 #. module: base
 #: code:addons/base/models/ir_module.py:341
@@ -26589,7 +26589,7 @@ msgid ""
 "%s"
 msgstr ""
 "Невозможно обновить модуль \"%s\" так, как внешняя зависимость не "
-"удовлетворена: %s"
+"удовлетворена: %s "
 
 #. module: base
 #: model:ir.module.category,name:base.module_category_uncategorized
@@ -26707,7 +26707,7 @@ msgstr ""
 msgid ""
 "Unrecognized extension: must be one of .csv, .po, or .tgz (received .%s)."
 msgstr ""
-"Неразрешенное расширение: должно быть .csv, .po, or .tgz (получено .%s)."
+"Неразрешенное расширение: должно быть .csv, .po, or .tgz (получено . %s)."
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_web_unsplash
@@ -27635,13 +27635,13 @@ msgid ""
 "number of subprocess reached. Message : %s"
 msgstr ""
 "Wkhtmltopdf неудался (код ошибки: %s). Предел памяти слишком мал или "
-"достигнут максимальный номер файла подпроцесса. Сообщение : %s"
+"достигнут максимальный номер файла подпроцесса. Сообщение : %s "
 
 #. module: base
 #: code:addons/base/models/ir_actions_report.py:413
 #, python-format
 msgid "Wkhtmltopdf failed (error code: %s). Message: %s"
-msgstr "Wkhtmltopdf не было выполнено (код ошибки: %s). Сообщение: %s"
+msgstr "Wkhtmltopdf не было выполнено (код ошибки: %s). Сообщение: %s "
 
 #. module: base
 #: model:ir.module.module,summary:base.module_mrp_workorder
@@ -27703,7 +27703,7 @@ msgstr "Вы приглашаете нового пользователя"
 #: code:addons/base/models/ir_module.py:423
 #, python-format
 msgid "You are trying to install incompatible modules in category \"%s\":"
-msgstr "Вы пытаетесь установить несовместимые модули в категории `%s `:"
+msgstr "Вы пытаетесь установить несовместимые модули в категории ` %s `:"
 
 #. module: base
 #: code:addons/base/models/ir_module.py:308

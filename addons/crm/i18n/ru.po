@@ -1021,7 +1021,7 @@ msgstr "Формат телефонных номеров на основе на�
 #: code:addons/crm/models/crm_lead.py:613
 #, python-format
 msgid "From %s : %s"
-msgstr "От %s: %s"
+msgstr "От %s: %s "
 
 #. module: crm
 #: model_terms:ir.ui.view,arch_db:crm.view_crm_case_leads_filter
@@ -2797,7 +2797,7 @@ msgstr "например https://www.odoo.com"
 #: code:addons/crm/models/crm_lead.py:946
 #, python-format
 msgid "or send an email to %s"
-msgstr "или отправить электронное письмо%s "
+msgstr "или отправить электронное письмо %s "
 
 #. module: crm
 #: model:ir.model.fields,field_description:crm.field_crm_stage__team_count

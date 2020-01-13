@@ -769,8 +769,8 @@ msgid ""
 "Shipment sent to carrier %s for shipping with tracking number %s<br/>Cost: "
 "%.2f %s"
 msgstr ""
-"Отправка направлено перевозчику%s  для отправки с номером отслеживания%s  "
-"<br/> Стоимость:%.2f%s "
+"Отправка направлено перевозчику %s  для отправки с номером отслеживания %s  "
+"<br/> Стоимость:%.2f %s "
 
 #. module: delivery
 #: model:ir.model.fields,field_description:delivery.field_stock_picking__carrier_price
@@ -989,7 +989,7 @@ msgid ""
 "Packaging Types: %s"
 msgstr ""
 "Вы отправляете различные типы упаковок в одной отгрузке.\n"
-"Типы упаковки: %s"
+"Типы упаковки: %s "
 
 #. module: delivery
 #: code:addons/delivery/models/sale_order.py:78

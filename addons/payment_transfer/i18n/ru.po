@@ -132,4 +132,4 @@ msgstr "Банковский Перевод"
 #: code:addons/payment_transfer/models/payment.py:79
 #, python-format
 msgid "received data for reference %s"
-msgstr "полученные данные для ссылки %s"
+msgstr "полученные данные для ссылки %s "

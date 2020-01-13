@@ -147,4 +147,4 @@ msgstr "Предупреждение"
 #: code:addons/mrp_byproduct/models/mrp_production.py:48
 #, python-format
 msgid "You cannot have %s  as the finished product and in the Byproducts"
-msgstr "Вы не можете иметь%s как завершенный товар и в побочных товарам"
+msgstr "Вы не можете иметь %s как завершенный товар и в побочных товарам"

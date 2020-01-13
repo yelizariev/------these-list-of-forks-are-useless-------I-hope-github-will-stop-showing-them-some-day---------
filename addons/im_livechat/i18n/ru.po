@@ -723,7 +723,7 @@ msgstr "Рейтинг"
 #: code:addons/im_livechat/static/src/js/im_livechat.js:420
 #, python-format
 msgid "Rating: %s"
-msgstr "Рейтинг:%s"
+msgstr "Рейтинг:%s "
 
 #. module: im_livechat
 #: model_terms:ir.ui.view,arch_db:im_livechat.im_livechat_channel_view_kanban

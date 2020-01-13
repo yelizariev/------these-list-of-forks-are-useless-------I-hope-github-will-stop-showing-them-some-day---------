@@ -1875,13 +1875,13 @@ msgstr "Эта пометка будет показана в заказах на
 #: code:addons/purchase/models/account_invoice.py:156
 #, python-format
 msgid "This vendor bill has been created from: %s"
-msgstr "Этот счет поставщика создан от: %s"
+msgstr "Этот счет поставщика создан от: %s "
 
 #. module: purchase
 #: code:addons/purchase/models/account_invoice.py:170
 #, python-format
 msgid "This vendor bill has been modified from: %s"
-msgstr "Этот счет поставщика изменен от: %s"
+msgstr "Этот счет поставщика изменен от: %s "
 
 #. module: purchase
 #: model_terms:ir.actions.act_window,help:purchase.act_res_partner_2_purchase_order
@@ -2097,7 +2097,7 @@ msgstr "Предупреждение"
 #: code:addons/purchase/models/purchase.py:574
 #, python-format
 msgid "Warning for %s"
-msgstr "Предупреждение для %s"
+msgstr "Предупреждение для %s "
 
 #. module: purchase
 #: model_terms:ir.ui.view,arch_db:purchase.res_partner_view_purchase_buttons

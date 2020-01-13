@@ -542,7 +542,7 @@ msgstr "На этой задаче можно записывать табеле.
 msgid ""
 "To allow timesheet, your project %s should have an analytic account set."
 msgstr ""
-"Чтобы позволить табель, ваш проект%s должен иметь установленные "
+"Чтобы позволить табель, ваш проект %s должен иметь установленные "
 "аналитические счета."
 
 #. module: hr_timesheet

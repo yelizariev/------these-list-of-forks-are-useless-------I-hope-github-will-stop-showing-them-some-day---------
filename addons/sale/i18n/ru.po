@@ -443,7 +443,7 @@ msgstr "<strong>Ваша ссылка:</strong>"
 #: code:addons/sale/models/sale.py:811
 #, python-format
 msgid "A journal must be specified of the acquirer %s."
-msgstr "Журнал должен быть указан эквайером%s."
+msgstr "Журнал должен быть указан эквайером %s."
 
 #. module: sale
 #: code:addons/sale/models/sale.py:804
@@ -599,7 +599,7 @@ msgstr "Адреса в заказах продаж"
 #: code:addons/sale/wizard/sale_make_invoice_advance.py:165
 #, python-format
 msgid "Advance: %s"
-msgstr "Продвижение: %s"
+msgstr "Продвижение: %s "
 
 #. module: sale
 #: model:ir.model.fields,help:sale.field_product_attribute_value__is_custom
@@ -1367,7 +1367,7 @@ msgstr "Авансовый платеж (в процентах)"
 #: code:addons/sale/wizard/sale_make_invoice_advance.py:84
 #, python-format
 msgid "Down payment of %s%%"
-msgstr "Авансовый платеж %s%%"
+msgstr "Авансовый платеж %s %%"
 
 #. module: sale
 #: model:ir.model.fields,help:sale.field_sale_order_line__is_downpayment
@@ -1632,13 +1632,13 @@ msgstr "Неверный заказ"
 #: code:addons/sale/models/sale.py:794
 #, python-format
 msgid "Invalid token found! Token acquirer %s != %s"
-msgstr "Найдено недействителен токен! Эквайер токена%s! =%s"
+msgstr "Найдено недействителен токен! Эквайер токена %s ! = %s "
 
 #. module: sale
 #: code:addons/sale/models/sale.py:797
 #, python-format
 msgid "Invalid token found! Token partner %s != %s"
-msgstr "Найдено недействителен токен! Партнер токена%s! =%s"
+msgstr "Найдено недействителен токен! Партнер токена %s ! = %s "
 
 #. module: sale
 #: model:ir.model,name:sale.model_account_invoice
@@ -1867,13 +1867,13 @@ msgid ""
 "%s"
 msgstr ""
 "В заблокированном заказе запрещено редактировать следующие поля:\n"
-"%s"
+" %s "
 
 #. module: sale
 #: code:addons/sale/models/sale.py:667
 #, python-format
 msgid "It is not allowed to confirm an order in the following states: %s"
-msgstr "Запрещается подтверждать заказ на следующих этапах:%s"
+msgstr "Запрещается подтверждать заказ на следующих этапах:%s "
 
 #. module: sale
 #: selection:res.company,sale_onboarding_order_confirmation_state:0
@@ -2353,7 +2353,7 @@ msgstr "Заказ не находится в состоянии, требует
 #: code:addons/sale/controllers/portal.py:215
 #, python-format
 msgid "Order signed by %s"
-msgstr "Заказ подписан %s"
+msgstr "Заказ подписан %s "
 
 #. module: sale
 #: model_terms:ir.ui.view,arch_db:sale.crm_team_salesteams_view_kanban
@@ -4080,8 +4080,8 @@ msgid ""
 "Upsell <a href='#' data-oe-model='%s' data-oe-id='%d'>%s</a> for customer <a"
 " href='#' data-oe-model='%s' data-oe-id='%s'>%s</a>"
 msgstr ""
-"Допродажа <a href='#' data-oe-model='%s' data-oe-id='%d'>%s</a> для клиента "
-"<a href='#' data-oe-model='%s' data-oe-id='%s'>%s</a>"
+"Допродажа <a href='#' data-oe-model='%s' data-oe-id='%d'> %s </a> для "
+"клиента <a href='#' data-oe-model='%s' data-oe-id='%s'> %s </a>"
 
 #. module: sale
 #: selection:sale.order,invoice_status:0
@@ -4155,7 +4155,7 @@ msgstr "Предупреждение"
 #: code:addons/sale/models/sale.py:1417
 #, python-format
 msgid "Warning for %s"
-msgstr "Предупреждение для %s"
+msgstr "Предупреждение для %s "
 
 #. module: sale
 #: model_terms:ir.ui.view,arch_db:sale.res_partner_view_buttons

@@ -403,8 +403,8 @@ msgid ""
 "When products are needed in <b>%s</b>, <br/> a request for quotation is "
 "created to fulfill the need."
 msgstr ""
-"Когда товары необходимые <b>в%s,</b> <br/> запрос предложения создается для "
-"выполнения необходимости."
+"Когда товары необходимые <b>в %s,</b> <br/> запрос предложения создается для"
+" выполнения необходимости."
 
 #. module: purchase_stock
 #: code:addons/purchase_stock/models/purchase.py:257
@@ -420,7 +420,7 @@ msgstr ""
 #: code:addons/purchase_stock/models/purchase.py:186
 #, python-format
 msgid "You must set a Vendor Location for this partner %s"
-msgstr "Вы должны указать местоположение Поставщика для партнера  %s"
+msgstr "Вы должны указать местоположение Поставщика для партнера  %s "
 
 #. module: purchase_stock
 #: model_terms:ir.ui.view,arch_db:purchase_stock.res_config_settings_view_form_stock

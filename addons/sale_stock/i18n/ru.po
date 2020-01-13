@@ -33,7 +33,7 @@ msgid ""
 "\n"
 "There are %s %s available across all warehouses.\n"
 "\n"
-msgstr "В наличии%s%s на всех складах."
+msgstr "В наличии %s %s на всех складах."
 
 #. module: sale_stock
 #: model_terms:ir.ui.view,arch_db:sale_stock.exception_on_picking
@@ -215,7 +215,7 @@ msgstr "Отображать Инкотермс на заказах и счет�
 #, python-format
 msgid ""
 "Do not forget to change the partner on the following delivery orders: %s"
-msgstr "Не забудьте сменить партнера на следующем заказе на доставку:%s"
+msgstr "Не забудьте сменить партнера на следующем заказе на доставку:%s "
 
 #. module: sale_stock
 #: model:ir.model.fields,field_description:sale_stock.field_sale_order__effective_date
@@ -632,7 +632,7 @@ msgid ""
 "You plan to sell %s %s of %s but you only have %s %s available in %s "
 "warehouse."
 msgstr ""
-"Вы планируете продать%s%s от%s Но у вас есть только%s%s доступен на%s "
+"Вы планируете продать %s %s от %s Но у вас есть только %s %s доступен на %s "
 "составе."
 
 #. module: sale_stock

@@ -1054,7 +1054,7 @@ msgstr "Предупредительная мера"
 #: code:addons/maintenance/models/maintenance.py:231
 #, python-format
 msgid "Preventive Maintenance - %s"
-msgstr "Профилактическое обслуживание -%s"
+msgstr "Профилактическое обслуживание - %s "
 
 #. module: maintenance
 #: model_terms:ir.ui.view,arch_db:maintenance.hr_equipment_view_form
@@ -1134,7 +1134,7 @@ msgstr "Запрос выполнен"
 msgid "Request planned for <a href=\"#\" data-oe-model=\"%s\" data-oe-id=\"%s\">%s</a>"
 msgstr ""
 "Запрос запланировано для <a href=\"#\" data-oe-model=\"%s\" data-oe-"
-"id=\"%s\">%s</a>"
+"id=\"%s\"> %s </a>"
 
 #. module: maintenance
 #: model_terms:ir.ui.view,arch_db:maintenance.hr_equipment_request_view_form

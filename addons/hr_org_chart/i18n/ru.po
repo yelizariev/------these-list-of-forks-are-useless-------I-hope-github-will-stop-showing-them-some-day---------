@@ -25,7 +25,7 @@ msgstr ""
 #: code:addons/hr_org_chart/static/src/js/hr_org_chart.js:137
 #, python-format
 msgid "Direct Subordinates of %s"
-msgstr "Предназначены подчиненные%s"
+msgstr "Предназначены подчиненные %s "
 
 #. module: hr_org_chart
 #. openerp-web
@@ -51,7 +51,7 @@ msgstr "Чтобы получить организацию, установите
 #: code:addons/hr_org_chart/static/src/js/hr_org_chart.js:147
 #, python-format
 msgid "Indirect Subordinates of %s"
-msgstr "Не предназначены подчиненные%s"
+msgstr "Не предназначены подчиненные %s "
 
 #. module: hr_org_chart
 #: model:ir.model.fields,field_description:hr_org_chart.field_hr_employee__child_all_count
@@ -96,7 +96,7 @@ msgstr "Перенаправление"
 #: code:addons/hr_org_chart/static/src/js/hr_org_chart.js:140
 #, python-format
 msgid "Subordinates of %s"
-msgstr "Подчиненные%s"
+msgstr "Подчиненные %s "
 
 #. module: hr_org_chart
 #. openerp-web

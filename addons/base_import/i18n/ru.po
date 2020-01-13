@@ -93,7 +93,7 @@ msgstr "Колонка %s содержит неверные значения (з
 #: code:addons/base_import/models/base_import.py:788
 #, python-format
 msgid "Column %s contains incorrect values. Error in line %d: %s"
-msgstr "Столбец %s содержит неверные значения. Ошибка в строке %d: %s"
+msgstr "Столбец %s содержит неверные значения. Ошибка в строке %d: %s "
 
 #. module: base_import
 #: model:ir.model.fields,field_description:base_import.field_base_import_mapping__column_name
@@ -280,13 +280,13 @@ msgstr "Кодировка:"
 #: code:addons/base_import/models/base_import.py:790
 #, python-format
 msgid "Error Parsing Date [%s:L%d]: %s"
-msgstr "Ошибка парсинга данных [%s: L %d]: %s"
+msgstr "Ошибка парсинга данных [ %s: L %d]: %s "
 
 #. module: base_import
 #: code:addons/base_import/models/base_import.py:289
 #, python-format
 msgid "Error cell found while reading XLS/XLSX file: %s"
-msgstr "Найдены ошибки в ячейках при чтении файла XLS/XLSX: %s"
+msgstr "Найдены ошибки в ячейках при чтении файла XLS/XLSX: %s "
 
 #. module: base_import
 #. openerp-web

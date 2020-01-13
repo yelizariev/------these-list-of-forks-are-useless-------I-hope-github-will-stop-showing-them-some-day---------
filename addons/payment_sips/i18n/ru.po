@@ -123,7 +123,7 @@ msgstr "Sips"
 #: code:addons/payment_sips/models/payment.py:160
 #, python-format
 msgid "Sips: received data for reference %s"
-msgstr "Sips: полученные данные для ссылки %s"
+msgstr "Sips: полученные данные для ссылки %s "
 
 #. module: payment_sips
 #: selection:payment.acquirer,provider:0

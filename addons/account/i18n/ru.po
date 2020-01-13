@@ -80,7 +80,7 @@ msgstr ""
 #: code:addons/account/models/account.py:937
 #, python-format
 msgid "%s (Copy)"
-msgstr "%s (Копия)"
+msgstr " %s (Копия)"
 
 #. module: account
 #: code:addons/account/models/account.py:242
@@ -90,13 +90,13 @@ msgstr "%s (Копия)"
 #: code:addons/account/models/account.py:598
 #, python-format
 msgid "%s (copy)"
-msgstr "%s (копия)"
+msgstr " %s (копия)"
 
 #. module: account
 #: code:addons/account/models/account.py:688
 #, python-format
 msgid "%s Sequence"
-msgstr "%s Последовательность"
+msgstr " %s Последовательность"
 
 #. module: account
 #: model_terms:ir.ui.view,arch_db:account.report_invoice_document
@@ -888,7 +888,7 @@ msgid ""
 "Account %s (%s) does not allow reconciliation. First change the "
 "configuration of this account to allow it."
 msgstr ""
-"Счет%s  (%s ) не позволяет согласования. Сначала измените настройки этого "
+"Счет %s  (%s ) не позволяет согласования. Сначала измените настройки этого "
 "счета, чтобы позволить согласования."
 
 #. module: account
@@ -2253,7 +2253,7 @@ msgstr "Банковская выписка"
 #: code:addons/account/models/account_bank_statement.py:591
 #, python-format
 msgid "Bank Statement %s"
-msgstr "Банковская выписка %s"
+msgstr "Банковская выписка %s "
 
 #. module: account
 #: model:ir.model,name:account.model_account_bank_statement_cashbox
@@ -3293,8 +3293,8 @@ msgid ""
 "Correction of <a href=# data-oe-model=account.invoice data-oe-"
 "id=%d>%s</a><br>Reason: %s"
 msgstr ""
-"Коррекция <a href=# data-oe-model=account.invoice data-oe-id=%d>%s </a> <br>"
-" Причина:%s "
+"Коррекция <a href=# data-oe-model=account.invoice data-oe-id=%d> %s </a> "
+"<br> Причина:%s "
 
 #. module: account
 #: model:account.account.type,name:account.data_account_type_direct_costs
@@ -3530,7 +3530,7 @@ msgstr "Создано"
 #: code:addons/account/models/account_invoice.py:419
 #, python-format
 msgid "Created by: %s"
-msgstr "Он создал%s "
+msgstr "Он создал %s "
 
 #. module: account
 #: model:ir.model.fields,field_description:account.field_account_account__create_date
@@ -3631,7 +3631,7 @@ msgstr "Кредит-нота"
 #: code:addons/account/models/account_invoice.py:487
 #, python-format
 msgid "Credit Note - %s"
-msgstr "Сторно -%s "
+msgstr "Сторно - %s "
 
 #. module: account
 #: model_terms:ir.ui.view,arch_db:account.account_journal_dashboard_kanban_view
@@ -5736,7 +5736,7 @@ msgstr "Счет на оплату #"
 #: code:addons/account/models/account_invoice.py:485
 #, python-format
 msgid "Invoice - %s"
-msgstr "Счет -%s "
+msgstr "Счет - %s "
 
 #. module: account
 #: model:mail.message.subtype,description:account.mt_invoice_created
@@ -7558,10 +7558,9 @@ msgid ""
 "href=#id=%s&model=account.journal>email alias</a> to allow draft vendor "
 "bills to be created upon reception of an email."
 msgstr ""
-"Или установите <a data-oe-id=%s data-oe-model=\"account.journal\" "
-"href=#id=%s&model=account.journal>псевдоним электронной почты</a> чтобы "
-"разрешить создание проектов счетов поставщиков после получения электронного "
-"письма."
+"Или установите <a data-oe-id= %s data-oe-model=\"account.journal\" href=#id="
+" %s &model=account.journal>псевдоним электронной почты</a> чтобы разрешить "
+"создание проектов счетов поставщиков после получения электронного письма."
 
 #. module: account
 #: code:addons/account/models/account_invoice.py:692
@@ -7570,7 +7569,7 @@ msgid ""
 "Or share the email %s to your vendors: bills will be created automatically "
 "upon mail reception."
 msgstr ""
-"Или отправьте электронное письмо%s  вашим поставщикам: счета будут созданы "
+"Или отправьте электронное письмо %s  вашим поставщикам: счета будут созданы "
 "автоматически при получении почты."
 
 #. module: account
@@ -7580,7 +7579,7 @@ msgid ""
 "Or share the emails %s to your vendors: bills will be created automatically "
 "upon mail reception."
 msgstr ""
-"Или отправьте электронные письма%s  вашим поставщикам: счета будут созданы "
+"Или отправьте электронные письма %s  вашим поставщикам: счета будут созданы "
 "автоматически при получении почты."
 
 #. module: account
@@ -8568,7 +8567,7 @@ msgstr "Запись операций в иностранной валюте"
 #: code:addons/account/models/account.py:930
 #, python-format
 msgid "Recursion found for tax '%s'."
-msgstr "Рекурсия найдена для налога `%s `."
+msgstr "Рекурсия найдена для налога ` %s `."
 
 #. module: account
 #. openerp-web
@@ -10278,7 +10277,7 @@ msgstr ""
 #: code:addons/account/models/account_move.py:1059
 #, python-format
 msgid "The account %s (%s) is deprecated."
-msgstr "Счет%s  (%s ) устарел."
+msgstr "Счет %s  (%s ) устарел."
 
 #. module: account
 #: code:addons/account/models/account_invoice.py:521
@@ -10980,7 +10979,7 @@ msgid ""
 "model=account.invoice data-oe-id=%d>%s</a><br>Reason: %s"
 msgstr ""
 "Это сторно счета клиента создан с: <a href=# data-oe-model=account.invoice "
-"data-oe-id=%d>%s </a> <br> Причина:%s "
+"data-oe-id=%d> %s </a> <br> Причина:%s "
 
 #. module: account
 #: model_terms:ir.ui.view,arch_db:account.res_config_settings_view_form
@@ -11142,7 +11141,7 @@ msgid ""
 "model=account.invoice data-oe-id=%d>%s</a><br>Reason: %s"
 msgstr ""
 "Это сторно счета поставщика создан с: <a href=# data-oe-"
-"model=account.invoice data-oe-id=%d>%s </a> <br> Причина:%s "
+"model=account.invoice data-oe-id=%d> %s </a> <br> Причина:%s "
 
 #. module: account
 #: model_terms:ir.actions.act_window,help:account.action_validate_account_move
@@ -11361,13 +11360,13 @@ msgstr "Перечислить"
 #: code:addons/account/models/account_payment.py:714
 #, python-format
 msgid "Transfer from %s"
-msgstr "Трансфер из %s"
+msgstr "Трансфер из %s "
 
 #. module: account
 #: code:addons/account/models/account_payment.py:790
 #, python-format
 msgid "Transfer to %s"
-msgstr "Трансфер в %s"
+msgstr "Трансфер в %s "
 
 #. module: account
 #: model_terms:ir.ui.view,arch_db:account.view_account_payment_search
@@ -11754,7 +11753,7 @@ msgstr "Счет от поставщика"
 #: code:addons/account/models/account_invoice.py:489
 #, python-format
 msgid "Vendor Bill - %s"
-msgstr "Счет от поставщика - %s"
+msgstr "Счет от поставщика - %s "
 
 #. module: account
 #: code:addons/account/models/chart_template.py:410
@@ -11776,7 +11775,7 @@ msgstr "Кредитное обязательство поставщика"
 #: code:addons/account/models/account_invoice.py:491
 #, python-format
 msgid "Vendor Credit Note - %s"
-msgstr "Кредитное обязательство поставщика - %s"
+msgstr "Кредитное обязательство поставщика - %s "
 
 #. module: account
 #: code:addons/account/models/account_invoice.py:1317
@@ -11847,7 +11846,7 @@ msgstr "Предупреждение"
 #: code:addons/account/models/account_invoice.py:852
 #, python-format
 msgid "Warning for %s"
-msgstr "Предупреждение для %s"
+msgstr "Предупреждение для %s "
 
 #. module: account
 #: model_terms:ir.ui.view,arch_db:account.partner_view_buttons
@@ -12064,7 +12063,8 @@ msgstr ""
 #, python-format
 msgid ""
 "You cannot add/modify entries prior to and inclusive of the lock date %s"
-msgstr "Нельзя добавлять/изменять записи до и включительно даты блокировки %s"
+msgstr ""
+"Нельзя добавлять/изменять записи до и включительно даты блокировки %s "
 
 #. module: account
 #: code:addons/account/models/account_move.py:375
@@ -12175,7 +12175,7 @@ msgid ""
 "%s."
 msgstr ""
 "Вы не можете сделать эту модификацию на размещенную запись в журнале, вы можете просто изменить некоторые не правовые поля. Необходимо вернуть в прежнее состояние бухгалтерскую проводку для ее отмены.\n"
-"%s."
+" %s."
 
 #. module: account
 #: code:addons/account/models/account_move.py:1148
@@ -12185,7 +12185,7 @@ msgid ""
 "%s."
 msgstr ""
 "Вы не можете сделать эту модификацию на сверенной записи. Вы можете просто изменить некоторые не правовые поля или необходимо сначала нажать кнопку отменить сверку.\n"
-"%s."
+" %s."
 
 #. module: account
 #: code:addons/account/models/account.py:64

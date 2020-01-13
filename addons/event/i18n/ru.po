@@ -37,7 +37,7 @@ msgstr "${object.event_id.name}: ${object.get_date_range_str()}"
 #: code:addons/event/models/event.py:303
 #, python-format
 msgid "%s (copy)"
-msgstr "%s (копия)"
+msgstr " %s (копия)"
 
 #. module: event
 #: model_terms:ir.ui.view,arch_db:event.event_event_report_template_badge
@@ -1074,9 +1074,9 @@ msgid ""
 "                              - or the last writer of the template."
 msgstr ""
 "Расписание события для: - Событие:%s (%s) - Запланировано:%s - Шаблон:%s "
-"(%s) Отклонено с ошибкой -%s Вы получаете этот электронное письмо, поскольку"
-" вы: - организатором мероприятия, - или ответственным за произошедшее, - или"
-" последним, кто редактировал шаблон."
+"(%s) Отклонено с ошибкой - %s Вы получаете этот электронное письмо, "
+"поскольку вы: - организатором мероприятия, - или ответственным за "
+"произошедшее, - или последним, кто редактировал шаблон."
 
 #. module: event
 #: model:ir.model.fields,field_description:event.field_event_registration__event_begin_date
@@ -1995,7 +1995,7 @@ msgstr "Видимость"
 #: code:addons/event/models/event_mail.py:130
 #, python-format
 msgid "WARNING: Event Scheduler Error for event: %s"
-msgstr "ВНИМАНИЕ: Ошибка планирования события:%s"
+msgstr "ВНИМАНИЕ: Ошибка планирования события:%s "
 
 #. module: event
 #: model_terms:event.event,description:event.event_2

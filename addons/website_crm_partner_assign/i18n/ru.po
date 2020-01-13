@@ -1116,13 +1116,13 @@ msgstr "Нумерация"
 #: code:addons/website_crm_partner_assign/wizard/crm_forward_to_partner.py:73
 #, python-format
 msgid "Set an email address for the partner %s"
-msgstr "Задайте адрес электронной почты для партнера %s"
+msgstr "Задайте адрес электронной почты для партнера %s "
 
 #. module: website_crm_partner_assign
 #: code:addons/website_crm_partner_assign/wizard/crm_forward_to_partner.py:71
 #, python-format
 msgid "Set an email address for the partner(s): %s"
-msgstr "Задайте адрес электронной почты для партнер(ов): %s"
+msgstr "Задайте адрес электронной почты для партнер(ов): %s "
 
 #. module: website_crm_partner_assign
 #: model:res.partner.grade,name:website_crm_partner_assign.res_partner_grade_silver

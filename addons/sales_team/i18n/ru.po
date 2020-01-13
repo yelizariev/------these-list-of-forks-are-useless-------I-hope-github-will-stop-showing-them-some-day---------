@@ -515,7 +515,7 @@ msgstr "Тип"
 #: code:addons/sales_team/models/crm_team.py:178
 #, python-format
 msgid "Undefined graph model for Sales Team: %s"
-msgstr "Неопределенная модель графы для команды продаж:%s"
+msgstr "Неопределенная модель графы для команды продаж:%s "
 
 #. module: sales_team
 #: model:ir.model.fields,field_description:sales_team.field_crm_team__message_unread

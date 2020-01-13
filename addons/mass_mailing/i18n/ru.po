@@ -53,7 +53,7 @@ msgstr "% <br/> <strong>ответы</strong>"
 #: code:addons/mass_mailing/models/mass_mailing.py:606
 #, python-format
 msgid "%s (copy)"
-msgstr "%s (копия)"
+msgstr " %s (копия)"
 
 #. module: mass_mailing
 #: model_terms:ir.ui.view,arch_db:mass_mailing.s_mail_block_discount1
@@ -950,7 +950,7 @@ msgstr "Неудачно"
 #: code:addons/mass_mailing/controllers/main.py:153
 #, python-format
 msgid "Feedback from %s: %s"
-msgstr "Отзыв от%s:%s"
+msgstr "Отзыв от %s:%s "
 
 #. module: mass_mailing
 #: model:mail.mass_mailing,name:mass_mailing.mass_mail_1
@@ -2211,13 +2211,14 @@ msgstr ""
 #: code:addons/mass_mailing/models/mass_mailing.py:624
 #, python-format
 msgid "The recipient <strong>subscribed to %s</strong> mailing list(s)"
-msgstr "Получатель <strong>подписался на%s</strong> список (ы) рассылки"
+msgstr "Получатель <strong>подписался на %s </strong> список (ы) рассылки"
 
 #. module: mass_mailing
 #: code:addons/mass_mailing/models/mass_mailing.py:623
 #, python-format
 msgid "The recipient <strong>unsubscribed from %s</strong> mailing list(s)"
-msgstr "Получатель <strong>отменил подписку на%s</strong> список (ы) рассылки"
+msgstr ""
+"Получатель <strong>отменил подписку на %s </strong> список (ы) рассылки"
 
 #. module: mass_mailing
 #: code:addons/mass_mailing/models/mass_mailing.py:823
@@ -2345,7 +2346,7 @@ msgstr "Дата отписки"
 #: code:addons/mass_mailing/models/mass_mailing.py:880
 #, python-format
 msgid "Unsupported mass mailing model %s"
-msgstr "Неподдерживаемая модель массовой рассылки%s"
+msgstr "Неподдерживаемая модель массовой рассылки %s "
 
 #. module: mass_mailing
 #: model_terms:ir.ui.view,arch_db:mass_mailing.unsubscribe
@@ -2503,7 +2504,7 @@ msgstr "Вы не подписаны на какой-либо из нашего 
 #: code:addons/mass_mailing/static/src/js/unsubscribe.js:50
 #, python-format
 msgid "You have been <strong>successfully unsubscribed from %s</strong>."
-msgstr "Вы <strong>успешно отписались от%s.</strong>"
+msgstr "Вы <strong>успешно отписались от %s.</strong>"
 
 #. module: mass_mailing
 #. openerp-web

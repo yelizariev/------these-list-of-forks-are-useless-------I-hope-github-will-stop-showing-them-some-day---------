@@ -98,7 +98,7 @@ msgstr "Строка расчетного листка"
 #: code:addons/hr_payroll_account/models/hr_payroll_account.py:65
 #, python-format
 msgid "Payslip of %s"
-msgstr "Расчетный листок %s"
+msgstr "Расчетный листок %s "
 
 #. module: hr_payroll_account
 #: model:ir.model.fields,field_description:hr_payroll_account.field_hr_contract__journal_id

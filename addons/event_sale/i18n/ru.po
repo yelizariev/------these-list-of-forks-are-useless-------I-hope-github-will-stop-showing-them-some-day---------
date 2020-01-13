@@ -327,7 +327,7 @@ msgstr "Регистрация"
 #: code:addons/event_sale/models/event.py:51
 #, python-format
 msgid "Registration for %s"
-msgstr "Регистрация для %s"
+msgstr "Регистрация для %s "
 
 #. module: event_sale
 #: model:ir.model.fields,field_description:event_sale.field_event_event_ticket__registration_ids

@@ -44,7 +44,7 @@ msgstr "Менеджер оповещения о событии"
 #: code:addons/calendar_sms/models/calendar.py:23
 #, python-format
 msgid "Event reminder: %s on %s."
-msgstr "Напоминание о событии:%s  на%s ."
+msgstr "Напоминание о событии:%s  на %s ."
 
 #. module: calendar_sms
 #: selection:calendar.alarm,type:0

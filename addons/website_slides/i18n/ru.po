@@ -569,7 +569,7 @@ msgid ""
 "Here is the received response: %s"
 msgstr ""
 "Не можете получить данные из URL-адреса. Документ или доступ право не предоставляется.\n"
-"Вот полученный ответ: %s"
+"Вот полученный ответ: %s "
 
 #. module: website_slides
 #: code:addons/website_slides/models/slides.py:330
@@ -579,7 +579,7 @@ msgid ""
 "%s"
 msgstr ""
 "Не удалось получить данные из URL. Документ или права доступа не доступны:\n"
-"%s"
+" %s "
 
 #. module: website_slides
 #: model_terms:ir.actions.act_window,help:website_slides.action_slide_channels
@@ -936,7 +936,7 @@ msgid ""
 "Here is the error message: %s"
 msgstr ""
 "Внутренняя ошибка сервера, пожалуйста попробуйте позже или свяжитесь с администратором.\n"
-"Сообщение о ошибке: %s"
+"Сообщение о ошибке: %s "
 
 #. module: website_slides
 #. openerp-web
@@ -1247,8 +1247,8 @@ msgstr "Пожалуйста"
 #, python-format
 msgid "Please <a href=\"/web?redirect=%s\">login</a> to vote this slide"
 msgstr ""
-"Пожалуйста <a href=\"/web?redirect=%s\">войдите</a> чтобы голосовать за этот"
-" слайд"
+"Пожалуйста <a href=\"/web?redirect= %s\">войдите</a> чтобы голосовать за "
+"этот слайд"
 
 #. module: website_slides
 #: code:addons/website_slides/models/slides.py:333
@@ -1597,7 +1597,7 @@ msgid ""
 "href=\"/slides/slide/%s\">click here to view it </a>"
 msgstr ""
 "Это видео уже существует в этом канале <a target=\"_blank\" "
-"href=\"/slides/slide/%s\">нажмите здесь для посмотра </a>"
+"href=\"/slides/slide/ %s\">нажмите здесь для посмотра </a>"
 
 #. module: website_slides
 #: model:ir.model.fields,field_description:website_slides.field_slide_slide__image_thumb

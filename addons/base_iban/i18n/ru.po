@@ -44,7 +44,7 @@ msgid ""
 "The IBAN does not seem to be correct. You should have entered something like this %s\n"
 "Where B = National bank code, S = Branch code, C = Account No, k = Check digit"
 msgstr ""
-"IBAN не кажется правильным. Вы должны ввести что-то вроде этого %s\n"
+"IBAN не кажется правильным. Вы должны ввести что-то вроде этого %s \n"
 "Где B = Национальный банковский код S = Код Филиала, C = № счета, k = Контрольная цифра"
 
 #. module: base_iban

@@ -39,26 +39,26 @@ msgid ""
 "%s at %s To\n"
 " %s at %s (%s)"
 msgstr ""
-"%s в %s на\n"
-"%s в %s (%s)"
+" %s в %s на\n"
+" %s в %s (%s)"
 
 #. module: calendar
 #: code:addons/calendar/models/calendar.py:732
 #, python-format
 msgid "%s at (%s To %s) (%s)"
-msgstr "%s в (%s на %s) (%s)"
+msgstr " %s в (%s на %s) (%s)"
 
 #. module: calendar
 #: code:addons/calendar/models/calendar.py:229
 #, python-format
 msgid "%s has accepted invitation"
-msgstr "%s, приглашение принято"
+msgstr " %s, приглашение принято"
 
 #. module: calendar
 #: code:addons/calendar/models/calendar.py:237
 #, python-format
 msgid "%s has declined invitation"
-msgstr "%s, приглашение отклонено"
+msgstr " %s, приглашение отклонено"
 
 #. module: calendar
 #: model:calendar.alarm,name:calendar.alarm_notif_5
@@ -378,7 +378,7 @@ msgstr "Весь день"
 #: code:addons/calendar/models/calendar.py:728
 #, python-format
 msgid "AllDay , %s"
-msgstr "Целый день , %s"
+msgstr "Целый день , %s "
 
 #. module: calendar
 #: sql_constraint:calendar.contacts:0
@@ -935,7 +935,7 @@ msgstr "Встреча"
 #: code:addons/calendar/models/calendar.py:947
 #, python-format
 msgid "Meeting '%s' starts '%s' and ends '%s'"
-msgstr "Встреча `%s ` начинается `%s ` и заканчивается `%s `"
+msgstr "Встреча ` %s ` начинается ` %s ` и заканчивается ` %s `"
 
 #. module: calendar
 #: model_terms:ir.ui.view,arch_db:calendar.view_calendar_event_form

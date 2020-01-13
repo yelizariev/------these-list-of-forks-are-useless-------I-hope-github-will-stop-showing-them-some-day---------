@@ -128,7 +128,7 @@ msgid ""
 "A payment of %s %s with the reference <a href='/mail/view?%s'>%s</a> related"
 " to your expense %s has been made."
 msgstr ""
-"Оплата%s %s со ссылкой<a href='/mail/view?%s'>%s</a> связанное с вашими "
+"Оплата %s %s со ссылкой<a href='/mail/view? %s'> %s </a> связанное с вашими "
 "расходами %s было сделано."
 
 #. module: hr_expense
@@ -909,7 +909,7 @@ msgid ""
 "No Expense account found for the product %s (or for its category), please "
 "configure one."
 msgstr ""
-"Нет счета расходов для товара%s (или для своей категории), пожалуйста, "
+"Нет счета расходов для товара %s (или для своей категории), пожалуйста, "
 "настройте его."
 
 #. module: hr_expense
