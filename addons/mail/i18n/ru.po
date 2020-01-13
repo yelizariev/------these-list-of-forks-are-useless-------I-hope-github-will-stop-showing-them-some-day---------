@@ -41,13 +41,13 @@ msgstr "Это личный канал. Присоединиться к нему
 #, python-format
 msgid "%(user_name)s invited you to follow %(document)s document: %(title)s"
 msgstr ""
-"% (User_name) s пригласил вас следить% (document) s по документу:% (title) s"
+"%(User_name) s пригласил вас следить%(document) s по документу:%(title) s"
 
 #. module: mail
 #: code:addons/mail/wizard/invite.py:31
 #, python-format
 msgid "%(user_name)s invited you to follow a new document."
-msgstr "% (User_name) s пригласил вас следить за новым документом."
+msgstr "%(User_name) s пригласил вас следить за новым документом."
 
 #. module: mail
 #. openerp-web
@@ -629,8 +629,7 @@ msgstr "Добавить канал"
 #, python-format
 msgid "Add a new %(document)s or send an email to %(email_link)s"
 msgstr ""
-"Добавьте новый% (document) s или отправьте электронное письмо% (email_link) "
-"s"
+"Добавьте новый%(document) s или отправьте электронное письмо%(email_link) s"
 
 #. module: mail
 #. openerp-web
@@ -1442,14 +1441,13 @@ msgstr "Создать новое действие"
 #: code:addons/mail/models/mail_thread.py:400
 #, python-format
 msgid "Create a new %(document)s"
-msgstr "Создать новый% (document) s"
+msgstr "Создать новый%(document) s"
 
 #. module: mail
 #: code:addons/mail/models/mail_thread.py:392
 #, python-format
 msgid "Create a new %(document)s by sending an email to %(email_link)s"
-msgstr ""
-"Создать новый% (document) s направив электронное письмо% (email_link) s"
+msgstr "Создать новый%(document) s направив электронное письмо%(email_link) s"
 
 #. module: mail
 #: selection:ir.actions.server,state:0
