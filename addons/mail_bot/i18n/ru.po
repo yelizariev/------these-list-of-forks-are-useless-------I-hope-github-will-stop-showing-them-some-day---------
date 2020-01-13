@@ -1,12 +1,12 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
 # * mail_bot
-# 
+#
 # Translators:
 # Martin Trigaux, 2018
 # Vasiliy Korobatov <korobatov@gmail.com>, 2019
 # Ivan Yelizariev <yelizariev@it-projects.info>, 2019
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server saas~11.5\n"
@@ -15,10 +15,10 @@ msgstr ""
 "PO-Revision-Date: 2018-08-24 09:20+0000\n"
 "Last-Translator: Ivan Yelizariev <yelizariev@it-projects.info>, 2019\n"
 "Language-Team: Russian (https://www.transifex.com/odoo/teams/41243/ru/)\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Language: ru\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 
 #. module: mail_bot
@@ -161,8 +161,8 @@ msgid ""
 "Not exactly. To continue the tour, send an emoji, <b>type \":)\"</b> and "
 "press enter."
 msgstr ""
-"Не совсем. Чтобы продолжить тур, отправьте смайлик <b>введите "
-"&quot;:)&quot;</b> и нажмите enter."
+"Не совсем. Чтобы продолжить тур, отправьте смайлик <b>введите `:)`</b> и "
+"нажмите enter."
 
 #. module: mail_bot
 #: selection:res.users,odoobot_state:0
@@ -176,8 +176,8 @@ msgid ""
 "Not sure wat you are doing. Please press / and wait for the propositions. "
 "Select \"help\" and press enter"
 msgstr ""
-"Не уверен, что вы делаете. Нажмите / и ждите предложений. Выберите "
-"&quot;помощь&quot; и нажмите enter"
+"Не уверен, что вы делаете. Нажмите / и ждите предложений. Выберите `помощь` "
+"и нажмите enter"
 
 #. module: mail_bot
 #. openerp-web
@@ -268,7 +268,7 @@ msgid ""
 "Write \"@odoobot\" and select me."
 msgstr ""
 "К сожалению, я не слушаю. Чтобы привлечь чье-то внимание, <b>свисните "
-"ему.</b> Напишите &quot;@odoobot&quot; и выберите меня."
+"ему.</b> Напишите `@odoobot` и выберите меня."
 
 #. module: mail_bot
 #: code:addons/mail_bot/models/mail_bot.py:61

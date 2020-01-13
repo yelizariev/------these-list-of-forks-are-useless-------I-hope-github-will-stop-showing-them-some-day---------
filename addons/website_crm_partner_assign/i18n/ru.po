@@ -1,7 +1,7 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
 # * website_crm_partner_assign
-# 
+#
 # Translators:
 # Максим Дронь <dronmax@gmail.com>, 2018
 # Max Belyanin <maxbelyanin@gmail.com>, 2018
@@ -12,7 +12,7 @@
 # Alex Puchkov <ap@alteco.co>, 2018
 # Vasiliy Korobatov <korobatov@gmail.com>, 2019
 # Ivan Yelizariev <yelizariev@it-projects.info>, 2019
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
@@ -21,10 +21,10 @@ msgstr ""
 "PO-Revision-Date: 2018-08-24 09:33+0000\n"
 "Last-Translator: Ivan Yelizariev <yelizariev@it-projects.info>, 2019\n"
 "Language-Team: Russian (https://www.transifex.com/odoo/teams/41243/ru/)\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Language: ru\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 
 #. module: website_crm_partner_assign
@@ -345,18 +345,18 @@ msgstr ""
 " &#39;partner_in_portal&#39;): Пожалуйста, свяжитесь с <a "
 "href=\"${object.get_portal_url()}\">Порталом партнера</a> для получения "
 "деталей. На каждом лиде две кнопки, которые вы должны нажать после того, как"
-" связались с лидом: &quot;Я заинтересован&quot; &amp; amp; &quot;Мне "
-"неинтересно&quot;. <br/> % Else: Вы еще не имеете доступа к нашей базе "
-"данных. Пожалуйста свяжитесь с $ {ctx [ &#39;partner_id&#39;]. User_id and "
-"ctx [ &#39;partner_id&#39;]. User_id.email and &#39;вашим менеджером "
-"аккаунта% s (% s) &quot;% (ctx [&#39; partner_id &#39;]. User_id .name, ctx "
-"[ &#39;partner_id&#39;]. user_id.email) or &#39;us&#39;}. <br/> % Endif Лед "
-"будет отправлено другому партнеру, если вы не связались с ним в течение 20 "
-"дней. <br/><br/> Спасибо, <br/> $ {Ctx [ &#39;partner_id&#39;]. User_id and "
-"ctx [ &#39;partner_id&#39;]. User_id.signature | safe or &#39;&#39;} <br/> %"
-" If not ctx [ &#39;partner_id&#39;]. User_id: PS: Похоже, у вас нет "
-"назначенного менеджера учетной записи, пожалуйста, свяжитесь с нами. % endif"
-" </div></td></tr><tr><td style=\"text-align:center;\"><hr width=\"100%\" "
+" связались с лидом: `Я заинтересован` &amp; amp; `Мне неинтересно`. <br/> % "
+"Else: Вы еще не имеете доступа к нашей базе данных. Пожалуйста свяжитесь с $"
+" {ctx [ &#39;partner_id&#39;]. User_id and ctx [ &#39;partner_id&#39;]. "
+"User_id.email and &#39;вашим менеджером аккаунта% s (% s) `% (ctx [&#39; "
+"partner_id &#39;]. User_id .name, ctx [ &#39;partner_id&#39;]. "
+"user_id.email) or &#39;us&#39;}. <br/> % Endif Лед будет отправлено другому "
+"партнеру, если вы не связались с ним в течение 20 дней. <br/><br/> Спасибо, "
+"<br/> $ {Ctx [ &#39;partner_id&#39;]. User_id and ctx [ "
+"&#39;partner_id&#39;]. User_id.signature | safe or &#39;&#39;} <br/> % If "
+"not ctx [ &#39;partner_id&#39;]. User_id: PS: Похоже, у вас нет назначенного"
+" менеджера учетной записи, пожалуйста, свяжитесь с нами. % endif "
+"</div></td></tr><tr><td style=\"text-align:center;\"><hr width=\"100%\" "
 "style=\"background-color:rgb(204,204,204);border:medium "
 "none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; "
 "margin: 16px 0px 16px 0px;\"/></td></tr></table></td></tr><!-- FOOTER "

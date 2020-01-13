@@ -1,7 +1,7 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
 # * website
-# 
+#
 # Translators:
 # Vladimir Lukianov <lvm.mobile@gmail.com>, 2018
 # Артур Чеботарь <artcha.chebotar@gmail.com>, 2018
@@ -18,7 +18,7 @@
 # Vasiliy Korobatov <korobatov@gmail.com>, 2019
 # Ivan Yelizariev <yelizariev@it-projects.info>, 2019
 # ILMIR <karamov@it-projects.info>, 2020
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
@@ -27,10 +27,10 @@ msgstr ""
 "PO-Revision-Date: 2018-08-24 09:33+0000\n"
 "Last-Translator: ILMIR <karamov@it-projects.info>, 2020\n"
 "Language-Team: Russian (https://www.transifex.com/odoo/teams/41243/ru/)\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Language: ru\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 
 #. module: website
@@ -1586,7 +1586,7 @@ msgstr "Главное меню по умолчанию"
 #: model:ir.model.fields,field_description:website.field_website__social_default_image
 #: model_terms:ir.ui.view,arch_db:website.res_config_settings_view_form
 msgid "Default Social Share Image"
-msgstr "Изображение &quot;Поделиться в соцсетях&quot; по умолчанию"
+msgstr "Изображение `Поделиться в соцсетях` по умолчанию"
 
 #. module: website
 #: model:ir.model.fields,field_description:website.field_res_config_settings__website_default_lang_id
@@ -1740,7 +1740,7 @@ msgstr "Вы хотите редактировать данные компани
 #: code:addons/website/static/src/js/menu/new_content.js:28
 #, python-format
 msgid "Do you want to install the \"%s\" App?"
-msgstr "Хотите установить модуль &quot;% s&quot;?"
+msgstr "Хотите установить модуль `% s`?"
 
 #. module: website
 #: model_terms:ir.ui.view,arch_db:website.res_config_settings_view_form
@@ -1972,7 +1972,7 @@ msgstr "появление"
 #: code:addons/website/static/src/js/menu/new_content.js:26
 #, python-format
 msgid "Failed to install \"%s\""
-msgstr "Не удалось установить &quot;% s&quot;"
+msgstr "Не удалось установить `% s`"
 
 #. module: website
 #: model_terms:ir.ui.view,arch_db:website.snippet_options
@@ -2432,7 +2432,7 @@ msgstr "Если Верно, новые учетные записи будут �
 msgid "If set, replaces the company logo as the default social share image."
 msgstr ""
 "Если установлено, заменяет логотип компании как типичное изображение на "
-"&quot;Поделиться в соцсети&quot;."
+"`Поделиться в соцсети`."
 
 #. module: website
 #: model_terms:ir.ui.view,arch_db:website.500
@@ -2545,7 +2545,7 @@ msgstr "установлена тема"
 #: code:addons/website/static/src/js/menu/new_content.js:29
 #, python-format
 msgid "Installing \"%s\""
-msgstr "Установление &quot;% s&quot;"
+msgstr "Установление `% s`"
 
 #. module: website
 #. openerp-web
@@ -4132,13 +4132,11 @@ msgid ""
 " and conditions of your use of this website and any of its products or "
 "services (collectively, \"Website\" or \"Services\")."
 msgstr ""
-"Эти условия предоставления услуг ( &quot;Условия&quot;, "
-"&quot;Соглашение&quot;) является соглашением между веб-сайтом ( "
-"&quot;Оператор веб-сайта&quot;, &quot;нас&quot;, &quot;мы&quot; или "
-"&quot;наш&quot;) и вами ( &quot;Пользователь&quot;, &quot;вы&quot; или "
-"&quot;ваш&quot; &quot;). Настоящее Соглашение устанавливает общие положения "
-"и условия вашего использования этого сайта и любых его товаров или услуг "
-"(совместно,&quot; сайт &quot;или&quot; Услуги &quot;)."
+"Эти условия предоставления услуг ( `Условия`, `Соглашение`) является "
+"соглашением между веб-сайтом ( `Оператор веб-сайта`, `нас`, `мы` или `наш`) "
+"и вами ( `Пользователь`, `вы` или `ваш` `). Настоящее Соглашение "
+"устанавливает общие положения и условия вашего использования этого сайта и "
+"любых его товаров или услуг (совместно,` сайт `или` Услуги `)."
 
 #. module: website
 #: model_terms:ir.ui.view,arch_db:website.snippet_options
@@ -4168,7 +4166,7 @@ msgstr "Это поле используется для установки/по�
 #: model_terms:ir.ui.view,arch_db:website.bs_debug_page_ir_ui_view
 #: model_terms:website.page,arch_db:website.bs_debug_page
 msgid "This is a \""
-msgstr "это &quot;"
+msgstr "это `"
 
 #. module: website
 #: model_terms:ir.ui.view,arch_db:website.s_banner
@@ -4238,8 +4236,8 @@ msgid ""
 "menu *Action*."
 msgstr ""
 "Чтобы отправить приглашение в режиме B2B, откройте контакт или выберите "
-"несколько в списке и нажмите на &quot;Управление доступом к порталу&quot; в "
-"выпадающем меню * Действие *."
+"несколько в списке и нажмите на `Управление доступом к порталу` в выпадающем"
+" меню * Действие *."
 
 #. module: website
 #: model_terms:ir.ui.view,arch_db:website.bs_debug_page_ir_ui_view

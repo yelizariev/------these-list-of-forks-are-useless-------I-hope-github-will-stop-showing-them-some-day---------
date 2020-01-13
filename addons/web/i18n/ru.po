@@ -1,7 +1,7 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
 # * web
-# 
+#
 # Translators:
 # Harry <harrierr@mail.ru>, 2018
 # Viktor Pogrebniak <vp@aifil.ru>, 2018
@@ -21,7 +21,7 @@
 # Collex100, 2019
 # Martin Trigaux, 2019
 # Ivan Yelizariev <yelizariev@it-projects.info>, 2019
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
@@ -30,10 +30,10 @@ msgstr ""
 "PO-Revision-Date: 2018-08-24 09:33+0000\n"
 "Last-Translator: Ivan Yelizariev <yelizariev@it-projects.info>, 2019\n"
 "Language-Team: Russian (https://www.transifex.com/odoo/teams/41243/ru/)\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Language: ru\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 
 #. module: web
@@ -183,7 +183,7 @@ msgstr "'%s' не является корректным целым числом"
 #: code:addons/web/static/src/js/fields/field_utils.js:548
 #, python-format
 msgid "'%s' is not a correct monetary field"
-msgstr "&quot;% S&quot; это не правильное денежное поле"
+msgstr "`% S` это не правильное денежное поле"
 
 #. module: web
 #. openerp-web
@@ -2582,7 +2582,7 @@ msgstr "Центр"
 #: code:addons/web/static/src/js/views/list/list_renderer.js:352
 #, python-format
 msgid "Please click on the \"save\" button first."
-msgstr "Пожалуйста, нажмите сначала на кнопку &quot;сохранить&quot;."
+msgstr "Пожалуйста, нажмите сначала на кнопку `сохранить`."
 
 #. module: web
 #. openerp-web
