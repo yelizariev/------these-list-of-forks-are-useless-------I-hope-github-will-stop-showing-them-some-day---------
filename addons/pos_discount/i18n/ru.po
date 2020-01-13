@@ -35,7 +35,7 @@ msgstr "Скидка"
 #. module: pos_discount
 #: model_terms:ir.ui.view,arch_db:pos_discount.pos_config_view_form_inherit_pos_discount
 msgid "Discount %"
-msgstr "% cкидки"
+msgstr ""
 
 #. module: pos_discount
 #. openerp-web

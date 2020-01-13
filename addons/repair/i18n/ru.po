@@ -81,15 +81,6 @@ msgid ""
 "    </p>\n"
 "</div>"
 msgstr ""
-"<?xml version=\"1.0\"?><div style=\"margin: 0px; padding: 0px;\"><p "
-"style=\"margin: 0px; padding: 0px;font-size: 13px;\"> Поздравляем $ "
-"{object.partner_id.name} <br/> Это ваш заказ на ремонт $ {doc_name} "
-"<strong>$ {object.name}%</strong> if object.origin: (со ссылкой: $ "
-"{object.origin})% endif% if object.invoice_method! = 'None': в сумме "
-"<strong>$ {format_amount (object.amount_total, "
-"object.pricelist_id.currency_id)}.</strong> <br/> % Else:. <br/> % Endif Вы "
-"можете ответить на это сообщение, если у вас возникли вопросы. <br/><br/> "
-"Спасибо, </p></div>"
 
 #. module: repair
 #: model_terms:ir.ui.view,arch_db:repair.report_repairorder

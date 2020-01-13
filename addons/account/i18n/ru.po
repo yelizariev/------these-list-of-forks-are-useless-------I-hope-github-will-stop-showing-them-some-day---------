@@ -218,16 +218,6 @@ msgid ""
 "</div>\n"
 "            "
 msgstr ""
-"<div style=\"margin: 0px; padding: 0px;\"><p style=\"margin: 0px; padding: "
-"0px; font-size: 13px;\"> Уважаемый (ая) $ {object.partner_id.name}% if "
-"object.partner_id.parent_id: ($ {object.partner_id.parent_id.name})% endif "
-"<br/><br/> Это ваш счет% if object.number: <strong>$ "
-"{object.number}%</strong> else: invoice% endif% if object.origin: (with "
-"reference: $ {object.origin})% endif в сумме <strong>$ {format_amount "
-"(object.amount_total, object.currency_id)}</strong> от $ "
-"{object.company_id.name}. % If object.state == 'paid `Этот счет уже оплачен."
-" % Else: Совершите платеж как можно скорее. % endif <br/><br/> Не "
-"стесняйтесь связаться с нами, если у вас есть вопросы. </p></div>"
 
 #. module: account
 #: model_terms:ir.ui.view,arch_db:account.portal_my_home_menu_invoice

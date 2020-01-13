@@ -123,17 +123,6 @@ msgid ""
 "</div>\n"
 "            "
 msgstr ""
-"<div style=\"margin: 0px; padding: 0px;\"><p style=\"margin: 0px; padding: "
-"0px; font-size: 13px;\"> % set doc_name = 'quotation' if object.state in ( "
-"'draft `,` sent') else 'order' Уважаемый $ {object.partner_id.name}% if "
-"object.partner_id.parent_id: ($ {object.partner_id.parent_id .name})% endif "
-"<br/><br/> В этом% if ctx.get ( 'proforma') прикреплении находится ваша "
-"проформа счета-фактуры% else $ {doc_name} <strong>$ {object.name}%</strong> "
-"endif% if object.origin: (with reference: $ {object.origin}) % endif в сумме"
-" <strong>$ {format_amount (object.amount_total, "
-"object.pricelist_id.currency_id)}</strong> от $ {object.company_id.name}. "
-"<br/><br/> Не стесняйтесь связаться с нами, если у вас возникли вопросы. "
-"</p></div>"
 
 #. module: sale
 #: model_terms:ir.ui.view,arch_db:sale.sale_order_portal_template
@@ -1291,7 +1280,7 @@ msgstr "Цифровой контент"
 #. module: sale
 #: model:ir.model.fields,field_description:sale.field_sale_report__discount
 msgid "Discount %"
-msgstr "% cкидки"
+msgstr ""
 
 #. module: sale
 #: model:ir.model.fields,field_description:sale.field_sale_order_line__discount

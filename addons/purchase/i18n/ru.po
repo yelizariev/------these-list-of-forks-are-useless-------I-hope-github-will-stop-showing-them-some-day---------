@@ -75,15 +75,6 @@ msgid ""
 "    </p>\n"
 "</div>"
 msgstr ""
-"<div style=\"margin: 0px; padding: 0px;\"><p style=\"margin: 0px; padding: "
-"0px; font-size: 13px;\"> Уважаемый (ая) $ {object.partner_id.name}% if "
-"object.partner_id.parent_id: ($ {object.partner_id.parent_id.name})% endif "
-"<br/><br/> В этом вложении заказ на покупку <strong>$ "
-"{object.name}%</strong> if object.partner_ref: со ссылкой: $ "
-"{object.partner_ref}% endif в сумме <strong>$ {format_amount "
-"(object.amount_total, object.currency_id)}</strong> от $ {object.company_id "
-".name}. <br/><br/> Если у вас возникли вопросы, пожалуйста, не стесняйтесь "
-"обращаться к нам. <br/><br/> С наилучшими пожеланиями, </p></div>"
 
 #. module: purchase
 #: model:mail.template,body_html:purchase.email_template_edi_purchase
@@ -107,14 +98,6 @@ msgid ""
 "    </p>\n"
 "</div>"
 msgstr ""
-"<div style=\"margin: 0px; padding: 0px;\"><p style=\"margin: 0px; padding: "
-"0px; font-size: 13px;\"> Уважаемый $ {object.partner_id.name}% if "
-"object.partner_id.parent_id: ($ {object.partner_id.parent_id.name})% endif "
-"<br/><br/> В этом вложении запрос предложения <strong>$ "
-"{object.name}%</strong> if object.partner_ref: со ссылкой: $ "
-"{object.partner_ref}% endif от $ {object.company_id.name}. <br/><br/> Если у"
-" вас возникли вопросы, пожалуйста, не стесняйтесь обращаться к нам. "
-"<br/><br/> С наилучшими пожеланиями, </p></div>"
 
 #. module: purchase
 #: model_terms:ir.ui.view,arch_db:purchase.res_config_settings_view_form_purchase

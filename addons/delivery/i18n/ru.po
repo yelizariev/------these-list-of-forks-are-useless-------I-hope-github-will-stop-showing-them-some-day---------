@@ -65,16 +65,6 @@ msgid ""
 "</div>\n"
 "        "
 msgstr ""
-"<div style=\"margin: 0px; padding: 0px;\"><p style=\"margin: 0px; padding: "
-"0px; font-size: 13px;\"> Поздравляем $ {object.partner_id.name} <br/><br/> "
-"Мы рады сообщить, что ваш заказ был отправлен. % if "
-"object.carrier_tracking_ref: Ваша ссылка на <strong>отслеживание% if "
-"object.carrier_tracking_url: <a href=\"${object.carrier_tracking_url}\" "
-"target=\"_blank\">$ {object.carrier_tracking_ref}</a> . % else: $ "
-"{object.carrier_tracking_ref}. % endif%</strong> endif <br/><br/> Для "
-"получения более подробной информации обратитесь к своему заказу на доставку."
-" <br/><br/> Спасибо, <br/> % If user and user.signature: $ {user.signature |"
-" safe}% endif </p></div>"
 
 #. module: delivery
 #: model_terms:ir.ui.view,arch_db:delivery.view_order_form_with_carrier
