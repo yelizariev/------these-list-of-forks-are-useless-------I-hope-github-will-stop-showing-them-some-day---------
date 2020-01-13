@@ -115,8 +115,8 @@ msgid ""
 "Could not retrieve URL: %(url)s [%(field_name)s: L%(line_number)d]: "
 "%(error)s"
 msgstr ""
-"Не удалось получить URL:%(url) s [%(field_name) s: L%(line_number) "
-"d]:%(error) s"
+"Не удалось получить URL:%(url)s  [%(field_name)s : L%(line_number) "
+"d]:%(error)s "
 
 #. module: base_import
 #. openerp-web

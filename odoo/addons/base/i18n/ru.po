@@ -7809,10 +7809,10 @@ msgid ""
 "                                <span colspan=\"2\">Month: %(month)s</span>\n"
 "                                <span colspan=\"2\">Day: %(day)s</span>"
 msgstr ""
-"<span colspan=\"2\">Текущий год с веком:%(year) s</span> <span "
-"colspan=\"2\">текущий год без века:%(y) s</span> <span "
-"colspan=\"2\">Луна:%(month) s</span> <span colspan=\"2\">День:%(day) "
-"s</span>"
+"<span colspan=\"2\">Текущий год с веком:%(year)s </span> <span "
+"colspan=\"2\">текущий год без века:%(y)s </span> <span "
+"colspan=\"2\">Луна:%(month)s </span> <span colspan=\"2\">День:%(day)s "
+"</span>"
 
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.sequence_view
@@ -7821,9 +7821,9 @@ msgid ""
 "                                <span colspan=\"2\">Week of the Year: %(woy)s</span>\n"
 "                                <span colspan=\"2\">Day of the Week (0:Monday): %(weekday)s</span>"
 msgstr ""
-"<span colspan=\"2\">День года:%(doy) s</span> <span colspan=\"2\">Неделя "
-"года:%(woy) s</span> <span colspan=\"2\">день недели (0: "
-"понедельник):%(weekday) s</span>"
+"<span colspan=\"2\">День года:%(doy)s </span> <span colspan=\"2\">Неделя "
+"года:%(woy)s </span> <span colspan=\"2\">день недели (0: "
+"понедельник):%(weekday)s </span>"
 
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.sequence_view
@@ -7833,9 +7833,9 @@ msgid ""
 "                                <span colspan=\"2\">Minute: %(min)s</span>\n"
 "                                <span colspan=\"2\">Second: %(sec)s</span>"
 msgstr ""
-"<span colspan=\"2\">Час 00-&gt; 24:%(h24) s</span> <span colspan=\"2\">час "
-"00-&gt; 12:%(h12) s</span> <span colspan=\"2\">Минута:%(min) s</span> <span "
-"colspan=\"2\">Секунда:%(sec) s</span>"
+"<span colspan=\"2\">Час 00-&gt; 24:%(h24)s </span> <span colspan=\"2\">час "
+"00-&gt; 12:%(h12)s </span> <span colspan=\"2\">Минута:%(min)s </span> <span "
+"colspan=\"2\">Секунда:%(sec)s </span>"
 
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.report_irmodulereference
@@ -12765,9 +12765,9 @@ msgid ""
 msgstr ""
 "Отразите формат для использования адресов, принадлежащих этой стране. Вы "
 "можете использовать строку стиля python со всеми полями адреса (например, "
-"используйте '%(street) s' to чтобы отобразить поле `street`) "
-"плюс%(state_name) s: название региона%(state_code) s код "
-"региона%(country_name) s: название страны%(country_code) s код страны"
+"используйте '%(street)s ' to чтобы отобразить поле `street`) "
+"плюс%(state_name)s : название региона%(state_code)s  код "
+"региона%(country_name)s : название страны%(country_code)s  код страны"
 
 #. module: base
 #: code:addons/base/models/ir_qweb_fields.py:225
@@ -18774,9 +18774,9 @@ msgid ""
 "'%%(field)s' and the following error was encountered when we attempted to "
 "create one: %(error_message)s"
 msgstr ""
-"Не найдено соответствующей записи для%(field_type) s '%(value) s' в поле "
+"Не найдено соответствующей записи для%(field_type)s  '%(value)s ' в поле "
 "'%%(поле) я `и возникла следующая ошибка, когда мы пытались создать "
-"его:%(error_message) s"
+"его:%(error_message)s "
 
 #. module: base
 #: model:ir.model.fields,field_description:base.field_ir_actions_act_window__view_ids
@@ -25708,13 +25708,13 @@ msgstr ""
 msgid ""
 "The server refused the sender address (%(email_from)s) with error %(repl)s"
 msgstr ""
-"Сервер отказался от адреса отправителя (%(email_from) s) с ошибкой%(repl) s"
+"Сервер отказался от адреса отправителя (%(email_from)s ) с ошибкой%(repl)s "
 
 #. module: base
 #: code:addons/base/models/ir_mail_server.py:190
 #, python-format
 msgid "The server refused the test connection with error %(repl)s"
-msgstr "Сервер отказался от тестового соединения с ошибкой%(repl) s"
+msgstr "Сервер отказался от тестового соединения с ошибкой%(repl)s "
 
 #. module: base
 #: code:addons/base/models/ir_mail_server.py:183
@@ -25722,7 +25722,7 @@ msgstr "Сервер отказался от тестового соединен
 msgid ""
 "The server refused the test recipient (%(email_to)s) with error %(repl)s"
 msgstr ""
-"Сервер отказался от проверки получателя (%(email_to) s) с ошибкой%(repl) s"
+"Сервер отказался от проверки получателя (%(email_to)s ) с ошибкой%(repl)s "
 
 #. module: base
 #: model:ir.model.fields,help:base.field_res_country_state__code
