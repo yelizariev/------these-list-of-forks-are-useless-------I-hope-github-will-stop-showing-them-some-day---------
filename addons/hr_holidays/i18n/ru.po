@@ -1,7 +1,7 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
 # * hr_holidays
-#
+# 
 # Translators:
 # Collex100, 2018
 # sergeiruzkiicode <sergei.ruzki@icode.by>, 2018
@@ -9,7 +9,7 @@
 # Андрей Гусев <gaussgss@gmail.com>, 2019
 # Martin Trigaux, 2019
 # Ivan Yelizariev <yelizariev@it-projects.info>, 2020
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
@@ -18,10 +18,10 @@ msgstr ""
 "PO-Revision-Date: 2018-08-24 09:19+0000\n"
 "Last-Translator: Ivan Yelizariev <yelizariev@it-projects.info>, 2020\n"
 "Language-Team: Russian (https://www.transifex.com/odoo/teams/41243/ru/)\n"
-"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
+"Language: ru\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 
 #. module: hr_holidays
@@ -103,7 +103,7 @@ msgstr "%s on %s : %.2f день(ей)"
 #: code:addons/hr_holidays/models/hr_leave.py:481
 #, python-format
 msgid "%s on %s : %.2f hour(s)"
-msgstr "% S на%s :% .2f час (ы)"
+msgstr "% S на% s:% .2f час (ы)"
 
 #. module: hr_holidays
 #: model_terms:ir.ui.view,arch_db:hr_holidays.report_holidayssummary
@@ -642,7 +642,7 @@ msgstr "Второе утверждение распределения"
 #: code:addons/hr_holidays/models/hr_leave_allocation.py:302
 #, python-format
 msgid "Allocation of %s : %.2f %s to %s"
-msgstr "Начисление%s :% .2f%s  в%s "
+msgstr "Начисление% s:% .2f% s в% s"
 
 #. module: hr_holidays
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_department__allocation_to_approve_count
@@ -2571,7 +2571,7 @@ msgstr "Год(ы)"
 #: code:addons/hr_holidays/models/hr_leave_allocation.py:326
 #, python-format
 msgid "You can allocate %s only between %s and %s"
-msgstr "Вы можете забронировать%s  только между%s  и%s "
+msgstr "Вы можете забронировать% s только между% s и% s"
 
 #. module: hr_holidays
 #: code:addons/hr_holidays/models/hr_leave.py:397
@@ -2583,19 +2583,19 @@ msgstr "Вы не можете иметь 2 отпуска, которые пе�
 #: code:addons/hr_holidays/models/hr_leave.py:520
 #, python-format
 msgid "You can take %s from %s"
-msgstr "Вы можете взять%s  из%s "
+msgstr "Вы можете взять% s из% s"
 
 #. module: hr_holidays
 #: code:addons/hr_holidays/models/hr_leave.py:515
 #, python-format
 msgid "You can take %s only between %s and %s"
-msgstr "Вы можете взять%s  только между%s  и%s "
+msgstr "Вы можете взять% s только между% s и% s"
 
 #. module: hr_holidays
 #: code:addons/hr_holidays/models/hr_leave.py:525
 #, python-format
 msgid "You can take %s until %s"
-msgstr "Вы можете взять%s  в%s "
+msgstr "Вы можете взять% s в% s"
 
 #. module: hr_holidays
 #: code:addons/hr_holidays/models/hr_leave.py:576
@@ -2616,7 +2616,7 @@ msgstr "Вы должны выбрать по крайней мере одно �
 #, python-format
 msgid "You must be either %s's manager or Leave manager to approve this leave"
 msgstr ""
-"Вы должны быть менеджером%s  или менеджером отпусков, чтобы утвердить этот "
+"Вы должны быть менеджером% s или менеджером отпусков, чтобы утвердить этот "
 "отпуск"
 
 #. module: hr_holidays
