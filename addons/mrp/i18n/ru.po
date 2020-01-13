@@ -1,7 +1,7 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
 # * mrp
-# 
+#
 # Translators:
 # Collex100, 2018
 # Максим Дронь <dronmax@gmail.com>, 2018
@@ -11,7 +11,7 @@
 # Vasiliy Korobatov <korobatov@gmail.com>, 2019
 # Андрей Гусев <gaussgss@gmail.com>, 2019
 # Ivan Yelizariev <yelizariev@it-projects.info>, 2020
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
@@ -20,17 +20,17 @@ msgstr ""
 "PO-Revision-Date: 2018-08-24 09:21+0000\n"
 "Last-Translator: Ivan Yelizariev <yelizariev@it-projects.info>, 2020\n"
 "Language-Team: Russian (https://www.transifex.com/odoo/teams/41243/ru/)\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Language: ru\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 
 #. module: mrp
 #: code:addons/mrp/models/stock_rule.py:19
 #, python-format
 msgid " <br/><br/> The components will be taken from <b>%s</b>."
-msgstr "<br/><br/> Компоненты будут взяты <b>из% s.</b>"
+msgstr "<br/><br/> Компоненты будут взяты <b>из%s .</b>"
 
 #. module: mrp
 #: selection:mrp.bom,ready_to_produce:0
@@ -3570,7 +3570,7 @@ msgstr ""
 #: code:addons/mrp/wizard/mrp_product_produce.py:56
 #, python-format
 msgid "The production order for '%s' has no quantity specified."
-msgstr "Заказ на производство для `% s` не имеет указанного количества."
+msgstr "Заказ на производство для `%s ` не имеет указанного количества."
 
 #. module: mrp
 #: sql_constraint:mrp.production:0
@@ -4152,7 +4152,7 @@ msgid ""
 "When products are needed in <b>%s</b>, <br/> a manufacturing order is "
 "created to fulfill the need."
 msgstr ""
-"Когда товары необходимые <b>в% s,</b> <br/> заказ на производство создано "
+"Когда товары необходимые <b>в%s ,</b> <br/> заказ на производство создано "
 "для удовлетворения потребности."
 
 #. module: mrp
@@ -4430,7 +4430,7 @@ msgstr ""
 #, python-format
 msgid "You can only process 1.0 %s of products with unique serial number."
 msgstr ""
-"Вы можете обработать только 1.0% s товаров с уникальным серийным номером."
+"Вы можете обработать только 1.0%s  товаров с уникальным серийным номером."
 
 #. module: mrp
 #: code:addons/mrp/models/stock_move.py:143
@@ -4490,7 +4490,7 @@ msgstr "Вы не можете разобрать еще не законченн
 #, python-format
 msgid "You have already processed %s. Please input a quantity higher than %s "
 msgstr ""
-"Вы уже полностью обработали% s. Пожалуйста, введите количество выше, чем% s"
+"Вы уже полностью обработали%s . Пожалуйста, введите количество выше, чем%s "
 
 #. module: mrp
 #: model_terms:ir.ui.view,arch_db:mrp.mrp_production_form_view

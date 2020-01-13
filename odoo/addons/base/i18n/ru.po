@@ -1,7 +1,7 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
 # * base
-# 
+#
 # Translators:
 # Denis Baranov <baranov@itlibertas.com>, 2018
 # sergeiruzkiicode <sergei.ruzki@icode.by>, 2018
@@ -27,7 +27,7 @@
 # Martin Trigaux, 2019
 # Алексей Хомяков <alexey.homyakov@gmail.com>, 2019
 # Ivan Yelizariev <yelizariev@it-projects.info>, 2020
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
@@ -36,10 +36,10 @@ msgstr ""
 "PO-Revision-Date: 2018-08-24 09:14+0000\n"
 "Last-Translator: Ivan Yelizariev <yelizariev@it-projects.info>, 2020\n"
 "Language-Team: Russian (https://www.transifex.com/odoo/teams/41243/ru/)\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Language: ru\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 
 #. module: base
@@ -7385,7 +7385,7 @@ msgstr "%M — Минуты [00—59].\""
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.res_lang_form
 msgid "%S - Seconds [00,61].\""
-msgstr "%S — Секунды [00—61].\""
+msgstr "%s  — Секунды [00—61].\""
 
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.res_lang_form
@@ -7579,12 +7579,12 @@ msgstr "4. %d, %m         → 05, 12"
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.res_lang_form
 msgid "5. %H:%M:%S      ==&gt; 18:25:20"
-msgstr "5. %H:%M:%S      → 18:25:20"
+msgstr "5. %H:%M:%s       → 18:25:20"
 
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.res_lang_form
 msgid "6. %I:%M:%S %p  ==&gt; 06:25:20 PM"
-msgstr "6. %I:%M:%S %p  → 06:25:20 PM"
+msgstr "6. %I:%M:%s  %p  → 06:25:20 PM"
 
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.res_lang_form
@@ -7594,7 +7594,7 @@ msgstr "7. %j              → 340"
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.res_lang_form
 msgid "8. %S              ==&gt; 20"
-msgstr "8. %S              → 20"
+msgstr "8. %s               → 20"
 
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.res_lang_form
@@ -8630,7 +8630,7 @@ msgstr "Кредитный перевод ABA"
 #: code:addons/fields.py:1770
 #, python-format
 msgid "ASCII characters are required for %s in %s"
-msgstr "Символы ASCII необходимые для% s в% s"
+msgstr "Символы ASCII необходимые для%s  в%s "
 
 #. module: base
 #: model:ir.model.fields,field_description:base.field_res_partner_title__shortcut
@@ -14085,7 +14085,7 @@ msgid ""
 "Failed to encode the address %s\n"
 "from mail header:\n"
 "%s"
-msgstr "Не удалось кодировать адрес% s из заголовка письма:% s"
+msgstr "Не удалось кодировать адрес%s  из заголовка письма:%s "
 
 #. module: base
 #: model:ir.actions.server,name:base.demo_failure_action
@@ -14385,7 +14385,7 @@ msgstr ""
 "Файл не импортируется из-за неправильно сформированный файл. Эта проблема "
 "может быть вызвана дубликатами записей, которые ссылаются на то же поле. "
 "Проверьте содержимое файла, который вы пытаетесь импортировать. Технические "
-"детали:% s"
+"детали:%s "
 
 #. module: base
 #: code:addons/base/wizard/base_import_language.py:51
@@ -16511,7 +16511,7 @@ msgstr ""
 #: code:addons/base/models/ir_default.py:69
 #, python-format
 msgid "Invalid field %s.%s"
-msgstr "Недействительно поле% s.% S"
+msgstr "Недействительно поле%s .% S"
 
 #. module: base
 #: code:addons/models.py:2110
@@ -16562,7 +16562,7 @@ msgstr "Недопустимый критерий поиска"
 #: code:addons/base/models/ir_ui_view.py:612
 #, python-format
 msgid "Invalid specification for moved nodes: '%s'"
-msgstr "Недействительна спецификация для перемещенных узлов '% s'"
+msgstr "Недействительна спецификация для перемещенных узлов '%s '"
 
 #. module: base
 #: code:addons/base/models/ir_property.py:68
@@ -16574,13 +16574,13 @@ msgstr "Неправильный тип"
 #: code:addons/base/models/ir_default.py:71
 #, python-format
 msgid "Invalid value for %s.%s: %s"
-msgstr "Недопустимое значение для% s.% S:% s"
+msgstr "Недопустимое значение для%s .% S:%s "
 
 #. module: base
 #: code:addons/base/models/ir_ui_view.py:353
 #, python-format
 msgid "Invalid view %s definition in %s"
-msgstr "Недействителен просмотр% s определение в% s"
+msgstr "Недействителен просмотр%s  определение в%s "
 
 #. module: base
 #: code:addons/base/models/ir_ui_view.py:355
@@ -16588,7 +16588,7 @@ msgstr "Недействителен просмотр% s определение 
 msgid ""
 "Invalid view %s definition in %s \n"
 "%s"
-msgstr "Недействителен просмотр% s определение в% s% s"
+msgstr "Недействителен просмотр%s  определение в%s %s "
 
 #. module: base
 #: model:ir.module.category,name:base.module_category_warehouse_management
@@ -18111,7 +18111,7 @@ msgid ""
 " instead(Method %s)"
 msgstr ""
 "Методы, начинающиеся с `get_default_`, устарели. Переопределите `get_values`"
-" вместо (метод% s)"
+" вместо (метод%s )"
 
 #. module: base
 #: code:addons/base/models/res_config.py:605
@@ -18121,7 +18121,7 @@ msgid ""
 " (Method %s)"
 msgstr ""
 "Методы, которые начинаются с `set_`, устарели. Переопределите `set_values` "
-"вместо (метод% s)"
+"вместо (метод%s )"
 
 #. module: base
 #: model:ir.module.module,summary:base.module_l10n_mx_edi
@@ -18258,7 +18258,7 @@ msgstr "Модель %s не существует!"
 #: code:addons/base/models/ir_model.py:194
 #, python-format
 msgid "Model '%s' contains module data and cannot be removed."
-msgstr "Модель `% s` содержит данные модуля и не может быть удалена."
+msgstr "Модель `%s ` содержит данные модуля и не может быть удалена."
 
 #. module: base
 #: model:ir.model,name:base.model_ir_model_access
@@ -18445,7 +18445,7 @@ msgstr "Модули"
 #: code:addons/base/models/ir_module.py:404
 #, python-format
 msgid "Modules \"%s\" and \"%s\" are incompatible."
-msgstr "Модули `% s` и `% s` несовместимы."
+msgstr "Модули `%s ` и `%s ` несовместимы."
 
 #. module: base
 #: model:res.country,name:base.md
@@ -19346,25 +19346,25 @@ msgid ""
 msgstr ""
 "Социальные сети Odoo Enterprise ------------------------------ Свяжитесь с "
 "экспертами, следите за тем, что вас интересует, обменивайтесь документами и "
-"рекламируйте лучшие практики по Odoo <a href=\"https://www.odoo.com/page"
-"/enterprise-social-network\">Социальные сети Enterprise</a> . Сделайте "
-"работу с эффективным сотрудничеством между ведомствами, географией, "
-"документами и бизнес-заявкам. Все это при снижении перегрузки электронной "
-"почты. Свяжитесь с экспертами -------------------- В следующий раз, когда у "
-"вас будет вопрос по маркетингу, продажам, исследованиям и разработкам или "
-"любом другом отдела не оставляйте по электронной почте сообщение в Odoo и "
-"получайте ответы от необходи человек. Следуйте тому, что вас интересует "
-"------------------------- Хотите получить информацию о новых функциях "
-"товара, горячие предложения, узкие места проекта или любую другую событие? "
-"Просто следуйте тому, что вас интересует, какая информация вам нужна; не "
-"больше и не меньше. Получите выполнения вещей --------------- Вы можете "
-"обрабатывать (не только читать) папку `Входящие` и легко помечать сообщения "
-"для будущего действия. Начните чувствовать удовлетворение от пустой папки "
-"`Входящие` каждый день; больше нет перегрузки информацией. Рекламируйте "
-"лучшие практики ---------------------- Снизьте количество встреч и "
-"электронных цепей, работая вместе в группах. Создайте группу, чтобы люди "
-"могли обмениваться файлами, обсуждать идеи и голосовать за лучшие практики. "
-"Улучшение доступа к информации и экспертизы "
+"рекламируйте лучшие практики по Odoo <a "
+"href=\"https://www.odoo.com/page/enterprise-social-network\">Социальные сети"
+" Enterprise</a> . Сделайте работу с эффективным сотрудничеством между "
+"ведомствами, географией, документами и бизнес-заявкам. Все это при снижении "
+"перегрузки электронной почты. Свяжитесь с экспертами -------------------- В "
+"следующий раз, когда у вас будет вопрос по маркетингу, продажам, "
+"исследованиям и разработкам или любом другом отдела не оставляйте по "
+"электронной почте сообщение в Odoo и получайте ответы от необходи человек. "
+"Следуйте тому, что вас интересует ------------------------- Хотите получить "
+"информацию о новых функциях товара, горячие предложения, узкие места проекта"
+" или любую другую событие? Просто следуйте тому, что вас интересует, какая "
+"информация вам нужна; не больше и не меньше. Получите выполнения вещей "
+"--------------- Вы можете обрабатывать (не только читать) папку `Входящие` и"
+" легко помечать сообщения для будущего действия. Начните чувствовать "
+"удовлетворение от пустой папки `Входящие` каждый день; больше нет перегрузки"
+" информацией. Рекламируйте лучшие практики ---------------------- Снизьте "
+"количество встреч и электронных цепей, работая вместе в группах. Создайте "
+"группу, чтобы люди могли обмениваться файлами, обсуждать идеи и голосовать "
+"за лучшие практики. Улучшение доступа к информации и экспертизы "
 "------------------------------------------- Разбейте информационные силосы. "
 "Ищите в своих существующих системах, чтобы найти ответы и опыт, необходимые "
 "для быстрого завершения проектов. Сотрудничайте надежно --------------------"
@@ -25660,7 +25660,7 @@ msgid ""
 "\n"
 "Can not separate file to save as attachment because the report's template does not contains the attributes 'data-oe-model' and 'data-oe-id' on the div with 'article' classname."
 msgstr ""
-"Шаблон отчета `% s` неправильный, обратитесь к администратору. Невозможно "
+"Шаблон отчета `%s ` неправильный, обратитесь к администратору. Невозможно "
 "отделить файл для сохранения как вложения, поскольку шаблон отчета не "
 "содержит атрибутов `data-oe-model` и `data-oe-id` на div с именем `article`."
 
@@ -25672,7 +25672,7 @@ msgid ""
 "type: %s, Operation: %s, Records: %s, User: %s"
 msgstr ""
 "Запрашиваемая операция не может быть завершена по правилам записи: Тип "
-"документа:% s, Операция:% s, Сообщений:% s, Пользователь:% s"
+"документа:%s , Операция:%s , Сообщений:%s , Пользователь:%s "
 
 #. module: base
 #: code:addons/models.py:2718 code:addons/models.py:2927
@@ -25777,7 +25777,7 @@ msgid ""
 "The value for the field '%s' already exists (this is probably '%s' in the "
 "current model)."
 msgstr ""
-"Значение для поля `% s` уже существует (вероятно, `% s` в текущем модуль)."
+"Значение для поля `%s ` уже существует (вероятно, `%s ` в текущем модуль)."
 
 #. module: base
 #: code:addons/base/models/ir_qweb_fields.py:405
@@ -25792,7 +25792,7 @@ msgid ""
 "The values for the fields '%s' already exist (they are probably '%s' in the "
 "current model)."
 msgstr ""
-"Значения для полей `% s` уже существуют (они, вероятно, является `% s` в "
+"Значения для полей `%s ` уже существуют (они, вероятно, является `%s ` в "
 "текущей модели)."
 
 #. module: base
@@ -26661,7 +26661,7 @@ msgstr "Неизвестный"
 #: code:addons/models.py:873
 #, python-format
 msgid "Unknown database error: '%s'"
-msgstr "Неизвестная ошибка базы данных '% s'"
+msgstr "Неизвестная ошибка базы данных '%s '"
 
 #. module: base
 #: code:addons/models.py:1067
@@ -27288,7 +27288,7 @@ msgstr ""
 #: code:addons/base/models/ir_model.py:620
 #, python-format
 msgid "View: %s"
-msgstr "Посмотреть:% s"
+msgstr "Посмотреть:%s "
 
 #. module: base
 #: model:ir.actions.act_window,name:base.action_ui_view
@@ -27703,7 +27703,7 @@ msgstr "Вы приглашаете нового пользователя"
 #: code:addons/base/models/ir_module.py:423
 #, python-format
 msgid "You are trying to install incompatible modules in category \"%s\":"
-msgstr "Вы пытаетесь установить несовместимые модули в категории `% s`:"
+msgstr "Вы пытаетесь установить несовместимые модули в категории `%s `:"
 
 #. module: base
 #: code:addons/base/models/ir_module.py:308

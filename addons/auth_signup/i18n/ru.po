@@ -1,14 +1,14 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
 # * auth_signup
-# 
+#
 # Translators:
 # Martin Trigaux, 2018
 # Oleg Kuryan <oleg@ventor.tech>, 2019
 # Vasiliy Korobatov <korobatov@gmail.com>, 2019
 # Ivan Yelizariev <yelizariev@it-projects.info>, 2019
 # ILMIR <karamov@it-projects.info>, 2020
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
@@ -17,10 +17,10 @@ msgstr ""
 "PO-Revision-Date: 2018-08-24 09:16+0000\n"
 "Last-Translator: ILMIR <karamov@it-projects.info>, 2020\n"
 "Language-Team: Russian (https://www.transifex.com/odoo/teams/41243/ru/)\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Language: ru\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 
 #. module: auth_signup
@@ -177,7 +177,7 @@ msgstr ""
 "Принять приглашение\n"
 "</a>\n"
 " </div>\n"
-" % set website_url = object.env['ir.config_parameter'].sudo().get_param('web.base.url')\n"
+" %s et website_url = object.env['ir.config_parameter'].sudo().get_param('web.base.url')\n"
 " Ваш домен Odoo: <b><a href=\"${website_url}\">${website_url}</a></b><br/> \n"
 "Электронный адрес для входа: <b><a href=\"/web/login?login=${object.email}\" target=\"_blank\">${object.email}</a></b><br/><br/>\n"
 " Никогда не слышали о Odoo? Все в одной системе для бизнеса, которую выбрали больше трех миллионов пользователей. Это значительно улучшит ваш опыт работы и повысит вашу производительность. \n"

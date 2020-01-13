@@ -1,7 +1,7 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
 # * mail
-# 
+#
 # Translators:
 # Владимир Куряев <istercul@gmail.com>, 2018
 # Sergey Vilizhanin, 2018
@@ -15,7 +15,7 @@
 # Martin Trigaux, 2019
 # sergeiruzkiicode <sergei.ruzki@icode.by>, 2019
 # Ivan Yelizariev <yelizariev@it-projects.info>, 2020
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
@@ -24,10 +24,10 @@ msgstr ""
 "PO-Revision-Date: 2018-08-24 09:20+0000\n"
 "Last-Translator: Ivan Yelizariev <yelizariev@it-projects.info>, 2020\n"
 "Language-Team: Russian (https://www.transifex.com/odoo/teams/41243/ru/)\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Language: ru\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 
 #. module: mail
@@ -74,7 +74,7 @@ msgstr "%s (копия)"
 #: code:addons/mail/static/src/js/models/threads/thread_typing_mixin/thread_typing_mixin.js:133
 #, python-format
 msgid "%s and %s are typing..."
-msgstr "% S и% s набирает текст ..."
+msgstr "% S и%s  набирает текст ..."
 
 #. module: mail
 #: code:addons/mail/models/mail_thread.py:278
@@ -94,13 +94,13 @@ msgstr "% S набирает текст ..."
 #: code:addons/mail/static/src/js/models/threads/thread_typing_mixin/thread_typing_mixin.js:137
 #, python-format
 msgid "%s, %s and more are typing..."
-msgstr "% S,% s и больше набирают текст ..."
+msgstr "% S,%s  и больше набирают текст ..."
 
 #. module: mail
 #: code:addons/mail/models/mail_activity.py:341
 #, python-format
 msgid "%s: %s assigned to you"
-msgstr "% S:% s назначен вам"
+msgstr "% S:%s  назначен вам"
 
 #. module: mail
 #: model_terms:ir.ui.view,arch_db:mail.mail_notification_paynow
@@ -838,7 +838,7 @@ msgid ""
 "Are you sure you want to discard %s mail delivery failures. You won't be "
 "able to re-send these mails later!"
 msgstr ""
-"Вы уверены, что хотите удалить% s ошибки доставки почты. Вы не сможете "
+"Вы уверены, что хотите удалить%s  ошибки доставки почты. Вы не сможете "
 "повторно направить эти письма позже!"
 
 #. module: mail
@@ -857,7 +857,7 @@ msgid ""
 "Assigned user %s has no access to the document and is not able to handle "
 "this activity."
 msgstr ""
-"Предназначен пользователь% s не имеет доступа к документу и не может "
+"Предназначен пользователь%s  не имеет доступа к документу и не может "
 "обработать это действие."
 
 #. module: mail
@@ -1802,7 +1802,7 @@ msgstr ""
 #: code:addons/mail/static/src/js/chatter.js:498
 #, python-format
 msgid "Do you really want to delete %s?"
-msgstr "Вы действительно хотите удалить% s?"
+msgstr "Вы действительно хотите удалить%s ?"
 
 #. module: mail
 #: model_terms:ir.ui.view,arch_db:mail.view_document_file_kanban
@@ -2421,7 +2421,7 @@ msgstr "Руководство"
 #: code:addons/mail/models/mail_channel.py:448
 #, python-format
 msgid "Guidelines of channel %s"
-msgstr "Руководство канала% s"
+msgstr "Руководство канала%s "
 
 #. module: mail
 #: selection:res.users,notification_type:0
@@ -2743,7 +2743,7 @@ msgstr ""
 #: code:addons/mail/models/mail_blacklist.py:129
 #, python-format
 msgid "Invalid primary email field on model %s"
-msgstr "Недействительно основное поле электронной почты на модели% s"
+msgstr "Недействительно основное поле электронной почты на модели%s "
 
 #. module: mail
 #: code:addons/mail/models/mail_thread.py:1968
@@ -3194,7 +3194,7 @@ msgstr "Почта: сообщать модераторов каналов"
 #: code:addons/mail/models/mail_thread.py:939
 #, python-format
 msgid "Mailbox unavailable - %s"
-msgstr "Почтовый ящик недоступна -% s"
+msgstr "Почтовый ящик недоступна -%s "
 
 #. module: mail
 #: model:ir.model.fields,field_description:mail.field_mail_activity__mail_template_ids
@@ -3478,7 +3478,7 @@ msgstr ""
 #: code:addons/mail/static/src/js/models/threads/mailbox.js:202
 #, python-format
 msgid "Missing domain for mailbox with ID '%s'"
-msgstr "Отсутствует домен для почтового ящика с ID '% s'"
+msgstr "Отсутствует домен для почтового ящика с ID '%s '"
 
 #. module: mail
 #: model:ir.model.fields,field_description:mail.field_mail_activity_type__res_model_id
@@ -5737,7 +5737,7 @@ msgstr "Подписка отменена"
 #: code:addons/mail/models/mail_template.py:473
 #, python-format
 msgid "Unsupported report type %s found."
-msgstr "Неподдерживаемый тип отчета% s найдено."
+msgstr "Неподдерживаемый тип отчета%s  найдено."
 
 #. module: mail
 #: code:addons/mail/models/mail_message.py:188
@@ -6031,14 +6031,14 @@ msgstr "Вы единственный человек в этом канале"
 #: code:addons/mail/static/src/js/discuss.js:367
 #, python-format
 msgid "You are going to ban: %s. Do you confirm the action?"
-msgstr "Вы собираетесь забанить:% s. Вы подтверждаете действие?"
+msgstr "Вы собираетесь забанить:%s . Вы подтверждаете действие?"
 
 #. module: mail
 #. openerp-web
 #: code:addons/mail/static/src/js/discuss.js:390
 #, python-format
 msgid "You are going to discard %s messages. Do you confirm the action?"
-msgstr "Вы собираетесь отклонить% s сообщения. Вы подтверждаете действие?"
+msgstr "Вы собираетесь отклонить%s  сообщения. Вы подтверждаете действие?"
 
 #. module: mail
 #. openerp-web
@@ -6121,7 +6121,7 @@ msgstr ""
 #: code:addons/mail/models/mail_thread.py:2365
 #, python-format
 msgid "You have been assigned to %s"
-msgstr "Вы были назначены в% s"
+msgstr "Вы были назначены в%s "
 
 #. module: mail
 #: model_terms:ir.ui.view,arch_db:mail.message_user_assigned
@@ -6240,7 +6240,7 @@ msgstr "после даты проверки"
 #: code:addons/mail/models/mail_thread.py:1074
 #, python-format
 msgid "alias %s: %s"
-msgstr "псевдоним% s:% s"
+msgstr "псевдоним%s :%s "
 
 #. module: mail
 #: model_terms:ir.ui.view,arch_db:mail.message_activity_assigned
