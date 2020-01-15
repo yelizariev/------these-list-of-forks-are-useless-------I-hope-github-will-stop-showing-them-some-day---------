@@ -48,7 +48,7 @@ msgstr " %s (копия)"
 #. module: survey
 #: model_terms:ir.ui.view,arch_db:survey.page
 msgid "&amp;times;"
-msgstr "&amp;раз;"
+msgstr "&amp;times;"
 
 #. module: survey
 #: model_terms:ir.ui.view,arch_db:survey.403

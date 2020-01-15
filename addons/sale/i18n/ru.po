@@ -79,7 +79,7 @@ msgstr "&amp;nbsp;<span>on</span>&amp;nbsp;"
 #. module: sale
 #: model_terms:ir.ui.view,arch_db:sale.sale_order_portal_template
 msgid "&amp;times;"
-msgstr "&amp;раз;"
+msgstr "&amp;times;"
 
 #. module: sale
 #: model:product.product,description_sale:sale.product_product_4e

@@ -56,7 +56,7 @@ msgstr " %s (id:%s)"
 #. module: website
 #: model_terms:ir.ui.view,arch_db:website.show_website_info
 msgid "&amp;times;"
-msgstr "&amp;раз;"
+msgstr "&amp;times;"
 
 #. module: website
 #: model_terms:ir.ui.view,arch_db:website.sitemap_index_xml
@@ -803,7 +803,7 @@ msgstr "<span>Свяжитесь с нами</span>"
 #. module: website
 #: model_terms:ir.ui.view,arch_db:website.layout_footer_copyright
 msgid "<span>Copyright &amp;copy;</span>"
-msgstr "<span>Авторские права &amp; копирование;</span>"
+msgstr "<span>Авторские права &amp;copy;</span>"
 
 #. module: website
 #: model_terms:ir.ui.view,arch_db:website.s_quotes_carousel
