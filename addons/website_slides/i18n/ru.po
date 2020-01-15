@@ -1,7 +1,7 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
 # * website_slides
-# 
+#
 # Translators:
 # Sergey Vilizhanin, 2018
 # Denis Trepalin <zekarious@gmail.com>, 2018
@@ -13,7 +13,7 @@
 # Vasiliy Korobatov <korobatov@gmail.com>, 2019
 # Андрей Гусев <gaussgss@gmail.com>, 2019
 # Ivan Yelizariev <yelizariev@it-projects.info>, 2020
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
@@ -22,10 +22,10 @@ msgstr ""
 "PO-Revision-Date: 2018-08-24 09:35+0000\n"
 "Last-Translator: Ivan Yelizariev <yelizariev@it-projects.info>, 2020\n"
 "Language-Team: Russian (https://www.transifex.com/odoo/teams/41243/ru/)\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Language: ru\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 
 #. module: website_slides
@@ -114,16 +114,16 @@ msgid ""
 "            "
 msgstr ""
 "<div style=\"margin: 0px; padding: 0px;\"><p style=\"margin: 0px; padding: "
-"0px; font-size: 13px;\"> Поздравляем <br/><br/> $ {user.name} поделился $ "
-"{object.slide_type} <strong>$ {object.name}</strong> с тобой! <div "
+"0px; font-size: 13px;\"> Поздравляем <br/><br/> ${user.name} поделился "
+"${object.slide_type} <strong>${object.name}</strong> с тобой! <div "
 "style=\"margin: 16px 8px 16px 8px; text-align: center;\"> <a "
-"href=\"${object.website_url}\"><img alt=\"$ {Object.name}\" "
+"href=\"${object.website_url}\"><img alt=\"${Object.name}\" "
 "src=\"${ctx['base_url']}/web/image/slide.slide/${object.id}/image\" "
 "style=\"height:auto; width:150px; margin: 16px;\"/></a> </div><div "
 "style=\"margin: 16px 8px 16px 8px; text-align: center;\"> <a "
 "href=\"${object.website_url}\" style=\"background-color: #875a7b; padding: "
 "8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: "
-"5px;\">Посмотреть <strong>$ {object.name}</strong></a> </div></p></div>"
+"5px;\">Посмотреть <strong>${object.name}</strong></a> </div></p></div>"
 
 #. module: website_slides
 #: model:mail.template,body_html:website_slides.slide_template_published
@@ -145,17 +145,17 @@ msgid ""
 "            "
 msgstr ""
 "<div style=\"margin: 0px; padding: 0px;\"><p style=\"margin: 0px; padding: "
-"0px; font-size: 13px;\"> Поздравляем <br/><br/> Новое $ {object.slide_type} "
-"<strong>$ {object.name}</strong> было опубликовано на $ "
-"{object.channel_id.name} в $ {format_tz (object.write_date, tz = user.tz)} "
+"0px; font-size: 13px;\"> Поздравляем <br/><br/> Новое ${object.slide_type} "
+"<strong>${object.name}</strong> было опубликовано на "
+"${object.channel_id.name} в ${format_tz (object.write_date, tz = user.tz)} "
 "<div style=\"margin: 16px 8px 16px 8px; text-align: center;\"> <a "
-"href=\"${object.website_url}\"><img alt=\"$ {Object.name}\" "
+"href=\"${object.website_url}\"><img alt=\"${Object.name}\" "
 "src=\"${ctx['base_url']}/web/image/slide.slide/${object.id}/image\" "
 "style=\"height:auto; width:150px; margin: 16px;\"/></a> </div><div "
 "style=\"margin: 16px 8px 16px 8px; text-align: center;\"> <a "
 "href=\"${object.website_url}\" style=\"background-color: #875a7b; padding: "
 "8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: "
-"5px;\">Посмотреть <strong>$ {object.name}</strong></a> </div></p></div>"
+"5px;\">Посмотреть <strong>${object.name}</strong></a> </div></p></div>"
 
 #. module: website_slides
 #: model_terms:ir.ui.view,arch_db:website_slides.slide_detail_view
@@ -659,8 +659,8 @@ msgid ""
 msgstr ""
 "Узнайте, как можно интегрировать MRP, PLM, качество и обслуживание в единую "
 "программу, чтобы максимально повысить эффективность ваших производственных "
-"операций. Узнайте больше о функции на странице https://www.odoo.com/page"
-"/manufacturing-features Откройте Odoo MRP: "
+"операций. Узнайте больше о функции на странице "
+"https://www.odoo.com/page/manufacturing-features Откройте Odoo MRP: "
 "https://www.odoo.com/page/manufacturing"
 
 #. module: website_slides

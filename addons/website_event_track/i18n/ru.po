@@ -1,7 +1,7 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
 # * website_event_track
-# 
+#
 # Translators:
 # Максим Дронь <dronmax@gmail.com>, 2018
 # Sergey Vilizhanin, 2018
@@ -13,7 +13,7 @@
 # Vasiliy Korobatov <korobatov@gmail.com>, 2019
 # Андрей Гусев <gaussgss@gmail.com>, 2019
 # Ivan Yelizariev <yelizariev@it-projects.info>, 2020
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
@@ -22,10 +22,10 @@ msgstr ""
 "PO-Revision-Date: 2018-08-24 09:34+0000\n"
 "Last-Translator: Ivan Yelizariev <yelizariev@it-projects.info>, 2020\n"
 "Language-Team: Russian (https://www.transifex.com/odoo/teams/41243/ru/)\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Language: ru\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 
 #. module: website_event_track
@@ -47,10 +47,10 @@ msgid ""
 "</div>\n"
 "            "
 msgstr ""
-"<?xml version=\"1.0\"?><div> Уважаемый (ая) $ {object.partner_name or ''} "
-"<br/> Мы рады сообщить вам, что ваше предложение $ {object.name} была "
-"принята и подтверждена для события $ {object.event_id.name}. <br/> Больше "
-"деталей вы найдете здесь: <div style=\"margin: 16px 0px 16px 0px;\"> <a "
+"<?xml version=\"1.0\"?><div> Уважаемый (ая) ${object.partner_name or ''} "
+"<br/> Мы рады сообщить вам, что ваше предложение ${object.name} была принята"
+" и подтверждена для события ${object.event_id.name}. <br/> Больше деталей вы"
+" найдете здесь: <div style=\"margin: 16px 0px 16px 0px;\"> <a "
 "href=\"/event/${object.event_id.id}/\" style=\"padding: 8px 16px 8px 16px; "
 "font-size: 14px; color: #FFFFFF; text-decoration: none !important; "
 "background-color: #875A7B; border: 0px solid #875A7B; border-"
@@ -282,7 +282,7 @@ msgstr "Конференция"
 #. module: website_event_track
 #: model:mail.template,subject:website_event_track.mail_template_data_track_confirmation
 msgid "Confirmation of ${object.name}"
-msgstr "Подтверждением $ {object.name}"
+msgstr "Подтверждением ${object.name}"
 
 #. module: website_event_track
 #: model:event.track.stage,name:website_event_track.event_track_stage1
