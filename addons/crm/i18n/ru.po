@@ -45,9 +45,9 @@ msgid ""
 "    % if email\n"
 "    <strong style=\"font-size: 16px;\">Try the mail gateway</strong>"
 msgstr ""
-"% Set email = object.env [ 'crm.team']. Search ([( 'alias_name `,`! =', "
-"False)], limit = 1) .alias_id.display_name% if email <strong style=\"font-"
-"size: 16px;\">Попробуйте шлюз почты</strong>"
+"% set email = object.env['crm.team'].search([('alias_name','!=', False)],limit=1).alias_id.display_name\n"
+"    % if email\n"
+"    <strong style=\"font-size: 16px;\">Попробуйте шлюз электронной почты</strong>"
 
 #. module: crm
 #. openerp-web
