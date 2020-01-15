@@ -576,7 +576,7 @@ msgid ""
 "The \"%(trigger_value)s\" %(trigger_label)s can only be used with the "
 "\"%(state_value)s\" action type"
 msgstr ""
-"`%(Trigger_value)s `%(trigger_label)s  может использоваться только с "
+"`%(trigger_value)s `%(trigger_label)s  может использоваться только с "
 "`%(state_value)s ` типом действия"
 
 #. module: base_automation

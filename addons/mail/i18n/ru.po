@@ -40,13 +40,13 @@ msgstr "Это личный канал. Присоединиться к нему
 #, python-format
 msgid "%(user_name)s invited you to follow %(document)s document: %(title)s"
 msgstr ""
-"%(User_name)s  пригласил вас следить%(document)s  по документу:%(title)s "
+"%(user_name)s пригласил вас следить за документом%(document)s:%(title)s "
 
 #. module: mail
 #: code:addons/mail/wizard/invite.py:31
 #, python-format
 msgid "%(user_name)s invited you to follow a new document."
-msgstr "%(User_name)s  пригласил вас следить за новым документом."
+msgstr "%(user_name)s  пригласил вас следить за новым документом."
 
 #. module: mail
 #. openerp-web
