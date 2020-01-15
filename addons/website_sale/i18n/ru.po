@@ -1,7 +1,7 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
 # * website_sale
-#
+# 
 # Translators:
 # Vladimir Lukianov <lvm.mobile@gmail.com>, 2018
 # Максим Дронь <dronmax@gmail.com>, 2018
@@ -15,7 +15,7 @@
 # Oleg Kuryan <oleg@ventor.tech>, 2019
 # Vasiliy Korobatov <korobatov@gmail.com>, 2019
 # Ivan Yelizariev <yelizariev@it-projects.info>, 2020
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
@@ -24,10 +24,10 @@ msgstr ""
 "PO-Revision-Date: 2018-08-24 09:35+0000\n"
 "Last-Translator: Ivan Yelizariev <yelizariev@it-projects.info>, 2020\n"
 "Language-Team: Russian (https://www.transifex.com/odoo/teams/41243/ru/)\n"
-"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
+"Language: ru\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 
 #. module: website_sale
@@ -169,6 +169,68 @@ msgid ""
 "</table>\n"
 "            "
 msgstr ""
+"<?xml version=\"1.0\"?><table border=\"0\" cellpadding=\"0\" "
+"cellspacing=\"0\" style=\"padding-top: 16px; background-color: #F1F1F1; "
+"font-family:Verdana, Arial,sans-serif; color: #454748; width: 100%; border-"
+"collapse:separate;\"><tr><td align=\"center\"><table border=\"0\" "
+"cellpadding=\"0\" cellspacing=\"0\" width=\"590\" style=\"padding: 16px; "
+"background-color: white; color: #454748; border-"
+"collapse:separate;\"><tbody><!-- HEADER --><tr><td align=\"center\" style"
+"=\"min-width: 590px;\"><table border=\"0\" cellpadding=\"0\" "
+"cellspacing=\"0\" width=\"590\" style=\"min-width: 590px; background-color: "
+"white; padding: 0px 8px 0px 8px; border-collapse:separate;\"><tr><td "
+"valign=\"middle\"> % Set company = object.company_id or "
+"object.user_id.company_id or user.company_id <span style=\"font-size: "
+"10px;\">Корзина</span> <br/> <span style=\"font-size: 20px; font-weight: "
+"bold;\">$ {object.name}</span> </td><td valign=\"middle\" "
+"align=\"right\"><img src=\"/logo.png?company=${company.id}\" "
+"style=\"padding: 0px; margin: 0px; height: auto; width: 80px;\" alt=\"$ "
+"{Company.name}\"/></td></tr><tr><td colspan=\"2\" style=\"text-"
+"align:center;\"><hr width=\"100%\" style=\"background-"
+"color:rgb(204,204,204);border:medium none;clear:both;display:block;font-"
+"size:0px;min-height:1px;line-height:0; margin:16px 0px 16px "
+"0px;\"/></td></tr></table></td></tr><!-- CONTENT --><tr><td align=\"center\""
+" style=\"min-width: 590px;\"><table border=\"0\" cellpadding=\"0\" "
+"cellspacing=\"0\" width=\"590\" style=\"min-width: 590px; background-color: "
+"white; padding: 0px 8px 0px 8px; border-collapse:separate;\"><tr><td "
+"valign=\"top\" style=\"font-size: 13px;\"><h1 style=\"color:#A9A9A9;\"> В "
+"вашей корзине ТО Е. </h1> Хотите завершить покупки? <br/><br/> % If "
+"object.order_line:% for line in object.website_order_line: <hr/><table "
+"width=\"100%\"><tr><td style=\"padding: 10px; width:150px;\"><img "
+"src=\"/web/image/product.product/${line.product_id.id}/image\" "
+"height=\"100px\" width=\"100px\" alt=\"Product image\"/></td><td> <strong>$ "
+"{line.product_id.display_name}</strong> <br/> $ {Line.name} </td><td "
+"width=\"100px\" align=\"right\"> $ {(Line.product_uom_qty) | int} $ "
+"{(line.product_uom.name)} </td></tr></table> % endfor <hr/> % endif <div "
+"style=\"text-align: center; margin: 16px 0px 16px 0px; font-size: 14px;\"> "
+"<a "
+"href=\"${object.get_base_url()}/shop/cart?access_token=${object.access_token}\""
+" target=\"_blank\" style=\"background-color: #875A7B; padding: 8px 16px 8px "
+"16px; text-decoration: none; color: #fff; border-radius: 5px; font-"
+"size:13px;\">итог заказ</a> </div><div style=\"text-align: center;\"> "
+"<strong>Спасибо за покупки с $ {user.company_id.name}!</strong> "
+"</div></td></tr><tr><td style=\"text-align:center;\"><hr width=\"100%\" "
+"style=\"background-color:rgb(204,204,204);border:medium "
+"none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; "
+"margin: 16px 0px 16px 0px;\"/></td></tr></table></td></tr><!-- FOOTER "
+"--><tr><td align=\"center\" style=\"min-width: 590px;\"><table border=\"0\" "
+"cellpadding=\"0\" cellspacing=\"0\" width=\"590\" style=\"min-width: 590px; "
+"background-color: white; font-size: 11px; padding: 0px 8px 0px 8px; border-"
+"collapse:separate;\"><tr><td valign=\"middle\" align=\"left\"> $ "
+"{Company.name} </td></tr><tr><td valign=\"middle\" align=\"left\" "
+"style=\"opacity: 0.7;\"> $ {Company.phone}% if company.email | <a "
+"href=\"'mailto:%s' % ${company.email}\" style=\"text-decoration:none; color:"
+" #454748;\">$ {company.email}</a> % endif% if company.website | <a "
+"href=\"'%s' % ${company.website}\" style=\"text-decoration:none; color: "
+"#454748;\">$ {company.website}</a> % endif "
+"</td></tr></table></td></tr></tbody></table></td></tr><!-- POWERED BY "
+"--><tr><td align=\"center\" style=\"min-width: 590px;\"><table border=\"0\" "
+"cellpadding=\"0\" cellspacing=\"0\" width=\"590\" style=\"min-width: 590px; "
+"background-color: #F1F1F1; color: #454748; padding: 8px; border-"
+"collapse:separate;\"><tr><td style=\"text-align: center; font-size: 13px;\">"
+" сделано <a target=\"_blank\" "
+"href=\"https://www.odoo.com?utm_source=db&amp;utm_medium=website\" "
+"style=\"color: #875A7B;\">Odoo</a> </td></tr></table></td></tr></table>"
 
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.payment_confirmation_status
@@ -253,11 +315,11 @@ msgstr ""
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.terms
 msgid ""
-"<small class=\"text-muted float-right\">Source: "
-"https://termsfeed.com/blog/sample-terms-and-conditions-template</small>"
+"<small class=\"text-muted float-right\">Source: https://termsfeed.com/blog"
+"/sample-terms-and-conditions-template</small>"
 msgstr ""
-"<small class=\"text-muted float-right\">Источник: "
-"https://termsfeed.com/blog/sample-terms-and-conditions-template</small>"
+"<small class=\"text-muted float-right\">Источник: https://termsfeed.com/blog"
+"/sample-terms-and-conditions-template</small>"
 
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.cart
