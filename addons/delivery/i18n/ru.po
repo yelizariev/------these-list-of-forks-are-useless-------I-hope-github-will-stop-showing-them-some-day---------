@@ -1,7 +1,7 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
 # 	* delivery
-# 
+#
 # Translators:
 # Martin Trigaux, 2019
 # Collex100, 2019
@@ -11,7 +11,7 @@
 # Sergey Vilizhanin, 2019
 # Andrey Samorukov <andrey.samorukov@me.com>, 2019
 # Ivan Yelizariev <yelizariev@it-projects.info>, 2019
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 13.0\n"
@@ -20,10 +20,10 @@ msgstr ""
 "PO-Revision-Date: 2019-08-26 09:09+0000\n"
 "Last-Translator: Ivan Yelizariev <yelizariev@it-projects.info>, 2019\n"
 "Language-Team: Russian (https://www.transifex.com/odoo/teams/41243/ru/)\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Language: ru\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 
 #. module: delivery
@@ -811,8 +811,8 @@ msgid ""
 "Shipment sent to carrier %s for shipping with tracking number %s<br/>Cost: "
 "%.2f %s"
 msgstr ""
-"Отправка направлено перевозчику% s для отправки с номером отслеживания% s "
-"<br/> Стоимость:% .2f% s"
+"Отправка направлено перевозчику %s  для отправки с номером отслеживания %s  "
+"<br/> Стоимость:%.2f %s "
 
 #. module: delivery
 #: model:ir.model.fields,field_description:delivery.field_stock_picking__carrier_price
@@ -1071,7 +1071,7 @@ msgid ""
 "Packaging Types: %s"
 msgstr ""
 "Вы отправляете различные типы упаковок в одной отгрузке.\n"
-"Типы упаковки: %s"
+"Типы упаковки: %s "
 
 #. module: delivery
 #: model_terms:ir.ui.view,arch_db:delivery.delivery_tracking_url_warning_form

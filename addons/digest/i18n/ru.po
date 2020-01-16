@@ -1,13 +1,13 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
 # 	* digest
-# 
+#
 # Translators:
 # Максим Дронь <dronmax@gmail.com>, 2019
 # Martin Trigaux, 2019
 # Vasiliy Korobatov <korobatov@gmail.com>, 2019
 # Ivan Yelizariev <yelizariev@it-projects.info>, 2019
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server saas~12.5\n"
@@ -16,10 +16,10 @@ msgstr ""
 "PO-Revision-Date: 2019-08-26 09:09+0000\n"
 "Last-Translator: Ivan Yelizariev <yelizariev@it-projects.info>, 2019\n"
 "Language-Team: Russian (https://www.transifex.com/odoo/teams/41243/ru/)\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Language: ru\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 
 #. module: digest
@@ -30,9 +30,7 @@ msgstr ""
 #. module: digest
 #: model_terms:digest.tip,tip_description:digest.digest_tip_mail_0
 msgid "${', '.join(users.mapped('name'))} signed up. Say hello in the"
-msgstr ""
-"$ { &#39;,&#39; .Join (users.mapped ( &#39;name&#39;))} подписали. "
-"поздоровайтесь в"
+msgstr "${ ',' .Join (users.mapped ( 'name'))} подписали. поздоровайтесь в"
 
 #. module: digest
 #: model_terms:digest.tip,tip_description:digest.digest_tip_mail_0
@@ -520,8 +518,8 @@ msgid ""
 "You can ping colleagues by tagging them in your messages using \"@\". They "
 "will be instantly notified.<br>"
 msgstr ""
-"Можно обозначать коллег в своих сообщениях с помощью &quot;@&quot;. Они "
-"будут немедленно уведомлены. <br>"
+"Можно обозначать коллег в своих сообщениях с помощью `@`. Они будут "
+"немедленно уведомлены. <br>"
 
 #. module: digest
 #: model_terms:digest.tip,tip_description:digest.digest_tip_mail_1

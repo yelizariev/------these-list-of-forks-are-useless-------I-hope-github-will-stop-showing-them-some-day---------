@@ -1,7 +1,7 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
 # 	* website_blog
-# 
+#
 # Translators:
 # Максим Дронь <dronmax@gmail.com>, 2019
 # Андрей Гусев <gaussgss@gmail.com>, 2019
@@ -12,7 +12,7 @@
 # Martin Trigaux, 2019
 # Sergey Vilizhanin, 2019
 # Ivan Yelizariev <yelizariev@it-projects.info>, 2020
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 13.0\n"
@@ -21,10 +21,10 @@ msgstr ""
 "PO-Revision-Date: 2019-08-26 09:15+0000\n"
 "Last-Translator: Ivan Yelizariev <yelizariev@it-projects.info>, 2020\n"
 "Language-Team: Russian (https://www.transifex.com/odoo/teams/41243/ru/)\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Language: ru\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 
 #. module: website_blog
@@ -569,13 +569,13 @@ msgstr "Публикация в блоге"
 #: code:addons/website_blog/models/website.py:0
 #, python-format
 msgid "Blog Post <b>%s</b> seems to be calling this file !"
-msgstr "Blog <b>Post% s</b> похоже, вызывает этот файл!"
+msgstr "Blog <b>Post %s </b> похоже, вызывает этот файл!"
 
 #. module: website_blog
 #: code:addons/website_blog/models/website.py:0
 #, python-format
 msgid "Blog Post <b>%s</b> seems to have a link to this page !"
-msgstr "Блог <b>%s</b>кажется, есть ссылка на эту страницу!"
+msgstr "Блог <b> %s </b>кажется, есть ссылка на эту страницу!"
 
 #. module: website_blog
 #: model_terms:ir.ui.view,arch_db:website_blog.blog_post_complete

@@ -1,7 +1,7 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
 # 	* website
-# 
+#
 # Translators:
 # Vladimir Lukianov <lvm.mobile@gmail.com>, 2019
 # Артур Чеботарь <artcha.chebotar@gmail.com>, 2019
@@ -18,7 +18,7 @@
 # Oleg Kuryan <oleg@ventor.tech>, 2019
 # ILMIR <karamov@it-projects.info>, 2020
 # Ivan Yelizariev <yelizariev@it-projects.info>, 2020
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 13.0\n"
@@ -27,10 +27,10 @@ msgstr ""
 "PO-Revision-Date: 2019-08-26 09:15+0000\n"
 "Last-Translator: Ivan Yelizariev <yelizariev@it-projects.info>, 2020\n"
 "Language-Team: Russian (https://www.transifex.com/odoo/teams/41243/ru/)\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Language: ru\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 
 #. module: website
@@ -56,7 +56,7 @@ msgstr ""
 #: code:addons/website/models/website.py:0
 #, python-format
 msgid "%s (id:%s)"
-msgstr "%s (id:%s)"
+msgstr " %s (id:%s)"
 
 #. module: website
 #: model_terms:ir.ui.view,arch_db:website.show_website_info
@@ -86,7 +86,7 @@ msgstr "&nbsp;"
 #: code:addons/website/static/src/xml/website.gallery.xml:0
 #, python-format
 msgid "&times;"
-msgstr "&times;"
+msgstr "&раз;"
 
 #. module: website
 #: model_terms:ir.ui.view,arch_db:website.list_website_pages
@@ -1957,7 +1957,7 @@ msgstr "Вы хотите редактировать данные компани
 #: code:addons/website/static/src/js/menu/new_content.js:0
 #, python-format
 msgid "Do you want to install the \"%s\" App?"
-msgstr "Хотите установить модуль &quot;% s&quot;?"
+msgstr "Вы действительно хотите установить приложение \"%s\"?"
 
 #. module: website
 #: model_terms:ir.ui.view,arch_db:website.res_config_settings_view_form
@@ -2205,7 +2205,7 @@ msgstr "появление"
 #: code:addons/website/static/src/js/menu/new_content.js:0
 #, python-format
 msgid "Failed to install \"%s\""
-msgstr "Не удалось установить &quot;% s&quot;"
+msgstr "Не удалось установить \"%s\""
 
 #. module: website
 #: model_terms:ir.ui.view,arch_db:website.snippet_options
@@ -2915,7 +2915,7 @@ msgstr "установлена тема"
 #: code:addons/website/static/src/js/menu/new_content.js:0
 #, python-format
 msgid "Installing \"%s\""
-msgstr "Установление `% s`"
+msgstr "Установление ` %s `"
 
 #. module: website
 #: model_terms:ir.actions.act_window,help:website.website_visitors_action
@@ -3886,13 +3886,13 @@ msgstr "Страница"
 #: code:addons/website/models/website.py:0
 #, python-format
 msgid "Page <b>%s</b> contains a link to this page"
-msgstr "Страница <b>%s</b> содержит ссылку на эту страницу"
+msgstr "Страница <b> %s </b> содержит ссылку на эту страницу"
 
 #. module: website
 #: code:addons/website/models/website.py:0
 #, python-format
 msgid "Page <b>%s</b> is calling this file"
-msgstr "<b>Страница% s</b> вызывает этот файл"
+msgstr "<b>Страница %s </b> вызывает этот файл"
 
 #. module: website
 #. openerp-web
@@ -4684,13 +4684,13 @@ msgstr "Шаблон"
 #: code:addons/website/models/website.py:0
 #, python-format
 msgid "Template <b>%s (id:%s)</b> contains a link to this page"
-msgstr "Шаблон <b>%s (id:%s)</b> содержит ссылку на эту страницу"
+msgstr "Шаблон <b> %s (id:%s)</b> содержит ссылку на эту страницу"
 
 #. module: website
 #: code:addons/website/models/website.py:0
 #, python-format
 msgid "Template <b>%s (id:%s)</b> is calling this file"
-msgstr "<b>Шаблон% s (id:% s)</b> вызывает этот файл"
+msgstr "<b>Шаблон %s (id:%s)</b> вызывает этот файл"
 
 #. module: website
 #: model_terms:ir.ui.view,arch_db:website.qweb_500
@@ -4937,7 +4937,7 @@ msgstr ""
 #: code:addons/website/models/website.py:0
 #, python-format
 msgid "This page is in the menu <b>%s</b>"
-msgstr "Эта страница находится в меню <b>%s</b>"
+msgstr "Эта страница находится в меню <b> %s </b>"
 
 #. module: website
 #: model_terms:ir.ui.view,arch_db:website.one_page_line
@@ -4995,8 +4995,8 @@ msgid ""
 "menu *Action*."
 msgstr ""
 "Чтобы отправить приглашение в режиме B2B, откройте контакт или выберите "
-"несколько в списке и нажмите на &quot;Управление доступом к порталу&quot; в "
-"выпадающем меню * Действие *."
+"несколько в списке и нажмите на `Управление доступом к порталу` в выпадающем"
+" меню * Действие *."
 
 #. module: website
 #: model_terms:ir.ui.view,arch_db:website.bs_debug_page_ir_ui_view
@@ -5031,7 +5031,7 @@ msgstr "Верхнее меню"
 #: code:addons/website/models/website.py:0
 #, python-format
 msgid "Top Menu for Website %s"
-msgstr "Верхнее меню сайта% s"
+msgstr "Верхнее меню сайта %s "
 
 #. module: website
 #: model:ir.model.fields,help:website.field_website_visitor__page_count
