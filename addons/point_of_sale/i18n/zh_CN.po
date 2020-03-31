@@ -5,15 +5,12 @@
 # Translators:
 # bower Guo <124358678@qq.com>, 2019
 # snow wang <147156565@qq.com>, 2019
-# Joray <13637815@qq.com>, 2019
 # roye w <159820@qq.com>, 2019
 # 张宏奎 <zhanghongkui@inspur.com>, 2019
 # 老窦 北京 <2662059195@qq.com>, 2019
 # 湘子 南 <1360857908@qq.com>, 2019
-# guohuadeng <guohuadeng@hotmail.com>, 2019
 # Jeff Yu - Elico Corp <jeff.yu@elico-corp.com>, 2019
 # Fisher <fisher@kdomi.com>, 2019
-# 卫安琪 <weianqi1991@gmail.com>, 2019
 # xu xiaohu <xu.xiaohu@gmail.com>, 2019
 # John An <johnxan@163.com>, 2019
 # Jeanphy <hzh0292@qq.com>, 2019
@@ -22,12 +19,14 @@
 # Felix Yuen <fyu@odoo.com>, 2019
 # Manga Tsang <mts@odoo.com>, 2019
 # Martin Trigaux, 2019
-# Jeffery CHEN Fan <jeffery9@gmail.com>, 2019
 # inspur qiuguodong <qiuguodong@inspur.com>, 2019
 # 山西清水欧度(QQ:54773801) <54773801@qq.com>, 2019
 # liAnGjiA <liangjia@qq.com>, 2019
 # keecome <7017511@qq.com>, 2019
 # Shiping Lv <lvshiping@sina.com>, 2019
+# Jeffery CHEN Fan <jeffery9@gmail.com>, 2020
+# as co02 <asco02@163.com>, 2020
+# guohuadeng <guohuadeng@hotmail.com>, 2020
 # 
 msgid ""
 msgstr ""
@@ -35,7 +34,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-12-05 12:32+0000\n"
 "PO-Revision-Date: 2019-08-26 09:12+0000\n"
-"Last-Translator: Shiping Lv <lvshiping@sina.com>, 2019\n"
+"Last-Translator: guohuadeng <guohuadeng@hotmail.com>, 2020\n"
 "Language-Team: Chinese (China) (https://www.transifex.com/odoo/teams/41243/zh_CN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -160,7 +159,7 @@ msgstr ""
 #. module: point_of_sale
 #: model_terms:ir.ui.view,arch_db:point_of_sale.pos_config_view_form
 msgid "<span class=\"o_form_label\">Barcode Scanner</span>"
-msgstr "<span class=\"o_form_label\">条形码扫描器</span>"
+msgstr "<span class=\"o_form_label\">条码扫描器</span>"
 
 #. module: point_of_sale
 #: model_terms:ir.ui.view,arch_db:point_of_sale.pos_config_view_form
@@ -582,7 +581,7 @@ msgstr "自动打开收银箱。"
 #. module: point_of_sale
 #: model:ir.model.fields,field_description:point_of_sale.field_pos_config__iface_available_categ_ids
 msgid "Available PoS Product Categories"
-msgstr "可用PoS产品类别"
+msgstr "可用PoS品类"
 
 #. module: point_of_sale
 #: model:ir.model.fields,field_description:point_of_sale.field_pos_config__available_pricelist_ids
@@ -593,7 +592,7 @@ msgstr "可用价格表"
 #. module: point_of_sale
 #: model_terms:ir.ui.view,arch_db:point_of_sale.pos_config_view_form
 msgid "Available Product Categories"
-msgstr "可用产品类别"
+msgstr "可用品类"
 
 #. module: point_of_sale
 #: model:ir.model.fields,field_description:point_of_sale.field_product_product__available_in_pos
@@ -808,7 +807,7 @@ msgstr "收银员"
 msgid ""
 "Categories are used to browse your products through the\n"
 "                touchscreen interface."
-msgstr "用于在触摸屏幕上浏览你的产品类别"
+msgstr "用于在触摸屏幕上浏览你的品类"
 
 #. module: point_of_sale
 #. openerp-web
@@ -992,7 +991,7 @@ msgstr "关闭······"
 #: model:ir.model.fields.selection,name:point_of_sale.selection__pos_session__state__closing_control
 #: model_terms:ir.ui.view,arch_db:point_of_sale.view_pos_config_kanban
 msgid "Closing Control"
-msgstr "关闭管理"
+msgstr "结业管理"
 
 #. module: point_of_sale
 #: model:ir.model.fields,field_description:point_of_sale.field_pos_session__stop_at
@@ -1028,7 +1027,7 @@ msgstr "配置设置"
 #. module: point_of_sale
 #: model:ir.ui.menu,name:point_of_sale.menu_point_config_product
 msgid "Configuration"
-msgstr "基础配置"
+msgstr "配置"
 
 #. module: point_of_sale
 #: model_terms:ir.ui.view,arch_db:point_of_sale.pos_config_view_form
@@ -1165,7 +1164,7 @@ msgstr "新增PoS配置"
 #. module: point_of_sale
 #: model_terms:ir.actions.act_window,help:point_of_sale.product_product_action
 msgid "Create a new product variant"
-msgstr "创建新产品变体"
+msgstr "创建新单品Sku"
 
 #. module: point_of_sale
 #: model:ir.model.fields,field_description:point_of_sale.field_closing_balance_confirm_wizard__create_uid
@@ -1546,7 +1545,7 @@ msgstr "显示名称"
 #. module: point_of_sale
 #: model_terms:ir.ui.view,arch_db:point_of_sale.pos_config_view_form
 msgid "Display pictures of product categories"
-msgstr "显示产品类别的图片"
+msgstr "显示品类的图片"
 
 #. module: point_of_sale
 #: code:addons/point_of_sale/models/digest.py:0
@@ -2630,7 +2629,7 @@ msgstr ""
 #: model:ir.model.fields.selection,name:point_of_sale.selection__pos_session__state__opening_control
 #: model_terms:ir.ui.view,arch_db:point_of_sale.view_pos_config_kanban
 msgid "Opening Control"
-msgstr "开始管理"
+msgstr "开业管理"
 
 #. module: point_of_sale
 #: model:ir.model.fields,field_description:point_of_sale.field_pos_session__start_at
@@ -3091,12 +3090,12 @@ msgstr "POS 订单"
 #: model:ir.ui.menu,name:point_of_sale.menu_products_pos_category
 #: model_terms:ir.ui.view,arch_db:point_of_sale.pos_config_view_form
 msgid "PoS Product Categories"
-msgstr "PoS产品类别"
+msgstr "PoS品类"
 
 #. module: point_of_sale
 #: model_terms:ir.ui.view,arch_db:point_of_sale.product_pos_category_tree_view
 msgid "PoS Product Category"
-msgstr "PoS产品类别"
+msgstr "PoS品类"
 
 #. module: point_of_sale
 #: model_terms:ir.ui.view,arch_db:point_of_sale.view_partner_property_form
@@ -3251,7 +3250,7 @@ msgstr "POS单明细"
 #. module: point_of_sale
 #: model_terms:ir.ui.view,arch_db:point_of_sale.product_pos_category_form_view
 msgid "Pos Product Categories"
-msgstr "POS产品类别"
+msgstr "POS品类"
 
 #. module: point_of_sale
 #: model:ir.model.fields,field_description:point_of_sale.field_pos_config__pos_session_duration
@@ -3437,7 +3436,7 @@ msgstr "产品"
 #: model:ir.model.fields,field_description:point_of_sale.field_report_pos_order__product_categ_id
 #: model_terms:ir.ui.view,arch_db:point_of_sale.view_report_pos_order_search
 msgid "Product Category"
-msgstr "产品类别"
+msgstr "品类"
 
 #. module: point_of_sale
 #: model_terms:ir.ui.view,arch_db:point_of_sale.pos_config_view_form
@@ -3447,7 +3446,7 @@ msgstr "产品价格"
 #. module: point_of_sale
 #: model_terms:ir.ui.view,arch_db:point_of_sale.product_pos_category_tree_view
 msgid "Product Product Categories"
-msgstr "产品产品类别"
+msgstr "产品品类"
 
 #. module: point_of_sale
 #: model:ir.model.fields,field_description:point_of_sale.field_report_pos_order__product_qty
@@ -3479,7 +3478,7 @@ msgstr "产品计量单位 类别"
 #: model:ir.actions.act_window,name:point_of_sale.product_product_action
 #: model:ir.ui.menu,name:point_of_sale.pos_config_menu_action_product_product
 msgid "Product Variants"
-msgstr "产品变体"
+msgstr "单品Sku"
 
 #. module: point_of_sale
 #. openerp-web
@@ -3849,7 +3848,7 @@ msgstr "以邮件形式发送"
 #. module: point_of_sale
 #: model:ir.model.fields,field_description:point_of_sale.field_pos_category__sequence
 msgid "Sequence"
-msgstr "单号规则"
+msgstr "序号"
 
 #. module: point_of_sale
 #: model:ir.model.fields,field_description:point_of_sale.field_pos_order__sequence_number
@@ -4068,7 +4067,7 @@ msgstr ""
 #. module: point_of_sale
 #: model_terms:ir.ui.view,arch_db:point_of_sale.pos_config_view_form
 msgid "Start selling from a default product category"
-msgstr "从默认产品类别开始销售"
+msgstr "从默认品类开始销售"
 
 #. module: point_of_sale
 #: model:ir.model.fields,field_description:point_of_sale.field_pos_session__cash_register_balance_start
@@ -4296,7 +4295,7 @@ msgstr "投标"
 msgid ""
 "The Point of Sale could not find any product, client, employee\n"
 "                    or action associated with the scanned barcode."
-msgstr "POS扫描的条形码找不到对应的产品,客户,员工或相关记录"
+msgstr "POS扫描的条码找不到对应的产品,客户,员工或相关记录"
 
 #. module: point_of_sale
 #: code:addons/point_of_sale/models/pos_config.py:0
@@ -4368,6 +4367,15 @@ msgid ""
 msgstr "订单已提前同步。请从后台为订单开具发票："
 
 #. module: point_of_sale
+#. openerp-web
+#: code:addons/point_of_sale/static/src/xml/pos.xml:715
+#, python-format
+msgid ""
+"The order has been synchronized earlier. To print the invoice please refer "
+"to the order in the backend"
+msgstr ""
+
+#. module: point_of_sale
 #: model:ir.model.fields,help:point_of_sale.field_pos_config__iface_precompute_cash
 msgid ""
 "The payment input will behave similarily to bank payment input, and will be "
@@ -4392,7 +4400,7 @@ msgstr "将要使用的物理POS。"
 msgid ""
 "The point of sale will display this product category by default. If no "
 "category is specified, all available products will be shown."
-msgstr "销售点将默认显示此产品类别。"
+msgstr "销售点将默认显示此品类。"
 
 #. module: point_of_sale
 #: model:ir.model.fields,help:point_of_sale.field_pos_config__iface_available_categ_ids
@@ -4872,7 +4880,7 @@ msgstr "单位"
 #: code:addons/point_of_sale/static/src/xml/pos.xml:0
 #, python-format
 msgid "Unknown Barcode"
-msgstr "未知条形码"
+msgstr "未知条码"
 
 #. module: point_of_sale
 #. openerp-web
@@ -4916,7 +4924,7 @@ msgstr "使用付款终端"
 #. module: point_of_sale
 #: model:ir.model.fields,help:point_of_sale.field_res_partner__barcode
 msgid "Use a barcode to identify this contact from the Point of Sale."
-msgstr "使用条形码从POS识别此联系人。"
+msgstr "使用条码从POS识别此联系人。"
 
 #. module: point_of_sale
 #: model_terms:ir.ui.view,arch_db:point_of_sale.pos_config_view_form
@@ -5088,6 +5096,13 @@ msgstr ""
 #: code:addons/point_of_sale/models/pos_session.py:0
 #, python-format
 msgid "You cannot create a session before the accounting lock date."
+msgstr ""
+
+#. module: point_of_sale
+#: code:addons/point_of_sale/models/account_bank_statement.py:0
+#, python-format
+msgid ""
+"You cannot delete a bank statement used in an open Point of Sale session."
 msgstr ""
 
 #. module: point_of_sale

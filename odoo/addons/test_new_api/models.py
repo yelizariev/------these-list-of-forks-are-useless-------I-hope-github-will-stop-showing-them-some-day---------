@@ -710,6 +710,23 @@ class ModelChildNoCheck(models.Model):
     parent_id = fields.Many2one('test_new_api.model_parent', check_company=False)
 
 
+class ModelPrivateAddressOnchange(models.Model):
+    _name = 'test_new_api.model_private_address_onchange'
+    _description = 'Model Private Address Onchange'
+    _check_company_auto = True
+
+    name = fields.Char()
+    company_id = fields.Many2one('res.company', required=True)
+    address_id = fields.Many2one('res.partner', check_company=True)
+
+    @api.onchange('name')
+    def _onchange_name(self):
+        if self.name and not self.address_id:
+            self.address_id = self.env['res.partner'].sudo().create({
+                'name': self.name,
+                'type': 'private',
+            })
+
 # model with explicit and stored field 'display_name'
 class Display(models.Model):
     _name = 'test_new_api.display'
@@ -798,3 +815,31 @@ class ModelParentM2o(models.Model):
 
     name = fields.Char('Name')
     child_ids = fields.One2many('test_new_api.model_child_m2o', 'parent_id', string="Children")
+
+
+class Country(models.Model):
+    _name = 'test_new_api.country'
+    _description = 'Country, ordered by name'
+    _order = 'name, id'
+
+    name = fields.Char()
+
+
+class City(models.Model):
+    _name = 'test_new_api.city'
+    _description = 'City, ordered by country then name'
+    _order = 'country_id, name, id'
+
+    name = fields.Char()
+    country_id = fields.Many2one('test_new_api.country')
+
+# abstract model with a selection field
+class StateMixin(models.AbstractModel):
+    _name = 'test_new_api.state_mixin'
+    _description = 'Dummy state mixin model'
+
+    state = fields.Selection([
+        ('draft', 'Draft'),
+        ('confirmed', 'Confirmed'),
+        ('done', 'Done'),
+    ])

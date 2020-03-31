@@ -44,6 +44,7 @@ class AuthorizeAPI():
         resp = requests.post(self.url, json.dumps(data))
         resp.raise_for_status()
         resp = json.loads(resp.content)
+        _logger.info("_authorize_request: Received response:\n%s", resp)
         messages = resp.get('messages')
         if messages and messages.get('resultCode') == 'Error':
             return {
@@ -89,7 +90,8 @@ class AuthorizeAPI():
                             'city': partner.city,
                             'state': partner.state_id.name or None,
                             'zip': partner.zip or '',
-                            'country': partner.country_id.name or None
+                            'country': partner.country_id.name or None,
+                            'phoneNumber': partner.phone or '',
                         },
                         'payment': {
                             'opaqueData': {
@@ -300,8 +302,8 @@ class AuthorizeAPI():
                 },
                 'transactionRequest': {
                     'transactionType': 'priorAuthCaptureTransaction',
+                    'amount': str(amount),
                     'refTransId': transaction_id,
-                    'amount': str(amount)
                 }
             }
         }

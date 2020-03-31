@@ -216,7 +216,7 @@ class MrpProduction(models.Model):
                                 readonly=True, states={'draft': [('readonly', False)]}, default='1')
     is_locked = fields.Boolean('Is Locked', default=True, copy=False)
     show_final_lots = fields.Boolean('Show Final Lots', compute='_compute_show_lots')
-    production_location_id = fields.Many2one('stock.location', "Production Location", related='product_id.property_stock_production', readonly=False)  # FIXME sle: probably wrong if document in another company
+    production_location_id = fields.Many2one('stock.location', "Production Location", related='product_id.property_stock_production', readonly=False, related_sudo=False)
     picking_ids = fields.Many2many('stock.picking', compute='_compute_picking_ids', string='Picking associated to this manufacturing order')
     delivery_count = fields.Integer(string='Delivery Orders', compute='_compute_picking_ids')
     confirm_cancel = fields.Boolean(compute='_compute_confirm_cancel')
@@ -501,7 +501,15 @@ class MrpProduction(models.Model):
                 values['name'] = self.env['ir.sequence'].next_by_code('mrp.production') or _('New')
         if not values.get('procurement_group_id'):
             values['procurement_group_id'] = self.env["procurement.group"].create({'name': values['name']}).id
-        return super(MrpProduction, self).create(values)
+        production = super(MrpProduction, self).create(values)
+        production.move_raw_ids.write({
+            'group_id': production.procurement_group_id.id,
+            'reference': production.name,  # set reference when MO name is different than 'New'
+        })
+        # Trigger move_raw creation when importing a file
+        if 'import_file' in self.env.context:
+            production._onchange_move_raw()
+        return production
 
     def unlink(self):
         if any(production.state == 'done' for production in self):
@@ -613,8 +621,7 @@ class MrpProduction(models.Model):
             old_qty = move[0].product_uom_qty
             remaining_qty = move[0].raw_material_production_id.product_qty - move[0].raw_material_production_id.qty_produced
             if quantity > 0:
-                move[0]._decrease_reserved_quanity(quantity)
-                move[0].with_context(do_not_unreserve=True).write({'product_uom_qty': quantity})
+                move[0].write({'product_uom_qty': quantity})
                 move[0]._recompute_state()
                 move[0]._action_assign()
                 move[0].unit_factor = remaining_qty and (quantity - move[0].quantity_done) / remaining_qty or 1.0
@@ -657,9 +664,7 @@ class MrpProduction(models.Model):
                 raise UserError(_("Add some materials to consume before marking this MO as to do."))
             for move_raw in production.move_raw_ids:
                 move_raw.write({
-                    'group_id': production.procurement_group_id.id,
                     'unit_factor': move_raw.product_uom_qty / production.product_qty,
-                    'reference': production.name,  # set reference when MO name is different than 'New'
                 })
             production._generate_finished_moves()
             production.move_raw_ids._adjust_procure_method()
@@ -722,7 +727,7 @@ class MrpProduction(models.Model):
                 to_date = workcenter.resource_calendar_id.plan_hours(duration_expected / 60.0, from_date, compute_leaves=True, resource=workcenter.resource_id, domain=[('time_type', 'in', ['leave', 'other'])])
 
                 # Check if this workcenter is better than the previous ones
-                if to_date < best_finished_date:
+                if to_date and to_date < best_finished_date:
                     best_start_date = from_date
                     best_finished_date = to_date
                     best_workcenter = workcenter

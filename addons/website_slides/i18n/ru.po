@@ -16,15 +16,15 @@
 # Collex100, 2019
 # Martin Trigaux, 2019
 # Denis Trepalin <zekarious@gmail.com>, 2019
-# Ivan Yelizariev <yelizariev@it-projects.info>, 2019
+# Ivan Yelizariev <yelizariev@it-projects.info>, 2020
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 13.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-05 12:34+0000\n"
+"POT-Creation-Date: 2020-02-18 11:22+0000\n"
 "PO-Revision-Date: 2019-08-26 09:16+0000\n"
-"Last-Translator: Ivan Yelizariev <yelizariev@it-projects.info>, 2019\n"
+"Last-Translator: Ivan Yelizariev <yelizariev@it-projects.info>, 2020\n"
 "Language-Team: Russian (https://www.transifex.com/odoo/teams/41243/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -65,6 +65,14 @@ msgid "&times;"
 msgstr "&times;"
 
 #. module: website_slides
+#. openerp-web
+#: code:addons/website_slides/static/src/js/slides_course_slides_list.js:0
+#: code:addons/website_slides/static/src/js/slides_slide_archive.js:0
+#, python-format
+msgid "(empty)"
+msgstr ""
+
+#. module: website_slides
 #: model:slide.slide,name:website_slides.slide_slide_demo_1_5
 msgid "3 Main Methodologies"
 msgstr ""
@@ -72,7 +80,7 @@ msgstr ""
 #. module: website_slides
 #: model_terms:ir.ui.view,arch_db:website_slides.slides_home_user_profile_small
 msgid "50%"
-msgstr ""
+msgstr "50%"
 
 #. module: website_slides
 #: model_terms:ir.ui.view,arch_db:website_slides.course_slides_list
@@ -708,6 +716,13 @@ msgid "All Courses"
 msgstr ""
 
 #. module: website_slides
+#. openerp-web
+#: code:addons/website_slides/static/src/xml/website_slides_unsubscribe.xml:0
+#, python-format
+msgid "All completed classes and earned karma will be lost."
+msgstr ""
+
+#. module: website_slides
 #: model:ir.model.fields,help:website_slides.field_slide_channel__partner_ids
 msgid "All members of the channel."
 msgstr ""
@@ -941,7 +956,7 @@ msgstr ""
 #: model_terms:slide.slide,html_content:website_slides.slide_slide_demo_1_4
 #: model_terms:slide.slide,html_content:website_slides.slide_slide_demo_2_1
 msgid "Catchy Headline"
-msgstr ""
+msgstr "захватывающий заголовок"
 
 #. module: website_slides
 #: model:ir.model.fields,field_description:website_slides.field_slide_channel__slide_category_ids
@@ -1261,7 +1276,7 @@ msgid ""
 "Here is the received response: %s"
 msgstr ""
 "Не можете получить данные из URL-адреса. Документ или доступ право не предоставляется.\n"
-"Вот полученный ответ: %s"
+"Вот полученный ответ: %s "
 
 #. module: website_slides
 #: code:addons/website_slides/models/slide_slide.py:0
@@ -1271,7 +1286,7 @@ msgid ""
 "%s"
 msgstr ""
 "Не удалось получить данные из URL. Документ или права доступа не доступны:\n"
-"%s"
+" %s "
 
 #. module: website_slides
 #: model:ir.model.fields,field_description:website_slides.field_slide_slide__channel_id
@@ -1463,7 +1478,7 @@ msgstr "Отменить"
 #: model_terms:slide.slide,html_content:website_slides.slide_slide_demo_1_4
 #: model_terms:slide.slide,html_content:website_slides.slide_slide_demo_2_1
 msgid "Discover more"
-msgstr ""
+msgstr "открыть больше"
 
 #. module: website_slides
 #: model:ir.model.fields,field_description:website_slides.field_slide_slide__dislikes
@@ -2104,7 +2119,7 @@ msgid ""
 "Here is the error message: %s"
 msgstr ""
 "Внутренняя ошибка сервера, пожалуйста попробуйте позже или свяжитесь с администратором.\n"
-"Сообщение о ошибке: %s"
+"Сообщение о ошибке: %s "
 
 #. module: website_slides
 #: model:slide.slide,name:website_slides.slide_category_demo_4_0
@@ -2715,7 +2730,7 @@ msgstr ""
 #: model_terms:slide.slide,html_content:website_slides.slide_slide_demo_1_4
 #: model_terms:slide.slide,html_content:website_slides.slide_slide_demo_2_1
 msgid "Odoo • Image and Text"
-msgstr ""
+msgstr "Odoo • Изображения и текст"
 
 #. module: website_slides
 #: model:ir.model.fields.selection,name:website_slides.selection__slide_channel__enroll__invite
@@ -2732,6 +2747,14 @@ msgstr "Параметры"
 #: model:ir.model.fields,field_description:website_slides.field_slide_slide_partner__partner_id
 msgid "Partner"
 msgstr "Партнёр"
+
+#. module: website_slides
+#: code:addons/website_slides/models/slide_slide.py:0
+#, python-format
+msgid ""
+"People already took this quiz. To keep course progression it should not be "
+"deleted."
+msgstr ""
 
 #. module: website_slides
 #: model_terms:ir.ui.view,arch_db:website_slides.courses_home
@@ -3160,7 +3183,7 @@ msgstr "Раздел"
 #: model_terms:slide.slide,html_content:website_slides.slide_slide_demo_1_4
 #: model_terms:slide.slide,html_content:website_slides.slide_slide_demo_2_1
 msgid "Section Subtitle"
-msgstr ""
+msgstr "подзаголовок раздела"
 
 #. module: website_slides
 #. openerp-web
@@ -3407,7 +3430,7 @@ msgstr ""
 #: model_terms:slide.slide,html_content:website_slides.slide_slide_demo_1_4
 #: model_terms:slide.slide,html_content:website_slides.slide_slide_demo_2_1
 msgid "Start with the customer – find out what they want and give it to them."
-msgstr ""
+msgstr "Начните с клиентом - выясните, чего они хотят и дайте им."
 
 #. module: website_slides
 #: model_terms:ir.ui.view,arch_db:website_slides.courses_home
@@ -4235,7 +4258,7 @@ msgstr ""
 #. module: website_slides
 #: model_terms:ir.ui.view,arch_db:website_slides.course_nav
 msgid "breadcrumb"
-msgstr ""
+msgstr "хлебные крошки"
 
 #. module: website_slides
 #. openerp-web
