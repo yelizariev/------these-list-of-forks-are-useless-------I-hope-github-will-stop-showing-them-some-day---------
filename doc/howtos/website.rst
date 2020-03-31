@@ -26,7 +26,7 @@ module. To quickly get started simply invoke:
 
 .. code-block:: console
 
-    $ ./odoo.py scaffold Academy my-modules
+    $ ./odoo-bin scaffold Academy my-modules
 
 This will automatically create a ``my-modules`` *module directory* with an
 ``academy`` module inside. The directory can be an existing module directory
@@ -46,7 +46,7 @@ Although it does absolutely nothing we can install it:
 
   .. code-block:: console
 
-      $ ./odoo.py --addons-path addons,my-modules
+      $ ./odoo-bin --addons-path addons,my-modules
 
 * go to http://localhost:8069
 * create a new database including demonstration data
@@ -58,7 +58,7 @@ Although it does absolutely nothing we can install it:
 To the browser
 ==============
 
-:ref:`Controllers <reference/http/controllers>` interpret browser requests and
+:ref:`Controllers <reference/controllers>` interpret browser requests and
 send data back.
 
 Add a simple controller and ensure it is imported by ``__init__.py`` (so
@@ -70,7 +70,7 @@ Shut down your server (:kbd:`^C`) then restart it:
 
 .. code-block:: console
 
-    $ ./odoo.py --addons-path addons,my-modules
+    $ ./odoo-bin --addons-path addons,my-modules
 
 and open a page to http://localhost:8069/academy/academy/, you should see your
 "page" appear:
@@ -88,7 +88,7 @@ own :ref:`QWeb <reference/qweb>` templating system which integrates with other
 features.
 
 Create a template and ensure the template file is registered in the
-``__openerp__.py`` manifest, and alter the controller to use our template:
+``__manifest__.py`` manifest, and alter the controller to use our template:
 
 .. patch::
 
@@ -102,11 +102,11 @@ Academy` and clicking :guilabel:`Upgrade`.
 .. tip::
 
     Alternatively, Odoo can be restarted :option:`and update modules at
-    the same time<odoo.py -u>`:
+    the same time<odoo-bin -u>`:
 
     .. code-block:: console
 
-        $ odoo.py --addons-path addons,my-modules -d academy -u academy
+        $ odoo-bin --addons-path addons,my-modules -d academy -u academy
 
 Going to http://localhost:8069/academy/academy/ should now result in:
 
@@ -174,7 +174,7 @@ Accessing the data
 The last step is to alter model and template to use our demonstration data:
 
 #. fetch the records from the database instead of having a static list
-#. Because :meth:`~openerp.models.Model.search` returns a set of records
+#. Because :meth:`~odoo.models.Model.search` returns a set of records
    matching the filter ("all records" here), alter the template to print each
    teacher's ``name``
 
@@ -210,7 +210,7 @@ elements (top-level menu, footer, …)
 
 .. image:: website/layout.png
 
-The website layout also provides support for edition tools: click
+The website layout also provides support for editing tools: click
 :guilabel:`Sign In` (in the top-right), fill the credentials in (``admin`` /
 ``admin`` by default) then click :guilabel:`Log In`.
 
@@ -218,12 +218,12 @@ You're now in Odoo "proper": the administrative interface. For now click on
 the :guilabel:`Website` menu item (top-left corner.
 
 We're back in the website but as an administrator, with access to advanced
-edition features provided by the *website* support:
+editing features provided by the *website* support:
 
 * a template code editor (:menuselection:`Customize --> HTML Editor`) where
   you can see and edit all templates used for the current page
-* the :guilabel:`Edit` button in the top-left switches to "edition mode" where
-  blocks (snippets) and rich text edition are available
+* the :guilabel:`Edit` button in the top-left switches to "edit mode" where
+  blocks (snippets) and rich text editing are available
 * a number of other features such as mobile preview or :abbr:`SEO (Search
   Engine Optimization)`
 
@@ -231,7 +231,7 @@ URLs and routing
 ================
 
 Controller methods are associated with *routes* via the
-:func:`~openerp.http.route` decorator which takes a routing string and a
+:func:`~odoo.http.route` decorator which takes a routing string and a
 number of attributes to customise its behavior or security.
 
 We've seen a "literal" routing string, which matches a URL section exactly,
@@ -273,7 +273,7 @@ biography is shared between all teachers, because blocks are added to the
 *template*, and the *biography* template is shared between all teachers, when
 one page is edited they're all edited at the same time.
 
-Field edition
+Field editing
 =============
 
 Data which is specific to a record should be saved on that record, so let us
@@ -367,9 +367,9 @@ Relations between models
 ------------------------
 
 We have seen a pair of "basic" fields stored directly in the record. There are
-:ref:`a number of basic fields <reference/orm/fields/basic>`. The second
+:ref:`a number of basic fields <reference/fields/basic>`. The second
 broad categories of fields are :ref:`relational
-<reference/orm/fields/relational>` and used to link records to one another
+<reference/fields/relational>` and used to link records to one another
 (within a model or across models).
 
 For demonstration, let's create a *courses* model. Each course should have a
@@ -384,7 +384,7 @@ let's also add views so we can see and edit a course's teacher:
 
 It should also be possible to create new courses directly from a teacher's
 page, or to see all the courses they teach, so add
-:class:`the inverse relationship <openerp.fields.One2many>` to the *teachers*
+:class:`the inverse relationship <odoo.fields.One2many>` to the *teachers*
 model:
 
 .. patch::
@@ -398,7 +398,7 @@ them by hand.
 
 One of these is the *Chatter* system, part of Odoo's email and messaging
 system, which can add notifications and discussion threads to any model.
-The model simply has to :attr:`~openerp.models.Model._inherit`
+The model simply has to :attr:`~odoo.models.Model._inherit`
 ``mail.thread``, and add the ``message_ids`` field to its form view to display
 the discussion thread. Discussion threads are per-record.
 
@@ -443,8 +443,8 @@ though they may have to be looked for.
 .. note::
 
     * to extend a model in-place, it's :attr:`inherited
-      <openerp.models.Model._inherit>` without giving it a new
-      :attr:`~openerp.models.Model._name`
+      <odoo.models.Model._inherit>` without giving it a new
+      :attr:`~odoo.models.Model._name`
     * ``product.template`` already uses the discussions system, so we can
       remove it from our extension model
     * we're creating our courses as *published* by default so they can be

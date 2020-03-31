@@ -1,41 +1,11 @@
 # HG changeset patch
 # Parent dba00a105dd2a82490394b8dec5fea5f1d8847e1
+# Parent  f4374b6e2e661e0782e396b24c57c1eb97d13288
 
-Index: addons/openacademy/models.py
-===================================================================
---- addons.orig/openacademy/models.py	2014-08-28 14:21:46.543015785 +0200
-+++ addons/openacademy/models.py	2014-08-28 14:21:46.539015785 +0200
-@@ -59,6 +59,9 @@
-     end_date = fields.Date(string="End Date", store=True,
-         compute='_get_end_date', inverse='_set_end_date')
- 
-+    hours = fields.Float(string="Duration in hours",
-+                         compute='_get_hours', inverse='_set_hours')
-+
-     @api.one
-     @api.depends('seats', 'attendee_ids')
-     def _taken_seats(self):
-@@ -109,6 +112,15 @@
-         self.duration = (end_date - start_date).days + 1
- 
-     @api.one
-+    @api.depends('duration')
-+    def _get_hours(self):
-+        self.hours = self.duration * 24
-+
-+    @api.one
-+    def _set_hours(self):
-+        self.duration = self.hours / 24
-+
-+    @api.one
-     @api.constrains('instructor_id', 'attendee_ids')
-     def _check_instructor_not_in_attendees(self):
-         if self.instructor_id and self.instructor_id in self.attendee_ids:
-Index: addons/openacademy/views/openacademy.xml
-===================================================================
---- addons.orig/openacademy/views/openacademy.xml	2014-08-28 14:21:46.543015785 +0200
-+++ addons/openacademy/views/openacademy.xml	2014-08-28 14:21:46.539015785 +0200
-@@ -145,11 +145,23 @@
+diff --git a/openacademy/views/openacademy.xml b/openacademy/views/openacademy.xml
+--- a/openacademy/views/openacademy.xml
++++ b/openacademy/views/openacademy.xml
+@@ -142,10 +142,21 @@
              </field>
          </record>
  
@@ -43,10 +13,9 @@ Index: addons/openacademy/views/openacademy.xml
 +            <field name="name">session.gantt</field>
 +            <field name="model">openacademy.session</field>
 +            <field name="arch" type="xml">
-+                <gantt string="Session Gantt" color="course_id"
-+                       date_start="start_date" date_delay="hours"
++                <gantt string="Session Gantt"
++                       date_start="start_date" date_stop="end_date"
 +                       default_group_by='instructor_id'>
-+                    <field name="name"/>
 +                </gantt>
 +            </field>
 +        </record>
@@ -54,7 +23,6 @@ Index: addons/openacademy/views/openacademy.xml
          <record model="ir.actions.act_window" id="session_list_action">
              <field name="name">Sessions</field>
              <field name="res_model">openacademy.session</field>
-             <field name="view_type">form</field>
 -            <field name="view_mode">tree,form,calendar</field>
 +            <field name="view_mode">tree,form,calendar,gantt</field>
          </record>

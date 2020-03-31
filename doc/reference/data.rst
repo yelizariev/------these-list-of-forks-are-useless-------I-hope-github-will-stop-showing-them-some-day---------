@@ -22,6 +22,7 @@ of an XML data file is the following:
 .. code-block:: xml
 
     <!-- the root elements of the data file -->
+    <?xml version="1.0" encoding="UTF-8"?>
     <odoo>
       <operation/>
       ...
@@ -29,6 +30,25 @@ of an XML data file is the following:
 
 Data files are executed sequentially, operations can only refer to the result
 of operations defined previously
+
+.. note::
+
+    If the content of the data file is expected to be applied only once, you
+    can specify the odoo flag ``noupdate`` set to 1.  If part of
+    the data in the file is expected to be applied once, you can place this part
+    of the file in a <data noupdate="1"> domain.
+
+    .. code-block:: xml
+
+      <odoo>
+          <data noupdate="1">
+              <!-- Only loaded when installing the module (odoo-bin -i module) -->
+              <operation/>
+          </data>
+
+          <!-- (Re)Loaded at install and update (odoo-bin -i/-u) -->
+          <operation/>
+      </odoo>
 
 Core operations
 ===============
@@ -58,7 +78,7 @@ following attributes:
     Requires an :term:`external id`, defaults to ``True``.
 
 ``field``
-'''''''''
+----------
 
 Each record can be composed of ``field`` tags, defining values to set when
 creating the record. A ``record`` with no ``field`` will use all default
@@ -72,18 +92,18 @@ Nothing
     on the field. Can be used to clear a field, or avoid using a default value
     for the field.
 ``search``
-    for :ref:`relational fields <reference/orm/fields/relational>`, should be
+    for :ref:`relational fields <reference/fields/relational>`, should be
     a :ref:`domain <reference/orm/domains>` on the field's model.
 
     Will evaluate the domain, search the field's model using it and set the
     search's result as the field's value. Will only use the first result if
-    the field is a :class:`~openerp.fields.Many2one`
+    the field is a :class:`~odoo.fields.Many2one`
 ``ref``
     if a ``ref`` attribute is provided, its value must be a valid
     :term:`external id`, which will be looked up and set as the field's value.
 
-    Mostly for :class:`~openerp.fields.Many2one` and
-    :class:`~openerp.fields.Reference` fields
+    Mostly for :class:`~odoo.fields.Many2one` and
+    :class:`~odoo.fields.Reference` fields
 ``type``
     if a ``type`` attribute is provided, it is used to interpret and convert
     the field's content. The field's content can be provided through an
@@ -152,17 +172,30 @@ Parameters can be provided using ``eval`` (should evaluate to a sequence of
 parameters to call the method with) or ``value`` elements (see ``list``
 values).
 
-``workflow``
-------------
+.. code-block:: xml
 
-The ``workflow`` tag sends a signal to an existing workflow. The workflow
-can be specified via a ``ref`` attribute (the :term:`external id` of
-an existing workflow) or a ``value`` tag returning the id of a workflow.
+  <odoo>
+      <data noupdate="1">
+          <record name="partner_1" model="res.partner">
+              <field name="name">Odude</field>
+          </record>
 
-The tag also has two mandatory attributes ``model`` (the model linked to the
-workflow) and ``action`` (the name of the signal to send to the workflow).
+          <function model="res.partner" name="send_inscription_notice"
+              eval="[[ref('partner_1'), ref('partner_2')]]"/>
+
+          <function model="res.users" name="send_vip_inscription_notice">
+              <function eval="[[('vip','=',True)]]" model="res.partner" name="search"/>
+          </function>
+      </data>
+
+      <record id="model_form_view" model="ir.ui.view">
+
+      </record>
+  </odoo>
 
 .. ignored assert
+
+.. _reference/data/shortcuts:
 
 Shortcuts
 =========
@@ -176,7 +209,7 @@ data files provide shorter alternatives to defining them using
 
 Defines an ``ir.ui.menu`` record with a number of defaults and fallbacks:
 
-Parent menu
+``parent``
     * If a ``parent`` attribute is set, it should be the :term:`external id`
       of an other menu item, used as the new item's parent
     * If no ``parent`` is provided, tries to interpret the ``name`` attribute
@@ -185,10 +218,10 @@ Parent menu
       created
     * Otherwise the menu is defined as a "top-level" menu item (*not* a menu
       with no parent)
-Menu name
+``name``
     If no ``name`` attribute is specified, tries to get the menu name from
     a linked action if any. Otherwise uses the record's ``id``
-Groups
+``groups``
     A ``groups`` attribute is interpreted as a comma-separated sequence of
     :term:`external identifiers` for ``res.groups`` models. If an
     :term:`external identifier` is prefixed with a minus (``-``), the group
@@ -228,10 +261,10 @@ section of the view, and allowing a few *optional* attributes:
 ``report``
 ----------
 
-Creates a ``ir.actions.report.xml`` record with a few default values.
+Creates a :ref:`IrActionsReport <reference/actions/report>` record with a few default values.
 
 Mostly just proxies attributes to the corresponding fields on
-``ir.actions.report.xml``, but also automatically creates the item in the
+``ir.actions.report``, but also automatically creates the item in the
 :guilabel:`More` menu of the report's ``model``.
 
 .. ignored url, act_window and ir_set
@@ -253,14 +286,14 @@ For this case, data files can also use csv_, this is often the case for
 Here's the first lines of the data file defining US states
 ``res.country.state.csv``
 
-.. literalinclude:: ../../openerp/addons/base/res/res.country.state.csv
+.. literalinclude:: ../../odoo/addons/base/data/res.country.state.csv
     :language: text
     :lines: 1-15
 
 rendered in a more readable format:
 
 .. csv-table::
-    :file: ../../openerp/addons/base/res/res.country.state.csv
+    :file: ../../odoo/addons/base/data/res.country.state.csv
     :header-rows: 1
     :class: table-striped table-hover table-condensed
 
@@ -273,5 +306,5 @@ For each row (record):
 * the third column is the ``name`` field for ``res.country.state``
 * the fourth column is the ``code`` field for ``res.country.state``
 
-.. _base64: http://tools.ietf.org/html/rfc3548.html#section-3
-.. _csv: http://en.wikipedia.org/wiki/Comma-separated_values
+.. _base64: https://tools.ietf.org/html/rfc3548.html#section-3
+.. _csv: https://en.wikipedia.org/wiki/Comma-separated_values

@@ -1,2 +1,7 @@
 # -*- coding: utf-8 -*-
-from openerp.addons.event.tests import test_event_flow, test_mail_schedule
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
+
+from . import test_event_flow
+from . import test_event_internals
+from . import test_event_mail_schedule
+from . import test_event_security

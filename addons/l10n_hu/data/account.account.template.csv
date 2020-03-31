@@ -49,6 +49,7 @@
 "chart_hu_271",271,"Közvetített szolgáltatások","account.data_account_type_current_assets","FALSE",hungarian_chart_template
 "chart_hu_281",281,"Betétdíjas göngyölegek","account.data_account_type_current_assets","FALSE",hungarian_chart_template
 "chart_hu_311",311,"Belföldi követelések","account.data_account_type_receivable","TRUE",hungarian_chart_template
+"chart_hu_312",312,"Belföldi követelések (PoS)","account.data_account_type_receivable","TRUE",hungarian_chart_template
 "chart_hu_316",316,"Külföldi követelések","account.data_account_type_receivable","TRUE",hungarian_chart_template
 "chart_hu_351",351,"Adott elõlegek","account.data_account_type_current_assets","FALSE",hungarian_chart_template
 "chart_hu_361",361,"Munkavállalókkal szembeni követelés","account.data_account_type_current_assets","FALSE",hungarian_chart_template
@@ -177,10 +178,6 @@
 "chart_hu_877",877,"Egyéb árfolyamveszteségek, opciós díjak","account.data_account_type_expenses","FALSE",hungarian_chart_template
 "chart_hu_878",878,"Vásárolt köv. kapcs. ráfordítások","account.data_account_type_expenses","FALSE",hungarian_chart_template
 "chart_hu_879",879,"Egyéb pénzügyi ráfordítások","account.data_account_type_expenses","FALSE",hungarian_chart_template
-"chart_hu_881",881,"Társaságban bevitt eszk. nytsz. értéke","account.data_account_type_expenses","FALSE",hungarian_chart_template
-"chart_hu_887",887,"Saját üzletrész nyilvántartási értéke","account.data_account_type_expenses","FALSE",hungarian_chart_template
-"chart_hu_888",888,"Tartozásátv. szerz. szerinti összege","account.data_account_type_expenses","FALSE",hungarian_chart_template
-"chart_hu_889",889,"Egyéb vagyoncsökk. rendkívüli ráfordítás","account.data_account_type_expenses","FALSE",hungarian_chart_template
 "chart_hu_891",891,"Társasági adó","account.data_account_type_expenses","FALSE",hungarian_chart_template
 "chart_hu_892",892,"Társas vállalkozás különadója","account.data_account_type_expenses","FALSE",hungarian_chart_template
 "chart_hu_895",895,"Egyszerüsített vállalkozói adó","account.data_account_type_expenses","FALSE",hungarian_chart_template
@@ -206,4 +203,3 @@
 "chart_hu_977",977,"Egyéb árfolyamnyereségek, opciós bev.","account.data_account_type_other_income","FALSE",hungarian_chart_template
 "chart_hu_978",978,"Vás. követelésekkel kapcs. bevételek","account.data_account_type_revenue","FALSE",hungarian_chart_template
 "chart_hu_979",979,"Egyéb pénzügyi mûveletek bevételei","account.data_account_type_revenue","FALSE",hungarian_chart_template
-"chart_hu_981",981,"Rendkívüli bevételek","account.data_account_type_revenue","FALSE",hungarian_chart_template

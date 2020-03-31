@@ -1,408 +1,641 @@
-# Hungarian translation for openobject-addons
-# Copyright (c) 2014 Rosetta Contributors and Canonical Ltd 2014
-# This file is distributed under the same license as the openobject-addons package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2014.
-#
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* base_setup
+# 
+# Translators:
+# Martin Trigaux, 2019
+# krnkris, 2019
+# Kovács Tibor <kovika@gmail.com>, 2019
+# Ákos Nagy <akos.nagy@oregional.hu>, 2019
+# Tibor Kőnig <konig.tibor@evitalit.hu>, 2019
+# Daniel Gerstenbrand <daniel.gerstenbrand@gmail.com>, 2019
+# gezza <geza.nagy@oregional.hu>, 2019
+# 
 msgid ""
 msgstr ""
-"Project-Id-Version: openobject-addons\n"
-"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2014-08-14 13:08+0000\n"
-"PO-Revision-Date: 2014-10-06 14:48+0000\n"
-"Last-Translator: krnkris <Unknown>\n"
-"Language-Team: Hungarian <hu@li.org>\n"
+"Project-Id-Version: Odoo Server saas~12.5\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-09-13 11:27+0000\n"
+"PO-Revision-Date: 2019-08-26 09:09+0000\n"
+"Last-Translator: gezza <geza.nagy@oregional.hu>, 2019\n"
+"Language-Team: Hungarian (https://www.transifex.com/odoo/teams/41243/hu/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-10-07 07:02+0000\n"
-"X-Generator: Launchpad (build 17196)\n"
+"Content-Transfer-Encoding: \n"
+"Language: hu\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. module: base_setup
-#: view:base.config.settings:base_setup.view_general_configuration
-msgid "(reload fonts)"
-msgstr "(betűk frissítése)"
+#. openerp-web
+#: code:addons/base_setup/static/src/xml/res_config_edition.xml:0
+#, python-format
+msgid "(Community Edition)"
+msgstr "(Közösségi kiadás)"
 
 #. module: base_setup
-#: field:base.config.settings,module_portal:0
-msgid "Activate the customer portal"
-msgstr "A közösségi portál aktiválása"
+#: model_terms:ir.ui.view,arch_db:base_setup.res_config_settings_view_form
+msgid ""
+"<span class=\"fa fa-lg fa-building-o\" title=\"Values set here are company-"
+"specific.\" aria-label=\"Values set here are company-specific.\" "
+"groups=\"base.group_multi_company\" role=\"img\"/>"
+msgstr ""
+"<span class=\"fa fa-lg fa-building-o\" title=\"Values set here are company-"
+"specific.\" aria-label=\"Values set here are company-specific.\" "
+"groups=\"base.group_multi_company\" role=\"img\"/>"
 
 #. module: base_setup
-#: field:base.config.settings,module_share:0
-msgid "Allow documents sharing"
-msgstr "Dokumentumok megoszásának engedélyezése"
+#: model_terms:ir.ui.view,arch_db:base_setup.res_config_settings_view_form
+msgid ""
+"<span class=\"o_form_label\" attrs=\"{'invisible':[('active_user_count', '&gt;', '1')]}\">\n"
+"                                            Active User\n"
+"                                        </span>\n"
+"                                        <span class=\"o_form_label\" attrs=\"{'invisible':[('active_user_count', '&lt;=', '1')]}\">\n"
+"                                            Active Users\n"
+"                                        </span>\n"
+"\n"
+"                                        <br/>"
+msgstr ""
 
 #. module: base_setup
-#: field:base.config.settings,module_google_calendar:0
+#: model_terms:ir.ui.view,arch_db:base_setup.res_config_settings_view_form
+msgid ""
+"<span class=\"o_form_label\">\n"
+"                                                Languages\n"
+"                                            </span>"
+msgstr ""
+
+#. module: base_setup
+#: model_terms:ir.ui.view,arch_db:base_setup.res_config_settings_view_form
+msgid ""
+"<span class=\"o_form_label\">\n"
+"                                            Companies\n"
+"                                        </span>\n"
+"                                        <br/>"
+msgstr ""
+
+#. module: base_setup
+#: model_terms:ir.ui.view,arch_db:base_setup.res_config_settings_view_form
+msgid ""
+"<span class=\"o_form_label\">Document Layout</span>\n"
+"                                        <span class=\"fa fa-lg fa-building-o\" title=\"Values set here are company-specific.\" aria-label=\"Values set here are company-specific.\" groups=\"base.group_multi_company\" role=\"img\"/>"
+msgstr ""
+
+#. module: base_setup
+#: model_terms:ir.ui.view,arch_db:base_setup.res_config_settings_view_form
+msgid ""
+"<span class=\"o_form_label\">Format</span>\n"
+"                                        <span class=\"fa fa-lg fa-building-o\" title=\"Values set here are company-specific.\" aria-label=\"Values set here are company-specific.\" groups=\"base.group_multi_company\" role=\"img\"/>"
+msgstr ""
+
+#. module: base_setup
+#: model_terms:ir.ui.view,arch_db:base_setup.res_config_settings_view_form
+msgid ""
+"<strong>Save</strong> this page and come back here to choose your Geo "
+"Provider."
+msgstr ""
+
+#. module: base_setup
+#: model_terms:ir.ui.view,arch_db:base_setup.res_config_settings_view_form
+msgid ""
+"<strong>Save</strong> this page and come back here to set up the feature."
+msgstr ""
+
+#. module: base_setup
+#: model_terms:ir.ui.view,arch_db:base_setup.res_config_settings_view_form
+msgid "About"
+msgstr "Névjegy"
+
+#. module: base_setup
+#: code:addons/base_setup/controllers/main.py:0
+#, python-format
+msgid "Access Denied"
+msgstr "Hozzáférés megtagadva"
+
+#. module: base_setup
+#. openerp-web
+#: code:addons/base_setup/static/src/xml/res_config_dev_tool.xml:0
+#, python-format
+msgid "Activate the developer mode"
+msgstr "Fejlesztői nézet aktiválása"
+
+#. module: base_setup
+#. openerp-web
+#: code:addons/base_setup/static/src/xml/res_config_dev_tool.xml:0
+#, python-format
+msgid "Activate the developer mode (with assets)"
+msgstr "Fejlesztői mód aktiválása (assets)"
+
+#. module: base_setup
+#. openerp-web
+#: code:addons/base_setup/static/src/xml/res_config_dev_tool.xml:0
+#, python-format
+msgid "Activate the developer mode (with tests assets)"
+msgstr ""
+
+#. module: base_setup
+#: model_terms:ir.ui.view,arch_db:base_setup.res_config_settings_view_form
+msgid "Add fun feedback and motivate your employees"
+msgstr ""
+
+#. module: base_setup
+#: model:ir.model.fields,field_description:base_setup.field_res_config_settings__module_google_calendar
 msgid "Allow the users to synchronize their calendar  with Google Calendar"
 msgstr ""
-"Lehetővé teszi a felhasználók számára a naptár szinkronizálását a Google "
+"Engedélyezze felhasználók számára a naptárak szinkronizálását Google "
 "naptárral"
 
 #. module: base_setup
-#: field:base.config.settings,module_base_import:0
-msgid "Allow users to import data from CSV files"
-msgstr "Lehetővé teszi a felhasználók adatainak betöltését CSV fájlokból"
+#: model:ir.model.fields,field_description:base_setup.field_res_config_settings__module_base_import
+#: model_terms:ir.ui.view,arch_db:base_setup.res_config_settings_view_form
+msgid "Allow users to import data from CSV/XLS/XLSX/ODS files"
+msgstr ""
+"Engedélyezze felhasználók számára adatok betöltését CSV/XLS/XLSX/ODS "
+"fájlokból"
 
 #. module: base_setup
-#: view:base.config.settings:base_setup.view_general_configuration
-#: view:sale.config.settings:base_setup.view_sale_config_settings
-msgid "Apply"
-msgstr "Alkalmaz"
+#: model:ir.model.fields,help:base_setup.field_res_config_settings__group_multi_currency
+msgid "Allows to work in a multi currency environment"
+msgstr "Több pénznemes környezetet tesz elérhetővé"
 
 #. module: base_setup
-#: field:base.config.settings,module_google_drive:0
+#: model:ir.model.fields,field_description:base_setup.field_res_config_settings__module_voip
+msgid "Asterisk (VoIP)"
+msgstr ""
+
+#. module: base_setup
+#: model:ir.model.fields,field_description:base_setup.field_res_config_settings__module_google_drive
 msgid "Attach Google documents to any record"
-msgstr "Fűzzön hozzá Google dokumentumokat bármilyen rekordhoz"
+msgstr "Csatoljon Google dokumentumokat bármilyen rekordhoz"
 
 #. module: base_setup
-#: view:base.config.settings:base_setup.view_general_configuration
-msgid "Authentication"
-msgstr "Azonosítás"
+#: model_terms:ir.ui.view,arch_db:base_setup.res_config_settings_view_form
+msgid "Automatically enrich your contact base with company data"
+msgstr ""
 
 #. module: base_setup
-#: field:sale.config.settings,module_crm:0
-msgid "CRM"
-msgstr "CRM ügyfélkapcsolat-kezelő rendszer"
+#: model_terms:ir.ui.view,arch_db:base_setup.res_config_settings_view_form
+msgid ""
+"Automatically generate counterpart documents for orders/invoices between "
+"companies"
+msgstr ""
 
 #. module: base_setup
-#: view:base.config.settings:base_setup.view_general_configuration
-#: view:sale.config.settings:base_setup.view_sale_config_settings
-msgid "Cancel"
-msgstr "Visszavonás"
+#: model_terms:ir.ui.view,arch_db:base_setup.res_config_settings_view_form
+msgid "Business Documents"
+msgstr ""
 
 #. module: base_setup
-#: selection:base.setup.terminology,partner:0
-msgid "Client"
-msgstr "Ügyfél"
+#: model_terms:ir.ui.view,arch_db:base_setup.res_config_settings_view_form
+msgid ""
+"By default, new users get highest access rights for all installed apps."
+msgstr ""
 
 #. module: base_setup
-#: model:ir.actions.act_window,name:base_setup.action_sale_config
-#: view:sale.config.settings:base_setup.view_sale_config_settings
-msgid "Configure Sales"
-msgstr "Eladás beállítása"
+#: model_terms:ir.ui.view,arch_db:base_setup.res_config_settings_view_form
+msgid "Choose the layout of your documents"
+msgstr ""
 
 #. module: base_setup
-#: view:base.config.settings:base_setup.view_general_configuration
-msgid "Configure outgoing email servers"
-msgstr "Kimenő e-mail szerverek beállítása"
+#: model:ir.model.fields,field_description:base_setup.field_res_config_settings__module_pad
+msgid "Collaborative Pads"
+msgstr "Segélynyújtó szerkesztők"
 
 #. module: base_setup
-#: view:base.config.settings:base_setup.view_general_configuration
-msgid "Configure your company data"
-msgstr "A vállalata részleteinek beállítása"
+#: model_terms:ir.ui.view,arch_db:base_setup.res_config_settings_view_form
+msgid "Companies"
+msgstr "Vállalatok"
 
 #. module: base_setup
-#: view:sale.config.settings:base_setup.view_sale_config_settings
+#: model:ir.model.fields,field_description:base_setup.field_res_config_settings__company_id
+msgid "Company"
+msgstr "Vállalat"
+
+#. module: base_setup
+#: model:ir.model.fields,field_description:base_setup.field_res_config_settings__company_informations
+msgid "Company Informations"
+msgstr ""
+
+#. module: base_setup
+#: model:ir.model.fields,field_description:base_setup.field_res_config_settings__company_name
+msgid "Company Name"
+msgstr "Vállalat neve"
+
+#. module: base_setup
+#: model:ir.model,name:base_setup.model_res_config_settings
+msgid "Config Settings"
+msgstr "Konfigurációs beállítások"
+
+#. module: base_setup
+#: model_terms:ir.ui.view,arch_db:base_setup.res_config_settings_view_form
+msgid "Configure Document Layout"
+msgstr ""
+
+#. module: base_setup
+#: model_terms:ir.ui.view,arch_db:base_setup.res_config_settings_view_form
+msgid ""
+"Configure company rules to automatically create SO/PO when one of your "
+"company sells/buys to another of your company."
+msgstr ""
+
+#. module: base_setup
+#: model_terms:ir.ui.view,arch_db:base_setup.res_config_settings_view_form
 msgid "Contacts"
-msgstr "Kapcsolattartók"
+msgstr "Kapcsolatok"
 
 #. module: base_setup
-#: field:base.config.settings,create_uid:0
-#: field:base.setup.terminology,create_uid:0
-#: field:sale.config.settings,create_uid:0
-msgid "Created by"
-msgstr "Készítette"
+#. openerp-web
+#: code:addons/base_setup/static/src/xml/res_config_edition.xml:0
+#, python-format
+msgid "Copyright © 2004"
+msgstr ""
 
 #. module: base_setup
-#: field:base.config.settings,create_date:0
-#: field:base.setup.terminology,create_date:0
-#: field:sale.config.settings,create_date:0
-msgid "Created on"
-msgstr "Létrehozás dátuma"
+#: model_terms:ir.ui.view,arch_db:base_setup.res_config_settings_view_form
+msgid "Create and attach Google Drive documents to any record"
+msgstr ""
 
 #. module: base_setup
-#: selection:base.setup.terminology,partner:0
-msgid "Customer"
-msgstr "Vevő"
+#: model:ir.model.fields,field_description:base_setup.field_res_config_settings__report_footer
+msgid "Custom Report Footer"
+msgstr "Egyedi kimutatás lábléc"
 
 #. module: base_setup
-#: view:sale.config.settings:base_setup.view_sale_config_settings
-msgid "Customer Features"
-msgstr "Vavő tulajdonságai"
+#. openerp-web
+#: code:addons/base_setup/static/src/xml/res_config_dev_tool.xml:0
+#, python-format
+msgid "Deactivate the developer mode"
+msgstr "Fejlesztői mód kikapcsolása"
 
 #. module: base_setup
-#: selection:base.setup.terminology,partner:0
-msgid "Donor"
-msgstr "Donor"
+#: model:ir.model.fields,field_description:base_setup.field_res_config_settings__user_default_rights
+#: model_terms:ir.ui.view,arch_db:base_setup.res_config_settings_view_form
+msgid "Default Access Rights"
+msgstr ""
 
 #. module: base_setup
-#: view:base.config.settings:base_setup.view_general_configuration
-msgid "Email"
-msgstr "E-mail"
+#. openerp-web
+#: code:addons/base_setup/static/src/xml/res_config_dev_tool.xml:0
+#, python-format
+msgid "Developer Tools"
+msgstr "Fejlesztési eszközök"
 
 #. module: base_setup
-#: view:sale.config.settings:base_setup.view_sale_config_settings
-msgid "Emails Integration"
-msgstr "e-amil integrálás"
+#: model:ir.model.fields,field_description:base_setup.field_res_config_settings__external_report_layout_id
+msgid "Document Template"
+msgstr "Dokumentum sablon"
 
 #. module: base_setup
-#: view:base.config.settings:base_setup.view_general_configuration
-#: model:ir.actions.act_window,name:base_setup.action_general_configuration
-#: model:ir.ui.menu,name:base_setup.menu_general_configuration
+#: model_terms:ir.ui.view,arch_db:base_setup.res_config_settings_view_form
+msgid "Edit Layout"
+msgstr "Elrendezés szerkesztése"
+
+#. module: base_setup
+#. openerp-web
+#: code:addons/base_setup/static/src/xml/res_config_invite_users.xml:0
+#, python-format
+msgid "Enter e-mail address"
+msgstr ""
+
+#. module: base_setup
+#: model:ir.model.fields,field_description:base_setup.field_res_config_settings__external_email_server_default
+msgid "External Email Servers"
+msgstr ""
+
+#. module: base_setup
+#: model_terms:ir.ui.view,arch_db:base_setup.res_config_settings_view_form
+msgid "Extract and analyze Odoo data from Google Spreadsheet"
+msgstr ""
+
+#. module: base_setup
+#: model_terms:ir.ui.view,arch_db:base_setup.res_config_settings_view_form
+msgid "Find free high-resolution images from Unsplash"
+msgstr "Nagy felbontású képek keresése az Unsplash-ben"
+
+#. module: base_setup
+#: model:ir.model.fields,help:base_setup.field_res_config_settings__report_footer
+msgid "Footer text displayed at the bottom of all reports."
+msgstr "Lábjegyzet szövege megjelenítve minden kimutatás alján."
+
+#. module: base_setup
+#: model_terms:ir.ui.view,arch_db:base_setup.res_config_settings_view_form
+msgid "Format"
+msgstr "Formátum"
+
+#. module: base_setup
+#. openerp-web
+#: code:addons/base_setup/static/src/xml/res_config_edition.xml:0
+#, python-format
+msgid "GNU LGPL Licensed"
+msgstr "GNU LGPL liszenszelt"
+
+#. module: base_setup
+#: model:ir.ui.menu,name:base_setup.menu_config
+#: model_terms:ir.ui.view,arch_db:base_setup.res_config_settings_view_form
 msgid "General Settings"
 msgstr "Általános beállítások"
 
 #. module: base_setup
-#: help:sale.config.settings,module_mass_mailing:0
-msgid "Get access to statistics with your mass mailing, manage campaigns."
+#: model_terms:ir.ui.view,arch_db:base_setup.res_config_settings_view_form
+msgid "Gengo Translations"
 msgstr ""
-"Férjen hozzá a statisztikákhoz a tömeges levélküldéssel, szervezze a "
-"kampányait."
 
 #. module: base_setup
-#: field:sale.config.settings,module_web_linkedin:0
-msgid "Get contacts automatically from linkedIn"
-msgstr "Kapcsolatok automatikus behozatala a LinkeIn-ből"
+#: model_terms:ir.ui.view,arch_db:base_setup.res_config_settings_view_form
+msgid "Geo Localization"
+msgstr ""
 
 #. module: base_setup
-#: help:base.config.settings,module_portal:0
-msgid "Give your customers access to their documents."
-msgstr "Adjon hozzáférést a vevőknek a dokumentumaikhoz."
+#: model:ir.model.fields,field_description:base_setup.field_res_config_settings__module_base_geolocalize
+msgid "GeoLocalize"
+msgstr ""
 
 #. module: base_setup
-#: view:base.config.settings:base_setup.view_general_configuration
+#: model_terms:ir.ui.view,arch_db:base_setup.res_config_settings_view_form
+msgid "GeoLocalize your partners"
+msgstr ""
+
+#. module: base_setup
+#: model_terms:ir.ui.view,arch_db:base_setup.res_config_settings_view_form
 msgid "Google Calendar"
 msgstr "Google naptár"
 
 #. module: base_setup
-#: view:base.config.settings:base_setup.view_general_configuration
+#: model_terms:ir.ui.view,arch_db:base_setup.res_config_settings_view_form
 msgid "Google Drive"
 msgstr "Google Drive"
 
 #. module: base_setup
-#: selection:base.setup.terminology,partner:0
-msgid "Guest"
-msgstr "Vendég"
+#: model:ir.model.fields,field_description:base_setup.field_res_config_settings__module_google_spreadsheet
+msgid "Google Spreadsheet"
+msgstr "Google táblázatkezelő"
 
 #. module: base_setup
-#: field:base.setup.terminology,partner:0
-msgid "How do you call a Customer"
-msgstr "Hogy hívhat meg egy Vevőt"
+#: model:ir.model,name:base_setup.model_ir_http
+msgid "HTTP Routing"
+msgstr "HTTP irányítás"
 
 #. module: base_setup
-#: field:base.config.settings,id:0
-#: field:base.setup.terminology,id:0
-#: field:sale.config.settings,id:0
-msgid "ID"
-msgstr "Azonosító ID"
-
-#. module: base_setup
-#: view:base.config.settings:base_setup.view_general_configuration
-msgid "Import / Export"
-msgstr "Import / Export"
-
-#. module: base_setup
-#: field:base.config.settings,write_uid:0
-#: field:base.setup.terminology,write_uid:0
-#: field:sale.config.settings,write_uid:0
-msgid "Last Updated by"
-msgstr "Utoljára frissítve, által"
-
-#. module: base_setup
-#: field:base.config.settings,write_date:0
-#: field:base.setup.terminology,write_date:0
-#: field:sale.config.settings,write_date:0
-msgid "Last Updated on"
-msgstr "Utoljára frissítve ekkor"
-
-#. module: base_setup
-#: field:sale.config.settings,module_mass_mailing:0
-msgid "Manage mass mailing campaigns"
-msgstr "Kezelje a tömeges levelezés kampányait"
-
-#. module: base_setup
-#: field:base.config.settings,module_multi_company:0
-msgid "Manage multiple companies"
-msgstr "Többes válallkozás kezelése"
-
-#. module: base_setup
-#: selection:base.setup.terminology,partner:0
-msgid "Member"
-msgstr "Tag"
-
-#. module: base_setup
-#: view:sale.config.settings:base_setup.view_sale_config_settings
-msgid ""
-"Odoo allows to automatically create leads (or others documents)\n"
-"                            from incoming emails. You can automatically "
-"synchronize emails with Odoo\n"
-"                            using regular POP/IMAP accounts, using a direct "
-"email integration script for your\n"
-"                            email server, or by manually pushing emails to "
-"Odoo using specific\n"
-"                            plugins for your preferred email application."
+#: model_terms:ir.ui.view,arch_db:base_setup.res_config_settings_view_form
+msgid "Import & Export"
 msgstr ""
-"Odoo rendszer lehetővé teszi az automatikus érdeklődés (vagy más "
-"dokumentumok) létrehozását \n"
-"                            a beérkező levelekből. Automatikusan "
-"szinkronizálhatja emailjeit az Odoo rendszerrel\n"
-"                            az általános POP/IMAP fiókokkal, egy közvetlen "
-"email beépülési szkripttel az email\n"
-"                            szerverén, vagy kézzel az emailek bevitelével az "
-"Odoo rendszerbe sajátos pliginnel\n"
-"                            az előnybe részesített email alkalmazásához."
 
 #. module: base_setup
-#: view:base.config.settings:base_setup.view_general_configuration
-msgid ""
-"Once installed, you can configure your API credentials for \"Google "
-"calendar\""
+#: model_terms:ir.ui.view,arch_db:base_setup.res_config_settings_view_form
+msgid "Integrations"
 msgstr ""
-"Ha egyszer telepítette, beállíthatja az API interfészt engedélyeket a "
-"\"Google naptár\" alkalmazásban"
 
 #. module: base_setup
-#: view:base.config.settings:base_setup.view_general_configuration
-msgid "Options"
-msgstr "Lehetőségek"
-
-#. module: base_setup
-#: selection:base.setup.terminology,partner:0
-msgid "Partner"
-msgstr "Partner"
-
-#. module: base_setup
-#: selection:base.setup.terminology,partner:0
-msgid "Patient"
-msgstr "Páciens"
-
-#. module: base_setup
-#: view:base.config.settings:base_setup.view_general_configuration
-msgid "Portal access"
-msgstr "Portál hozzáférés"
-
-#. module: base_setup
-#: view:sale.config.settings:base_setup.view_sale_config_settings
-msgid "Quotations and Sales Orders"
-msgstr "Árajánlatok és vevői megrendelések"
-
-#. module: base_setup
-#: field:base.config.settings,font:0
-msgid "Report Font"
-msgstr "Jelentés betűtípus"
-
-#. module: base_setup
-#: field:sale.config.settings,module_sale:0
-msgid "SALE"
-msgstr "ÉRTÉKESÍTÉS"
-
-#. module: base_setup
-#: view:sale.config.settings:base_setup.view_sale_config_settings
-msgid "Sale Features"
-msgstr "eladás tulajdonságai"
-
-#. module: base_setup
-#: help:base.config.settings,font:0
-msgid ""
-"Set the font into the report header, it will be used as default font in the "
-"RML reports of the user company"
+#: model_terms:ir.ui.view,arch_db:base_setup.res_config_settings_view_form
+msgid "Inter-Company Transactions"
 msgstr ""
-"Állítsa be a jelentés fejléc betűtípusát, amit alapértelmezettként használ "
-"az felhasználó vállalat RML jelentéseiben"
 
 #. module: base_setup
-#: help:base.config.settings,module_share:0
-msgid "Share or embbed any screen of openerp."
-msgstr "Bármely OpenERP képernyő megosztása vagy eltüntetése."
+#. openerp-web
+#: code:addons/base_setup/static/src/xml/res_config_invite_users.xml:0
+#, python-format
+msgid "Invite"
+msgstr "Meghívás"
 
 #. module: base_setup
-#: view:sale.config.settings:base_setup.view_sale_config_settings
-msgid "Social Network Integration"
-msgstr "Közösségi hálózat integráció"
-
-#. module: base_setup
-#: view:base.setup.terminology:base_setup.base_setup_terminology_form
-msgid "Specify Your Terminology"
-msgstr "Terminológia meghatározása"
-
-#. module: base_setup
-#: selection:base.setup.terminology,partner:0
-msgid "Tenant"
-msgstr "Haszonélvező"
-
-#. module: base_setup
-#: help:base.config.settings,module_google_calendar:0
-msgid "This installs the module google_calendar."
-msgstr "Ez előkészíti a google_calendar modult."
-
-#. module: base_setup
-#: help:base.config.settings,module_google_drive:0
-msgid "This installs the module google_docs."
-msgstr "Ez előkészíti a google_docs modult."
-
-#. module: base_setup
-#: model:ir.actions.act_window,name:base_setup.action_partner_terminology_config_form
-msgid "Use another word to say \"Customer\""
-msgstr "Használjon másik szót amivel kifejezi \"Vevő\""
-
-#. module: base_setup
-#: field:base.config.settings,module_auth_oauth:0
-msgid ""
-"Use external authentication providers, sign in with google, facebook, ..."
+#. openerp-web
+#: code:addons/base_setup/static/src/xml/res_config_invite_users.xml:0
+#, python-format
+msgid "Invite New Users"
 msgstr ""
-"Használjon külső azonosító tartalomkezelőt, lépjen be mint google, facebook, "
-"... felhasználó"
 
 #. module: base_setup
-#: help:sale.config.settings,module_web_linkedin:0
-msgid ""
-"When you create a new contact (person or company), you will be able to load "
-"all the data from LinkedIn (photos, address, etc)."
+#: model:ir.model.fields,field_description:base_setup.field_res_config_settings__module_auth_ldap
+#: model_terms:ir.ui.view,arch_db:base_setup.res_config_settings_view_form
+msgid "LDAP Authentication"
 msgstr ""
-"Ha új kapcsolatot hoz létre (személy vagy vállalkozás), akkor lehetősége "
-"lesz a LinkedIn adatok betöltésére (fotók, címek, stb.)."
 
 #. module: base_setup
-#: view:base.config.settings:base_setup.view_general_configuration
-msgid ""
-"When you send a document to a customer\n"
-"                                    (quotation, invoice), your customer will "
-"be\n"
-"                                    able to signup to get all his "
-"documents,\n"
-"                                    read your company news, check his "
-"projects,\n"
-"                                    etc."
+#: model_terms:ir.ui.view,arch_db:base_setup.res_config_settings_view_form
+msgid "Languages"
+msgstr "Nyelvek"
+
+#. module: base_setup
+#: model_terms:ir.ui.view,arch_db:base_setup.res_config_settings_view_form
+msgid "Layout"
+msgstr "Elrendezés"
+
+#. module: base_setup
+#. openerp-web
+#: code:addons/base_setup/static/src/xml/res_config_dev_tool.xml:0
+#, python-format
+msgid "Load demo data"
 msgstr ""
-"Ha egy dokumentumot küld egy Vevőhöz\n"
-"                                    (árajánlat, számla), a Vevő "
-"feliratkozhat\n"
-"                                    a dokumentumainak eléréséhez,\n"
-"                                    a vállalati új hírek elolvasásához, "
-"projektek ellenőrzéséhez,\n"
-"                                    stb."
 
 #. module: base_setup
-#: help:base.config.settings,module_multi_company:0
-msgid ""
-"Work in multi-company environments, with appropriate security access between "
-"companies.\n"
-"-This installs the module multi_company."
+#: model_terms:ir.ui.view,arch_db:base_setup.res_config_settings_view_form
+msgid "Manage Companies"
 msgstr ""
-"Több vállalkozásos környezetben, a vállalatok közti megfelelő biztonsági "
-"hozzáférésekkel.\n"
-"-Ez a multi_company modult telepíti."
 
 #. module: base_setup
-#: view:base.setup.terminology:base_setup.base_setup_terminology_form
-msgid ""
-"You can use this wizard to change the terminologies for customers in the "
-"whole application."
+#: model:ir.model.fields,field_description:base_setup.field_res_config_settings__module_inter_company_rules
+msgid "Manage Inter Company"
+msgstr "Belső vállalat kezelés"
+
+#. module: base_setup
+#: model_terms:ir.ui.view,arch_db:base_setup.res_config_settings_view_form
+msgid "Manage Languages"
 msgstr ""
-"Használhatja ezt a varázslót a vevők nyelvezetének megváltoztatásához a "
-"teljes alkalmazásra vonatkozólag."
 
 #. module: base_setup
-#: view:base.config.settings:base_setup.view_general_configuration
-msgid ""
-"You will find more options in your company details: address for the header "
-"and footer, overdue payments texts, etc."
+#: model_terms:ir.ui.view,arch_db:base_setup.res_config_settings_view_form
+msgid "Manage Users"
 msgstr ""
-"Több lehetőséget fog találni a vállalata részleteinél: a fejléc és "
-"lábjegyzet címek, határidő túllépés szöveges üzenete, stb."
 
 #. module: base_setup
-#: view:base.setup.terminology:base_setup.base_setup_terminology_form
-msgid "res_config_contents"
-msgstr "res_config_contents"
+#: model_terms:ir.ui.view,arch_db:base_setup.res_config_settings_view_form
+msgid "Multi-Company"
+msgstr ""
+
+#. module: base_setup
+#: model:ir.model.fields,field_description:base_setup.field_res_config_settings__group_multi_currency
+msgid "Multi-Currencies"
+msgstr "Több pénznem"
+
+#. module: base_setup
+#: model:ir.model.fields,field_description:base_setup.field_res_config_settings__active_user_count
+msgid "Number of Active Users"
+msgstr ""
+
+#. module: base_setup
+#: model:ir.model.fields,field_description:base_setup.field_res_config_settings__company_count
+msgid "Number of Companies"
+msgstr "Vállalatok száma"
+
+#. module: base_setup
+#: model:ir.model.fields,field_description:base_setup.field_res_config_settings__language_count
+msgid "Number of Languages"
+msgstr ""
+
+#. module: base_setup
+#: model_terms:ir.ui.view,arch_db:base_setup.res_config_settings_view_form
+msgid "OAuth Authentication"
+msgstr ""
+
+#. module: base_setup
+#. openerp-web
+#: code:addons/base_setup/static/src/xml/res_config_edition.xml:0
+#, python-format
+msgid "Odoo"
+msgstr "Odoo"
+
+#. module: base_setup
+#. openerp-web
+#: code:addons/base_setup/static/src/xml/res_config_edition.xml:0
+#, python-format
+msgid "Odoo S.A."
+msgstr "Odoo S.A."
+
+#. module: base_setup
+#: model_terms:ir.ui.view,arch_db:base_setup.res_config_settings_view_form
+msgid "On Apple Store"
+msgstr ""
+
+#. module: base_setup
+#: model_terms:ir.ui.view,arch_db:base_setup.res_config_settings_view_form
+msgid "On Google Play"
+msgstr ""
+
+#. module: base_setup
+#: model:ir.model.fields,field_description:base_setup.field_res_config_settings__paperformat_id
+msgid "Paper format"
+msgstr "Papír formátum"
+
+#. module: base_setup
+#: model:ir.model.fields,field_description:base_setup.field_res_config_settings__module_partner_autocomplete
+msgid "Partner Autocomplete"
+msgstr ""
+
+#. module: base_setup
+#. openerp-web
+#: code:addons/base_setup/static/src/xml/res_config_invite_users.xml:0
+#, python-format
+msgid "Pending Invitations:"
+msgstr ""
+
+#. module: base_setup
+#: model_terms:ir.ui.view,arch_db:base_setup.res_config_settings_view_form
+msgid "Preview Document"
+msgstr ""
+
+#. module: base_setup
+#: model_terms:ir.ui.view,arch_db:base_setup.res_config_settings_view_form
+msgid "Send SMS"
+msgstr "SMS küldése"
+
+#. module: base_setup
+#: model_terms:ir.ui.view,arch_db:base_setup.res_config_settings_view_form
+msgid "Send texts to your contacts"
+msgstr ""
+
+#. module: base_setup
+#: model_terms:ir.ui.view,arch_db:base_setup.res_config_settings_view_form
+msgid "Set custom access rights for new users"
+msgstr ""
+
+#. module: base_setup
+#: model_terms:ir.ui.view,arch_db:base_setup.res_config_settings_view_form
+msgid "Set the paper format of printed documents"
+msgstr ""
+
+#. module: base_setup
+#: model:ir.actions.act_window,name:base_setup.action_general_configuration
+msgid "Settings"
+msgstr "Beállítások"
+
+#. module: base_setup
+#: model:ir.model.fields,field_description:base_setup.field_res_config_settings__show_effect
+msgid "Show Effect"
+msgstr ""
+
+#. module: base_setup
+#: model_terms:ir.ui.view,arch_db:base_setup.res_config_settings_view_form
+msgid "Statistics"
+msgstr "Statisztika"
+
+#. module: base_setup
+#: model_terms:ir.ui.view,arch_db:base_setup.res_config_settings_view_form
+msgid "Synchronize your calendar with Google Calendar"
+msgstr ""
+
+#. module: base_setup
+#. openerp-web
+#: code:addons/base_setup/static/src/js/res_config_invite_users.js:0
+#, python-format
+msgid "The following email addresses already exist: %s."
+msgstr ""
+
+#. module: base_setup
+#. openerp-web
+#: code:addons/base_setup/static/src/js/res_config_invite_users.js:0
+#, python-format
+msgid "The following email addresses are invalid: %s."
+msgstr ""
+
+#. module: base_setup
+#: model:ir.model.fields,field_description:base_setup.field_res_config_settings__module_base_gengo
+msgid "Translate Your Website with Gengo"
+msgstr ""
+
+#. module: base_setup
+#: model_terms:ir.ui.view,arch_db:base_setup.res_config_settings_view_form
+msgid "Translate your website with Gengo"
+msgstr ""
+
+#. module: base_setup
+#: model:ir.model.fields,field_description:base_setup.field_res_config_settings__module_web_unsplash
+msgid "Unsplash Image Library"
+msgstr ""
+
+#. module: base_setup
+#: model_terms:ir.ui.view,arch_db:base_setup.res_config_settings_view_form
+msgid "Update Info"
+msgstr ""
+
+#. module: base_setup
+#: model_terms:ir.ui.view,arch_db:base_setup.res_config_settings_view_form
+msgid "Use LDAP credentials to log in"
+msgstr ""
+
+#. module: base_setup
+#: model_terms:ir.ui.view,arch_db:base_setup.res_config_settings_view_form
+msgid "Use external accounts to log in (Google, Facebook, etc.)"
+msgstr ""
+
+#. module: base_setup
+#: model:ir.model.fields,field_description:base_setup.field_res_config_settings__module_auth_oauth
+msgid "Use external authentication providers (OAuth)"
+msgstr "Külső azonosító szolgáltatók használata (OAuth)"
+
+#. module: base_setup
+#: model_terms:ir.ui.view,arch_db:base_setup.res_config_settings_view_form
+msgid "Use external pads in Odoo Notes"
+msgstr ""
+
+#. module: base_setup
+#. openerp-web
+#: code:addons/base_setup/static/src/js/res_config_invite_users.js:0
+#: model:ir.model,name:base_setup.model_res_users
+#: model_terms:ir.ui.view,arch_db:base_setup.res_config_settings_view_form
+#, python-format
+msgid "Users"
+msgstr "Felhasználók"
+
+#. module: base_setup
+#: model_terms:ir.ui.view,arch_db:base_setup.res_config_settings_view_form
+msgid ""
+"When populating your address book, Odoo provides a list of matching "
+"companies. When selecting one item, the company data and logo are auto-"
+"filled."
+msgstr ""
+
+#. module: base_setup
+#. openerp-web
+#: code:addons/base_setup/static/src/xml/res_config_invite_users.xml:0
+#, python-format
+msgid "more"
+msgstr "tovább"

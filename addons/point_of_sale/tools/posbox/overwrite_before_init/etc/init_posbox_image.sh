@@ -8,53 +8,131 @@ __dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 __file="${__dir}/$(basename "${BASH_SOURCE[0]}")"
 __base="$(basename ${__file} .sh)"
 
-# Recommends: antiword, graphviz, ghostscript, postgresql, python-gevent, poppler-utils
+# Recommends: antiword, graphviz, ghostscript, python-gevent, poppler-utils
 export DEBIAN_FRONTEND=noninteractive
+echo "nameserver 8.8.8.8" >> /etc/resolv.conf
 
-# GUI-related packages
-PKGS_TO_DELETE="xserver-xorg-video-fbdev xserver-xorg xinit gstreamer1.0-x gstreamer1.0-omx gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-alsa gstreamer1.0-libav epiphany-browser lxde lxtask menu-xdg gksu xserver-xorg-video-fbturbo xpdf gtk2-engines alsa-utils netsurf-gtk zenity desktop-base lxpolkit weston omxplayer raspberrypi-artwork lightdm gnome-themes-standard-data gnome-icon-theme qt50-snapshot qt50-quick-particle-examples idle python-pygame python-tk idle3 python-serial python-picamera debian-reference-en dillo x2x scratch nuscratch raspberrypi-ui-mods timidity smartsim penguinspuzzle pistore sonic-pi python-pifacecommon python-pifacedigitalio oracle-java8-jdk minecraft-pi python-minecraftpi wolfram-engine raspi-config libgl1-mesa-dri libicu48 pypy-upstream lxde-icon-theme python3 avahi-daemon"
-INSTALLED_PKGS_TO_DELETE=""
-set +o errexit
-for CURRENT_PKG in $(echo $PKGS_TO_DELETE); do
-  $(dpkg --status $CURRENT_PKG &> /dev/null)
-  if [[ $? -eq 0 ]]; then
-    INSTALLED_PKGS_TO_DELETE="$INSTALLED_PKGS_TO_DELETE $CURRENT_PKG"
-  fi
-done
-set -o errexit
+# set locale to en_US
+echo "set locale to en_US"
+echo "export LANGUAGE=en_US.UTF-8" >> ~/.bashrc
+echo "export LANG=en_US.UTF-8" >> ~/.bashrc
+echo "export LC_ALL=en_US.UTF-8" >> ~/.bashrc
+locale-gen
+source ~/.bashrc
 
-apt-get -y remove --purge ${INSTALLED_PKGS_TO_DELETE}
+apt-get update && apt-get -y upgrade
+# Do not be too fast to upgrade to more recent firmware and kernel than 4.38
+# Firmware 4.44 seems to prevent the LED mechanism from working
 
-# Remove automatically installed dependency packages
-apt-get -y autoremove
+PKGS_TO_INSTALL="
+    fswebcam \
+    nginx-full \
+    dnsmasq \
+    dbus \
+    dbus-x11 \
+    cups \
+    printer-driver-all \
+    cups-ipp-utils \
+    libcups2-dev \
+    pcscd \
+    localepurge \
+    vim \
+    mc \
+    mg \
+    screen \
+    iw \
+    hostapd \
+    git \
+    rsync \
+    kpartx \
+    swig \
+    console-data \
+    lightdm \
+    xserver-xorg-video-fbdev \
+    xserver-xorg-input-evdev \
+    firefox-esr \
+    xdotool \
+    unclutter \
+    x11-utils \
+    xserver-xorg-video-dummy \
+    openbox \
+    rpi-update \
+    adduser \
+    libpq-dev \
+    python-cups \
+    python3 \
+    python3-pyscard \
+    python3-urllib3 \
+    python3-dateutil \
+    python3-decorator \
+    python3-docutils \
+    python3-feedparser \
+    python3-pil \
+    python3-jinja2 \
+    python3-ldap \
+    python3-lxml \
+    python3-mako \
+    python3-mock \
+    python3-openid \
+    python3-psutil \
+    python3-psycopg2 \
+    python3-babel \
+    python3-pydot \
+    python3-pyparsing \
+    python3-pypdf2 \
+    python3-reportlab \
+    python3-requests \
+    python3-simplejson \
+    python3-stdnum \
+    python3-tz \
+    python3-werkzeug \
+    python3-serial \
+    python3-pip \
+    python3-dev \
+    python3-netifaces \
+    python3-passlib \
+    python3-libsass \
+    python3-qrcode \
+    python3-html2text \
+    python3-unittest2 \
+    python3-simplejson"
 
-apt-get update
-apt-get -y dist-upgrade
-
-PKGS_TO_INSTALL="adduser postgresql-client python python-dateutil python-decorator python-docutils python-feedparser python-imaging python-jinja2 python-ldap python-libxslt1 python-lxml python-mako python-mock python-openid python-passlib python-psutil python-psycopg2 python-pybabel python-pychart python-pydot python-pyparsing python-pypdf python-reportlab python-requests python-simplejson python-tz python-unittest2 python-vatnumber python-vobject python-werkzeug python-xlwt python-yaml postgresql python-gevent python-serial python-pip python-dev localepurge vim mc mg screen"
-
-apt-get -y install ${PKGS_TO_INSTALL}
+echo "Acquire::Retries "16";" > /etc/apt/apt.conf.d/99acquire-retries
+# KEEP OWN CONFIG FILES DURING PACKAGE CONFIGURATION
+# http://serverfault.com/questions/259226/automatically-keep-current-version-of-config-files-when-apt-get-install
+apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install ${PKGS_TO_INSTALL}
 
 apt-get clean
 localepurge
-rm -rf /usr/share/doc || true
-rm -rf /home/pi/python_games || true
+rm -rfv /usr/share/doc
 
 # python-usb in wheezy is too old
 # the latest pyusb from pip does not work either, usb.core.find() never returns
 # this may be fixed with libusb>2:1.0.11-1, but that's the most recent one in raspbian
-# so we install the latest pyusb that works with this libusb
-pip install pyusb==1.0.0b1
-pip install qrcode
-pip install evdev
+# so we install the latest pyusb that works with this libusb.
+# Even in stretch, we had an error with langid (but worked otherwise)
+PIP_TO_INSTALL="
+    pyusb==1.0.0b1 \
+    evdev \
+    gatt \
+    v4l2 \
+    polib \
+    pycups"
+
+pip3 install ${PIP_TO_INSTALL}
+
+# Dowload MPD server and library for Six terminals
+wget 'https://nightly.odoo.com/master/iotbox/eftdvs' -P /usr/local/bin/
+chmod +x /usr/local/bin/eftdvs
+wget 'https://nightly.odoo.com/master/iotbox/eftapi.so' -P /usr/lib/
 
 groupadd usbusers
 usermod -a -G usbusers pi
 usermod -a -G lp pi
-
-sudo -u postgres createuser -s pi
-mkdir /var/log/odoo
+usermod -a -G input lightdm
+mkdir -v /var/log/odoo
 chown pi:pi /var/log/odoo
+chown pi:pi -R /home/pi/odoo/
 
 # logrotate is very picky when it comes to file permissions
 chown -R root:root /etc/logrotate.d/
@@ -64,19 +142,40 @@ chmod 644 /etc/logrotate.conf
 
 echo "* * * * * rm /var/run/odoo/sessions/*" | crontab -
 
-update-rc.d odoo defaults
+update-rc.d -f hostapd remove
+update-rc.d -f nginx remove
+update-rc.d -f dnsmasq remove
+update-rc.d timesyncd defaults
 
-# https://www.raspberrypi.org/forums/viewtopic.php?p=79249
-# to not have "setting up console font and keymap" during boot take ages
-setupcon
+systemctl enable ramdisks.service
+systemctl disable dphys-swapfile.service
+systemctl enable ssh
+systemctl set-default graphical.target
+systemctl disable getty@tty1.service
+systemctl enable autologin@.service
+systemctl disable systemd-timesyncd.service
+systemctl unmask hostapd.service
+systemctl disable hostapd.service
+
+# disable overscan in /boot/config.txt, we can't use
+# overwrite_after_init because it's on a different device
+# (/dev/mmcblk0p1) and we don't mount that afterwards.
+# This option disables any black strips around the screen
+# cf: https://www.raspberrypi.org/documentation/configuration/raspi-config.md
+echo "disable_overscan=1" >> /boot/config.txt
+
+# Separate framebuffers for both screens on RPI4
+sed -i '/dtoverlay/d' /boot/config.txt
+
+# exclude /drivers folder from git info to be able to load specific drivers
+echo "addons/hw_drivers/drivers/" > /home/pi/odoo/.git/info/exclude
 
 # create dirs for ramdisks
 create_ramdisk_dir () {
-    mkdir "${1}_ram"
+    mkdir -v "${1}_ram"
 }
 
 create_ramdisk_dir "/var"
 create_ramdisk_dir "/etc"
-mkdir /root_bypass_ramdisks
-
-reboot
+create_ramdisk_dir "/tmp"
+mkdir -v /root_bypass_ramdisks

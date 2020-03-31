@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
-import sale
-import sale_analytic
-import sales_team
-import res_partner
-import wizard
-import report
-import res_config
+from . import models
+from . import controllers
+from . import report
+from . import wizard
+
+from functools import partial
+import odoo
+from odoo import api, SUPERUSER_ID
+
+

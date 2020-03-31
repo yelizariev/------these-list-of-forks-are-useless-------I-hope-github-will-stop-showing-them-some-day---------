@@ -7,7 +7,8 @@ var gui = require('point_of_sale.gui');
 var models = require('point_of_sale.models');
 var screens = require('point_of_sale.screens');
 var core = require('web.core');
-var Model = require('web.DataModel');
+var rpc = require('web.rpc');
+var session = require('web.session');
 
 var QWeb = core.qweb;
 var _t = core._t;
@@ -34,7 +35,7 @@ models.load_models({
 });
 
 // At POS Startup, after the floors are loaded, load the tables, and associate
-// them with their floor. 
+// them with their floor.
 models.load_models({
     model: 'restaurant.table',
     fields: ['name','width','height','position_h','position_v','shape','floor_id','color','seats'],
@@ -60,8 +61,6 @@ var TableWidget = PosBaseWidget.extend({
         this.selected = false;
         this.moved    = false;
         this.dragpos  = {x:0, y:0};
-        this.handle_dragging = false;
-        this.handle   = null;
     },
     // computes the absolute position of a DOM mouse event, used
     // when resizing tables
@@ -87,88 +86,32 @@ var TableWidget = PosBaseWidget.extend({
                     } else {
                         self.getParent().deselect_tables();
                     }
-                } 
+                }
             },50);
         } else {
             floorplan.pos.set_table(this.table);
         }
     },
     // drag and drop for moving the table, at drag start
-    dragstart_handler: function(event,$el,drag){
-        if (this.selected && !this.handle_dragging) {
-            this.dragging = true;
-            this.dragpos  = { x: drag.offsetX, y: drag.offsetY };
-        }
+    dragstart_handler:   function(event, ui){
+        this.dragging = true;
     },
     // drag and drop for moving the table, at drag end
-    dragend_handler:   function(){
+    dragend_handler:   function(event, ui){
         this.dragging = false;
-    },
-    // drag and drop for moving the table, at every drop movement.
-    dragmove_handler: function(event,$el,drag){
-        if (this.dragging) {
-            var dx   = drag.offsetX - this.dragpos.x;
-            var dy   = drag.offsetY - this.dragpos.y;
-
-            this.dragpos = { x: drag.offsetX, y: drag.offsetY };
-            this.moved   = true;
-
-            this.table.position_v += dy;
-            this.table.position_h += dx;
-
-            $el.css(this.table_style());
-        } 
+        this.moved = true;
+        this.table.position_h = ui.position.left - this.table.width/2;
+        this.table.position_v = ui.position.top - this.table.height/2;
+        this.$el.css(this.table_style());
     },
     // drag and dropping the resizing handles
-    handle_dragstart_handler: function(event, $el, drag) {
-        if (this.selected && !this.dragging) {
-            this.handle_dragging = true;
-            this.handle_dragpos  = this.event_position(event);
-            this.handle          = drag.target;
-        } 
-    },
-    handle_dragend_handler: function() {
-        this.handle_dragging = false;
-    },
-    handle_dragmove_handler: function(event) {
-        if (this.handle_dragging) {
-            var pos  = this.event_position(event);
-            var dx   = pos.x - this.handle_dragpos.x;
-            var dy   = pos.y - this.handle_dragpos.y;
-
-            this.handle_dragpos = pos;
-            this.moved   = true;
-
-            var cl     = this.handle.classList;
-
-            var MIN_SIZE = 40;  // smaller than this, and it becomes impossible to edit.
-
-            var tw = Math.max(MIN_SIZE, this.table.width);  
-            var th = Math.max(MIN_SIZE, this.table.height);
-            var tx = this.table.position_h;
-            var ty = this.table.position_v;
-
-            if (cl.contains('left') && tw - dx >= MIN_SIZE) {
-                tw -= dx;
-                tx += dx;
-            } else if (cl.contains('right') && tw + dx >= MIN_SIZE) {
-                tw += dx;
-            }
-
-            if (cl.contains('top') && th - dy >= MIN_SIZE) {
-                th -= dy;
-                ty += dy;
-            } else if (cl.contains('bottom') && th + dy >= MIN_SIZE) {
-                th += dy;
-            }
-
-            this.table.width  = tw;
-            this.table.height = th;
-            this.table.position_h = tx;
-            this.table.position_v = ty;
-
-            this.$el.css(this.table_style());
-        }
+    handle_dragmove_handler: function(event, ui) {
+        this.moved = true;
+        this.table.width  = ui.size.width;
+        this.table.height = ui.size.height;
+        this.table.position_h = ui.position.left - ui.originalSize.width/2;
+        this.table.position_v = ui.position.top - ui.originalSize.height/2;
+        this.$el.css(this.table_style());
     },
     set_table_color: function(color){
         this.table.color = _.escape(color);
@@ -199,7 +142,7 @@ var TableWidget = PosBaseWidget.extend({
             'margin-top':   unit(-table.height/2),
             'top':          unit(table.position_v + table.height/2),
             'left':         unit(table.position_h + table.width/2),
-            'border-radius': table.shape === 'round' ? 
+            'border-radius': table.shape === 'round' ?
                     unit(Math.max(table.width,table.height)/2) : '3px',
         };
         if (table.color) {
@@ -207,7 +150,7 @@ var TableWidget = PosBaseWidget.extend({
         }
         if (table.height >= 150 && table.width >= 150) {
             style['font-size'] = '32px';
-        } 
+        }
 
         return style;
     },
@@ -225,6 +168,15 @@ var TableWidget = PosBaseWidget.extend({
     select: function() {
         this.selected = true;
         this.renderElement();
+
+        this.$el.resizable({
+            handles: 'all',
+            resize: this.handle_dragmove_handler.bind(this),
+        });
+
+        this.$el.draggable({
+            stop: this.dragend_handler.bind(this),
+        });
     },
     // deselect the table (should be called via the floorplan)
     deselect: function() {
@@ -235,7 +187,6 @@ var TableWidget = PosBaseWidget.extend({
     // sends the table's modification to the server
     save_changes: function(){
         var self   = this;
-        var model  = new Model('restaurant.table');
         var fields = _.find(this.pos.models,function(model){ return model.model === 'restaurant.table'; }).fields;
 
         // we need a serializable copy of the table, containing only the fields defined on the server
@@ -248,51 +199,70 @@ var TableWidget = PosBaseWidget.extend({
         // and the id ...
         serializable_table.id = this.table.id;
 
-        model.call('create_from_ui',[serializable_table]).then(function(table_id){
-            model.query(fields).filter([['id','=',table_id]]).first().then(function(table){
-                for (var field in table) {
-                    self.table[field] = table[field];
-                }
-                self.renderElement();
+        rpc.query({
+                model: 'restaurant.table',
+                method: 'create_from_ui',
+                args: [serializable_table],
+            })
+            .then(function (table_id){
+                rpc.query({
+                        model: 'restaurant.table',
+                        method: 'search_read',
+                        args: [[['id', '=', table_id]], fields],
+                        limit: 1,
+                    })
+                    .then(function (result){
+                        var table = result[0];
+                        for (var field in table) {
+                            self.table[field] = table[field];
+                        }
+                        self.pos.tables_by_id[table.id] = self.table;
+                        // If selected, render with drag and resize event handlers.
+                        if (!self.selected) {
+                            self.renderElement();
+                        } else {
+                            self.select();
+                        }
+                    });
+            }, function(type,err) {
+                    self.gui.show_sync_error_popup();
             });
-        }, function(err,event) {
-            self.gui.show_popup('error',{
-                'title':_t('Changes could not be saved'),
-                'body': _t('Check your internet connection and access rights'),
-            });
-            event.stopPropagation();
-            event.preventDefault();
-        });
     },
-    // destroy the table.  We do not really destroy it, we set it 
+    // destroy the table.  We do not really destroy it, we set it
     // to inactive so that it doesn't show up anymore, but it still
     // available on the database for the orders that depend on it.
     trash: function(){
         var self  = this;
-        var model = new Model('restaurant.table');
-        return model.call('create_from_ui',[{'active':false,'id':this.table.id}]).then(function(table_id){
-            // Removing all references from the table and the table_widget in in the UI ... 
-            for (var i = 0; i < self.pos.floors.length; i++) {
-                var floor = self.pos.floors[i];
-                for (var j = 0; j < floor.tables.length; j++) {
-                    if (floor.tables[j].id === table_id) {
-                        floor.tables.splice(j,1);
-                        break;
+        rpc.query({
+                model: 'restaurant.table',
+                method: 'create_from_ui',
+                args: [{'active':false,'id':this.table.id}],
+            })
+            .then(function (table_id){
+                // Removing all references from the table and the table_widget in in the UI ...
+                for (var i = 0; i < self.pos.floors.length; i++) {
+                    var floor = self.pos.floors[i];
+                    for (var j = 0; j < floor.tables.length; j++) {
+                        if (floor.tables[j].id === table_id) {
+                            floor.tables.splice(j,1);
+                            break;
+                        }
                     }
                 }
-            }
-            var floorplan = self.getParent();
-            for (var i = 0; i < floorplan.table_widgets.length; i++) {
-                if (floorplan.table_widgets[i] === self) {
-                    floorplan.table_widgets.splice(i,1);
+                var floorplan = self.getParent();
+                for (var i = 0; i < floorplan.table_widgets.length; i++) {
+                    if (floorplan.table_widgets[i] === self) {
+                        floorplan.table_widgets.splice(i,1);
+                    }
                 }
-            }
-            if (floorplan.selected_table === self) {
-                floorplan.selected_table = null;
-            }
-            floorplan.update_toolbar();
-            self.destroy();
-        });
+                if (floorplan.selected_table === self) {
+                    floorplan.selected_table = null;
+                }
+                floorplan.update_toolbar();
+                self.destroy();
+            }, function(type, err) {
+                self.gui.show_sync_error_popup();
+            });
     },
     get_notifications: function(){  //FIXME : Make this faster
         var orders = this.pos.get_table_orders(this.table);
@@ -307,25 +277,28 @@ var TableWidget = PosBaseWidget.extend({
         }
         return notifications;
     },
+    update_click_handlers: function(editing){
+        var self = this;
+        this.$el.off('mouseup touchend touchcancel click dragend');
+
+        if (editing) {
+            this.$el.on('mouseup touchend touchcancel', function(event){ self.click_handler(event,$(this)); });
+        } else {
+            this.$el.on('click dragend', function(event){ self.click_handler(event,$(this)); });
+        }
+    },
     renderElement: function(){
         var self = this;
-        this.order_count    = this.pos.get_table_orders(this.table).length;
+        this.order_count    = this.table.order_count !== undefined ?
+            this.table.order_count :
+            this.pos.get_table_orders(this.table)
+                .filter(o => o.orderlines.length !== 0 || o.paymentlines.length !==0).length;
         this.customer_count = this.pos.get_customer_count(this.table);
         this.fill           = Math.min(1,Math.max(0,this.customer_count / this.table.seats));
         this.notifications  = this.get_notifications();
         this._super();
 
-        this.$el.on('mouseup',      function(event){ self.click_handler(event,$(this)); });
-        this.$el.on('touchend',     function(event){ self.click_handler(event,$(this)); });
-        this.$el.on('touchcancel',  function(event){ self.click_handler(event,$(this)); });
-        this.$el.on('dragstart', function(event,drag){ self.dragstart_handler(event,$(this),drag); });
-        this.$el.on('drag',      function(event,drag){ self.dragmove_handler(event,$(this),drag); });
-        this.$el.on('dragend',   function(event,drag){ self.dragend_handler(event,$(this),drag); });
-        
-        var handles = this.$el.find('.table-handle');
-        handles.on('dragstart',  function(event,drag){ self.handle_dragstart_handler(event,$(this),drag); });
-        handles.on('drag',       function(event,drag){ self.handle_dragmove_handler(event,$(this),drag); });
-        handles.on('dragend',    function(event,drag){ self.handle_dragend_handler(event,$(this),drag); });
+        this.update_click_handlers();
     },
 });
 
@@ -333,7 +306,6 @@ var TableWidget = PosBaseWidget.extend({
 // as well as edit them.
 var FloorScreenWidget = screens.ScreenWidget.extend({
     template: 'FloorScreenWidget',
-    show_leftpane: false,
 
     // Ignore products, discounts, and client barcodes
     barcode_product_action: function(code){},
@@ -347,20 +319,55 @@ var FloorScreenWidget = screens.ScreenWidget.extend({
         this.selected_table = null;
         this.editing = false;
     },
+    _table_longpolling: function(){
+        if (this.editing) {
+            return;
+        }
+        var self = this;
+        rpc.query({
+            model: 'pos.config',
+            method: 'get_tables_order_count',
+            args: [this.pos.config.id],
+        })
+        .then(function (result){
+            result.forEach(function(table){
+                var table_obj = self.pos.tables_by_id[table.id];
+                var unsynced_orders = self.pos.get_table_orders(table_obj)
+                    .filter(o => o.server_id === undefined &&
+                            (o.orderlines.length !== 0 || o.paymentlines.length !== 0)).length
+                table_obj.order_count = table.orders + unsynced_orders;
+            });
+            self.table_widgets.forEach(
+                    function(tw){
+                        tw.renderElement();
+                    });
+        }, function(type,err) {
+            self.table_widgets.forEach(
+                    function(tw){
+                        tw.table.order_count = self.pos.get_table_orders(tw.table)
+                            .filter(o => o.orderlines.length !== 0 || o.paymentlines.length !== 0).length
+                        tw.renderElement();
+                    });
+        });
+    },
     hide: function(){
         this._super();
-        if (this.editing) { 
+        if (this.editing) {
             this.toggle_editing();
         }
         this.chrome.widget.order_selector.show();
+        clearInterval(this.table_longpolling);
     },
     show: function(){
         this._super();
         this.chrome.widget.order_selector.hide();
-        for (var i = 0; i < this.table_widgets.length; i++) { 
+        for (var i = 0; i < this.table_widgets.length; i++) {
             this.table_widgets[i].renderElement();
         }
         this.check_empty_floor();
+
+        this._table_longpolling();
+        this.table_longpolling = setInterval(this._table_longpolling.bind(this), 5000);
     },
     click_floor_button: function(event,$el){
         var floor = this.pos.floors_by_id[$el.data('id')];
@@ -374,7 +381,7 @@ var FloorScreenWidget = screens.ScreenWidget.extend({
             this.check_empty_floor();
         }
     },
-    background_image_url: function(floor) { 
+    background_image_url: function(floor) {
         return '/web/image?model=restaurant.floor&id='+floor.id+'&field=background_image';
     },
     get_floor_style: function() {
@@ -390,14 +397,13 @@ var FloorScreenWidget = screens.ScreenWidget.extend({
     set_background_color: function(background) {
         var self = this;
         this.floor.background_color = background;
-        (new Model('restaurant.floor'))
-            .call('set_background_color',[this.floor.id, background]).fail(function(err,event){
-                self.gui.show_popup('error',{
-                    'title':_t('Changes could not be saved'),
-                    'body': _t('Check your internet connection and access rights'),
-                });
-                event.stopPropagation();
-                event.preventDefault();
+        rpc.query({
+                model: 'restaurant.floor',
+                method: 'write',
+                args: [[this.floor.id], {'background_color': background}],
+            })
+            .guardedCatch(function (){
+                self.gui.show_sync_error_popup();
             });
         this.$('.floor-map').css({"background-color": _.escape(background)});
     },
@@ -515,13 +521,13 @@ var FloorScreenWidget = screens.ScreenWidget.extend({
         for (var p in params) {
             table[p] = params[p];
         }
-        
+
         table.name = this.new_table_name(params.name);
 
-        delete table.id; 
+        delete table.id;
         table.floor_id = [this.floor.id,''];
         table.floor = this.floor;
-        
+
         this.floor.tables.push(table);
         var tw = new TableWidget(this,{table: table});
             tw.appendTo('.floor-map .tables');
@@ -543,9 +549,19 @@ var FloorScreenWidget = screens.ScreenWidget.extend({
     toggle_editing: function(){
         this.editing = !this.editing;
         this.update_toolbar();
+            this.update_table_click_handlers();
 
         if (!this.editing) {
             this.deselect_tables();
+            }
+        },
+        update_table_click_handlers: function(){
+            for (var i = 0; i < this.table_widgets.length; ++i) {
+                if (this.editing) {
+                    this.table_widgets[i].update_click_handlers("editing");
+                } else {
+                    this.table_widgets[i].update_click_handlers();
+                }
         }
     },
     check_empty_floor: function(){
@@ -559,7 +575,7 @@ var FloorScreenWidget = screens.ScreenWidget.extend({
         }
     },
     update_toolbar: function(){
-        
+
         if (this.editing) {
             this.$('.edit-bar').removeClass('oe_hidden');
             this.$('.edit-button.editing').addClass('active');
@@ -587,7 +603,7 @@ var FloorScreenWidget = screens.ScreenWidget.extend({
         var self = this;
 
         // cleanup table widgets from previous renders
-        for (var i = 0; i < this.table_widgets.length; i++) { 
+        for (var i = 0; i < this.table_widgets.length; i++) {
             this.table_widgets[i].destroy();
         }
 
@@ -602,6 +618,14 @@ var FloorScreenWidget = screens.ScreenWidget.extend({
             tw.appendTo(this.$('.floor-map .tables'));
             this.table_widgets.push(tw);
         }
+
+        $('body').on('keyup', function (event) {
+            if (event.which === $.ui.keyCode.ESCAPE) {
+                if(self.editing) {
+                    self.toggle_editing();
+                }
+            }
+        });
 
         this.$('.floor-selector .button').click(function(event){
             self.click_floor_button(event,$(this));
@@ -634,7 +658,7 @@ var FloorScreenWidget = screens.ScreenWidget.extend({
         this.$('.edit-button.trash').click(function(){
             self.tool_trash_table();
         });
-        
+
         this.$('.color-picker .close-picker').click(function(event){
             self.tool_colorpicker_close();
             event.stopPropagation();
@@ -666,11 +690,56 @@ var FloorScreenWidget = screens.ScreenWidget.extend({
     },
 });
 
+screens.ProductScreenWidget.include({
+    show: function () {
+        var self = this;
+        this._super();
+        if (this.pos.config.iface_floorplan) {
+            this.$el.bind("mousemove mousedown touchstart click scroll keypress", function () {
+                self.set_idle_timer();
+            });
+            this.set_idle_timer();
+        }
+    },
+    hide: function () {
+        this._super();
+        if (this.pos.config.iface_floorplan) {
+            this.$el.unbind("mousemove mousedown touchstart click scroll keypress");
+            clearTimeout(this.idle_timer);
+        }
+    },
+    /**
+     * Set a timeout to go back to the floorplan and clear the previous timeout
+     *
+     * @param {number} timeout, optional timeout in miliseconds, default one minute.
+     */
+    set_idle_timer: function(timeout=60000) {
+        var self = this;
+        clearTimeout(this.idle_timer);
+        this.idle_timer = setTimeout(function () {
+            self.pos.set_table(null);
+        }, timeout);
+    },
+});
+
 gui.define_screen({
     'name': 'floors',
     'widget': FloorScreenWidget,
     'condition': function(){
         return this.pos.config.iface_floorplan;
+    },
+});
+
+gui.Gui.include({
+    show_sync_error_popup: function() {
+        if (this.show_sync_errors) {
+            this.show_popup('error-sync',{
+                'title':_t('Changes could not be saved'),
+                'body': _t('You must be connected to the internet to save your changes.\n\n' +
+                        'Changes made to previously synced orders will get lost at the next sync.\n' +
+                        'Orders that where not synced before will be synced next time you open and close the same table.'),
+            });
+        }
     },
 });
 
@@ -699,7 +768,7 @@ models.Order = models.Order.extend({
         var json = _super_order.export_as_JSON.apply(this,arguments);
         json.table     = this.table ? this.table.name : undefined;
         json.table_id  = this.table ? this.table.id : false;
-        json.floor     = this.table ? this.table.floor.name : false; 
+        json.floor     = this.table ? this.table.floor.name : false;
         json.floor_id  = this.table ? this.table.floor.id : false;
         json.customer_count = this.customer_count;
         return json;
@@ -762,26 +831,182 @@ chrome.OrderSelectorWidget.include({
 // and when an order is validated, it needs to go back to the floor map.
 //
 // And when we change the table, we must create an order for that table
-// if there is none. 
+// if there is none.
 var _super_posmodel = models.PosModel.prototype;
 models.PosModel = models.PosModel.extend({
-    initialize: function(session, attributes) {
-        this.table = null;
-        return _super_posmodel.initialize.call(this,session,attributes);
+    after_load_server_data: function() {
+        var res = _super_posmodel.after_load_server_data.call(this);
+        if (this.config.iface_floorplan) {
+            this.table = null;
+        }
+        return res;
     },
 
-    // changes the current table. 
-    set_table: function(table) {
-        if (!table) { // no table ? go back to the floor plan, see ScreenSelector
-            this.set_order(null);   
-        } else {     // table ? load the associated orders  ...
-            this.table = table;
-            var orders = this.get_order_list();
-            if (orders.length) {   
-                this.set_order(orders[0]); // and go to the first one ...
-            } else { 
-                this.add_new_order();  // or create a new order with the current table
+    transfer_order_to_different_table: function () {
+        this.order_to_transfer_to_different_table = this.get_order();
+
+        // go to 'floors' screen, this will set the order to null and
+        // eventually this will cause the gui to go to its
+        // default_screen, which is 'floors'
+        this.set_table(null);
+    },
+
+    remove_from_server_and_set_sync_state: function(ids_to_remove){
+        var self = this;
+        this.set_synch('connecting', ids_to_remove.length);
+        self._remove_from_server(ids_to_remove)
+            .then(function(server_ids) {
+                self.set_synch('connected');
+            }).catch(function(reason){
+                self.set_synch('error');
+            });
+    },
+
+    /**
+     * Request the orders of the table with given id.
+     * @param {number} table_id.
+     * @param {dict} options.
+     * @param {number} options.timeout optional timeout parameter for the rpc call.
+     * @return {Promise}
+     */
+    _get_from_server: function (table_id, options) {
+        options = options || {};
+        var self = this;
+        var timeout = typeof options.timeout === 'number' ? options.timeout : 7500;
+        return rpc.query({
+                model: 'pos.order',
+                method: 'get_table_draft_orders',
+                args: [table_id],
+                kwargs: {context: session.user_context},
+            }, {
+                timeout: timeout,
+                shadow: false,
+            })
+    },
+
+    transfer_order_to_table: function(table) {
+        this.order_to_transfer_to_different_table.table = table;
+        this.order_to_transfer_to_different_table.save_to_db();
+    },
+
+    push_order_for_transfer: function(order_ids, table_orders) {
+        order_ids.push(this.order_to_transfer_to_different_table.uid);
+        table_orders.push(this.order_to_transfer_to_different_table);
+    },
+
+    clean_table_transfer: function(table) {
+        if (this.order_to_transfer_to_different_table && table) {
+            this.order_to_transfer_to_different_table = null;
+            this.set_table(table);
+        }
+    },
+
+    sync_from_server: function(table, table_orders, order_ids) {
+        var self = this;
+        var ids_to_remove = this.db.get_ids_to_remove_from_server();
+        var orders_to_sync = this.db.get_unpaid_orders_to_sync(order_ids);
+        if (orders_to_sync.length) {
+            this.set_synch('connecting', orders_to_sync.length);
+            this._save_to_server(orders_to_sync, {'draft': true}).then(function (server_ids) {
+                server_ids.forEach(function(server_id){
+                    table_orders.some(function(o){
+                        if (o.name === server_id.pos_reference) {
+                            o.server_id = server_id.id;
+                            o.save_to_db();
+                        }
+                    });
+                });
+                if (!ids_to_remove.length) {
+                    self.set_synch('connected');
+                } else {
+                    self.remove_from_server_and_set_sync_state(ids_to_remove);
+                }
+            }).catch(function(reason){
+                self.set_synch('error');
+            }).finally(function(){
+                self.clean_table_transfer(table);
+            });
+        } else {
+            if (ids_to_remove.length) {
+                self.remove_from_server_and_set_sync_state(ids_to_remove);
             }
+            self.clean_table_transfer(table);
+        }
+    },
+
+    set_order_on_table: function() {
+        var orders = this.get_order_list();
+        if (orders.length) {
+            this.set_order(orders[0]); // and go to the first one ...
+        } else {
+            this.add_new_order();  // or create a new order with the current table
+        }
+    },
+
+    sync_to_server: function(table) {
+        var self = this;
+        var ids_to_remove = this.db.get_ids_to_remove_from_server();
+
+        clearInterval(this.table_longpolling);
+
+        this.set_synch('connecting', 1);
+        this._get_from_server(table.id).then(function (server_orders) {
+            var orders = self.get_order_list();
+            orders.forEach(function(order){
+                if (order.server_id){
+                    self.get("orders").remove(order);
+                    order.destroy();
+                }
+            });
+            server_orders.forEach(function(server_order){
+                if (server_order.lines.length){
+                    var new_order = new models.Order({},{pos: self, json: server_order});
+                    self.get("orders").add(new_order);
+                    new_order.save_to_db();
+                }
+            })
+            if (!ids_to_remove.length) {
+                self.set_synch('connected');
+            } else {
+                self.remove_from_server_and_set_sync_state(ids_to_remove);
+            }
+        }).catch(function(reason){
+            self.set_synch('error');
+        }).finally(function(){
+            self.set_order_on_table();
+        });
+    },
+
+    get_order_with_uid: function() {
+        var order_ids = [];
+        this.get_order_list().forEach(function(o){
+            order_ids.push(o.uid);
+        });
+
+        return order_ids;
+    },
+
+    /**
+     * Changes the current table.
+     *
+     * Switch table and make sure all nececery syncing tasks are done.
+     * @param {object} table.
+     */
+    set_table: function(table) {
+        if(!table){
+            this.sync_from_server(table, this.get_order_list(), this.get_order_with_uid());
+            this.set_order(null);
+        } else if (this.order_to_transfer_to_different_table) {
+            var order_ids = this.get_order_with_uid();
+
+            this.transfer_order_to_table(table);
+            this.push_order_for_transfer(order_ids, this.get_order_list());
+
+            this.sync_from_server(table, this.get_order_list(), order_ids);
+            this.set_order(null);
+        } else {
+            this.table = table;
+            this.sync_to_server(table);
         }
     },
 
@@ -798,19 +1023,20 @@ models.PosModel = models.PosModel.extend({
     add_new_order: function() {
         if (this.config.iface_floorplan) {
             if (this.table) {
-                _super_posmodel.add_new_order.call(this);
+                return _super_posmodel.add_new_order.call(this);
             } else {
                 console.warn("WARNING: orders cannot be created when there is no active table in restaurant mode");
+                return undefined;
             }
         } else {
-            _super_posmodel.add_new_order.apply(this,arguments);
+            return _super_posmodel.add_new_order.apply(this,arguments);
         }
     },
 
 
     // get the list of unpaid orders (associated to the current table)
-    get_order_list: function() {    
-        var orders = _super_posmodel.get_order_list.call(this);  
+    get_order_list: function() {
+        var orders = _super_posmodel.get_order_list.call(this);
         if (!this.config.iface_floorplan) {
             return orders;
         } else if (!this.table) {
@@ -848,12 +1074,15 @@ models.PosModel = models.PosModel.extend({
         return count;
     },
 
-    // When we validate an order we go back to the floor plan. 
-    // When we cancel an order and there is multiple orders 
+    // When we validate an order we go back to the floor plan.
+    // When we cancel an order and there is multiple orders
     // on the table, stay on the table.
     on_removed_order: function(removed_order,index,reason){
         if (this.config.iface_floorplan) {
             var order_list = this.get_order_list();
+            if (reason === 'abandon') {
+                this.db.set_order_to_remove_from_server(removed_order);
+            }
             if( (reason === 'abandon' || removed_order.temporary) && order_list.length > 0){
                 this.set_order(order_list[index] || order_list[order_list.length -1]);
             }else{
@@ -865,7 +1094,7 @@ models.PosModel = models.PosModel.extend({
         }
     },
 
-    
+
 });
 
 var TableGuestsButton = screens.ActionButtonWidget.extend({
@@ -895,7 +1124,7 @@ var TableGuestsButton = screens.ActionButtonWidget.extend({
 screens.OrderWidget.include({
     update_summary: function(){
         this._super();
-        if (this.getParent().action_buttons && 
+        if (this.getParent().action_buttons &&
             this.getParent().action_buttons.guests) {
             this.getParent().action_buttons.guests.renderElement();
         }
@@ -909,5 +1138,27 @@ screens.define_action_button({
         return this.pos.config.iface_floorplan;
     },
 });
+
+var TransferOrderButton = screens.ActionButtonWidget.extend({
+    template: 'TransferOrderButton',
+    button_click: function() {
+        this.pos.transfer_order_to_different_table();
+    },
+});
+
+screens.define_action_button({
+    'name': 'transfer',
+    'widget': TransferOrderButton,
+    'condition': function(){
+        return this.pos.config.iface_floorplan;
+    },
+});
+
+return {
+    TableGuestsButton: TableGuestsButton,
+    TransferOrderButton:TransferOrderButton,
+    TableWidget: TableWidget,
+    FloorScreenWidget: FloorScreenWidget,
+};
 
 });

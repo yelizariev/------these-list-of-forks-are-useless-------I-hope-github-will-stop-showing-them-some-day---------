@@ -6,322 +6,224 @@
 ORM API
 =======
 
-Recordsets
-==========
+.. automodule:: odoo.models
 
-.. versionadded:: 8.0
+.. _reference/orm/models:
+.. _reference/orm/model:
 
-    This page documents the New API added in Odoo 8.0 which should be the
-    primary development API going forward. It also provides information about
-    porting from or bridging with the "old API" of versions 7 and earlier, but
-    does not explicitly document that API. See the old documentation for that.
-
-Interaction with models and records is performed through recordsets, a sorted
-set of records of the same model.
-
-.. warning:: contrary to what the name implies, it is currently possible for
-             recordsets to contain duplicates. This may change in the future.
-
-Methods defined on a model are executed on a recordset, and their ``self`` is
-a recordset::
-
-    class AModel(models.Model):
-        _name = 'a.model'
-        def a_method(self):
-            # self can be anywhere between 0 records and all records in the
-            # database
-            self.do_operation()
-
-Iterating on a recordset will yield new sets of *a single record*
-("singletons"), much like iterating on a Python string yields strings of a
-single characters::
-
-        def do_operation(self):
-            print self # => a.model(1, 2, 3, 4, 5)
-            for record in self:
-                print record # => a.model(1), then a.model(2), then a.model(3), ...
-
-Field access
-------------
-
-Recordsets provide an "Active Record" interface: model fields can be read and
-written directly from the record, but only on singletons (single-record
-recordsets). Setting a field's value triggers an update to the database::
-
-    >>> record.name
-    Example Name
-    >>> record.company_id.name
-    Company Name
-    >>> record.name = "Bob"
-
-Trying to read or write a field on multiple records will raise an error.
-
-Accessing a relational field (:class:`~openerp.fields.Many2one`,
-:class:`~openerp.fields.One2many`, :class:`~openerp.fields.Many2many`)
-*always* returns a recordset, empty if the field is not set.
-
-.. danger::
-
-    each assignment to a field triggers a database update, when setting
-    multiple fields at the same time or setting fields on multiple records
-    (to the same value), use :meth:`~openerp.models.Model.write`::
-
-        # 3 * len(records) database updates
-        for record in records:
-            record.a = 1
-            record.b = 2
-            record.c = 3
-
-        # len(records) database updates
-        for record in records:
-            record.write({'a': 1, 'b': 2, 'c': 3})
-
-        # 1 database update
-        records.write({'a': 1, 'b': 2, 'c': 3})
-
-Set operations
---------------
-
-Recordsets are immutable, but sets of the same model can be combined using
-various set operations, returning new recordsets. Set operations do *not*
-preserve order.
-
-.. addition preserves order but can introduce duplicates
-
-* ``record in set`` returns whether ``record`` (which must be a 1-element
-  recordset) is present in ``set``. ``record not in set`` is the inverse
-  operation
-* ``set1 | set2`` returns the union of the two recordsets, a new recordset
-  containing all records present in either source
-* ``set1 & set2`` returns the intersection of two recordsets, a new recordset
-  containing only records present in both sources
-* ``set1 - set2`` returns a new recordset containing only records of ``set1``
-  which are *not* in ``set2``
-
-Other recordset operations
---------------------------
-
-Recordsets are iterable so the usual Python tools are available for
-transformation (:func:`python:map`, :func:`python:sorted`,
-:func:`~python:itertools.ifilter`, ...) however these return either a
-:class:`python:list` or an :term:`python:iterator`, removing the ability to
-call methods on their result, or to use set operations.
-
-Recordsets therefore provide these operations returning recordsets themselves
-(when possible):
-
-:meth:`~openerp.models.Model.filtered`
-    returns a recordset containing only records satisfying the provided
-    predicate function. The predicate can also be a string to filter by a
-    field being true or false::
-
-        # only keep records whose company is the current user's
-        records.filtered(lambda r: r.company_id == user.company_id)
-
-        # only keep records whose partner is a company
-        records.filtered("partner_id.is_company")
-
-:meth:`~openerp.models.Model.sorted`
-    returns a recordset sorted by the provided key function. If no key
-    is provided, use the model's default sort order::
-
-        # sort records by name
-        records.sorted(key=lambda r: r.name)
-
-:meth:`~openerp.models.Model.mapped`
-    applies the provided function to each record in the recordset, returns
-    a recordset if the results are recordsets::
-
-        # returns a list of summing two fields for each record in the set
-        records.mapped(lambda r: r.field1 + r.field2)
-
-    The provided function can be a string to get field values::
-
-        # returns a list of names
-        records.mapped('name')
-
-        # returns a recordset of partners
-        record.mapped('partner_id')
-
-        # returns the union of all partner banks, with duplicates removed
-        record.mapped('partner_id.bank_ids')
-
-Environment
-===========
-
-The :class:`~openerp.api.Environment` stores various contextual data used by
-the ORM: the database cursor (for database queries), the current user
-(for access rights checking) and the current context (storing arbitrary
-metadata). The environment also stores caches.
-
-All recordsets have an environment, which is immutable, can be accessed
-using :attr:`~openerp.models.Model.env` and gives access to the current user
-(:attr:`~openerp.api.Environment.user`), the cursor
-(:attr:`~openerp.api.Environment.cr`) or the context
-(:attr:`~openerp.api.Environment.context`)::
-
-    >>> records.env
-    <Environment object ...>
-    >>> records.env.user
-    res.user(3)
-    >>> records.env.cr
-    <Cursor object ...)
-
-When creating a recordset from an other recordset, the environment is
-inherited. The environment can be used to get an empty recordset in an
-other model, and query that model::
-
-    >>> self.env['res.partner']
-    res.partner
-    >>> self.env['res.partner'].search([['is_company', '=', True], ['customer', '=', True]])
-    res.partner(7, 18, 12, 14, 17, 19, 8, 31, 26, 16, 13, 20, 30, 22, 29, 15, 23, 28, 74)
-
-Altering the environment
-------------------------
-
-The environment can be customized from a recordset. This returns a new
-version of the recordset using the altered environment.
-
-:meth:`~openerp.models.Model.sudo`
-    creates a new environment with the provided user set, uses the
-    administrator if none is provided (to bypass access rights/rules in safe
-    contexts), returns a copy of the recordset it is called on using the
-    new environment::
-
-        # create partner object as administrator
-        env['res.partner'].sudo().create({'name': "A Partner"})
-
-        # list partners visible by the "public" user
-        public = env.ref('base.public_user')
-        env['res.partner'].sudo(public).search([])
-
-:meth:`~openerp.models.Model.with_context`
-    #. can take a single positional parameter, which replaces the current
-       environment's context
-    #. can take any number of parameters by keyword, which are added to either
-       the current environment's context or the context set during step 1
-
-    ::
-
-        # look for partner, or create one with specified timezone if none is
-        # found
-        env['res.partner'].with_context(tz=a_tz).find_or_create(email_address)
-
-:meth:`~openerp.models.Model.with_env`
-    replaces the existing environment entirely
-
-Common ORM methods
-==================
-
-.. maybe these clarifications/examples should be in the APIDoc?
-
-:meth:`~openerp.models.Model.search`
-   Takes a :ref:`search domain <reference/orm/domains>`, returns a recordset
-   of matching records. Can return a subset of matching records (``offset``
-   and ``limit`` parameters) and be ordered (``order`` parameter)::
-
-        >>> # searches the current model
-        >>> self.search([('is_company', '=', True), ('customer', '=', True)])
-        res.partner(7, 18, 12, 14, 17, 19, 8, 31, 26, 16, 13, 20, 30, 22, 29, 15, 23, 28, 74)
-        >>> self.search([('is_company', '=', True)], limit=1).name
-        'Agrolait'
-
-   .. tip:: to just check if any record matches a domain, or count the number
-             of records which do, use
-             :meth:`~openerp.models.Model.search_count`
-:meth:`~openerp.models.Model.create`
-    Takes a number of field values, and returns a recordset containing the
-    record created::
-
-        >>> self.create({'name': "New Name"})
-        res.partner(78)
-
-:meth:`~openerp.models.Model.write`
-    Takes a number of field values, writes them to all the records in its
-    recordset. Does not return anything::
-
-        self.write({'name': "Newer Name"})
-
-:meth:`~openerp.models.Model.browse`
-    Takes a database id or a list of ids and returns a recordset, useful when
-    record ids are obtained from outside Odoo (e.g. round-trip through
-    external system) or :ref:`when calling methods in the old API
-    <reference/orm/oldapi>`::
-
-        >>> self.browse([7, 18, 12])
-        res.partner(7, 18, 12])
-
-:meth:`~openerp.models.Model.exists`
-    Returns a new recordset containing only the records which exist in the
-    database. Can be used to check whether a record (e.g. obtained externally)
-    still exists::
-
-        if not record.exists():
-            raise Exception("The record has been deleted")
-
-    or after calling a method which could have removed some records::
-
-        records.may_remove_some()
-        # only keep records which were not deleted
-        records = records.exists()
-
-:meth:`~openerp.api.Environment.ref`
-    Environment method returning the record matching a provided
-    :term:`external id`::
-
-        >>> env.ref('base.group_public')
-        res.groups(2)
-
-:meth:`~openerp.models.Model.ensure_one`
-    checks that the recordset is a singleton (only contains a single record),
-    raises an error otherwise::
-
-        records.ensure_one()
-        # is equivalent to but clearer than:
-        assert len(records) == 1, "Expected singleton"
-
-Creating Models
-===============
+Models
+======
 
 Model fields are defined as attributes on the model itself::
 
-    from openerp import models, fields
+    from odoo import models, fields
     class AModel(models.Model):
         _name = 'a.model.name'
 
         field1 = fields.Char()
 
-.. warning:: this means you can not define a field and a method with the same
-             name, they will conflict
+.. warning:: this means you cannot define a field and a method with the same
+             name, the last one will silently overwrite the former ones.
 
 By default, the field's label (user-visible name) is a capitalized version of
-the field name, this can be overridden with the ``string`` parameter::
+the field name, this can be overridden with the ``string`` parameter. ::
 
-        field2 = fields.Integer(string="an other field")
+        field2 = fields.Integer(string="Field Label")
 
-For the various field types and parameters, see :ref:`the fields reference
-<reference/orm/fields>`.
+For the list of field types and parameters, see :ref:`the fields reference
+<reference/fields>`.
 
-Default values are defined as parameters on fields, either a value::
+Default values are defined as parameters on fields, either as a value::
 
-    a_field = fields.Char(default="a value")
+    name = fields.Char(default="a value")
 
-or a function called to compute the default value, which should return that
+or as a function called to compute the default value, which should return that
 value::
 
-    a_field = fields.Char(default=compute_default_value)
-    def compute_default_value(self):
+    def _default_name(self):
         return self.get_value()
 
-Computed fields
+    name = fields.Char(default=lambda self: self._default_name())
+
+.. rubric:: API
+
+.. autoclass:: odoo.models.BaseModel()
+
+    .. autoattribute:: _auto
+    .. autoattribute:: _table
+    .. autoattribute:: _sequence
+    .. autoattribute:: _sql_constraints
+
+    .. autoattribute:: _register
+
+    .. autoattribute:: _name
+    .. autoattribute:: _description
+
+    .. autoattribute:: _inherit
+    .. autoattribute:: _inherits
+
+    .. autoattribute:: _rec_name
+    .. autoattribute:: _order
+
+    .. autoattribute:: _check_company_auto
+
+    .. autoattribute:: _parent_name
+    .. autoattribute:: _parent_store
+
+    .. autoattribute:: _abstract
+
+    .. seealso:: :class:`odoo.models.AbstractModel`
+
+    .. autoattribute:: _transient
+
+    .. seealso:: :class:`odoo.models.TransientModel`
+
+    .. autoattribute:: _date_name
+    .. autoattribute:: _fold_name
+
+AbstractModel
+-------------
+
+.. autoclass:: odoo.models.AbstractModel()
+
+Model
+-----
+
+.. autoclass:: odoo.models.Model()
+
+TransientModel
+--------------
+
+.. autoclass:: odoo.models.TransientModel()
+
+.. _reference/fields:
+.. _reference/orm/fields:
+
+Fields
+======
+
+.. currentmodule:: odoo.fields
+
+.. autoclass:: Field()
+
+.. .. autoattribute:: Field._slots
+      :annotation:
+
+.. _reference/fields/basic:
+
+Basic Fields
+------------
+
+.. autoclass:: Boolean()
+
+.. autoclass:: Char()
+
+.. autoclass:: Float()
+
+.. autoclass:: Integer()
+
+.. _reference/fields/advanced:
+
+Advanced Fields
 ---------------
+
+.. autoclass:: Binary()
+
+.. autoclass:: Html()
+
+.. autoclass:: Image()
+
+.. autoclass:: Monetary()
+
+.. autoclass:: Selection()
+
+.. autoclass:: Text()
+
+.. _reference/fields/date:
+
+Date(time) Fields
+'''''''''''''''''
+
+Dates and Datetimes are very important fields in any kind of business
+application, they are heavily used in many popular Odoo applications such as
+logistics or accounting and their misuse can create invisible yet painful
+bugs, this excerpt aims to provide Odoo developers with the knowledge required
+to avoid misusing these fields.
+
+When assigning a value to a Date/Datetime field, the following options are valid:
+
+* A `date` or `datetime` object.
+* A string in the proper server format *(YYYY-MM-DD)* for Date fields,
+  *(YYYY-MM-DD HH:MM:SS)* for Datetime fields.
+* `False` or `None`.
+
+The Date and Datetime fields class have helper methods to attempt conversion
+into a compatible type: :func:`~odoo.fields.Date.to_date` will convert to a `datetime.date`
+object while :func:`~odoo.fields.Datetime.to_datetime` will convert to a `datetime.datetime`.
+
+.. admonition:: Example
+
+    To parse date/datetimes coming from external sources::
+
+        fields.Date.to_date(self._context.get('date_from'))
+
+Date / Datetime comparison best practices:
+
+* Date fields can **only** be compared to date objects.
+* Datetime fields can **only** be compared to datetime objects.
+
+.. warning:: Strings representing dates and datetimes can be compared
+             between each other, however the result may not be the expected
+             result, as a datetime string will always be greater than a
+             date string, therefore this practice is **heavily**
+             discouraged.
+
+Common operations with dates and datetimes such as addition, substraction or
+fetching the start/end of a period are exposed through both
+:class:`~odoo.fields.Date` and :class:`~odoo.fields.Datetime`.
+These helpers are also available by importing `odoo.tools.date_utils`.
+
+.. note:: Timezones
+
+    Datetime fields are stored as `timestamp without timezone` columns in the database and are stored
+    in the UTC timezone. This is by design, as it makes the Odoo database independent from the timezone
+    of the hosting server system. Timezone conversion is managed entirely by the client side.
+
+.. autoclass:: Date()
+    :members: today, context_today, to_date, to_string, start_of, end_of, add, subtract
+
+.. autoclass:: Datetime()
+    :members: now, today, context_timestamp, to_datetime, to_string, start_of, end_of, add, subtract
+
+.. _reference/fields/relational:
+
+Relational Fields
+'''''''''''''''''
+
+.. autoclass:: Many2one()
+
+.. autoclass:: One2many()
+
+.. autoclass:: Many2many()
+
+Pseudo-relational fields
+''''''''''''''''''''''''
+
+.. autoclass:: Reference()
+
+.. autoclass:: Many2oneReference()
+
+.. _reference/fields/compute:
+
+Computed Fields
+'''''''''''''''
 
 Fields can be computed (instead of read straight from the database) using the
 ``compute`` parameter. **It must assign the computed value to the field**. If
 it uses the values of other *fields*, it should specify those fields using
-:func:`~openerp.api.depends`::
+:func:`~odoo.api.depends`. ::
 
-    from openerp import api
+    from odoo import api
     total = fields.Float(compute='_compute_total')
 
     @api.depends('value', 'tax')
@@ -338,10 +240,10 @@ it uses the values of other *fields*, it should specify those fields using
 
 * computed fields are not stored by default, they are computed and
   returned when requested. Setting ``store=True`` will store them in the
-  database and automatically enable searching
+  database and automatically enable searching.
 * searching on a computed field can also be enabled by setting the ``search``
   parameter. The value is a method name returning a
-  :ref:`reference/orm/domains`::
+  :ref:`reference/orm/domains`. ::
 
     upper_name = field.Char(compute='_compute_upper', search='_search_upper')
 
@@ -350,7 +252,13 @@ it uses the values of other *fields*, it should specify those fields using
             operator = 'ilike'
         return [('name', operator, value)]
 
-* to allow *setting* values on a computed field, use the ``inverse``
+  The search method is invoked when processing domains before doing an
+  actual search on the model. It must return a domain equivalent to the
+  condition: ``field operator value``.
+
+.. TODO and/or by setting the store to True for search domains ?
+
+* Computed fields are readonly by default. To allow *setting* values on a computed field, use the ``inverse``
   parameter. It is the name of a function reversing the computation and
   setting the relevant fields::
 
@@ -372,13 +280,15 @@ it uses the values of other *fields*, it should specify those fields using
     discount_value = fields.Float(compute='_apply_discount')
     total = fields.Float(compute='_apply_discount')
 
-    @depends('value', 'discount')
+    @api.depends('value', 'discount')
     def _apply_discount(self):
         for record in self:
             # compute actual discount from discount percentage
-            discount = self.value * self.discount
-            self.discount_value = discount
-            self.total = self.value - discount
+            discount = record.value * record.discount
+            record.discount_value = discount
+            record.total = record.value - discount
+
+.. _reference/fields/related:
 
 Related fields
 ''''''''''''''
@@ -390,30 +300,246 @@ stored::
 
     nickname = fields.Char(related='user_id.partner_id.name', store=True)
 
-onchange: updating UI on the fly
---------------------------------
+The value of a related field is given by following a sequence of
+relational fields and reading a field on the reached model. The complete
+sequence of fields to traverse is specified by the ``related`` attribute.
 
-When a user changes a field's value in a form (but hasn't saved the form yet),
-it can be useful to automatically update other fields based on that value
-e.g. updating a final total when the tax is changed or a new invoice line is
-added.
+Some field attributes are automatically copied from the source field if
+they are not redefined: ``string``, ``help``, ``readonly``, ``required`` (only
+if all fields in the sequence are required), ``groups``, ``digits``, ``size``,
+``translate``, ``sanitize``, ``selection``, ``comodel_name``, ``domain``,
+``context``. All semantic-free attributes are copied from the source
+field.
 
-* computed fields are automatically checked and recomputed, they do not need
-  an ``onchange``
-* for non-computed fields, the :func:`~openerp.api.onchange` decorator is used
-  to provide new field values::
+By default, the values of related fields are not stored to the database.
+Add the attribute ``store=True`` to make it stored, just like computed
+fields. Related fields are automatically recomputed when their
+dependencies are modified.
 
-    @api.onchange('field1', 'field2') # if these fields are changed, call method
-    def check_change(self):
-        if self.field1 < self.field2:
-            self.field3 = True
+.. note:: The related fields are computed in sudo mode.
 
-  the changes performed during the method are then sent to the client program
-  and become visible to the user
+.. _reference/fields/automatic:
 
-* Both computed fields and new-API onchanges are automatically called by the
-  client without having to add them in views
-* It is possible to suppress the trigger from a specific field by adding
+Automatic fields
+----------------
+
+.. Documented
+
+.. attribute:: id
+
+    Identifier :class:`field <odoo.fields.Field>`
+
+    If length of current recordset is 1, return id of unique record in it.
+
+    Raise an Error otherwise.
+
+.. todo:: _log_access info
+
+.. attribute:: create_date
+
+    :class:`~odoo.fields.Datetime`
+
+.. attribute:: create_uid
+
+    :class:`~odoo.fields.Many2one`
+
+.. attribute:: write_date
+
+    :class:`~odoo.fields.Datetime`
+
+.. attribute:: write_uid
+
+    :class:`~odoo.fields.Many2one`
+
+.. _reference/orm/fields/reserved:
+
+Reserved Field names
+--------------------
+
+A few field names are reserved for pre-defined behaviors beyond that of
+automated fields. They should be defined on a model when the related
+behavior is desired:
+
+.. attribute:: name
+
+  default value for :attr:`~odoo.models.BaseModel._rec_name`, used to
+  display records in context where a representative "naming" is
+  necessary.
+
+  :class:`~odoo.fields.Char`
+
+.. attribute:: active
+
+  toggles the global visibility of the record, if ``active`` is set to
+  ``False`` the record is invisible in most searches and listing.
+
+  :class:`~odoo.fields.Boolean`
+
+.. .. attribute:: sequence
+..
+..   Alterable ordering criteria, allows drag-and-drop reordering of models
+..   in list views.
+..
+..   :class:`~odoo.fields.Integer`
+
+.. attribute:: state
+
+  lifecycle stages of the object, used by the ``states`` attribute on
+  :class:`fields <odoo.fields.Field>`.
+
+  :class:`~odoo.fields.Selection`
+
+.. attribute:: parent_id
+
+  default_value of :attr:`~._parent_name`, used to organize
+  records in a tree structure and enables the ``child_of``
+  and ``parent_of`` operators in domains.
+
+  :class:`~odoo.fields.Many2one`
+
+.. attribute:: parent_path
+
+  When :attr:`~._parent_store` is set to True, used to store a value reflecting
+  the tree structure of :attr:`~._parent_name`, and to optimize the operators
+  ``child_of`` and ``parent_of`` in search domains.
+  It must be declared with ``index=True`` for proper operation.
+
+  :class:`~odoo.fields.Char`
+
+.. attribute:: company_id
+
+  Main field name used for Odoo multi-company behavior.
+
+  Used by `:meth:~odoo.models._check_company` to check multi company consistency.
+  Defines whether a record is shared between companies (no value) or only
+  accessible by the users of a given company.
+
+  :class:`~odoo.fields.Many2one`
+  :type: :class:`~odoo.addons.base.models.res_company`
+
+Recordsets
+==========
+
+Interactions with models and records are performed through recordsets, an ordered
+collection of records of the same model.
+
+.. warning:: Contrary to what the name implies, it is currently possible for
+             recordsets to contain duplicates. This may change in the future.
+
+Methods defined on a model are executed on a recordset, and their ``self`` is
+a recordset::
+
+    class AModel(models.Model):
+        _name = 'a.model'
+        def a_method(self):
+            # self can be anything between 0 records and all records in the
+            # database
+            self.do_operation()
+
+Iterating on a recordset will yield new sets of *a single record*
+("singletons"), much like iterating on a Python string yields strings of a
+single characters::
+
+        def do_operation(self):
+            print(self) # => a.model(1, 2, 3, 4, 5)
+            for record in self:
+                print(record) # => a.model(1), then a.model(2), then a.model(3), ...
+
+Field access
+------------
+
+Recordsets provide an "Active Record" interface: model fields can be read and
+written directly from the record as attributes.
+
+.. note::
+
+    When accessing non-relational fields on a recordset of potentially multiple
+    records, use :meth:`~odoo.models.BaseModel.mapped`::
+
+        total_qty = sum(self.mapped('qty'))
+
+Field values can also be accessed like dict items, which is more elegant and
+safer than ``getattr()`` for dynamic field names.
+Setting a field's value triggers an update to the database::
+
+    >>> record.name
+    Example Name
+    >>> record.company_id.name
+    Company Name
+    >>> record.name = "Bob"
+    >>> field = "name"
+    >>> record[field]
+    Bob
+
+.. warning::
+
+    Trying to read a field on multiple records will raise an error for non relational
+    fields.
+
+Accessing a relational field (:class:`~odoo.fields.Many2one`,
+:class:`~odoo.fields.One2many`, :class:`~odoo.fields.Many2many`)
+*always* returns a recordset, empty if the field is not set.
+
+Record cache and prefetching
+----------------------------
+
+Odoo maintains a cache for the fields of the records, so that not every field
+access issues a database request, which would be terrible for performance. The
+following example queries the database only for the first statement::
+
+    record.name             # first access reads value from database
+    record.name             # second access gets value from cache
+
+To avoid reading one field on one record at a time, Odoo *prefetches* records
+and fields following some heuristics to get good performance. Once a field must
+be read on a given record, the ORM actually reads that field on a larger
+recordset, and stores the returned values in cache for later use. The prefetched
+recordset is usually the recordset from which the record comes by iteration.
+Moreover, all simple stored fields (boolean, integer, float, char, text, date,
+datetime, selection, many2one) are fetched altogether; they correspond to the
+columns of the model's table, and are fetched efficiently in the same query.
+
+Consider the following example, where ``partners`` is a recordset of 1000
+records. Without prefetching, the loop would make 2000 queries to the database.
+With prefetching, only one query is made::
+
+    for partner in partners:
+        print partner.name          # first pass prefetches 'name' and 'lang'
+                                    # (and other fields) on all 'partners'
+        print partner.lang
+
+The prefetching also works on *secondary records*: when relational fields are
+read, their values (which are records) are  subscribed for future prefetching.
+Accessing one of those secondary records prefetches all secondary records from
+the same model. This makes the following example generate only two queries, one
+for partners and one for countries::
+
+    countries = set()
+    for partner in partners:
+        country = partner.country_id        # first pass prefetches all partners
+        countries.add(country.name)         # first pass prefetches all countries
+
+
+.. _reference/api/decorators:
+
+Method decorators
+=================
+
+.. automodule:: odoo.api
+    :members: depends, depends_context, constrains, onchange, returns, model, model_create_multi
+
+.. .. currentmodule:: odoo.api
+
+.. .. autodata:: model
+.. .. autodata:: depends
+.. .. autodata:: constrains
+.. .. autodata:: onchange
+.. .. autodata:: returns
+
+.. todo:: With sphinx 2.0 : autodecorator
+
+.. todo:: Add in Views reference
+  * It is possible to suppress the trigger from a specific field by adding
   ``on_change="0"`` in a view::
 
     <field name="name" on_change="0"/>
@@ -422,534 +548,161 @@ added.
   even if there are function fields or explicit onchange depending on that
   field.
 
-.. note::
+.. _reference/orm/environment:
 
-    ``onchange`` methods work on virtual records assignment on these records
-    is not written to the database, just used to know which value to send back
-    to the client
+Environment
+===========
 
-Low-level SQL
+The :class:`~odoo.api.Environment` stores various contextual data used by
+the ORM: the database cursor (for database queries), the current user
+(for access rights checking) and the current context (storing arbitrary
+metadata). The environment also stores caches.
+
+All recordsets have an environment, which is immutable, can be accessed
+using :attr:`~odoo.models.Model.env` and gives access to:
+
+* the current user (:attr:`~odoo.api.Environment.user`)
+* the cursor (:attr:`~odoo.api.Environment.cr`)
+* the superuser flag (:attr:`~odoo.api.Environment.su`)
+* or the context (:attr:`~odoo.api.Environment.context`)
+
+.. code-block:: bash
+
+    >>> records.env
+    <Environment object ...>
+    >>> records.env.user
+    res.user(3)
+    >>> records.env.cr
+    <Cursor object ...)
+
+When creating a recordset from an other recordset, the environment is
+inherited. The environment can be used to get an empty recordset in an
+other model, and query that model::
+
+    >>> self.env['res.partner']
+    res.partner()
+    >>> self.env['res.partner'].search([['is_company', '=', True], ['customer', '=', True]])
+    res.partner(7, 18, 12, 14, 17, 19, 8, 31, 26, 16, 13, 20, 30, 22, 29, 15, 23, 28, 74)
+
+.. currentmodule:: odoo.api
+
+.. automethod:: Environment.ref
+
+.. autoattribute:: Environment.lang
+
+.. autoattribute:: Environment.user
+
+.. autoattribute:: Environment.company
+
+.. autoattribute:: Environment.companies
+
+.. TODO cr, uid but not @property or methods of Environment class...
+
+Altering the environment
+------------------------
+
+.. currentmodule:: odoo.models
+
+.. automethod:: Model.with_context
+
+.. automethod:: Model.with_user
+
+.. automethod:: Model.with_company
+
+.. automethod:: Model.with_env
+
+.. automethod:: Model.sudo
+
+.. _reference/orm/sql:
+
+SQL Execution
 -------------
 
-The :attr:`~openerp.api.Environment.cr` attribute on environments is the
+The :attr:`~odoo.api.Environment.cr` attribute on environments is the
 cursor for the current database transaction and allows executing SQL directly,
 either for queries which are difficult to express using the ORM (e.g. complex
 joins) or for performance reasons::
 
     self.env.cr.execute("some_sql", param1, param2, param3)
 
-Because models use the same cursor and the :class:`~openerp.api.Environment`
+Because models use the same cursor and the :class:`~odoo.api.Environment`
 holds various caches, these caches must be invalidated when *altering* the
 database in raw SQL, or further uses of models may become incoherent. It is
 necessary to clear caches when using ``CREATE``, ``UPDATE`` or ``DELETE`` in
 SQL, but not ``SELECT`` (which simply reads the database).
 
-Clearing caches can be performed using the
-:meth:`~openerp.api.Environment.invalidate_all` method of the
-:class:`~openerp.api.Environment` object.
+.. note::
+    Clearing caches can be performed using the
+    :meth:`~odoo.models.Model.invalidate_cache` method.
 
+.. automethod:: Model.invalidate_cache
 
-.. _reference/orm/oldapi:
+.. warning::
+    Executing raw SQL bypasses the ORM, and by consequent, Odoo security rules.
+    Please make sure your queries are sanitized when using user input and prefer using
+    ORM utilities if you don't really need to use SQL queries.
 
-Compatibility between new API and old API
-=========================================
 
-Odoo is currently transitioning from an older (less regular) API, it can be
-necessary to manually bridge from one to the other manually:
+.. _reference/orm/models/crud:
 
-* RPC layers (both XML-RPC and JSON-RPC) are expressed in terms of the old
-  API, methods expressed purely in the new API are not available over RPC
-* overridable methods may be called from older pieces of code still written
-  in the old API style
+Common ORM methods
+==================
 
-The big differences between the old and new APIs are:
+.. currentmodule:: odoo.models
 
-* values of the :class:`~openerp.api.Environment` (cursor, user id and
-  context) are passed explicitly to methods instead
-* record data (:attr:`~openerp.models.Model.ids`) are passed explicitly to
-  methods, and possibly not passed at all
-* methods tend to work on lists of ids instead of recordsets
+Create/update
+-------------
 
-By default, methods are assumed to use the new API style and are not callable
-from the old API style.
+.. todo:: api.model_create_multi information
 
-.. tip:: calls from the new API to the old API are bridged
-    :class: aphorism
+.. automethod:: Model.create
 
-    when using the new API style, calls to methods defined using the old API
-    are automatically converted on-the-fly, there should be no need to do
-    anything special::
+.. automethod:: Model.copy
 
-        >>> # method in the old API style
-        >>> def old_method(self, cr, uid, ids, context=None):
-        ...    print ids
+.. automethod:: Model.default_get
 
-        >>> # method in the new API style
-        >>> def new_method(self):
-        ...     # system automatically infers how to call the old-style
-        ...     # method from the new-style method
-        ...     self.old_method()
+.. automethod:: Model.name_create
 
-        >>> env[model].browse([1, 2, 3, 4]).new_method()
-        [1, 2, 3, 4]
+.. automethod:: Model.write
 
-Two decorators can expose a new-style method to the old API:
+.. automethod:: Model.flush
 
-:func:`~openerp.api.model`
-    the method is exposed as not using ids, its recordset will generally be
-    empty. Its "old API" signature is ``cr, uid, *arguments, context``::
+Search/Read
+-----------
 
-        @api.model
-        def some_method(self, a_value):
-            pass
-        # can be called as
-        old_style_model.some_method(cr, uid, a_value, context=context)
+.. automethod:: Model.browse
 
-:func:`~openerp.api.multi`
-    the method is exposed as taking a list of ids (possibly empty), its
-    "old API" signature is ``cr, uid, ids, *arguments, context``::
+.. automethod:: Model.search
 
-        @api.multi
-        def some_method(self, a_value):
-            pass
-        # can be called as
-        old_style_model.some_method(cr, uid, [id1, id2], a_value, context=context)
+.. automethod:: Model.search_count
 
-Because new-style APIs tend to return recordsets and old-style APIs tend to
-return lists of ids, there is also a decorator managing this:
+.. automethod:: Model.name_search
 
-:func:`~openerp.api.returns`
-    the function is assumed to return a recordset, the first parameter should
-    be the name of the recordset's model or ``self`` (for the current model).
+.. automethod:: Model.read
 
-    No effect if the method is called in new API style, but transforms the
-    recordset into a list of ids when called from the old API style::
+.. automethod:: Model.read_group
 
-        >>> @api.multi
-        ... @api.returns('self')
-        ... def some_method(self):
-        ...     return self
-        >>> new_style_model = env['a.model'].browse(1, 2, 3)
-        >>> new_style_model.some_method()
-        a.model(1, 2, 3)
-        >>> old_style_model = pool['a.model']
-        >>> old_style_model.some_method(cr, uid, [1, 2, 3], context=context)
-        [1, 2, 3]
+Fields/Views
+''''''''''''
 
-.. _reference/orm/model:
+.. automethod:: Model.fields_get
 
-Model Reference
-===============
-
-.. - can't get autoattribute to import docstrings, so use regular attribute
-   - no autoclassmethod
-
-.. currentmodule:: openerp.models
-
-.. autoclass:: openerp.models.Model
-
-    .. rubric:: Structural attributes
-
-    .. attribute:: _name
-
-        business object name, in dot-notation (in module namespace)
-
-    .. attribute:: _rec_name
-
-        Alternative field to use as name, used by osv’s name_get()
-        (default: ``'name'``)
-
-    .. attribute:: _inherit
-
-        * If :attr:`._name` is set, names of parent models to inherit from.
-          Can be a ``str`` if inheriting from a single parent
-        * If :attr:`._name` is unset, name of a single model to extend
-          in-place
-
-        See :ref:`reference/orm/inheritance`.
-
-    .. attribute:: _order
-
-        Ordering field when searching without an ordering specified (default:
-        ``'id'``)
-
-        :type: str
-
-    .. attribute:: _auto
-
-        Whether a database table should be created (default: ``True``)
-
-        If set to ``False``, override :meth:`.init` to create the database
-        table
-
-    .. attribute:: _table
-
-        Name of the table backing the model created when
-        :attr:`~openerp.models.Model._auto`, automatically generated by
-        default.
-
-    .. attribute:: _inherits
-
-        dictionary mapping the _name of the parent business objects to the
-        names of the corresponding foreign key fields to use::
-
-            _inherits = {
-                'a.model': 'a_field_id',
-                'b.model': 'b_field_id'
-            }
-
-        implements composition-based inheritance: the new model exposes all
-        the fields of the :attr:`~openerp.models.Model._inherits`-ed model but
-        stores none of them: the values themselves remain stored on the linked
-        record.
-
-        .. warning::
-
-            if the same field is defined on multiple
-            :attr:`~openerp.models.Model._inherits`-ed
-
-    .. attribute:: _constraints
-
-        list of ``(constraint_function, message, fields)`` defining Python
-        constraints. The fields list is indicative
-
-        .. deprecated:: 8.0
-
-            use :func:`~openerp.api.constrains`
-
-    .. attribute:: _sql_constraints
-
-        list of ``(name, sql_definition, message)`` triples defining SQL
-        constraints to execute when generating the backing table
-
-    .. attribute:: _parent_store
-
-        Alongside :attr:`~.parent_left` and :attr:`~.parent_right`, sets up a
-        `nested set <http://en.wikipedia.org/wiki/Nested_set_model>`_  to
-        enable fast hierarchical queries on the records of the current model
-        (default: ``False``)
-
-        :type: bool
-
-    .. rubric:: CRUD
-
-    .. automethod:: create
-    .. automethod:: browse
-    .. automethod:: unlink
-    .. automethod:: write
-
-    .. automethod:: read
-
-    .. rubric:: Research
-
-    .. automethod:: search
-    .. automethod:: search_count
-    .. automethod:: name_search
-
-    .. rubric:: Recordset operations
-
-    .. autoattribute:: ids
-    .. automethod:: ensure_one
-    .. automethod:: exists
-    .. automethod:: filtered
-    .. automethod:: sorted
-    .. automethod:: mapped
-
-    .. rubric:: Environment swapping
-
-    .. automethod:: sudo
-    .. automethod:: with_context
-    .. automethod:: with_env
-
-    .. rubric:: Fields and views querying
-
-    .. automethod:: fields_get
-    .. automethod:: fields_view_get
-
-    .. rubric:: ???
-
-    .. automethod:: default_get
-    .. automethod:: copy
-    .. automethod:: name_get
-    .. automethod:: name_create
-
-    .. _reference/orm/model/automatic:
-
-    .. rubric:: Automatic fields
-
-    .. attribute:: id
-
-        Identifier :class:`field <openerp.fields.Field>`
-
-    .. attribute:: _log_access
-
-        Whether log access fields (``create_date``, ``write_uid``, ...) should
-        be generated (default: ``True``)
-
-    .. attribute:: create_date
-
-        Date at which the record was created
-
-        :type: :class:`~openerp.field.Datetime`
-
-    .. attribute:: create_uid
-
-        Relational field to the user who created the record
-
-        :type: ``res.users``
-
-    .. attribute:: write_date
-
-        Date at which the record was last modified
-
-        :type: :class:`~openerp.field.Datetime`
-
-    .. attribute:: write_uid
-
-        Relational field to the last user who modified the record
-
-        :type: ``res.users``
-
-    .. rubric:: Reserved field names
-
-    A few field names are reserved for pre-defined behaviors beyond that of
-    automated fields. They should be defined on a model when the related
-    behavior is desired:
-
-    .. attribute:: name
-
-        default value for :attr:`~._rec_name`, used to
-        display records in context where a representative "naming" is
-        necessary.
-
-        :type: :class:`~openerp.fields.Char`
-
-    .. attribute:: active
-
-        toggles the global visibility of the record, if ``active`` is set to
-        ``False`` the record is invisible in most searches and listing
-
-        :type: :class:`~openerp.fields.Boolean`
-
-    .. attribute:: sequence
-
-        Alterable ordering criteria, allows drag-and-drop reordering of models
-        in list views
-
-        :type: :class:`~openerp.fields.Integer`
-
-    .. attribute:: state
-
-        lifecycle stages of the object, used by the ``states`` attribute on
-        :class:`fields <openerp.fields.Field>`
-
-        :type: :class:`~openerp.fields.Selection`
-
-    .. attribute:: parent_id
-
-        used to order records in a tree structure and enables the ``child_of``
-        operator in domains
-
-        :type: :class:`~openerp.fields.Many2one`
-
-    .. attribute:: parent_left
-
-        used with :attr:`~._parent_store`, allows faster tree structure access
-
-    .. attribute:: parent_right
-
-        see :attr:`~.parent_left`
-
-.. _reference/orm/decorators:
-
-Method decorators
-=================
-
-.. automodule:: openerp.api
-    :members: one, multi, model, depends, constrains, onchange, returns,
-              v7, v8
-
-.. _reference/orm/fields:
-
-Fields
-======
-
-.. _reference/orm/fields/basic:
-
-Basic fields
-------------
-
-.. autodoc documents descriptors as attributes, even for the *definition* of
-   descriptors. As a result automodule:: openerp.fields lists all the field
-   classes as attributes without providing inheritance info or methods (though
-   we don't document methods as they're not useful for "external" devs)
-   (because we don't support pluggable field types) (or do we?)
-
-.. autoclass:: openerp.fields.Field
-
-.. autoclass:: openerp.fields.Char
-    :show-inheritance:
-
-.. autoclass:: openerp.fields.Boolean
-    :show-inheritance:
-
-.. autoclass:: openerp.fields.Integer
-    :show-inheritance:
-
-.. autoclass:: openerp.fields.Float
-    :show-inheritance:
-
-.. autoclass:: openerp.fields.Text
-    :show-inheritance:
-
-.. autoclass:: openerp.fields.Selection
-    :show-inheritance:
-
-.. autoclass:: openerp.fields.Html
-    :show-inheritance:
-
-.. autoclass:: openerp.fields.Date
-    :show-inheritance:
-    :members: today, context_today, from_string, to_string
-
-.. autoclass:: openerp.fields.Datetime
-    :show-inheritance:
-    :members: now, context_timestamp, from_string, to_string
-
-.. _reference/orm/fields/relational:
-
-Relational fields
------------------
-
-.. autoclass:: openerp.fields.Many2one
-    :show-inheritance:
-
-.. autoclass:: openerp.fields.One2many
-    :show-inheritance:
-
-.. autoclass:: openerp.fields.Many2many
-    :show-inheritance:
-
-.. autoclass:: openerp.fields.Reference
-    :show-inheritance:
-
-.. _reference/orm/inheritance:
-
-Inheritance and extension
-=========================
-
-Odoo provides three different mechanisms to extend models in a modular way:
-
-* creating a new model from an existing one, adding new information to the
-  copy but leaving the original module as-is
-* extending models defined in other modules in-place, replacing the previous
-  version
-* delegating some of the model's fields to records it contains
-
-.. image:: ../images/inheritance_methods.png
-    :align: center
-
-Classical inheritance
----------------------
-
-When using the :attr:`~openerp.models.Model._inherit` and
-:attr:`~openerp.models.Model._name` attributes together, Odoo creates a new
-model using the existing one (provided via
-:attr:`~openerp.models.Model._inherit`) as a base. The new model gets all the
-fields, methods and meta-information (defaults & al) from its base.
-
-.. literalinclude:: ../../openerp/addons/test_documentation_examples/inheritance.py
-    :language: python
-    :lines: 5-
-
-and using them:
-
-.. literalinclude:: ../../openerp/addons/test_documentation_examples/tests/test_inheritance.py
-    :language: python
-    :lines: 8,12,9,19
-
-will yield:
-
-.. literalinclude:: ../../openerp/addons/test_documentation_examples/tests/test_inheritance.py
-    :language: text
-    :lines: 15,22
-
-the second model has inherited from the first model's ``check`` method and its
-``name`` field, but overridden the ``call`` method, as when using standard
-:ref:`Python inheritance <python:tut-inheritance>`.
-
-Extension
----------
-
-When using :attr:`~openerp.models.Model._inherit` but leaving out
-:attr:`~openerp.models.Model._name`, the new model replaces the existing one,
-essentially extending it in-place. This is useful to add new fields or methods
-to existing models (created in other modules), or to customize or reconfigure
-them (e.g. to change their default sort order):
-
-.. literalinclude:: ../../openerp/addons/test_documentation_examples/extension.py
-    :language: python
-    :lines: 5-
-
-.. literalinclude:: ../../openerp/addons/test_documentation_examples/tests/test_extension.py
-    :language: python
-    :lines: 8,13
-
-will yield:
-
-.. literalinclude:: ../../openerp/addons/test_documentation_examples/tests/test_extension.py
-    :language: text
-    :lines: 11
-
-.. note:: it will also yield the various :ref:`automatic fields
-          <reference/orm/model/automatic>` unless they've been disabled
-
-Delegation
-----------
-
-The third inheritance mechanism provides more flexibility (it can be altered
-at runtime) but less power: using the :attr:`~openerp.models.Model._inherits`
-a model *delegates* the lookup of any field not found on the current model
-to "children" models. The delegation is performed via
-:class:`~openerp.fields.Reference` fields automatically set up on the parent
-model:
-
-.. literalinclude:: ../../openerp/addons/test_documentation_examples/delegation.py
-    :language: python
-    :lines: 5-
-
-.. literalinclude:: ../../openerp/addons/test_documentation_examples/tests/test_delegation.py
-    :language: python
-    :lines: 9-12,21,26
-
-will result in:
-
-.. literalinclude:: ../../openerp/addons/test_documentation_examples/tests/test_delegation.py
-    :language: text
-    :lines: 23,28
-
-and it's possible to write directly on the delegated field:
-
-.. literalinclude:: ../../openerp/addons/test_documentation_examples/tests/test_delegation.py
-    :language: python
-    :lines: 47
-
-.. warning:: when using delegation inheritance, methods are *not* inherited,
-             only fields
+.. automethod:: Model.fields_view_get
 
 .. _reference/orm/domains:
 
-Domains
-=======
+Search domains
+''''''''''''''
 
 A domain is a list of criteria, each criterion being a triple (either a
 ``list`` or a ``tuple``) of ``(field_name, operator, value)`` where:
 
-``field_name`` (``str``)
+* ``field_name`` (``str``)
     a field name of the current model, or a relationship traversal through
-    a :class:`~openerp.fields.Many2one` using dot-notation e.g. ``'street'``
+    a :class:`~odoo.fields.Many2one` using dot-notation e.g. ``'street'``
     or ``'partner_id.country'``
-``operator`` (``str``)
+
+* ``operator`` (``str``)
     an operator used to compare the ``field_name`` with the ``value``. Valid
     operators are:
 
@@ -989,15 +742,23 @@ A domain is a list of criteria, each criterion being a triple (either a
     ``not in``
         is unequal to all of the items from ``value``
     ``child_of``
-        is a child (descendant) of a ``value`` record.
+        is a child (descendant) of a ``value`` record (value can be either
+        one item or a list of items).
 
         Takes the semantics of the model into account (i.e following the
         relationship field named by
-        :attr:`~openerp.models.Model._parent_name`).
+        :attr:`~odoo.models.Model._parent_name`).
+    ``parent_of``
+        is a parent (ascendant) of a ``value`` record (value can be either
+        one item or a list of items).
 
-``value``
+        Takes the semantics of the model into account (i.e following the
+        relationship field named by
+        :attr:`~odoo.models.Model._parent_name`).
+
+* ``value``
     variable type, must be comparable (through ``operator``) to the named
-    field
+    field.
 
 Domain criteria can be combined using logical operators in *prefix* form:
 
@@ -1009,9 +770,7 @@ Domain criteria can be combined using logical operators in *prefix* form:
 ``'!'``
     logical *NOT*, arity 1.
 
-    .. tip:: Mostly to negate combinations of criteria
-        :class: aphorism
-
+    .. note:: Mostly to negate combinations of criteria
         Individual criterion generally have a negative form (e.g. ``=`` ->
         ``!=``, ``<`` -> ``>=``) which is simpler than negating the positive.
 
@@ -1033,148 +792,226 @@ Domain criteria can be combined using logical operators in *prefix* form:
         AND (language is NOT english)
         AND (country is Belgium OR Germany)
 
-Porting from the old API to the new API
-=======================================
+Unlink
+------
 
-* bare lists of ids are to be avoided in the new API, use recordsets instead
-* methods still written in the old API should be automatically bridged by the
-  ORM, no need to switch to the old API, just call them as if they were a new
-  API method. See :ref:`reference/orm/oldapi/bridging` for more details.
-* :meth:`~openerp.models.Model.search` returns a recordset, no point in e.g.
-  browsing its result
-* ``fields.related`` and ``fields.function`` are replaced by using a normal
-  field type with either a ``related=`` or a ``compute=`` parameter
-* :func:`~openerp.api.depends` on ``compute=`` methods **must be complete**,
-  it must list **all** the fields and sub-fields which the compute method
-  uses. It is better to have too many dependencies (will recompute the field
-  in cases where that is not needed) than not enough (will forget to recompute
-  the field and then values will be incorrect)
-* **remove** all ``onchange`` methods on computed fields. Computed fields are
-  automatically re-computed when one of their dependencies is changed, and
-  that is used to auto-generate ``onchange`` by the client
-* the decorators :func:`~openerp.api.model` and :func:`~openerp.api.multi` are
-  for bridging *when calling from the old API context*, for internal or pure
-  new-api (e.g. compute) they are useless
-* remove :attr:`~openerp.models.Model._default`, replace by ``default=``
-  parameter on corresponding fields
-* if a field's ``string=`` is the titlecased version of the field name::
+.. automethod:: Model.unlink
 
-    name = fields.Char(string="Name")
+.. _reference/orm/records/info:
 
-  it is useless and should be removed
-* the ``multi=`` parameter does not do anything on new API fields use the same
-  ``compute=`` methods on all relevant fields for the same result
-* provide ``compute=``, ``inverse=`` and ``search=`` methods by name (as a
-  string), this makes them overridable (removes the need for an intermediate
-  "trampoline" function)
-* double check that all fields and methods have different names, there is no
-  warning in case of collision (because Python handles it before Odoo sees
-  anything)
-* the normal new-api import is ``from openerp import fields, models``. If
-  compatibility decorators are necessary, use ``from openerp import api,
-  fields, models``
-* avoid the :func:`~openerp.api.one` decorator, it probably does not do what
-  you expect
-* remove explicit definition of :attr:`~openerp.models.Model.create_uid`,
-  :attr:`~openerp.models.Model.create_date`,
-  :attr:`~openerp.models.Model.write_uid` and
-  :attr:`~openerp.models.Model.write_date` fields: they are now created as
-  regular "legitimate" fields, and can be read and written like any other
-  field out-of-the-box
-* when straight conversion is impossible (semantics can not be bridged) or the
-  "old API" version is not desirable and could be improved for the new API, it
-  is possible to use completely different "old API" and "new API"
-  implementations for the same method name using :func:`~openerp.api.v7` and
-  :func:`~openerp.api.v8`. The method should first be defined using the
-  old-API style and decorated with :func:`~openerp.api.v7`, it should then be
-  re-defined using the exact same name but the new-API style and decorated
-  with :func:`~openerp.api.v8`. Calls from an old-API context will be
-  dispatched to the first implementation and calls from a new-API context will
-  be dispatched to the second implementation. One implementation can call (and
-  frequently does) call the other by switching context.
+Record(set) information
+-----------------------
 
-  .. danger:: using these decorators makes methods extremely difficult to
-              override and harder to understand and document
-* uses of :attr:`~openerp.models.Model._columns` or
-  :attr:`~openerp.models.Model._all_columns` should be replaced by
-  :attr:`~openerp.models.Model._fields`, which provides access to instances of
-  new-style :class:`openerp.fields.Field` instances (rather than old-style
-  :class:`openerp.osv.fields._column`).
+.. autoattribute:: Model.ids
 
-  Non-stored computed fields created using the new API style are *not*
-  available in :attr:`~openerp.models.Model._columns` and can only be
-  inspected through :attr:`~openerp.models.Model._fields`
-* reassigning ``self`` in a method is probably unnecessary and may break
-  translation introspection
-* :class:`~openerp.api.Environment` objects rely on some threadlocal state,
-  which has to be set up before using them. It is necessary to do so using the
-  :meth:`openerp.api.Environment.manage` context manager when trying to use
-  the new API in contexts where it hasn't been set up yet, such as new threads
-  or a Python interactive environment::
+.. attribute:: env
 
-    >>> from openerp import api, modules
-    >>> r = modules.registry.RegistryManager.get('test')
-    >>> cr = r.cursor()
-    >>> env = api.Environment(cr, 1, {})
-    Traceback (most recent call last):
-      ...
-    AttributeError: environments
-    >>> with api.Environment.manage():
-    ...     env = api.Environment(cr, 1, {})
-    ...     print env['res.partner'].browse(1)
-    ...
-    res.partner(1,)
+    Returns the environment of the given recordset.
 
-.. _reference/orm/oldapi/bridging:
+    :type: :class:`~odoo.api.Environment`
 
-Automatic bridging of old API methods
--------------------------------------
+.. todo:: Environment documentation
 
-When models are initialized, all methods are automatically scanned and bridged
-if they look like models declared in the old API style. This bridging makes
-them transparently callable from new-API-style methods.
+.. automethod:: Model.exists
 
-Methods are matched as "old-API style" if their second positional parameter
-(after ``self``) is called either ``cr`` or ``cursor``. The system also
-recognizes the third positional parameter being called ``uid`` or ``user`` and
-the fourth being called ``id`` or ``ids``. It also recognizes the presence of
-any parameter called ``context``.
+.. automethod:: Model.ensure_one
 
-When calling such methods from a new API context, the system will
-automatically fill matched parameters from the current
-:class:`~openerp.api.Environment` (for :attr:`~openerp.api.Environment.cr`,
-:attr:`~openerp.api.Environment.user` and
-:attr:`~openerp.api.Environment.context`) or the current recordset (for ``id``
-and ``ids``).
+.. automethod:: Model.name_get
 
-In the rare cases where it is necessary, the bridging can be customized by
-decorating the old-style method:
+.. automethod:: Model.get_metadata
 
-* disabling it entirely, by decorating a method with
-  :func:`~openerp.api.noguess` there will be no bridging and methods will be
-  called the exact same way from the new and old API styles
-* defining the bridge explicitly, this is mostly for methods which are matched
-  incorrectly (because parameters are named in unexpected ways):
+.. _reference/orm/records/operations:
 
-  :func:`~openerp.api.cr`
-     will automatically prepend the current cursor to explicitly provided
-     parameters, positionally
-  :func:`~openerp.api.cr_uid`
-     will automatically prepend the current cursor and user's id to explictly
-     provided parameters
-  :func:`~openerp.api.cr_uid_ids`
-     will automatically prepend the current cursor, user's id and recordset's
-     ids to explicitly provided parameters
-  :func:`~openerp.api.cr_uid_id`
-     will loop over the current recordset and call the method once for each
-     record, prepending the current cursor, user's id and record's id to
-     explicitly provided parameters.
+Operations
+----------
 
-     .. danger:: the result of this wrapper is *always a list* when calling
-                 from a new-API context
+Recordsets are immutable, but sets of the same model can be combined using
+various set operations, returning new recordsets.
 
-  All of these methods have a ``_context``-suffixed version
-  (e.g. :func:`~openerp.api.cr_uid_context`) which also passes the current
-  context *by keyword*.
-* dual implementations using :func:`~openerp.api.v7` and
-  :func:`~openerp.api.v8` will be ignored as they provide their own "bridging"
+.. addition preserves order but can introduce duplicates
+
+* ``record in set`` returns whether ``record`` (which must be a 1-element
+  recordset) is present in ``set``. ``record not in set`` is the inverse
+  operation
+* ``set1 <= set2`` and ``set1 < set2`` return whether ``set1`` is a subset
+  of ``set2`` (resp. strict)
+* ``set1 >= set2`` and ``set1 > set2`` return whether ``set1`` is a superset
+  of ``set2`` (resp. strict)
+* ``set1 | set2`` returns the union of the two recordsets, a new recordset
+  containing all records present in either source
+* ``set1 & set2`` returns the intersection of two recordsets, a new recordset
+  containing only records present in both sources
+* ``set1 - set2`` returns a new recordset containing only records of ``set1``
+  which are *not* in ``set2``
+
+Recordsets are iterable so the usual Python tools are available for
+transformation (:func:`python:map`, :func:`python:sorted`,
+:func:`~python:itertools.ifilter`, ...) however these return either a
+:class:`python:list` or an :term:`python:iterator`, removing the ability to
+call methods on their result, or to use set operations.
+
+Recordsets therefore provide the following operations returning recordsets themselves
+(when possible):
+
+Filter
+''''''
+
+.. automethod:: Model.filtered
+
+.. automethod:: Model.filtered_domain
+
+Map
+'''
+
+.. automethod:: Model.mapped
+
+.. note::
+
+    Since V13, multi-relational field access is supported and works like a mapped call:
+
+    .. code-block:: python3
+
+        records.partner_id  # == records.mapped('partner_id')
+        records.partner_id.bank_ids  # == records.mapped('partner_id.bank_ids')
+        records.partner_id.mapped('name')  # == records.mapped('partner_id.name')
+
+Sort
+''''
+
+.. automethod:: Model.sorted
+
+.. _reference/orm/inheritance:
+
+Inheritance and extension
+=========================
+
+Odoo provides three different mechanisms to extend models in a modular way:
+
+* creating a new model from an existing one, adding new information to the
+  copy but leaving the original module as-is
+* extending models defined in other modules in-place, replacing the previous
+  version
+* delegating some of the model's fields to records it contains
+
+.. image:: ../images/inheritance_methods.png
+    :align: center
+
+Classical inheritance
+---------------------
+
+When using the :attr:`~odoo.models.Model._inherit` and
+:attr:`~odoo.models.Model._name` attributes together, Odoo creates a new
+model using the existing one (provided via
+:attr:`~odoo.models.Model._inherit`) as a base. The new model gets all the
+fields, methods and meta-information (defaults & al) from its base.
+
+.. literalinclude:: ../../odoo/addons/test_documentation_examples/inheritance.py
+    :language: python
+    :lines: 6-
+
+and using them:
+
+.. literalinclude:: ../../odoo/addons/test_documentation_examples/tests/test_inheritance.py
+    :language: python
+    :lines: 10,11,14,19
+
+will yield:
+
+.. literalinclude:: ../../odoo/addons/test_documentation_examples/tests/test_inheritance.py
+    :language: text
+    :lines: 16,21
+
+the second model has inherited from the first model's ``check`` method and its
+``name`` field, but overridden the ``call`` method, as when using standard
+:ref:`Python inheritance <python:tut-inheritance>`.
+
+Extension
+---------
+
+When using :attr:`~odoo.models.Model._inherit` but leaving out
+:attr:`~odoo.models.Model._name`, the new model replaces the existing one,
+essentially extending it in-place. This is useful to add new fields or methods
+to existing models (created in other modules), or to customize or reconfigure
+them (e.g. to change their default sort order):
+
+.. literalinclude:: ../../odoo/addons/test_documentation_examples/extension.py
+    :language: python
+    :lines: 6-
+
+.. literalinclude:: ../../odoo/addons/test_documentation_examples/tests/test_extension.py
+    :language: python
+    :lines: 10,15
+
+will yield:
+
+.. literalinclude:: ../../odoo/addons/test_documentation_examples/tests/test_extension.py
+    :language: text
+    :lines: 13
+
+.. note:: it will also yield the various :ref:`automatic fields
+          <reference/fields/automatic>` unless they've been disabled
+
+Delegation
+----------
+
+The third inheritance mechanism provides more flexibility (it can be altered
+at runtime) but less power: using the :attr:`~odoo.models.Model._inherits`
+a model *delegates* the lookup of any field not found on the current model
+to "children" models. The delegation is performed via
+:class:`~odoo.fields.Reference` fields automatically set up on the parent
+model.
+
+The main difference is in the meaning. When using Delegation, the model
+**has one** instead of **is one**, turning the relationship in a composition
+instead of inheritance:
+
+.. literalinclude:: ../../odoo/addons/test_documentation_examples/delegation.py
+    :language: python
+    :lines: 5-
+
+.. literalinclude:: ../../odoo/addons/test_documentation_examples/tests/test_delegation.py
+    :language: python
+    :lines: 11-14,23,28
+
+will result in:
+
+.. literalinclude:: ../../odoo/addons/test_documentation_examples/tests/test_delegation.py
+    :language: text
+    :lines: 25,30
+
+and it's possible to write directly on the delegated field:
+
+.. literalinclude:: ../../odoo/addons/test_documentation_examples/tests/test_delegation.py
+    :language: python
+    :lines: 45
+
+.. warning:: when using delegation inheritance, methods are *not* inherited,
+             only fields
+
+Fields Incremental Definition
+-----------------------------
+
+A field is defined as class attribute on a model class. If the model
+is extended, one can also extend the field definition by redefining
+a field with the same name and same type on the subclass.
+In that case, the attributes of the field are taken from the parent class
+and overridden by the ones given in subclasses.
+
+For instance, the second class below only adds a tooltip on the field
+``state``::
+
+    class First(models.Model):
+        _name = 'foo'
+        state = fields.Selection([...], required=True)
+
+    class Second(models.Model):
+        _inherit = 'foo'
+        state = fields.Selection(help="Blah blah blah")
+
+.. _reference/exceptions:
+
+Error management
+================
+
+.. automodule:: odoo.exceptions
+    :members: AccessDenied, AccessError, CacheMiss, MissingError, RedirectWarning, UserError, ValidationError

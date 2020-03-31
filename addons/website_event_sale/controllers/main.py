@@ -1,73 +1,72 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
-from openerp import SUPERUSER_ID
-from openerp.addons.web import http
-from openerp.addons.web.http import request
-from openerp.addons.website_event.controllers.main import website_event
-from openerp.addons.website_sale.controllers.main import get_pricelist
-from openerp.tools.translate import _
+from odoo import http, _
+from odoo.addons.website_event.controllers.main import WebsiteEventController
+from odoo.http import request
 
 
-class website_event(website_event):
+class WebsiteEventSaleController(WebsiteEventController):
 
-    @http.route(['/event/<model("event.event"):event>/register'], type='http', auth="public", website=True)
+    @http.route()
     def event_register(self, event, **post):
-        pricelist_id = int(get_pricelist())
-        values = {
-            'event': event.with_context(pricelist=pricelist_id),
-            'main_object': event.with_context(pricelist=pricelist_id),
-            'range': range,
-        }
-        return request.website.render("website_event.event_description_full", values)
+        event = event.with_context(pricelist=request.website.id)
+        if not request.context.get('pricelist'):
+            pricelist = request.website.get_current_pricelist()
+            if pricelist:
+                event = event.with_context(pricelist=pricelist.id)
+        return super(WebsiteEventSaleController, self).event_register(event, **post)
 
-    def _process_tickets_details(self, data):
-        ticket_post = {}
-        for key, value in data.iteritems():
-            if not key.startswith('nb_register') or '-' not in key:
-                continue
-            items = key.split('-')
-            if len(items) < 2:
-                continue
-            ticket_post[int(items[1])] = int(value)
-        tickets = request.registry['event.event.ticket'].browse(request.cr, request.uid, ticket_post.keys(), request.context)
-        return [{'id': ticket.id, 'name': ticket.name, 'quantity': ticket_post[ticket.id], 'price': ticket.price} for ticket in tickets if ticket_post[ticket.id]]
+    def _process_tickets_form(self, event, form_details):
+        """ Add price information on ticket order """
+        res = super(WebsiteEventSaleController, self)._process_tickets_form(event, form_details)
+        for item in res:
+            item['price'] = item['ticket']['price'] if item['ticket'] else 0
+        return res
 
-    @http.route(['/event/<model("event.event"):event>/registration/confirm'], type='http', auth="public", methods=['POST'], website=True)
+    def _create_attendees_from_registration_post(self, event, registration_data):
+        # we have at least one registration linked to a ticket -> sale mode activate
+        if any(info.get('event_ticket_id') for info in registration_data):
+            order = request.website.sale_get_order(force_create=1)
+
+        order_attendee_ids = set()
+        for info in [r for r in registration_data if r.get('event_ticket_id')]:
+            ticket = request.env['event.event.ticket'].sudo().browse(info['event_ticket_id'])
+            cart_values = order.with_context(event_ticket_id=ticket.id, fixed_price=True)._cart_update(product_id=ticket.product_id.id, add_qty=1, registration_data=[info])
+            order_attendee_ids |= set(cart_values.get('attendee_ids', []))
+
+        attendees_sudo = super(WebsiteEventSaleController, self)._create_attendees_from_registration_post(event, [r for r in registration_data if not r['event_ticket_id']])
+        if order_attendee_ids:
+            attendees_sudo |= request.env['event.registration'].sudo().browse(order_attendee_ids)
+
+        return attendees_sudo
+
+    @http.route()
     def registration_confirm(self, event, **post):
-        cr, uid, context = request.cr, request.uid, request.context
-        order = request.website.sale_get_order(force_create=1)
-        attendee_ids = set()
+        res = super(WebsiteEventSaleController, self).registration_confirm(event, **post)
 
-        registrations = self._process_registration_details(post)
-        for registration in registrations:
-            ticket = request.registry['event.event.ticket'].browse(cr, SUPERUSER_ID, int(registration['ticket_id']), context=context)
-            cart_values = order.with_context(event_ticket_id=ticket.id)._cart_update(product_id=ticket.product_id.id, add_qty=1, registration_data=[registration])
-            attendee_ids |= set(cart_values.get('attendee_ids', []))
+        registrations = self._process_attendees_form(event, post)
 
-        # free tickets -> order with amount = 0: auto-confirm, no checkout
-        if not order.amount_total:
-            order.action_confirm()  # tde notsure: email sending ?
-            attendees = request.registry['event.registration'].browse(cr, uid, list(attendee_ids), context=context)
-            # clean context and session, then redirect to the confirmation page
-            request.website.sale_reset(context=context)
-            return request.website.render("website_event.registration_complete", {
-                'attendees': attendees,
-                'event': event,
-            })
+        # we have at least one registration linked to a ticket -> sale mode activate
+        if any(info['event_ticket_id'] for info in registrations):
+            order = request.website.sale_get_order(force_create=False)
+            if order.amount_total:
+                return request.redirect("/shop/checkout")
+            # free tickets -> order with amount = 0: auto-confirm, no checkout
+            elif order:
+                order.action_confirm()  # tde notsure: email sending ?
+                request.website.sale_reset()
 
-        return request.redirect("/shop/checkout")
+        return res
 
-    def _add_event(self, event_name="New Event", context={}, **kwargs):
-        try:
-            res_id = request.env.ref('event_sale.product_product_event').id
-            context['default_event_ticket_ids'] = [[0, 0, {
-                'name': _('Subscription'),
-                'product_id': res_id,
-                'deadline': False,
+    def _add_event(self, event_name="New Event", context=None, **kwargs):
+        product = request.env.ref('event_sale.product_product_event', raise_if_not_found=False)
+        if product:
+            context = dict(context or {}, default_event_ticket_ids=[[0, 0, {
+                'name': _('Registration'),
+                'product_id': product.id,
+                'end_sale_date': False,
                 'seats_max': 1000,
                 'price': 0,
-            }]]
-        except ValueError:
-            pass
-        return super(website_event, self)._add_event(event_name, context, **kwargs)
+            }]])
+        return super(WebsiteEventSaleController, self)._add_event(event_name, context, **kwargs)

@@ -1,1415 +1,1115 @@
-# Russian translation for openobject-addons
-# Copyright (c) 2014 Rosetta Contributors and Canonical Ltd 2014
-# This file is distributed under the same license as the openobject-addons package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2014.
-#
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* product
+# 
+# Translators:
+# Максим Дронь <dronmax@gmail.com>, 2019
+# Sergey Vilizhanin, 2019
+# Андрей Гусев <gaussgss@gmail.com>, 2019
+# Vasiliy Korobatov <korobatov@gmail.com>, 2019
+# Oleg Kuryan <oleg@ventor.tech>, 2019
+# Martin Trigaux, 2019
+# 
 msgid ""
 msgstr ""
-"Project-Id-Version: openobject-addons\n"
-"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2014-09-23 16:28+0000\n"
-"PO-Revision-Date: 2014-08-14 16:10+0000\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: Russian <ru@li.org>\n"
+"Project-Id-Version: Odoo Server saas~12.5\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-09-27 09:11+0000\n"
+"PO-Revision-Date: 2019-08-26 09:13+0000\n"
+"Last-Translator: Martin Trigaux, 2019\n"
+"Language-Team: Russian (https://www.transifex.com/odoo/teams/41243/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-09-24 09:26+0000\n"
-"X-Generator: Launchpad (build 17196)\n"
+"Content-Transfer-Encoding: \n"
+"Language: ru\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 
 #. module: product
-#: field:product.template,product_variant_count:0
-msgid "# of Product Variants"
-msgstr ""
+#: model:ir.model.fields.selection,name:product.selection__product_pricelist_item__applied_on__2_product_category
+msgid " Product Category"
+msgstr "Категория продукта"
 
 #. module: product
-#: code:addons/product/product.py:725
-#: code:addons/product/product.py:1070
+#: model:ir.model.fields,field_description:product.field_product_product__product_variant_count
+#: model:ir.model.fields,field_description:product.field_product_template__product_variant_count
+msgid "# Product Variants"
+msgstr "Варианты продукции"
+
+#. module: product
+#: model:ir.model.fields,field_description:product.field_product_category__product_count
+msgid "# Products"
+msgstr "# Продукты"
+
+#. module: product
+#: code:addons/product/models/product_pricelist.py:0
+#, python-format
+msgid "%s %% discount"
+msgstr "%s %% скидка"
+
+#. module: product
+#: code:addons/product/models/product_pricelist.py:0
+#, python-format
+msgid "%s %% discount and %s surcharge"
+msgstr "%s %% скидки и %s надбавки"
+
+#. module: product
+#: code:addons/product/models/product_template.py:0
 #, python-format
 msgid "%s (copy)"
 msgstr "%s (копия)"
 
 #. module: product
-#: model:product.attribute.value,name:product.product_attribute_value_1
-msgid "16 GB"
+#: model:ir.actions.report,print_report_name:product.report_product_label
+#: model:ir.actions.report,print_report_name:product.report_product_template_label
+msgid "'Products Labels - %s' % (object.name)"
 msgstr ""
 
 #. module: product
-#: model:product.template,description_sale:product.product_product_3_product_template
+#: model:ir.actions.report,print_report_name:product.report_product_product_barcode
+#: model:ir.actions.report,print_report_name:product.report_product_template_barcode
+msgid "'Products barcode - %s' % (object.name)"
+msgstr ""
+
+#. module: product
+#: model:ir.actions.report,print_report_name:product.report_product_packaging
+msgid "'Products packaging - %s' % (object.name)"
+msgstr ""
+
+#. module: product
+#: model:ir.model.fields,help:product.field_product_attribute__create_variant
 msgid ""
-"17\" LCD Monitor\n"
-"Processor AMD 8-Core\n"
-"512MB RAM\n"
-"HDD SH-1"
+"- Instantly: All possible variants are created as soon as the attribute and its values are added to a product.\n"
+"        - Dynamically: Each variant is created only when its corresponding attributes and values are added to a sales order.\n"
+"        - Never: Variants are never created for the attribute.\n"
+"        Note: the variants creation mode cannot be changed once the attribute is used on at least one product."
 msgstr ""
 
 #. module: product
-#: model:product.template,description:product.product_product_25_product_template
+#: model_terms:ir.ui.view,arch_db:product.product_pricelist_view_kanban
+msgid "<i class=\"fa fa-money\" role=\"img\" aria-label=\"Currency\" title=\"Currency\"/>"
+msgstr ""
+
+#. module: product
+#: model_terms:ir.ui.view,arch_db:product.product_template_form_view
 msgid ""
-"17\" Monitor\n"
-"4GB RAM\n"
-"Standard-1294P Processor\n"
-"QWERTY keyboard"
+"<span attrs=\"{'invisible': [('pricelist_item_count', '=', 1)]}\">\n"
+"                                          Extra Prices\n"
+"                                        </span>\n"
+"                                        <span attrs=\"{'invisible': [('pricelist_item_count', '!=', 1)]}\">\n"
+"                                          Extra Price\n"
+"                                        </span>"
 msgstr ""
 
 #. module: product
-#: model:product.template,description:product.product_product_26_product_template
+#: model_terms:ir.ui.view,arch_db:product.product_pricelist_item_form_view
 msgid ""
-"17\" Monitor\n"
-"6GB RAM\n"
-"Hi-Speed 234Q Processor\n"
-"QWERTY keyboard"
+"<span attrs=\"{'invisible':[('base', '!=', 'list_price')]}\">Sales Price  -  </span>\n"
+"                              <span attrs=\"{'invisible':[('base', '!=', 'standard_price')]}\">Cost  -  </span>\n"
+"                              <span attrs=\"{'invisible':[('base', '!=', 'pricelist')]}\">Other Pricelist  -  </span>"
 msgstr ""
 
 #. module: product
-#: model:product.attribute.value,name:product.product_attribute_value_5
-msgid "2.4 GHz"
+#: model_terms:ir.ui.view,arch_db:product.product_category_form_view
+msgid "<span class=\"o_stat_text\"> Products</span>"
+msgstr "<span class=\"o_stat_text\"> Продукты</span>"
+
+#. module: product
+#: model_terms:ir.ui.view,arch_db:product.report_simple_barcode
+#: model_terms:ir.ui.view,arch_db:product.report_simple_label
+msgid "<span class=\"text-muted\">No barcode available</span>"
 msgstr ""
 
 #. module: product
-#: model:product.template,description_sale:product.product_product_8_product_template
+#: model_terms:ir.ui.view,arch_db:product.product_variant_easy_edit_view
+msgid "<span>All general settings about this product are managed on</span>"
+msgstr ""
+
+#. module: product
+#: model_terms:ir.ui.view,arch_db:product.product_variant_easy_edit_view
+msgid "<span>m³</span>"
+msgstr "<span>м³</span>"
+
+#. module: product
+#: model_terms:ir.ui.view,arch_db:product.report_pricelist
+msgid "<strong>Currency</strong>:<br/>"
+msgstr "<strong>Валюта</strong>:<br/>"
+
+#. module: product
+#: model_terms:ir.ui.view,arch_db:product.report_pricelist
+msgid "<strong>Description</strong>"
+msgstr "<strong>Описание</strong>"
+
+#. module: product
+#: model_terms:ir.ui.view,arch_db:product.report_pricelist
+msgid "<strong>Price List Name</strong>:<br/>"
+msgstr "<strong>Имя прайс-листа</strong>:<br/>"
+
+#. module: product
+#: model_terms:ir.ui.view,arch_db:product.report_simple_label
+msgid "<strong>Price:</strong>"
+msgstr "<strong>Цена:</strong>"
+
+#. module: product
+#: model_terms:ir.ui.view,arch_db:product.report_pricelist
+msgid "<strong>Print date</strong>:<br/>"
+msgstr "<strong>Дата печати</strong>:<br/>"
+
+#. module: product
+#: model_terms:ir.ui.view,arch_db:product.report_packagingbarcode
+msgid "<strong>Qty: </strong>"
+msgstr ""
+
+#. module: product
+#: model_terms:ir.ui.view,arch_db:product.product_template_only_form_view
 msgid ""
-"2.7GHz quad-core Intel Core i5\n"
-"                Turbo Boost up to 3.2GHz\n"
-"                8GB (two 4GB) memory\n"
-"                1TB hard drive1\n"
-"                Intel Iris Pro graphics\n"
-"            "
+"<strong>Warning</strong>: adding or deleting attributes\n"
+"                        will delete and recreate existing variants and lead\n"
+"                        to the loss of their possible customizations."
 msgstr ""
+"<strong>Внимание:</strong> добавление или удаление\n"
+"атрибутов и переустановка существующих вариантов\n"
+"приведёт к потере возможных настроек."
 
 #. module: product
-#: model:product.attribute.value,name:product.product_attribute_value_2
-msgid "32 GB"
-msgstr ""
+#: model:ir.model.constraint,message:product.constraint_product_product_barcode_uniq
+msgid "A barcode can only be assigned to one product !"
+msgstr "Штрих-код может быть присвоен только одному продукту !"
 
 #. module: product
-#: model:product.template,description_sale:product.product_product_4_product_template
-#: model:product.template,description_sale:product.product_product_4b_product_template
-#: model:product.template,description_sale:product.product_product_4c_product_template
-#: model:product.template,description_sale:product.product_product_4d_product_template
+#: model:ir.model.fields,help:product.field_product_product__description_sale
+#: model:ir.model.fields,help:product.field_product_template__description_sale
 msgid ""
-"7.9‑inch (diagonal) LED-backlit, 128Gb\n"
-"Dual-core A5 with quad-core graphics\n"
-"FaceTime HD Camera, 1.2 MP Photos"
+"A description of the Product that you want to communicate to your customers."
+" This description will be copied to every Sales Order, Delivery Order and "
+"Customer Invoice/Credit Note"
 msgstr ""
+"Описание продукта, которое Вы хотели бы предоставлять вашим потребителям.Это"
+" описание будет отображаться в каждом заказе покупателя, заказе на доставку "
+"и счете покупателю/ кредитном обязательстве"
 
 #. module: product
-#: model:ir.actions.act_window,help:product.product_ul_form_action
+#: model_terms:ir.actions.act_window,help:product.product_pricelist_action2
 msgid ""
-"<p class=\"oe_view_nocontent_create\">\n"
-"                Click to add a new Logistic Unit\n"
-"              </p><p>\n"
-"                The logistic unit defines the container used for the "
-"package.  \n"
-"                It has a type (e.g. pallet, box, ...) and you can specify "
-"its \n"
-"                size. \n"
-"              </p>\n"
-"            "
+"A price is a set of sales prices or rules to compute the price of sales order lines based on products, product categories, dates and ordered quantities.\n"
+"                This is the perfect tool to handle several pricings, seasonal discounts, etc."
 msgstr ""
 
 #. module: product
-#: model:ir.actions.act_window,help:product.product_uom_categ_form_action
+#: model:ir.model.fields,help:product.field_product_product__type
+#: model:ir.model.fields,help:product.field_product_template__type
 msgid ""
-"<p class=\"oe_view_nocontent_create\">\n"
-"                Click to add a new unit of measure category.\n"
-"              </p><p>\n"
-"                Units of measure belonging to the same category can be\n"
-"                converted between each others. For example, in the category\n"
-"                <i>'Time'</i>, you will have the following units of "
-"measure:\n"
-"                Hours, Days.\n"
-"              </p>\n"
-"            "
+"A storable product is a product for which you manage stock. The Inventory app has to be installed.\n"
+"A consumable product is a product for which stock is not managed.\n"
+"A service is a non-material product you provide."
 msgstr ""
 
 #. module: product
-#: model:ir.actions.act_window,help:product.product_uom_form_action
-msgid ""
-"<p class=\"oe_view_nocontent_create\">\n"
-"                Click to add a new unit of measure.\n"
-"              </p><p>\n"
-"                You must define a conversion rate between several Units of\n"
-"                Measure within the same category.\n"
-"              </p>\n"
-"            "
-msgstr ""
+#: model:ir.model.fields,field_description:product.field_product_product__message_needaction
+#: model:ir.model.fields,field_description:product.field_product_template__message_needaction
+msgid "Action Needed"
+msgstr "Требует внимания"
 
 #. module: product
-#: model:ir.actions.act_window,help:product.product_pricelist_action
-msgid ""
-"<p class=\"oe_view_nocontent_create\">\n"
-"                Click to add a pricelist version.\n"
-"              </p><p>\n"
-"                There can be more than one version of a pricelist, each of\n"
-"                these must be valid during a certain period of time. Some\n"
-"                examples of versions: Main Prices, 2010, 2011, Summer "
-"Sales,\n"
-"                etc.\n"
-"              </p>\n"
-"            "
-msgstr ""
-
-#. module: product
-#: model:ir.actions.act_window,help:product.product_pricelist_action_for_purchase
-msgid ""
-"<p class=\"oe_view_nocontent_create\">\n"
-"                Click to create a pricelist.\n"
-"              </p><p>\n"
-"                A price list contains rules to be evaluated in order to "
-"compute\n"
-"                the purchase price. The default price list has only one "
-"rule; use\n"
-"                the cost price defined on the product form, so that you do "
-"not have to\n"
-"                worry about supplier pricelists if you have very simple "
-"needs.\n"
-"              </p><p>\n"
-"                But you can also import complex price lists form your "
-"supplier\n"
-"                that may depends on the quantities ordered or the current\n"
-"                promotions.\n"
-"              </p>\n"
-"            "
-msgstr ""
-
-#. module: product
-#: model:ir.actions.act_window,help:product.product_pricelist_action2
-msgid ""
-"<p class=\"oe_view_nocontent_create\">\n"
-"                Click to create a pricelist.\n"
-"              </p><p>\n"
-"                A price list contains rules to be evaluated in order to "
-"compute\n"
-"                the sales price of the products.\n"
-"              </p><p>\n"
-"                Price lists may have several versions (2010, 2011, Promotion "
-"of\n"
-"                February 2010, etc.) and each version may have several "
-"rules.\n"
-"                (e.g. the customer price of a product category will be based "
-"on\n"
-"                the supplier price multiplied by 1.80).\n"
-"              </p>\n"
-"            "
-msgstr ""
-"<p class=\"oe_view_nocontent_create\">\n"
-"                 Щелкните, чтобы создать прайс-лист.\n"
-"              </p><p>\n"
-"                Прайс-лист содержит правила, которые должны оцениваться для "
-"того, чтобы вычислить\n"
-"                цену продукции для продажи.\n"
-"              </p><p>\n"
-"               Прайс-листы могут иметь несколько версий (2010, 2011, \n"
-"                 Февраль 2010 года, и т.д.) и каждая версия может иметь "
-"несколько правил.\n"
-"                   (например, цена товара будет основываться на\n"
-"                цене поставщика умноженной на 1,80).\n"
-"              </p>\n"
-"            "
-
-#. module: product
-#: model:ir.actions.act_window,help:product.product_normal_action
-#: model:ir.actions.act_window,help:product.product_variant_action
-msgid ""
-"<p class=\"oe_view_nocontent_create\">\n"
-"                Click to define a new product.\n"
-"              </p><p>\n"
-"                You must define a product for everything you buy or sell,\n"
-"                whether it's a physical product, a consumable or service.\n"
-"              </p>\n"
-"            "
-msgstr ""
-"<p class=\"oe_view_nocontent_create\">\n"
-"                Нажмите для добавления нового продукта.\n"
-"              </p><p>\n"
-"                Вы должны определить продукт для всего что вы покупаете или "
-"продаете,\n"
-"                будь то материальный продукт, потребляемый или услуга.\n"
-"              </p>\n"
-"            "
-
-#. module: product
-#: model:ir.actions.act_window,help:product.product_normal_action_sell
-msgid ""
-"<p class=\"oe_view_nocontent_create\">\n"
-"                Click to define a new product.\n"
-"              </p><p>\n"
-"                You must define a product for everything you sell, whether "
-"it's\n"
-"                a physical product, a consumable or a service you offer to\n"
-"                customers.\n"
-"              </p><p>\n"
-"                The product form contains information to simplify the sale\n"
-"                process: price, notes in the quotation, accounting data,\n"
-"                procurement methods, etc.\n"
-"              </p>\n"
-"            "
-msgstr ""
-"<p class=\"oe_view_nocontent_create\">\n"
-"                Нажмите для добавления нового продукта.\n"
-"              </p><p>\n"
-"                Вы должны определить продукт для всего что вы продаете, будь "
-"то\n"
-"                материальный продукт, потребляемый или услуга которую вы "
-"оказываете\n"
-"                клиентам.\n"
-"              </p><p>\n"
-"                Форма продукта содержит информацию для упрощения процесса\n"
-"                продажи: цена, описание для заявок, бухгалтерская "
-"информация,\n"
-"                методы снабжения, и т.д.\n"
-"              </p>\n"
-"            "
-
-#. module: product
-#: model:ir.actions.act_window,help:product.product_category_action
-msgid ""
-"<p>\n"
-"                Here is a list of all your products classified by category. "
-"You\n"
-"                can click a category to get the list of all products linked "
-"to\n"
-"                this category or to a child of this category.\n"
-"              </p>\n"
-"            "
-msgstr ""
-
-#. module: product
-#: help:product.category,type:0
-msgid ""
-"A category of the view type is a virtual category that can be used as the "
-"parent of another category to create a hierarchical structure."
-msgstr ""
-
-#. module: product
-#: help:product.template,description_sale:0
-msgid ""
-"A description of the Product that you want to communicate to your customers. "
-"This description will be copied to every Sale Order, Delivery Order and "
-"Customer Invoice/Refund"
-msgstr ""
-
-#. module: product
-#: help:product.template,description_purchase:0
-msgid ""
-"A description of the Product that you want to communicate to your suppliers. "
-"This description will be copied to every Purchase Order, Receipt and "
-"Supplier Invoice/Refund."
-msgstr ""
-
-#. module: product
-#: help:product.template,description:0
-msgid ""
-"A precise description of the Product, used only for internal information "
-"purposes."
-msgstr ""
-
-#. module: product
-#: model:product.category,name:product.product_category_7
-msgid "Accessories"
-msgstr "Дополнительные"
-
-#. module: product
-#: field:product.price.type,active:0
-#: field:product.pricelist,active:0
-#: field:product.pricelist.version,active:0
-#: field:product.product,active:0
-#: field:product.template,active:0
-#: field:product.uom,active:0
+#: model:ir.model.fields,field_description:product.field_product_pricelist__active
+#: model:ir.model.fields,field_description:product.field_product_pricelist_item__active
+#: model:ir.model.fields,field_description:product.field_product_product__active
+#: model:ir.model.fields,field_description:product.field_product_template__active
+#: model:ir.model.fields,field_description:product.field_product_template_attribute_line__active
+#: model:ir.model.fields,field_description:product.field_product_template_attribute_value__ptav_active
+#: model_terms:ir.ui.view,arch_db:product.product_supplierinfo_search_view
+#: model_terms:ir.ui.view,arch_db:product.product_template_attribute_value_view_search
 msgid "Active"
 msgstr "Активно"
 
 #. module: product
-#: model:product.category,name:product.product_category_all
-msgid "All"
+#: model:ir.model.fields,field_description:product.field_product_product__activity_ids
+#: model:ir.model.fields,field_description:product.field_product_template__activity_ids
+msgid "Activities"
+msgstr "Деятельность"
+
+#. module: product
+#: model:ir.model.fields,field_description:product.field_product_product__activity_exception_decoration
+#: model:ir.model.fields,field_description:product.field_product_template__activity_exception_decoration
+msgid "Activity Exception Decoration"
 msgstr ""
 
 #. module: product
-#: model:product.template,description:product.product_product_37_product_template
-msgid "All in one hi-speed printer with fax and scanner."
+#: model:ir.model.fields,field_description:product.field_product_product__activity_state
+#: model:ir.model.fields,field_description:product.field_product_template__activity_state
+msgid "Activity State"
+msgstr "Этап действия"
+
+#. module: product
+#: model:ir.model.fields,field_description:product.field_res_config_settings__group_sale_pricelist
+#: model:res.groups,name:product.group_sale_pricelist
+msgid "Advanced Pricelists"
 msgstr ""
 
 #. module: product
-#: model:product.category,name:product.accessories
-msgid "Apple Accessories"
+#: model:ir.model.fields.selection,name:product.selection__res_config_settings__product_pricelist_setting__advanced
+msgid "Advanced price rules (discounts, formulas)"
 msgstr ""
 
 #. module: product
-#: model:product.template,name:product.product_product_7_product_template
-msgid "Apple In-Ear Headphones"
-msgstr ""
-
-#. module: product
-#: model:product.category,name:product.apple
-msgid "Apple Products"
-msgstr ""
-
-#. module: product
-#: model:product.template,name:product.product_product_9_product_template
-msgid "Apple Wireless Keyboard"
-msgstr ""
-
-#. module: product
-#: model:product.template,name:product.product_assembly_product_template
-msgid "Assembly Service Cost"
-msgstr "Цена услуги сборки"
-
-#. module: product
-#: help:product.supplierinfo,sequence:0
-msgid "Assigns the priority to the list of product supplier."
-msgstr "Назначает приоритет в списке поставщиков продукта."
-
-#. module: product
-#: help:product.price.type,field:0
-msgid "Associated field in the product form."
-msgstr "Связанные поля в форме изделия"
-
-#. module: product
-#: code:addons/product/pricelist.py:208
+#: code:addons/product/models/product_pricelist.py:0
+#: model:ir.model.fields.selection,name:product.selection__product_pricelist_item__applied_on__3_global
 #, python-format
+msgid "All Products"
+msgstr "Все продукты"
+
+#. module: product
+#: model:ir.model.fields,help:product.field_res_config_settings__group_sale_pricelist
 msgid ""
-"At least one pricelist has no active version !\n"
-"Please create or activate one."
+"Allows to manage different prices based on rules per category of customers.\n"
+"                Example: 10% for retailers, promotion of 5 EUR on this product, etc."
 msgstr ""
-"По крайней мере один прайс-лист не имеет активной версии!\n"
-"Пожалуйста, создайте или активируйте его."
+"Позволяет устанавливать отдельные цены согласно правилам для отдельных категорий клиентов.\n"
+"                    Например: 10% для розничных продавцов, скидка 5 евро при первой покупке, и т.д."
 
 #. module: product
-#: field:product.attribute.line,attribute_id:0
-#: field:product.attribute.value,attribute_id:0
+#: model_terms:ir.ui.view,arch_db:product.product_pricelist_view_inherit
+msgid "Applicable On"
+msgstr "Применяется к"
+
+#. module: product
+#: model_terms:ir.ui.view,arch_db:product.product_pricelist_item_tree_view
+#: model_terms:ir.ui.view,arch_db:product.product_pricelist_item_tree_view_from_product
+msgid "Applied On"
+msgstr "Примененный на"
+
+#. module: product
+#: model:ir.model.fields,field_description:product.field_product_pricelist_item__applied_on
+msgid "Apply On"
+msgstr "Применить на"
+
+#. module: product
+#: model_terms:ir.ui.view,arch_db:product.product_pricelist_item_view_search
+#: model_terms:ir.ui.view,arch_db:product.product_pricelist_view_search
+#: model_terms:ir.ui.view,arch_db:product.product_supplierinfo_search_view
+#: model_terms:ir.ui.view,arch_db:product.product_template_search_view
+msgid "Archived"
+msgstr "Архивировано"
+
+#. module: product
+#: model:ir.model.fields,help:product.field_product_supplierinfo__sequence
+msgid "Assigns the priority to the list of product vendor."
+msgstr "Назначает приоритет списку поставщиков продукции."
+
+#. module: product
+#: model:ir.model.fields,field_description:product.field_product_product__message_attachment_count
+#: model:ir.model.fields,field_description:product.field_product_template__message_attachment_count
+msgid "Attachment Count"
+msgstr "Количество вложений"
+
+#. module: product
+#: model:ir.model.fields,field_description:product.field_product_attribute__name
+#: model:ir.model.fields,field_description:product.field_product_attribute_value__attribute_id
+#: model:ir.model.fields,field_description:product.field_product_template_attribute_line__attribute_id
+#: model:ir.model.fields,field_description:product.field_product_template_attribute_value__attribute_id
 msgid "Attribute"
+msgstr "Атрибут"
+
+#. module: product
+#: model:ir.model.fields,field_description:product.field_product_template_attribute_value__attribute_line_id
+msgid "Attribute Line"
 msgstr ""
 
 #. module: product
-#: field:product.attribute.value,price_extra:0
-msgid "Attribute Price Extra"
+#: model_terms:ir.ui.view,arch_db:product.product_attribute_view_form
+#: model_terms:ir.ui.view,arch_db:product.product_template_attribute_line_form
+msgid "Attribute Name"
+msgstr "Название атрибута"
+
+#. module: product
+#: model:ir.model,name:product.model_product_attribute_value
+#: model:ir.model.fields,field_description:product.field_product_template_attribute_exclusion__product_template_attribute_value_id
+#: model:ir.model.fields,field_description:product.field_product_template_attribute_value__product_attribute_value_id
+msgid "Attribute Value"
 msgstr ""
 
 #. module: product
-#: field:product.attribute.value,price_ids:0
-msgid "Attribute Prices"
-msgstr ""
-
-#. module: product
-#: model:ir.actions.act_window,name:product.variants_action
-#: model:ir.ui.menu,name:product.menu_variants_action
+#: model:ir.model.fields,field_description:product.field_product_product__product_template_attribute_value_ids
+#: model:ir.model.fields,field_description:product.field_product_template_attribute_exclusion__value_ids
+#: model_terms:ir.ui.view,arch_db:product.product_attribute_view_form
 msgid "Attribute Values"
-msgstr ""
+msgstr "Значение атрибута"
 
 #. module: product
 #: model:ir.actions.act_window,name:product.attribute_action
-#: model:ir.ui.menu,name:product.menu_attribute_action
-#: field:product.product,attribute_value_ids:0
+#: model_terms:ir.ui.view,arch_db:product.product_template_attribute_value_view_tree
+#: model_terms:ir.ui.view,arch_db:product.product_template_search_view
 msgid "Attributes"
-msgstr ""
+msgstr "Атрибуты"
 
 #. module: product
-#: view:product.pricelist.item:product.product_pricelist_item_form_view
-msgid "Base Price"
-msgstr "Базовая цена"
+#: model_terms:ir.ui.view,arch_db:product.product_pricelist_view
+msgid "Availability"
+msgstr "Наличие"
 
 #. module: product
-#: help:product.pricelist.item,base:0
-msgid "Base price for computation."
-msgstr "Базовая цена для вычислений."
+#: model:ir.model.fields,field_description:product.field_product_packaging__barcode
+#: model:ir.model.fields,field_description:product.field_product_product__barcode
+#: model:ir.model.fields,field_description:product.field_product_template__barcode
+#: model_terms:ir.ui.view,arch_db:product.report_packagingbarcode
+#: model_terms:ir.ui.view,arch_db:product.report_simple_barcode
+#: model_terms:ir.ui.view,arch_db:product.report_simple_label
+msgid "Barcode"
+msgstr "Штрих-код"
 
 #. module: product
-#: help:product.template,list_price:0
+#: model:ir.model.fields,help:product.field_product_packaging__barcode
 msgid ""
-"Base price to compute the customer price. Sometimes called the catalog price."
+"Barcode used for packaging identification. Scan this packaging barcode from "
+"a transfer in the Barcode app to move all the contained units"
 msgstr ""
-"Базовая цена для расчета цены заказчику. Так называемая прайсовая цена."
 
 #. module: product
-#: field:product.pricelist.item,base:0
+#: model:ir.model.fields,help:product.field_product_pricelist_item__base
+msgid ""
+"Base price for computation.\n"
+"Sales Price: The base price will be the Sales Price.\n"
+"Cost Price : The base price will be the cost price.\n"
+"Other Pricelist : Computation of the base price based on another Pricelist."
+msgstr ""
+
+#. module: product
+#: model:ir.model.fields,field_description:product.field_product_pricelist_item__base
 msgid "Based on"
 msgstr "На основе"
 
 #. module: product
-#: field:product.product,image:0
-msgid "Big-sized image"
+#: model:res.groups,name:product.group_product_pricelist
+msgid "Basic Pricelists"
 msgstr ""
 
 #. module: product
-#: field:product.uom,factor_inv:0
-msgid "Bigger Ratio"
-msgstr ""
-
-#. module: product
-#: selection:product.uom,uom_type:0
-msgid "Bigger than the reference Unit of Measure"
-msgstr "Больше, чем базовая единица измерения"
-
-#. module: product
-#: model:product.attribute.value,name:product.product_attribute_value_4
-msgid "Black"
-msgstr ""
-
-#. module: product
-#: model:product.template,name:product.product_product_35_product_template
-msgid "Blank CD"
-msgstr "Чистый CD"
-
-#. module: product
-#: model:product.template,name:product.product_product_36_product_template
-msgid "Blank DVD-RW"
-msgstr "Чистый DVD-RW"
-
-#. module: product
-#: model:product.template,name:product.product_product_5b_product_template
-msgid "Bose Mini Bluetooth Speaker"
-msgstr ""
-
-#. module: product
-#: model:product.template,description_sale:product.product_product_5b_product_template
-msgid "Bose's smallest portable Bluetooth speaker"
-msgstr ""
-
-#. module: product
-#: selection:product.ul,type:0
-msgid "Box"
-msgstr "Коробка"
-
-#. module: product
-#: model:product.ul,name:product.product_ul_box
-msgid "Box 20x20x40"
-msgstr "Ящик 20x20x40"
-
-#. module: product
-#: model:product.ul,name:product.product_ul_big_box
-msgid "Box 30x40x60"
-msgstr "Коробка 30x40x60"
-
-#. module: product
-#: help:product.uom,active:0
-msgid ""
-"By unchecking the active field you can disable a unit of measure without "
-"deleting it."
-msgstr ""
-"Сняв отметку с активного поля \"Активно\", вы можете запретить единицу "
-"измерения без ее удаления."
-
-#. module: product
-#: view:product.price_list:product.view_product_price_list
+#: model_terms:ir.ui.view,arch_db:product.view_product_price_list
 msgid "Calculate Product Price per Unit Based on Pricelist Version."
 msgstr "Вычислить цену  за единицу продукции основанную на версии каталога."
 
 #. module: product
-#: field:product.template,rental:0
+#: model:ir.model.fields,field_description:product.field_product_product__can_image_1024_be_zoomed
+#: model:ir.model.fields,field_description:product.field_product_template__can_image_1024_be_zoomed
+msgid "Can Image 1024 be zoomed"
+msgstr ""
+
+#. module: product
+#: model:ir.model.fields,field_description:product.field_product_product__can_image_variant_1024_be_zoomed
+msgid "Can Variant Image 1024 be zoomed"
+msgstr ""
+
+#. module: product
+#: model:ir.model.fields,field_description:product.field_product_product__purchase_ok
+#: model:ir.model.fields,field_description:product.field_product_template__purchase_ok
+#: model_terms:ir.ui.view,arch_db:product.product_template_search_view
+msgid "Can be Purchased"
+msgstr "Можно закупать"
+
+#. module: product
+#: model:ir.model.fields,field_description:product.field_product_product__rental
+#: model:ir.model.fields,field_description:product.field_product_template__rental
 msgid "Can be Rent"
 msgstr "Может быть аренда"
 
 #. module: product
-#: view:product.template:product.product_template_search_view
-#: field:product.template,sale_ok:0
+#: model:ir.model.fields,field_description:product.field_product_product__sale_ok
+#: model:ir.model.fields,field_description:product.field_product_template__sale_ok
+#: model_terms:ir.ui.view,arch_db:product.product_template_search_view
 msgid "Can be Sold"
 msgstr "Можно продавать"
 
 #. module: product
-#: view:product.price_list:product.view_product_price_list
+#: model_terms:ir.ui.view,arch_db:product.view_product_price_list
 msgid "Cancel"
-msgstr "Отмена"
+msgstr "Отменить"
 
 #. module: product
-#: code:addons/product/product.py:210
+#: model_terms:ir.ui.view,arch_db:product.product_category_form_view
+msgid "Category name"
+msgstr "Название категории"
+
+#. module: product
+#: code:addons/product/models/product_pricelist.py:0
 #, python-format
-msgid "Cannot change the category of existing Unit of Measure '%s'."
-msgstr "Невозможно изменить категорию существующие единицы измерения '%s'."
+msgid "Category: %s"
+msgstr "Категория:  %s"
 
 #. module: product
-#: model:product.public.category,name:product.case
-msgid "Case"
-msgstr "Место"
-
-#. module: product
-#: view:product.template:product.product_template_search_view
-msgid "Category"
-msgstr "Категория"
-
-#. module: product
-#: field:product.category,type:0
-msgid "Category Type"
-msgstr "Тип категории"
-
-#. module: product
-#: field:product.category,child_id:0
+#: model:ir.model.fields,field_description:product.field_product_category__child_id
 msgid "Child Categories"
 msgstr "Подчиненные категории"
 
 #. module: product
-#: field:product.packaging,code:0
-msgid "Code"
-msgstr "Код"
-
-#. module: product
-#: help:product.template,uos_coeff:0
-msgid ""
-"Coefficient to convert default Unit of Measure to Unit of Sale\n"
-" uos = uom * coeff"
+#: model_terms:ir.ui.view,arch_db:product.res_config_settings_view_form
+msgid "Choose the unit to measure weight"
 msgstr ""
 
 #. module: product
-#: model:product.attribute,name:product.product_attribute_2
-msgid "Color"
-msgstr ""
+#: model_terms:ir.ui.view,arch_db:product.product_variant_easy_edit_view
+msgid "Codes"
+msgstr "Коды"
 
 #. module: product
-#: field:product.template,color:0
+#: model:ir.model.fields,field_description:product.field_product_product__color
+#: model:ir.model.fields,field_description:product.field_product_template__color
 msgid "Color Index"
 msgstr "Цветовая палитра"
 
 #. module: product
-#: model:product.template,description_sale:product.product_product_6_product_template
-msgid ""
-"Color: White\n"
-"Capacity: 16GB\n"
-"Connectivity: Wifi\n"
-"Beautiful 7.9-inch display\n"
-"Over 375,000 apps3\n"
-"Ultrafast wireless\n"
-"iOS7\n"
-"            "
+#: model:ir.model.fields,field_description:product.field_product_product__combination_indices
+msgid "Combination Indices"
 msgstr ""
 
 #. module: product
-#: field:product.pricelist,company_id:0
-#: field:product.pricelist.item,company_id:0
-#: field:product.pricelist.version,company_id:0
-#: field:product.supplierinfo,company_id:0
-#: field:product.template,company_id:0
+#: model:ir.model,name:product.model_res_company
+msgid "Companies"
+msgstr "Компании"
+
+#. module: product
+#: model:ir.model.fields,field_description:product.field_product_packaging__company_id
+#: model:ir.model.fields,field_description:product.field_product_pricelist__company_id
+#: model:ir.model.fields,field_description:product.field_product_pricelist_item__company_id
+#: model:ir.model.fields,field_description:product.field_product_product__company_id
+#: model:ir.model.fields,field_description:product.field_product_supplierinfo__company_id
+#: model:ir.model.fields,field_description:product.field_product_template__company_id
 msgid "Company"
 msgstr "Компания"
 
 #. module: product
-#: model:product.category,name:product.product_category_8
-#: model:product.public.category,name:product.Components
-msgid "Components"
-msgstr "Компоненты"
+#: model:ir.model.fields,field_description:product.field_product_category__complete_name
+msgid "Complete Name"
+msgstr "Полное название"
 
 #. module: product
-#: model:product.template,name:product.product_product_16_product_template
-msgid "Computer Case"
+#: model:ir.model.fields,field_description:product.field_product_pricelist_item__compute_price
+#: model_terms:ir.ui.view,arch_db:product.product_pricelist_item_form_view
+msgid "Compute Price"
+msgstr "Вычислить Стоимость"
+
+#. module: product
+#: model:ir.model,name:product.model_res_config_settings
+msgid "Config Settings"
+msgstr "Настройки конфигурации"
+
+#. module: product
+#: model_terms:ir.ui.view,arch_db:product.product_pricelist_view
+msgid "Configuration"
+msgstr "Настройка"
+
+#. module: product
+#: model_terms:ir.ui.view,arch_db:product.product_template_form_view
+msgid "Configure Variants"
 msgstr ""
 
 #. module: product
-#: model:product.public.category,name:product.Computer_all_in_one
-msgid "Computer all-in-one"
-msgstr ""
-
-#. module: product
-#: model:product.category,name:product.product_category_4
-#: model:product.public.category,name:product.computers
-#: model:product.public.category,name:product.sub_computers
-msgid "Computers"
-msgstr "Компьютеры"
-
-#. module: product
-#: view:product.template:product.product_template_form_view
-msgid "Configurations"
-msgstr ""
-
-#. module: product
-#: view:product.template:product.product_template_search_view
-#: selection:product.template,type:0
+#: model:ir.model.fields.selection,name:product.selection__product_template__type__consu
 msgid "Consumable"
 msgstr "Потребляемый"
 
 #. module: product
-#: view:product.template:product.product_template_search_view
-msgid "Consumable products"
-msgstr "Расходные материалы"
+#: model:ir.model,name:product.model_res_partner
+msgid "Contact"
+msgstr "Контакт"
 
 #. module: product
-#: help:product.template,type:0
-msgid ""
-"Consumable: Will not imply stock management for this product. \n"
-"Stockable product: Will imply stock management for this product."
+#: model:ir.model.fields,field_description:product.field_product_packaging__qty
+msgid "Contained Quantity"
 msgstr ""
 
 #. module: product
-#: help:product.uom,category_id:0
-msgid ""
-"Conversion between Units of Measure can only occur if they belong to the "
-"same category. The conversion will be made based on the ratios."
-msgstr ""
-"Преобразование между единицами измерения возможно если они принадлежат одной "
-"категории. Преобразование будет сделано на основе коэффициентов."
-
-#. module: product
-#: code:addons/product/product.py:178
-#, python-format
-msgid ""
-"Conversion from Product UoM %s to Default UoM %s is not possible as they "
-"both belong to different Category!."
-msgstr ""
-"Преобразование ед.изм. товара %s в ед.изм. по умолчанию %s невозможно "
-"поскольку они принадлежат различным категориям!"
-
-#. module: product
-#: model:product.price.type,name:product.standard_price
-#: field:product.template,standard_price:0
-msgid "Cost Price"
-msgstr "Себестоимость"
-
-#. module: product
-#: help:product.template,standard_price:0
-msgid ""
-"Cost price of the product template used for standard stock valuation in "
-"accounting and used as a base price on purchase orders."
+#: model_terms:ir.ui.view,arch_db:product.product_packaging_form_view
+msgid "Contained quantity"
 msgstr ""
 
 #. module: product
-#: field:pricelist.partnerinfo,create_uid:0
-#: field:product.attribute,create_uid:0
-#: field:product.attribute.line,create_uid:0
-#: field:product.attribute.price,create_uid:0
-#: field:product.attribute.value,create_uid:0
-#: field:product.category,create_uid:0
-#: field:product.packaging,create_uid:0
-#: field:product.price.history,create_uid:0
-#: field:product.price.type,create_uid:0
-#: field:product.price_list,create_uid:0
-#: field:product.pricelist,create_uid:0
-#: field:product.pricelist.item,create_uid:0
-#: field:product.pricelist.type,create_uid:0
-#: field:product.pricelist.version,create_uid:0
-#: field:product.product,create_uid:0
-#: field:product.supplierinfo,create_uid:0
-#: field:product.template,create_uid:0
-#: field:product.ul,create_uid:0
-#: field:product.uom,create_uid:0
-#: field:product.uom.categ,create_uid:0
+#: model:ir.model.fields,field_description:product.field_product_product__standard_price
+#: model:ir.model.fields,field_description:product.field_product_template__standard_price
+#: model:ir.model.fields.selection,name:product.selection__product_pricelist_item__base__standard_price
+msgid "Cost"
+msgstr "Стоимость"
+
+#. module: product
+#: model:ir.model.fields,field_description:product.field_product_product__cost_currency_id
+#: model:ir.model.fields,field_description:product.field_product_template__cost_currency_id
+msgid "Cost Currency"
+msgstr ""
+
+#. module: product
+#: model:ir.model,name:product.model_res_country_group
+msgid "Country Group"
+msgstr "Группа страны"
+
+#. module: product
+#: model:ir.model.fields,field_description:product.field_product_pricelist__country_group_ids
+msgid "Country Groups"
+msgstr "Группы стран"
+
+#. module: product
+#: model_terms:ir.actions.act_window,help:product.product_pricelist_action2
+msgid "Create a new pricelist"
+msgstr ""
+
+#. module: product
+#: model_terms:ir.actions.act_window,help:product.product_template_action
+#: model_terms:ir.actions.act_window,help:product.product_template_action_all
+msgid "Create a new product"
+msgstr "Создать новый продукт"
+
+#. module: product
+#: model_terms:ir.actions.act_window,help:product.product_normal_action
+#: model_terms:ir.actions.act_window,help:product.product_normal_action_sell
+#: model_terms:ir.actions.act_window,help:product.product_variant_action
+msgid "Create a new product variant"
+msgstr ""
+
+#. module: product
+#: model:ir.model.fields,field_description:product.field_product_attribute__create_uid
+#: model:ir.model.fields,field_description:product.field_product_attribute_value__create_uid
+#: model:ir.model.fields,field_description:product.field_product_category__create_uid
+#: model:ir.model.fields,field_description:product.field_product_packaging__create_uid
+#: model:ir.model.fields,field_description:product.field_product_price_list__create_uid
+#: model:ir.model.fields,field_description:product.field_product_pricelist__create_uid
+#: model:ir.model.fields,field_description:product.field_product_pricelist_item__create_uid
+#: model:ir.model.fields,field_description:product.field_product_product__create_uid
+#: model:ir.model.fields,field_description:product.field_product_supplierinfo__create_uid
+#: model:ir.model.fields,field_description:product.field_product_template__create_uid
+#: model:ir.model.fields,field_description:product.field_product_template_attribute_exclusion__create_uid
+#: model:ir.model.fields,field_description:product.field_product_template_attribute_line__create_uid
+#: model:ir.model.fields,field_description:product.field_product_template_attribute_value__create_uid
 msgid "Created by"
-msgstr ""
+msgstr "Создано"
 
 #. module: product
-#: field:pricelist.partnerinfo,create_date:0
-#: field:product.attribute,create_date:0
-#: field:product.attribute.line,create_date:0
-#: field:product.attribute.price,create_date:0
-#: field:product.attribute.value,create_date:0
-#: field:product.category,create_date:0
-#: field:product.packaging,create_date:0
-#: field:product.price.history,create_date:0
-#: field:product.price.type,create_date:0
-#: field:product.price_list,create_date:0
-#: field:product.pricelist,create_date:0
-#: field:product.pricelist.item,create_date:0
-#: field:product.pricelist.type,create_date:0
-#: field:product.pricelist.version,create_date:0
-#: field:product.product,create_date:0
-#: field:product.supplierinfo,create_date:0
-#: field:product.template,create_date:0
-#: field:product.ul,create_date:0
-#: field:product.uom,create_date:0
-#: field:product.uom.categ,create_date:0
+#: model:ir.model.fields,field_description:product.field_product_attribute__create_date
+#: model:ir.model.fields,field_description:product.field_product_attribute_value__create_date
+#: model:ir.model.fields,field_description:product.field_product_category__create_date
+#: model:ir.model.fields,field_description:product.field_product_packaging__create_date
+#: model:ir.model.fields,field_description:product.field_product_price_list__create_date
+#: model:ir.model.fields,field_description:product.field_product_pricelist__create_date
+#: model:ir.model.fields,field_description:product.field_product_pricelist_item__create_date
+#: model:ir.model.fields,field_description:product.field_product_product__create_date
+#: model:ir.model.fields,field_description:product.field_product_supplierinfo__create_date
+#: model:ir.model.fields,field_description:product.field_product_template__create_date
+#: model:ir.model.fields,field_description:product.field_product_template_attribute_exclusion__create_date
+#: model:ir.model.fields,field_description:product.field_product_template_attribute_line__create_date
+#: model:ir.model.fields,field_description:product.field_product_template_attribute_value__create_date
 msgid "Created on"
+msgstr "Создан"
+
+#. module: product
+#: model:ir.model.fields.selection,name:product.selection__res_config_settings__product_volume_volume_in_cubic_feet__1
+msgid "Cubic Feet"
 msgstr ""
 
 #. module: product
-#: model:ir.model,name:product.model_res_currency
-#: field:product.price.type,currency_id:0
-#: field:product.pricelist,currency_id:0
-#: view:website:product.report_pricelist
+#: model:ir.model.fields.selection,name:product.selection__res_config_settings__product_volume_volume_in_cubic_feet__0
+msgid "Cubic Meters"
+msgstr ""
+
+#. module: product
+#: model:ir.model.fields,field_description:product.field_product_pricelist__currency_id
+#: model:ir.model.fields,field_description:product.field_product_pricelist_item__currency_id
+#: model:ir.model.fields,field_description:product.field_product_product__currency_id
+#: model:ir.model.fields,field_description:product.field_product_supplierinfo__currency_id
+#: model:ir.model.fields,field_description:product.field_product_template__currency_id
 msgid "Currency"
 msgstr "Валюта"
 
 #. module: product
-#: model:product.template,description:product.product_product_27_product_template
-msgid "Custom Laptop based on customer's requirement."
+#: model:ir.model.fields,field_description:product.field_product_product__partner_ref
+msgid "Customer Ref"
+msgstr "Справка клиента"
+
+#. module: product
+#: model:ir.model,name:product.model_decimal_precision
+msgid "Decimal Precision"
+msgstr "Точность"
+
+#. module: product
+#: code:addons/product/models/res_company.py:0
+#: code:addons/product/models/res_company.py:0
+#, python-format
+msgid "Default %(currency)s pricelist"
 msgstr ""
 
 #. module: product
-#: model:product.template,description:product.product_product_5_product_template
-#: model:product.template,description:product.product_product_5b_product_template
-msgid "Custom computer assembled on order based on customer's requirement."
+#: model:ir.model.fields,help:product.field_product_packaging__product_uom_id
+#: model:ir.model.fields,help:product.field_product_product__uom_id
+#: model:ir.model.fields,help:product.field_product_template__uom_id
+msgid "Default unit of measure used for all stock operations."
 msgstr ""
 
 #. module: product
-#: field:product.product,partner_ref:0
-msgid "Customer ref"
-msgstr "Ссылка на клиента"
-
-#. module: product
-#: model:product.template,name:product.product_product_46_product_template
-msgid "Datacard"
-msgstr ""
-
-#. module: product
-#: help:product.product,message_last_post:0
-#: help:product.template,message_last_post:0
-msgid "Date of the last message posted on the record."
-msgstr ""
-
-#. module: product
-#: model:product.uom,name:product.product_uom_day
-msgid "Day(s)"
-msgstr "Дней"
-
-#. module: product
-#: model:product.pricelist.version,name:product.ver0
-msgid "Default Public Pricelist Version"
-msgstr "Версия открытого каталога по умолчанию"
-
-#. module: product
-#: view:product.template:product.product_template_search_view
-msgid "Default Unit of Measure"
-msgstr "Единица измерения по умолчанию"
-
-#. module: product
-#: help:product.template,uom_id:0
-msgid "Default Unit of Measure used for all stock operation."
-msgstr ""
-"Единица измерения по умолчанию, используемая для всех складских операций."
-
-#. module: product
-#: help:product.template,uom_po_id:0
+#: model:ir.model.fields,help:product.field_product_product__uom_po_id
+#: model:ir.model.fields,help:product.field_product_template__uom_po_id
 msgid ""
-"Default Unit of Measure used for purchase orders. It must be in the same "
-"category than the default unit of measure."
+"Default unit of measure used for purchase orders. It must be in the same "
+"category as the default unit of measure."
 msgstr ""
-"Единицы измерения по умолчанию для заказов на закупку. Должны быть той же "
-"категории, что и единицы измерения по умолчанию."
 
 #. module: product
-#: field:product.supplierinfo,delay:0
+#: model:ir.model.fields,help:product.field_product_product__seller_ids
+#: model:ir.model.fields,help:product.field_product_template__seller_ids
+msgid "Define vendor pricelists."
+msgstr ""
+
+#. module: product
+#: model:ir.model.fields,field_description:product.field_product_supplierinfo__delay
 msgid "Delivery Lead Time"
 msgstr "Время выполнения доставки"
 
 #. module: product
-#: field:pricelist.partnerinfo,name:0
-#: field:product.packaging,name:0
-#: field:product.template,description:0
-#: view:website:product.report_pricelist
+#: model:ir.model.fields,field_description:product.field_product_product__description
+#: model:ir.model.fields,field_description:product.field_product_template__description
 msgid "Description"
 msgstr "Описание"
 
 #. module: product
-#: view:product.template:product.product_template_form_view
-msgid "Description for Quotations"
-msgstr "Описание для заявок"
-
-#. module: product
-#: view:product.template:product.product_template_form_view
-msgid "Description for Suppliers"
-msgstr "Описание для поставщиков"
-
-#. module: product
-#: help:product.attribute.value,sequence:0
+#: model:ir.model.fields,help:product.field_product_attribute__sequence
+#: model:ir.model.fields,help:product.field_product_attribute_value__sequence
 msgid "Determine the display order"
+msgstr "Определить порядок отображения"
+
+#. module: product
+#: model:ir.model.fields,field_description:product.field_product_pricelist__discount_policy
+msgid "Discount Policy"
+msgstr "Дисконтная политика"
+
+#. module: product
+#: model:ir.model.fields.selection,name:product.selection__product_pricelist__discount_policy__with_discount
+msgid "Discount included in the price"
+msgstr "Скидка включена в цену"
+
+#. module: product
+#: model:res.groups,name:product.group_discount_per_so_line
+msgid "Discount on lines"
+msgstr "Скидка по строкам"
+
+#. module: product
+#: model:ir.model.fields,field_description:product.field_res_config_settings__group_discount_per_so_line
+#: model_terms:ir.ui.view,arch_db:product.product_pricelist_view
+msgid "Discounts"
+msgstr "Скидки"
+
+#. module: product
+#: model:ir.model.fields,field_description:product.field_product_attribute__display_name
+#: model:ir.model.fields,field_description:product.field_product_attribute_value__display_name
+#: model:ir.model.fields,field_description:product.field_product_category__display_name
+#: model:ir.model.fields,field_description:product.field_product_packaging__display_name
+#: model:ir.model.fields,field_description:product.field_product_price_list__display_name
+#: model:ir.model.fields,field_description:product.field_product_pricelist__display_name
+#: model:ir.model.fields,field_description:product.field_product_pricelist_item__display_name
+#: model:ir.model.fields,field_description:product.field_product_product__display_name
+#: model:ir.model.fields,field_description:product.field_product_supplierinfo__display_name
+#: model:ir.model.fields,field_description:product.field_product_template__display_name
+#: model:ir.model.fields,field_description:product.field_product_template_attribute_exclusion__display_name
+#: model:ir.model.fields,field_description:product.field_product_template_attribute_line__display_name
+#: model:ir.model.fields,field_description:product.field_product_template_attribute_value__display_name
+#: model:ir.model.fields,field_description:product.field_report_product_report_pricelist__display_name
+msgid "Display Name"
+msgstr "Отображаемое Имя"
+
+#. module: product
+#: model:ir.model.fields.selection,name:product.selection__product_attribute__create_variant__dynamic
+msgid "Dynamically"
 msgstr ""
 
 #. module: product
-#: model:product.public.category,name:product.devices
-msgid "Devices"
+#: model:ir.model.constraint,message:product.constraint_product_template_attribute_value_attribute_value_unique
+msgid "Each value should be defined only once per attribute per product."
 msgstr ""
 
 #. module: product
-#: model:product.uom,name:product.product_uom_dozen
-msgid "Dozen(s)"
-msgstr ""
-
-#. module: product
-#: field:product.packaging,ean:0
-msgid "EAN"
-msgstr "Штрих-код"
-
-#. module: product
-#: field:product.product,ean13:0
-#: field:product.template,ean13:0
-msgid "EAN13 Barcode"
-msgstr "Баркод EAN13"
-
-#. module: product
-#: field:product.ul,weight:0
-msgid "Empty Package Weight"
-msgstr "Вес пустого пакета"
-
-#. module: product
-#: field:product.pricelist.version,date_end:0
+#: model:ir.model.fields,field_description:product.field_product_pricelist_item__date_end
+#: model:ir.model.fields,field_description:product.field_product_supplierinfo__date_end
 msgid "End Date"
 msgstr "Дата окончания"
 
 #. module: product
-#: selection:product.template,state:0
-msgid "End of Lifecycle"
-msgstr "Конец жизненного цикла"
+#: model:ir.model.fields,help:product.field_product_supplierinfo__date_end
+msgid "End date for this vendor price"
+msgstr "Конечная дата этой цены поставщика"
 
 #. module: product
-#: constraint:product.category:0
-msgid "Error ! You cannot create recursive categories."
-msgstr "Ошибка ! Нельзя создавать рекурсивные категории."
+#: model:ir.model.fields,help:product.field_product_pricelist_item__date_end
+msgid "Ending valid for the pricelist item validation"
+msgstr "Конечное значение, действительное для проверки позиции прайслиста"
 
 #. module: product
-#: code:addons/product/product.py:178
-#, python-format
-msgid "Error!"
-msgstr "Ошибка!"
-
-#. module: product
-#: constraint:product.pricelist.item:0
-msgid "Error! The minimum margin should be lower than the maximum margin."
-msgstr "Ошибка! Минимальная наценка должна быть меньше , чем максимальная."
-
-#. module: product
-#: constraint:product.pricelist.item:0
-msgid ""
-"Error! You cannot assign the Main Pricelist as Other Pricelist in PriceList "
-"Item!"
-msgstr ""
-"Error! Нельзя определить основной прайс-лист как дополнительный прайс-лист в "
-"пункте прайс-листа!"
-
-#. module: product
-#: constraint:res.currency:0
-msgid ""
-"Error! You cannot define a rounding factor for the company's main currency "
-"that is smaller than the decimal precision of 'Account'."
+#: model_terms:ir.ui.view,arch_db:product.product_template_search_view
+msgid "Exception Activities"
 msgstr ""
 
 #. module: product
-#: constraint:decimal.precision:0
-msgid ""
-"Error! You cannot define the decimal precision of 'Account' as greater than "
-"the rounding factor of the company's main currency"
+#: model:ir.model.fields,field_description:product.field_product_template_attribute_value__exclude_for
+msgid "Exclude for"
 msgstr ""
 
 #. module: product
-#: constraint:product.packaging:0
-msgid "Error: Invalid ean code"
-msgstr "Ошибка: Неправильный штрих-код"
-
-#. module: product
-#: constraint:product.template:0
-msgid ""
-"Error: The default Unit of Measure and the purchase Unit of Measure must be "
-"in the same category."
-msgstr ""
-"Ошибка: Единицы измерения по умолчанию и единицы измерения покупки должны "
-"быть в одной категории."
-
-#. module: product
-#: help:product.pricelist.item,name:0
+#: model:ir.model.fields,help:product.field_product_pricelist_item__name
+#: model:ir.model.fields,help:product.field_product_pricelist_item__price
 msgid "Explicit rule name for this pricelist line."
 msgstr "Название явного правила для позиции прайс-листа."
 
 #. module: product
-#: model:product.category,name:product.product_category_6
-msgid "External Devices"
-msgstr "Внешние устройства"
-
-#. module: product
-#: model:product.public.category,name:product.External_Hard_Drive
-msgid "External Hard Drive"
+#: model:ir.model.fields,help:product.field_product_template_attribute_value__price_extra
+msgid ""
+"Extra price for the variant with this attribute value on sale price. eg. 200"
+" price extra, 1000 + 200 = 1200."
 msgstr ""
 
 #. module: product
-#: model:product.template,name:product.product_product_28_product_template
-msgid "External Hard disk"
-msgstr "Внешний жесткий диск"
+#: model:ir.model.fields,field_description:product.field_product_pricelist_item__fixed_price
+#: model:ir.model.fields.selection,name:product.selection__product_pricelist_item__compute_price__fixed
+msgid "Fixed Price"
+msgstr "Фиксированная цена"
 
 #. module: product
-#: help:product.pricelist.version,date_start:0
-msgid "First valid date for the version."
-msgstr "Первая допустимая дата для версии."
-
-#. module: product
-#: selection:product.template,mes_type:0
-msgid "Fixed"
-msgstr "Фиксированный"
-
-#. module: product
-#: field:product.product,message_follower_ids:0
-#: field:product.template,message_follower_ids:0
+#: model:ir.model.fields,field_description:product.field_product_product__message_follower_ids
+#: model:ir.model.fields,field_description:product.field_product_template__message_follower_ids
 msgid "Followers"
 msgstr "Подписчики"
 
 #. module: product
-#: help:product.pricelist.item,min_quantity:0
+#: model:ir.model.fields,field_description:product.field_product_product__message_channel_ids
+#: model:ir.model.fields,field_description:product.field_product_template__message_channel_ids
+msgid "Followers (Channels)"
+msgstr "Подписчики (Каналы)"
+
+#. module: product
+#: model:ir.model.fields,field_description:product.field_product_product__message_partner_ids
+#: model:ir.model.fields,field_description:product.field_product_template__message_partner_ids
+msgid "Followers (Partners)"
+msgstr "Подписчики (Партнеры)"
+
+#. module: product
+#: model:ir.model.fields,help:product.field_product_pricelist_item__min_quantity
 msgid ""
-"For the rule to apply, bought/sold quantity must be greater than or equal to "
-"minimum quantity specified in this field."
+"For the rule to apply, bought/sold quantity must be greater than or equal to the minimum quantity specified in this field.\n"
+"Expressed in the default unit of measure of the product."
 msgstr ""
+"Чтобы правило применялось, купленное/продаваемое количество должно быть больше или равно минимальному количеству, указанному в этом поле.\n"
+"Выражается в стандартной единице измерения продукта."
 
 #. module: product
-#: model:product.template,description_sale:product.product_product_7_product_template
-msgid ""
-"Frequency: 5Hz to 21kHz\n"
-"Impedance: 23 ohms\n"
-"Sensitivity: 109 dB SPL/mW\n"
-"Drivers: two-way balanced armature\n"
-"Cable length: 1065 mm\n"
-"Weight: 0.4 ounce\n"
-"            "
-msgstr ""
+#: model:ir.model.fields.selection,name:product.selection__product_pricelist_item__compute_price__formula
+msgid "Formula"
+msgstr "Формула"
 
 #. module: product
-#: model:product.template,description_sale:product.product_product_44_product_template
-msgid "Full featured image editing software."
-msgstr ""
+#: model_terms:ir.ui.view,arch_db:product.product_template_search_view
+msgid "Future Activities"
+msgstr "Будущие действия"
 
 #. module: product
-#: help:product.template,packaging_ids:0
-msgid ""
-"Gives the different ways to package the same product. This has no impact on "
-"the picking order and is mainly used if you use the EDI module."
-msgstr ""
-"Даёт различные способы упаковки товара. Это не влияет на заказ "
-"комплектования и в основном применяется если вы используете модуль ЭОД (EDI)."
+#: model_terms:ir.ui.view,arch_db:product.product_template_form_view
+msgid "General Information"
+msgstr "Общая информация"
 
 #. module: product
-#: help:product.pricelist.item,sequence:0
-msgid ""
-"Gives the order in which the pricelist items will be checked. The evaluation "
-"gives highest priority to lowest sequence and stops as soon as a matching "
-"item is found."
-msgstr ""
-"Определяет последовательность выбора из прайс листа. Обработка элементов "
-"начинается с меньших номеров и останавливается после нахождения нужного "
-"элемента."
+#: model:ir.model.fields,help:product.field_product_product__packaging_ids
+#: model:ir.model.fields,help:product.field_product_template__packaging_ids
+msgid "Gives the different ways to package the same product."
+msgstr "Предоставляет различные варианты упаковки одного и того же продукта."
 
 #. module: product
-#: help:product.packaging,sequence:0
-msgid "Gives the sequence order when displaying a list of packaging."
-msgstr "Дает порядок последовательности при выводе списка упаковок."
+#: model:ir.model.fields,help:product.field_product_product__sequence
+#: model:ir.model.fields,help:product.field_product_template__sequence
+msgid "Gives the sequence order when displaying a product list"
+msgstr "Определяет порядок следования при отображении списка товаров"
 
 #. module: product
-#: help:product.category,sequence:0
-msgid ""
-"Gives the sequence order when displaying a list of product categories."
-msgstr ""
-"Дает порядок последовательности при выводе списка категорий продуктов."
+#: code:addons/product/models/product_template.py:0
+#, python-format
+msgid "Go to Internal Categories"
+msgstr "Переход к внутренним Категориям"
 
 #. module: product
-#: model:product.template,name:product.product_product_44_product_template
-msgid "GrapWorks Software"
-msgstr ""
+#: model_terms:ir.ui.view,arch_db:product.product_pricelist_item_view_search
+#: model_terms:ir.ui.view,arch_db:product.product_supplierinfo_search_view
+#: model_terms:ir.ui.view,arch_db:product.product_template_search_view
+msgid "Group By"
+msgstr "Группировать по"
 
 #. module: product
-#: model:product.public.category,name:product.graphics_card
-#: model:product.template,name:product.product_product_24_product_template
-msgid "Graphics Card"
-msgstr "Графическая плата"
-
-#. module: product
-#: field:product.template,weight:0
-msgid "Gross Weight"
-msgstr "Вес брутто"
-
-#. module: product
-#: view:product.template:product.product_template_search_view
-msgid "Group by..."
-msgstr "Объединять по..."
-
-#. module: product
-#: model:product.template,name:product.product_product_17_product_template
-msgid "HDD SH-1"
-msgstr ""
-
-#. module: product
-#: model:product.template,name:product.product_product_18_product_template
-msgid "HDD SH-2"
-msgstr ""
-
-#. module: product
-#: model:product.template,name:product.product_product_19_product_template
-msgid "HDD on Demand"
-msgstr ""
-
-#. module: product
-#: model:product.template,description:product.product_product_32_product_template
-msgid ""
-"Hands free headset for laptop PC with in-line microphone and headphone plug."
-msgstr ""
-
-#. module: product
-#: model:product.public.category,name:product.HDD
-msgid "Hard Drive"
-msgstr ""
-
-#. module: product
-#: model:product.public.category,name:product.Headset
-msgid "Headset"
-msgstr ""
-
-#. module: product
-#: model:product.template,name:product.product_product_33_product_template
-msgid "Headset USB"
-msgstr "USB наушники"
-
-#. module: product
-#: model:product.template,description:product.product_product_33_product_template
-msgid "Headset for laptop PC with USB connector."
-msgstr ""
-
-#. module: product
-#: model:product.template,name:product.product_product_32_product_template
-msgid "Headset standard"
-msgstr "Наушники стандартные"
-
-#. module: product
-#: field:product.ul,height:0
-msgid "Height"
-msgstr "Высота"
-
-#. module: product
-#: model:product.template,description_sale:product.product_product_11_product_template
-#: model:product.template,description_sale:product.product_product_11b_product_template
-msgid ""
-"Height: 3.01 inches\n"
-"Width:  1.56 inches\n"
-"Depth:  0.21 inch\n"
-"Weight: 1.1 ounces"
-msgstr ""
-
-#. module: product
-#: field:product.price.history,datetime:0
-msgid "Historization Time"
-msgstr ""
-
-#. module: product
-#: field:product.price.history,cost:0
-msgid "Historized Cost"
-msgstr ""
-
-#. module: product
-#: help:product.product,message_summary:0
-#: help:product.template,message_summary:0
-msgid ""
-"Holds the Chatter summary (number of messages, ...). This summary is "
-"directly in html format in order to be inserted in kanban views."
-msgstr ""
-"Содержит сводку по Чаттеру (количество сообщений,...). Эта сводка в формате "
-"html для возможности использования в канбан виде"
-
-#. module: product
-#: model:product.uom,name:product.product_uom_hour
-msgid "Hour(s)"
-msgstr "Час(ов)"
-
-#. module: product
-#: help:product.uom,factor_inv:0
-msgid ""
-"How many times this Unit of Measure is bigger than the reference Unit of "
-"Measure in this category:\n"
-"1 * (this unit) = ratio * (reference unit)"
-msgstr ""
-
-#. module: product
-#: help:product.uom,factor:0
-msgid ""
-"How much bigger or smaller this unit is compared to the reference Unit of "
-"Measure for this category:\n"
-"1 * (reference unit) = ratio * (this unit)"
-msgstr ""
-
-#. module: product
-#: field:pricelist.partnerinfo,id:0
-#: field:product.attribute,id:0
-#: field:product.attribute.line,id:0
-#: field:product.attribute.price,id:0
-#: field:product.attribute.value,id:0
-#: field:product.category,id:0
-#: field:product.packaging,id:0
-#: field:product.price.history,id:0
-#: field:product.price.type,id:0
-#: field:product.price_list,id:0
-#: field:product.pricelist,id:0
-#: field:product.pricelist.item,id:0
-#: field:product.pricelist.type,id:0
-#: field:product.pricelist.version,id:0
-#: field:product.product,id:0
-#: field:product.supplierinfo,id:0
-#: field:product.template,id:0
-#: field:product.ul,id:0
-#: field:product.uom,id:0
-#: field:product.uom.categ,id:0
-#: field:report.product.report_pricelist,id:0
+#: model:ir.model.fields,field_description:product.field_product_attribute__id
+#: model:ir.model.fields,field_description:product.field_product_attribute_value__id
+#: model:ir.model.fields,field_description:product.field_product_category__id
+#: model:ir.model.fields,field_description:product.field_product_packaging__id
+#: model:ir.model.fields,field_description:product.field_product_price_list__id
+#: model:ir.model.fields,field_description:product.field_product_pricelist__id
+#: model:ir.model.fields,field_description:product.field_product_pricelist_item__id
+#: model:ir.model.fields,field_description:product.field_product_product__id
+#: model:ir.model.fields,field_description:product.field_product_supplierinfo__id
+#: model:ir.model.fields,field_description:product.field_product_template__id
+#: model:ir.model.fields,field_description:product.field_product_template_attribute_exclusion__id
+#: model:ir.model.fields,field_description:product.field_product_template_attribute_line__id
+#: model:ir.model.fields,field_description:product.field_product_template_attribute_value__id
+#: model:ir.model.fields,field_description:product.field_report_product_report_pricelist__id
 msgid "ID"
+msgstr "Номер"
+
+#. module: product
+#: model:ir.model.fields,field_description:product.field_product_product__activity_exception_icon
+#: model:ir.model.fields,field_description:product.field_product_template__activity_exception_icon
+msgid "Icon"
+msgstr "Иконка"
+
+#. module: product
+#: model:ir.model.fields,help:product.field_product_product__activity_exception_icon
+#: model:ir.model.fields,help:product.field_product_template__activity_exception_icon
+msgid "Icon to indicate an exception activity."
 msgstr ""
 
 #. module: product
-#: help:product.product,message_unread:0
-#: help:product.template,message_unread:0
-msgid "If checked new messages require your attention."
-msgstr "Если установлено, новые сообщения требуют вашего внимания"
+#: model:ir.model.fields,help:product.field_product_product__message_needaction
+#: model:ir.model.fields,help:product.field_product_product__message_unread
+#: model:ir.model.fields,help:product.field_product_template__message_needaction
+#: model:ir.model.fields,help:product.field_product_template__message_unread
+msgid "If checked, new messages require your attention."
+msgstr "Если отмечено - новые сообщения требуют Вашего внимания."
 
 #. module: product
-#: help:product.pricelist,active:0
+#: model:ir.model.fields,help:product.field_product_product__message_has_error
+#: model:ir.model.fields,help:product.field_product_template__message_has_error
+msgid "If checked, some messages have a delivery error."
+msgstr ""
+
+#. module: product
+#: model:ir.model.fields,help:product.field_product_supplierinfo__product_id
+msgid ""
+"If not set, the vendor price will apply to all variants of this product."
+msgstr ""
+
+#. module: product
+#: model:ir.model.fields,help:product.field_product_pricelist__active
+#: model:ir.model.fields,help:product.field_product_pricelist_item__active
 msgid ""
 "If unchecked, it will allow you to hide the pricelist without removing it."
 msgstr ""
 "Если не отмечено, это позволит вам скрыть прайс-лист без его удаления."
 
 #. module: product
-#: help:product.product,active:0
-#: help:product.template,active:0
+#: model:ir.model.fields,help:product.field_product_product__active
+#: model:ir.model.fields,help:product.field_product_template__active
 msgid ""
 "If unchecked, it will allow you to hide the product without removing it."
-msgstr ""
-"Если не установлено, это позволит вам скрыть продукт, не удаляя его ."
+msgstr "Если не установлено, это позволит вам скрыть продукт, не удаляя его ."
 
 #. module: product
-#: model:product.category,name:product.imac
-msgid "Imac"
-msgstr ""
-
-#. module: product
-#: field:product.template,image:0
+#: model:ir.model.fields,field_description:product.field_product_product__image_1920
+#: model:ir.model.fields,field_description:product.field_product_template__image_1920
 msgid "Image"
 msgstr "Изображение"
 
 #. module: product
-#: help:product.product,image:0
-msgid ""
-"Image of the product variant (Big-sized image of product template if false). "
-"It is automatically resized as a 1024x1024px image, with aspect ratio "
-"preserved."
+#: model:ir.model.fields,field_description:product.field_product_product__image_1024
+#: model:ir.model.fields,field_description:product.field_product_template__image_1024
+msgid "Image 1024"
 msgstr ""
 
 #. module: product
-#: help:product.product,image_medium:0
-msgid ""
-"Image of the product variant (Medium-sized image of product template if "
-"false)."
+#: model:ir.model.fields,field_description:product.field_product_product__image_128
+#: model:ir.model.fields,field_description:product.field_product_template__image_128
+msgid "Image 128"
 msgstr ""
 
 #. module: product
-#: help:product.product,image_small:0
-msgid ""
-"Image of the product variant (Small-sized image of product template if "
-"false)."
+#: model:ir.model.fields,field_description:product.field_product_product__image_256
+#: model:ir.model.fields,field_description:product.field_product_template__image_256
+msgid "Image 256"
 msgstr ""
 
 #. module: product
-#: selection:product.template,state:0
-msgid "In Development"
-msgstr "В разработке"
+#: model:ir.model.fields,field_description:product.field_product_product__image_512
+#: model:ir.model.fields,field_description:product.field_product_template__image_512
+msgid "Image 512"
+msgstr ""
 
 #. module: product
-#: view:product.template:product.product_template_form_view
-msgid "Information"
-msgstr "Информация"
-
-#. module: product
-#: model:ir.model,name:product.model_product_supplierinfo
-msgid "Information about a product supplier"
-msgstr "Информация о поставщике продукции"
-
-#. module: product
-#: model:product.template,name:product.product_product_38_product_template
-msgid "Ink Cartridge"
-msgstr "Чернила в картридже"
-
-#. module: product
-#: code:addons/product/product.py:385
+#: code:addons/product/models/product_pricelist.py:0
 #, python-format
-msgid "Integrity Error!"
+msgid "Import Template for Pricelists"
 msgstr ""
 
 #. module: product
-#: model:product.category,name:product.product_category_2
-msgid "Internal"
-msgstr "Внутренний"
-
-#. module: product
-#: field:product.template,categ_id:0
-msgid "Internal Category"
+#: code:addons/product/models/product_template.py:0
+#, python-format
+msgid "Import Template for Products"
 msgstr ""
 
 #. module: product
-#: field:product.product,code:0
-#: field:product.product,default_code:0
-#: field:product.template,default_code:0
+#: code:addons/product/models/product.py:0
+#, python-format
+msgid "Import Template for Vendor Pricelists"
+msgstr ""
+
+#. module: product
+#: model:ir.model.fields,help:product.field_product_product__standard_price
+#: model:ir.model.fields,help:product.field_product_template__standard_price
+msgid ""
+"In Standard Price & AVCO: value of the product (automatically computed in AVCO).\n"
+"        In FIFO: value of the last unit that left the stock (automatically computed).\n"
+"        Used to value the product when the purchase cost is not known (e.g. inventory adjustment).\n"
+"        Used to compute margins on sale orders."
+msgstr ""
+
+#. module: product
+#: model_terms:ir.ui.view,arch_db:product.res_config_settings_view_form
+msgid "In which unit of measure do you manage your volumes"
+msgstr ""
+
+#. module: product
+#: model_terms:ir.ui.view,arch_db:product.product_template_attribute_value_view_search
+msgid "Inactive"
+msgstr "Не активно"
+
+#. module: product
+#: model:ir.model.fields.selection,name:product.selection__product_attribute__create_variant__always
+msgid "Instantly"
+msgstr ""
+
+#. module: product
+#: model_terms:ir.ui.view,arch_db:product.product_template_form_view
+msgid "Internal Notes"
+msgstr "Внутренние заметки"
+
+#. module: product
+#: model:ir.model.fields,field_description:product.field_product_product__default_code
+#: model:ir.model.fields,field_description:product.field_product_template__default_code
 msgid "Internal Reference"
-msgstr "Внутренняя ссылка"
+msgstr "Внутренний артикул"
 
 #. module: product
-#: help:product.product,ean13:0
+#: model:ir.model.fields,help:product.field_product_product__barcode
+#: model:ir.model.fields,help:product.field_product_template__barcode
 msgid "International Article Number used for product identification."
 msgstr "Международный  номер товара используется для идентификации товара."
 
 #. module: product
-#: view:product.template:product.product_template_form_view
+#: model_terms:ir.ui.view,arch_db:product.product_template_form_view
 msgid "Inventory"
+msgstr "Склад"
+
+#. module: product
+#: model:ir.model.fields,field_description:product.field_product_product__message_is_follower
+#: model:ir.model.fields,field_description:product.field_product_template__message_is_follower
+msgid "Is Follower"
+msgstr "Подписчик"
+
+#. module: product
+#: model:ir.model.fields,field_description:product.field_product_product__is_product_variant
+msgid "Is Product Variant"
 msgstr ""
 
 #. module: product
-#: model:product.category,name:product.ipad
-msgid "Ipad"
+#: model:ir.model.fields,field_description:product.field_product_product__has_configurable_attributes
+#: model:ir.model.fields,field_description:product.field_product_template__has_configurable_attributes
+msgid "Is a configurable product"
 msgstr ""
 
 #. module: product
-#: model:product.category,name:product.ipod
-msgid "Ipod"
+#: model:ir.model.fields,field_description:product.field_product_template__is_product_variant
+msgid "Is a product variant"
+msgstr "Является вариантом продукта"
+
+#. module: product
+#: model:ir.model.fields.selection,name:product.selection__res_config_settings__product_weight_in_lbs__0
+msgid "Kilogram"
 msgstr ""
 
 #. module: product
-#: field:product.product,message_is_follower:0
-#: field:product.template,message_is_follower:0
-msgid "Is a Follower"
-msgstr "Подписан"
+#: model:ir.model.fields,field_description:product.field_product_attribute____last_update
+#: model:ir.model.fields,field_description:product.field_product_attribute_value____last_update
+#: model:ir.model.fields,field_description:product.field_product_category____last_update
+#: model:ir.model.fields,field_description:product.field_product_packaging____last_update
+#: model:ir.model.fields,field_description:product.field_product_price_list____last_update
+#: model:ir.model.fields,field_description:product.field_product_pricelist____last_update
+#: model:ir.model.fields,field_description:product.field_product_pricelist_item____last_update
+#: model:ir.model.fields,field_description:product.field_product_product____last_update
+#: model:ir.model.fields,field_description:product.field_product_supplierinfo____last_update
+#: model:ir.model.fields,field_description:product.field_product_template____last_update
+#: model:ir.model.fields,field_description:product.field_product_template_attribute_exclusion____last_update
+#: model:ir.model.fields,field_description:product.field_product_template_attribute_line____last_update
+#: model:ir.model.fields,field_description:product.field_product_template_attribute_value____last_update
+#: model:ir.model.fields,field_description:product.field_report_product_report_pricelist____last_update
+msgid "Last Modified on"
+msgstr "Последнее изменение"
 
 #. module: product
-#: view:product.pricelist.version:product.product_pricelist_version_form_view
-msgid "Item List"
-msgstr ""
-
-#. module: product
-#: field:product.pricelist.type,key:0
-msgid "Key"
-msgstr "Ключ"
-
-#. module: product
-#: model:product.public.category,name:product.Keyboard_Mouse
-msgid "Keyboard / Mouse"
-msgstr ""
-
-#. module: product
-#: model:product.template,name:product.product_product_27_product_template
-msgid "Laptop Customized"
-msgstr ""
-
-#. module: product
-#: model:product.template,name:product.product_product_25_product_template
-msgid "Laptop E5023"
-msgstr ""
-
-#. module: product
-#: model:product.template,name:product.product_product_26_product_template
-msgid "Laptop S3450"
-msgstr ""
-
-#. module: product
-#: model:product.public.category,name:product.laptops
-msgid "Laptops"
-msgstr ""
-
-#. module: product
-#: field:product.product,message_last_post:0
-#: field:product.template,message_last_post:0
-msgid "Last Message Date"
-msgstr ""
-
-#. module: product
-#: field:pricelist.partnerinfo,write_uid:0
-#: field:product.attribute,write_uid:0
-#: field:product.attribute.line,write_uid:0
-#: field:product.attribute.price,write_uid:0
-#: field:product.attribute.value,write_uid:0
-#: field:product.category,write_uid:0
-#: field:product.packaging,write_uid:0
-#: field:product.price.history,write_uid:0
-#: field:product.price.type,write_uid:0
-#: field:product.price_list,write_uid:0
-#: field:product.pricelist,write_uid:0
-#: field:product.pricelist.item,write_uid:0
-#: field:product.pricelist.type,write_uid:0
-#: field:product.pricelist.version,write_uid:0
-#: field:product.product,write_uid:0
-#: field:product.supplierinfo,write_uid:0
-#: field:product.template,write_uid:0
-#: field:product.ul,write_uid:0
-#: field:product.uom,write_uid:0
-#: field:product.uom.categ,write_uid:0
+#: model:ir.model.fields,field_description:product.field_product_attribute__write_uid
+#: model:ir.model.fields,field_description:product.field_product_attribute_value__write_uid
+#: model:ir.model.fields,field_description:product.field_product_category__write_uid
+#: model:ir.model.fields,field_description:product.field_product_packaging__write_uid
+#: model:ir.model.fields,field_description:product.field_product_price_list__write_uid
+#: model:ir.model.fields,field_description:product.field_product_pricelist__write_uid
+#: model:ir.model.fields,field_description:product.field_product_pricelist_item__write_uid
+#: model:ir.model.fields,field_description:product.field_product_product__write_uid
+#: model:ir.model.fields,field_description:product.field_product_supplierinfo__write_uid
+#: model:ir.model.fields,field_description:product.field_product_template__write_uid
+#: model:ir.model.fields,field_description:product.field_product_template_attribute_exclusion__write_uid
+#: model:ir.model.fields,field_description:product.field_product_template_attribute_line__write_uid
+#: model:ir.model.fields,field_description:product.field_product_template_attribute_value__write_uid
 msgid "Last Updated by"
-msgstr ""
+msgstr "Последний раз обновил"
 
 #. module: product
-#: field:pricelist.partnerinfo,write_date:0
-#: field:product.attribute,write_date:0
-#: field:product.attribute.line,write_date:0
-#: field:product.attribute.price,write_date:0
-#: field:product.attribute.value,write_date:0
-#: field:product.category,write_date:0
-#: field:product.packaging,write_date:0
-#: field:product.price.history,write_date:0
-#: field:product.price.type,write_date:0
-#: field:product.price_list,write_date:0
-#: field:product.pricelist,write_date:0
-#: field:product.pricelist.item,write_date:0
-#: field:product.pricelist.type,write_date:0
-#: field:product.pricelist.version,write_date:0
-#: field:product.product,write_date:0
-#: field:product.supplierinfo,write_date:0
-#: field:product.template,write_date:0
-#: field:product.ul,write_date:0
-#: field:product.uom,write_date:0
-#: field:product.uom.categ,write_date:0
+#: model:ir.model.fields,field_description:product.field_product_attribute__write_date
+#: model:ir.model.fields,field_description:product.field_product_attribute_value__write_date
+#: model:ir.model.fields,field_description:product.field_product_category__write_date
+#: model:ir.model.fields,field_description:product.field_product_packaging__write_date
+#: model:ir.model.fields,field_description:product.field_product_price_list__write_date
+#: model:ir.model.fields,field_description:product.field_product_pricelist__write_date
+#: model:ir.model.fields,field_description:product.field_product_pricelist_item__write_date
+#: model:ir.model.fields,field_description:product.field_product_product__write_date
+#: model:ir.model.fields,field_description:product.field_product_supplierinfo__write_date
+#: model:ir.model.fields,field_description:product.field_product_template__write_date
+#: model:ir.model.fields,field_description:product.field_product_template_attribute_exclusion__write_date
+#: model:ir.model.fields,field_description:product.field_product_template_attribute_line__write_date
+#: model:ir.model.fields,field_description:product.field_product_template_attribute_value__write_date
 msgid "Last Updated on"
-msgstr ""
+msgstr "Последнее обновление"
 
 #. module: product
-#: help:product.pricelist.version,date_end:0
-msgid "Last valid date for the version."
-msgstr "Последняя допустимая дата для версии."
+#: model_terms:ir.ui.view,arch_db:product.product_template_search_view
+msgid "Late Activities"
+msgstr "Действия с опозданием"
 
 #. module: product
-#: help:product.supplierinfo,delay:0
+#: model:ir.model.fields,help:product.field_product_supplierinfo__delay
 msgid ""
 "Lead time in days between the confirmation of the purchase order and the "
 "receipt of the products in your warehouse. Used by the scheduler for "
 "automatic computation of the purchase order planning."
 msgstr ""
+"Время выполнения заказа в днях между подтверждением заказа на покупку и "
+"получением товаров на Вашем складе. Используется диспетчером для "
+"автоматического вычисления планирования заказа на покупку."
 
 #. module: product
-#: field:product.category,parent_left:0
-msgid "Left Parent"
+#: model:ir.model.fields,field_description:product.field_product_attribute__attribute_line_ids
+#: model:ir.model.fields,field_description:product.field_product_attribute_value__pav_attribute_line_ids
+msgid "Lines"
+msgstr "Строк"
+
+#. module: product
+#: model_terms:ir.ui.view,arch_db:product.product_template_form_view
+#: model_terms:ir.ui.view,arch_db:product.product_variant_easy_edit_view
+msgid "Logistics"
+msgstr "Логистика"
+
+#. module: product
+#: model:ir.model.fields,field_description:product.field_product_product__message_main_attachment_id
+#: model:ir.model.fields,field_description:product.field_product_template__message_main_attachment_id
+msgid "Main Attachment"
 msgstr ""
 
 #. module: product
-#: field:product.ul,length:0
-msgid "Length"
-msgstr "Длина"
-
-#. module: product
-#: model:product.uom.categ,name:product.uom_categ_length
-msgid "Length / Distance"
-msgstr "Длинна / Расстояние"
-
-#. module: product
-#: view:product.template:product.product_template_only_form_view
-msgid "List of Variants"
+#: model:ir.model.fields,help:product.field_product_template_attribute_value__exclude_for
+msgid ""
+"Make this attribute value not compatible with other values of the product or"
+" some attribute values of optional and accessory products."
 msgstr ""
-
-#. module: product
-#: model:product.uom,name:product.product_uom_litre
-msgid "Liter(s)"
-msgstr "Литр(ов)"
-
-#. module: product
-#: model:ir.model,name:product.model_product_ul
-msgid "Logistic Unit"
-msgstr ""
-
-#. module: product
-#: model:ir.actions.act_window,name:product.product_ul_form_action
-#: model:ir.ui.menu,name:product.menu_product_ul_form_action
-#: view:product.ul:product.product_ul_form_view
-#: view:product.ul:product.product_ul_tree
-msgid "Logistic Units"
-msgstr ""
-
-#. module: product
-#: field:product.template,packaging_ids:0
-msgid "Logistical Units"
-msgstr "Логистические единицы"
-
-#. module: product
-#: field:product.template,seller_id:0
-msgid "Main Supplier"
-msgstr "Основной поставщик"
-
-#. module: product
-#: help:product.template,seller_id:0
-msgid "Main Supplier who has highest priority in Supplier List."
-msgstr "Основной поставщик - имеет высший приоритет в списке поставщиков."
-
-#. module: product
-#: model:res.groups,name:product.group_uom
-msgid "Manage Multiple Units of Measure"
-msgstr "Управление несколькими единицами измерения"
 
 #. module: product
 #: model:res.groups,name:product.group_stock_packaging
@@ -1417,655 +1117,568 @@ msgid "Manage Product Packaging"
 msgstr "Управление упаковкой товаров"
 
 #. module: product
-#: model:res.groups,name:product.group_mrp_properties
-msgid "Manage Properties of Product"
-msgstr "Управление свойствами товара"
+#: model:res.groups,name:product.group_product_variant
+msgid "Manage Product Variants"
+msgstr "Управление вариантами продукта"
 
 #. module: product
-#: model:res.groups,name:product.group_uos
-msgid "Manage Secondary Unit of Measure"
-msgstr "Управление второй единицей измерения"
-
-#. module: product
-#: view:product.pricelist.item:product.product_pricelist_item_form_view
+#: model_terms:ir.ui.view,arch_db:product.product_pricelist_item_form_view
 msgid "Max. Margin"
 msgstr "Макс. маржа"
 
 #. module: product
-#: field:product.pricelist.item,price_max_margin:0
+#: model:ir.model.fields,field_description:product.field_product_pricelist_item__price_max_margin
 msgid "Max. Price Margin"
 msgstr "Максимальная маржа цены"
 
 #. module: product
-#: field:product.template,mes_type:0
-msgid "Measure Type"
-msgstr "Тип измерения"
-
-#. module: product
-#: field:product.product,image_medium:0
-#: field:product.template,image_medium:0
-msgid "Medium-sized image"
-msgstr "Среднее изображение"
-
-#. module: product
-#: help:product.template,image_medium:0
-msgid ""
-"Medium-sized image of the product. It is automatically resized as a "
-"128x128px image, with aspect ratio preserved, only when the image exceeds "
-"one of those sizes. Use this field in form views or some kanban views."
-msgstr ""
-"Средне-размерное изображение товара. Оно автоматически изменяется до "
-"128x128px, с таким же соотношением сторон, только тогда, когда изображение "
-"превышает один из размеров. Используйте это поле в форме просмотра или "
-"некоторых видах канбан."
-
-#. module: product
-#: model:product.attribute,name:product.product_attribute_1
-#: model:product.public.category,name:product.Memory
-msgid "Memory"
+#: model:ir.model.fields,field_description:product.field_product_product__message_has_error
+#: model:ir.model.fields,field_description:product.field_product_template__message_has_error
+msgid "Message Delivery error"
 msgstr ""
 
 #. module: product
-#: field:product.product,message_ids:0
-#: field:product.template,message_ids:0
+#: model:ir.model.fields,field_description:product.field_product_product__message_ids
+#: model:ir.model.fields,field_description:product.field_product_template__message_ids
 msgid "Messages"
 msgstr "Сообщения"
 
 #. module: product
-#: help:product.product,message_ids:0
-#: help:product.template,message_ids:0
-msgid "Messages and communication history"
-msgstr "Сообщения и история общения"
-
-#. module: product
-#: view:product.pricelist.item:product.product_pricelist_item_form_view
+#: model_terms:ir.ui.view,arch_db:product.product_pricelist_item_form_view
 msgid "Min. Margin"
 msgstr "Мин. маржа"
 
 #. module: product
-#: field:product.pricelist.item,price_min_margin:0
+#: model:ir.model.fields,field_description:product.field_product_pricelist_item__price_min_margin
 msgid "Min. Price Margin"
 msgstr "Минимальная маржа цены"
 
 #. module: product
-#: field:product.pricelist.item,min_quantity:0
+#: model:ir.model.fields,field_description:product.field_product_pricelist_item__min_quantity
 msgid "Min. Quantity"
 msgstr "Мин. кол-во"
 
 #. module: product
-#: field:product.supplierinfo,min_qty:0
-msgid "Minimal Quantity"
-msgstr "Минимальное количество"
-
-#. module: product
-#: model:product.public.category,name:product.Modem_Router
-msgid "Modem & Router"
+#: model:ir.model.fields.selection,name:product.selection__res_config_settings__product_pricelist_setting__basic
+msgid "Multiple prices per product"
 msgstr ""
 
 #. module: product
-#: model:product.public.category,name:product.motherboard
-msgid "Motherboard"
+#: model:ir.model.fields,help:product.field_res_config_settings__product_pricelist_setting
+msgid ""
+"Multiple prices: Pricelists with fixed price rules by product,\n"
+"Advanced rules: enables advanced price rules for pricelists."
 msgstr ""
 
 #. module: product
-#: model:product.template,name:product.product_product_21_product_template
-msgid "Motherboard A20Z7"
-msgstr ""
-
-#. module: product
-#: model:product.template,name:product.product_product_20_product_template
-msgid "Motherboard I9P57"
-msgstr ""
-
-#. module: product
-#: model:product.template,name:product.product_product_10_product_template
-msgid "Mouse, Optical"
-msgstr "Мышь, оптическая"
-
-#. module: product
-#: model:product.template,name:product.product_product_12_product_template
-msgid "Mouse, Wireless"
-msgstr "Мышь, беспроводная"
-
-#. module: product
-#: model:product.template,name:product.product_product_31_product_template
-msgid "Multimedia Speakers"
-msgstr ""
-
-#. module: product
-#: field:product.attribute,name:0
-#: field:product.category,complete_name:0
-#: field:product.category,name:0
-#: field:product.pricelist.type,name:0
-#: field:product.pricelist.version,name:0
-#: field:product.template,name:0
-#: field:product.ul,name:0
-#: field:product.uom.categ,name:0
+#: model:ir.model.fields,field_description:product.field_product_category__name
+#: model:ir.model.fields,field_description:product.field_product_pricelist_item__name
+#: model:ir.model.fields,field_description:product.field_product_product__name
+#: model:ir.model.fields,field_description:product.field_product_template__name
 msgid "Name"
 msgstr "Название"
 
 #. module: product
-#: help:product.price.type,name:0
-msgid "Name of this kind of price."
-msgstr "Наименование типа цены"
+#: model:ir.model.fields.selection,name:product.selection__product_attribute__create_variant__no_variant
+msgid "Never"
+msgstr "Никогда"
 
 #. module: product
-#: field:product.template,weight_net:0
-msgid "Net Weight"
-msgstr "Вес нетто"
-
-#. module: product
-#: model:product.public.category,name:product.network
-msgid "Network"
-msgstr ""
-
-#. module: product
-#: view:product.pricelist.item:product.product_pricelist_item_form_view
+#: model_terms:ir.ui.view,arch_db:product.product_pricelist_item_form_view
 msgid "New Price ="
 msgstr "Новая цена ="
 
 #. module: product
-#: code:addons/product/product.py:705
+#: model:ir.model.fields,field_description:product.field_product_product__activity_date_deadline
+#: model:ir.model.fields,field_description:product.field_product_template__activity_date_deadline
+msgid "Next Activity Deadline"
+msgstr ""
+
+#. module: product
+#: model:ir.model.fields,field_description:product.field_product_product__activity_summary
+#: model:ir.model.fields,field_description:product.field_product_template__activity_summary
+msgid "Next Activity Summary"
+msgstr "Резюме следующего мероприятия"
+
+#. module: product
+#: model:ir.model.fields,field_description:product.field_product_product__activity_type_id
+#: model:ir.model.fields,field_description:product.field_product_template__activity_type_id
+msgid "Next Activity Type"
+msgstr ""
+
+#. module: product
+#: model:ir.model.fields,field_description:product.field_product_product__message_needaction_counter
+#: model:ir.model.fields,field_description:product.field_product_template__message_needaction_counter
+msgid "Number of Actions"
+msgstr "Количество действий"
+
+#. module: product
+#: model:ir.model.fields,field_description:product.field_product_product__message_has_error_counter
+#: model:ir.model.fields,field_description:product.field_product_template__message_has_error_counter
+msgid "Number of errors"
+msgstr ""
+
+#. module: product
+#: model:ir.model.fields,help:product.field_product_product__message_needaction_counter
+#: model:ir.model.fields,help:product.field_product_template__message_needaction_counter
+msgid "Number of messages which requires an action"
+msgstr "Количество сообщений, требующих внимания"
+
+#. module: product
+#: model:ir.model.fields,help:product.field_product_product__message_has_error_counter
+#: model:ir.model.fields,help:product.field_product_template__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr ""
+
+#. module: product
+#: model:ir.model.fields,field_description:product.field_product_product__pricelist_item_count
+#: model:ir.model.fields,field_description:product.field_product_template__pricelist_item_count
+msgid "Number of price rules"
+msgstr ""
+
+#. module: product
+#: model:ir.model.fields,help:product.field_product_product__message_unread_counter
+#: model:ir.model.fields,help:product.field_product_template__message_unread_counter
+msgid "Number of unread messages"
+msgstr "Количество непрочитанных сообщений"
+
+#. module: product
+#: code:addons/product/models/product_attribute.py:0
 #, python-format
 msgid ""
-"New Unit of Measure '%s' must belong to same Unit of Measure category '%s' "
-"as of old Unit of Measure '%s'. If you need to change the unit of measure, "
-"you may deactivate this product from the 'Procurements' tab and create a new "
-"one."
+"On the product %s you cannot associate the value %s with the attribute %s "
+"because they do not match."
 msgstr ""
 
 #. module: product
-#: selection:product.category,type:0
-#: selection:product.template,state:0
-msgid "Normal"
-msgstr "Обычный"
-
-#. module: product
-#: field:product.packaging,rows:0
-msgid "Number of Layers"
-msgstr "Количество уровней"
-
-#. module: product
-#: selection:product.template,state:0
-msgid "Obsolete"
-msgstr "Устаревший"
-
-#. module: product
-#: model:product.template,description_sale:product.product_product_42_product_template
+#: code:addons/product/models/product_attribute.py:0
+#, python-format
 msgid ""
-"Office Editing Software with word processing, spreadsheets, presentations, "
-"graphics, and databases..."
+"On the product %s you cannot transform the attribute %s into the attribute "
+"%s."
 msgstr ""
 
 #. module: product
-#: model:product.template,name:product.product_product_42_product_template
-msgid "Office Suite"
-msgstr "Набор офисных приложений"
-
-#. module: product
-#: model:product.template,name:product.product_product_2_product_template
-msgid "On Site Assistance"
-msgstr "Помощь на сайте"
-
-#. module: product
-#: model:product.template,name:product.product_product_1_product_template
-msgid "On Site Monitoring"
-msgstr ""
-
-#. module: product
-#: model:product.template,description:product.product_product_19_product_template
-msgid "On demand hard-disk having capacity based on requirement."
-msgstr ""
-
-#. module: product
-#: field:product.template,is_product_variant:0
-msgid "Only one product variant"
-msgstr ""
-
-#. module: product
-#: view:product.packaging:product.product_packaging_form_view
-#: view:product.packaging:product.product_packaging_form_view_without_product
-msgid "Other Info"
+#: model_terms:ir.ui.view,arch_db:product.product_supplierinfo_form_view
+msgid "Other Information"
 msgstr "Прочая информация"
 
 #. module: product
-#: code:addons/product/pricelist.py:391
-#: field:product.pricelist.item,base_pricelist_id:0
-#, python-format
+#: model:ir.model.fields,field_description:product.field_product_pricelist_item__base_pricelist_id
+#: model:ir.model.fields.selection,name:product.selection__product_pricelist_item__base__pricelist
 msgid "Other Pricelist"
 msgstr "Другой прайс"
 
 #. module: product
-#: model:product.category,name:product.product_category_3
-msgid "Other Products"
-msgstr "Другие продукты"
+#: model:ir.model.fields,field_description:product.field_product_packaging__name
+msgid "Package Type"
+msgstr "Тип упаковки"
 
 #. module: product
-#: model:product.template,name:product.product_product_5_product_template
-msgid "PC Assemble + Custom (PC on Demand) "
-msgstr ""
-
-#. module: product
-#: model:product.template,name:product.product_product_3_product_template
-msgid "PC Assemble SC234"
-msgstr ""
-
-#. module: product
-#: selection:product.ul,type:0
-msgid "Pack"
-msgstr "Упаковка"
-
-#. module: product
-#: field:product.packaging,ul:0
-msgid "Package Logistic Unit"
-msgstr ""
-
-#. module: product
-#: field:product.packaging,ul_qty:0
-msgid "Package by layer"
-msgstr "Упаковка по слоям"
-
-#. module: product
-#: model:ir.model,name:product.model_product_packaging
-#: view:product.packaging:product.product_packaging_form_view
-#: view:product.packaging:product.product_packaging_form_view_without_product
-#: view:product.packaging:product.product_packaging_tree_view
-#: view:product.packaging:product.product_packaging_tree_view_product
-#: view:product.template:product.product_template_form_view
+#: model_terms:ir.ui.view,arch_db:product.product_packaging_form_view
+#: model_terms:ir.ui.view,arch_db:product.product_packaging_tree_view
+#: model_terms:ir.ui.view,arch_db:product.product_template_form_view
+#: model_terms:ir.ui.view,arch_db:product.product_variant_easy_edit_view
 msgid "Packaging"
 msgstr "Упаковка"
 
 #. module: product
-#: selection:product.ul,type:0
-msgid "Pallet"
-msgstr "Поддон"
-
-#. module: product
-#: field:product.packaging,ul_container:0
-msgid "Pallet Logistic Unit"
-msgstr ""
-
-#. module: product
-#: view:product.packaging:product.product_packaging_form_view
-#: view:product.packaging:product.product_packaging_form_view_without_product
-msgid "Palletization"
-msgstr "Укладка на паллеты"
-
-#. module: product
-#: field:product.category,parent_id:0
+#: model:ir.model.fields,field_description:product.field_product_category__parent_id
 msgid "Parent Category"
 msgstr "Категория предка"
 
 #. module: product
-#: model:ir.model,name:product.model_res_partner
-msgid "Partner"
-msgstr "Партнер"
-
-#. module: product
-#: field:pricelist.partnerinfo,suppinfo_id:0
-msgid "Partner Information"
-msgstr "Информация партнера"
-
-#. module: product
-#: model:product.public.category,name:product.Pen_Drive
-msgid "Pen Drive"
+#: model:ir.model.fields,field_description:product.field_product_category__parent_path
+msgid "Parent Path"
 msgstr ""
 
 #. module: product
-#: model:product.template,name:product.product_product_29_product_template
-msgid "Pen drive, SP-2"
+#: model:ir.model.fields.selection,name:product.selection__product_pricelist_item__compute_price__percentage
+msgid "Percentage (discount)"
+msgstr "Процент (скидки)"
+
+#. module: product
+#: model:ir.model.fields,field_description:product.field_product_pricelist_item__percent_price
+msgid "Percentage Price"
+msgstr "Процент Цены"
+
+#. module: product
+#: code:addons/product/models/product_pricelist.py:0
+#, python-format
+msgid "Please specify the category for which this rule should be applied"
 msgstr ""
 
 #. module: product
-#: model:product.template,name:product.product_product_30_product_template
-msgid "Pen drive, SP-4"
+#: code:addons/product/models/product_pricelist.py:0
+#, python-format
+msgid "Please specify the product for which this rule should be applied"
 msgstr ""
 
 #. module: product
-#: field:product.product,price:0
-#: field:product.template,price:0
+#: code:addons/product/models/product_pricelist.py:0
+#, python-format
+msgid ""
+"Please specify the product variant for which this rule should be applied"
+msgstr ""
+
+#. module: product
+#: model:ir.model.fields.selection,name:product.selection__res_config_settings__product_weight_in_lbs__1
+msgid "Pound"
+msgstr ""
+
+#. module: product
+#: model:ir.model.fields,field_description:product.field_product_pricelist_item__price
+#: model:ir.model.fields,field_description:product.field_product_product__price
+#: model:ir.model.fields,field_description:product.field_product_supplierinfo__price
+#: model:ir.model.fields,field_description:product.field_product_template__price
+#: model_terms:ir.ui.view,arch_db:product.product_pricelist_item_tree_view_from_product
+#: model_terms:ir.ui.view,arch_db:product.product_pricelist_view
+#: model_terms:ir.ui.view,arch_db:product.product_pricelist_view_inherit
+#: model_terms:ir.ui.view,arch_db:product.product_supplierinfo_tree_view
 msgid "Price"
 msgstr "Цена"
 
 #. module: product
-#: view:product.pricelist.item:product.product_pricelist_item_form_view
+#: model_terms:ir.ui.view,arch_db:product.product_pricelist_item_form_view
 msgid "Price Computation"
 msgstr "Расчет цены"
 
 #. module: product
-#: field:product.pricelist.item,price_discount:0
+#: model:ir.model.fields,field_description:product.field_product_pricelist_item__price_discount
 msgid "Price Discount"
 msgstr "Скидка с цены"
 
 #. module: product
-#: field:product.attribute.price,price_extra:0
-msgid "Price Extra"
-msgstr ""
-
-#. module: product
-#: help:product.attribute.value,price_extra:0
-msgid ""
-"Price Extra: Extra price for the variant with this attribute value on sale "
-"price. eg. 200 price extra, 1000 + 200 = 1200."
-msgstr ""
-
-#. module: product
 #: model:ir.actions.act_window,name:product.action_product_price_list
-#: model:ir.model,name:product.model_product_price_list
-#: view:product.price_list:product.view_product_price_list
-#: field:product.pricelist.version,pricelist_id:0
-#: view:website:product.report_pricelist
+#: model_terms:ir.ui.view,arch_db:product.product_supplierinfo_form_view
+#: model_terms:ir.ui.view,arch_db:product.report_pricelist
+#: model_terms:ir.ui.view,arch_db:product.view_product_price_list
 msgid "Price List"
 msgstr "Каталог"
 
 #. module: product
-#: field:product.pricelist.version,items_id:0
-msgid "Price List Items"
-msgstr "Элементы каталога"
-
-#. module: product
-#: view:website:product.report_pricelist
-msgid "Price List Name"
-msgstr "Название каталога"
-
-#. module: product
-#: field:product.pricelist.item,price_version_id:0
-msgid "Price List Version"
-msgstr "Версия каталога"
-
-#. module: product
-#: field:product.price.type,name:0
-msgid "Price Name"
-msgstr "Название цены"
-
-#. module: product
-#: field:product.pricelist.item,price_round:0
+#: model:ir.model.fields,field_description:product.field_product_pricelist_item__price_round
 msgid "Price Rounding"
 msgstr "Округление цены"
 
 #. module: product
-#: field:product.pricelist.item,price_surcharge:0
+#: code:addons/product/models/product.py:0
+#: code:addons/product/models/product_template.py:0
+#: model:ir.actions.act_window,name:product.product_pricelist_item_action
+#: model_terms:ir.ui.view,arch_db:product.product_pricelist_item_tree_view
+#: model_terms:ir.ui.view,arch_db:product.product_pricelist_view
+#, python-format
+msgid "Price Rules"
+msgstr "Цена Правила"
+
+#. module: product
+#: model:ir.model.fields,field_description:product.field_product_pricelist_item__price_surcharge
 msgid "Price Surcharge"
 msgstr "Надбавка к цене"
 
 #. module: product
-#: model:ir.model,name:product.model_product_price_type
-msgid "Price Type"
-msgstr "Тип цены"
+#: model:ir.model.fields,help:product.field_product_product__list_price
+#: model:ir.model.fields,help:product.field_product_template__list_price
+#: model:ir.model.fields,help:product.field_product_template__lst_price
+msgid "Price at which the product is sold to customers."
+msgstr ""
 
 #. module: product
-#: model:ir.actions.act_window,name:product.product_price_type_action
-#: model:ir.ui.menu,name:product.menu_product_price_type
-msgid "Price Types"
-msgstr "Типы цен"
-
-#. module: product
-#: view:product.product:product.product_kanban_view
-#: view:product.template:product.product_template_kanban_view
+#: model_terms:ir.ui.view,arch_db:product.product_kanban_view
+#: model_terms:ir.ui.view,arch_db:product.product_template_kanban_view
 msgid "Price:"
 msgstr "Цена:"
 
 #. module: product
-#: field:product.price_list,price_list:0
+#: model:ir.model.fields,field_description:product.field_product_price_list__price_list
 msgid "PriceList"
 msgstr "Прайс-лист"
 
 #. module: product
-#: model:ir.actions.report.xml,name:product.action_report_pricelist
+#: model:ir.actions.report,name:product.action_report_pricelist
 #: model:ir.model,name:product.model_product_pricelist
-#: view:product.supplierinfo:product.product_supplierinfo_form_view
-#: field:product.template,pricelist_id:0
+#: model:ir.model.fields,field_description:product.field_product_pricelist_item__pricelist_id
+#: model:ir.model.fields,field_description:product.field_product_product__pricelist_id
+#: model:ir.model.fields,field_description:product.field_product_template__pricelist_id
+#: model:ir.model.fields,field_description:product.field_res_partner__property_product_pricelist
+#: model:ir.model.fields,field_description:product.field_res_users__property_product_pricelist
+#: model_terms:ir.ui.view,arch_db:product.product_pricelist_item_tree_view_from_product
+#: model_terms:ir.ui.view,arch_db:product.product_pricelist_item_view_search
 msgid "Pricelist"
 msgstr "Прайс-лист"
 
 #. module: product
-#: field:product.pricelist,name:0
+#: model:ir.model.fields,help:product.field_product_pricelist_item__applied_on
+msgid "Pricelist Item applicable on selected option"
+msgstr "Пункт прайс-листа, применимый к выбранному варианту"
+
+#. module: product
+#: model:ir.model.fields,field_description:product.field_product_pricelist__item_ids
+#: model_terms:ir.ui.view,arch_db:product.product_pricelist_item_form_view
+#: model_terms:ir.ui.view,arch_db:product.product_pricelist_item_tree_view_from_product
+#: model_terms:ir.ui.view,arch_db:product.product_pricelist_view
+#: model_terms:ir.ui.view,arch_db:product.product_pricelist_view_inherit
+msgid "Pricelist Items"
+msgstr "Позиции прайс-листа"
+
+#. module: product
+#: model:ir.model.fields,field_description:product.field_product_pricelist__name
 msgid "Pricelist Name"
 msgstr "Название прайс-листа"
 
 #. module: product
-#: model:ir.model,name:product.model_product_pricelist_type
-#: field:product.pricelist,type:0
-msgid "Pricelist Type"
-msgstr "Тип каталога"
-
-#. module: product
-#: model:ir.model,name:product.model_product_pricelist_version
-#: view:product.pricelist:product.product_pricelist_view
-#: view:product.pricelist.version:product.product_pricelist_version_form_view
-#: view:product.pricelist.version:product.product_pricelist_version_tree_view
-msgid "Pricelist Version"
-msgstr "Версия каталога"
-
-#. module: product
-#: model:ir.actions.act_window,name:product.product_pricelist_action
-#: model:ir.ui.menu,name:product.menu_product_pricelist_action
-#: field:product.pricelist,version_id:0
-msgid "Pricelist Versions"
-msgstr "Версии каталогов"
-
-#. module: product
 #: model:ir.model,name:product.model_product_pricelist_item
-msgid "Pricelist item"
-msgstr "Элемент каталога"
+msgid "Pricelist Rule"
+msgstr ""
 
 #. module: product
 #: model:ir.actions.act_window,name:product.product_pricelist_action2
-#: model:ir.actions.act_window,name:product.product_pricelist_action_for_purchase
-#: model:ir.ui.menu,name:product.menu_product_pricelist_action2
-#: model:ir.ui.menu,name:product.menu_product_pricelist_main
+#: model:ir.model.fields,field_description:product.field_res_config_settings__group_product_pricelist
+#: model:ir.model.fields,field_description:product.field_res_country_group__pricelist_ids
 msgid "Pricelists"
-msgstr "Каталоги"
+msgstr "Прайс-листы"
 
 #. module: product
-#: view:res.partner:product.view_partner_property_form
+#: model:ir.model.fields,field_description:product.field_res_config_settings__product_pricelist_setting
+msgid "Pricelists Method"
+msgstr ""
+
+#. module: product
+#: model_terms:ir.ui.view,arch_db:product.view_partner_property_form
 msgid "Pricelists are managed on"
-msgstr ""
+msgstr "Прейскурантами управляют на"
 
 #. module: product
-#: view:product.price_list:product.view_product_price_list
+#: model_terms:ir.ui.view,arch_db:product.product_variant_easy_edit_view
+msgid "Pricing"
+msgstr "Установление цены"
+
+#. module: product
+#: model_terms:ir.ui.view,arch_db:product.view_product_price_list
 msgid "Print"
-msgstr "Распечатать"
-
-#. module: product
-#: view:website:product.report_pricelist
-msgid "Print date"
-msgstr ""
-
-#. module: product
-#: model:product.public.category,name:product.printer
-msgid "Printer"
-msgstr ""
-
-#. module: product
-#: model:product.template,name:product.product_product_37_product_template
-msgid "Printer, All-in-one"
-msgstr "Принтер, все в одном"
-
-#. module: product
-#: model:product.public.category,name:product.processor
-msgid "Processor"
-msgstr ""
-
-#. module: product
-#: model:product.template,name:product.product_product_23_product_template
-msgid "Processor AMD 8-Core"
-msgstr "Процессор AMD 8-Core"
-
-#. module: product
-#: model:product.template,name:product.product_product_22_product_template
-msgid "Processor Core i5 2.70 Ghz"
-msgstr ""
-
-#. module: product
-#: view:product.template:product.product_template_form_view
-msgid "Procurements"
-msgstr "Снабжение"
+msgstr "Печать"
 
 #. module: product
 #: model:ir.model,name:product.model_product_product
-#: field:product.packaging,product_tmpl_id:0
-#: field:product.pricelist.item,product_id:0
-#: view:product.product:product.product_search_form_view
-#: view:product.template:product.product_template_form_view
-#: view:product.template:product.product_template_search_view
-#: view:product.template:product.product_template_tree_view
-#: model:res.request.link,name:product.req_link_product
+#: model:ir.model.fields,field_description:product.field_product_packaging__product_id
+#: model:ir.model.fields,field_description:product.field_product_pricelist_item__product_tmpl_id
+#: model:ir.model.fields,field_description:product.field_product_product__product_variant_id
+#: model:ir.model.fields,field_description:product.field_product_template__product_variant_id
+#: model:ir.model.fields.selection,name:product.selection__product_pricelist_item__applied_on__1_product
+#: model_terms:ir.ui.view,arch_db:product.product_kanban_view
+#: model_terms:ir.ui.view,arch_db:product.product_pricelist_item_view_search
+#: model_terms:ir.ui.view,arch_db:product.product_search_form_view
+#: model_terms:ir.ui.view,arch_db:product.product_supplierinfo_form_view
+#: model_terms:ir.ui.view,arch_db:product.product_supplierinfo_search_view
+#: model_terms:ir.ui.view,arch_db:product.product_supplierinfo_tree_view
+#: model_terms:ir.ui.view,arch_db:product.product_template_form_view
+#: model_terms:ir.ui.view,arch_db:product.product_template_kanban_view
+#: model_terms:ir.ui.view,arch_db:product.product_template_search_view
+#: model_terms:ir.ui.view,arch_db:product.product_template_tree_view
 msgid "Product"
 msgstr "Продукт"
 
 #. module: product
 #: model:ir.model,name:product.model_product_attribute
+#: model_terms:ir.ui.view,arch_db:product.product_attribute_view_form
+#: model_terms:ir.ui.view,arch_db:product.product_template_attribute_value_view_form
 msgid "Product Attribute"
+msgstr "Характеристики продукта"
+
+#. module: product
+#: model:ir.model.fields,field_description:product.field_product_template_attribute_line__product_template_value_ids
+msgid "Product Attribute Values"
 msgstr ""
 
 #. module: product
-#: field:product.attribute.line,value_ids:0
-#: field:product.attribute.price,value_id:0
-msgid "Product Attribute Value"
-msgstr ""
+#: model_terms:ir.ui.view,arch_db:product.product_template_attribute_line_form
+msgid "Product Attribute and Values"
+msgstr "Ценности и атрибуты продукта"
 
 #. module: product
-#: field:product.template,attribute_line_ids:0
+#: model:ir.model.fields,field_description:product.field_product_product__attribute_line_ids
+#: model:ir.model.fields,field_description:product.field_product_template__attribute_line_ids
 msgid "Product Attributes"
+msgstr "Атрибуты ТМЦ"
+
+#. module: product
+#: model:ir.actions.report,name:product.report_product_product_barcode
+#: model:ir.actions.report,name:product.report_product_template_barcode
+msgid "Product Barcode (PDF)"
 msgstr ""
 
 #. module: product
 #: model:ir.actions.act_window,name:product.product_category_action_form
-#: model:ir.ui.menu,name:product.menu_product_category_action_form
-#: view:product.category:product.product_category_form_view
-#: view:product.category:product.product_category_list_view
-#: view:product.category:product.product_category_search_view
-#: view:product.category:product.product_category_tree_view
+#: model_terms:ir.ui.view,arch_db:product.product_category_list_view
+#: model_terms:ir.ui.view,arch_db:product.product_category_search_view
 msgid "Product Categories"
 msgstr "Категории продуктов"
 
 #. module: product
-#: model:ir.ui.menu,name:product.prod_config_main
-msgid "Product Categories & Attributes"
-msgstr ""
-
-#. module: product
 #: model:ir.model,name:product.model_product_category
-#: field:product.pricelist.item,categ_id:0
-#: field:product.uom,category_id:0
+#: model:ir.model.fields,field_description:product.field_product_pricelist_item__categ_id
+#: model:ir.model.fields,field_description:product.field_product_product__categ_id
+#: model:ir.model.fields,field_description:product.field_product_template__categ_id
+#: model_terms:ir.ui.view,arch_db:product.product_category_list_view
+#: model_terms:ir.ui.view,arch_db:product.product_template_form_view
+#: model_terms:ir.ui.view,arch_db:product.product_template_search_view
 msgid "Product Category"
 msgstr "Категория продукта"
 
 #. module: product
-#: field:product.price.type,field:0
-msgid "Product Field"
-msgstr "Поле продукции"
+#: model:ir.model.fields,field_description:product.field_res_config_settings__module_sale_product_configurator
+msgid "Product Configurator"
+msgstr ""
 
 #. module: product
-#: field:product.template,product_manager:0
-msgid "Product Manager"
-msgstr "Менеджер продукции"
+#: model:ir.actions.report,name:product.report_product_label
+#: model:ir.actions.report,name:product.report_product_template_label
+msgid "Product Label (PDF)"
+msgstr ""
 
 #. module: product
-#: view:product.template:product.product_template_form_view
+#: model_terms:ir.ui.view,arch_db:product.product_template_form_view
+#: model_terms:ir.ui.view,arch_db:product.product_variant_easy_edit_view
 msgid "Product Name"
-msgstr "Наименование товара"
+msgstr "Название продукта"
+
+#. module: product
+#: model:ir.model.fields,field_description:product.field_product_product__packaging_ids
+#: model:ir.model.fields,field_description:product.field_product_template__packaging_ids
+msgid "Product Packages"
+msgstr "Варианты упаковки продукта"
+
+#. module: product
+#: model:ir.model,name:product.model_product_packaging
+#: model_terms:ir.ui.view,arch_db:product.product_packaging_form_view
+msgid "Product Packaging"
+msgstr "Тара"
+
+#. module: product
+#: model:ir.actions.report,name:product.report_product_packaging
+msgid "Product Packaging (PDF)"
+msgstr ""
+
+#. module: product
+#: model:ir.actions.act_window,name:product.action_packaging_view
+#: model:ir.model.fields,field_description:product.field_res_config_settings__group_stock_packaging
+#: model_terms:ir.ui.view,arch_db:product.product_packaging_tree_view
+msgid "Product Packagings"
+msgstr ""
+
+#. module: product
+#: model:ir.model,name:product.model_report_product_report_pricelist
+msgid "Product Price List Report"
+msgstr ""
+
+#. module: product
+#: model:ir.model,name:product.model_product_price_list
+msgid "Product Price per Unit Based on Pricelist Version"
+msgstr ""
 
 #. module: product
 #: model:ir.model,name:product.model_product_template
-#: field:product.attribute.line,product_tmpl_id:0
-#: field:product.attribute.price,product_tmpl_id:0
-#: field:product.price.history,product_template_id:0
-#: field:product.pricelist.item,product_tmpl_id:0
-#: view:product.product:product.product_search_form_view
-#: field:product.product,product_tmpl_id:0
-#: field:product.supplierinfo,product_tmpl_id:0
-#: view:product.template:product.product_template_only_form_view
+#: model:ir.model.fields,field_description:product.field_product_product__product_tmpl_id
+#: model:ir.model.fields,field_description:product.field_product_supplierinfo__product_tmpl_id
+#: model:ir.model.fields,field_description:product.field_product_template_attribute_exclusion__product_tmpl_id
+#: model:ir.model.fields,field_description:product.field_product_template_attribute_line__product_tmpl_id
+#: model:ir.model.fields,field_description:product.field_product_template_attribute_value__product_tmpl_id
+#: model_terms:ir.ui.view,arch_db:product.product_search_form_view
 msgid "Product Template"
 msgstr "Шаблон продукта"
 
 #. module: product
-#: field:product.template,type:0
+#: model:ir.model,name:product.model_product_template_attribute_exclusion
+msgid "Product Template Attribute Exclusion"
+msgstr ""
+
+#. module: product
+#: model:ir.model,name:product.model_product_template_attribute_line
+msgid "Product Template Attribute Line"
+msgstr ""
+
+#. module: product
+#: model:ir.model,name:product.model_product_template_attribute_value
+msgid "Product Template Attribute Value"
+msgstr ""
+
+#. module: product
+#: model:ir.model.fields,field_description:product.field_product_product__type
+#: model:ir.model.fields,field_description:product.field_product_template__type
+#: model_terms:ir.ui.view,arch_db:product.product_template_search_view
 msgid "Product Type"
 msgstr "Тип продукта"
 
 #. module: product
-#: model:ir.model,name:product.model_product_uom
-msgid "Product Unit of Measure"
-msgstr "Ед. изм. продукции"
-
-#. module: product
-#: view:product.product:product.product_normal_form_view
-#: view:product.template:product.product_template_search_view
+#: model:ir.model.fields,field_description:product.field_product_pricelist_item__product_id
+#: model:ir.model.fields,field_description:product.field_product_supplierinfo__product_id
+#: model:ir.model.fields.selection,name:product.selection__product_pricelist_item__applied_on__0_product_variant
+#: model_terms:ir.ui.view,arch_db:product.product_normal_form_view
 msgid "Product Variant"
 msgstr "Вариант продукта"
 
 #. module: product
-#: model:ir.actions.act_window,name:product.product_normal_action
-#: model:ir.actions.act_window,name:product.product_normal_action_sell
-#: model:ir.actions.act_window,name:product.product_normal_action_tree
-#: model:ir.actions.act_window,name:product.product_variant_action
-#: model:ir.ui.menu,name:product.menu_products
-#: view:product.product:product.product_product_tree_view
-msgid "Product Variants"
+#: model:ir.actions.act_window,name:product.product_attribute_value_action
+msgid "Product Variant Values"
 msgstr ""
 
 #. module: product
-#: model:ir.model,name:product.model_product_uom_categ
-msgid "Product uom categ"
-msgstr "Категория ед. изм. продукции"
+#: model:ir.actions.act_window,name:product.product_normal_action
+#: model:ir.actions.act_window,name:product.product_normal_action_sell
+#: model:ir.actions.act_window,name:product.product_variant_action
+#: model_terms:ir.ui.view,arch_db:product.product_product_tree_view
+#: model_terms:ir.ui.view,arch_db:product.product_product_view_activity
+msgid "Product Variants"
+msgstr "Варианты продукта"
+
+#. module: product
+#: code:addons/product/models/product_pricelist.py:0
+#, python-format
+msgid "Product: %s"
+msgstr ""
 
 #. module: product
 #: model:ir.actions.act_window,name:product.product_template_action
-#: model:ir.ui.menu,name:product.menu_product_template_action
-#: field:product.template,product_variant_ids:0
+#: model:ir.actions.act_window,name:product.product_template_action_all
+#: model:ir.model.fields,field_description:product.field_product_product__product_variant_ids
+#: model:ir.model.fields,field_description:product.field_product_template__product_variant_ids
+#: model_terms:ir.ui.view,arch_db:product.product_pricelist_view
+#: model_terms:ir.ui.view,arch_db:product.product_template_search_view
+#: model_terms:ir.ui.view,arch_db:product.product_template_view_activity
+#: model_terms:ir.ui.view,arch_db:product.res_config_settings_view_form
 msgid "Products"
 msgstr "Продукты"
 
 #. module: product
-#: model:ir.actions.report.xml,name:product.report_product_label
-msgid "Products Labels"
-msgstr "Этикетки изделия"
-
-#. module: product
-#: view:product.pricelist.item:product.product_pricelist_item_form_view
-#: view:product.pricelist.item:product.product_pricelist_item_tree_view
-msgid "Products Listprices Items"
-msgstr "Элкменты каталога продукции"
-
-#. module: product
-#: view:product.pricelist:product.product_pricelist_view_search
+#: model_terms:ir.ui.view,arch_db:product.product_pricelist_view_search
 msgid "Products Price"
 msgstr "Цены товаров"
 
 #. module: product
-#: view:product.pricelist:product.product_pricelist_view
-#: view:product.pricelist:product.product_pricelist_view_tree
+#: model_terms:ir.ui.view,arch_db:product.product_pricelist_view
+#: model_terms:ir.ui.view,arch_db:product.product_pricelist_view_tree
 msgid "Products Price List"
 msgstr "Каталог продукции"
 
 #. module: product
-#: view:product.pricelist:product.product_pricelist_view_search
+#: model_terms:ir.ui.view,arch_db:product.product_pricelist_item_view_search
+msgid "Products Price Rules Search"
+msgstr ""
+
+#. module: product
+#: model_terms:ir.ui.view,arch_db:product.product_pricelist_view_search
 msgid "Products Price Search"
 msgstr "Поиск цены продуктов"
 
 #. module: product
-#: view:product.price.type:product.product_price_type_view
-msgid "Products Price Type"
-msgstr "Тип цены продукции"
-
-#. module: product
-#: model:ir.actions.act_window,name:product.product_category_action
-#: model:ir.ui.menu,name:product.menu_products_category
-msgid "Products by Category"
-msgstr "Продукты по категориям"
-
-#. module: product
-#: code:addons/product/product.py:809
+#: code:addons/product/models/product.py:0
 #, python-format
 msgid "Products: "
 msgstr "Продукты "
 
 #. module: product
-#: model:product.price.type,name:product.list_price
-#: field:product.product,lst_price:0
-#: field:product.template,lst_price:0
+#: model:ir.model.fields,field_description:product.field_product_product__lst_price
+#: model:ir.model.fields,field_description:product.field_product_template__lst_price
 msgid "Public Price"
 msgstr "Открытый каталог"
 
@@ -2075,196 +1688,144 @@ msgid "Public Pricelist"
 msgstr "Открытый каталог"
 
 #. module: product
-#: view:product.template:product.product_template_form_view
+#: model_terms:ir.ui.view,arch_db:product.product_template_form_view
 msgid "Purchase"
 msgstr "Закупка"
 
 #. module: product
-#: field:product.template,description_purchase:0
+#: model:ir.model.fields,field_description:product.field_product_product__description_purchase
+#: model:ir.model.fields,field_description:product.field_product_template__description_purchase
 msgid "Purchase Description"
 msgstr "Описание закупки"
 
 #. module: product
-#: model:res.groups,name:product.group_purchase_pricelist
-msgid "Purchase Pricelists"
-msgstr "Прайс-лист закупок"
-
-#. module: product
-#: field:product.template,uom_po_id:0
+#: model:ir.model.fields,field_description:product.field_product_product__uom_po_id
+#: model:ir.model.fields,field_description:product.field_product_template__uom_po_id
 msgid "Purchase Unit of Measure"
 msgstr "Единицы измерения при закупке"
 
 #. module: product
-#: field:pricelist.partnerinfo,min_quantity:0
-#: field:product.supplierinfo,qty:0
+#: model:ir.model.fields,field_description:product.field_product_supplierinfo__min_qty
 msgid "Quantity"
 msgstr "Количество"
 
 #. module: product
-#: field:product.packaging,qty:0
-msgid "Quantity by Package"
-msgstr "Количество по пакету"
+#: model:ir.model.fields,help:product.field_product_packaging__qty
+msgid "Quantity of products contained in the packaging."
+msgstr ""
 
 #. module: product
-#: field:product.price_list,qty1:0
+#: model:ir.model.fields,field_description:product.field_product_price_list__qty1
 msgid "Quantity-1"
 msgstr "Количество-1"
 
 #. module: product
-#: field:product.price_list,qty2:0
+#: model:ir.model.fields,field_description:product.field_product_price_list__qty2
 msgid "Quantity-2"
 msgstr "Количество-2"
 
 #. module: product
-#: field:product.price_list,qty3:0
+#: model:ir.model.fields,field_description:product.field_product_price_list__qty3
 msgid "Quantity-3"
 msgstr "Количество-3"
 
 #. module: product
-#: field:product.price_list,qty4:0
+#: model:ir.model.fields,field_description:product.field_product_price_list__qty4
 msgid "Quantity-4"
 msgstr "Количество-4"
 
 #. module: product
-#: field:product.price_list,qty5:0
+#: model:ir.model.fields,field_description:product.field_product_price_list__qty5
 msgid "Quantity-5"
 msgstr "Количество-5"
 
 #. module: product
-#: model:product.template,name:product.product_product_14_product_template
-msgid "RAM SR2"
+#: model:ir.model.fields,field_description:product.field_product_product__code
+msgid "Reference"
+msgstr "Ссылка"
+
+#. module: product
+#: model:ir.model.fields,field_description:product.field_product_attribute__product_tmpl_ids
+#: model_terms:ir.ui.view,arch_db:product.product_attribute_view_form
+msgid "Related Products"
 msgstr ""
 
 #. module: product
-#: model:product.template,name:product.product_product_15_product_template
-msgid "RAM SR3"
+#: model:ir.model.fields,field_description:product.field_product_template_attribute_value__ptav_product_variant_ids
+msgid "Related Variants"
 msgstr ""
 
 #. module: product
-#: model:product.template,name:product.product_product_13_product_template
-msgid "RAM SR5"
-msgstr ""
+#: model:ir.model.fields,field_description:product.field_product_product__activity_user_id
+#: model:ir.model.fields,field_description:product.field_product_template__activity_user_id
+msgid "Responsible User"
+msgstr "Ответственный"
 
 #. module: product
-#: field:product.uom,factor:0
-msgid "Ratio"
-msgstr "Коэффициент"
-
-#. module: product
-#: model:product.category,name:product.product_category_10
-msgid "Raw Materials"
-msgstr "Сырье"
-
-#. module: product
-#: selection:product.uom,uom_type:0
-msgid "Reference Unit of Measure for this category"
-msgstr "Базовая единица измерения для этой категории"
-
-#. module: product
-#: field:product.category,parent_right:0
-msgid "Right Parent"
-msgstr "Правый источник"
-
-#. module: product
-#: view:product.pricelist.item:product.product_pricelist_item_form_view
+#: model_terms:ir.ui.view,arch_db:product.product_pricelist_item_form_view
 msgid "Rounding Method"
 msgstr "Метод округления"
 
 #. module: product
-#: field:product.uom,rounding:0
-msgid "Rounding Precision"
-msgstr "Точность округления"
-
-#. module: product
-#: model:product.template,name:product.product_product_45_product_template
-msgid "Router R430"
-msgstr ""
-
-#. module: product
-#: field:product.pricelist.item,name:0
-msgid "Rule Name"
-msgstr "Название правила"
-
-#. module: product
-#: view:product.template:product.product_template_form_view
-msgid "Sale Conditions"
-msgstr "Условия продажи"
-
-#. module: product
-#: field:product.template,description_sale:0
-msgid "Sale Description"
-msgstr "Описание продажи"
-
-#. module: product
-#: field:product.template,list_price:0
+#: model:ir.model.fields,field_description:product.field_product_product__list_price
+#: model:ir.model.fields,field_description:product.field_product_template__list_price
 msgid "Sale Price"
 msgstr "Цена продажи"
 
 #. module: product
-#: model:product.pricelist.type,name:product.pricelist_type_sale
-#: field:res.partner,property_product_pricelist:0
-msgid "Sale Pricelist"
-msgstr "Каталог продаж"
-
-#. module: product
-#: model:product.category,name:product.product_category_1
-msgid "Saleable"
-msgstr "Продаваемое"
-
-#. module: product
-#: view:product.template:product.product_template_form_view
+#: model_terms:ir.ui.view,arch_db:product.product_template_form_view
 msgid "Sales"
 msgstr "Продажи"
 
 #. module: product
-#: view:res.partner:product.view_partner_property_form
-msgid "Sales & Purchases"
-msgstr "Продажи и закупки"
-
-#. module: product
-#: model:res.groups,name:product.group_sale_pricelist
-msgid "Sales Pricelists"
-msgstr "Прайс-лист продаж"
-
-#. module: product
-#: model:product.public.category,name:product.Screen
-msgid "Screen"
+#: model:ir.model.fields,field_description:product.field_product_product__description_sale
+#: model:ir.model.fields,field_description:product.field_product_template__description_sale
+#: model_terms:ir.ui.view,arch_db:product.product_template_form_view
+msgid "Sales Description"
 msgstr ""
 
 #. module: product
-#: help:product.template,categ_id:0
+#: model:ir.model.fields,field_description:product.field_res_config_settings__module_sale_product_matrix
+msgid "Sales Grid Entry"
+msgstr ""
+
+#. module: product
+#: model:ir.model.fields.selection,name:product.selection__product_pricelist_item__base__list_price
+#: model_terms:ir.ui.view,arch_db:product.product_product_tree_view
+#: model_terms:ir.ui.view,arch_db:product.product_template_form_view
+#: model_terms:ir.ui.view,arch_db:product.product_template_tree_view
+msgid "Sales Price"
+msgstr "Продажная цена"
+
+#. module: product
+#: model:ir.model.fields,help:product.field_product_product__categ_id
+#: model:ir.model.fields,help:product.field_product_template__categ_id
 msgid "Select category for the current product"
 msgstr "Выберите категорию для продукта"
 
 #. module: product
-#: field:product.attribute.value,sequence:0
-#: field:product.category,sequence:0
-#: field:product.packaging,sequence:0
-#: field:product.pricelist.item,sequence:0
-#: field:product.supplierinfo,sequence:0
+#: model:ir.model.fields,field_description:product.field_product_attribute__sequence
+#: model:ir.model.fields,field_description:product.field_product_attribute_value__sequence
+#: model:ir.model.fields,field_description:product.field_product_packaging__sequence
+#: model:ir.model.fields,field_description:product.field_product_pricelist__sequence
+#: model:ir.model.fields,field_description:product.field_product_product__sequence
+#: model:ir.model.fields,field_description:product.field_product_supplierinfo__sequence
+#: model:ir.model.fields,field_description:product.field_product_template__sequence
 msgid "Sequence"
-msgstr "Последовательность"
+msgstr "Нумерация"
 
 #. module: product
-#: model:product.public.category,name:product.server
-msgid "Server"
-msgstr ""
-
-#. module: product
-#: model:product.template,name:product.product_product_consultant_product_template
-#: selection:product.template,type:0
+#: model:ir.model.fields.selection,name:product.selection__product_template__type__service
 msgid "Service"
 msgstr "Услуга"
 
 #. module: product
-#: model:product.category,name:product.product_category_5
-#: model:product.public.category,name:product.services
-#: view:product.template:product.product_template_search_view
+#: model_terms:ir.ui.view,arch_db:product.product_template_search_view
 msgid "Services"
 msgstr "Услуги"
 
 #. module: product
-#: help:product.pricelist.item,price_round:0
+#: model:ir.model.fields,help:product.field_product_pricelist_item__price_round
 msgid ""
 "Sets the price so that it is a multiple of this value.\n"
 "Rounding is applied after the discount and before the surcharge.\n"
@@ -2272,48 +1833,30 @@ msgid ""
 msgstr ""
 "Устанавливает цену кратной данному значению.\n"
 "Округление применяется после скидки, но  перед надбавкой.\n"
-"Так, чтобы цена заканчивалась на 9,99, установите округление 10, надбавку -"
-"0,01."
+"Так, чтобы цена заканчивалась на 9,99, установите округление 10, надбавку -0,01."
 
 #. module: product
-#: field:product.product,image_small:0
-#: field:product.template,image_small:0
-msgid "Small-sized image"
-msgstr "Маленькое изображение"
+#: model_terms:ir.ui.view,arch_db:product.product_template_search_view
+msgid "Show all records which has next action date is before today"
+msgstr "Показать все записи с просроченой датой следующего действия"
 
 #. module: product
-#: help:product.template,image_small:0
-msgid ""
-"Small-sized image of the product. It is automatically resized as a 64x64px "
-"image, with aspect ratio preserved. Use this field anywhere a small image is "
-"required."
-msgstr ""
+#: model:ir.model.fields.selection,name:product.selection__product_pricelist__discount_policy__without_discount
+msgid "Show public price & discount to the customer"
+msgstr "Показать публичную цену & скидку для клиента"
 
 #. module: product
-#: selection:product.uom,uom_type:0
-msgid "Smaller than the reference Unit of Measure"
-msgstr "Меньше, чем базовая единица измерения"
-
-#. module: product
-#: model:product.category,name:product.product_category_9
-#: model:product.public.category,name:product.Software
-msgid "Software"
-msgstr ""
-
-#. module: product
-#: model:product.public.category,name:product.Speakers
-msgid "Speakers"
-msgstr ""
-
-#. module: product
-#: help:product.pricelist.item,categ_id:0
+#: model:ir.model.fields,help:product.field_product_pricelist_item__categ_id
 msgid ""
 "Specify a product category if this rule only applies to products belonging "
 "to this category or its children categories. Keep empty otherwise."
 msgstr ""
+"Укажите категорию товара, если это правило относится только к товарам, "
+"принадлежащим этой категории или ее дочерним категориям. Если нет, оставьте "
+"поле пустым."
 
 #. module: product
-#: help:product.pricelist.item,product_id:0
+#: model:ir.model.fields,help:product.field_product_pricelist_item__product_id
 msgid ""
 "Specify a product if this rule only applies to one product. Keep empty "
 "otherwise."
@@ -2322,26 +1865,16 @@ msgstr ""
 "оставьте пустым."
 
 #. module: product
-#: help:product.pricelist.item,product_tmpl_id:0
+#: model:ir.model.fields,help:product.field_product_pricelist_item__product_tmpl_id
 msgid ""
 "Specify a template if this rule only applies to one product template. Keep "
 "empty otherwise."
 msgstr ""
+"Укажите образец, если это правило относится только к одному образцу товара. "
+"Если нет, оставьте поле пустым."
 
 #. module: product
-#: help:product.template,uos_id:0
-msgid ""
-"Specify a unit of measure here if invoicing is made in another unit of "
-"measure than inventory. Keep empty to use the default unit of measure."
-msgstr ""
-
-#. module: product
-#: help:product.template,sale_ok:0
-msgid "Specify if the product can be selected in a sales order line."
-msgstr "Укажите , если продукт может быть выбран в заказе продажи."
-
-#. module: product
-#: help:product.pricelist.item,price_surcharge:0
+#: model:ir.model.fields,help:product.field_product_pricelist_item__price_surcharge
 msgid ""
 "Specify the fixed amount to add or substract(if negative) to the amount "
 "calculated with the discount."
@@ -2349,702 +1882,647 @@ msgstr ""
 "Укажите сумму , чтобы добавить или вычесть к сумме вычисленной с дисконтом."
 
 #. module: product
-#: help:product.pricelist.item,price_max_margin:0
+#: model:ir.model.fields,help:product.field_product_pricelist_item__price_max_margin
 msgid "Specify the maximum amount of margin over the base price."
 msgstr "Определите максимальную наценку сверх базовой цены."
 
 #. module: product
-#: help:product.pricelist.item,price_min_margin:0
+#: model:ir.model.fields,help:product.field_product_pricelist_item__price_min_margin
 msgid "Specify the minimum amount of margin over the base price."
 msgstr "Укажите минимальную наценку к базовой цене."
 
 #. module: product
-#: field:product.pricelist.version,date_start:0
+#: model:ir.model.fields,field_description:product.field_product_pricelist_item__date_start
+#: model:ir.model.fields,field_description:product.field_product_supplierinfo__date_start
 msgid "Start Date"
 msgstr "Дата начала"
 
 #. module: product
-#: view:product.template:product.product_template_form_view
-#: field:product.template,state:0
-msgid "Status"
-msgstr "Статус"
+#: model:ir.model.fields,help:product.field_product_supplierinfo__date_start
+msgid "Start date for this vendor price"
+msgstr "Дата начала по этой цене поставщика"
 
 #. module: product
-#: selection:product.template,type:0
-msgid "Stockable Product"
-msgstr "Складируемая продукция"
+#: model:ir.model.fields,help:product.field_product_pricelist_item__date_start
+msgid "Starting date for the pricelist item validation"
+msgstr "Дата начала проверки пункта прайс листа"
 
 #. module: product
-#: field:product.product,message_summary:0
-#: field:product.template,message_summary:0
-msgid "Summary"
-msgstr "Итого"
+#: model:ir.model.fields,help:product.field_product_product__activity_state
+#: model:ir.model.fields,help:product.field_product_template__activity_state
+msgid ""
+"Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
+msgstr ""
 
 #. module: product
-#: field:product.supplierinfo,name:0
-#: field:product.template,seller_ids:0
-msgid "Supplier"
-msgstr "Поставщик"
-
-#. module: product
-#: view:product.supplierinfo:product.product_supplierinfo_form_view
-#: view:product.supplierinfo:product.product_supplierinfo_tree_view
-msgid "Supplier Information"
-msgstr "Информация поставщика"
-
-#. module: product
-#: field:product.template,seller_delay:0
-msgid "Supplier Lead Time"
-msgstr "Время поставки"
-
-#. module: product
-#: field:product.supplierinfo,pricelist_ids:0
+#: model:ir.model,name:product.model_product_supplierinfo
 msgid "Supplier Pricelist"
 msgstr "Каталог поставщика"
 
 #. module: product
-#: code:addons/product/pricelist.py:392
+#: model:ir.model.fields,help:product.field_product_product__valid_product_template_attribute_line_ids
+#: model:ir.model.fields,help:product.field_product_template__valid_product_template_attribute_line_ids
+msgid "Technical compute"
+msgstr ""
+
+#. module: product
+#: model:ir.model.fields,help:product.field_product_product__pricelist_id
+#: model:ir.model.fields,help:product.field_product_template__pricelist_id
+msgid ""
+"Technical field. Used for searching on pricelists, not stored in database."
+msgstr ""
+"Техническое поле. Используется для поиска по прайс-листам, не хранится в "
+"базе данных."
+
+#. module: product
+#: code:addons/product/models/product_attribute.py:0
 #, python-format
-msgid "Supplier Prices on the product form"
+msgid "The attribute %s must have at least one value for the product %s."
 msgstr ""
 
 #. module: product
-#: field:product.supplierinfo,product_code:0
-msgid "Supplier Product Code"
-msgstr "Код продукта у поставщика"
-
-#. module: product
-#: field:product.supplierinfo,product_name:0
-msgid "Supplier Product Name"
-msgstr "Название продукта у поставщика"
-
-#. module: product
-#: field:product.template,seller_qty:0
-msgid "Supplier Quantity"
-msgstr "Количество поставщика"
-
-#. module: product
-#: field:product.supplierinfo,product_uom:0
-msgid "Supplier Unit of Measure"
-msgstr "Единица измерения поставщика"
-
-#. module: product
-#: help:product.supplierinfo,name:0
-msgid "Supplier of this product"
-msgstr "Поставщик этой продукции"
-
-#. module: product
-#: view:product.template:product.product_template_form_view
-msgid "Suppliers"
-msgstr "Поставщики"
-
-#. module: product
-#: model:product.public.category,name:product.Switch
-msgid "Switch"
-msgstr ""
-
-#. module: product
-#: model:product.template,name:product.product_product_47_product_template
-msgid "Switch, 24 ports"
-msgstr ""
-
-#. module: product
-#: field:product.product,name_template:0
-msgid "Template Name"
-msgstr ""
-
-#. module: product
-#: help:product.packaging,ean:0
-msgid "The EAN code of the package unit."
-msgstr "Штрих-код EAN упаковки"
-
-#. module: product
-#: help:product.packaging,code:0
-msgid "The code of the transport unit."
-msgstr "Код транспортной единицы."
-
-#. module: product
-#: help:product.uom,rounding:0
+#: model:ir.model.fields,help:product.field_product_attribute_value__attribute_id
 msgid ""
-"The computed quantity will be a multiple of this value. Use 1.0 for a Unit "
-"of Measure that cannot be further split, such as a piece."
+"The attribute cannot be changed once the value is used on at least one "
+"product."
 msgstr ""
 
 #. module: product
-#: sql_constraint:product.uom:0
-msgid "The conversion ratio for a unit of measure cannot be 0!"
-msgstr ""
-"Коэффициент преобразования для единиц измерения не может быть нулевым !"
-
-#. module: product
-#: help:product.price.type,currency_id:0
-msgid "The currency the field is expressed in."
-msgstr "Валюта"
-
-#. module: product
-#: help:product.template,weight:0
-msgid "The gross weight in Kg."
-msgstr "Вес брутто в килограммах."
-
-#. module: product
-#: help:product.ul,height:0
-msgid "The height of the package"
-msgstr "Высота упаковки"
-
-#. module: product
-#: help:product.ul,length:0
-msgid "The length of the package"
-msgstr "Длина пакета"
-
-#. module: product
-#: help:product.supplierinfo,min_qty:0
+#: model_terms:ir.ui.view,arch_db:product.product_pricelist_item_form_view
 msgid ""
-"The minimal quantity to purchase to this supplier, expressed in the supplier "
-"Product Unit of Measure if not empty, in the default unit of measure of the "
-"product otherwise."
-msgstr ""
-
-#. module: product
-#: help:pricelist.partnerinfo,min_quantity:0
-msgid ""
-"The minimal quantity to trigger this rule, expressed in the supplier Unit of "
-"Measure if any or in the default Unit of Measure of the product otherrwise."
-msgstr ""
-
-#. module: product
-#: help:product.template,weight_net:0
-msgid "The net weight in Kg."
-msgstr "Вес нетто в килограммах."
-
-#. module: product
-#: help:product.packaging,rows:0
-msgid "The number of layers on a pallet or box"
-msgstr "Количество слоев на поддоне или в коробке"
-
-#. module: product
-#: help:product.packaging,ul_qty:0
-msgid "The number of packages by layer"
-msgstr "Количество упаковок на слой"
-
-#. module: product
-#: code:addons/product/product.py:385
-#, python-format
-msgid ""
-"The operation cannot be completed:\n"
-"You trying to delete an attribute value with a reference on a product "
-"variant."
-msgstr ""
-
-#. module: product
-#: view:product.supplierinfo:product.product_supplierinfo_form_view
-msgid ""
-"The prices below will only be taken into account when your pricelist is set "
-"as based on supplier prices."
-msgstr ""
-
-#. module: product
-#: model:product.template,description_sale:product.product_product_9_product_template
-msgid ""
-"The sleek aluminium Apple Wireless Keyboard.\n"
-"            "
-msgstr ""
-
-#. module: product
-#: help:product.packaging,qty:0
-msgid "The total number of products you can put by pallet or box."
-msgstr ""
-"Общее количество продуктов, которое вы можете разместить на поддоне или в "
-"коробке."
-
-#. module: product
-#: help:product.template,volume:0
-msgid "The volume in m3."
-msgstr "Объём в метрах куб."
-
-#. module: product
-#: help:product.packaging,weight:0
-msgid "The weight of a full package, pallet or box."
-msgstr "Вес полной упаковки, коробки или поддона."
-
-#. module: product
-#: help:product.ul,width:0
-msgid "The width of the package"
-msgstr "Ширина пакета"
-
-#. module: product
-#: sql_constraint:product.attribute.value:0
-msgid "This attribute value already exists !"
-msgstr ""
-
-#. module: product
-#: help:product.supplierinfo,product_uom:0
-msgid "This comes from the product form."
-msgstr "Это поступает из формы товара."
-
-#. module: product
-#: help:product.product,image_variant:0
-msgid ""
-"This field holds the image used as image for the product variant, limited to "
-"1024x1024px."
-msgstr ""
-
-#. module: product
-#: help:product.template,image:0
-msgid ""
-"This field holds the image used as image for the product, limited to "
-"1024x1024px."
-msgstr ""
-"Это поле содержит изображение, используемое в качестве изображения товара, "
-"ограничивается 1024x1024px ."
-
-#. module: product
-#: help:product.supplierinfo,qty:0
-msgid "This is a quantity which is converted into Default Unit of Measure."
-msgstr "Это величина, которая превращается в единицу измерения по умолчанию."
-
-#. module: product
-#: help:product.product,price_extra:0
-msgid "This is le sum of the extra price of all attributes"
-msgstr ""
-
-#. module: product
-#: help:product.template,seller_qty:0
-msgid "This is minimum quantity to purchase from Main Supplier."
-msgstr "Это минимальное количество для закупки у основного поставщика."
-
-#. module: product
-#: help:product.template,seller_delay:0
-msgid ""
-"This is the average delay in days between the purchase order confirmation "
-"and the receipts for this product and for the default supplier. It is used "
-"by the scheduler to order requests based on reordering delays."
-msgstr ""
-
-#. module: product
-#: view:product.template:product.product_template_form_view
-msgid "This note will be displayed on requests for quotation..."
-msgstr ""
-
-#. module: product
-#: help:pricelist.partnerinfo,price:0
-msgid ""
-"This price will be considered as a price for the supplier Unit of Measure if "
-"any or the default Unit of Measure of the product otherwise"
+"The computed price is expressed in the default Unit of Measure of the "
+"product."
 msgstr ""
 "Эта цена - цена за единицу измерения поставщика, если задана. Иначе цена за "
 "единицу измерения по умолчанию."
 
 #. module: product
-#: help:res.partner,property_product_pricelist:0
+#: code:addons/product/models/product_template.py:0
+#, python-format
+msgid ""
+"The default Unit of Measure and the purchase Unit of Measure must be in the "
+"same category."
+msgstr ""
+
+#. module: product
+#: model:ir.model.fields,help:product.field_product_packaging__sequence
+msgid "The first in the sequence is the default one."
+msgstr "Первый в последовательности является стандартным."
+
+#. module: product
+#: code:addons/product/models/product_pricelist.py:0
+#, python-format
+msgid "The minimum margin should be lower than the maximum margin."
+msgstr ""
+
+#. module: product
+#: model:ir.model.fields,help:product.field_product_category__product_count
+msgid ""
+"The number of products under this category (Does not consider the children "
+"categories)"
+msgstr ""
+"Количество продуктов этой категории (не учитывает подчиненные категории )"
+
+#. module: product
+#: code:addons/product/models/product_template.py:0
+#, python-format
+msgid ""
+"The number of variants to generate is too high. You should either not "
+"generate variants for each combination or generate them on demand from the "
+"sales order. To do so, open the form view of attributes and change the mode "
+"of *Create Variants*."
+msgstr ""
+
+#. module: product
+#: model:ir.model.fields,help:product.field_product_supplierinfo__price
+msgid "The price to purchase a product"
+msgstr "Цена покупки продукта"
+
+#. module: product
+#: code:addons/product/models/product_template.py:0
+#, python-format
+msgid "The product template is archived so no combination is possible."
+msgstr ""
+
+#. module: product
+#: model:ir.model.fields,help:product.field_product_supplierinfo__min_qty
+msgid ""
+"The quantity to purchase from this vendor to benefit from the price, "
+"expressed in the vendor Product Unit of Measure if not any, in the default "
+"unit of measure of the product otherwise."
+msgstr ""
+
+#. module: product
+#: model:ir.model.fields,help:product.field_product_product__lst_price
+msgid ""
+"The sale price is managed from the product template. Click on the 'Configure"
+" Variants' button to set the extra attribute prices."
+msgstr ""
+
+#. module: product
+#: code:addons/product/models/product_attribute.py:0
+#, python-format
+msgid "The value %s is not defined for the attribute %s on the product %s."
+msgstr ""
+
+#. module: product
+#: code:addons/product/models/product_template.py:0
+#, python-format
+msgid "There are no possible combination."
+msgstr ""
+
+#. module: product
+#: code:addons/product/models/product_template.py:0
+#, python-format
+msgid "There are no remaining closest combination."
+msgstr ""
+
+#. module: product
+#: code:addons/product/models/product_template.py:0
+#, python-format
+msgid "There are no remaining possible combination."
+msgstr ""
+
+#. module: product
+#: model:ir.model.fields,help:product.field_product_supplierinfo__product_uom
+msgid "This comes from the product form."
+msgstr "Это поступает из формы товара."
+
+#. module: product
+#: model:ir.model.fields,help:product.field_product_product__price_extra
+msgid "This is the sum of the extra price of all attributes"
+msgstr "Это сумма дополнительной цены всех атрибутов"
+
+#. module: product
+#: model_terms:ir.ui.view,arch_db:product.product_template_form_view
+msgid "This note is only for internal purposes."
+msgstr ""
+
+#. module: product
+#: model_terms:ir.ui.view,arch_db:product.product_template_form_view
+msgid "This note will show up on sales orders & invoices."
+msgstr ""
+
+#. module: product
+#: model:ir.model.fields,help:product.field_res_partner__property_product_pricelist
+#: model:ir.model.fields,help:product.field_res_users__property_product_pricelist
 msgid ""
 "This pricelist will be used, instead of the default one, for sales to the "
 "current partner"
 msgstr ""
-"Для продаж текущему партнеру, вместо прайс-листа по умолчанию, будет "
+"Для продаж текущему партнеру вместо прайс-листа по умолчанию будет "
 "использоваться этот прайс-лист"
 
 #. module: product
-#: model:product.template,description:product.product_product_9_product_template
-msgid "This product is configured with example of push/pull flows"
-msgstr "Этот товар сконфигурирован с примером потоков положить/взять"
-
-#. module: product
-#: help:product.supplierinfo,product_code:0
+#: model:ir.model.fields,help:product.field_product_supplierinfo__product_code
 msgid ""
-"This supplier's product code will be used when printing a request for "
+"This vendor's product code will be used when printing a request for "
 "quotation. Keep empty to use the internal one."
 msgstr ""
-"Этот код продукции поставщика будет использован при печати запроса цен. "
-"Оставьте пустым для использования внутреннего кода."
+"Код продукта при печати запроса цен будет заменено на принятый у него. "
+"Оставьте пустым чтобы использовать обычный."
 
 #. module: product
-#: help:product.supplierinfo,product_name:0
+#: model:ir.model.fields,help:product.field_product_supplierinfo__product_name
 msgid ""
-"This supplier's product name will be used when printing a request for "
+"This vendor's product name will be used when printing a request for "
 "quotation. Keep empty to use the internal one."
 msgstr ""
-"Название продукции, используемое поставщиком, будет выводиться при печати "
-"запроса цен. Оставьте пустым для использования внутреннего названия."
+"Название продукта при печати запроса цен будет заменено на принятое у него. "
+"Оставьте пустым чтобы использовать обычное."
 
 #. module: product
-#: model:product.template,description:product.product_product_2_product_template
-msgid ""
-"This type of service include assistance for security questions, system "
-"configuration requirements, implementation or special needs."
+#: model_terms:ir.ui.view,arch_db:product.product_template_search_view
+msgid "Today Activities"
+msgstr "Сегодняшние мероприятия"
+
+#. module: product
+#: model:ir.model.fields,help:product.field_product_product__activity_exception_decoration
+#: model:ir.model.fields,help:product.field_product_template__activity_exception_decoration
+msgid "Type of the exception activity on record."
 msgstr ""
 
 #. module: product
-#: model:product.template,description:product.product_product_1_product_template
-#: model:product.template,description_sale:product.product_product_1_product_template
-msgid "This type of service include basic monitoring of products."
-msgstr "Этот вид услуг включает базовый мониторинг товаров."
-
-#. module: product
-#: model:product.template,name:product.product_product_39_product_template
-msgid "Toner Cartridge"
-msgstr ""
-
-#. module: product
-#: field:product.packaging,weight:0
-msgid "Total Package Weight"
-msgstr "Итоговый вес пакета"
-
-#. module: product
-#: view:product.template:product.product_template_search_view
-#: field:product.ul,type:0
-#: field:product.uom,uom_type:0
-msgid "Type"
-msgstr "Тип"
-
-#. module: product
-#: model:product.template,name:product.product_product_48_product_template
-msgid "USB Adapter"
-msgstr "USB Adapter"
-
-#. module: product
-#: selection:product.ul,type:0
-#: model:product.uom.categ,name:product.product_uom_categ_unit
-msgid "Unit"
-msgstr "Ед."
-
-#. module: product
-#: field:pricelist.partnerinfo,price:0
-msgid "Unit Price"
-msgstr "Цена за ед."
-
-#. module: product
-#: view:product.template:product.product_template_form_view
-#: field:product.template,uom_id:0
-#: field:product.uom,name:0
+#: model:ir.model.fields,field_description:product.field_product_packaging__product_uom_id
+#: model:ir.model.fields,field_description:product.field_product_product__uom_id
+#: model:ir.model.fields,field_description:product.field_product_supplierinfo__product_uom
+#: model:ir.model.fields,field_description:product.field_product_template__uom_id
 msgid "Unit of Measure"
-msgstr "Ед. изм."
+msgstr "Единица измерения"
 
 #. module: product
-#: field:product.template,uos_coeff:0
-msgid "Unit of Measure -> UOS Coeff"
-msgstr "Коэффициент Ед.изм -> Ед.прод."
+#: model:ir.model.fields,field_description:product.field_product_product__uom_name
+#: model:ir.model.fields,field_description:product.field_product_template__uom_name
+msgid "Unit of Measure Name"
+msgstr ""
 
 #. module: product
-#: model:ir.actions.act_window,name:product.product_uom_categ_form_action
-#: model:ir.ui.menu,name:product.menu_product_uom_categ_form_action
-msgid "Unit of Measure Categories"
-msgstr "Категории единиц измерения"
-
-#. module: product
-#: code:addons/product/product.py:705
-#, python-format
-msgid "Unit of Measure categories Mismatch!"
-msgstr "Несоответствие категорий единиц измерения!"
-
-#. module: product
-#: field:product.template,uos_id:0
-msgid "Unit of Sale"
-msgstr "Единица продажи"
-
-#. module: product
-#: model:product.uom,name:product.product_uom_unit
-msgid "Unit(s)"
-msgstr "шт."
-
-#. module: product
-#: model:ir.actions.act_window,name:product.product_uom_form_action
-#: model:ir.ui.menu,name:product.menu_product_uom_form_action
-#: model:ir.ui.menu,name:product.next_id_16
-#: view:product.uom:product.product_uom_form_view
-#: view:product.uom:product.product_uom_tree_view
+#: model:ir.model.fields,field_description:product.field_res_config_settings__group_uom
 msgid "Units of Measure"
 msgstr "Единицы измерения"
 
 #. module: product
-#: view:product.uom.categ:product.product_uom_categ_form_view
-msgid "Units of Measure categories"
-msgstr "Категории единиц измерения"
-
-#. module: product
-#: field:product.product,message_unread:0
-#: field:product.template,message_unread:0
+#: model:ir.model.fields,field_description:product.field_product_product__message_unread
+#: model:ir.model.fields,field_description:product.field_product_template__message_unread
 msgid "Unread Messages"
-msgstr "Непрочитанные сообщения"
+msgstr "Непрочитанные Сообщения"
 
 #. module: product
-#: help:product.pricelist.type,key:0
-msgid ""
-"Used in the code to select specific prices based on the context. Keep "
-"unchanged."
+#: model:ir.model.fields,field_description:product.field_product_product__message_unread_counter
+#: model:ir.model.fields,field_description:product.field_product_template__message_unread_counter
+msgid "Unread Messages Counter"
+msgstr "Счетчик непрочитанных сообщений"
+
+#. module: product
+#: model:ir.model.fields,field_description:product.field_product_attribute__is_used_on_products
+#: model:ir.model.fields,field_description:product.field_product_attribute_value__is_used_on_products
+msgid "Used on Products"
 msgstr ""
-"Использоваться в коде, чтобы выбрать конкретные цены в зависимости от "
-"контекста. Сохранить без изменений."
 
 #. module: product
-#: field:product.attribute.value,name:0
+#: model:ir.model.fields,field_description:product.field_product_product__valid_product_template_attribute_line_ids
+#: model:ir.model.fields,field_description:product.field_product_template__valid_product_template_attribute_line_ids
+msgid "Valid Product Attribute Lines"
+msgstr ""
+
+#. module: product
+#: model_terms:ir.ui.view,arch_db:product.product_supplierinfo_form_view
+msgid "Validity"
+msgstr "Период действия"
+
+#. module: product
+#: model:ir.model.fields,field_description:product.field_product_attribute_value__name
+#: model:ir.model.fields,field_description:product.field_product_template_attribute_value__name
 msgid "Value"
+msgstr "Объём"
+
+#. module: product
+#: model:ir.model.fields,field_description:product.field_product_template_attribute_value__price_extra
+msgid "Value Price Extra"
 msgstr ""
 
 #. module: product
-#: field:product.attribute,value_ids:0
+#: model:ir.model.fields,field_description:product.field_product_attribute__value_ids
+#: model:ir.model.fields,field_description:product.field_product_template_attribute_line__value_ids
+#: model_terms:ir.ui.view,arch_db:product.product_attribute_view_form
+#: model_terms:ir.ui.view,arch_db:product.product_template_attribute_line_form
 msgid "Values"
-msgstr ""
+msgstr "Значения"
 
 #. module: product
-#: selection:product.template,mes_type:0
-msgid "Variable"
-msgstr "Переменный"
+#: model_terms:ir.ui.view,arch_db:product.product_pricelist_item_view_search
+msgid "Variant"
+msgstr "Вариант"
 
 #. module: product
-#: field:product.product,price_extra:0
-msgid "Variant Extra Price"
-msgstr ""
+#: model:ir.model.fields,field_description:product.field_product_supplierinfo__product_variant_count
+msgid "Variant Count"
+msgstr "Подсчет вариантов"
 
 #. module: product
-#: field:product.product,image_variant:0
+#: model:ir.model.fields,field_description:product.field_product_product__image_variant_1920
 msgid "Variant Image"
+msgstr "Изображение варианта"
+
+#. module: product
+#: model:ir.model.fields,field_description:product.field_product_product__image_variant_1024
+msgid "Variant Image 1204"
 msgstr ""
 
 #. module: product
-#: view:product.template:product.product_template_only_form_view
-msgid "Variant Prices"
+#: model:ir.model.fields,field_description:product.field_product_product__image_variant_128
+msgid "Variant Image 128"
 msgstr ""
 
 #. module: product
-#: model:ir.actions.act_window,name:product.variants_template_action
-#: view:product.attribute:product.attribute_tree_view
-#: view:product.attribute.value:product.variants_template_tree_view
-#: view:product.attribute.value:product.variants_tree_view
+#: model:ir.model.fields,field_description:product.field_product_product__image_variant_256
+msgid "Variant Image 256"
+msgstr ""
+
+#. module: product
+#: model:ir.model.fields,field_description:product.field_product_product__image_variant_512
+msgid "Variant Image 512"
+msgstr ""
+
+#. module: product
+#: model_terms:ir.ui.view,arch_db:product.product_variant_easy_edit_view
+msgid "Variant Information"
+msgstr "Информация о варианта"
+
+#. module: product
+#: model:ir.model.fields,field_description:product.field_product_product__price_extra
+msgid "Variant Price Extra"
+msgstr "Экстра-цена варианта"
+
+#. module: product
+#: model:ir.model.fields,field_description:product.field_product_product__variant_seller_ids
+#: model:ir.model.fields,field_description:product.field_product_template__variant_seller_ids
+msgid "Variant Seller"
+msgstr ""
+
+#. module: product
+#: model_terms:ir.ui.view,arch_db:product.attribute_tree_view
 msgid "Variant Values"
+msgstr "Значения варианта"
+
+#. module: product
+#: code:addons/product/models/product_pricelist.py:0
+#, python-format
+msgid "Variant: %s"
 msgstr ""
 
 #. module: product
-#: field:product.attribute.value,product_ids:0
-#: view:product.template:product.product_template_kanban_view
-#: view:product.template:product.product_template_only_form_view
+#: model:ir.model.fields,field_description:product.field_res_config_settings__group_product_variant
+#: model_terms:ir.ui.view,arch_db:product.product_pricelist_view
+#: model_terms:ir.ui.view,arch_db:product.product_template_kanban_view
+#: model_terms:ir.ui.view,arch_db:product.product_template_only_form_view
 msgid "Variants"
 msgstr "Варианты"
 
 #. module: product
-#: model:product.public.category,name:product.video_acquisition
-msgid "Video Acquisition"
+#: model:ir.model.fields,field_description:product.field_product_attribute__create_variant
+msgid "Variants Creation Mode"
 msgstr ""
 
 #. module: product
-#: selection:product.category,type:0
-msgid "View"
-msgstr "Вид"
+#: model:ir.model.fields,field_description:product.field_product_supplierinfo__name
+#: model_terms:ir.ui.view,arch_db:product.product_supplierinfo_form_view
+#: model_terms:ir.ui.view,arch_db:product.product_supplierinfo_search_view
+msgid "Vendor"
+msgstr "Поставщик"
 
 #. module: product
-#: field:product.template,volume:0
-#: model:product.uom.categ,name:product.product_uom_categ_vol
+#: model_terms:ir.ui.view,arch_db:product.product_template_form_view
+msgid "Vendor Bills"
+msgstr "Счета от поставщиков"
+
+#. module: product
+#: model_terms:ir.ui.view,arch_db:product.product_supplierinfo_form_view
+#: model_terms:ir.ui.view,arch_db:product.product_supplierinfo_tree_view
+msgid "Vendor Information"
+msgstr "Информация производителя"
+
+#. module: product
+#: model:ir.actions.act_window,name:product.product_supplierinfo_type_action
+msgid "Vendor Pricelists"
+msgstr "Прайс-листы производителя"
+
+#. module: product
+#: model:ir.model.fields,field_description:product.field_product_supplierinfo__product_code
+msgid "Vendor Product Code"
+msgstr "Код продукта у производителя"
+
+#. module: product
+#: model:ir.model.fields,field_description:product.field_product_supplierinfo__product_name
+msgid "Vendor Product Name"
+msgstr "Название продукта у производителя"
+
+#. module: product
+#: model:ir.model.fields,help:product.field_product_supplierinfo__name
+msgid "Vendor of this product"
+msgstr "Производитель этого продукта"
+
+#. module: product
+#: model:ir.model.fields,field_description:product.field_product_product__seller_ids
+#: model:ir.model.fields,field_description:product.field_product_template__seller_ids
+msgid "Vendors"
+msgstr "Производители"
+
+#. module: product
+#: model:ir.model.fields,field_description:product.field_product_product__volume
+#: model:ir.model.fields,field_description:product.field_product_template__volume
+#: model_terms:ir.ui.view,arch_db:product.product_template_form_view
 msgid "Volume"
-msgstr "Объем"
+msgstr "Объём"
 
 #. module: product
-#: code:addons/product/pricelist.py:208
-#: code:addons/product/product.py:210
-#, python-format
-msgid "Warning!"
-msgstr "Внимание!"
+#: model:ir.model.fields,field_description:product.field_res_config_settings__product_volume_volume_in_cubic_feet
+msgid "Volume unit of measure"
+msgstr ""
 
 #. module: product
-#: field:product.template,warranty:0
-msgid "Warranty"
-msgstr "Гарантия"
+#: model:ir.model.fields,field_description:product.field_product_product__volume_uom_name
+#: model:ir.model.fields,field_description:product.field_product_template__volume_uom_name
+msgid "Volume unit of measure label"
+msgstr ""
 
 #. module: product
-#: model:product.template,name:product.product_product_34_product_template
-msgid "Webcam"
-msgstr "Веб-камера"
-
-#. module: product
-#: model:product.uom.categ,name:product.product_uom_categ_kgm
+#: model:ir.model.fields,field_description:product.field_product_product__weight
+#: model:ir.model.fields,field_description:product.field_product_template__weight
 msgid "Weight"
 msgstr "Вес"
 
 #. module: product
-#: view:product.template:product.product_template_form_view
-msgid "Weights"
-msgstr "Вес"
+#: model_terms:ir.ui.view,arch_db:product.res_config_settings_view_form
+msgid "Weight Measurement"
+msgstr ""
 
 #. module: product
-#: help:product.pricelist.version,active:0
+#: model:ir.model.fields,field_description:product.field_res_config_settings__product_weight_in_lbs
+msgid "Weight unit of measure"
+msgstr ""
+
+#. module: product
+#: model:ir.model.fields,field_description:product.field_product_product__weight_uom_name
+#: model:ir.model.fields,field_description:product.field_product_template__weight_uom_name
+msgid "Weight unit of measure label"
+msgstr ""
+
+#. module: product
+#: model_terms:ir.actions.act_window,help:product.product_pricelist_action2
 msgid ""
-"When a version is duplicated it is set to non active, so that the dates do "
-"not overlaps with original version. You should change the dates and "
-"reactivate the pricelist"
-msgstr ""
-"Когда версия дублируется она устанавливается в не активную, таким образом, "
-"даты не пересекаются с оригиналом. Вы должны изменить даты и активировать "
-"прайс-лист."
-
-#. module: product
-#: model:product.attribute.value,name:product.product_attribute_value_3
-msgid "White"
+"You can assign pricelists to your customers or select one when creating a "
+"new sales quotation."
 msgstr ""
 
 #. module: product
-#: model:product.attribute,name:product.product_attribute_3
-msgid "Wi-Fi"
-msgstr ""
-
-#. module: product
-#: field:product.ul,width:0
-msgid "Width"
-msgstr "Ширина"
-
-#. module: product
-#: model:product.template,name:product.product_product_40_product_template
-msgid "Windows 7 Professional"
-msgstr "Windows 7 Professional"
-
-#. module: product
-#: model:product.template,name:product.product_product_41_product_template
-msgid "Windows Home Server 2011"
-msgstr "Windows Home Server 2011"
-
-#. module: product
-#: model:product.uom.categ,name:product.uom_categ_wtime
-msgid "Working Time"
-msgstr "Время работы"
-
-#. module: product
-#: constraint:product.pricelist.version:0
-msgid "You cannot have 2 pricelist versions that overlap!"
-msgstr "Нельзя иметь 2 перекрывающиеся версии каталога!"
-
-#. module: product
-#: constraint:product.product:0
+#: code:addons/product/models/product_pricelist.py:0
+#, python-format
 msgid ""
-"You provided an invalid \"EAN13 Barcode\" reference. You may use the "
-"\"Internal Reference\" field instead."
-msgstr ""
-"Вы ввели недопустимую ссылку на баркод EAN13. Вы можете использовать поле "
-"\"Внутренняя ссылка\"."
-
-#. module: product
-#: model:product.template,name:product.product_product_43_product_template
-msgid "Zed+ Antivirus"
+"You cannot assign the Main Pricelist as Other Pricelist in PriceList Item"
 msgstr ""
 
 #. module: product
-#: model:product.uom,name:product.product_uom_cm
-msgid "cm"
-msgstr "см"
-
-#. module: product
-#: view:product.template:product.product_template_form_view
-msgid "describe the product characteristics..."
+#: code:addons/product/models/product_attribute.py:0
+#, python-format
+msgid ""
+"You cannot change the Variants Creation Mode of the attribute %s because it is used on the following products:\n"
+"%s"
 msgstr ""
 
 #. module: product
-#: view:product.uom:product.product_uom_form_view
-msgid "e.g: 1 * (reference unit) = ratio * (this unit)"
+#: code:addons/product/models/product_attribute.py:0
+#, python-format
+msgid ""
+"You cannot change the attribute of the value %s because it is used on the "
+"following products:%s"
 msgstr ""
 
 #. module: product
-#: view:product.uom:product.product_uom_form_view
-msgid "e.g: 1 * (this unit) = ratio * (reference unit)"
-msgstr "прим.: 1 * (эта единица) = коэффициент * (базовая единица)"
-
-#. module: product
-#: model:product.uom,name:product.product_uom_floz
-msgid "fl oz"
+#: code:addons/product/models/product_attribute.py:0
+#, python-format
+msgid "You cannot change the product of the value %s set on product %s."
 msgstr ""
 
 #. module: product
-#: model:product.uom,name:product.product_uom_foot
-msgid "foot(ft)"
+#: code:addons/product/models/product_attribute.py:0
+#, python-format
+msgid "You cannot change the value of the value %s set on product %s."
 msgstr ""
 
 #. module: product
-#: model:product.uom,name:product.product_uom_gal
-msgid "gal(s)"
+#: code:addons/product/models/product.py:0
+#, python-format
+msgid "You cannot create recursive categories."
 msgstr ""
 
 #. module: product
-#: model:product.template,name:product.product_product_8_product_template
-msgid "iMac"
+#: model:ir.model.constraint,message:product.constraint_product_attribute_value_value_company_uniq
+msgid ""
+"You cannot create two values with the same name for the same attribute."
 msgstr ""
 
 #. module: product
-#: model:product.template,name:product.product_product_6_product_template
-msgid "iPad Mini"
+#: code:addons/product/models/decimal_precision.py:0
+#, python-format
+msgid ""
+"You cannot define the decimal precision of 'Account' as greater than the "
+"rounding factor of the company's main currency"
+msgstr ""
+"Вы не можете определить десятичную точность 'Аккаунта' как более высокую, "
+"чем коэффициент округления основной валюты компании"
+
+#. module: product
+#: code:addons/product/models/product_attribute.py:0
+#, python-format
+msgid ""
+"You cannot delete the attribute %s because it is used on the following products:\n"
+"%s"
 msgstr ""
 
 #. module: product
-#: model:product.template,name:product.product_product_4_product_template
-#: model:product.template,name:product.product_product_4b_product_template
-#: model:product.template,name:product.product_product_4c_product_template
-#: model:product.template,name:product.product_product_4d_product_template
-msgid "iPad Retina Display"
+#: code:addons/product/models/product_attribute.py:0
+#, python-format
+msgid ""
+"You cannot delete the value %s because it is used on the following products:\n"
+"%s"
 msgstr ""
 
 #. module: product
-#: model:product.template,name:product.product_product_11_product_template
-#: model:product.template,name:product.product_product_11b_product_template
-msgid "iPod"
+#: code:addons/product/models/product_attribute.py:0
+#, python-format
+msgid ""
+"You cannot move the attribute %s from the product %s to the product %s."
 msgstr ""
 
 #. module: product
-#: model:product.uom,name:product.product_uom_inch
-msgid "inch(es)"
+#: code:addons/product/models/product_attribute.py:0
+#: code:addons/product/models/product_attribute.py:0
+#, python-format
+msgid ""
+"You cannot update related variants from the values. Please update related "
+"values from the variants."
 msgstr ""
 
 #. module: product
-#: model:product.uom,name:product.product_uom_kgm
-msgid "kg"
-msgstr "кг"
+#: code:addons/product/wizard/product_price_list.py:0
+#, python-format
+msgid "You have to set a logo or a layout for your company."
+msgstr ""
+"Вам необходимо установить логотип или скомпоновать необходимую информацию о "
+"вашей компании."
 
 #. module: product
-#: model:product.uom,name:product.product_uom_km
-msgid "km"
-msgstr "км"
+#: code:addons/product/wizard/product_price_list.py:0
+#, python-format
+msgid "You have to set your reports's header and footer layout."
+msgstr ""
+"Вам необходимо установить компоновку верхнего и нижнего колонтитулов вашего "
+"отчета."
 
 #. module: product
-#: model:product.uom,name:product.product_uom_lb
-msgid "lb(s)"
+#: model_terms:ir.actions.act_window,help:product.product_normal_action
+#: model_terms:ir.actions.act_window,help:product.product_template_action
+msgid ""
+"You must define a product for everything you sell or purchase,\n"
+"                whether it's a storable product, a consumable or a service."
 msgstr ""
 
 #. module: product
-#: view:product.product:product.product_normal_form_view
-msgid "lst_price"
+#: model_terms:ir.actions.act_window,help:product.product_variant_action
+msgid ""
+"You must define a product for everything you sell or purchase,\n"
+"                whether it's a storable product, a consumable or a service.\n"
+"                The product form contains information to simplify the sale process:\n"
+"                price, notes in the quotation, accounting data, procurement methods, etc."
 msgstr ""
 
 #. module: product
-#: model:product.uom,name:product.product_uom_mile
-msgid "mile(s)"
+#: model_terms:ir.actions.act_window,help:product.product_normal_action_sell
+msgid ""
+"You must define a product for everything you sell, whether it's a physical product,\n"
+"                a consumable or a service you offer to customers.\n"
+"                The product form contains information to simplify the sale process:\n"
+"                price, notes in the quotation, accounting data, procurement methods, etc."
 msgstr ""
 
 #. module: product
-#: view:product.template:product.product_template_form_view
-msgid "months"
-msgstr "месяцы"
+#: code:addons/product/models/product_template.py:0
+#, python-format
+msgid ""
+"You must define at least one product category in order to be able to create "
+"products."
+msgstr ""
+"Вам необходимо указать хотя бы одну категорию продуктов, для того чтобы "
+"иметь возможность создать продукты."
 
 #. module: product
-#: view:product.template:product.product_template_form_view
-msgid "note to be displayed on quotations..."
+#: model_terms:ir.ui.view,arch_db:product.product_supplierinfo_form_view
+#: model_terms:ir.ui.view,arch_db:product.product_supplierinfo_view_kanban
+msgid "days"
+msgstr "дней"
+
+#. module: product
+#: model_terms:ir.ui.view,arch_db:product.product_category_form_view
+msgid "e.g. Lamps"
+msgstr "например Лампы"
+
+#. module: product
+#: model_terms:ir.ui.view,arch_db:product.product_variant_easy_edit_view
+msgid "e.g. Odoo Enterprise Subscription"
 msgstr ""
 
 #. module: product
-#: model:product.uom,name:product.product_uom_oz
-msgid "oz(s)"
+#: model_terms:ir.ui.view,arch_db:product.product_pricelist_view
+msgid "e.g. USD Retailers"
+msgstr "нап. Продавцы в долларах США"
+
+#. module: product
+#: model_terms:ir.ui.view,arch_db:product.product_template_form_view
+msgid "per"
 msgstr ""
 
 #. module: product
-#: model:product.uom,name:product.product_uom_qt
-msgid "qt"
+#: code:addons/product/models/product.py:0
+#: code:addons/product/models/product_template.py:0
+#, python-format
+msgid "product"
 msgstr ""
 
 #. module: product
-#: view:res.partner:product.view_partner_property_form
+#: model_terms:ir.ui.view,arch_db:product.view_partner_property_form
 msgid "the parent company"
+msgstr "родительская компания"
+
+#. module: product
+#: model_terms:ir.ui.view,arch_db:product.product_variant_easy_edit_view
+msgid "the product template."
 msgstr ""
 
 #. module: product
-#: field:product.price.history,company_id:0
-msgid "unknown"
-msgstr "неизвесно"
-
-#~ msgid ""
-#~ "Specify the minimum quantity that needs to be bought/sold for the rule to "
-#~ "apply."
-#~ msgstr ""
-#~ "Укажите минимальное количество которое должно быть куплено/продано чтобы "
-#~ "правило сработало."
+#: model_terms:ir.ui.view,arch_db:product.product_supplierinfo_form_view
+msgid "to"
+msgstr "для"

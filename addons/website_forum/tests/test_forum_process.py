@@ -1,11 +1,17 @@
-import openerp.tests
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
-@openerp.tests.common.at_install(False)
-@openerp.tests.common.post_install(True)
-class TestUi(openerp.tests.HttpCase):
+from odoo.addons.base.tests.common import HttpCaseWithUserDemo
+from odoo.tests import tagged
+
+
+@tagged('post_install', '-at_install')
+class TestUi(HttpCaseWithUserDemo):
+
     def test_01_admin_forum_tour(self):
-        self.phantom_js("/", "odoo.__DEBUG__.services['web.Tour'].run('question', 'test')", "odoo.__DEBUG__.services['web.Tour'].tours.question", login="admin")
+        self.start_tour("/", 'question', login="admin", step_delay=100)
 
     def test_02_demo_question(self):
-        self.phantom_js("/", "odoo.__DEBUG__.services['web.Tour'].run('forum_question', 'test')", "odoo.__DEBUG__.services['web.Tour'].tours.forum_question", login="demo")
-
+        forum = self.env.ref('website_forum.forum_help')
+        demo = self.user_demo
+        demo.karma = forum.karma_post + 1
+        self.start_tour("/", 'forum_question', login="demo")

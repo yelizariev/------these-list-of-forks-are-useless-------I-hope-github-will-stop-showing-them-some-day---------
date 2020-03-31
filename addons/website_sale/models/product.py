@@ -1,191 +1,448 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
-from openerp import tools
-from openerp.osv import osv, fields
+from odoo import api, fields, models, _
+from odoo.exceptions import ValidationError, UserError
+from odoo.addons.http_routing.models.ir_http import slug
+from odoo.addons.website.models import ir_http
+from odoo.tools.translate import html_translate
+from odoo.osv import expression
 
-class product_style(osv.Model):
+
+class ProductStyle(models.Model):
     _name = "product.style"
-    _columns = {
-        'name' : fields.char('Style Name', required=True),
-        'html_class': fields.char('HTML Classes'),
-    }
+    _description = 'Product Style'
 
-class product_pricelist(osv.Model):
+    name = fields.Char(string='Style Name', required=True)
+    html_class = fields.Char(string='HTML Classes')
+
+
+class ProductPricelist(models.Model):
     _inherit = "product.pricelist"
-    _columns = {
-        'code': fields.char('E-commerce Promotional Code'),
-    }
 
+    def _default_website(self):
+        """ Find the first company's website, if there is one. """
+        company_id = self.env.company.id
 
-class product_public_category(osv.osv):
-    _name = "product.public.category"
-    _inherit = ["website.seo.metadata"]
-    _description = "Website Product Category"
-    _order = "sequence, name"
+        if self._context.get('default_company_id'):
+            company_id = self._context.get('default_company_id')
 
-    _constraints = [
-        (osv.osv._check_recursion, 'Error ! You cannot create recursive categories.', ['parent_id'])
-    ]
+        domain = [('company_id', '=', company_id)]
+        return self.env['website'].search(domain, limit=1)
 
-    def name_get(self, cr, uid, ids, context=None):
-        res = []
-        for cat in self.browse(cr, uid, ids, context=context):
-            names = [cat.name]
-            pcat = cat.parent_id
-            while pcat:
-                names.append(pcat.name)
-                pcat = pcat.parent_id
-            res.append((cat.id, ' / '.join(reversed(names))))
+    website_id = fields.Many2one('website', string="Website", ondelete='restrict', default=_default_website, domain="[('company_id', '=?', company_id)]")
+    code = fields.Char(string='E-commerce Promotional Code', groups="base.group_user")
+    selectable = fields.Boolean(help="Allow the end user to choose this price list")
+
+    def clear_cache(self):
+        # website._get_pl_partner_order() is cached to avoid to recompute at each request the
+        # list of available pricelists. So, we need to invalidate the cache when
+        # we change the config of website price list to force to recompute.
+        website = self.env['website']
+        website._get_pl_partner_order.clear_cache(website)
+
+    @api.model
+    def create(self, data):
+        if data.get('company_id') and not data.get('website_id'):
+            # l10n modules install will change the company currency, creating a
+            # pricelist for that currency. Do not use user's company in that
+            # case as module install are done with OdooBot (company 1)
+            self = self.with_context(default_company_id=data['company_id'])
+        res = super(ProductPricelist, self).create(data)
+        self.clear_cache()
         return res
 
-    def _name_get_fnc(self, cr, uid, ids, prop, unknow_none, context=None):
-        res = self.name_get(cr, uid, ids, context=context)
-        return dict(res)
+    def write(self, data):
+        res = super(ProductPricelist, self).write(data)
+        if data.keys() & {'code', 'active', 'website_id', 'selectable'}:
+            self._check_website_pricelist()
+        self.clear_cache()
+        return res
 
-    def _get_image(self, cr, uid, ids, name, args, context=None):
-        result = dict.fromkeys(ids, False)
-        for obj in self.browse(cr, uid, ids, context=context):
-            result[obj.id] = tools.image_get_resized_images(obj.image)
-        return result
+    def unlink(self):
+        res = super(ProductPricelist, self).unlink()
+        self._check_website_pricelist()
+        self.clear_cache()
+        return res
 
-    def _set_image(self, cr, uid, id, name, value, args, context=None):
-        return self.write(cr, uid, [id], {'image': tools.image_resize_image_big(value)}, context=context)
+    def _get_partner_pricelist_multi_search_domain_hook(self):
+        domain = super(ProductPricelist, self)._get_partner_pricelist_multi_search_domain_hook()
+        website = ir_http.get_request_website()
+        if website:
+            domain += self._get_website_pricelists_domain(website.id)
+        return domain
 
-    _columns = {
-        'name': fields.char('Name', required=True, translate=True),
-        'complete_name': fields.function(_name_get_fnc, type="char", string='Name'),
-        'parent_id': fields.many2one('product.public.category','Parent Category', select=True),
-        'child_id': fields.one2many('product.public.category', 'parent_id', string='Children Categories'),
-        'sequence': fields.integer('Sequence', help="Gives the sequence order when displaying a list of product categories."),
+    def _get_partner_pricelist_multi_filter_hook(self):
+        res = super(ProductPricelist, self)._get_partner_pricelist_multi_filter_hook()
+        website = ir_http.get_request_website()
+        if website:
+            res = res.filtered(lambda pl: pl._is_available_on_website(website.id))
+        return res
 
-        # NOTE: there is no 'default image', because by default we don't show thumbnails for categories. However if we have a thumbnail
-        # for at least one category, then we display a default image on the other, so that the buttons have consistent styling.
-        # In this case, the default image is set by the js code.
-        # NOTE2: image: all image fields are base64 encoded and PIL-supported
-        'image': fields.binary("Image",
-            help="This field holds the image used as image for the category, limited to 1024x1024px."),
-        'image_medium': fields.function(_get_image, fnct_inv=_set_image,
-            string="Medium-sized image", type="binary", multi="_get_image",
-            store={
-                'product.public.category': (lambda self, cr, uid, ids, c={}: ids, ['image'], 10),
-            },
-            help="Medium-sized image of the category. It is automatically "\
-                 "resized as a 128x128px image, with aspect ratio preserved. "\
-                 "Use this field in form views or some kanban views."),
-        'image_small': fields.function(_get_image, fnct_inv=_set_image,
-            string="Smal-sized image", type="binary", multi="_get_image",
-            store={
-                'product.public.category': (lambda self, cr, uid, ids, c={}: ids, ['image'], 10),
-            },
-            help="Small-sized image of the category. It is automatically "\
-                 "resized as a 64x64px image, with aspect ratio preserved. "\
-                 "Use this field anywhere a small image is required."),
-    }
+    def _check_website_pricelist(self):
+        for website in self.env['website'].search([]):
+            if not website.pricelist_ids:
+                raise UserError(_("With this action, '%s' website would not have any pricelist available.") % (website.name))
 
-class product_template(osv.Model):
-    _inherit = ["product.template", "website.seo.metadata", 'website.published.mixin', 'rating.mixin']
-    _order = 'website_published desc, website_sequence desc, name'
+    def _is_available_on_website(self, website_id):
+        """ To be able to be used on a website, a pricelist should either:
+        - Have its `website_id` set to current website (specific pricelist).
+        - Have no `website_id` set and should be `selectable` (generic pricelist)
+          or should have a `code` (generic promotion).
+
+        Note: A pricelist without a website_id, not selectable and without a
+              code is a backend pricelist.
+
+        Change in this method should be reflected in `_get_website_pricelists_domain`.
+        """
+        self.ensure_one()
+        return self.website_id.id == website_id or (not self.website_id and (self.selectable or self.sudo().code))
+
+    def _get_website_pricelists_domain(self, website_id):
+        ''' Check above `_is_available_on_website` for explanation.
+        Change in this method should be reflected in `_is_available_on_website`.
+        '''
+        return [
+            '|', ('website_id', '=', website_id),
+            '&', ('website_id', '=', False),
+            '|', ('selectable', '=', True), ('code', '!=', False),
+        ]
+
+    def _get_partner_pricelist_multi(self, partner_ids, company_id=None):
+        ''' If `property_product_pricelist` is read from website, we should use
+            the website's company and not the user's one.
+            Passing a `company_id` to super will avoid using the current user's
+            company.
+        '''
+        website = ir_http.get_request_website()
+        if not company_id and website:
+            company_id = website.company_id.id
+        return super(ProductPricelist, self)._get_partner_pricelist_multi(partner_ids, company_id)
+
+    @api.constrains('company_id', 'website_id')
+    def _check_websites_in_company(self):
+        '''Prevent misconfiguration multi-website/multi-companies.
+           If the record has a company, the website should be from that company.
+        '''
+        for record in self.filtered(lambda pl: pl.website_id and pl.company_id):
+            if record.website_id.company_id != record.company_id:
+                raise ValidationError(_("Only the company's websites are allowed. \
+                    Leave the Company field empty or select a website from that company."))
+
+
+class ProductPublicCategory(models.Model):
+    _name = "product.public.category"
+    _inherit = ["website.seo.metadata", "website.multi.mixin", 'image.mixin']
+    _description = "Website Product Category"
+    _parent_store = True
+    _order = "sequence, name, id"
+
+    def _default_sequence(self):
+        cat = self.search([], limit=1, order="sequence DESC")
+        if cat:
+            return cat.sequence + 5
+        return 10000
+
+    name = fields.Char(required=True, translate=True)
+    parent_id = fields.Many2one('product.public.category', string='Parent Category', index=True, ondelete="cascade")
+    parent_path = fields.Char(index=True)
+    child_id = fields.One2many('product.public.category', 'parent_id', string='Children Categories')
+    parents_and_self = fields.Many2many('product.public.category', compute='_compute_parents_and_self')
+    sequence = fields.Integer(help="Gives the sequence order when displaying a list of product categories.", index=True, default=_default_sequence)
+    website_description = fields.Html('Category Description', sanitize_attributes=False, translate=html_translate)
+    product_tmpl_ids = fields.Many2many('product.template', relation='product_public_category_product_template_rel')
+
+    @api.constrains('parent_id')
+    def check_parent_id(self):
+        if not self._check_recursion():
+            raise ValueError(_('Error ! You cannot create recursive categories.'))
+
+    def name_get(self):
+        res = []
+        for category in self:
+            res.append((category.id, " / ".join(category.parents_and_self.mapped('name'))))
+        return res
+
+    def _compute_parents_and_self(self):
+        for category in self:
+            if category.parent_path:
+                category.parents_and_self = self.env['product.public.category'].browse([int(p) for p in category.parent_path.split('/')[:-1]])
+            else:
+                category.parents_and_self = category
+
+
+class ProductTemplate(models.Model):
+    _inherit = ["product.template", "website.seo.metadata", 'website.published.multi.mixin', 'rating.mixin']
     _name = 'product.template'
     _mail_post_access = 'read'
+    _check_company_auto = True
 
-    def _website_url(self, cr, uid, ids, field_name, arg, context=None):
-        res = super(product_template, self)._website_url(cr, uid, ids, field_name, arg, context=context)
-        for product in self.browse(cr, uid, ids, context=context):
-            res[product.id] = "/shop/product/%s" % (product.id,)
+    website_description = fields.Html('Description for the website', sanitize_attributes=False, translate=html_translate)
+    alternative_product_ids = fields.Many2many(
+        'product.template', 'product_alternative_rel', 'src_id', 'dest_id', check_company=True,
+        string='Alternative Products', help='Suggest alternatives to your customer (upsell strategy). '
+                                            'Those products show up on the product page.')
+    accessory_product_ids = fields.Many2many(
+        'product.product', 'product_accessory_rel', 'src_id', 'dest_id', string='Accessory Products', check_company=True,
+        help='Accessories show up when the customer reviews the cart before payment (cross-sell strategy).')
+    website_size_x = fields.Integer('Size X', default=1)
+    website_size_y = fields.Integer('Size Y', default=1)
+    website_style_ids = fields.Many2many('product.style', string='Styles')
+    website_sequence = fields.Integer('Website Sequence', help="Determine the display order in the Website E-commerce",
+                                      default=lambda self: self._default_website_sequence())
+    public_categ_ids = fields.Many2many(
+        'product.public.category', relation='product_public_category_product_template_rel',
+        string='Website Product Category',
+        help="The product will be available in each mentioned eCommerce category. Go to Shop > "
+             "Customize and enable 'eCommerce categories' to view all eCommerce categories.")
+
+    product_template_image_ids = fields.One2many('product.image', 'product_tmpl_id', string="Extra Product Media", copy=True)
+
+    def _has_no_variant_attributes(self):
+        """Return whether this `product.template` has at least one no_variant
+        attribute.
+
+        :return: True if at least one no_variant attribute, False otherwise
+        :rtype: bool
+        """
+        self.ensure_one()
+        return any(a.create_variant == 'no_variant' for a in self.valid_product_template_attribute_line_ids.attribute_id)
+
+    def _has_is_custom_values(self):
+        self.ensure_one()
+        """Return whether this `product.template` has at least one is_custom
+        attribute value.
+
+        :return: True if at least one is_custom attribute value, False otherwise
+        :rtype: bool
+        """
+        return any(v.is_custom for v in self.valid_product_template_attribute_line_ids.product_template_value_ids._only_active())
+
+    def _get_possible_variants_sorted(self, parent_combination=None):
+        """Return the sorted recordset of variants that are possible.
+
+        The order is based on the order of the attributes and their values.
+
+        See `_get_possible_variants` for the limitations of this method with
+        dynamic or no_variant attributes, and also for a warning about
+        performances.
+
+        :param parent_combination: combination from which `self` is an
+            optional or accessory product
+        :type parent_combination: recordset `product.template.attribute.value`
+
+        :return: the sorted variants that are possible
+        :rtype: recordset of `product.product`
+        """
+        self.ensure_one()
+
+        def _sort_key_attribute_value(value):
+            # if you change this order, keep it in sync with _order from `product.attribute`
+            return (value.attribute_id.sequence, value.attribute_id.id)
+
+        def _sort_key_variant(variant):
+            """
+                We assume all variants will have the same attributes, with only one value for each.
+                    - first level sort: same as "product.attribute"._order
+                    - second level sort: same as "product.attribute.value"._order
+            """
+            keys = []
+            for attribute in variant.product_template_attribute_value_ids.sorted(_sort_key_attribute_value):
+                # if you change this order, keep it in sync with _order from `product.attribute.value`
+                keys.append(attribute.product_attribute_value_id.sequence)
+                keys.append(attribute.id)
+            return keys
+
+        return self._get_possible_variants(parent_combination).sorted(_sort_key_variant)
+
+    def _get_combination_info(self, combination=False, product_id=False, add_qty=1, pricelist=False, parent_combination=False, only_template=False):
+        """Override for website, where we want to:
+            - take the website pricelist if no pricelist is set
+            - apply the b2b/b2c setting to the result
+
+        This will work when adding website_id to the context, which is done
+        automatically when called from routes with website=True.
+        """
+        self.ensure_one()
+
+        current_website = False
+
+        if self.env.context.get('website_id'):
+            current_website = self.env['website'].get_current_website()
+            if not pricelist:
+                pricelist = current_website.get_current_pricelist()
+
+        combination_info = super(ProductTemplate, self)._get_combination_info(
+            combination=combination, product_id=product_id, add_qty=add_qty, pricelist=pricelist,
+            parent_combination=parent_combination, only_template=only_template)
+
+        if self.env.context.get('website_id'):
+            partner = self.env.user.partner_id
+            company_id = current_website.company_id
+            product = self.env['product.product'].browse(combination_info['product_id']) or self
+
+            tax_display = self.user_has_groups('account.group_show_line_subtotals_tax_excluded') and 'total_excluded' or 'total_included'
+            fpos = self.env['account.fiscal.position'].get_fiscal_position(partner.id)
+            taxes = fpos.map_tax(product.sudo().taxes_id.filtered(lambda x: x.company_id == company_id), product, partner)
+
+            # The list_price is always the price of one.
+            quantity_1 = 1
+            price = taxes.compute_all(combination_info['price'], pricelist.currency_id, quantity_1, product, partner)[tax_display]
+            if pricelist.discount_policy == 'without_discount':
+                list_price = taxes.compute_all(combination_info['list_price'], pricelist.currency_id, quantity_1, product, partner)[tax_display]
+            else:
+                list_price = price
+            has_discounted_price = pricelist.currency_id.compare_amounts(list_price, price) == 1
+
+            combination_info.update(
+                price=price,
+                list_price=list_price,
+                has_discounted_price=has_discounted_price,
+            )
+
+        return combination_info
+
+    def _create_first_product_variant(self, log_warning=False):
+        """Create if necessary and possible and return the first product
+        variant for this template.
+
+        :param log_warning: whether a warning should be logged on fail
+        :type log_warning: bool
+
+        :return: the first product variant or none
+        :rtype: recordset of `product.product`
+        """
+        return self._create_product_variant(self._get_first_possible_combination(), log_warning)
+
+    def _get_current_company_fallback(self, **kwargs):
+        """Override: if a website is set on the product or given, fallback to
+        the company of the website. Otherwise use the one from parent method."""
+        res = super(ProductTemplate, self)._get_current_company_fallback(**kwargs)
+        website = self.website_id or kwargs.get('website')
+        return website and website.company_id or res
+
+    def _default_website_sequence(self):
+        ''' We want new product to be the last (highest seq).
+        Every product should ideally have an unique sequence.
+        Default sequence (10000) should only be used for DB first product.
+        As we don't resequence the whole tree (as `sequence` does), this field
+        might have negative value.
+        '''
+        self._cr.execute("SELECT MAX(website_sequence) FROM %s" % self._table)
+        max_sequence = self._cr.fetchone()[0]
+        if max_sequence is None:
+            return 10000
+        return max_sequence + 5
+
+    def set_sequence_top(self):
+        min_sequence = self.sudo().search([], order='website_sequence ASC', limit=1)
+        self.website_sequence = min_sequence.website_sequence - 5
+
+    def set_sequence_bottom(self):
+        max_sequence = self.sudo().search([], order='website_sequence DESC', limit=1)
+        self.website_sequence = max_sequence.website_sequence + 5
+
+    def set_sequence_up(self):
+        previous_product_tmpl = self.sudo().search([
+            ('website_sequence', '<', self.website_sequence),
+            ('website_published', '=', self.website_published),
+        ], order='website_sequence DESC', limit=1)
+        if previous_product_tmpl:
+            previous_product_tmpl.website_sequence, self.website_sequence = self.website_sequence, previous_product_tmpl.website_sequence
+        else:
+            self.set_sequence_top()
+
+    def set_sequence_down(self):
+        next_prodcut_tmpl = self.search([
+            ('website_sequence', '>', self.website_sequence),
+            ('website_published', '=', self.website_published),
+        ], order='website_sequence ASC', limit=1)
+        if next_prodcut_tmpl:
+            next_prodcut_tmpl.website_sequence, self.website_sequence = self.website_sequence, next_prodcut_tmpl.website_sequence
+        else:
+            return self.set_sequence_bottom()
+
+    def _default_website_meta(self):
+        res = super(ProductTemplate, self)._default_website_meta()
+        res['default_opengraph']['og:description'] = res['default_twitter']['twitter:description'] = self.description_sale
+        res['default_opengraph']['og:title'] = res['default_twitter']['twitter:title'] = self.name
+        res['default_opengraph']['og:image'] = res['default_twitter']['twitter:image'] = self.env['website'].image_url(self, 'image_1024')
+        res['default_meta_description'] = self.description_sale
         return res
 
-    _columns = {
-        # TODO FIXME tde: when website_mail/mail_thread.py inheritance work -> this field won't be necessary
-        'website_message_ids': fields.one2many(
-            'mail.message', 'res_id',
-            domain=lambda self: [
-                '&', ('model', '=', self._name), ('message_type', '=', 'comment')
-            ],
-            string='Website Comments',
-        ),
-        'website_description': fields.html('Description for the website', translate=True),
-        'alternative_product_ids': fields.many2many('product.template','product_alternative_rel','src_id','dest_id', string='Suggested Products', help='Appear on the product page'),
-        'accessory_product_ids': fields.many2many('product.product','product_accessory_rel','src_id','dest_id', string='Accessory Products', help='Appear on the shopping cart'),
-        'website_size_x': fields.integer('Size X'),
-        'website_size_y': fields.integer('Size Y'),
-        'website_style_ids': fields.many2many('product.style', string='Styles'),
-        'website_sequence': fields.integer('Sequence', help="Determine the display order in the Website E-commerce"),
-        'public_categ_ids': fields.many2many('product.public.category', string='Website Product Category', help="Those categories are used to group similar products for e-commerce."),
-    }
+    def _compute_website_url(self):
+        super(ProductTemplate, self)._compute_website_url()
+        for product in self:
+            product.website_url = "/shop/product/%s" % slug(product)
 
-    def _defaults_website_sequence(self, cr, uid, *l, **kwargs):
-        cr.execute('SELECT MIN(website_sequence)-1 FROM product_template')
-        next_sequence = cr.fetchone()[0] or 10
-        return next_sequence
+    # ---------------------------------------------------------
+    # Rating Mixin API
+    # ---------------------------------------------------------
 
-    _defaults = {
-        'website_size_x': 1,
-        'website_size_y': 1,
-        'website_sequence': _defaults_website_sequence,
-    }
+    def _rating_domain(self):
+        """ Only take the published rating into account to compute avg and count """
+        domain = super(ProductTemplate, self)._rating_domain()
+        return expression.AND([domain, [('is_internal', '=', False)]])
 
-    def set_sequence_top(self, cr, uid, ids, context=None):
-        cr.execute('SELECT MAX(website_sequence) FROM product_template')
-        max_sequence = cr.fetchone()[0] or 0
-        return self.write(cr, uid, ids, {'website_sequence': max_sequence + 1}, context=context)
+    def _get_images(self):
+        """Return a list of records implementing `image.mixin` to
+        display on the carousel on the website for this template.
 
-    def set_sequence_bottom(self, cr, uid, ids, context=None):
-        cr.execute('SELECT MIN(website_sequence) FROM product_template')
-        min_sequence = cr.fetchone()[0] or 0
-        return self.write(cr, uid, ids, {'website_sequence': min_sequence -1}, context=context)
+        This returns a list and not a recordset because the records might be
+        from different models (template and image).
 
-    def set_sequence_up(self, cr, uid, ids, context=None):
-        product = self.browse(cr, uid, ids[0], context=context)
-        cr.execute("""  SELECT id, website_sequence FROM product_template
-                        WHERE website_sequence > %s AND website_published = %s ORDER BY website_sequence ASC LIMIT 1""" % (product.website_sequence, product.website_published))
-        prev = cr.fetchone()
-        if prev:
-            self.write(cr, uid, [prev[0]], {'website_sequence': product.website_sequence}, context=context)
-            return self.write(cr, uid, [ids[0]], {'website_sequence': prev[1]}, context=context)
-        else:
-            return self.set_sequence_top(cr, uid, ids, context=context)
-
-    def set_sequence_down(self, cr, uid, ids, context=None):
-        product = self.browse(cr, uid, ids[0], context=context)
-        cr.execute("""  SELECT id, website_sequence FROM product_template
-                        WHERE website_sequence < %s AND website_published = %s ORDER BY website_sequence DESC LIMIT 1""" % (product.website_sequence, product.website_published))
-        next = cr.fetchone()
-        if next:
-            self.write(cr, uid, [next[0]], {'website_sequence': product.website_sequence}, context=context)
-            return self.write(cr, uid, [ids[0]], {'website_sequence': next[1]}, context=context)
-        else:
-            return self.set_sequence_bottom(cr, uid, ids, context=context)
+        It contains in this order: the main image of the template and the
+        Template Extra Images.
+        """
+        self.ensure_one()
+        return [self] + list(self.product_template_image_ids)
 
 
-class product_product(osv.Model):
+class Product(models.Model):
     _inherit = "product.product"
 
-    # Wrappers for call_kw with inherits
-    def open_website_url(self, cr, uid, ids, context=None):
-        template_id = self.browse(cr, uid, ids, context=context).product_tmpl_id.id
-        return self.pool['product.template'].open_website_url(cr, uid, [template_id], context=context)
+    website_id = fields.Many2one(related='product_tmpl_id.website_id', readonly=False)
 
-    def website_publish_button(self, cr, uid, ids, context=None):
-        template_id = self.browse(cr, uid, ids, context=context).product_tmpl_id.id
-        return self.pool['product.template'].website_publish_button(cr, uid, [template_id], context=context)
+    product_variant_image_ids = fields.One2many('product.image', 'product_variant_id', string="Extra Variant Images")
 
-    def website_publish_button(self, cr, uid, ids, context=None):
-        template_id = self.browse(cr, uid, ids, context=context).product_tmpl_id.id
-        return self.pool['product.template'].website_publish_button(cr, uid, [template_id], context=context)
+    website_url = fields.Char('Website URL', compute='_compute_product_website_url', help='The full URL to access the document through the website.')
 
-class product_attribute(osv.Model):
-    _inherit = "product.attribute"
-    _columns = {
-        'type': fields.selection([('radio', 'Radio'), ('select', 'Select'), ('color', 'Color'), ('hidden', 'Hidden')], string="Type"),
-    }
-    _defaults = {
-        'type': lambda *a: 'radio',
-    }
+    @api.depends('product_tmpl_id.website_url', 'product_template_attribute_value_ids')
+    def _compute_product_website_url(self):
+        for product in self:
+            attributes = ','.join(str(x) for x in product.product_template_attribute_value_ids.ids)
+            product.website_url = "%s#attr=%s" % (product.product_tmpl_id.website_url, attributes)
 
+    def website_publish_button(self):
+        self.ensure_one()
+        return self.product_tmpl_id.website_publish_button()
 
-class product_attribute_value(osv.Model):
-    _inherit = "product.attribute.value"
-    _columns = {
-        'color': fields.char("HTML Color Index", help="Here you can set a specific HTML color index (e.g. #ff0000) to display the color on the website if the attibute type is 'Color'."),
-    }
+    def open_website_url(self):
+        self.ensure_one()
+        res = self.product_tmpl_id.open_website_url()
+        res['url'] = self.website_url
+        return res
+
+    def _get_images(self):
+        """Return a list of records implementing `image.mixin` to
+        display on the carousel on the website for this variant.
+
+        This returns a list and not a recordset because the records might be
+        from different models (template, variant and image).
+
+        It contains in this order: the main image of the variant (if set), the
+        Variant Extra Images, and the Template Extra Images.
+        """
+        self.ensure_one()
+        variant_images = list(self.product_variant_image_ids)
+        if self.image_variant_1920:
+            # if the main variant image is set, display it first
+            variant_images = [self] + variant_images
+        else:
+            # If the main variant image is empty, it will fallback to template
+            # image, in this case insert it after the other variant images, so
+            # that all variant images are first and all template images last.
+            variant_images = variant_images + [self]
+        # [1:] to remove the main image from the template, we only display
+        # the template extra images here
+        return variant_images + self.product_tmpl_id._get_images()[1:]

@@ -1,13 +1,14 @@
 odoo.define('point_of_sale.gui', function (require) {
 "use strict";
-// this file contains the Gui, which is the pos 'controller'. 
+// this file contains the Gui, which is the pos 'controller'.
 // It contains high level methods to manipulate the interface
 // such as changing between screens, creating popups, etc.
 //
 // it is available to all pos objects trough the '.gui' field.
 
 var core = require('web.core');
-var Model = require('web.DataModel');
+var field_utils = require('web.field_utils');
+var session = require('web.session');
 
 var _t = core._t;
 
@@ -23,20 +24,25 @@ var Gui = core.Class.extend({
         this.default_screen = null;
         this.startup_screen = null;
         this.current_popup  = null;
-        this.current_screen = null; 
+        this.current_screen = null;
+        this.show_sync_errors = true;
 
         this.chrome.ready.then(function(){
             self.close_other_tabs();
-            var order = self.pos.get_order();
-            if (order) {
-                self.show_saved_screen(order);
-            } else {
-                self.show_screen(self.startup_screen);
-            }
+            self._show_first_screen();
             self.pos.bind('change:selectedOrder', function(){
                 self.show_saved_screen(self.pos.get_order());
             });
         });
+    },
+
+    _show_first_screen: function() {
+        var order = this.pos.get_order();
+        if (order) {
+            this.show_saved_screen(order);
+        } else {
+            this.show_screen(this.startup_screen);
+        }
     },
 
     /* ---- Gui: SCREEN MANIPULATION ---- */
@@ -50,7 +56,7 @@ var Gui = core.Class.extend({
 
     // sets the screen that will be displayed
     // for new orders
-    set_default_screen: function(name){ 
+    set_default_screen: function(name){
         this.default_screen = name;
     },
 
@@ -68,8 +74,8 @@ var Gui = core.Class.extend({
         options = options || {};
         this.close_popup();
         if (order) {
-            this.show_screen(order.get_screen_data('screen') || 
-                             options.default_screen || 
+            this.show_screen(order.get_screen_data('screen') ||
+                             options.default_screen ||
                              this.default_screen,
                              null,'refresh');
         } else {
@@ -77,20 +83,20 @@ var Gui = core.Class.extend({
         }
     },
 
-    // display a screen. 
+    // display a screen.
     // If there is an order, the screen will be saved in the order
     // - params: used to load a screen with parameters, for
     // example loading a 'product_details' screen for a specific product.
     // - refresh: if you want the screen to cycle trough show / hide even
     // if you are already on the same screen.
-    show_screen: function(screen_name,params,refresh) {
+    show_screen: function(screen_name,params,refresh,skip_close_popup) {
         var screen = this.screen_instances[screen_name];
         if (!screen) {
             console.error("ERROR: show_screen("+screen_name+") : screen not found");
         }
-
-        this.close_popup();
-
+        if (!skip_close_popup){
+            this.close_popup();
+        }
         var order = this.pos.get_order();
         if (order) {
             var old_screen_name = order.get_screen_data('screen');
@@ -112,10 +118,10 @@ var Gui = core.Class.extend({
                 this.current_screen.hide();
             }
             this.current_screen = screen;
-            this.current_screen.show();
+            this.current_screen.show(refresh);
         }
     },
-    
+
     // returns the current screen.
     get_current_screen: function() {
         return this.pos.get_order() ? ( this.pos.get_order().get_screen_data('screen') || this.default_screen ) : this.startup_screen;
@@ -160,6 +166,15 @@ var Gui = core.Class.extend({
         this.current_popup = this.popup_instances[name];
         return this.current_popup.show(options);
     },
+    show_sync_error_popup: function() {
+        if (this.show_sync_errors) {
+            this.show_popup('error-sync',{
+                'title':_t('Changes could not be saved'),
+                'body': _t('You must be connected to the internet to save your changes.\n\n' +
+                        'Orders that where not synced before will be synced next time you close an order while connected to the internet or when you close the session.'),
+            });
+        }
+    },
 
     // close the current popup.
     close_popup: function() {
@@ -182,12 +197,22 @@ var Gui = core.Class.extend({
     close_other_tabs: function() {
         var self = this;
 
+        // avoid closing itself
+        var now = Date.now();
+
         localStorage['message'] = '';
         localStorage['message'] = JSON.stringify({
             'message':'close_tabs',
-            'session': this.pos.pos_session.id,
+            'config': this.pos.config.id,
+            'window_uid': now,
         });
 
+        // storage events are (most of the time) triggered only when the
+        // localstorage is updated in a different tab.
+        // some browsers (e.g. IE) does trigger an event in the same tab
+        // This may be a browser bug or a different interpretation of the HTML spec
+        // cf https://connect.microsoft.com/IE/feedback/details/774798/localstorage-event-fired-in-source-window
+        // Use window_uid parameter to exclude the current window
         window.addEventListener("storage", function(event) {
             var msg = event.data;
 
@@ -195,9 +220,10 @@ var Gui = core.Class.extend({
 
                 var msg = JSON.parse(event.newValue);
                 if ( msg.message  === 'close_tabs' &&
-                     msg.session  ==  self.pos.pos_session.id ) {
+                     msg.config  ==  self.pos.config.id &&
+                     msg.window_uid != now) {
 
-                    console.info('POS / Session opened in another window. EXITING POS')
+                    console.info('POS / Session opened in another window. EXITING POS');
                     self._close();
                 }
             }
@@ -208,85 +234,28 @@ var Gui = core.Class.extend({
     /* ---- Gui: ACCESS CONTROL ---- */
 
     // A Generic UI that allow to select a user from a list.
-    // It returns a deferred that resolves with the selected user 
+    // It returns a promise that resolves with the selected user
     // upon success. Several options are available :
     // - security: passwords will be asked
     // - only_managers: restricts the list to managers
-    // - current_user: password will not be asked if this 
+    // - current_user: password will not be asked if this
     //                 user is selected.
-    // - title: The title of the user selection list. 
-    select_user: function(options){
-        options = options || {};
-        var self = this;
-        var def  = new $.Deferred();
+    // - title: The title of the employee selection list.
 
-        var list = [];
-        for (var i = 0; i < this.pos.users.length; i++) {
-            var user = this.pos.users[i];
-            if (!options.only_managers || user.role === 'manager') {
-                list.push({
-                    'label': user.name,
-                    'item':  user,
-                });
-            }
-        }
-
-        this.show_popup('selection',{
-            'title': options.title || _t('Select User'),
-            list: list,
-            confirm: function(user){ def.resolve(user); },
-            cancel:  function(){ def.reject(); },
-        });
-
-        return def.then(function(user){
-            if (options.security && user !== options.current_user && user.pos_security_pin) {
-                return self.ask_password(user.pos_security_pin).then(function(){
-                    return user;
-                });
-            } else {
-                return user;
-            }
-        });
-    },
-
-    // Ask for a password, and checks if it this
-    // the same as specified by the function call.
-    // returns a deferred that resolves on success,
-    // fails on failure.
-    ask_password: function(password) {
-        var self = this;
-        var ret = new $.Deferred();
-        if (password) {
-            this.show_popup('password',{
-                'title': _t('Password ?'),
-                confirm: function(pw) {
-                    if (pw !== password) {
-                        self.show_popup('error',_t('Incorrect Password'));
-                        ret.reject();
-                    } else {
-                        ret.resolve();
-                    }
-                },
-            });
-        } else {
-            ret.resolve();
-        }
-        return ret;
-    },
 
     // checks if the current user (or the user provided) has manager
     // access rights. If not, a popup is shown allowing the user to
-    // temporarily login as an administrator. 
-    // This method returns a deferred, that succeeds with the 
+    // temporarily login as an administrator.
+    // This method returns a promise, that succeeds with the
     // manager user when the login is successfull.
     sudo: function(user){
         user = user || this.pos.get_cashier();
 
         if (user.role === 'manager') {
-            return new $.Deferred().resolve(user);
+            return Promise.resolve(user);
         } else {
-            return this.select_user({
-                security:       true, 
+            return this.select_employee({
+                security:       true,
                 only_managers:  true,
                 title:       _t('Login as a Manager'),
             });
@@ -302,28 +271,33 @@ var Gui = core.Class.extend({
         if (!pending) {
             this._close();
         } else {
-            this.pos.push_order().always(function() {
+            var always = function () {
                 var pending = self.pos.db.get_orders().length;
                 if (!pending) {
                     self._close();
                 } else {
-                    var reason = self.pos.get('failed') ? 
-                                 'configuration errors' : 
-                                 'internet connection issues';  
+                    var reason = self.pos.get('failed') ?
+                                 _t('Some orders could not be submitted to '+
+                                     'the server due to configuration errors. '+
+                                     'You can exit the Point of Sale, but do '+
+                                     'not close the session before the issue '+
+                                     'has been resolved.') :
+                                 _t('Some orders could not be submitted to '+
+                                     'the server due to internet connection issues. '+
+                                     'You can exit the Point of Sale, but do '+
+                                     'not close the session before the issue '+
+                                     'has been resolved.');
 
                     self.show_popup('confirm', {
                         'title': _t('Offline Orders'),
-                        'body':  _t(['Some orders could not be submitted to',
-                                     'the server due to ' + reason + '.',
-                                     'You can exit the Point of Sale, but do',
-                                     'not close the session before the issue',
-                                     'has been resolved.'].join(' ')),
+                        'body':  reason,
                         'confirm': function() {
                             self._close();
                         },
                     });
                 }
-            });
+            };
+            this.pos.push_order().then(always, always);
         }
     },
 
@@ -333,17 +307,7 @@ var Gui = core.Class.extend({
         this.chrome.loading_message(_t('Closing ...'));
 
         this.pos.push_order().then(function(){
-            return new Model("ir.model.data").get_func("search_read")([['name', '=', 'action_client_pos_menu']], ['res_id'])
-            .pipe(function(res) {
-                window.location = '/web#action=' + res[0]['res_id'];
-            },function(err,event) {
-                event.preventDefault();
-                self.show_popup('error',{
-                    'title': _t('Could not close the point of sale.'),
-                    'body':  _t('Your internet connection is probably down.'),
-                });
-                self.chrome.widget.close_button.renderElement();
-            });
+            window.location = "/web#action=point_of_sale.action_client_pos_menu";
         });
     },
 
@@ -364,27 +328,49 @@ var Gui = core.Class.extend({
 
     /* ---- Gui: FILE I/O ---- */
 
-    // This will make the browser download 'contents' as a 
+    // This will make the browser download 'contents' as a
     // file named 'name'
     // if 'contents' is not a string, it is converted into
-    // a JSON representation of the contents. 
+    // a JSON representation of the contents.
 
+
+    // TODO: remove me in master: deprecated in favor of prepare_download_link
+    // this method is kept for backward compatibility but is likely not going
+    // to work as many browsers do to not accept fake click events on links
     download_file: function(contents, name) {
+        href_params = this.prepare_file_blob(contents,name);
+        var evt  = document.createEvent("HTMLEvents");
+        evt.initEvent("click");
+
+        $("<a>",href_params).get(0).dispatchEvent(evt);
+
+    },
+
+    prepare_download_link: function(contents, filename, src, target) {
+        var href_params = this.prepare_file_blob(contents, filename);
+
+        $(target).parent().attr(href_params);
+        $(src).addClass('oe_hidden');
+        $(target).removeClass('oe_hidden');
+
+        // hide again after click
+        $(target).click(function() {
+            $(src).removeClass('oe_hidden');
+            $(this).addClass('oe_hidden');
+        });
+    },
+
+    prepare_file_blob: function(contents, name) {
         var URL = window.URL || window.webkitURL;
-        
+
         if (typeof contents !== 'string') {
             contents = JSON.stringify(contents,null,2);
         }
 
         var blob = new Blob([contents]);
 
-        var evt  = document.createEvent("HTMLEvents");
-            evt.initEvent("click");
-
-        $("<a>",{
-            download: name || 'document.txt',
-            href: URL.createObjectURL(blob),
-        }).get(0).dispatchEvent(evt);
+        return {download: name || 'document.txt',
+                href: URL.createObjectURL(blob),}
     },
 
     /* ---- Gui: EMAILS ---- */
@@ -394,54 +380,61 @@ var Gui = core.Class.extend({
     // prefilled.
 
     send_email: function(address, subject, body) {
-        window.open("mailto:" + address + 
+        window.open("mailto:" + address +
                           "?subject=" + (subject ? window.encodeURIComponent(subject) : '') +
                           "&body=" + (body ? window.encodeURIComponent(body) : ''));
     },
 
     /* ---- Gui: KEYBOARD INPUT ---- */
 
-    // This is a helper to handle numpad keyboard input. 
+    // This is a helper to handle numpad keyboard input.
     // - buffer: an empty or number string
     // - input:  '[0-9],'+','-','.','CLEAR','BACKSPACE'
     // - options: 'firstinput' -> will clear buffer if
     //     input is '[0-9]' or '.'
     //  returns the new buffer containing the modifications
-    //  (the original is not touched) 
-    numpad_input: function(buffer, input, options) { 
+    //  (the original is not touched)
+    numpad_input: function(buffer, input, options) {
         var newbuf  = buffer.slice(0);
         options = options || {};
+        var newbuf_float  = newbuf === '-' ? newbuf : field_utils.parse.float(newbuf);
+        var decimal_point = _t.database.parameters.decimal_point;
 
-        if (input === '.') {
+        if (input === decimal_point) {
             if (options.firstinput) {
                 newbuf = "0.";
             }else if (!newbuf.length || newbuf === '-') {
                 newbuf += "0.";
-            } else if (newbuf.indexOf('.') < 0){
-                newbuf = newbuf + '.';
+            } else if (newbuf.indexOf(decimal_point) < 0){
+                newbuf = newbuf + decimal_point;
             }
         } else if (input === 'CLEAR') {
-            newbuf = ""; 
-        } else if (input === 'BACKSPACE') { 
+            newbuf = "";
+        } else if (input === 'BACKSPACE') {
             newbuf = newbuf.substring(0,newbuf.length - 1);
         } else if (input === '+') {
             if ( newbuf[0] === '-' ) {
                 newbuf = newbuf.substring(1,newbuf.length);
             }
         } else if (input === '-') {
-            if ( newbuf[0] === '-' ) {
+            if (options.firstinput) {
+                newbuf = '-0';
+            } else if ( newbuf[0] === '-' ) {
                 newbuf = newbuf.substring(1,newbuf.length);
             } else {
                 newbuf = '-' + newbuf;
             }
         } else if (input[0] === '+' && !isNaN(parseFloat(input))) {
-            newbuf = '' + ((parseFloat(newbuf) || 0) + parseFloat(input));
+            newbuf = this.chrome.format_currency_no_symbol(newbuf_float + parseFloat(input));
         } else if (!isNaN(parseInt(input))) {
             if (options.firstinput) {
                 newbuf = '' + input;
             } else {
                 newbuf += input;
             }
+        }
+        if (newbuf === "-") {
+            newbuf = "";
         }
 
         // End of input buffer at 12 characters.

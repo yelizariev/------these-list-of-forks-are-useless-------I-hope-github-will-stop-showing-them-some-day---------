@@ -1,109 +1,128 @@
 odoo.define('website_blog.new_blog_post', function (require) {
-"use strict";
+'use strict';
 
 var core = require('web.core');
-var base = require('web_editor.base');
-var Model = require('web.Model');
-var website = require('website.website');
-var contentMenu = require('website.contentMenu');
+var wUtils = require('website.utils');
+var WebsiteNewMenu = require('website.newMenu');
 
 var _t = core._t;
 
-contentMenu.TopBar.include({
-    new_blog_post: function () {
-        var model = new Model('blog.blog');
-        model.call('name_search', [], { context: base.get_context() }).then(function (blog_ids) {
-            if (blog_ids.length == 1) {
-                document.location = '/blog/' + blog_ids[0][0] + '/post/new';
-            } else if (blog_ids.length > 1) {
-                website.prompt({
-                    id: "editor_new_blog",
+WebsiteNewMenu.include({
+    actions: _.extend({}, WebsiteNewMenu.prototype.actions || {}, {
+        new_blog_post: '_createNewBlogPost',
+    }),
+
+    //--------------------------------------------------------------------------
+    // Actions
+    //--------------------------------------------------------------------------
+
+    /**
+     * Asks the user information about a new blog post to create, then creates
+     * it and redirects the user to this new post.
+     *
+     * @private
+     * @returns {Promise} Unresolved if there is a redirection
+     */
+    _createNewBlogPost: function () {
+        return this._rpc({
+            model: 'blog.blog',
+            method: 'search_read',
+            args: [wUtils.websiteDomain(this), ['name']],
+        }).then(function (blogs) {
+            if (blogs.length === 1) {
+                document.location = '/blog/' + blogs[0]['id'] + '/post/new';
+                return new Promise(function () {});
+            } else if (blogs.length > 1) {
+                return wUtils.prompt({
+                    id: 'editor_new_blog',
                     window_title: _t("New Blog Post"),
-                    select: "Select Blog",
+                    select: _t("Select Blog"),
                     init: function (field) {
-                        return blog_ids;
+                        return _.map(blogs, function (blog) {
+                            return [blog['id'], blog['name']];
+                        });
                     },
-                }).then(function (blog_id) {
+                }).then(function (result) {
+                    var blog_id = result.val;
+                    if (!blog_id) {
+                        return;
+                    }
                     document.location = '/blog/' + blog_id + '/post/new';
+                    return new Promise(function () {});
                 });
             }
         });
     },
 });
-
 });
 
+//==============================================================================
+
 odoo.define('website_blog.editor', function (require) {
-"use strict";
+'use strict';
 
-    var ajax = require('web.ajax');
-    var widget = require('web_editor.widget');
-    var options = require('web_editor.snippets.options');
-    var rte = require('web_editor.rte');
+require('web.dom_ready');
+var core = require('web.core');
+var options = require('web_editor.snippets.options');
+var WysiwygMultizone = require('web_editor.wysiwyg.multizone');
 
-    if(!$('.website_blog').length) {
-        return $.Deferred().reject("DOM doesn't contain '.website_blog'");
-    }
+var _t = core._t;
 
-    rte.Class.include({
-        saveElement: function ($el, context) {
-            if ($el.is('#js_blogcover')) {
-                return ajax.jsonRpc("/blog/post_change_background", 'call', {
-                    'post_id' : +$('#blog_post_name').data('oe-id'),
-                    'cover_properties' : {
-                        "background-image": $el.css("background-image").replace(/"/g, ''),
-                        "background-color": $el.attr("class"),
-                        "opacity": $el.css("opacity"),
-                        "resize_class": $('#title').attr('class'),
-                    }
-                });
-            }
-            return this._super($el, context);
-        },
-    });
+if (!$('.website_blog').length) {
+    return Promise.reject("DOM doesn't contain '.website_blog'");
+}
 
+WysiwygMultizone.include({
+    /**
+     * @override
+     */
+    start: function () {
+        $('.js_tweet, .js_comment').off('mouseup').trigger('mousedown');
+        return this._super.apply(this, arguments);
+    },
+});
 
-    options.registry.many2one.include({
-        select_record: function (li) {
-            var self = this;
-            this._super(li);
-            if (this.$target.data('oe-field') === "author_id") {
-                var $nodes = $('[data-oe-model="blog.post"][data-oe-id="'+this.$target.data('oe-id')+'"][data-oe-field="author_avatar"]');
-                $nodes.each(function () {
-                    var $img = $(this).find("img");
-                    var css = window.getComputedStyle($img[0]);
-                    $img.css({ width: css.width, height: css.height });
-                    $img.attr("src", "/web/image/res.partner/"+self.ID+"/image");
-                });
-                setTimeout(function () { $nodes.removeClass('o_dirty'); },0);
-            }
-        }
-    });
+options.registry.many2one.include({
 
-    options.registry.website_blog = options.Class.extend({
-        start : function(type, value, $li) {
-            this._super();
-            this.src = this.$target.css("background-image").replace(/url\(|\)|"|'/g,'').replace(/.*none$/,'');
-            this.$image = $('<image src="'+this.src+'">');
-        },
-        clear : function(type, value, $li) {
-            if (type !== 'click') return;
-            this.src = null;
-            this.$target.css({"background-image": '', 'min-height': $(window).height()});
-            this.$image.removeAttr("src");
-        },
-        change : function(type, value, $li) {
-            if (type !== 'click') return;
-            var self = this;
-            var editor  = new widget.MediaDialog(this.$image, this.$image[0], {only_images: true});
-            editor.appendTo('body');
-            editor.on('saved', self, function (event, img) {
-                var url = self.$image.attr('src');
-                self.$target.find('#js_blogcover').css({"background-image": url ? 'url(' + url + ')' : "", 'min-height': $(window).height()-$('#js_blogcover').offset().top});
-                self.$target.find('#js_blogcover').addClass('o_dirty');
-                self.buildingBlock.parent.rte_changed();
+    //--------------------------------------------------------------------------
+    // Private
+    //--------------------------------------------------------------------------
+
+    /**
+     * @override
+     */
+    _selectRecord: function ($opt) {
+        var self = this;
+        this._super.apply(this, arguments);
+        if (this.$target.data('oe-field') === 'author_id') {
+            var $nodes = $('[data-oe-model="blog.post"][data-oe-id="'+this.$target.data('oe-id')+'"][data-oe-field="author_avatar"]');
+            $nodes.each(function () {
+                var $img = $(this).find('img');
+                var css = window.getComputedStyle($img[0]);
+                $img.css({ width: css.width, height: css.height });
+                $img.attr('src', '/web/image/res.partner/'+self.ID+'/image_1024');
             });
-        },
-    });
+            setTimeout(function () { $nodes.removeClass('o_dirty'); },0);
+        }
+    }
+});
 
+options.registry.CoverProperties.include({
+    /**
+     * @override
+     */
+    updateUI: async function () {
+        await this._super(...arguments);
+        var isRegularCover = this.$target.is('.o_wblog_post_page_cover_regular');
+        var $coverFull = this.$el.find('[data-select-class*="o_full_screen_height"]');
+        var $coverMid = this.$el.find('[data-select-class*="o_half_screen_height"]');
+        var $coverAuto = this.$el.find('[data-select-class*="cover_auto"]');
+        this._coverFullOriginalLabel = this._coverFullOriginalLabel || $coverFull.text();
+        this._coverMidOriginalLabel = this._coverMidOriginalLabel || $coverMid.text();
+        this._coverAutoOriginalLabel = this._coverAutoOriginalLabel || $coverAuto.text();
+        $coverFull.text(isRegularCover ? _t("Large") : this._coverFullOriginalLabel);
+        $coverMid.text(isRegularCover ? _t("Medium") : this._coverMidOriginalLabel);
+        $coverAuto.text(isRegularCover ? _t("Tiny") : this._coverAutoOriginalLabel);
+    },
+});
 });

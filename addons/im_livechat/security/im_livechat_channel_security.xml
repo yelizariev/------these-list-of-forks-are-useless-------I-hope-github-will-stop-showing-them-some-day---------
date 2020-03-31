@@ -1,47 +1,40 @@
 <?xml version="1.0"?>
 <odoo>
-    <data>
 
         <record id="module_category_im_livechat" model="ir.module.category">
-            <field name="name">Live Support</field>
+            <field name="name">Live Chat</field>
             <field name="sequence" eval="20" />
         </record>
 
         <record id="im_livechat_group_user" model="res.groups">
             <field name="name">User</field>
-            <field name="category_id" ref="module_category_im_livechat"/>
+            <field name="category_id" ref="base.module_category_website_live_chat"/>
             <field name="comment">The user will be able to join support channels.</field>
         </record>
 
         <record id="im_livechat_group_manager" model="res.groups">
-            <field name="name">Manager</field>
+            <field name="name">Administrator</field>
             <field name="comment">The user will be able to delete support channels.</field>
-            <field name="category_id" ref="module_category_im_livechat"/>
+            <field name="category_id" ref="base.module_category_website_live_chat"/>
             <field name="implied_ids" eval="[(4, ref('im_livechat.im_livechat_group_user'))]"/>
-            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+            <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
         </record>
 
-        <record id="mail_message_rule_manager" model="ir.rule">
-            <field name="name">Live Support Managers can read messages from live support</field>
-            <field name="model_id" ref="mail.model_mail_message"/>
-            <field name="groups" eval="[(6,0,[ref('im_livechat.im_livechat_group_manager')])]"/>
-            <field name="domain_force">[('mail.channel_ids.livechat_channel_id', '!=', None)]</field>
-            <field name="perm_unlink" eval="0"/>
-            <field name="perm_write" eval="0"/>
-            <field name="perm_read" eval="1"/>
-            <field name="perm_create" eval="0"/>
+    <data noupdate="1">
+        <record id="im_livechat_rule_manager_read_all_mail_channel" model="ir.rule">
+            <field name="name">Livechat: Administrator: read all livechat channel</field>
+            <field name="model_id" ref="model_mail_channel"/>
+            <field name="groups" eval="[(4, ref('im_livechat_group_manager'))]"/>
+            <field name="domain_force">[('channel_type', '=', 'livechat')]</field>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
         </record>
 
-        <record id="mail_channel_rule_manager" model="ir.rule">
-            <field name="name">Live Support Managers can see all session from live support</field>
-            <field name="model_id" ref="mail.model_mail_channel"/>
-            <field name="groups" eval="[(6,0,[ref('im_livechat.im_livechat_group_manager')])]"/>
-            <field name="domain_force">[('mail.channel_ids.livechat_channel_id', '!=', None)]</field>
-            <field name="perm_unlink" eval="1"/>
-            <field name="perm_write" eval="0"/>
-            <field name="perm_read" eval="1"/>
-            <field name="perm_create" eval="0"/>
-        </record>
 
+        <record id="base.default_user" model="res.users">
+            <field name="groups_id" eval="[(4,ref('im_livechat.im_livechat_group_manager'))]"/>
+        </record>
     </data>
 </odoo>

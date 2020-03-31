@@ -1,7 +1,12 @@
-import openerp.tests
+# -*- coding: utf-8 -*-
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
-@openerp.tests.common.at_install(False)
-@openerp.tests.common.post_install(True)
-class TestUi(openerp.tests.HttpCase):
+import odoo.tests
+from odoo import tools
+
+
+@odoo.tests.tagged('post_install', '-at_install')
+class TestUi(odoo.tests.HttpCase):
     def test_admin(self):
-        self.phantom_js("/", "odoo.__DEBUG__.services['web.Tour'].run('blog', 'test')", "odoo.__DEBUG__.services['web.Tour'].tours.blog", login='admin')
+        self.env['blog.blog'].create({'name': 'Travel'})
+        self.start_tour("/", 'blog', login='admin')
