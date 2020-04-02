@@ -672,7 +672,7 @@ class ChromeBrowser():
         self.ws_url = infos['webSocketDebuggerUrl']
         self._logger.info('Chrome headless temporary user profile dir: %s', self.user_data_dir)
 
-    def _json_command(self, command, timeout=3):
+    def _json_command(self, command, timeout=30):
         """
         Inspect dev tools with get
         Available commands:
