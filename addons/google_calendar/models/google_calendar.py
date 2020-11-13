@@ -12,6 +12,8 @@ import pytz
 from werkzeug import urls
 
 from odoo import api, fields, models, tools, _
+from odoo.exceptions import UserError
+from odoo.osv import expression
 from odoo.tools import exception_to_unicode
 
 _logger = logging.getLogger(__name__)
@@ -223,12 +225,12 @@ class GoogleCalendar(models.AbstractModel):
             "start": {
                 type: start_date,
                 vstype: None,
-                'timeZone': self.env.context.get('tz') or 'UTC',
+                'timeZone': self.env.context.get('tz') or self.env.user.tz or 'UTC',
             },
             "end": {
                 type: final_date,
                 vstype: None,
-                'timeZone': self.env.context.get('tz') or 'UTC',
+                'timeZone': self.env.context.get('tz') or self.env.user.tz or 'UTC',
             },
             "attendees": attendee_list,
             "reminders": {
@@ -262,7 +264,20 @@ class GoogleCalendar(models.AbstractModel):
         url = "/calendar/v3/calendars/%s/events?fields=%s&access_token=%s" % ('primary', urls.url_quote('id,updated'), self.get_token())
         headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
         data_json = json.dumps(data)
-        return self.env['google.service']._do_request(url, data_json, headers, type='POST')
+        try:
+            return self.env['google.service']._do_request(url, data_json, headers, type='POST')
+        except requests.HTTPError as e:
+            try:
+                response = e.response.json()
+                error = response.get('error', {}).get('message')
+            except Exception:
+                error = None
+            if not error:
+                raise e
+            message = _('The event "%s", %s (ID: %s) cannot be synchronized because of the following error: %s') % (
+                event.name, event.start, event.id, error
+            )
+            raise UserError(message)
 
     def delete_an_event(self, event_id):
         """ Delete the given event in primary calendar of google cal.
@@ -441,7 +456,9 @@ class GoogleCalendar(models.AbstractModel):
                 if google_attendee.get('found'):
                     continue
 
-                attendee = ResPartner.search([('email', '=', google_attendee['email'])], limit=1)
+                attendee = ResPartner.search([('email', '=ilike', google_attendee['email']), ('user_ids', '!=', False)], limit=1)
+                if not attendee:
+                    attendee = ResPartner.search([('email', '=ilike', google_attendee['email'])], limit=1)
                 if not attendee:
                     data = {
                         'email': partner_email,
@@ -538,7 +555,15 @@ class GoogleCalendar(models.AbstractModel):
     @api.model
     def synchronize_events_cron(self):
         """ Call by the cron. """
-        users = self.env['res.users'].search([('google_calendar_last_sync_date', '!=', False)])
+        domain = [('google_calendar_last_sync_date', '!=', False)]
+        if self.env.context.get('last_sync_hours'):
+            last_sync_hours = self.env.context['last_sync_hours']
+            last_sync_date = datetime.now() - timedelta(hours=last_sync_hours)
+            domain = expression.AND([
+                domain,
+                [('google_calendar_last_sync_date', '<=', fields.Datetime.to_string(last_sync_date))]
+            ])
+        users = self.env['res.users'].search(domain, order='google_calendar_last_sync_date')
         _logger.info("Calendar Synchro - Started by cron")
 
         for user_to_sync in users.ids:
@@ -677,7 +702,7 @@ class GoogleCalendar(models.AbstractModel):
             try:
                 all_event_from_google = self.get_event_synchro_dict(lastSync=lastSync)
             except requests.HTTPError as e:
-                if e.response.code == 410:  # GONE, Google is lost.
+                if e.response.status_code == 410:  # GONE, Google is lost.
                     # we need to force the rollback from this cursor, because it locks my res_users but I need to write in this tuple before to raise.
                     self.env.cr.rollback()
                     self.env.user.write({'google_calendar_last_sync_date': False})
@@ -842,7 +867,7 @@ class GoogleCalendar(models.AbstractModel):
                         try:
                             # if already deleted from gmail or never created
                             recs.delete_an_event(current_event[0])
-                        except Exception as e:
+                        except requests.exceptions.HTTPError as e:
                             if e.response.status_code in (401, 410,):
                                 pass
                             else:

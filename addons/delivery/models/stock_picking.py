@@ -59,7 +59,7 @@ class StockPicking(models.Model):
         return weight_uom_id
 
     @api.one
-    @api.depends('move_line_ids')
+    @api.depends('move_line_ids', 'move_line_ids.result_package_id')
     def _compute_packages(self):
         self.ensure_one()
         packs = set()
@@ -69,7 +69,7 @@ class StockPicking(models.Model):
         self.package_ids = list(packs)
 
     @api.one
-    @api.depends('move_line_ids')
+    @api.depends('move_line_ids', 'move_line_ids.result_package_id', 'move_line_ids.product_uom_id', 'move_line_ids.qty_done')
     def _compute_bulk_weight(self):
         weight = 0.0
         for move_line in self.move_line_ids:
@@ -86,7 +86,7 @@ class StockPicking(models.Model):
     delivery_type = fields.Selection(related='carrier_id.delivery_type', readonly=True)
     carrier_id = fields.Many2one("delivery.carrier", string="Carrier")
     volume = fields.Float(copy=False)
-    weight = fields.Float(compute='_cal_weight', digits=dp.get_precision('Stock Weight'), store=True)
+    weight = fields.Float(compute='_cal_weight', digits=dp.get_precision('Stock Weight'), store=True, compute_sudo=True)
     carrier_tracking_ref = fields.Char(string='Tracking Reference', copy=False)
     carrier_tracking_url = fields.Char(string='Tracking URL', compute='_compute_carrier_tracking_url')
     number_of_packages = fields.Integer(string='Number of Packages', copy=False)
@@ -164,7 +164,8 @@ class StockPicking(models.Model):
         if self.carrier_id.free_over and self.sale_id and self.sale_id._compute_amount_total_without_delivery() >= self.carrier_id.amount:
             res['exact_price'] = 0.0
         self.carrier_price = res['exact_price']
-        self.carrier_tracking_ref = res['tracking_number']
+        if res['tracking_number']:
+            self.carrier_tracking_ref = res['tracking_number']
         order_currency = self.sale_id.currency_id or self.company_id.currency_id
         msg = _("Shipment sent to carrier %s for shipping with tracking number %s<br/>Cost: %.2f %s") % (self.carrier_id.name, self.carrier_tracking_ref, self.carrier_price, order_currency.name)
         self.message_post(body=msg)

@@ -42,7 +42,19 @@ var History = function History($editable) {
             $editable.removeAttr('contentEditable').removeProp('contentEditable');
         }
 
-        $editable.html(oSnap.contents).scrollTop(oSnap.scrollTop);
+        $editable.trigger('content_will_be_destroyed');
+        var $tempDiv = $('<div/>', {html: oSnap.contents});
+        _.each($tempDiv.find('.o_temp_auto_element'), function (el) {
+            var $el = $(el);
+            var originalContent = $el.attr('data-temp-auto-element-original-content');
+            if (originalContent) {
+                $el.after(originalContent);
+            }
+            $el.remove();
+        });
+        $editable.html($tempDiv.html()).scrollTop(oSnap.scrollTop);
+        $editable.trigger('content_was_recreated');
+
         $('.oe_overlay').remove();
         $('.note-control-selection').hide();
 
@@ -157,7 +169,7 @@ var History = function History($editable) {
 
         if (aUndo[pos]) {
             pos = Math.min(pos, aUndo.length);
-            aUndo.splice(Math.max(pos,1), aUndo.length);
+            aUndo.splice(pos, aUndo.length);
         }
 
         // => make a snap when the user change editable zone (because: don't make snap for each keydown)
@@ -276,6 +288,20 @@ var RTEWidget = Widget.extend({
 
         var $editable = this.editable();
 
+        // When a undo/redo is performed, the whole DOM is changed so we have
+        // to prepare for it (website will restart animations for example)
+        // TODO should be better handled
+        $editable.on('content_will_be_destroyed', function (ev) {
+            self.trigger_up('content_will_be_destroyed', {
+                $target: $(ev.currentTarget),
+            });
+        });
+        $editable.on('content_was_recreated', function (ev) {
+            self.trigger_up('content_was_recreated', {
+                $target: $(ev.currentTarget),
+            });
+        });
+
         $editable.addClass('o_editable')
         .data('rte', this)
         .each(function () {
@@ -290,9 +316,12 @@ var RTEWidget = Widget.extend({
         });
 
         // start element observation
-        $(document).on('content_changed', '.o_editable', function (event) {
-            self.trigger_up('rte_change', {target: event.target});
-            $(this).addClass('o_dirty');
+        $(document).on('content_changed', '.o_editable', function (ev) {
+            self.trigger_up('rte_change', {target: ev.target});
+            if (!ev.__isDirtyHandled) {
+                $(this).addClass('o_dirty');
+                ev.__isDirtyHandled = true;
+            }
         });
 
         $('#wrapwrap, .o_editable').on('click.rte', '*', this, this._onClick.bind(this));
@@ -408,6 +437,10 @@ var RTEWidget = Widget.extend({
     save: function (context) {
         var self = this;
 
+        $('.o_editable')
+            .destroy()
+            .removeClass('o_editable o_is_inline_editable o_editable_date_field_linked o_editable_date_field_format_changed');
+
         var $dirty = $('.o_dirty');
         $dirty
             .removeAttr('contentEditable')
@@ -474,6 +507,17 @@ var RTEWidget = Widget.extend({
      * @param {jQuery} $editable
      */
     _enableEditableArea: function ($editable) {
+        if ($editable.data('oe-type') === "datetime" || $editable.data('oe-type') === "date") {
+            var selector = '[data-oe-id="' + $editable.data('oe-id') + '"]';
+            selector += '[data-oe-field="' + $editable.data('oe-field') + '"]';
+            selector += '[data-oe-model="' + $editable.data('oe-model') + '"]';
+            var $linkedFieldNodes = this.editable().find(selector).addBack(selector);
+            $linkedFieldNodes.not($editable).addClass('o_editable_date_field_linked');
+            if (!$editable.hasClass('o_editable_date_field_format_changed')) {
+                $linkedFieldNodes.html($editable.data('oe-original-with-format'));
+                $linkedFieldNodes.addClass('o_editable_date_field_format_changed');
+            }
+        }
         if ($editable.data('oe-type') === "monetary") {
             $editable.attr('contenteditable', false);
             $editable.find('.oe_currency_value').attr('contenteditable', true);
@@ -580,9 +624,20 @@ var RTEWidget = Widget.extend({
         var $target = $(ev.target);
         var $editable = $target.closest('.o_editable');
 
+        if (this && this.$last && this.$last.length && this.$last[0] !== $target[0]) {
+            $('.o_editable_date_field_linked').removeClass('o_editable_date_field_linked');
+        }
         if (!$editable.length || $.summernote.core.dom.isContentEditableFalse($target)) {
             return;
         }
+
+        // Removes strange _moz_abspos attribute when it appears. Cannot
+        // find another solution which works in all cases. A grabber still
+        // appears at the same time which I did not manage to remove.
+        // TODO find a complete and better solution
+        _.defer(function () {
+            $editable.find('[_moz_abspos]').removeAttr('_moz_abspos');
+        });
 
         if ($target.is('a')) {
             /**
@@ -615,6 +670,7 @@ var RTEWidget = Widget.extend({
             }, 150); // setTimeout to remove flickering when change to editable zone (re-create an editor)
             this.$last = null;
         }
+
         if ($editable.length && (!this.$last || this.$last[0] !== $editable[0])) {
             $editable.summernote(this._getConfig($editable));
 
