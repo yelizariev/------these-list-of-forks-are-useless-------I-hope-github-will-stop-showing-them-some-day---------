@@ -28,6 +28,7 @@ var SnippetEditor = Widget.extend({
     xmlDependencies: ['/web_editor/static/src/xml/snippets.xml'],
     events: {
         'click .oe_snippet_remove': '_onRemoveClick',
+        'wheel': '_onMouseWheel',
     },
     custom_events: {
         'option_update': '_onOptionUpdate',
@@ -55,6 +56,7 @@ var SnippetEditor = Widget.extend({
         this.templateOptions = templateOptions;
         this.isTargetParentEditable = false;
         this.isTargetMovable = false;
+        this.$scrollingElement = $().getScrollingElement();
 
         this.__isStarted = new Promise(resolve => {
             this.__isStartedResolveFunc = resolve;
@@ -205,11 +207,38 @@ var SnippetEditor = Widget.extend({
      * Makes the editor overlay cover the associated snippet.
      */
     cover: function () {
-        if (!this.isShown() || !this.$target.length || !this.$target.is(':visible')) {
+        if (!this.isShown() || !this.$target.length) {
             return;
         }
+
         const $modal = this.$target.find('.modal');
         const $target = $modal.length ? $modal : this.$target;
+        const targetEl = $target[0];
+
+        // Check first if the target is still visible, otherwise we have to
+        // hide it. When covering all element after scroll for instance it may
+        // have been hidden (part of an affixed header for example) or it may
+        // be outside of the viewport (the whole header during an effect for
+        // example).
+        const rect = targetEl.getBoundingClientRect();
+        const vpWidth = window.innerWidth || document.documentElement.clientWidth;
+        const vpHeight = window.innerHeight || document.documentElement.clientHeight;
+        const isInViewport = (
+            rect.bottom > -0.1 &&
+            rect.right > -0.1 &&
+            (vpHeight - rect.top) > -0.1 &&
+            (vpWidth - rect.left) > -0.1
+        );
+        const hasSize = ( // :visible not enough for images
+            Math.abs(rect.bottom - rect.top) > 0.01 &&
+            Math.abs(rect.right - rect.left) > 0.01
+        );
+        if (!isInViewport || !hasSize || !this.$target.is(`:visible`)) {
+            this.toggleOverlayVisibility(false);
+            return;
+        }
+
+        // Now cover the element
         const offset = $target.offset();
         var manipulatorOffset = this.$el.parent().offset();
         offset.top -= manipulatorOffset.top;
@@ -220,7 +249,9 @@ var SnippetEditor = Widget.extend({
             top: offset.top,
         });
         this.$('.o_handles').css('height', $target.outerHeight());
-        this.$el.toggleClass('o_top_cover', offset.top < this.$editable.offset().top);
+
+        const editableOffsetTop = this.$editable.offset().top - manipulatorOffset.top;
+        this.$el.toggleClass('o_top_cover', offset.top - editableOffsetTop < 25);
     },
     /**
      * DOMElements have a default name which appears in the overlay when they
@@ -614,15 +645,24 @@ var SnippetEditor = Widget.extend({
 
         this.$editable.find('.oe_drop_zone').droppable({
             over: function () {
-                self.$editable.find('.oe_drop_zone.hide').removeClass('hide');
-                $(this).addClass('hide').first().after(self.$target);
-                self.dropped = true;
+                if (!self.dropped) {
+                    self.dropped = true;
+                    $(this).first().after(self.$target).addClass('invisible');
+                }
             },
             out: function () {
-                $(this).removeClass('hide');
-                self.$target.detach();
-                self.dropped = false;
+                var prev = self.$target.prev();
+                if (this === prev[0]) {
+                    self.dropped = false;
+                    self.$target.detach();
+                    $(this).removeClass('invisible');
+                }
             },
+        });
+        // Trigger a scroll on the draggable element so that jQuery updates
+        // the position of the drop zones.
+        this.$scrollingElement.on('scroll.scrolling_element', function () {
+            self.$el.trigger('scroll');
         });
     },
     /**
@@ -684,6 +724,7 @@ var SnippetEditor = Widget.extend({
         this.trigger_up('drag_and_drop_stop', {
             $snippet: this.$target,
         });
+        this.$scrollingElement.off('scroll.scrolling_element');
     },
     /**
      * @private
@@ -805,6 +846,21 @@ var SnippetEditor = Widget.extend({
             }
         }
     },
+    /**
+     * Called when the 'mouse wheel' is used when hovering over the overlay.
+     * Disable the pointer events to prevent page scrolling from stopping.
+     *
+     * @private
+     * @param {Event} ev
+     */
+    _onMouseWheel: function (ev) {
+        ev.stopPropagation();
+        this.$el.css('pointer-events', 'none');
+        clearTimeout(this.wheelTimeout);
+        this.wheelTimeout = setTimeout(() => {
+            this.$el.css('pointer-events', '');
+        }, 250);
+    },
 });
 
 /**
@@ -821,6 +877,7 @@ var SnippetsMenu = Widget.extend({
         'mousedown': '_onMouseDown',
         'input .o_snippet_search_filter_input': '_onSnippetSearchInput',
         'click .o_snippet_search_filter_reset': '_onSnippetSearchResetClick',
+        'summernote_popover_update_call .o_we_snippet_text_tools': '_onSummernoteToolsUpdate',
     },
     custom_events: {
         'activate_insertion_zones': '_onActivateInsertionZones',
@@ -929,7 +986,7 @@ var SnippetsMenu = Widget.extend({
         this.customizePanel.classList.add('o_we_customize_panel', 'd-none');
 
         this.textEditorPanelEl = document.createElement('div');
-        this.textEditorPanelEl.classList.add('o_we_snippet_text_tools');
+        this.textEditorPanelEl.classList.add('o_we_snippet_text_tools', 'd-none');
 
         this.invisibleDOMPanelEl = document.createElement('div');
         this.invisibleDOMPanelEl.classList.add('o_we_invisible_el_panel');
@@ -990,13 +1047,19 @@ var SnippetsMenu = Widget.extend({
         // On keydown add a class on the active overlay to hide it and show it
         // again when the mouse moves
         this.$document.on('keydown.snippets_menu', () => {
+            this.__overlayKeyWasDown = true;
             this.snippetEditors.forEach(editor => {
                 editor.toggleOverlayVisibility(false);
             });
         });
         this.$document.on('mousemove.snippets_menu, mousedown.snippets_menu', _.throttle(() => {
+            if (!this.__overlayKeyWasDown) {
+                return;
+            }
+            this.__overlayKeyWasDown = false;
             this.snippetEditors.forEach(editor => {
                 editor.toggleOverlayVisibility(true);
+                editor.cover();
             });
         }, 250));
 
@@ -1030,13 +1093,28 @@ var SnippetsMenu = Widget.extend({
         });
 
         const $autoFocusEls = $('.o_we_snippet_autofocus');
-        if ($autoFocusEls.length) {
-            this._activateSnippet($autoFocusEls.first());
-        }
+        this._activateSnippet($autoFocusEls.length ? $autoFocusEls.first() : false);
+
+        // Add tooltips on we-title elements whose text overflows
+        this.$el.tooltip({
+            selector: 'we-title',
+            placement: 'bottom',
+            delay: 100,
+            title: function () {
+                const el = this;
+                // On Firefox, el.scrollWidth is equal to el.clientWidth when
+                // overflow: hidden, so we need to update the style before to
+                // get the right values.
+                el.style.setProperty('overflow', 'scroll', 'important');
+                const tipContent = el.scrollWidth > el.clientWidth ? el.innerHTML : '';
+                el.style.removeProperty('overflow');
+                return tipContent;
+            },
+        });
 
         return Promise.all(defs).then(() => {
             this.$('[data-title]').tooltip({
-                delay: 0,
+                delay: 100,
                 title: function () {
                     return this.classList.contains('active') ? false : this.dataset.title;
                 },
@@ -1047,6 +1125,12 @@ var SnippetsMenu = Widget.extend({
             // animation). (TODO wait for real animation end)
             setTimeout(() => {
                 this.$window.trigger('resize');
+
+                // Hacky way to prevent to switch to text tools on editor
+                // start. Only allow switching after some delay. Switching to
+                // tools is only useful for out-of-snippet texts anyway, so
+                // snippet texts can still be enabled immediately.
+                this._mutex.exec(() => this._textToolsSwitchingEnabled = true);
             }, 1000);
         });
     },
@@ -1540,6 +1624,14 @@ var SnippetsMenu = Widget.extend({
         var $html = $(html);
         var $scroll = $html.siblings('#o_scroll');
 
+        // TODO remove me in master: introduced in a 14.0 fix to allow users to
+        // customize their navbar with 'Boxed' website header, which they could
+        // not because of a wrong XML selector they may not update.
+        const $headerNavFix = $html.find('[data-js="HeaderNavbar"][data-selector="#wrapwrap > header > nav"]');
+        if ($headerNavFix.length) {
+            $headerNavFix[0].dataset.selector = '#wrapwrap > header nav.navbar';
+        }
+
         this.templateOptions = [];
         var selectors = [];
         var $styles = $html.find('[data-selector]');
@@ -1827,6 +1919,7 @@ var SnippetsMenu = Widget.extend({
         var $toInsert, dropped, $snippet;
 
         let dragAndDropResolve;
+        const $scrollingElement = $().getScrollingElement();
 
         const smoothScrollOptions = this._getScrollOptions({
             jQueryDraggableOptions: {
@@ -1879,7 +1972,7 @@ var SnippetsMenu = Widget.extend({
                         over: function () {
                             if (!dropped) {
                                 dropped = true;
-                                $(this).first().after($toInsert).addClass('d-none');
+                                $(this).first().after($toInsert).addClass('invisible');
                                 $toInsert.removeClass('oe_snippet_body');
                             }
                         },
@@ -1888,10 +1981,16 @@ var SnippetsMenu = Widget.extend({
                             if (this === prev[0]) {
                                 dropped = false;
                                 $toInsert.detach();
-                                $(this).removeClass('d-none');
+                                $(this).removeClass('invisible');
                                 $toInsert.addClass('oe_snippet_body');
                             }
                         },
+                    });
+
+                    // Trigger a scroll on the draggable element so that jQuery updates
+                    // the position of the drop zones.
+                    $scrollingElement.on('scroll.scrolling_element', function () {
+                        self.$el.trigger('scroll');
                     });
 
                     const prom = new Promise(resolve => dragAndDropResolve = () => resolve());
@@ -1899,6 +1998,7 @@ var SnippetsMenu = Widget.extend({
                 },
                 stop: async function (ev, ui) {
                     $toInsert.removeClass('oe_snippet_body');
+                    $scrollingElement.off('scroll.scrolling_element');
 
                     if (!dropped && ui.position.top > 3 && ui.position.left + ui.helper.outerHeight() < self.el.getBoundingClientRect().left) {
                         var $el = $.nearest({x: ui.position.left, y: ui.position.top}, '.oe_drop_zone', {container: document.body}).first();
@@ -1954,7 +2054,7 @@ var SnippetsMenu = Widget.extend({
                 },
             },
         });
-        this.draggableComponent = new SmoothScrollOnDrag(this, $snippets, $().getScrollingElement(), smoothScrollOptions);
+        this.draggableComponent = new SmoothScrollOnDrag(this, $snippets, $scrollingElement, smoothScrollOptions);
     },
     /**
      * Adds the 'o_default_snippet_text' class on nodes which contain only
@@ -1985,6 +2085,7 @@ var SnippetsMenu = Widget.extend({
      * @param {this.tabs.VALUE} [tab='blocks'] - the tab to select
      */
     _updateLeftPanelContent: function ({content, tab}) {
+        clearTimeout(this._textToolsSwitchingTimeout);
         this._closeWidgets();
 
         tab = tab || this.tabs.BLOCKS;
@@ -1999,10 +2100,12 @@ var SnippetsMenu = Widget.extend({
         this.$('.o_snippet_search_filter').toggleClass('d-none', tab !== this.tabs.BLOCKS);
         this.$('#o_scroll').toggleClass('d-none', tab !== this.tabs.BLOCKS);
         this.customizePanel.classList.toggle('d-none', tab === this.tabs.BLOCKS);
+        this.textEditorPanelEl.classList.toggle('d-none', tab !== this.tabs.OPTIONS);
 
         this.$('.o_we_add_snippet_btn').toggleClass('active', tab === this.tabs.BLOCKS);
         this.$('.o_we_customize_snippet_btn').toggleClass('active', tab === this.tabs.OPTIONS)
                                              .prop('disabled', tab !== this.tabs.OPTIONS);
+
     },
     /**
      * Scrolls to given snippet.
@@ -2315,6 +2418,12 @@ var SnippetsMenu = Widget.extend({
         });
     },
     /**
+     * UNUSED: used to be called when saving a custom snippet. We now save and
+     * reload the page when saving a custom snippet so that all the DOM cleanup
+     * mechanisms are run before saving. Kept for compatibility.
+     *
+     * TODO: remove in master / find a way to clean the DOM without save+reload
+     *
      * @private
      */
     _onReloadSnippetTemplate: async function (ev) {
@@ -2423,6 +2532,41 @@ var SnippetsMenu = Widget.extend({
     _onSnippetThumbnailURLRequest(ev) {
         const $snippet = this.$snippets.has(`[data-snippet="${ev.data.key}"]`);
         ev.data.onSuccess($snippet.length ? $snippet[0].dataset.oeThumbnail : '');
+    },
+    /**
+     * @private
+     */
+    _onSummernoteToolsUpdate(ev) {
+        if (!this._textToolsSwitchingEnabled) {
+            return;
+        }
+        const range = $.summernote.core.range.create();
+        if (!range) {
+            return;
+        }
+        if (range.sc === range.ec && range.sc.nodeType === Node.ELEMENT_NODE
+                && range.sc.classList.contains('oe_structure')
+                && range.sc.children.length === 0) {
+            // Do not switch to text tools if the cursor is in an empty
+            // oe_structure (to encourage using snippets there and actually
+            // avoid breaking tours which suppose the snippet list is visible).
+            return;
+        }
+        this.textEditorPanelEl.classList.add('d-block');
+        const hasVisibleButtons = !!$(this.textEditorPanelEl).find('.btn:visible').length;
+        this.textEditorPanelEl.classList.remove('d-block');
+        if (!hasVisibleButtons) {
+            // Ugly way to detect that summernote was updated but there is no
+            // visible text tools.
+            return;
+        }
+        // Only switch tab without changing content (_updateLeftPanelContent
+        // make text tools visible only on that specific tab). Also do it with
+        // a slight delay to avoid flickering doing it twice.
+        clearTimeout(this._textToolsSwitchingTimeout);
+        this._textToolsSwitchingTimeout = setTimeout(() => {
+            this._updateLeftPanelContent({tab: this.tabs.OPTIONS});
+        }, 250);
     },
     /**
      * @private

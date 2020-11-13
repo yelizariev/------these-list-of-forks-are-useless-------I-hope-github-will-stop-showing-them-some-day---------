@@ -47,8 +47,8 @@ function factory(dependencies) {
         markComponentHintProcessed(hint) {
             let filterFun;
             switch (hint.type) {
-                case 'current-partner-just-posted-message':
-                    filterFun = h => h.type !== hint.type && h.messageId !== hint.data.messageId;
+                case 'message-received':
+                    filterFun = h => h.type !== hint.type && h.message !== hint.data.message;
                     break;
                 default:
                     filterFun = h => h.type !== hint.type;
@@ -56,6 +56,10 @@ function factory(dependencies) {
             }
             this.update({
                 componentHintList: this.componentHintList.filter(filterFun),
+            });
+            this.env.messagingBus.trigger('o-thread-view-hint-processed', {
+                hint,
+                threadViewer: this.threadViewer,
             });
         }
 
@@ -71,6 +75,21 @@ function factory(dependencies) {
         //----------------------------------------------------------------------
         // Private
         //----------------------------------------------------------------------
+
+        /**
+         * @private
+         * @returns {integer|undefined}
+         */
+        _computeThreadCacheInitialScrollHeight() {
+            if (!this.threadCache) {
+                return clear();
+            }
+            const threadCacheInitialScrollHeight = this.threadCacheInitialScrollHeights[this.threadCache.localId];
+            if (threadCacheInitialScrollHeight !== undefined) {
+                return threadCacheInitialScrollHeight;
+            }
+            return clear();
+        }
 
         /**
          * @private
@@ -95,18 +114,29 @@ function factory(dependencies) {
          * @returns {boolean}
          */
         _computeThreadShouldBeSetAsSeen() {
-            // FIXME condition should not be on "composer is focused" but "threadView is active"
-            // See task-2277543
-            const lastMessageIsVisible = this.lastVisibleMessage &&
-                this.lastVisibleMessage === this.lastMessage;
-            if (lastMessageIsVisible && this.hasComposerFocus && this.thread) {
-                this.thread.markAsSeen(this.lastMessage.id).catch(e => {
-                    // prevent crash when executing compute during destroy
-                    if (!(e instanceof RecordDeletedError)) {
-                        throw e;
-                    }
-                });
+            if (!this.thread) {
+                return;
             }
+            if (!this.thread.lastNonTransientMessage) {
+                return;
+            }
+            if (!this.lastVisibleMessage) {
+                return;
+            }
+            if (this.lastVisibleMessage !== this.lastMessage) {
+                return;
+            }
+            if (!this.hasComposerFocus) {
+                // FIXME condition should not be on "composer is focused" but "threadView is active"
+                // See task-2277543
+                return;
+            }
+            this.thread.markAsSeen(this.thread.lastNonTransientMessage).catch(e => {
+                // prevent crash when executing compute during destroy
+                if (!(e instanceof RecordDeletedError)) {
+                    throw e;
+                }
+            });
         }
 
         /**
@@ -114,6 +144,10 @@ function factory(dependencies) {
          */
         _onThreadCacheChanged() {
             this.addComponentHint('change-of-thread-cache');
+            if (this.threadCache) {
+                this.threadCache.update({ isCacheRefreshRequested: true });
+            }
+            this.update({ lastVisibleMessage: [['unlink']] });
         }
 
         /**
@@ -197,16 +231,34 @@ function factory(dependencies) {
         isPreparingLoading: attr({
             default: false,
         }),
+        /**
+         * Determines whether `this` should automatically scroll on receiving
+         * a new message. Detection of new message is done through the component
+         * hint `message-received`.
+         */
+        hasAutoScrollOnMessageReceived: attr(),
+        /**
+         * Last message in the context of the currently displayed thread cache.
+         */
         lastMessage: many2one('mail.message', {
             related: 'thread.lastMessage',
         }),
         /**
+         * Serves as compute dependency.
+         */
+        lastNonTransientMessage: many2one('mail.message', {
+            related: 'thread.lastNonTransientMessage',
+        }),
+        /**
          * Most recent message in this ThreadView that has been shown to the
-         * current partner.
+         * current partner in the currently displayed thread cache.
          */
         lastVisibleMessage: many2one('mail.message'),
         messages: many2many('mail.message', {
             related: 'threadCache.messages',
+        }),
+        nonEmptyMessages: many2many('mail.message', {
+            related: 'threadCache.nonEmptyMessages',
         }),
         /**
          * Not a real field, used to trigger `_onThreadCacheChanged` when one of
@@ -251,6 +303,13 @@ function factory(dependencies) {
             inverse: 'threadViews',
             related: 'threadViewer.threadCache',
         }),
+        threadCacheInitialScrollHeight: attr({
+            compute: '_computeThreadCacheInitialScrollHeight',
+            dependencies: [
+                'threadCache',
+                'threadCacheInitialScrollHeights',
+            ],
+        }),
         threadCacheInitialScrollPosition: attr({
             compute: '_computeThreadCacheInitialScrollPosition',
             dependencies: [
@@ -263,6 +322,13 @@ function factory(dependencies) {
          */
         threadCacheIsLoading: attr({
             related: 'threadCache.isLoading',
+        }),
+        /**
+         * List of saved initial scroll heights of thread caches.
+         */
+        threadCacheInitialScrollHeights: attr({
+            default: {},
+            related: 'threadViewer.threadCacheInitialScrollHeights',
         }),
         /**
          * List of saved initial scroll positions of thread caches.
@@ -280,6 +346,7 @@ function factory(dependencies) {
             dependencies: [
                 'hasComposerFocus',
                 'lastMessage',
+                'lastNonTransientMessage',
                 'lastVisibleMessage',
                 'threadCache',
             ],

@@ -769,41 +769,6 @@ registry.backgroundVideo = publicWidget.Widget.extend({
     },
 });
 
-registry.ul = publicWidget.Widget.extend({
-    selector: 'ul.o_ul_folded, ol.o_ul_folded',
-    events: {
-        'click .o_ul_toggle_next': '_onToggleNextClick',
-        'click .o_ul_toggle_self': '_onToggleSelfClick',
-    },
-
-    //--------------------------------------------------------------------------
-    // Handlers
-    //--------------------------------------------------------------------------
-
-    /**
-     * Called when a "toggle next" ul is clicked.
-     *
-     * @private
-     */
-    _onToggleNextClick: function (ev) {
-        ev.preventDefault();
-        var $target = $(ev.currentTarget);
-        $target.toggleClass('o_open');
-        $target.closest('li').next().toggleClass('o_close');
-    },
-    /**
-     * Called when a "toggle self" ul is clicked.
-     *
-     * @private
-     */
-    _onToggleSelfClick: function (ev) {
-        ev.preventDefault();
-        var $target = $(ev.currentTarget);
-        $target.toggleClass('o_open');
-        $target.closest('li').find('ul,ol').toggleClass('o_close');
-    },
-});
-
 registry.socialShare = publicWidget.Widget.extend({
     selector: '.oe_social_share',
     xmlDependencies: ['/website/static/src/xml/website.share.xml'],
@@ -984,7 +949,8 @@ registry.FullScreenHeight = publicWidget.Widget.extend({
         const windowHeight = $(window).outerHeight();
         // Doing it that way allows to considerer fixed headers, hidden headers,
         // connected users, ...
-        const mainTopPos = $('#wrapwrap > main')[0].getBoundingClientRect().top;
+        const firstContentEl = $('#wrapwrap > main > :first-child')[0]; // first child to consider the padding-top of main
+        const mainTopPos = firstContentEl.getBoundingClientRect().top + dom.closestScrollable(firstContentEl.parentNode).scrollTop;
         return (windowHeight - mainTopPos);
     },
 });
@@ -1015,6 +981,20 @@ registry.FooterSlideout = publicWidget.Widget.extend({
         const $main = this.$('> main');
         const slideoutEffect = $main.outerHeight() >= $(window).outerHeight();
         this.el.classList.toggle('o_footer_effect_enable', slideoutEffect);
+
+        // Add a pixel div over the footer, after in the DOM, so that the
+        // height of the footer is understood by Firefox sticky implementation
+        // (which it seems to not understand because of the combination of 3
+        // items: the footer is the last :visible element in the #wrapwrap, the
+        // #wrapwrap uses flex layout and the #wrapwrap is the element with a
+        // scrollbar).
+        // TODO check if the hack is still needed by future browsers.
+        this.__pixelEl = document.createElement('div');
+        this.__pixelEl.style.width = `1px`;
+        this.__pixelEl.style.height = `1px`;
+        this.__pixelEl.style.marginTop = `-1px`;
+        this.el.appendChild(this.__pixelEl);
+
         return this._super(...arguments);
     },
     /**
@@ -1023,6 +1003,7 @@ registry.FooterSlideout = publicWidget.Widget.extend({
     destroy() {
         this._super(...arguments);
         this.el.classList.remove('o_footer_effect_enable');
+        this.__pixelEl.remove();
     },
 });
 

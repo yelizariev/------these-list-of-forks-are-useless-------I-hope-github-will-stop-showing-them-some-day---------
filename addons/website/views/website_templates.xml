@@ -535,6 +535,9 @@
 </template>
 
 <template id="template_header_sidebar" inherit_id="website.layout" name="Template Header Sidebar" active="False">
+    <xpath expr="//header" position="attributes">
+        <attribute name="t-attf-class" add="o_header_sidebar" separator=" "/>
+    </xpath>
     <xpath expr="//header//nav" position="replace">
         <nav data-name="Navbar" class="navbar navbar-expand-lg navbar-light o_colored_level o_cc shadow pb-3">
             <div id="top_menu_container" class="container h-100">
@@ -1379,7 +1382,7 @@
                                 <a href="/website/social/linkedin" class="s_share_linkedin" target="_blank">
                                     <i class="fa fa-linkedin rounded-circle shadow-sm"/>
                                 </a>
-                                <a href="/" class="float-right">
+                                <a href="/" class="text-800 float-right">
                                     <i class="fa fa-home rounded-circle shadow-sm"/>
                                 </a>
                             </div>

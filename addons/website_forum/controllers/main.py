@@ -143,6 +143,8 @@ class WebsiteForum(WebsiteProfile):
             url_args['search'] = search
         if filters:
             url_args['filters'] = filters
+        if my:
+            url_args['my'] = my
         pager = request.website.pager(url=url, total=question_count, page=page,
                                       step=self._post_per_page, scope=self._post_per_page,
                                       url_args=url_args)
@@ -226,7 +228,7 @@ class WebsiteForum(WebsiteProfile):
                 type='http', auth="public", website=True, sitemap=False)
     def old_question(self, forum, question, **post):
         # Compatibility pre-v14
-        return request.redirect(_build_url_w_params("/forum/%s/question/%s" % (slug(forum), slug(question)), request.params), code=301)
+        return request.redirect(_build_url_w_params("/forum/%s/%s" % (slug(forum), slug(question)), request.params), code=301)
 
     @http.route(['''/forum/<model("forum.forum"):forum>/<model("forum.post", "[('forum_id','=',forum.id),('parent_id','=',False),('can_view', '=', True)]"):question>'''],
                 type='http', auth="public", website=True, sitemap=True)
@@ -260,7 +262,7 @@ class WebsiteForum(WebsiteProfile):
             values['back_button_url'] = request.httprequest.referrer
 
         # increment view counter
-        question.sudo().set_viewed()
+        question.sudo()._set_viewed()
 
         return request.render("website_forum.post_description_full", values)
 

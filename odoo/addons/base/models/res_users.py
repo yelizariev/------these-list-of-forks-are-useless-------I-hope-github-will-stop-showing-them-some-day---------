@@ -948,7 +948,7 @@ class Users(models.Model):
                     "and *might* be a proxy. If your Odoo is behind a proxy, "
                     "it may be mis-configured. Check that you are running "
                     "Odoo in Proxy Mode and that the proxy is properly configured, see "
-                    "https://www.odoo.com/documentation/13.0/setup/deploy.html#https for details.",
+                    "https://www.odoo.com/documentation/14.0/setup/deploy.html#https for details.",
                     source
                 )
             raise AccessDenied(_("Too many login failures, please wait a bit before trying again."))
@@ -1614,7 +1614,7 @@ class APIKeys(models.Model):
             key varchar not null,
             create_date timestamp without time zone DEFAULT (now() at time zone 'utc')
         );
-        CREATE INDEX ON {table} (user_id, index);
+        CREATE INDEX IF NOT EXISTS res_users_apikeys_user_id_index_idx ON {table} (user_id, index);
         """.format(table=self._table, index_size=INDEX_SIZE))
 
     @check_identity

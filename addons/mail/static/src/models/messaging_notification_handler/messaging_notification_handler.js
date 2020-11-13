@@ -108,6 +108,7 @@ function factory(dependencies) {
                 is_typing,
                 last_message_id,
                 partner_id,
+                partner_name,
             } = data;
             switch (info) {
                 case 'channel_fetched':
@@ -124,6 +125,7 @@ function factory(dependencies) {
                     return this._handleNotificationChannelTypingStatus(channelId, {
                         is_typing,
                         partner_id,
+                        partner_name,
                     });
                 default:
                     return this._handleNotificationChannelMessage(channelId, data);
@@ -203,10 +205,11 @@ function factory(dependencies) {
                 ))[0];
             }
             if (!channel.isPinned) {
-                channel.update({ isPendingPinned: true });
+                channel.pin();
             }
 
             const message = this.env.models['mail.message'].insert(convertedData);
+            this._notifyThreadViewsMessageReceived(message);
 
             // If the message was already known: nothing else should be done,
             // except if it was pending moderation by the current partner, then
@@ -299,7 +302,7 @@ function factory(dependencies) {
                 // knowledge of the channel
                 return;
             }
-            const lastMessage = this.env.models['mail.message'].insert({id: last_message_id});
+            const lastMessage = this.env.models['mail.message'].insert({ id: last_message_id });
             // restrict computation of seen indicator for "non-channel" channels
             // for performance reasons
             const shouldComputeSeenIndicators = channel.channel_type !== 'channel';
@@ -343,8 +346,9 @@ function factory(dependencies) {
          * @param {Object} param1
          * @param {boolean} param1.is_typing
          * @param {integer} param1.partner_id
+         * @param {string} param1.partner_name
          */
-        _handleNotificationChannelTypingStatus(channelId, { is_typing, partner_id }) {
+        _handleNotificationChannelTypingStatus(channelId, { is_typing, partner_id, partner_name }) {
             const channel = this.env.models['mail.thread'].findFromIdentifyingData({
                 id: channelId,
                 model: 'mail.channel',
@@ -352,7 +356,10 @@ function factory(dependencies) {
             if (!channel) {
                 return;
             }
-            const partner = this.env.models['mail.partner'].insert({ id: partner_id });
+            const partner = this.env.models['mail.partner'].insert({
+                id: partner_id,
+                name: partner_name,
+            });
             if (partner === this.env.messaging.currentPartner) {
                 // Ignore management of current partner is typing notification.
                 return;
@@ -411,10 +418,7 @@ function factory(dependencies) {
             } else if (type === 'author') {
                 return this._handleNotificationPartnerAuthor(data);
             } else if (info === 'channel_seen') {
-                return this._handleNotificationChannelSeen(data.channel_id, {
-                    last_message_id: data.last_message_id,
-                    partner_id: this.env.messaging.currentPartner.id,
-                });
+                return this._handleNotificationChannelSeen(data.channel_id, data);
             } else if (type === 'deletion') {
                 return this._handleNotificationPartnerDeletion(data);
             } else if (type === 'message_notification_update') {
@@ -471,7 +475,15 @@ function factory(dependencies) {
             const convertedData = this.env.models['mail.thread'].convertData(
                 Object.assign({ model: 'mail.channel' }, data)
             );
-
+            if (!convertedData.members) {
+                // channel_info does not return all members of channel for
+                // performance reasons, but code is expecting to know at
+                // least if the current partner is member of it.
+                // (e.g. to know when to display "invited" notification)
+                // Current partner can always be assumed to be a member of
+                // channels received through this notification.
+                convertedData.members = [['link', this.env.messaging.currentPartner]];
+            }
             let channel = this.env.models['mail.thread'].findFromIdentifyingData(convertedData);
             const wasCurrentPartnerMember = (
                 channel &&
@@ -553,8 +565,6 @@ function factory(dependencies) {
             const inboxMailbox = this.env.messaging.inbox;
 
             // 1. move messages from inbox to history
-            // AKU TODO: flag other caches to invalidate
-            // task-2171873
             for (const message_id of message_ids) {
                 // We need to ignore all not yet known messages because we don't want them
                 // to be shown partially as they would be linked directly to mainCache
@@ -627,14 +637,10 @@ function factory(dependencies) {
                     continue;
                 }
                 message.update({ isStarred: starred });
-                if (!starred) {
-                    // AKU TODO: flag starred other caches for invalidation
-                    // task-2171873
-                }
                 starredMailbox.update({
                     counter: starred
                         ? starredMailbox.counter + 1
-                        : starredMailbox.counter -1,
+                        : starredMailbox.counter - 1,
                 });
             }
         }
@@ -649,13 +655,19 @@ function factory(dependencies) {
          */
         _handleNotificationPartnerTransientMessage(data) {
             const convertedData = this.env.models['mail.message'].convertData(data);
-            const messageIds = this.env.models['mail.message'].all().map(message => message.id);
+            const lastMessageId = this.env.models['mail.message'].all().reduce(
+                (lastMessageId, message) => Math.max(lastMessageId, message.id),
+                0
+            );
             const partnerRoot = this.env.messaging.partnerRoot;
-            this.env.models['mail.message'].create(Object.assign(convertedData, {
+            const message = this.env.models['mail.message'].create(Object.assign(convertedData, {
                 author: [['link', partnerRoot]],
-                id: (messageIds ? Math.max(...messageIds) : 0) + 0.01,
+                id: lastMessageId + 0.01,
                 isTransient: true,
             }));
+            this._notifyThreadViewsMessageReceived(message);
+            // manually force recompute of counter
+            this.messaging.messagingMenu.update();
         }
 
         /**
@@ -757,6 +769,21 @@ function factory(dependencies) {
                 part: '_chat',
                 title: _.str.sprintf(titlePattern, messaging.outOfFocusUnreadMessageCounter),
             });
+        }
+
+        /**
+         * Notifies threadViews about the given message being just received.
+         * This can allow them adjust their scroll position if applicable.
+         *
+         * @private
+         * @param {mail.message}
+         */
+        _notifyThreadViewsMessageReceived(message) {
+            for (const thread of message.threads) {
+                for (const threadView of thread.threadViews) {
+                    threadView.addComponentHint('message-received', { message });
+                }
+            }
         }
 
     }

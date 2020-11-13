@@ -795,7 +795,7 @@ options.registry.OptionsTab = options.Class.extend({
         // TODO improve: hack to click on external image picker
         this.bodyImageType = widgetValue;
         const widget = this._requestUserValueWidgets(params.imagepicker)[0];
-        widget.$el.click();
+        widget.enable();
     },
     /**
      * @override
@@ -1275,7 +1275,7 @@ options.registry.CarouselItem = options.Class.extend({
         const $items = this.$carousel.find('.carousel-item');
         this.$controls.removeClass('d-none');
         this.$indicators.append($('<li>', {
-            'data-target': '#' + this.$target.attr('id'),
+            'data-target': '#' + this.$carousel.attr('id'),
             'data-slide-to': $items.length,
         }));
         this.$indicators.append(' ');
@@ -1631,65 +1631,9 @@ options.registry.Parallax = options.Class.extend({
             // The parallax option was enabled but the background image was
             // removed: disable the parallax option.
             const widget = this._requestUserValueWidgets('parallax_none_opt')[0];
-            widget.$el.click();
+            widget.enable();
             widget.getParent().close(); // FIXME remove this ugly hack asap
         }
-    },
-});
-
-options.registry.ul = options.Class.extend({
-    /**
-     * @override
-     */
-    start: function () {
-        var self = this;
-        this.$target.on('mouseup', '.o_ul_toggle_self, .o_ul_toggle_next', function () {
-            self.trigger_up('cover_update');
-        });
-        return this._super.apply(this, arguments);
-    },
-    /**
-     * @override
-     */
-    cleanForSave: function () {
-        this._super();
-        if (!this.$target.hasClass('o_ul_folded')) {
-            this.$target.find('.o_close').removeClass('o_close');
-            this.$target.find('li').css('list-style', '');
-        }
-    },
-
-    //--------------------------------------------------------------------------
-    // Options
-    //--------------------------------------------------------------------------
-
-    /**
-     * @override
-     */
-    selectClass: async function () {
-        await this._super.apply(this, arguments);
-
-        this.trigger_up('widgets_stop_request', {
-            $target: this.$target,
-        });
-
-        this.$target.find('.o_ul_toggle_self, .o_ul_toggle_next').remove();
-        this.$target.find('li:has(>ul,>ol)').map(function () {
-            // get if the li contain a text label
-            var texts = _.filter(_.toArray(this.childNodes), a => (a.nodeType === 3));
-            if (!texts.length || !texts.reduce((a, b) => (a.textContent + b.textContent)).match(/\S/)) {
-                return;
-            }
-            $(this).children('ul,ol').addClass('o_close');
-            return $(this).children(':not(ul,ol)')[0] || this;
-        })
-        .prepend('<a href="#" class="o_ul_toggle_self fa" />');
-        var $li = this.$target.find('li:has(+li:not(>.o_ul_toggle_self)>ul, +li:not(>.o_ul_toggle_self)>ol)');
-        $li.css('list-style', this.$target.hasClass('o_ul_folded') ? 'none' : '');
-        $li.map((i, el) => ($(el).children()[0] || el))
-            .prepend('<a href="#" class="o_ul_toggle_next fa" />');
-        $li.removeClass('o_open').next().addClass('o_close');
-        this.$target.find('li').removeClass('o_open');
     },
 });
 
@@ -1772,6 +1716,19 @@ options.registry.collapse = options.Class.extend({
 });
 
 options.registry.HeaderNavbar = options.Class.extend({
+    /**
+     * Particular case: we want the option to be associated on the header navbar
+     * in XML so that the related options only appear on navbar click (not
+     * header), in a different section, etc... but we still want the target to
+     * be the header itself.
+     *
+     * @constructor
+     */
+    init() {
+        this._super(...arguments);
+        // Don't use setTarget, we want it to be set directly at initialization.
+        this.$target = this.$target.closest('#wrapwrap > header');
+    },
 
     //--------------------------------------------------------------------------
     // Private
@@ -1809,12 +1766,19 @@ const VisibilityPageOptionUpdate = options.Class.extend({
      * @override
      */
     async onTargetShow() {
+        if (await this._isShown()) {
+            // onTargetShow may be called even if the element is already shown.
+            // In most cases, this is not a problem but here it is as the code
+            // that follows clicks on the visibility checkbox regardless of its
+            // status. This avoids searching for that checkbox entirely.
+            return;
+        }
         // TODO improve: here we make a hack so that if we make the invisible
         // header appear for edition, its actual visibility for the page is
         // toggled (otherwise it would be about editing an element which
         // is actually never displayed on the page).
         const widget = this._requestUserValueWidgets(this.showOptionWidgetName)[0];
-        widget.$el.click();
+        widget.enable();
     },
 
     //--------------------------------------------------------------------------

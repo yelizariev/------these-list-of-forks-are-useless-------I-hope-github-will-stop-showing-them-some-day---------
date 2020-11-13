@@ -121,8 +121,7 @@ class Project(models.Model):
             project.task_count = result.get(project.id, 0)
 
     def attachment_tree_view(self):
-        attachment_action = self.env.ref('base.action_attachment')
-        action = attachment_action.read()[0]
+        action = self.env['ir.actions.act_window']._for_xml_id('base.action_attachment')
         action['domain'] = str([
             '|',
             '&',
@@ -264,6 +263,11 @@ class Project(models.Model):
         for project in self:
             if project.partner_id and project.partner_phone != project.partner_id.phone:
                 project.partner_id.phone = project.partner_phone
+
+    @api.onchange('alias_enabled')
+    def _onchange_alias_name(self):
+        if not self.alias_enabled:
+            self.alias_name = False
 
     def _compute_alias_enabled(self):
         for project in self:
@@ -931,7 +935,7 @@ class Task(models.Model):
     @api.depends('child_ids')
     def _compute_subtask_count(self):
         for task in self:
-            task.subtask_count = len(self._get_all_subtasks())
+            task.subtask_count = len(task._get_all_subtasks())
 
     @api.onchange('company_id')
     def _onchange_task_company(self):
@@ -992,7 +996,7 @@ class Task(models.Model):
         if partner_ids:
             new_allowed_users = self.env['res.partner'].browse(partner_ids).user_ids.filtered('share')
             tasks = self.filtered(lambda task: task.project_id.privacy_visibility == 'portal')
-            tasks.write({'allowed_user_ids': [(4, user.id) for user in new_allowed_users]})
+            tasks.sudo().write({'allowed_user_ids': [(4, user.id) for user in new_allowed_users]})
         return res
 
     # ----------------------------------------
@@ -1075,7 +1079,11 @@ class Task(models.Model):
                 rec_values['next_recurrence_date'] = fields.Datetime.today()
                 recurrence = self.env['project.task.recurrence'].create(rec_values)
                 vals['recurrence_id'] = recurrence.id
-        return super().create(vals_list)
+        tasks = super().create(vals_list)
+        for task in tasks:
+            if task.project_id.privacy_visibility == 'portal':
+                task._portal_ensure_token()
+        return tasks
 
     def write(self, vals):
         now = fields.Datetime.now()

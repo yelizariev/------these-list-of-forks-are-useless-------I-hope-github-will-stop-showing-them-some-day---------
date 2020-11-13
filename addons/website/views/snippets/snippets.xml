@@ -319,7 +319,9 @@
             data-select-style="true"
             data-css-property="background-color"
             data-color-prefix="bg-"/>
-        <t t-call="website.snippet_options_border_widgets"/>
+        <t t-call="website.snippet_options_border_widgets">
+            <t t-set="so_rounded_no_dependencies" t-value="True"/>
+        </t>
         <t t-call="website.snippet_options_shadow_widgets"/>
     </div>
 
@@ -511,11 +513,6 @@
                    title="Save the block to use it elsewhere"
                    data-save-snippet=""
                    data-no-preview="true"/>
-    </div>
-
-    <div data-js="ul"
-         data-selector=":not(li) > ul:has(ul,ol), :not(li) > ol:has(ul,ol)">
-        <we-checkbox string="Folded list" data-select-class="o_ul_folded"/>
     </div>
 
     <div data-js="menu_data"
@@ -711,7 +708,7 @@
 
     <!-- Header > Navbar Options -->
     <div data-js="HeaderNavbar"
-         data-selector="#wrapwrap > header > nav"
+         data-selector="#wrapwrap > header nav.navbar"
          data-no-check="true"
          groups="website.group_website_designer">
         <!-- Generic alignment option controling all the template at once. -->
