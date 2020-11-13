@@ -283,9 +283,19 @@ class PosSession(models.Model):
     def _validate_session(self):
         self.ensure_one()
         self._check_if_no_draft_orders()
-        self._create_account_move()
+        # Users without any accounting rights won't be able to create the journal entry. If this
+        # case, switch to sudo for creation and posting.
+        sudo = False
+        if (
+            not self.env['account.move'].check_access_rights('create', raise_exception=False)
+            and self.user_has_groups('point_of_sale.group_pos_user')
+        ):
+            sudo = True
+            self.sudo()._create_account_move()
+        else:
+            self._create_account_move()
         if self.move_id.line_ids:
-            self.move_id.post()
+            self.move_id.post() if not sudo else self.move_id.sudo().post()
             # Set the uninvoiced orders' state to 'done'
             self.env['pos.order'].search([('session_id', '=', self.id), ('state', '=', 'paid')]).write({'state': 'done'})
         else:
@@ -387,6 +397,7 @@ class PosSession(models.Model):
                         -1 if line['amount'] < 0 else 1,
                         # for taxes
                         tuple((tax['id'], tax['account_id'], tax['tax_repartition_line_id']) for tax in line['taxes']),
+                        line['base_tags'],
                     )
                     sales[sale_key] = self._update_amounts(sales[sale_key], {'amount': line['amount']}, line['date_order'])
                     # Combine tax lines
@@ -404,17 +415,22 @@ class PosSession(models.Model):
                     for amount_key, amount in amounts.items():
                         taxes[tax_key][amount_key] += amount
 
-                if self.company_id.anglo_saxon_accounting:
+                if self.company_id.anglo_saxon_accounting and order.picking_id.id:
                     # Combine stock lines
+                    order_pickings = self.env['stock.picking'].search([
+                        '|',
+                        ('origin', '=', '%s - %s' % (self.name, order.name)),
+                        ('id', '=', order.picking_id.id)
+                    ])
                     stock_moves = self.env['stock.move'].search([
-                        ('picking_id', '=', order.picking_id.id),
+                        ('picking_id', 'in', order_pickings.ids),
                         ('company_id.anglo_saxon_accounting', '=', True),
                         ('product_id.categ_id.property_valuation', '=', 'real_time')
                     ])
                     for move in stock_moves:
                         exp_key = move.product_id.property_account_expense_id or move.product_id.categ_id.property_account_expense_categ_id
                         out_key = move.product_id.categ_id.property_stock_account_output_categ_id
-                        amount = -sum(move.stock_valuation_layer_ids.mapped('value'))
+                        amount = -sum(move.sudo().stock_valuation_layer_ids.mapped('value'))
                         stock_expense[exp_key] = self._update_amounts(stock_expense[exp_key], {'amount': amount}, move.picking_id.date, force_company_currency=True)
                         stock_output[out_key] = self._update_amounts(stock_output[out_key], {'amount': amount}, move.picking_id.date, force_company_currency=True)
 
@@ -488,7 +504,7 @@ class PosSession(models.Model):
         split_cash_receivable_vals = defaultdict(list)
         for payment, amounts in split_receivables_cash.items():
             statement = statements_by_journal_id[payment.payment_method_id.cash_journal_id.id]
-            split_cash_statement_line_vals[statement].append(self._get_statement_line_vals(statement, payment.payment_method_id.receivable_account_id, amounts['amount']))
+            split_cash_statement_line_vals[statement].append(self._get_statement_line_vals(statement, payment.payment_method_id.receivable_account_id, amounts['amount'], payment.payment_date.date()))
             split_cash_receivable_vals[statement].append(self._get_split_receivable_vals(payment, amounts['amount'], amounts['amount_converted']))
         # handle combine cash payments
         combine_cash_statement_line_vals = defaultdict(list)
@@ -589,14 +605,18 @@ class PosSession(models.Model):
         # reconcile invoice receivable lines
         for account_id in order_account_move_receivable_lines:
             ( order_account_move_receivable_lines[account_id]
-            | invoice_receivable_lines[account_id]
+            | invoice_receivable_lines.get(account_id, self.env['account.move.line'])
             ).reconcile()
 
         # reconcile stock output lines
-        stock_moves = self.env['stock.move'].search([('picking_id', 'in', self.order_ids.filtered(lambda order: not order.is_invoiced).mapped('picking_id').ids)])
+        orders_to_invoice = self.order_ids.filtered(lambda order: not order.is_invoiced)
+        stock_moves = (
+            orders_to_invoice.mapped('picking_id') +
+            self.env['stock.picking'].search([('origin', 'in', orders_to_invoice.mapped(lambda o: '%s - %s' % (self.name, o.name)))])
+        ).mapped('move_lines')
         stock_account_move_lines = self.env['account.move'].search([('stock_move_id', 'in', stock_moves.ids)]).mapped('line_ids')
         for account_id in stock_output_lines:
-            ( stock_output_lines[account_id]
+            ( stock_output_lines[account_id].filtered(lambda aml: not aml.reconciled)
             | stock_account_move_lines.filtered(lambda aml: aml.account_id == account_id)
             ).reconcile()
         return data
@@ -619,8 +639,22 @@ class PosSession(models.Model):
 
         tax_ids = order_line.tax_ids_after_fiscal_position\
                     .filtered(lambda t: t.company_id.id == order_line.order_id.company_id.id)
-        price = order_line.price_unit * (1 - (order_line.discount or 0.0) / 100.0)
-        taxes = tax_ids.compute_all(price_unit=price, quantity=order_line.qty, currency=self.currency_id, is_refund=order_line.qty<0).get('taxes', [])
+        sign = -1 if order_line.qty >= 0 else 1
+        price = sign * order_line.price_unit * (1 - (order_line.discount or 0.0) / 100.0)
+        # The 'is_refund' parameter is used to compute the tax tags. Ultimately, the tags are part
+        # of the key used for summing taxes. Since the POS UI doesn't support the tags, inconsistencies
+        # may arise in 'Round Globally'.
+        check_refund = lambda x: x.qty * x.price_unit < 0
+        if self.company_id.tax_calculation_rounding_method == 'round_globally':
+            is_refund = all(check_refund(line) for line in order_line.order_id.lines)
+        else:
+            is_refund = check_refund(order_line)
+        tax_data = tax_ids.compute_all(price_unit=price, quantity=abs(order_line.qty), currency=self.currency_id, is_refund=is_refund)
+        taxes = tax_data['taxes']
+        # For Cash based taxes, use the account from the repartition line immediately as it has been paid already
+        for tax in taxes:
+            tax_rep = self.env['account.tax.repartition.line'].browse(tax['tax_repartition_line_id'])
+            tax['account_id'] = tax_rep.account_id.id
         date_order = order_line.order_id.date_order
         taxes = [{'date_order': date_order, **tax} for tax in taxes]
         return {
@@ -628,6 +662,7 @@ class PosSession(models.Model):
             'income_account_id': get_income_account(order_line).id,
             'amount': order_line.price_subtotal,
             'taxes': taxes,
+            'base_tags': tuple(tax_data['base_tags']),
         }
 
     def _get_split_receivable_vals(self, payment, amount, amount_converted):
@@ -656,23 +691,19 @@ class PosSession(models.Model):
         return self._credit_amounts(partial_vals, amount, amount_converted)
 
     def _get_sale_vals(self, key, amount, amount_converted):
-        account_id, sign, tax_keys = key
+        account_id, sign, tax_keys, base_tag_ids = key
         tax_ids = set(tax[0] for tax in tax_keys)
         applied_taxes = self.env['account.tax'].browse(tax_ids)
         title = 'Sales' if sign == 1 else 'Refund'
         name = '%s untaxed' % title
         if applied_taxes:
             name = '%s with %s' % (title, ', '.join([tax.name for tax in applied_taxes]))
-        base_tags = applied_taxes\
-            .mapped('invoice_repartition_line_ids' if sign == 1 else 'refund_repartition_line_ids')\
-            .filtered(lambda line: line.repartition_type == 'base')\
-            .tag_ids
         partial_vals = {
             'name': name,
             'account_id': account_id,
             'move_id': self.move_id.id,
             'tax_ids': [(6, 0, tax_ids)],
-            'tag_ids': [(6, 0, base_tags.ids)],
+            'tag_ids': [(6, 0, base_tag_ids)],
         }
         return self._credit_amounts(partial_vals, amount, amount_converted)
 
@@ -683,11 +714,11 @@ class PosSession(models.Model):
             'name': tax.name,
             'account_id': account_id,
             'move_id': self.move_id.id,
-            'tax_base_amount': base_amount_converted,
+            'tax_base_amount': abs(base_amount_converted),
             'tax_repartition_line_id': repartition_line_id,
             'tag_ids': [(6, 0, tag_ids)],
         }
-        return self._credit_amounts(partial_args, amount, amount_converted)
+        return self._debit_amounts(partial_args, amount, amount_converted)
 
     def _get_stock_expense_vals(self, exp_account, amount, amount_converted):
         partial_args = {'account_id': exp_account.id, 'move_id': self.move_id.id}
@@ -697,9 +728,9 @@ class PosSession(models.Model):
         partial_args = {'account_id': out_account.id, 'move_id': self.move_id.id}
         return self._credit_amounts(partial_args, amount, amount_converted, force_company_currency=True)
 
-    def _get_statement_line_vals(self, statement, receivable_account, amount):
+    def _get_statement_line_vals(self, statement, receivable_account, amount, date=False):
         return {
-            'date': fields.Date.context_today(self),
+            'date': date or fields.Date.context_today(self),
             'amount': amount,
             'name': self.name,
             'statement_id': statement.id,

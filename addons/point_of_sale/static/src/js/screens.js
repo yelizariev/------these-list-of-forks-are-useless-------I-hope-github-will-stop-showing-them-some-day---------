@@ -1866,7 +1866,7 @@ var PaymentScreenWidget = ScreenWidget.extend({
                     self.validate_order();
                 } else if ( event.keyCode === 190 || // Dot
                             event.keyCode === 110 ||  // Decimal point (numpad)
-                            event.keyCode === 188 ||  // Comma
+                            event.keyCode === 44 ||  // Comma
                             event.keyCode === 46 ) {  // Numpad dot
                     key = self.decimal_point;
                 } else if (event.keyCode >= 48 && event.keyCode <= 57) { // Numbers
@@ -2288,7 +2288,7 @@ var PaymentScreenWidget = ScreenWidget.extend({
         }
 
         // The exact amount must be paid if there is no cash payment method defined.
-        if (Math.abs(order.get_total_with_tax() - order.get_total_paid()) > 0.00001) {
+        if (Math.abs(order.get_total_balance()) > 0.00001) {
             var cash = false;
             for (var i = 0; i < this.pos.payment_methods.length; i++) {
                 cash = cash || (this.pos.payment_methods[i].is_cash_count);
@@ -2305,14 +2305,14 @@ var PaymentScreenWidget = ScreenWidget.extend({
         var client = order.get_client();
         if (order.is_to_email() && (!client || client && !utils.is_email(client.email))) {
             var title = !client
-                ? 'Please select the customer'
-                : 'Please provide valid email';
+                ? _t('Please select the customer')
+                : _t('Please provide valid email');
             var body = !client
-                ? 'You need to select the customer before you can send the receipt via email.'
-                : 'This customer does not have a valid email address, define one or do not send an email.';
+                ? _t('You need to select the customer before you can send the receipt via email.')
+                : _t('This customer does not have a valid email address, define one or do not send an email.');
             this.gui.show_popup('confirm', {
-                'title': _t(title),
-                'body': _t(body),
+                'title': title,
+                'body': body,
                 confirm: function () {
                     this.gui.show_screen('clientlist');
                 },

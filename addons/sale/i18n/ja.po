@@ -16,14 +16,15 @@
 # Tim Siu Lai <tl@roomsfor.hk>, 2019
 # Hau Dao <hau@quartile.co>, 2020
 # Yoshi Tashiro <tashiro@roomsfor.hk>, 2020
+# Noma Yuki, 2020
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 13.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-01-03 14:57+0000\n"
+"POT-Creation-Date: 2020-04-27 09:22+0000\n"
 "PO-Revision-Date: 2019-08-26 09:13+0000\n"
-"Last-Translator: Yoshi Tashiro <tashiro@roomsfor.hk>, 2020\n"
+"Last-Translator: Noma Yuki, 2020\n"
 "Language-Team: Japanese (https://www.transifex.com/odoo/teams/41243/ja/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -379,6 +380,8 @@ msgid ""
 "<span class=\"d-none d-md-inline\">Sales Order #</span>\n"
 "                            <span class=\"d-block d-md-none\">Ref.</span>"
 msgstr ""
+"<span class=\"d-none d-md-inline\">販売オーダ #</span>\n"
+"<span class=\"d-block d-md-none\">参照:</span>"
 
 #. module: sale
 #: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
@@ -387,6 +390,8 @@ msgid ""
 "specific.\" aria-label=\"Values set here are company-specific.\" "
 "groups=\"base.group_multi_company\" role=\"img\"/>"
 msgstr ""
+"<span class=\"fa fa-lg fa-building-o\" title=\"各企業固有の値\" aria-"
+"label=\"各企業固有の値\" groups=\"base.group_multi_company\" role=\"img\"/>"
 
 #. module: sale
 #: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
@@ -394,6 +399,8 @@ msgid ""
 "<span class=\"fa fa-lg fa-building-o\" title=\"Values set here are company-"
 "specific.\" groups=\"base.group_multi_company\"/>"
 msgstr ""
+"<span class=\"fa fa-lg fa-building-o\" title=\"Values set here are company-"
+"specific.\" groups=\"base.group_multi_company\"/>"
 
 #. module: sale
 #: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
@@ -690,7 +697,7 @@ msgstr "活動"
 #. module: sale
 #: model:ir.model.fields,field_description:sale.field_sale_order__activity_exception_decoration
 msgid "Activity Exception Decoration"
-msgstr ""
+msgstr "例外の活動を示す文字装飾"
 
 #. module: sale
 #: model:ir.model.fields,field_description:sale.field_sale_order__activity_state
@@ -1013,7 +1020,7 @@ msgstr "オーダで配送費用を計算"
 #. module: sale
 #: model:ir.model,name:sale.model_res_config_settings
 msgid "Config Settings"
-msgstr ""
+msgstr "コンフィグ設定"
 
 #. module: sale
 #: model:ir.ui.menu,name:sale.menu_sale_config
@@ -1698,7 +1705,7 @@ msgstr "アイコン"
 #. module: sale
 #: model:ir.model.fields,help:sale.field_sale_order__activity_exception_icon
 msgid "Icon to indicate an exception activity."
-msgstr ""
+msgstr "例外的なアクティビティを示唆するアイコン"
 
 #. module: sale
 #: model:ir.model.fields,help:sale.field_sale_order__message_needaction
@@ -1742,12 +1749,6 @@ msgstr "Amazonオーダインポートおよび運送同期"
 #, python-format
 msgid "Import Template for Products"
 msgstr "プロダクトテンプレートをインポート"
-
-#. module: sale
-#: code:addons/sale/models/product_template.py:0
-#, python-format
-msgid "Import Template for Products (with several prices)"
-msgstr ""
 
 #. module: sale
 #: model_terms:ir.ui.view,arch_db:sale.sale_order_portal_template
@@ -2053,7 +2054,7 @@ msgstr "ロック済"
 #. module: sale
 #: model_terms:ir.ui.view,arch_db:sale.onboarding_quotation_layout_step
 msgid "Looks great!"
-msgstr ""
+msgstr "素晴らしい!"
 
 #. module: sale
 #: model:ir.model.fields,field_description:sale.field_sale_order__message_main_attachment_id
@@ -2073,7 +2074,7 @@ msgstr "手動"
 #. module: sale
 #: model:ir.model.fields.selection,name:sale.selection__res_company__sale_onboarding_payment_method__manual
 msgid "Manual Payment"
-msgstr ""
+msgstr "手動支払"
 
 #. module: sale
 #: model:ir.model.fields.selection,name:sale.selection__product_template__service_type__manual
@@ -2095,8 +2096,12 @@ msgid "Margins"
 msgstr "マージン"
 
 #. module: sale
+#: model:ir.actions.server,name:sale.model_sale_order_action_quotation_sent
+msgid "Mark Quotation as Sent"
+msgstr ""
+
+#. module: sale
 #: model_terms:ir.ui.view,arch_db:sale.account_invoice_form
-#: model_terms:ir.ui.view,arch_db:sale.view_order_form
 msgid "Marketing"
 msgstr "マーケティング"
 
@@ -2358,6 +2363,12 @@ msgid "Only Integer Value should be valid."
 msgstr "整数値のみが有効です。"
 
 #. module: sale
+#: code:addons/sale/models/sale.py:0
+#, python-format
+msgid "Only draft orders can be marked as sent directly."
+msgstr ""
+
+#. module: sale
 #: model:ir.model.constraint,message:sale.constraint_product_attribute_custom_value_sol_custom_value_unique
 msgid ""
 "Only one Custom Value is allowed per Attribute Value per Sales Order Line."
@@ -2593,7 +2604,7 @@ msgstr "支払条件"
 #. module: sale
 #: model:ir.model.fields,field_description:sale.field_sale_payment_acquirer_onboarding_wizard__paypal_user_type
 msgid "Paypal User Type"
-msgstr ""
+msgstr "PayPalユーザタイプ"
 
 #. module: sale
 #: code:addons/sale/models/sale.py:0
@@ -3626,6 +3637,7 @@ msgstr ""
 
 #. module: sale
 #: code:addons/sale/models/product_template.py:0
+#, python-format
 msgid ""
 "The following products cannot be restricted to the company %s because they have already been used in quotations or sales orders in another company:\n"
 "%s\n"
@@ -3905,12 +3917,6 @@ msgstr "USPSコネクタ"
 #: model:ir.model,name:sale.model_utm_campaign
 msgid "UTM Campaign"
 msgstr ""
-
-#. module: sale
-#: code:addons/sale/models/sale.py:0
-#, python-format
-msgid "Uncategorized"
-msgstr "未分類"
 
 #. module: sale
 #: model:ir.model.fields,field_description:sale.field_sale_order_line__price_unit
@@ -4239,15 +4245,4 @@ msgstr ""
 #: code:addons/sale/static/src/xml/account_reconciliation.xml:0
 #, python-format
 msgid "uninvoiced sales orders"
-msgstr ""
-
-#. module: sale
-#: model:ir.actions.server,name:sale.model_sale_order_action_quotation_sent
-msgid "Mark Quotation as Sent"
-msgstr ""
-
-#. module: sale
-#: code:addons/sale/models/sale.py:0
-#, python-format
-msgid "Only draft orders can be marked as sent directly."
 msgstr ""

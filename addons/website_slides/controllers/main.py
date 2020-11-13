@@ -350,7 +350,7 @@ class WebsiteSlides(WebsiteProfile):
 
         if search:
             domain += [
-                '|', '|', '|',
+                '|', '|',
                 ('name', 'ilike', search),
                 ('description', 'ilike', search),
                 ('html_content', 'ilike', search)]
@@ -428,7 +428,7 @@ class WebsiteSlides(WebsiteProfile):
                 last_message_values = last_message.read(['body', 'rating_value', 'attachment_ids'])[0]
                 last_message_attachment_ids = last_message_values.pop('attachment_ids', [])
                 if last_message_attachment_ids:
-                    last_message_attachment_ids = json.dumps(request.env['ir.attachment'].browse(last_message_attachment_ids).read(
+                    last_message_attachment_ids = json.dumps(request.env['ir.attachment'].browse(last_message_attachment_ids).sudo().read(
                         ['id', 'name', 'mimetype', 'file_size', 'access_token']
                     ))
             else:
@@ -830,15 +830,15 @@ class WebsiteSlides(WebsiteProfile):
             # minutes to hours conversion
             values['completion_time'] = int(post['duration']) / 60
 
-        category_id = False
+        category = False
         # handle creation of new categories on the fly
         if post.get('category_id'):
             category_id = post['category_id'][0]
             if category_id == 0:
                 category = request.env['slide.slide'].create(self._get_new_slide_category_values(channel, post['category_id'][1]['name']))
                 values['sequence'] = category.sequence + 1
-                category_id = category.id
             else:
+                category = request.env['slide.slide'].browse(category_id)
                 values.update({
                     'sequence': request.env['slide.slide'].browse(post['category_id'][0]).sequence + 1
                 })
@@ -856,7 +856,7 @@ class WebsiteSlides(WebsiteProfile):
             return {'error': _('Internal server error, please try again later or contact administrator.\nHere is the error message: %s') % e}
 
         # ensure correct ordering by re sequencing slides in front-end (backend should be ok thanks to list view)
-        channel._resequence_slides(slide, category_id)
+        channel._resequence_slides(slide, force_category=category)
 
         redirect_url = "/slides/slide/%s" % (slide.id)
         if channel.channel_type == "training" and not slide.slide_type == "webpage":

@@ -219,6 +219,13 @@ class AccountMove(models.Model):
         def get_vat_country(vat):
             return vat[:2].upper()
 
+        def in_eu(partner):
+            europe = self.env.ref('base.europe', raise_if_not_found=False)
+            country = partner.country_id
+            if not europe or not country or country in europe.country_ids:
+                return True
+            return False
+
         formato_trasmissione = "FPR12"
         if len(self.commercial_partner_id.l10n_it_pa_index or '1') == 6:
             formato_trasmissione = "FPA12"
@@ -245,6 +252,7 @@ class AccountMove(models.Model):
             'discount_type': discount_type,
             'get_vat_number': get_vat_number,
             'get_vat_country': get_vat_country,
+            'in_eu': in_eu,
             'abs': abs,
             'formato_trasmissione': formato_trasmissione,
             'document_type': document_type,
@@ -477,34 +485,35 @@ class AccountMove(models.Model):
                         amount_total_import))
 
                 # Bank account. <2.4.2.13>
-                elements = body_tree.xpath('.//DatiPagamento/DettaglioPagamento/IBAN')
-                if elements:
-                    if invoice_form.partner_id and invoice_form.partner_id.commercial_partner_id:
-                        bank = self.env['res.partner.bank'].search([
-                            ('acc_number', '=', elements[0].text),
-                            ('partner_id.id', '=', invoice_form.partner_id.commercial_partner_id.id)
-                            ])
-                    else:
-                        bank = self.env['res.partner.bank'].search([('acc_number', '=', elements[0].text)])
-                    if bank:
-                        invoice_form.invoice_partner_bank_id = bank
-                    else:
-                        message_to_log.append("%s<br/>%s" % (
-                            _("Bank account not found, useful informations from XML file:"),
-                            self._compose_multi_info_message(
-                                body_tree, ['.//DatiPagamento//Beneficiario',
-                                    './/DatiPagamento//IstitutoFinanziario',
-                                    './/DatiPagamento//IBAN',
-                                    './/DatiPagamento//ABI',
-                                    './/DatiPagamento//CAB',
-                                    './/DatiPagamento//BIC',
-                                    './/DatiPagamento//ModalitaPagamento'])))
-                else:
-                    elements = body_tree.xpath('.//DatiPagamento/DettaglioPagamento')
+                if invoice_form.type not in ('out_invoice', 'in_refund'):
+                    elements = body_tree.xpath('.//DatiPagamento/DettaglioPagamento/IBAN')
                     if elements:
-                        message_to_log.append("%s<br/>%s" % (
-                            _("Bank account not found, useful informations from XML file:"),
-                            self._compose_info_message(body_tree, './/DatiPagamento')))
+                        if invoice_form.partner_id and invoice_form.partner_id.commercial_partner_id:
+                            bank = self.env['res.partner.bank'].search([
+                                ('acc_number', '=', elements[0].text),
+                                ('partner_id.id', '=', invoice_form.partner_id.commercial_partner_id.id)
+                                ])
+                        else:
+                            bank = self.env['res.partner.bank'].search([('acc_number', '=', elements[0].text)])
+                        if bank:
+                            invoice_form.invoice_partner_bank_id = bank
+                        else:
+                            message_to_log.append("%s<br/>%s" % (
+                                _("Bank account not found, useful informations from XML file:"),
+                                self._compose_multi_info_message(
+                                    body_tree, ['.//DatiPagamento//Beneficiario',
+                                        './/DatiPagamento//IstitutoFinanziario',
+                                        './/DatiPagamento//IBAN',
+                                        './/DatiPagamento//ABI',
+                                        './/DatiPagamento//CAB',
+                                        './/DatiPagamento//BIC',
+                                        './/DatiPagamento//ModalitaPagamento'])))
+                    else:
+                        elements = body_tree.xpath('.//DatiPagamento/DettaglioPagamento')
+                        if elements:
+                            message_to_log.append("%s<br/>%s" % (
+                                _("Bank account not found, useful informations from XML file:"),
+                                self._compose_info_message(body_tree, './/DatiPagamento')))
 
                 # Invoice lines. <2.2.1>
                 elements = body_tree.xpath('.//DettaglioLinee')

@@ -257,7 +257,7 @@ var ControlPanelModel = mvc.Model.extend({
             facets: facets,
             filterFields: filterFields,
             filters: filters,
-            groupBys: groupBys,
+            groupBys: this.searchMenuTypes.includes('groupBy') ? groupBys : [],
             timeRanges: timeRanges,
             favorites: favorites,
             groups: this.groups,
@@ -307,7 +307,7 @@ var ControlPanelModel = mvc.Model.extend({
         return {
             context: context,
             domain: results.domain,
-            groupBy: groupBy,
+            groupBy: this.searchMenuTypes.includes('groupBy') ? groupBy : [],
             orderedBy: this._getOrderedBy(),
         };
     },
@@ -1114,7 +1114,7 @@ var ControlPanelModel = mvc.Model.extend({
                         domain: favorite.domain,
                         groupBys: groupBys,
                         // we want to keep strings as long as possible
-                        context: favorite.context,
+                        context: JSON.stringify(context),
                         orderedBy: orderedBy,
                         userId: userId,
                         serverSideId: favorite.id,

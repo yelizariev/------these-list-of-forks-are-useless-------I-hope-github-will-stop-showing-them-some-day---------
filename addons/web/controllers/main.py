@@ -1485,7 +1485,7 @@ class Binary(http.Controller):
         try:
             data = ufile.read()
             args = [len(data), ufile.filename,
-                    ufile.content_type, base64.b64encode(data)]
+                    ufile.content_type, pycompat.to_text(base64.b64encode(data))]
         except Exception as e:
             args = [False, str(e)]
         return out % (json.dumps(callback), json.dumps(args))
@@ -1925,6 +1925,8 @@ class ExcelExport(ExportFormat, http.Controller):
         with ExportXlsxWriter(fields, len(rows)) as xlsx_writer:
             for row_index, row in enumerate(rows):
                 for cell_index, cell_value in enumerate(row):
+                    if isinstance(cell_value, (list, tuple)):
+                        cell_value = pycompat.to_text(cell_value)
                     xlsx_writer.write_cell(row_index + 1, cell_index, cell_value)
 
         return xlsx_writer.value

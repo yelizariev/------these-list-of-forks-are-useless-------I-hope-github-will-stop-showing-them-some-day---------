@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 13.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-05 12:32+0000\n"
+"POT-Creation-Date: 2020-04-27 09:21+0000\n"
 "PO-Revision-Date: 2019-08-26 09:14+0000\n"
 "Last-Translator: JH CHOI <hwangtog@gmail.com>, 2020\n"
 "Language-Team: Korean (https://www.transifex.com/odoo/teams/41243/ko/)\n"
@@ -876,6 +876,12 @@ msgid "Available Products"
 msgstr "사용 가능 제품"
 
 #. module: stock
+#: code:addons/stock/models/product.py:581
+#, python-format
+msgid "Available quantity should be set to zero before changing type"
+msgstr "유형을 변경하기 전에 사용 가능한 수량을 0으로 설정해야 합니다"
+
+#. module: stock
 #: model:ir.model.fields,field_description:stock.field_stock_move__backorder_id
 #: model:ir.model.fields,field_description:stock.field_stock_picking__backorder_id
 msgid "Back Order of"
@@ -1108,6 +1114,12 @@ msgid "Changing the operation type of this record is forbidden at this point."
 msgstr "이 시점에서는 이 레코드의 작업 유형을 변경할 수 없습니다."
 
 #. module: stock
+#: code:addons/stock/models/stock_move_line.py:0
+#, python-format
+msgid "Changing the product is only allowed in 'Draft' state."
+msgstr "상품 변경은 '초안' 상태에서만 허용됩니다."
+
+#. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.view_picking_form
 msgid "Check Availability"
 msgstr "사용 가능 확인"
@@ -1149,6 +1161,13 @@ msgstr "목적지 위치 선택"
 #: model_terms:ir.ui.view,arch_db:stock.view_stock_quantity_history
 msgid "Choose your date"
 msgstr "날짜 선택"
+
+#. module: stock
+#. openerp-web
+#: code:addons/stock/static/src/xml/stock_traceability_report_backend.xml:0
+#, python-format
+msgid "Close"
+msgstr "닫기"
 
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_stock_picking_type__sequence_code
@@ -1768,7 +1787,7 @@ msgstr "배송 주소"
 #: model:stock.picking.type,name:stock.picking_type_out
 #, python-format
 msgid "Delivery Orders"
-msgstr "배송 주문서"
+msgstr "출고"
 
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_res_config_settings__group_stock_tracking_lot
@@ -3735,6 +3754,8 @@ msgid "Number of unread messages"
 msgstr "읽지 않은 메시지 수"
 
 #. module: stock
+#: model:ir.model.fields,field_description:stock.field_stock_quant__on_hand
+#: model_terms:ir.ui.view,arch_db:stock.quant_search_view
 #: model_terms:ir.ui.view,arch_db:stock.stock_inventory_line_tree2
 msgid "On Hand"
 msgstr "보유량"
@@ -3790,6 +3811,12 @@ msgstr "반품 작업 유형"
 #: model_terms:ir.ui.view,arch_db:stock.view_warehouse
 msgid "Operation Types"
 msgstr "작업 유형"
+
+#. module: stock
+#: code:addons/stock/models/stock_quant.py:0
+#, python-format
+msgid "Operation not supported"
+msgstr "지원되지 않는 작업"
 
 #. module: stock
 #: model:ir.actions.report,name:stock.action_report_picking_type_label
@@ -4199,6 +4226,12 @@ msgstr "선별에 '완료' 수량을 추가하여 새 꾸러미를 만드십시�
 #, python-format
 msgid "Please add some items to move."
 msgstr "이동할 항목을 추가하십시오."
+
+#. module: stock
+#: code:addons/stock/models/stock_quant.py:92
+#, python-format
+msgid "Please check the following serial number (name, id): "
+msgstr ""
 
 #. module: stock
 #: code:addons/stock/wizard/stock_picking_return.py:0
@@ -6419,6 +6452,7 @@ msgstr "추적 명세"
 
 #. module: stock
 #: model:ir.model,name:stock.model_stock_picking
+#: model_terms:ir.ui.view,arch_db:stock.stock_move_line_view_search
 #: model_terms:ir.ui.view,arch_db:stock.view_picking_form
 #: model_terms:ir.ui.view,arch_db:stock.view_picking_internal_search
 msgid "Transfer"
@@ -6483,6 +6517,11 @@ msgstr "이송 위치"
 #: model_terms:ir.ui.view,arch_db:stock.report_stock_rule
 msgid "Trigger Another Rule"
 msgstr "다른 규칙 실행"
+
+#. module: stock
+#: model_terms:ir.ui.view,arch_db:stock.report_stock_rule
+msgid "Trigger Another Rule If No Stock"
+msgstr "재고가 없을 경우 다른 규칙을 실행"
 
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_barcode_rule__type
@@ -6906,12 +6945,8 @@ msgstr "중량이 있는 품목"
 #: model:ir.model.fields,help:stock.field_stock_location_route__warehouse_selectable
 msgid ""
 "When a warehouse is selected for this route, this route should be seen as "
-"the default route when products pass through this warehouse.  This behaviour"
-" can be overridden by the routes on the Product/Product Categories or by the"
-" Preferred Routes on the Procurement"
-msgstr ""
-"이 경로에 대해 창고가 선택되면, 품목이 이 창고를 통과 할 때 이 경로가 기본 경로로 보여야합니다. 이 동작은 품목/품목 범주의 경로 "
-"또는 조달의 기본 경로에 의해 무시 될 수 있습니다"
+"the default route when products pass through this warehouse."
+msgstr "이 경로에 대해 창고를 선택하면 이 경로는 제품이 이 창고를 통과할 때 기본 경로로 간주되어야 합니다."
 
 #. module: stock
 #: model:ir.model.fields.selection,name:stock.selection__stock_picking__move_type__one
@@ -6922,15 +6957,13 @@ msgstr "모든 품목 준비가 완료되면"
 #: model:ir.model.fields,help:stock.field_stock_location_route__product_selectable
 msgid ""
 "When checked, the route will be selectable in the Inventory tab of the "
-"Product form.  It will take priority over the Warehouse route. "
-msgstr "이 옵션을 선택하면 품목 양식의 재고 탭에서 경로를 선택할 수 있습니다. 창고 경로보다 우선 순위가 될 것입니다. "
+"Product form."
+msgstr "이 옵션을 선택하면 제품 양식의 재고 탭에서 경로를 선택할 수 있습니다."
 
 #. module: stock
 #: model:ir.model.fields,help:stock.field_stock_location_route__product_categ_selectable
-msgid ""
-"When checked, the route will be selectable on the Product Category.  It will"
-" take priority over the Warehouse route. "
-msgstr "이 옵션을 선택하면 품목 카테고리에서 경로를 선택할 수 있습니다. 창고 경로보다 우선 순위가 될 것입니다. "
+msgid "When checked, the route will be selectable on the Product Category."
+msgstr "선택하면 제품 범주에서 경로를 선택할 수 있습니다."
 
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_stock_putaway_rule__location_in_id
@@ -7010,7 +7043,7 @@ msgid "Wizard"
 msgstr "마법사"
 
 #. module: stock
-#: model_terms:ir.ui.view,arch_db:stock.view_stock_move_line_operation_tree_lot_name_as_textarea
+#: model_terms:ir.ui.view,arch_db:stock.view_stock_move_line_operation_tree
 msgid "Write your SN/LN one by one or copy paste a list."
 msgstr "SN/LN을 하나씩 쓰거나 목록을 복사하여 붙여 넣습니다."
 
@@ -7441,9 +7474,3 @@ msgstr "다음 대신 처리됨"
 #: model_terms:ir.ui.view,arch_db:stock.stock_report_view_graph
 msgid "report_stock_quantity_graph"
 msgstr "report_stock_quantity_graph"
-
-#. module: stock
-#: code:addons/stock/models/stock_move_line.py:223
-#, python-format
-msgid "Changing the product is only allowed in 'Draft' state."
-msgstr "상품 변경은 '초안' 상태에서만 허용됩니다."

@@ -180,9 +180,12 @@ class Channel(models.Model):
 
     @api.onchange('moderator_ids')
     def _onchange_moderator_ids(self):
-        missing_partners = self.mapped('moderator_ids.partner_id') - self.mapped('channel_last_seen_partner_ids.partner_id')
-        for partner in missing_partners:
-            self.channel_last_seen_partner_ids += self.env['mail.channel.partner'].new({'partner_id': partner.id})
+        missing_partner_ids = set(self.mapped('moderator_ids.partner_id').ids) - set(self.mapped('channel_last_seen_partner_ids.partner_id').ids)
+        if missing_partner_ids:
+            self.channel_last_seen_partner_ids = [
+                (0, 0, {'partner_id': partner_id})
+                for partner_id in missing_partner_ids
+            ]
 
     @api.onchange('email_send')
     def _onchange_email_send(self):
@@ -366,7 +369,7 @@ class Channel(models.Model):
 
         # Notifies the message author when his message is pending moderation if required on channel.
         # The fields "email_from" and "reply_to" are filled in automatically by method create in model mail.message.
-        if self.moderation_notify and self.moderation_notify_msg and message_type == 'email' and moderation_status == 'pending_moderation':
+        if self.moderation_notify and self.moderation_notify_msg and message_type in ['email','comment'] and moderation_status == 'pending_moderation':
             self.env['mail.mail'].create({
                 'body_html': self.moderation_notify_msg,
                 'subject': 'Re: %s' % (kwargs.get('subject', '')),

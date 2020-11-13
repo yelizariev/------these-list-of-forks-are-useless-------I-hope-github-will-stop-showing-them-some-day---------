@@ -692,7 +692,11 @@ class Field(MetaField('DummyField', (object,), {})):
                     # recomputations of fields on transient models
                     break
 
-                field = field_model._fields[fname]
+                try:
+                    field = field_model._fields[fname]
+                except KeyError:
+                    msg = "Field %s cannot find dependency %r on model %r."
+                    raise ValueError(msg % (self, fname, field_model._name))
                 if field is self and index:
                     self.recursive = True
 
@@ -895,7 +899,7 @@ class Field(MetaField('DummyField', (object,), {})):
                 model.flush([self.name])
 
         if self.required and not has_notnull:
-            model.pool.post_constraint(sql.set_not_null, model._cr, model._table, self.name)
+            model.pool.post_constraint(apply_required, model, self.name)
         elif not self.required and has_notnull:
             sql.drop_not_null(model._cr, model._table, self.name)
 
@@ -986,10 +990,14 @@ class Field(MetaField('DummyField', (object,), {})):
         if self.compute and (record.id in env.all.tocompute.get(self, ())) \
                 and not env.is_protected(self, record):
             # self must be computed on record
-            recs = record if self.recursive else env.records_to_compute(self)
+            if self.recursive:
+                recs = record
+            else:
+                ids = expand_ids(record.id, env.all.tocompute[self])
+                recs = record.browse(itertools.islice(ids, PREFETCH_MAX))
             try:
                 self.compute_value(recs)
-            except AccessError:
+            except (AccessError, MissingError):
                 self.compute_value(record)
 
         try:
@@ -1018,7 +1026,7 @@ class Field(MetaField('DummyField', (object,), {})):
                     recs = record if self.recursive else record._in_cache_without(self)
                     try:
                         self.compute_value(recs)
-                    except AccessError:
+                    except (AccessError, MissingError):
                         self.compute_value(record)
                     value = env.cache.get(record, self)
 
@@ -1129,6 +1137,7 @@ class Field(MetaField('DummyField', (object,), {})):
 
 
 class Boolean(Field):
+    """ Encapsulates a :class:`bool`. """
     type = 'boolean'
     column_type = ('bool', 'bool')
 
@@ -1143,6 +1152,7 @@ class Boolean(Field):
 
 
 class Integer(Field):
+    """ Encapsulates an :class:`int`. """
     type = 'integer'
     column_type = ('int4', 'int4')
     _slots = {
@@ -1181,7 +1191,9 @@ class Integer(Field):
 
 
 class Float(Field):
-    """The precision digits are given by the (optional) digits attribute.
+    """ Encapsulates a :class:`float`.
+
+    The precision digits are given by the (optional) ``digits`` attribute.
 
     :param digits: a pair (total, decimal) or a string referencing a
         :class:`~odoo.addons.base.models.decimal_precision.DecimalPrecision` record name.
@@ -1246,9 +1258,13 @@ class Float(Field):
 
 
 class Monetary(Field):
-    """ The decimal precision and currency symbol are taken from the attribute
+    """ Encapsulates a :class:`float` expressed in a given
+    :class:`res_currency<odoo.addons.base.models.res_currency.Currency>`.
 
-    :param str currency_field: name of the field holding the currency
+    The decimal precision and currency symbol are taken from the ``currency_field`` attribute.
+
+    :param str currency_field: name of the :class:`Many2one` field
+        holding the :class:`res_currency <odoo.addons.base.models.res_currency.Currency>`
         this monetary field is expressed in (default: `\'currency_id\'`)
     """
     type = 'monetary'
@@ -1293,7 +1309,9 @@ class Monetary(Field):
         else:
             # Note: this is wrong if 'record' is several records with different
             # currencies, which is functional nonsense and should not happen
-            currency = record[:1][self.currency_field]
+            # BEWARE: do not prefetch other fields, because 'value' may be in
+            # cache, and would be overridden by the value read from database!
+            currency = record[:1].with_context(prefetch_fields=False)[self.currency_field]
 
         value = float(value or 0.0)
         if currency:
@@ -1306,7 +1324,9 @@ class Monetary(Field):
         if value and validate:
             # FIXME @rco-odoo: currency may not be already initialized if it is
             # a function or related field!
-            currency = record.sudo()[self.currency_field]
+            # BEWARE: do not prefetch other fields, because 'value' may be in
+            # cache, and would be overridden by the value read from database!
+            currency = record.sudo().with_context(prefetch_fields=False)[self.currency_field]
             if len(currency) > 1:
                 raise ValueError("Got multiple currencies while assigning values of monetary field %s" % str(self))
             elif currency:
@@ -1431,7 +1451,10 @@ class _String(Field):
             if self.translate is True and cache_value is not None:
                 tname = "%s,%s" % (records._name, self.name)
                 records.env['ir.translation']._set_source(tname, real_recs._ids, value)
-                records.invalidate_cache(fnames=[self.name], ids=records.ids)
+            if self.translate:
+                # invalidate the field in the other languages
+                cache.invalidate([(self, records.ids)])
+                cache.update(records, self, [cache_value] * len(records))
 
         if update_trans:
             if callable(self.translate):
@@ -1531,7 +1554,7 @@ class Char(_String):
 
 
 class Text(_String):
-    """ Very similar to :class:`~.Char` but used for longer contents, does not
+    """ Very similar to :class:`Char` but used for longer contents, does not
     have a size and usually displayed as a multiline text box.
 
     :param translate: enable the translation of the field's values; use
@@ -1552,6 +1575,18 @@ class Text(_String):
 
 
 class Html(_String):
+    """ Encapsulates an html code content.
+
+    :param bool sanitize: whether value must be sanitized (default: ``True``)
+    :param bool sanitize_tags: whether to sanitize tags
+        (only a white list of attributes is accepted, default: ``True``)
+    :param bool sanitize_attributes: whether to sanitize attributes
+        (only a white list of attributes is accepted, default: ``True``)
+    :param bool sanitize_style: whether to sanitize style attributes (default: ``False``)
+    :param bool strip_style: whether to strip style attributes
+        (removed and therefore not sanitized, default: ``False``)
+    :param bool strip_classes: whether to strip classes attributes (default: ``False``)
+    """
     type = 'html'
     column_type = ('text', 'text')
     _slots = {
@@ -1613,9 +1648,7 @@ class Html(_String):
 
 
 class Date(Field):
-    """ This field type encapsulates a python date object.
-    :type date:
-    """
+    """ Encapsulates a python :class:`date <datetime.date>` object. """
     type = 'date'
     column_type = ('date', 'date')
     column_cast_from = ('timestamp',)
@@ -1714,9 +1747,7 @@ class Date(Field):
 
 
 class Datetime(Field):
-    """ This field type encapsulates a python datetime object.
-    :type datetime:
-    """
+    """ Encapsulates a python :class:`datetime <datetime.datetime>` object. """
     type = 'datetime'
     column_type = ('timestamp', 'timestamp')
     column_cast_from = ('date',)
@@ -1825,6 +1856,11 @@ _BINARY = memoryview
 
 
 class Binary(Field):
+    """Encapsulates a binary content (e.g. a file).
+
+    :param bool attachment: whether the field should be stored as `ir_attachment`
+        or in a column of the model's table (default: ``True``).
+    """
     type = 'binary'
     _slots = {
         'prefetch': False,                  # not prefetched by default
@@ -1835,6 +1871,12 @@ class Binary(Field):
     @property
     def column_type(self):
         return None if self.attachment else ('bytea', 'bytea')
+
+    def _get_attrs(self, model, name):
+        attrs = super(Binary, self)._get_attrs(model, name)
+        if not attrs.get('store', True):
+            attrs['attachment'] = False
+        return attrs
 
     _description_attachment = property(attrgetter('attachment'))
 
@@ -1977,20 +2019,21 @@ class Binary(Field):
         cache.update(records, self, [cache_value] * len(records))
 
         # retrieve the attachments that store the values, and adapt them
-        if self.store:
+        if self.store and any(records._ids):
+            real_records = records.filtered('id')
             atts = records.env['ir.attachment'].sudo()
             if not_null:
                 atts = atts.search([
                     ('res_model', '=', self.model_name),
                     ('res_field', '=', self.name),
-                    ('res_id', 'in', records.ids),
+                    ('res_id', 'in', real_records.ids),
                 ])
             if value:
                 # update the existing attachments
                 atts.write({'datas': value})
                 atts_records = records.browse(atts.mapped('res_id'))
                 # create the missing attachments
-                missing = (records - atts_records).filtered('id')
+                missing = (real_records - atts_records)
                 if missing:
                     atts.create([{
                             'name': self.name,
@@ -2009,6 +2052,22 @@ class Binary(Field):
 
 
 class Image(Binary):
+    """Encapsulates an image, extending :class:`Binary`.
+
+    If image size is greater than the ``max_width``/``max_height`` limit of pixels, the image will be
+    resized to the limit by keeping aspect ratio.
+
+    :param int max_width: the maximum width of the image (default: ``0``, no limit)
+    :param int max_height: the maximum height of the image (default: ``0``, no limit)
+    :param bool verify_resolution: whether the image resolution should be verified
+        to ensure it doesn't go over the maximum image resolution (default: ``True``).
+        See :class:`odoo.tools.image.ImageProcess` for maximum image resolution (default: ``45e6``).
+
+    .. note::
+
+        If no ``max_width``/``max_height`` is specified (or is set to 0) and ``verify_resolution`` is False,
+        the field content won't be verified at all and a :class:`Binary` field should be used.
+    """
     _slots = {
         'max_width': 0,
         'max_height': 0,
@@ -2027,7 +2086,18 @@ class Image(Binary):
         super(Image, self).create(new_record_values)
 
     def write(self, records, value):
-        new_value = self._image_process(value)
+        try:
+            new_value = self._image_process(value)
+        except UserError:
+            if not any(records._ids):
+                # Some crap is assigned to a new record. This can happen in an
+                # onchange, where the client sends the "bin size" value of the
+                # field instead of its full value (this saves bandwidth). In
+                # this case, we simply don't assign the field: its value will be
+                # taken from the records' origin.
+                return
+            raise
+
         super(Image, self).write(records, new_value)
         cache_value = self.convert_to_cache(value if self.related else new_value, records)
         records.env.cache.update(records, self, [cache_value] * len(records))
@@ -2049,7 +2119,8 @@ class Image(Binary):
 
 
 class Selection(Field):
-    """
+    """ Encapsulates an exclusive choice between different values.
+
     :param selection: specifies the possible values for this field.
         It is given as either a list of pairs ``(value, label)``, or a model
         method, or a method name.
@@ -2111,9 +2182,11 @@ class Selection(Field):
                     ):
                         _logger.warning("%s: selection=%r overrides existing selection; use selection_add instead", self, selection)
                     values = [kv[0] for kv in selection]
-                    labels.update(selection)
+                    labels = dict(selection)
                 else:
                     self.selection = selection
+                    values = None
+                    labels = {}
 
             if 'selection_add' in field.args:
                 selection_add = field.args['selection_add']
@@ -2199,6 +2272,11 @@ class Selection(Field):
 
 
 class Reference(Selection):
+    """ Pseudo-relational field (no FK in database).
+
+    The field value is stored as a :class:`string <str>` following the pattern
+    ``"res_model.res_id"`` in database.
+    """
     type = 'reference'
 
     @property
@@ -2489,9 +2567,6 @@ class Many2one(_Relational):
         # update the cache of self
         cache.update(records, self, [cache_value] * len(records))
 
-        # update the cache of one2many fields of new corecord
-        self._update_inverses(records, cache_value)
-
         # update towrite
         if self.store:
             towrite = records.env.all.towrite[self.model_name]
@@ -2499,15 +2574,22 @@ class Many2one(_Relational):
                 # cache_value is already in database format
                 towrite[record.id][self.name] = cache_value
 
+        # update the cache of one2many fields of new corecord
+        self._update_inverses(records, cache_value)
+
         return records
 
     def _remove_inverses(self, records, value):
         """ Remove `records` from the cached values of the inverse fields of `self`. """
         cache = records.env.cache
         record_ids = set(records._ids)
+
+        # align(id) returns a NewId if records are new, a real id otherwise
+        align = (lambda id_: id_) if all(record_ids) else (lambda id_: id_ and NewId(id_))
+
         for invf in records._field_inverses[self]:
             corecords = records.env[self.comodel_name].browse(
-                id_ for id_ in cache.get_values(records, self)
+                align(id_) for id_ in cache.get_values(records, self)
             )
             for corecord in corecords:
                 ids0 = cache.get(corecord, invf, None)
@@ -2535,6 +2617,16 @@ class Many2one(_Relational):
 
 
 class Many2oneReference(Integer):
+    """ Pseudo-relational field (no FK in database).
+
+    The field value is stored as an :class:`integer <int>` id in database.
+
+    Contrary to :class:`Reference` fields, the model has to be specified
+    in a :class:`Char` field, whose name has to be specified in the
+    `model_field` attribute for the current :class:`Many2oneReference` field.
+
+    :param str model_field: name of the :class:`Char` where the model name is stored.
+    """
     type = 'many2one_reference'
     _slots = {
         'model_field': None,
@@ -2866,6 +2958,15 @@ class One2many(_RelationalMulti):
             domain = domain + [(inverse_field.model_field, '=', records._name)]
         return domain
 
+    def __get__(self, records, owner):
+        if records is not None and self.inverse_name is not None:
+            # force the computation of the inverse field to ensure that the
+            # cache value of self is consistent
+            inverse_field = records.pool[self.comodel_name]._fields[self.inverse_name]
+            if inverse_field.compute:
+                records.env[self.comodel_name].recompute([self.inverse_name])
+        return super().__get__(records, owner)
+
     def read(self, records):
         # retrieve the lines in the comodel
         context = {'active_test': False}
@@ -3009,6 +3110,11 @@ class One2many(_RelationalMulti):
 
         if self.store:
             inverse = self.inverse_name
+
+            # make sure self's inverse is in cache
+            inverse_field = comodel._fields[inverse]
+            for record in records:
+                cache.update(record[self.name], inverse_field, itertools.repeat(record.id))
 
             for recs, commands in records_commands_list:
                 for command in commands:
@@ -3556,6 +3662,16 @@ def prefetch_x2many_ids(record, field):
     return unique(id_ for ids in ids_list for id_ in ids)
 
 
+def apply_required(model, field_name):
+    """ Set a NOT NULL constraint on the given field, if necessary. """
+    # At the time this function is called, the model's _fields may have been reset, although
+    # the model's class is still the same. Retrieve the field to see whether the NOT NULL
+    # constraint still applies
+    field = model._fields[field_name]
+    if field.store and field.required:
+        sql.set_not_null(model.env.cr, model._table, field_name)
+
+
 # imported here to avoid dependency cycle issues
 from .exceptions import AccessError, MissingError, UserError
-from .models import check_pg_name, BaseModel, NewId, IdType
+from .models import check_pg_name, BaseModel, NewId, IdType, expand_ids, PREFETCH_MAX

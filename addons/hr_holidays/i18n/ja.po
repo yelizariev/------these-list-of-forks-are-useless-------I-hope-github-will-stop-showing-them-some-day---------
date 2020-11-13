@@ -13,16 +13,17 @@
 # Norimichi Sugimoto <norimichi.sugimoto@tls-ltd.co.jp>, 2019
 # NANIWA Masahiro <naniwa.masahiro@gmail.com>, 2019
 # Tim Siu Lai <tl@roomsfor.hk>, 2019
-# Yoshi Tashiro <tashiro@roomsfor.hk>, 2020
 # Hau Dao <hau@quartile.co>, 2020
+# Yoshi Tashiro <tashiro@roomsfor.hk>, 2020
+# Noma Yuki, 2020
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 13.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-05 12:33+0000\n"
+"POT-Creation-Date: 2020-04-27 09:22+0000\n"
 "PO-Revision-Date: 2019-08-26 09:10+0000\n"
-"Last-Translator: Hau Dao <hau@quartile.co>, 2020\n"
+"Last-Translator: Noma Yuki, 2020\n"
 "Language-Team: Japanese (https://www.transifex.com/odoo/teams/41243/ja/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -125,6 +126,18 @@ msgid "%s on %s: %.2f days"
 msgstr ""
 
 #. module: hr_holidays
+#: code:addons/hr_holidays/models/hr_leave.py:0
+#, python-format
+msgid "%s on Time Off : %.2f day(s)"
+msgstr ""
+
+#. module: hr_holidays
+#: code:addons/hr_holidays/models/hr_leave.py:0
+#, python-format
+msgid "%s on Time Off : %.2f hour(s)"
+msgstr ""
+
+#. module: hr_holidays
 #: model_terms:ir.ui.view,arch_db:hr_holidays.report_holidayssummary
 msgid "&lt;/td&gt;"
 msgstr "&lt;/td&gt;"
@@ -214,14 +227,14 @@ msgid "11:30 PM"
 msgstr ""
 
 #. module: hr_holidays
-#: model:ir.model.fields.selection,name:hr_holidays.selection__hr_leave__request_hour_from__12
-#: model:ir.model.fields.selection,name:hr_holidays.selection__hr_leave__request_hour_to__12
+#: model:ir.model.fields.selection,name:hr_holidays.selection__hr_leave__request_hour_from__0
+#: model:ir.model.fields.selection,name:hr_holidays.selection__hr_leave__request_hour_to__0
 msgid "12:00 AM"
 msgstr ""
 
 #. module: hr_holidays
-#: model:ir.model.fields.selection,name:hr_holidays.selection__hr_leave__request_hour_from__0
-#: model:ir.model.fields.selection,name:hr_holidays.selection__hr_leave__request_hour_to__0
+#: model:ir.model.fields.selection,name:hr_holidays.selection__hr_leave__request_hour_from__12
+#: model:ir.model.fields.selection,name:hr_holidays.selection__hr_leave__request_hour_to__12
 msgid "12:00 PM"
 msgstr ""
 
@@ -528,6 +541,21 @@ msgstr ""
 "                                </span>"
 
 #. module: hr_holidays
+#: model_terms:ir.ui.view,arch_db:hr_holidays.hr_leave_view_form
+msgid ""
+"<span attrs=\"{'invisible': [('holiday_type', '!=', 'employee')]}\">\n"
+"                        The employee has a different timezone than yours! Here dates and times are displayed in the employee's timezone\n"
+"                    </span>\n"
+"                    <span attrs=\"{'invisible': [('holiday_type', '!=', 'department')]}\">\n"
+"                        The department's company has a different timezone than yours! Here dates and times are displayed in the company's timezone\n"
+"                    </span>\n"
+"                    <span attrs=\"{'invisible': [('holiday_type', '!=', 'company')]}\">\n"
+"                        The company has a different timezone than yours! Here dates and times are displayed in the company's timezone\n"
+"                    </span>\n"
+"                    ("
+msgstr ""
+
+#. module: hr_holidays
 #: model_terms:ir.ui.view,arch_db:hr_holidays.hr_leave_view_kanban
 msgid "<span class=\"text-muted\">from </span>"
 msgstr ""
@@ -647,7 +675,7 @@ msgstr "活動"
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_leave__activity_exception_decoration
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_leave_allocation__activity_exception_decoration
 msgid "Activity Exception Decoration"
-msgstr ""
+msgstr "例外の活動を示す文字装飾"
 
 #. module: hr_holidays
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_leave__activity_state
@@ -681,7 +709,7 @@ msgstr "管理者"
 #. module: hr_holidays
 #: model:ir.model.fields.selection,name:hr_holidays.selection__hr_leave__request_date_from_period__pm
 msgid "Afternoon"
-msgstr ""
+msgstr "午後"
 
 #. module: hr_holidays
 #: model:ir.ui.menu,name:hr_holidays.hr_holidays_menu_manager_all
@@ -1204,7 +1232,7 @@ msgstr "説明"
 #. module: hr_holidays
 #: model:ir.model,name:hr_holidays.model_mail_channel
 msgid "Discussion Channel"
-msgstr ""
+msgstr "ディスカッションチャンネル"
 
 #. module: hr_holidays
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_holidays_summary_employee__display_name
@@ -1314,6 +1342,11 @@ msgid "Everyone"
 msgstr "全員"
 
 #. module: hr_holidays
+#: model_terms:ir.ui.view,arch_db:hr_holidays.hr_leave_allocation_view_form
+msgid "Extra days"
+msgstr ""
+
+#. module: hr_holidays
 #: model:ir.model.fields,help:hr_holidays.field_hr_leave_allocation__duration_display
 msgid ""
 "Field allowing to see the allocation duration in days or hours depending on "
@@ -1369,7 +1402,7 @@ msgstr "フォロワー (取引先)"
 #: code:addons/hr_holidays/report/holidays_summary_report.py:0
 #, python-format
 msgid "Form content is missing, this report cannot be printed."
-msgstr ""
+msgstr "送信元の内容が欠けています、このレポートは印刷できません。"
 
 #. module: hr_holidays
 #: model:ir.model.fields.selection,name:hr_holidays.selection__hr_leave_type__allocation_type__fixed_allocation
@@ -1497,6 +1530,20 @@ msgstr "アイコン"
 #: model:ir.model.fields,help:hr_holidays.field_hr_leave__activity_exception_icon
 #: model:ir.model.fields,help:hr_holidays.field_hr_leave_allocation__activity_exception_icon
 msgid "Icon to indicate an exception activity."
+msgstr "例外的なアクティビティを示唆するアイコン"
+
+#. module: hr_holidays
+#: model:ir.model.fields,help:hr_holidays.field_hr_leave_allocation__number_of_days_display
+msgid ""
+"If Accrual Allocation: Number of days allocated in addition to the ones you "
+"will get via the accrual' system."
+msgstr ""
+
+#. module: hr_holidays
+#: model:ir.model.fields,help:hr_holidays.field_hr_leave_allocation__number_of_hours_display
+msgid ""
+"If Accrual Allocation: Number of hours allocated in addition to the ones you"
+" will get via the accrual' system."
 msgstr ""
 
 #. module: hr_holidays
@@ -1765,7 +1812,7 @@ msgstr "月"
 #. module: hr_holidays
 #: model:ir.model.fields.selection,name:hr_holidays.selection__hr_leave__request_date_from_period__am
 msgid "Morning"
-msgstr ""
+msgstr "午前"
 
 #. module: hr_holidays
 #: model:ir.actions.act_window,name:hr_holidays.hr_leave_allocation_action_my
@@ -2205,6 +2252,7 @@ msgstr ""
 
 #. module: hr_holidays
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_leave_type__responsible_id
+#: model:res.groups,name:hr_holidays.group_hr_holidays_responsible
 msgid "Responsible"
 msgstr "担当者"
 
@@ -2758,20 +2806,6 @@ msgid "Type of the exception activity on record."
 msgstr ""
 
 #. module: hr_holidays
-#: model:ir.model.fields,help:hr_holidays.field_hr_leave_allocation__number_of_days_display
-msgid ""
-"UX field allowing to see and modify the allocation duration, computed in "
-"days."
-msgstr ""
-
-#. module: hr_holidays
-#: model:ir.model.fields,help:hr_holidays.field_hr_leave_allocation__number_of_hours_display
-msgid ""
-"UX field allowing to see and modify the allocation duration, computed in "
-"hours."
-msgstr ""
-
-#. module: hr_holidays
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_leave_allocation__unit_per_interval
 msgid "Unit of time added at each interval"
 msgstr ""
@@ -2809,6 +2843,20 @@ msgstr "未読メッセージカウンター"
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_leave__user_id
 msgid "User"
 msgstr "ユーザ"
+
+#. module: hr_holidays
+#. openerp-web
+#: code:addons/hr_holidays/static/src/xml/discuss.xml:0
+#, python-format
+msgid "User is online"
+msgstr ""
+
+#. module: hr_holidays
+#. openerp-web
+#: code:addons/hr_holidays/static/src/xml/discuss.xml:0
+#, python-format
+msgid "User is out of office"
+msgstr ""
 
 #. module: hr_holidays
 #: model:ir.model.fields,help:hr_holidays.field_hr_employee__leave_manager_id
@@ -3009,7 +3057,7 @@ msgstr "タイプ別"
 #: code:addons/hr_holidays/static/src/xml/leave_stats_templates.xml:0
 #, python-format
 msgid "day(s)"
-msgstr ""
+msgstr "日"
 
 #. module: hr_holidays
 #: code:addons/hr_holidays/models/hr_leave.py:0

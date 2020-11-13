@@ -259,7 +259,7 @@ actual arch.
          """)
 
     @api.depends('arch_db', 'arch_fs', 'arch_updated')
-    @api.depends_context('read_arch_from_file')
+    @api.depends_context('read_arch_from_file', 'lang')
     def _compute_arch(self):
         def resolve_external_ids(arch_fs, view_xml_id):
             def replacer(m):
@@ -297,6 +297,10 @@ actual arch.
                     data['arch_fs'] = '/'.join(path_info[0:2])
                     data['arch_updated'] = False
             view.write(data)
+        # the field 'arch' depends on the context and has been implicitly
+        # modified in all languages; the invalidation below ensures that the
+        # field does not keep an old value in another environment
+        self.invalidate_cache(['arch'], self._ids)
 
     @api.depends('arch')
     @api.depends_context('read_arch_from_file')
@@ -378,8 +382,6 @@ actual arch.
         # Any exception raised below will cause a transaction rollback.
         self = self.with_context(check_field_names=True)
         for view in self:
-            if not view.arch:
-                continue
             view_arch = etree.fromstring(view.arch.encode('utf-8'))
             view._valid_inheritance(view_arch)
             view_def = view.read_combined(['arch'])
@@ -475,7 +477,7 @@ actual arch.
     def write(self, vals):
         # Keep track if view was modified. That will be useful for the --dev mode
         # to prefer modified arch over file arch.
-        if ('arch' in vals or 'arch_base' in vals) and 'install_filename' not in self._context:
+        if 'arch_updated' not in vals and ('arch' in vals or 'arch_base' in vals) and 'install_filename' not in self._context:
             vals['arch_updated'] = True
 
         # drop the corresponding view customizations (used for dashboards for example), otherwise
@@ -507,7 +509,7 @@ actual arch.
         # if in uninstall mode and has children views, emulate an ondelete cascade
         if self.env.context.get('_force_unlink', False) and self.inherit_children_ids:
             self.inherit_children_ids.unlink()
-        super(View, self).unlink()
+        return super(View, self).unlink()
 
     @api.returns('self', lambda value: value.id)
     def copy(self, default=None):
@@ -629,7 +631,14 @@ actual arch.
     def inherit_branding(self, specs_tree, view_id, root_id):
         for node in specs_tree.iterchildren(tag=etree.Element):
             xpath = node.getroottree().getpath(node)
-            if node.tag == 'data' or node.tag == 'xpath' or node.get('position') or node.get('t-field'):
+            if node.tag == 'data' or node.tag == 'xpath' or node.get('position'):
+                self.inherit_branding(node, view_id, root_id)
+            elif node.get('t-field'):
+                # Note: 'data-oe-field-xpath' and not 'data-oe-xpath' as this
+                # was introduced as a fix. To avoid breaking customizations and
+                # to make a minimal diff fix, a separated attribute was used.
+                # TODO Try to use a common attribute in master (14.1).
+                node.set('data-oe-field-xpath', xpath)
                 self.inherit_branding(node, view_id, root_id)
             else:
                 node.set('data-oe-id', str(view_id))
@@ -883,6 +892,7 @@ actual arch.
                 self.with_context(
                     base_model_name=model,
                     check_field_names=False,  # field validation is a bit more tricky and done apart
+                    check_field_names_original=self.env.context.get('check_field_names'),
                     view_is_editable=False,
                 ).postprocess_and_fields(model, searchpanel[0], view_id)
 
@@ -1109,9 +1119,16 @@ actual arch.
         node_path = e.get('data-oe-xpath')
         if node_path is None:
             node_path = "%s/%s[%d]" % (parent_xpath, e.tag, index_map[e.tag])
-        if branding and not (e.get('data-oe-model') or e.get('t-field')):
-            e.attrib.update(branding)
-            e.set('data-oe-xpath', node_path)
+        if branding:
+            if e.get('t-field'):
+                # Note: 'data-oe-field-xpath' and not 'data-oe-xpath' as this
+                # was introduced as a fix. To avoid breaking customizations and
+                # to make a minimal diff fix, a separated attribute was used.
+                # TODO Try to use a common attribute in master (14.1).
+                e.set('data-oe-field-xpath', node_path)
+            elif not e.get('data-oe-model'):
+                e.attrib.update(branding)
+                e.set('data-oe-xpath', node_path)
         if not e.get('data-oe-model'):
             return
 
@@ -1130,7 +1147,7 @@ actual arch.
                 # running index by tag type, for XPath query generation
                 indexes = collections.defaultdict(lambda: 0)
                 for child in e.iterchildren(tag=etree.Element):
-                    if child.get('data-oe-xpath'):
+                    if child.get('data-oe-xpath') or child.get('data-oe-field-xpath'):
                         # injected by view inheritance, skip otherwise
                         # generated xpath is incorrect
                         # Also, if a node is known to have been replaced during applying xpath
@@ -1155,7 +1172,7 @@ actual arch.
         :rtype: boolean
         """
         return any(
-            (attr in ('data-oe-model', 'group') or (attr.startswith('t-')))
+            (attr in ('data-oe-model', 'groups') or (attr.startswith('t-')))
             for attr in node.attrib
         )
 
@@ -1338,6 +1355,37 @@ actual arch.
                 view._check_xml()
             except Exception as e:
                 self.raise_view_error("Can't validate view:\n%s" % e, view.id)
+
+    def _create_all_specific_views(self, processed_modules):
+        """To be overriden and have specific view behaviour on create"""
+        pass
+
+    def _get_specific_views(self):
+        """ Given a view, return a record set containing all the specific views
+            for that view's key.
+        """
+        self.ensure_one()
+        # Only qweb views have a specific conterpart
+        if self.type != 'qweb':
+            return self.env['ir.ui.view']
+        # A specific view can have a xml_id if exported/imported but it will not be equals to it's key (only generic view will).
+        return self.with_context(active_test=False).search([('key', '=', self.key)]).filtered(lambda r: not r.xml_id == r.key)
+
+    def _load_records_write(self, values):
+        """ During module update, when updating a generic view, we should also
+            update its specific views (COW'd).
+            Note that we will only update unmodified fields. That will mimic the
+            noupdate behavior on views having an ir.model.data.
+        """
+        if self.type == 'qweb':
+            # Update also specific views
+            for cow_view in self._get_specific_views():
+                authorized_vals = {}
+                for key in values:
+                    if cow_view[key] == self[key]:
+                        authorized_vals[key] = values[key]
+                cow_view.write(authorized_vals)
+        super(View, self)._load_records_write(values)
 
 
 class ResetViewArchWizard(models.TransientModel):

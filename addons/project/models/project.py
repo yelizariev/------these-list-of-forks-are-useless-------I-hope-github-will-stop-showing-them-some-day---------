@@ -173,7 +173,7 @@ class Project(models.Model):
         string='Members')
     is_favorite = fields.Boolean(compute='_compute_is_favorite', inverse='_inverse_is_favorite', string='Show Project on dashboard',
         help="Whether this project should be displayed on your dashboard.")
-    label_tasks = fields.Char(string='Use Tasks as', default='Tasks', help="Label used for the tasks of the project.")
+    label_tasks = fields.Char(string='Use Tasks as', default='Tasks', help="Label used for the tasks of the project.", translate=True)
     tasks = fields.One2many('project.task', 'project_id', string="Task Activities")
     resource_calendar_id = fields.Many2one(
         'resource.calendar', string='Working Time',
@@ -417,8 +417,10 @@ class Project(models.Model):
     @api.model
     def _send_rating_all(self):
         projects = self.search([('rating_status', '=', 'periodic'), ('rating_request_deadline', '<=', fields.Datetime.now())])
-        projects.mapped('task_ids')._send_task_rating_mail()
-        projects._compute_rating_request_deadline()
+        for project in projects:
+            project.task_ids._send_task_rating_mail()
+            project._compute_rating_request_deadline()
+            self.env.cr.commit()
 
 
 class Task(models.Model):
@@ -724,6 +726,8 @@ class Task(models.Model):
                 if fname not in vals:
                     vals[fname] = value
         task = super(Task, self.with_context(context)).create(vals)
+        if task.project_id.privacy_visibility == 'portal':
+            task._portal_ensure_token()
         return task
 
     def write(self, vals):

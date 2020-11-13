@@ -3,11 +3,10 @@
 # 	* payment
 # 
 # Translators:
-# Felix Schubert <felix.schubert@go-erp.com>, 2019
 # dd5cd5bab88c61e9dedf84f5ea59b147, 2019
 # Wolfgang Taferner, 2019
 # Rudolf Schnapka <rs@techno-flex.de>, 2019
-# darenkster <inactive+darenkster@transifex.com>, 2019
+# f91684c3ff9ec3e650d5c8461e534581_686eae3 <449b96d9f63071f94d89e129677b83de_366193>, 2019
 # Johannes Croe <jcr@odoo.com>, 2019
 # Marco Tarsia <marco.y.tarsia@gmail.com>, 2019
 # Leon Grill <leg@odoo.com>, 2019
@@ -15,14 +14,16 @@
 # Martin Trigaux, 2019
 # Patrick Heuel <patrick.heuel@odoo-bs.com>, 2019
 # JEK Odoo <jek@odoo.com>, 2020
+# Kevin Harrings <kha@odoo.com>, 2020
+# Felix Schubert <felix.schubert@go-erp.com>, 2020
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 13.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-18 09:47+0000\n"
+"POT-Creation-Date: 2020-04-27 09:22+0000\n"
 "PO-Revision-Date: 2019-08-26 09:12+0000\n"
-"Last-Translator: JEK Odoo <jek@odoo.com>, 2020\n"
+"Last-Translator: Felix Schubert <felix.schubert@go-erp.com>, 2020\n"
 "Language-Team: German (https://www.transifex.com/odoo/teams/41243/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -298,7 +299,7 @@ msgstr "Adyen"
 #. module: payment
 #: model:payment.acquirer,name:payment.payment_acquirer_alipay
 msgid "Alipay"
-msgstr ""
+msgstr "Alipay"
 
 #. module: payment
 #: model:ir.model.fields.selection,name:payment.selection__payment_acquirer__save_token__always
@@ -316,6 +317,12 @@ msgstr "Betrag"
 #: model:ir.model.fields,field_description:payment.field_payment_link_wizard__amount_max
 msgid "Amount Max"
 msgstr "Max. Betrag"
+
+#. module: payment
+#: code:addons/payment/controllers/portal.py:0
+#, python-format
+msgid "An error occured during the processing of this payment"
+msgstr ""
 
 #. module: payment
 #. openerp-web
@@ -657,7 +664,7 @@ msgstr ""
 #. module: payment
 #: model:ir.model.fields.selection,name:payment.selection__payment_acquirer_onboarding_wizard__payment_method__stripe
 msgid "Credit card (via Stripe)"
-msgstr ""
+msgstr "Kreditkarte (Stripe)"
 
 #. module: payment
 #: model:ir.model.fields,field_description:payment.field_payment_link_wizard__currency_id
@@ -836,7 +843,7 @@ msgstr "Zahlungslink erstellen"
 #. module: payment
 #: model:ir.model,name:payment.model_payment_link_wizard
 msgid "Generate Sales Payment Link"
-msgstr ""
+msgstr "Zahlungslink für den Auftrag erzeugen"
 
 #. module: payment
 #: model:ir.actions.act_window,name:payment.action_invoice_order_generate_link
@@ -1154,6 +1161,13 @@ msgid "Never"
 msgstr "Niemals"
 
 #. module: payment
+#: model_terms:ir.ui.view,arch_db:payment.payment_link_wizard_view_form
+msgid ""
+"This partner has no email, which may cause issues with some payment "
+"acquirers. Setting an email for this partner is advised."
+msgstr ""
+
+#. module: payment
 #: code:addons/payment/wizards/payment_acquirer_onboarding_wizard.py:0
 #, python-format
 msgid ""
@@ -1222,31 +1236,6 @@ msgstr "Ok"
 #, python-format
 msgid "Only administrators can access this data."
 msgstr "Nur Administratoren können auf diese Daten zugreifen."
-
-#. module: payment
-#: code:addons/payment/models/payment_acquirer.py:0
-#, python-format
-msgid "Only draft transaction can be authorized."
-msgstr ""
-
-#. module: payment
-#: code:addons/payment/models/payment_acquirer.py:0
-#: code:addons/payment/models/payment_acquirer.py:0
-#, python-format
-msgid "Only draft transaction can be processed."
-msgstr "Nur ein Transaktionsentwurf kann gebucht werden."
-
-#. module: payment
-#: code:addons/payment/models/payment_acquirer.py:0
-#, python-format
-msgid "Only draft/authorized transaction can be cancelled."
-msgstr ""
-
-#. module: payment
-#: code:addons/payment/models/payment_acquirer.py:0
-#, python-format
-msgid "Only draft/authorized transaction can be posted."
-msgstr ""
 
 #. module: payment
 #: code:addons/payment/models/payment_acquirer.py:0
@@ -1726,8 +1715,8 @@ msgstr "Vorlage für die Methodenregistrierung"
 
 #. module: payment
 #: model:ir.model.fields.selection,name:payment.selection__payment_acquirer__state__test
-#: model_terms:ir.ui.view,arch_db:payment.payment_tokens_list
 #: model_terms:ir.ui.view,arch_db:payment.acquirer_form
+#: model_terms:ir.ui.view,arch_db:payment.payment_tokens_list
 msgid "Test Mode"
 msgstr "Testmodus"
 

@@ -23,6 +23,7 @@ class PurchaseOrder(models.Model):
         for order in self:
             amount_untaxed = amount_tax = 0.0
             for line in order.order_line:
+                line._compute_amount()
                 amount_untaxed += line.price_subtotal
                 amount_tax += line.price_tax
             order.update({
@@ -39,12 +40,27 @@ class PurchaseOrder(models.Model):
                 order.invoice_status = 'no'
                 continue
 
-            if any(float_compare(line.qty_invoiced, line.product_qty if line.product_id.purchase_method == 'purchase' else line.qty_received, precision_digits=precision) == -1 for line in order.order_line):
+            if any(
+                float_compare(
+                    line.qty_invoiced,
+                    line.product_qty if line.product_id.purchase_method == 'purchase' else line.qty_received,
+                    precision_digits=precision,
+                )
+                == -1
+                for line in order.order_line.filtered(lambda l: not l.display_type)
+            ):
                 order.invoice_status = 'to invoice'
-            elif all(
-                (line.product_qty if line.product_id.purchase_method == 'purchase' else line.qty_received)
-                and float_compare(line.qty_invoiced, line.product_qty if line.product_id.purchase_method == 'purchase' else line.qty_received, precision_digits=precision) >= 0
-                for line in order.order_line
+            elif (
+                all(
+                    float_compare(
+                        line.qty_invoiced,
+                        line.product_qty if line.product_id.purchase_method == "purchase" else line.qty_received,
+                        precision_digits=precision,
+                    )
+                    >= 0
+                    for line in order.order_line.filtered(lambda l: not l.display_type)
+                )
+                and order.invoice_ids
             ):
                 order.invoice_status = 'invoiced'
             else:
@@ -184,7 +200,7 @@ class PurchaseOrder(models.Model):
         self = self.with_context(ctx)
         new_po = super(PurchaseOrder, self).copy(default=default)
         for line in new_po.order_line:
-            if new_po.date_planned:
+            if new_po.date_planned and not line.display_type:
                 line.date_planned = new_po.date_planned
             elif line.product_id:
                 seller = line.product_id._select_seller(
@@ -416,6 +432,7 @@ class PurchaseOrder(models.Model):
             'default_type': 'in_invoice',
             'default_company_id': self.company_id.id,
             'default_purchase_id': self.id,
+            'default_partner_id': self.partner_id.id,
         }
         # Invoice_ids may be filtered depending on the user. To ensure we get all
         # invoices related to the purchase order, we read them in sudo to fill the
@@ -529,8 +546,8 @@ class PurchaseOrderLine(models.Model):
     def _compute_tax_id(self):
         for line in self:
             fpos = line.order_id.fiscal_position_id or line.order_id.partner_id.with_context(force_company=line.company_id.id).property_account_position_id
-            # If company_id is set, always filter taxes by the company
-            taxes = line.product_id.supplier_taxes_id.filtered(lambda r: not line.company_id or r.company_id == line.company_id)
+            # If company_id is set in the order, always filter taxes by the company
+            taxes = line.product_id.supplier_taxes_id.filtered(lambda r: r.company_id == line.order_id.company_id)
             line.taxes_id = fpos.map_tax(taxes, line.product_id, line.order_id.partner_id) if fpos else taxes
 
     @api.depends('invoice_lines.move_id.state', 'invoice_lines.quantity')
@@ -591,7 +608,7 @@ class PurchaseOrderLine(models.Model):
 
     def write(self, values):
         if 'display_type' in values and self.filtered(lambda line: line.display_type != values.get('display_type')):
-            raise UserError("You cannot change the type of a purchase order line. Instead you should delete the current line and create a new line of the proper type.")
+            raise UserError(_("You cannot change the type of a purchase order line. Instead you should delete the current line and create a new line of the proper type."))
 
         if 'product_qty' in values:
             for line in self:

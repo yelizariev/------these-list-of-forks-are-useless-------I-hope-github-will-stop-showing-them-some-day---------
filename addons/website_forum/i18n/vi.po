@@ -20,7 +20,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 13.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-05 12:34+0000\n"
+"POT-Creation-Date: 2020-04-27 09:22+0000\n"
 "PO-Revision-Date: 2019-08-26 09:15+0000\n"
 "Last-Translator: Duy BQ <duybq86@gmail.com>, 2020\n"
 "Language-Team: Vietnamese (https://www.transifex.com/odoo/teams/41243/vi/)\n"
@@ -419,11 +419,6 @@ msgstr ""
 
 #. module: website_forum
 #: model_terms:ir.ui.view,arch_db:website_forum.forum_nav_header
-msgid "<i class=\"fa fa-chevron-left mr-1\"/>All Forums"
-msgstr ""
-
-#. module: website_forum
-#: model_terms:ir.ui.view,arch_db:website_forum.forum_nav_header
 msgid "<i class=\"fa fa-chevron-left mr-1\"/>Back"
 msgstr ""
 
@@ -706,6 +701,11 @@ msgstr ""
 #, python-format
 msgid "All"
 msgstr "Tất cả"
+
+#. module: website_forum
+#: model_terms:ir.ui.view,arch_db:website_forum.forum_nav_header
+msgid "All Forums"
+msgstr ""
 
 #. module: website_forum
 #: model_terms:ir.ui.view,arch_db:website_forum.header
@@ -1102,8 +1102,12 @@ msgid "Click to post your question."
 msgstr "Chọn để đăng câu hỏi"
 
 #. module: website_forum
+#. openerp-web
+#: code:addons/website_forum/static/src/xml/website_forum_share_templates.xml:0
+#: code:addons/website_forum/static/src/xml/website_forum_share_templates.xml:0
 #: model:ir.model.fields.selection,name:website_forum.selection__forum_post__state__close
 #: model_terms:ir.ui.view,arch_db:website_forum.question_dropdown
+#, python-format
 msgid "Close"
 msgstr "Đóng"
 
@@ -1860,7 +1864,7 @@ msgstr "Hình ảnh"
 #. module: website_forum
 #: model:ir.model.fields,field_description:website_forum.field_forum_forum__image_1024
 msgid "Image 1024"
-msgstr ""
+msgstr "Hình 1024"
 
 #. module: website_forum
 #: model:ir.model.fields,field_description:website_forum.field_forum_forum__image_128
@@ -1870,12 +1874,12 @@ msgstr "Ảnh 128"
 #. module: website_forum
 #: model:ir.model.fields,field_description:website_forum.field_forum_forum__image_256
 msgid "Image 256"
-msgstr ""
+msgstr "Hình 256"
 
 #. module: website_forum
 #: model:ir.model.fields,field_description:website_forum.field_forum_forum__image_512
 msgid "Image 512"
-msgstr ""
+msgstr "Hình 512"
 
 #. module: website_forum
 #. openerp-web
@@ -2571,6 +2575,7 @@ msgid "Ranks"
 msgstr ""
 
 #. module: website_forum
+#: code:addons/website_forum/models/forum.py:0
 #: code:addons/website_forum/models/forum.py:0
 #, python-format
 msgid "Re: %s"

@@ -10,20 +10,20 @@
 # Patrik Lermon <patrik.lermon@gmail.com>, 2019
 # Robert Frykelius <robert.frykelius@linserv.se>, 2019
 # lynnliuying <lynn.liu1971@gmail.com>, 2019
-# Anders Wallenquist <anders.wallenquist@vertel.se>, 2019
 # Martin Wilderoth <martin.wilderoth@linserv.se>, 2019
 # Chrille Hedberg <hedberg.chrille@gmail.com>, 2019
-# Kristoffer Grundström <hamnisdude@gmail.com>, 2019
+# Kristoffer Grundström <lovaren@gmail.com>, 2019
 # Martin Trigaux, 2019
 # Kim Asplund <kim.asplund@gmail.com>, 2020
+# Anders Wallenquist <anders.wallenquist@vertel.se>, 2020
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 13.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-05 12:32+0000\n"
+"POT-Creation-Date: 2020-10-27 11:49+0000\n"
 "PO-Revision-Date: 2019-08-26 09:12+0000\n"
-"Last-Translator: Kim Asplund <kim.asplund@gmail.com>, 2020\n"
+"Last-Translator: Anders Wallenquist <anders.wallenquist@vertel.se>, 2020\n"
 "Language-Team: Swedish (https://www.transifex.com/odoo/teams/41243/sv/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -253,15 +253,6 @@ msgstr ""
 #: code:addons/point_of_sale/static/src/js/screens.js:0
 #, python-format
 msgid "? Clicking \"Confirm\" will validate the payment."
-msgstr ""
-
-#. module: point_of_sale
-#: code:addons/point_of_sale/models/pos_config.py:0
-#, python-format
-msgid ""
-"A Chart of Accounts is not yet installed in your current company. Please "
-"install a Chart of Accounts through the Invoicing/Accounting settings before"
-" launching a PoS session."
 msgstr ""
 
 #. module: point_of_sale
@@ -3038,6 +3029,13 @@ msgstr "Välj en partner för försäljningen."
 
 #. module: point_of_sale
 #. openerp-web
+#: code:addons/point_of_sale/static/src/js/screens.js:0
+#, python-format
+msgid "Please provide valid email"
+msgstr ""
+
+#. module: point_of_sale
+#. openerp-web
 #: code:addons/point_of_sale/static/src/xml/pos.xml:0
 #, python-format
 msgid "Please select a payment method."
@@ -3049,6 +3047,13 @@ msgstr "Vänligen välj betalningsmetod."
 #, python-format
 msgid "Please select the Customer"
 msgstr "Vänligen välj Kund"
+
+#. module: point_of_sale
+#. openerp-web
+#: code:addons/point_of_sale/static/src/js/screens.js:0
+#, python-format
+msgid "Please select the customer"
+msgstr ""
 
 #. module: point_of_sale
 #: model:ir.model.fields,field_description:point_of_sale.field_report_pos_order__pos_categ_id
@@ -3184,6 +3189,7 @@ msgstr "Kassa Order Raport"
 
 #. module: point_of_sale
 #: model:ir.model,name:point_of_sale.model_pos_payment_method
+#: model:ir.model.fields,field_description:point_of_sale.field_account_bank_statement_import_journal_creation__pos_payment_method_ids
 #: model:ir.model.fields,field_description:point_of_sale.field_account_journal__pos_payment_method_ids
 msgid "Point of Sale Payment Methods"
 msgstr "Kassa Betalningsmetoder"
@@ -3335,16 +3341,12 @@ msgid "Pricing"
 msgstr "Priser"
 
 #. module: point_of_sale
-#: model_terms:ir.ui.view,arch_db:point_of_sale.view_pos_details_wizard
-msgid "Print"
-msgstr "Skriv ut"
-
-#. module: point_of_sale
 #. openerp-web
 #: code:addons/point_of_sale/static/src/xml/pos.xml:0
+#: model_terms:ir.ui.view,arch_db:point_of_sale.view_pos_details_wizard
 #, python-format
-msgid "Print Invoice"
-msgstr "Skriv ut faktura"
+msgid "Print"
+msgstr "Skriv ut"
 
 #. module: point_of_sale
 #. openerp-web
@@ -4196,6 +4198,7 @@ msgstr "Visa skatt"
 
 #. module: point_of_sale
 #. openerp-web
+#: code:addons/point_of_sale/static/src/js/models.js:0
 #: code:addons/point_of_sale/static/src/xml/pos.xml:0
 #: code:addons/point_of_sale/static/src/xml/pos.xml:0
 #, python-format
@@ -4347,7 +4350,7 @@ msgstr ""
 
 #. module: point_of_sale
 #. openerp-web
-#: code:addons/point_of_sale/static/src/xml/pos.xml:715
+#: code:addons/point_of_sale/static/src/xml/pos.xml:0
 #, python-format
 msgid ""
 "The order has been synchronized earlier. To print the invoice please refer "
@@ -4551,6 +4554,15 @@ msgstr ""
 msgid ""
 "This barcode is already assigned to another contact. Please make sure you "
 "assign a unique barcode to this contact."
+msgstr ""
+
+#. module: point_of_sale
+#. openerp-web
+#: code:addons/point_of_sale/static/src/js/screens.js:0
+#, python-format
+msgid ""
+"This customer does not have a valid email address, define one or do not send"
+" an email."
 msgstr ""
 
 #. module: point_of_sale
@@ -4779,6 +4791,11 @@ msgid "Transaction cancelled"
 msgstr "Transaktionen Avbruten"
 
 #. module: point_of_sale
+#: model:ir.model,name:point_of_sale.model_stock_picking
+msgid "Transfer"
+msgstr "Flytt"
+
+#. module: point_of_sale
 #: model:ir.model.fields,field_description:point_of_sale.field_barcode_rule__type
 msgid "Type"
 msgstr "Typ"
@@ -4942,13 +4959,6 @@ msgstr ""
 #: model:ir.model.fields,field_description:point_of_sale.field_pos_config__uuid
 msgid "Uuid"
 msgstr ""
-
-#. module: point_of_sale
-#. openerp-web
-#: code:addons/point_of_sale/static/src/xml/pos.xml:0
-#, python-format
-msgid "VAT:"
-msgstr "Moms:"
 
 #. module: point_of_sale
 #. openerp-web
@@ -5128,18 +5138,6 @@ msgid "You have to select a pricelist in the sale form."
 msgstr ""
 
 #. module: point_of_sale
-#: code:addons/point_of_sale/wizard/pos_details.py:0
-#, python-format
-msgid "You have to set a logo or a layout for your company."
-msgstr ""
-
-#. module: point_of_sale
-#: code:addons/point_of_sale/wizard/pos_details.py:0
-#, python-format
-msgid "You have to set your reports's header and footer layout."
-msgstr ""
-
-#. module: point_of_sale
 #. openerp-web
 #: code:addons/point_of_sale/static/src/js/gui.js:0
 #, python-format
@@ -5147,6 +5145,13 @@ msgid ""
 "You must be connected to the internet to save your changes.\n"
 "\n"
 "Orders that where not synced before will be synced next time you close an order while connected to the internet or when you close the session."
+msgstr ""
+
+#. module: point_of_sale
+#: code:addons/point_of_sale/models/pos_config.py:0
+#, python-format
+msgid ""
+"You must configure an intermediary account for the payment methods: %s."
 msgstr ""
 
 #. module: point_of_sale
@@ -5161,6 +5166,14 @@ msgstr ""
 #: code:addons/point_of_sale/static/src/js/screens.js:0
 #, python-format
 msgid "You need to select the customer before you can invoice an order."
+msgstr ""
+
+#. module: point_of_sale
+#. openerp-web
+#: code:addons/point_of_sale/static/src/js/screens.js:0
+#, python-format
+msgid ""
+"You need to select the customer before you can send the receipt via email."
 msgstr ""
 
 #. module: point_of_sale

@@ -4,11 +4,11 @@
 # 
 # Translators:
 # Martin Trigaux, 2020
-# Matjaz Mozetic <m.mozetic@matmoz.si>, 2020
 # Dejan Sraka <dejan.sraka@picolabs.si>, 2020
 # laznikd <laznik@mentis.si>, 2020
 # matjaz k <matjaz@mentis.si>, 2020
 # Tadej Lupšina <tadej@hbs.si>, 2020
+# Matjaz Mozetic <m.mozetic@matmoz.si>, 2020
 # Jasmina Macur <jasmina@hbs.si>, 2020
 # 
 msgid ""
@@ -102,7 +102,7 @@ msgstr "Dejanje"
 #. module: im_livechat
 #: model:res.groups,name:im_livechat.im_livechat_group_manager
 msgid "Administrator"
-msgstr ""
+msgstr "Administrator"
 
 #. module: im_livechat
 #: model_terms:ir.ui.view,arch_db:im_livechat.mail_channel_view_form
@@ -347,7 +347,7 @@ msgstr ""
 #. module: im_livechat
 #: model_terms:ir.ui.view,arch_db:im_livechat.im_livechat_report_channel_view_search
 msgid "Creation date (hour)"
-msgstr "Datum kreiranja (ura)"
+msgstr "Datum nastanka (ura)"
 
 #. module: im_livechat
 #: model:ir.actions.act_window,name:im_livechat.rating_rating_action_livechat_report

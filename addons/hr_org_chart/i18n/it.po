@@ -5,6 +5,7 @@
 # Translators:
 # Martin Trigaux, 2019
 # Silvia Durisotti, 2019
+# Loris Balsamo <et94@live.it>, 2020
 # Sergio Zanchetta <primes2h@gmail.com>, 2020
 # 
 msgid ""
@@ -24,13 +25,13 @@ msgstr ""
 #. module: hr_org_chart
 #: model:ir.model,name:hr_org_chart.model_hr_employee_base
 msgid "Basic Employee"
-msgstr ""
+msgstr "Dipendente base"
 
 #. module: hr_org_chart
 #: model:ir.model.fields,help:hr_org_chart.field_hr_employee__subordinate_ids
 #: model:ir.model.fields,help:hr_org_chart.field_hr_employee_public__subordinate_ids
 msgid "Direct and indirect subordinates"
-msgstr ""
+msgstr "Sottoposti diretti e indiretti"
 
 #. module: hr_org_chart
 #. openerp-web
@@ -71,7 +72,7 @@ msgstr "Sottoposti indiretti"
 #: code:addons/hr_org_chart/static/src/xml/hr_org_chart.xml:65
 #, python-format
 msgid "More managers"
-msgstr "Più responsabili"
+msgstr "Più supervisori"
 
 #. module: hr_org_chart
 #. openerp-web
@@ -110,7 +111,7 @@ msgstr "Subordinati"
 #: code:addons/hr_org_chart/static/src/xml/hr_org_chart.xml:87
 #, python-format
 msgid "This employee has no manager or subordinate."
-msgstr "Questo dipendente non ha responsabili o sottoposti."
+msgstr "Questo dipendente non ha supervisori o sottoposti."
 
 #. module: hr_org_chart
 #. openerp-web
