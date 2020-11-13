@@ -7,15 +7,18 @@
 # Marc Tormo i Bochaca <mtbochaca@gmail.com>, 2018
 # RGB Consulting <odoo@rgbconsulting.com>, 2018
 # Sandra Franch <sandra.franch@upc.edu>, 2018
-# Manel Fernandez <manelfera@outlook.com>, 2018
+# Manel Fernandez Ramirez <manelfera@outlook.com>, 2018
+# M Palau <mpalau@tda.ad>, 2019
+# Arnau Ros, 2019
+# jabelchi <jabelchi@gmail.com>, 2020
 # 
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server saas~11.5\n"
+"Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-21 13:18+0000\n"
+"POT-Creation-Date: 2018-12-19 08:21+0000\n"
 "PO-Revision-Date: 2018-08-24 09:35+0000\n"
-"Last-Translator: Manel Fernandez <manelfera@outlook.com>, 2018\n"
+"Last-Translator: jabelchi <jabelchi@gmail.com>, 2020\n"
 "Language-Team: Catalan (https://www.transifex.com/odoo/teams/41243/ca/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -61,7 +64,7 @@ msgstr "Visualització Base"
 #. module: website_theme_install
 #: model_terms:ir.ui.view,arch_db:website_theme_install.view_website_form_view_themes_modal
 msgid "Cancel"
-msgstr "Cancel·la"
+msgstr "Cancel·lar"
 
 #. module: website_theme_install
 #: model_terms:ir.ui.view,arch_db:website_theme_install.theme_view_search
@@ -87,7 +90,7 @@ msgstr "Empreses"
 #. module: website_theme_install
 #: model:ir.model,name:website_theme_install.model_res_config_settings
 msgid "Config Settings"
-msgstr ""
+msgstr "Configuració"
 
 #. module: website_theme_install
 #: model:ir.actions.server,name:website_theme_install.theme_install_todo_action
@@ -183,7 +186,7 @@ msgstr "Última actualització el"
 #. module: website_theme_install
 #: model_terms:ir.ui.view,arch_db:website_theme_install.onboarding_website_theme_step
 msgid "Let's start!"
-msgstr ""
+msgstr "Comenceu!"
 
 #. module: website_theme_install
 #: model_terms:ir.ui.view,arch_db:website_theme_install.theme_view_kanban
@@ -231,6 +234,11 @@ msgstr "Pàgina"
 #. module: website_theme_install
 #: model:ir.model.fields,field_description:website_theme_install.field_theme_website_page__website_indexed
 msgid "Page Indexed"
+msgstr "Pàgina indexada"
+
+#. module: website_theme_install
+#: model:ir.model.fields,field_description:website_theme_install.field_theme_website_page__copy_ids
+msgid "Page using a copy of me"
 msgstr ""
 
 #. module: website_theme_install
@@ -274,6 +282,8 @@ msgid ""
 "Technical field used to resolve multiple attachments in a multi-website "
 "environment."
 msgstr ""
+"Camp tècnic que es fa servir per resoldre diversos adjunts en un entorn de "
+"diferents llocs web."
 
 #. module: website_theme_install
 #: model_terms:ir.ui.view,arch_db:website_theme_install.theme_view_search
@@ -288,7 +298,6 @@ msgstr ""
 #. module: website_theme_install
 #: model:ir.model.fields,field_description:website_theme_install.field_ir_attachment__theme_template_id
 #: model:ir.model.fields,field_description:website_theme_install.field_ir_ui_view__theme_template_id
-#: model:ir.model.fields,field_description:website_theme_install.field_mrp_document__theme_template_id
 #: model:ir.model.fields,field_description:website_theme_install.field_website_menu__theme_template_id
 #: model:ir.model.fields,field_description:website_theme_install.field_website_page__theme_template_id
 msgid "Theme Template"
@@ -307,11 +316,6 @@ msgstr ""
 #. module: website_theme_install
 #: model_terms:ir.ui.view,arch_db:website_theme_install.theme_view_kanban
 msgid "Theme preview"
-msgstr ""
-
-#. module: website_theme_install
-#: model:ir.model.fields,field_description:website_theme_install.field_theme_website_page__copy_ids
-msgid "Theme using a copy of me"
 msgstr ""
 
 #. module: website_theme_install

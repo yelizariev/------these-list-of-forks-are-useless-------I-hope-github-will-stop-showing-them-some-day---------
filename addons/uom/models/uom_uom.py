@@ -83,9 +83,8 @@ class UoM(models.Model):
         self._cr.execute("""
             SELECT C.id AS category_id, count(U.id) AS uom_count
             FROM uom_category C
-            LEFT JOIN uom_uom U ON C.id = U.category_id AND uom_type = 'reference'
+            LEFT JOIN uom_uom U ON C.id = U.category_id AND uom_type = 'reference' AND U.active = 't'
             WHERE C.id IN %s
-                AND U.active = 't'
             GROUP BY C.id
         """, (tuple(category_ids),))
         for uom_data in self._cr.dictfetchall():
@@ -93,6 +92,21 @@ class UoM(models.Model):
                 raise ValidationError(_("UoM category %s should have a reference unit of measure. If you just created a new category, please record the 'reference' unit first.") % (self.env['uom.category'].browse(uom_data['category_id']).name,))
             if uom_data['uom_count'] > 1:
                 raise ValidationError(_("UoM category %s should only have one reference unit of measure.") % (self.env['uom.category'].browse(uom_data['category_id']).name,))
+
+    @api.onchange('rounding')
+    def _onchange_rounding(self):
+        precision = self.env.ref('product.decimal_product_uom').digits
+        if self.rounding < 1.0 / 10.0**precision:
+            warning = {
+                    'title': _('Warning!'),
+                    'message':  _(
+                        "This rounding precision is higher than the Decimal Accuracy"
+                        " (%s digits).\nThis may cause inconsistencies in reservations.\n"
+                         "Please set a precision between %s and 1.")
+                         %(str(precision), str(1.0 / 10.0**precision))
+                    ,
+                }
+            return {'warning': warning}
 
     @api.model_create_multi
     def create(self, vals_list):

@@ -11,16 +11,19 @@
 # Martin Trigaux, 2018
 # Wanradt Koell <wanradt@gmail.com>, 2018
 # Arma Gedonsky <armagedonsky@hot.ee>, 2018
-# Eneli Õigus <enelioigus@gmail.com>, 2018
 # Martin Aavastik <martin@avalah.ee>, 2018
+# Algo Kärp <algokarp@gmail.com>, 2020
+# Eneli Õigus <enelioigus@gmail.com>, 2020
+# Piia Paurson <piia@avalah.ee>, 2020
+# Triine Aavik <triine@avalah.ee>, 2020
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-10-08 06:49+0000\n"
+"POT-Creation-Date: 2019-01-09 10:32+0000\n"
 "PO-Revision-Date: 2018-08-24 09:35+0000\n"
-"Last-Translator: Martin Aavastik <martin@avalah.ee>, 2018\n"
+"Last-Translator: Triine Aavik <triine@avalah.ee>, 2020\n"
 "Language-Team: Estonian (https://www.transifex.com/odoo/teams/41243/et/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -167,6 +170,11 @@ msgid "<i class=\"fa fa-comments-o\"/> Comments"
 msgstr "<i class=\"fa fa-comments-o\"/> Kommentaarid"
 
 #. module: website_slides
+#: model_terms:ir.ui.view,arch_db:website_slides.embed_slide
+msgid "<i class=\"fa fa-download fa-2x\" role=\"img\" aria-label=\"Download\"/>"
+msgstr ""
+
+#. module: website_slides
 #: model_terms:ir.ui.view,arch_db:website_slides.slide_social_email
 msgid "<i class=\"fa fa-envelope-o\"/> Send Email"
 msgstr ""
@@ -214,8 +222,20 @@ msgstr "<i class=\"fa fa-spinner fa-spin\"/> Laadimine ..."
 
 #. module: website_slides
 #: model_terms:ir.ui.view,arch_db:website_slides.slide_detail_view
+msgid ""
+"<i class=\"fa fa-thumbs-down fa-1x\" role=\"img\" aria-label=\"Dislikes\" "
+"title=\"Dislikes\"/>"
+msgstr ""
+
+#. module: website_slides
+#: model_terms:ir.ui.view,arch_db:website_slides.slide_detail_view
 msgid "<i class=\"fa fa-thumbs-down\"/> Dislikes"
 msgstr "<i class=\"fa fa-thumbs-down\"/> Mittemeeldimised"
+
+#. module: website_slides
+#: model_terms:ir.ui.view,arch_db:website_slides.slide_detail_view
+msgid "<i class=\"fa fa-thumbs-up fa-1x\" role=\"img\" aria-label=\"Likes\" title=\"Likes\"/>"
+msgstr ""
 
 #. module: website_slides
 #: model_terms:ir.ui.view,arch_db:website_slides.slide_detail_view
@@ -300,6 +320,22 @@ msgid "<span class=\"text-muted\">Sort by:</span>"
 msgstr "<span class=\"text-muted\">Sorteeri:</span>"
 
 #. module: website_slides
+#: model_terms:ir.ui.view,arch_db:website_slides.embed_slide
+msgid ""
+"<span id=\"first\" class=\"ml-2 mr-2\" title=\"First slide\" role=\"img\" aria-label=\"First slide\">\n"
+"                                            <i class=\"fa fa-step-backward fa-2x\"/>\n"
+"                                        </span>"
+msgstr ""
+
+#. module: website_slides
+#: model_terms:ir.ui.view,arch_db:website_slides.embed_slide
+msgid ""
+"<span id=\"fullscreen\" title=\"View fullscreen\" role=\"img\" aria-label=\"Fullscreen\">\n"
+"                                            <i class=\"fa fa-arrows-alt fa-2x\"/>\n"
+"                                        </span>"
+msgstr ""
+
+#. module: website_slides
 #: sql_constraint:slide.tag:0
 msgid "A tag must be unique!"
 msgstr "Silt peab olema unikaalne!"
@@ -341,7 +377,7 @@ msgstr "Arhiveeritud"
 #: model:ir.model.fields,field_description:website_slides.field_slide_channel__message_attachment_count
 #: model:ir.model.fields,field_description:website_slides.field_slide_slide__message_attachment_count
 msgid "Attachment Count"
-msgstr ""
+msgstr "Manuste arv"
 
 #. module: website_slides
 #: selection:slide.slide,download_security:0
@@ -456,7 +492,7 @@ msgstr ""
 #. module: website_slides
 #: model:ir.model,name:website_slides.model_res_config_settings
 msgid "Config Settings"
-msgstr ""
+msgstr "Seadistused"
 
 #. module: website_slides
 #: model:ir.model.fields,field_description:website_slides.field_slide_slide__datas
@@ -799,7 +835,7 @@ msgstr "Kui kontrollitud, siis uued sõnumid nõuavad Su tähelepanu."
 #: model:ir.model.fields,help:website_slides.field_slide_channel__message_has_error
 #: model:ir.model.fields,help:website_slides.field_slide_slide__message_has_error
 msgid "If checked, some messages have a delivery error."
-msgstr ""
+msgstr "Kui valitud, on mõningate sõnumitel saatmiserror."
 
 #. module: website_slides
 #: model:ir.model.fields,field_description:website_slides.field_slide_slide__image
@@ -895,7 +931,7 @@ msgstr "Meeldimised"
 #: model:ir.model.fields,field_description:website_slides.field_slide_channel__message_main_attachment_id
 #: model:ir.model.fields,field_description:website_slides.field_slide_slide__message_main_attachment_id
 msgid "Main Attachment"
-msgstr ""
+msgstr "Peamine manus"
 
 #. module: website_slides
 #: model:slide.tag,name:website_slides.tag2
@@ -911,7 +947,7 @@ msgstr "Keskmine"
 #: model:ir.model.fields,field_description:website_slides.field_slide_channel__message_has_error
 #: model:ir.model.fields,field_description:website_slides.field_slide_slide__message_has_error
 msgid "Message Delivery error"
-msgstr ""
+msgstr "Sõnumi edastamise viga"
 
 #. module: website_slides
 #: model:ir.model.fields,help:website_slides.field_slide_channel__access_error_msg
@@ -1032,7 +1068,7 @@ msgstr "Videote arv"
 #: model:ir.model.fields,field_description:website_slides.field_slide_channel__message_has_error_counter
 #: model:ir.model.fields,field_description:website_slides.field_slide_slide__message_has_error_counter
 msgid "Number of error"
-msgstr ""
+msgstr "Vigade arv"
 
 #. module: website_slides
 #: model:ir.model.fields,help:website_slides.field_slide_channel__message_needaction_counter
@@ -1044,7 +1080,7 @@ msgstr "Tegutsemist nõudvate sõnumite arv"
 #: model:ir.model.fields,help:website_slides.field_slide_channel__message_has_error_counter
 #: model:ir.model.fields,help:website_slides.field_slide_slide__message_has_error_counter
 msgid "Number of messages with delivery error"
-msgstr ""
+msgstr "Kohaletoimetamise veateatega sõnumite arv"
 
 #. module: website_slides
 #: model:ir.model.fields,help:website_slides.field_slide_channel__message_unread_counter

@@ -5,19 +5,24 @@
 # Translators:
 # SHIMIZU Taku <shimizu.taku@gmail.com>, 2018
 # Martin Trigaux, 2018
-# Yoshi Tashiro <tashiro@roomsfor.hk>, 2018
 # Manami Hashi <manami@roomsfor.hk>, 2018
 # NOKA Shigekazu <shigekazu.noka@gmail.com>, 2018
 # 高木正勝 <masakatsu.takagi@pro-spire.co.jp>, 2018
 # kent_ocean <ke.tanabe@gmail.com>, 2018
 # Norimichi Sugimoto <norimichi.sugimoto@tls-ltd.co.jp>, 2018
+# Yoshi Tashiro <tashiro@roomsfor.hk>, 2019
+# Tim Siu Lai <tl@roomsfor.hk>, 2019
+# 江口 和志 <k_eguchi@enzantrades.co.jp>, 2020
+# Hau Dao <hau@quartile.co>, 2020
+# Noma Yuki, 2020
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-10-08 06:48+0000\n"
-"PO-Revision-Date: 2018-10-08 06:48+0000\n"
-"Last-Translator: Norimichi Sugimoto <norimichi.sugimoto@tls-ltd.co.jp>, 2018\n"
+"POT-Creation-Date: 2019-04-12 12:19+0000\n"
+"PO-Revision-Date: 2018-08-24 09:18+0000\n"
+"Last-Translator: Noma Yuki, 2020\n"
 "Language-Team: Japanese (https://www.transifex.com/odoo/teams/41243/ja/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -35,6 +40,11 @@ msgstr "%s (コピー)"
 #: model_terms:ir.ui.view,arch_db:hr.hr_job_view_kanban
 msgid "&amp;nbsp;"
 msgstr "&amp;nbsp;"
+
+#. module: hr
+#: model_terms:ir.ui.view,arch_db:hr.hr_department_view_kanban
+msgid "<i class=\"fa fa-ellipsis-v\" role=\"img\" aria-label=\"Manage\" title=\"Manage\"/>"
+msgstr ""
 
 #. module: hr
 #: model_terms:hr.job,website_description:hr.job_ceo
@@ -72,6 +82,14 @@ msgstr "<i>あなたは自発的に迅速に学びますね</i>"
 #: model_terms:hr.job,website_description:hr.job_marketing
 msgid "<i>You easily manage them</i>"
 msgstr "<i>簡単に管理できます</i>"
+
+#. module: hr
+#: model_terms:ir.ui.view,arch_db:hr.res_config_settings_view_form
+msgid ""
+"<span class=\"fa fa-lg fa-building-o\" title=\"Values set here are company-"
+"specific.\" role=\"img\" aria-label=\"Values set here are company-"
+"specific.\" groups=\"base.group_multi_company\"/>"
+msgstr ""
 
 #. module: hr
 #: model_terms:ir.ui.view,arch_db:hr.hr_department_view_kanban
@@ -175,15 +193,18 @@ msgstr "活動状態"
 #: model_terms:ir.actions.act_window,help:hr.act_employee_from_department
 #: model_terms:ir.actions.act_window,help:hr.open_view_employee_list_my
 msgid "Add a new employee"
-msgstr ""
+msgstr "新しい従業員を追加"
 
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_hr_employee__additional_note
 msgid "Additional Note"
-msgstr ""
+msgstr "追加メモ"
 
 #. module: hr
+#: model:ir.model.fields,field_description:hr.field_crm_team__alias_contact
 #: model:ir.model.fields,field_description:hr.field_mail_alias__alias_contact
+#: model:ir.model.fields,field_description:hr.field_mail_alias_mixin__alias_contact
+#: model:ir.model.fields,field_description:hr.field_mail_channel__alias_contact
 msgid "Alias Contact Security"
 msgstr "エイリアス連絡先セキュリティ"
 
@@ -203,7 +224,7 @@ msgstr "アーカイブ済"
 #: model:ir.model.fields,field_description:hr.field_hr_employee__message_attachment_count
 #: model:ir.model.fields,field_description:hr.field_hr_job__message_attachment_count
 msgid "Attachment Count"
-msgstr ""
+msgstr "添付数"
 
 #. module: hr
 #: selection:mail.alias,alias_contact:0
@@ -218,7 +239,7 @@ msgstr "許可された取引先"
 #. module: hr
 #: model_terms:ir.ui.view,arch_db:hr.mail_channel_view_form_
 msgid "Auto Subscribe Departments"
-msgstr ""
+msgstr "自動購読部門"
 
 #. module: hr
 #: model:ir.model.fields,help:hr.field_mail_channel__subscription_department_ids
@@ -228,7 +249,7 @@ msgstr ""
 #. module: hr
 #: selection:hr.employee,certificate:0
 msgid "Bachelor"
-msgstr ""
+msgstr "大学卒"
 
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_hr_employee__bank_account_id
@@ -278,7 +299,7 @@ msgstr "出生"
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_hr_employee__certificate
 msgid "Certificate Level"
-msgstr ""
+msgstr "学歴"
 
 #. module: hr
 #: model:hr.job,name:hr.job_ceo
@@ -351,7 +372,7 @@ msgstr "完全な名前"
 #. module: hr
 #: model:ir.model,name:hr.model_res_config_settings
 msgid "Config Settings"
-msgstr ""
+msgstr "コンフィグ設定"
 
 #. module: hr
 #: model:ir.ui.menu,name:hr.menu_human_resources_configuration
@@ -383,7 +404,7 @@ msgstr "オープンソースプロジェクトへの貢献"
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_hr_employee__country_of_birth
 msgid "Country of Birth"
-msgstr ""
+msgstr "出生国"
 
 #. module: hr
 #: model_terms:ir.actions.act_window,help:hr.open_module_tree_department
@@ -456,8 +477,8 @@ msgstr "部門"
 
 #. module: hr
 #: model:ir.model,name:hr.model_mail_channel
-msgid "Discussion channel"
-msgstr "ディスカッションチャネル"
+msgid "Discussion Channel"
+msgstr "ディスカッションチャンネル"
 
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_hr_department__display_name
@@ -490,12 +511,12 @@ msgstr ""
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_hr_employee__emergency_contact
 msgid "Emergency Contact"
-msgstr ""
+msgstr "緊急連絡人"
 
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_hr_employee__emergency_phone
 msgid "Emergency Phone"
-msgstr ""
+msgstr "緊急連絡人電話"
 
 #. module: hr
 #: model:ir.model,name:hr.model_hr_employee
@@ -597,7 +618,7 @@ msgstr "女"
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_hr_employee__study_field
 msgid "Field of Study"
-msgstr ""
+msgstr "科目"
 
 #. module: hr
 #: model_terms:hr.job,website_description:hr.job_consultant
@@ -629,6 +650,11 @@ msgstr "フォロワー (取引先)"
 #: selection:mail.alias,alias_contact:0
 msgid "Followers only"
 msgstr "フォロワーのみ"
+
+#. module: hr
+#: model_terms:ir.ui.view,arch_db:hr.view_employee_filter
+msgid "Future Activities"
+msgstr "将来の活動"
 
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_hr_employee__gender
@@ -882,6 +908,11 @@ msgid "Last Updated on"
 msgstr "最終更新日"
 
 #. module: hr
+#: model_terms:ir.ui.view,arch_db:hr.view_employee_filter
+msgid "Late Activities"
+msgstr "遅れた活動"
+
+#. module: hr
 #: model_terms:hr.job,website_description:hr.job_marketing
 msgid "Launch new marketing campaigns and offers"
 msgstr "新しいマーケティングキャンペーンとオファーを開始する"
@@ -899,7 +930,7 @@ msgstr "新製品、マーケティングキャンペーン、オファーを開
 #. module: hr
 #: selection:hr.employee,marital:0
 msgid "Legal Cohabitant"
-msgstr ""
+msgstr "既婚"
 
 #. module: hr
 #: model_terms:ir.actions.act_window,help:hr.action_hr_job
@@ -911,7 +942,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:hr.field_hr_employee__message_main_attachment_id
 #: model:ir.model.fields,field_description:hr.field_hr_job__message_main_attachment_id
 msgid "Main Attachment"
-msgstr ""
+msgstr "主な添付"
 
 #. module: hr
 #: selection:hr.employee,gender:0
@@ -978,7 +1009,7 @@ msgstr "メンバー"
 #: model:ir.model.fields,field_description:hr.field_hr_employee__message_has_error
 #: model:ir.model.fields,field_description:hr.field_hr_job__message_has_error
 msgid "Message Delivery error"
-msgstr ""
+msgstr "メッセージ配信エラー"
 
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_hr_department__message_ids
@@ -1071,7 +1102,7 @@ msgstr "現在この職位を占める従業員の数。"
 #: model:ir.model.fields,field_description:hr.field_hr_employee__message_has_error_counter
 #: model:ir.model.fields,field_description:hr.field_hr_job__message_has_error_counter
 msgid "Number of error"
-msgstr ""
+msgstr "エラー数"
 
 #. module: hr
 #: model:ir.model.fields,help:hr.field_hr_job__no_of_hired_employee
@@ -1091,7 +1122,7 @@ msgstr "アクションを必要とするメッセージの数"
 #: model:ir.model.fields,help:hr.field_hr_employee__message_has_error_counter
 #: model:ir.model.fields,help:hr.field_hr_job__message_has_error_counter
 msgid "Number of messages with delivery error"
-msgstr ""
+msgstr "配信エラーのメッセージ数"
 
 #. module: hr
 #: model:ir.model.fields,help:hr.field_hr_job__no_of_recruitment
@@ -1186,7 +1217,10 @@ msgid "Planned"
 msgstr "予定済"
 
 #. module: hr
+#: model:ir.model.fields,help:hr.field_crm_team__alias_contact
 #: model:ir.model.fields,help:hr.field_mail_alias__alias_contact
+#: model:ir.model.fields,help:hr.field_mail_alias_mixin__alias_contact
+#: model:ir.model.fields,help:hr.field_mail_channel__alias_contact
 msgid ""
 "Policy to post a message on the document using the mailgateway.\n"
 "- everyone: everyone can post\n"
@@ -1311,7 +1345,7 @@ msgstr "世界中にイベント組織を拡大"
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_hr_employee__study_school
 msgid "School"
-msgstr ""
+msgstr "学校名"
 
 #. module: hr
 #: model_terms:ir.ui.view,arch_db:hr.res_config_settings_view_form
@@ -1341,7 +1375,7 @@ msgstr "組織図を表示"
 #. module: hr
 #: model_terms:ir.ui.view,arch_db:hr.res_config_settings_view_form
 msgid "Show organizational chart on employee form"
-msgstr ""
+msgstr "従業員フォームビューに組織図を表示"
 
 #. module: hr
 #: model_terms:ir.ui.view,arch_db:hr.res_config_settings_view_form
@@ -1392,12 +1426,12 @@ msgstr "社会保障番号"
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_hr_employee__spouse_birthdate
 msgid "Spouse Birthdate"
-msgstr ""
+msgstr "配偶者の生年月日"
 
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_hr_employee__spouse_complete_name
 msgid "Spouse Complete Name"
-msgstr ""
+msgstr "配偶者の氏名"
 
 #. module: hr
 #: model_terms:ir.ui.view,arch_db:hr.view_hr_job_form
@@ -1419,6 +1453,10 @@ msgid ""
 "Today: Activity date is today\n"
 "Planned: Future activities."
 msgstr ""
+"活動に基づく状態\n"
+"延滞：期限は既に過ぎました\n"
+"当日：活動日は本日です\n"
+"予定：将来の活動。"
 
 #. module: hr
 #: model_terms:ir.ui.view,arch_db:hr.view_hr_job_form
@@ -1500,6 +1538,11 @@ msgstr "タイムゾーン"
 #: selection:hr.employee,activity_state:0
 msgid "Today"
 msgstr "本日"
+
+#. module: hr
+#: model_terms:ir.ui.view,arch_db:hr.view_employee_filter
+msgid "Today Activities"
+msgstr "本日の活動"
 
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_hr_job__expected_employees
@@ -1603,6 +1646,20 @@ msgid ""
 "people love to use. We need someone who is ambitious, passionated, and ....."
 " not afraid to start new things, a lot of new things and scale them."
 msgstr ""
+
+#. module: hr
+#: model:ir.model.fields,field_description:hr.field_hr_department__website_message_ids
+#: model:ir.model.fields,field_description:hr.field_hr_employee__website_message_ids
+#: model:ir.model.fields,field_description:hr.field_hr_job__website_message_ids
+msgid "Website Messages"
+msgstr "ウェブサイトメッセージ"
+
+#. module: hr
+#: model:ir.model.fields,help:hr.field_hr_department__website_message_ids
+#: model:ir.model.fields,help:hr.field_hr_employee__website_message_ids
+#: model:ir.model.fields,help:hr.field_hr_job__website_message_ids
+msgid "Website communication history"
+msgstr "ウェブサイトコミュニケーション履歴"
 
 #. module: hr
 #: model_terms:hr.job,website_description:hr.job_ceo

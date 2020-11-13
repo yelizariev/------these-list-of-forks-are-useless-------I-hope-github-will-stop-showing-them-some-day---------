@@ -3,23 +3,26 @@
 # * website_blog
 # 
 # Translators:
-# Martin Trigaux, 2018
 # Hans Henrik Gabelgaard <hhg@gabelgaard.org>, 2018
 # Per Rasmussen <perhgrasmussen@gmail.com>, 2018
 # Morten Schou <ms@msteknik.dk>, 2018
-# JonathanStein <jstein@image.dk>, 2018
 # Jesper Carstensen <jc@danodoo.dk>, 2018
 # Pernille Kristensen <pernillekristensen1994@gmail.com>, 2018
-# Sanne Kristensen <sanne@vkdata.dk>, 2018
 # Ejner Sønniksen <ejner@vkdata.dk>, 2018
+# Martin Trigaux, 2018
 # lhmflexerp <lhm@flexerp.dk>, 2018
+# Joe Hansen <joedalton2@yahoo.dk>, 2019
+# JonathanStein <jstein@image.dk>, 2020
+# Sanne Kristensen <sanne@vkdata.dk>, 2020
+# Mads Søndergaard, 2020
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-10-08 06:49+0000\n"
-"PO-Revision-Date: 2018-10-08 06:49+0000\n"
-"Last-Translator: lhmflexerp <lhm@flexerp.dk>, 2018\n"
+"POT-Creation-Date: 2019-01-09 10:32+0000\n"
+"PO-Revision-Date: 2018-08-24 09:33+0000\n"
+"Last-Translator: Mads Søndergaard, 2020\n"
 "Language-Team: Danish (https://www.transifex.com/odoo/teams/41243/da/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -164,6 +167,8 @@ msgid ""
 "<b>That's it, your blog post is published!</b> Discover more features "
 "through the <i>Customize</i> menu."
 msgstr ""
+"<b>Det var det. Dit blog indlæg er udgivet!</b> Opdag yderligere funktioner "
+"gennem <i>Tilpas</i> menuen."
 
 #. module: website_blog
 #. openerp-web
@@ -174,10 +179,47 @@ msgid ""
 " image or table, set bold or italic, etc. Drag and drop building blocks for "
 "more graphical blogs."
 msgstr ""
+"<b>Skriv din historie her.</b> Brug værktøjslinjen øverst til at style din "
+"tekst: Tilføj et billede eller en tabel, angiv teksten som fed eller kursiv,"
+" osv. Træk og slip en bygningsklods for at få en mere grafisk blog."
+
+#. module: website_blog
+#: model_terms:ir.ui.view,arch_db:website_blog.blog_post_view_kanban
+msgid "<i class=\"fa fa-clock-o\" role=\"img\" aria-label=\"Post date\" title=\"Post date\"/>"
+msgstr ""
+"<i class=\"fa fa-clock-o\" role=\"img\" aria-label=\"Posterings dato\" "
+"title=\"Posterings dato\"/> "
+
+#. module: website_blog
+#: model_terms:ir.ui.view,arch_db:website_blog.tag_category
+msgid ""
+"<i class=\"fa fa-tag\" role=\"img\" aria-label=\"Tag category\" title=\"Tag "
+"category\"/>"
+msgstr ""
+
+#. module: website_blog
+#: model_terms:ir.ui.view,arch_db:website_blog.latest_blogs
+msgid ""
+"<span class=\"fa fa-calendar mr8\" role=\"img\" aria-label=\"Post date\" "
+"title=\"Post date\"/>"
+msgstr ""
+
+#. module: website_blog
+#: model_terms:ir.ui.view,arch_db:website_blog.latest_blogs
+msgid ""
+"<span class=\"fa fa-exclamation-triangle ml8\" title=\"Unpublished\" "
+"role=\"img\" aria-label=\"Unpublished\"/>"
+msgstr ""
 
 #. module: website_blog
 #: model_terms:ir.ui.view,arch_db:website_blog.latest_blogs
 msgid "<span class=\"fa fa-folder-open\"/> In"
+msgstr ""
+
+#. module: website_blog
+#: model_terms:ir.ui.view,arch_db:website_blog.blog_post_complete
+#: model_terms:ir.ui.view,arch_db:website_blog.blog_post_short
+msgid "<span class=\"fa fa-tags\" role=\"img\" aria-label=\"Tags\" title=\"Tags\"/>"
 msgstr ""
 
 #. module: website_blog
@@ -201,13 +243,13 @@ msgstr "Om os"
 #. module: website_blog
 #: model_terms:ir.ui.view,arch_db:website_blog.blog_post_template_new_post
 msgid "Access post"
-msgstr ""
+msgstr "Tilgå indlæg"
 
 #. module: website_blog
 #: model:ir.model.fields,field_description:website_blog.field_blog_blog__message_needaction
 #: model:ir.model.fields,field_description:website_blog.field_blog_post__message_needaction
 msgid "Action Needed"
-msgstr "Aktion påkrævet"
+msgstr "Handling påkrævet"
 
 #. module: website_blog
 #: model:ir.model.fields,field_description:website_blog.field_blog_blog__active
@@ -223,7 +265,7 @@ msgstr ""
 #. module: website_blog
 #: model_terms:ir.ui.view,arch_db:website_blog.s_latest_posts_options
 msgid "All blogs"
-msgstr ""
+msgstr "Alle blogs"
 
 #. module: website_blog
 #. openerp-web
@@ -233,6 +275,8 @@ msgid ""
 "An error occured with this latest posts block. If the problem persists, "
 "please consider deleting it and adding a new one"
 msgstr ""
+"Der opstod en fejl med denne seneste indlægs blok. Hvis problemet "
+"fortsætter, bedes du venligst overveje at slette den, og tilføje en ny"
 
 #. module: website_blog
 #: model_terms:ir.ui.view,arch_db:website_blog.blog_blog_view_search
@@ -267,13 +311,13 @@ msgstr ""
 #. module: website_blog
 #: model_terms:ir.ui.view,arch_db:website_blog.blog_post_short
 msgid "Atom Feed"
-msgstr ""
+msgstr "Atom Feed"
 
 #. module: website_blog
 #: model:ir.model.fields,field_description:website_blog.field_blog_blog__message_attachment_count
 #: model:ir.model.fields,field_description:website_blog.field_blog_post__message_attachment_count
 msgid "Attachment Count"
-msgstr ""
+msgstr "Antal vedhæftninger"
 
 #. module: website_blog
 #: model:ir.model.fields,field_description:website_blog.field_blog_post__author_id
@@ -284,7 +328,7 @@ msgstr "Forfatter"
 #. module: website_blog
 #: model:ir.model.fields,field_description:website_blog.field_blog_post__author_avatar
 msgid "Avatar"
-msgstr ""
+msgstr "Avatar"
 
 #. module: website_blog
 #: model_terms:ir.ui.view,arch_db:website_blog.website_blog
@@ -319,7 +363,7 @@ msgstr "Blogindlæg"
 #: code:addons/website_blog/models/website.py:53
 #, python-format
 msgid "Blog Post <b>%s</b> seems to be calling this file !"
-msgstr ""
+msgstr "Blog indlæg <b>%s</b> ser ud til at kalde denne fil !"
 
 #. module: website_blog
 #: code:addons/website_blog/models/website.py:28
@@ -332,7 +376,7 @@ msgstr "Blogindlæg <b>%s</b> lader til at have et link til denne side !"
 #: model_terms:ir.ui.view,arch_db:website_blog.opt_blog_post_complete_read_next
 #: model_terms:ir.ui.view,arch_db:website_blog.view_blog_post_form
 msgid "Blog Post Title"
-msgstr "Titel på Blogindlæg"
+msgstr "Overskrift på blogindlæg"
 
 #. module: website_blog
 #: code:addons/website_blog/models/website.py:24
@@ -341,28 +385,28 @@ msgstr "Titel på Blogindlæg"
 #: model_terms:ir.ui.view,arch_db:website_blog.view_blog_post_list
 #, python-format
 msgid "Blog Posts"
-msgstr ""
+msgstr "Blog indlæg"
 
 #. module: website_blog
 #: model:ir.model.fields,field_description:website_blog.field_blog_blog__subtitle
 #: model_terms:ir.ui.view,arch_db:website_blog.view_blog_post_form
 msgid "Blog Subtitle"
-msgstr ""
+msgstr "Blog undertekst"
 
 #. module: website_blog
 #: model:ir.model,name:website_blog.model_blog_tag
 msgid "Blog Tag"
-msgstr ""
+msgstr "Blog tag"
 
 #. module: website_blog
 #: model:ir.model,name:website_blog.model_blog_tag_category
 msgid "Blog Tag Category"
-msgstr ""
+msgstr "Blog tag kategori"
 
 #. module: website_blog
 #: model:ir.actions.act_window,name:website_blog.action_tags
 msgid "Blog Tags"
-msgstr ""
+msgstr "Blog tags"
 
 #. module: website_blog
 #: model:ir.actions.act_window,name:website_blog.action_blog_blog
@@ -395,7 +439,7 @@ msgstr "Kategori"
 #: model_terms:ir.ui.view,arch_db:website_blog.website_blog
 #, python-format
 msgid "Change Cover"
-msgstr ""
+msgstr "Ændre Cover"
 
 #. module: website_blog
 #: model_terms:ir.ui.view,arch_db:website_blog.s_latest_posts_options
@@ -427,7 +471,7 @@ msgstr ""
 #: code:addons/website_blog/static/src/js/website.tour.blog.js:40
 #, python-format
 msgid "Click on <b>Save</b> to set the picture as cover."
-msgstr ""
+msgstr "Klik på <b>Gem</b> for at angive billedet som cover."
 
 #. module: website_blog
 #: model_terms:ir.ui.view,arch_db:website_blog.latest_blogs
@@ -443,12 +487,12 @@ msgstr "Indhold"
 #. module: website_blog
 #: model:ir.model.fields,field_description:website_blog.field_blog_post__cover_properties
 msgid "Cover Properties"
-msgstr ""
+msgstr "Cover egenskaber"
 
 #. module: website_blog
 #: model_terms:ir.actions.act_window,help:website_blog.action_blog_post
 msgid "Create a new blog post"
-msgstr ""
+msgstr "Opret et nyt blog indlæg"
 
 #. module: website_blog
 #: model:ir.model.fields,field_description:website_blog.field_blog_blog__create_uid
@@ -503,12 +547,12 @@ msgstr "Facebook"
 #. module: website_blog
 #: model_terms:ir.ui.view,arch_db:website_blog.website_blog
 msgid "Filter Color"
-msgstr ""
+msgstr "Filter farve"
 
 #. module: website_blog
 #: model_terms:ir.ui.view,arch_db:website_blog.website_blog
 msgid "Filter Intensity"
-msgstr ""
+msgstr "Filter intensitet"
 
 #. module: website_blog
 #: model_terms:blog.post,content:website_blog.blog_post_1
@@ -572,14 +616,14 @@ msgstr "Kontakt os"
 #. module: website_blog
 #: model_terms:ir.ui.view,arch_db:website_blog.opt_blog_rc_follow_us
 msgid "Github"
-msgstr ""
+msgstr "Github"
 
 #. module: website_blog
 #: model_terms:ir.ui.view,arch_db:website_blog.blog_post_complete
 #: model_terms:ir.ui.view,arch_db:website_blog.blog_post_short
 #: model_terms:ir.ui.view,arch_db:website_blog.opt_blog_rc_follow_us
 msgid "Google Plus"
-msgstr ""
+msgstr "Google Plus"
 
 #. module: website_blog
 #: model_terms:ir.ui.view,arch_db:website_blog.website_blog
@@ -629,19 +673,19 @@ msgstr "Idéer bag Odoo kommunikationsværktøjerne"
 #: model:ir.model.fields,help:website_blog.field_blog_blog__message_unread
 #: model:ir.model.fields,help:website_blog.field_blog_post__message_unread
 msgid "If checked new messages require your attention."
-msgstr "Hvis afmærket, kræver nye beskeder din attention"
+msgstr "Hvis afkrydset, kræver nye beskeder din opmærksomhed"
 
 #. module: website_blog
 #: model:ir.model.fields,help:website_blog.field_blog_blog__message_needaction
 #: model:ir.model.fields,help:website_blog.field_blog_post__message_needaction
 msgid "If checked, new messages require your attention."
-msgstr "Hvis afmærket, kræver nye beskeder din opmærksomhed "
+msgstr "Hvis afkrydset, kræver nye beskeder din opmærksomhed "
 
 #. module: website_blog
 #: model:ir.model.fields,help:website_blog.field_blog_blog__message_has_error
 #: model:ir.model.fields,help:website_blog.field_blog_post__message_has_error
 msgid "If checked, some messages have a delivery error."
-msgstr ""
+msgstr "Hvis afkrydset har nogle beskeder en leveringsfejl"
 
 #. module: website_blog
 #: model_terms:ir.ui.view,arch_db:website_blog.opt_blog_rc_follow_us
@@ -662,7 +706,7 @@ msgstr "Følger"
 #. module: website_blog
 #: model:ir.model.fields,field_description:website_blog.field_blog_post__is_published
 msgid "Is published"
-msgstr ""
+msgstr "Er udgivet"
 
 #. module: website_blog
 #: model_terms:blog.post,content:website_blog.blog_post_1
@@ -677,7 +721,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:website_blog.field_blog_post__write_uid
 #: model_terms:ir.ui.view,arch_db:website_blog.view_blog_post_search
 msgid "Last Contributor"
-msgstr "Sidste Bidragsyder"
+msgstr "Sidste bidragsyder"
 
 #. module: website_blog
 #: model:ir.model.fields,field_description:website_blog.field_blog_blog____last_update
@@ -707,7 +751,7 @@ msgstr "Sidst opdateret den"
 #: model_terms:ir.ui.view,arch_db:website_blog.s_latest_posts
 #: model_terms:ir.ui.view,arch_db:website_blog.s_latest_posts_big_picture
 msgid "Latest Posts"
-msgstr ""
+msgstr "Seneste indlæg"
 
 #. module: website_blog
 #: model_terms:blog.post,content:website_blog.blog_post_2
@@ -722,7 +766,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:website_blog.blog_post_short
 #: model_terms:ir.ui.view,arch_db:website_blog.opt_blog_rc_follow_us
 msgid "LinkedIn"
-msgstr ""
+msgstr "LinkedIn"
 
 #. module: website_blog
 #: model_terms:ir.ui.view,arch_db:website_blog.website_blog
@@ -733,7 +777,7 @@ msgstr "Lav"
 #: model:ir.model.fields,field_description:website_blog.field_blog_blog__message_main_attachment_id
 #: model:ir.model.fields,field_description:website_blog.field_blog_post__message_main_attachment_id
 msgid "Main Attachment"
-msgstr ""
+msgstr "Primær vedhæftning"
 
 #. module: website_blog
 #: model_terms:ir.ui.view,arch_db:website_blog.website_blog
@@ -744,7 +788,7 @@ msgstr "Medium"
 #: model:ir.model.fields,field_description:website_blog.field_blog_blog__message_has_error
 #: model:ir.model.fields,field_description:website_blog.field_blog_post__message_has_error
 msgid "Message Delivery error"
-msgstr ""
+msgstr "Besked ved leveringsfejl"
 
 #. module: website_blog
 #: model:ir.model.fields,field_description:website_blog.field_blog_blog__message_ids
@@ -794,12 +838,12 @@ msgstr "Snæver"
 #: code:addons/website_blog/static/src/js/website_blog.editor.js:37
 #, python-format
 msgid "New Blog Post"
-msgstr "Nyt Blogindlæg"
+msgstr "Nyt blogindlæg"
 
 #. module: website_blog
 #: model_terms:blog.post,content:website_blog.blog_post_2
 msgid "New Features Launched"
-msgstr "Nye Funktioner Lanceret"
+msgstr "Nye funktioner lanceret"
 
 #. module: website_blog
 #: model_terms:ir.ui.view,arch_db:website_blog.opt_blog_rc_history
@@ -816,7 +860,7 @@ msgstr ""
 #: code:addons/website_blog/static/src/js/s_latest_posts_frontend.js:44
 #, python-format
 msgid "No blog post was found. Make sure your posts are published."
-msgstr ""
+msgstr "Intet blog indlæg blev fundet. Forsikre, at dine indlæg blev udgivet."
 
 #. module: website_blog
 #: model_terms:ir.ui.view,arch_db:website_blog.blog_post_short
@@ -826,7 +870,7 @@ msgstr "Intet blogindlæg endnu."
 #. module: website_blog
 #: model:ir.model.fields,field_description:website_blog.field_blog_post__visits
 msgid "No of Views"
-msgstr "Antal Visninger"
+msgstr "Antal visninger"
 
 #. module: website_blog
 #: model_terms:ir.ui.view,arch_db:website_blog.latest_blogs
@@ -842,13 +886,13 @@ msgstr "Ingen"
 #: model:ir.model.fields,field_description:website_blog.field_blog_blog__message_needaction_counter
 #: model:ir.model.fields,field_description:website_blog.field_blog_post__message_needaction_counter
 msgid "Number of Actions"
-msgstr "Antal aktioner"
+msgstr "Antal handlinger"
 
 #. module: website_blog
 #: model:ir.model.fields,field_description:website_blog.field_blog_blog__message_has_error_counter
 #: model:ir.model.fields,field_description:website_blog.field_blog_post__message_has_error_counter
 msgid "Number of error"
-msgstr ""
+msgstr "Antal fejl"
 
 #. module: website_blog
 #: model:ir.model.fields,help:website_blog.field_blog_blog__message_needaction_counter
@@ -860,7 +904,7 @@ msgstr "Antal meddelser der kræver handling"
 #: model:ir.model.fields,help:website_blog.field_blog_blog__message_has_error_counter
 #: model:ir.model.fields,help:website_blog.field_blog_post__message_has_error_counter
 msgid "Number of messages with delivery error"
-msgstr ""
+msgstr "Antal beskeder med leveringsfejl"
 
 #. module: website_blog
 #: model_terms:ir.ui.view,arch_db:website_blog.s_latest_posts_options
@@ -892,21 +936,22 @@ msgstr "Odoo, email"
 #, python-format
 msgid "Once you have reviewed the content on mobile, close the preview."
 msgstr ""
+"Når du har gennemgået indholdet på mobil, bedes du lukke forhåndsvisningen."
 
 #. module: website_blog
 #: model_terms:ir.ui.view,arch_db:website_blog.opt_blog_rc_tags
 msgid "Others"
-msgstr ""
+msgstr "Andre"
 
 #. module: website_blog
 #: model:blog.blog,name:website_blog.blog_blog_1
 msgid "Our Blog"
-msgstr "Vores Blog"
+msgstr "Vores blog"
 
 #. module: website_blog
 #: model_terms:ir.ui.view,arch_db:website_blog.opt_blog_rc_blogs
 msgid "Our Blogs"
-msgstr "Vores Blogs"
+msgstr "Vores blogs"
 
 #. module: website_blog
 #: model_terms:ir.ui.view,arch_db:website_blog.opt_blog_rc_follow_us
@@ -935,28 +980,28 @@ msgstr "Udgivet"
 #. module: website_blog
 #: model:ir.model.fields,field_description:website_blog.field_blog_post__published_date
 msgid "Published Date"
-msgstr ""
+msgstr "Udgivelsesdato"
 
 #. module: website_blog
 #: model:mail.message.subtype,description:website_blog.mt_blog_blog_published
 #: model:mail.message.subtype,name:website_blog.mt_blog_blog_published
 msgid "Published Post"
-msgstr ""
+msgstr "Udgivet indlæg"
 
 #. module: website_blog
 #: model_terms:ir.ui.view,arch_db:website_blog.view_blog_post_form
 msgid "Publishing Options"
-msgstr ""
+msgstr "Udgivet indstillinger"
 
 #. module: website_blog
 #: model:ir.model.fields,field_description:website_blog.field_blog_post__post_date
 msgid "Publishing date"
-msgstr ""
+msgstr "U"
 
 #. module: website_blog
 #: model_terms:ir.ui.view,arch_db:website_blog.website_blog
 msgid "Purple"
-msgstr ""
+msgstr "Lilla"
 
 #. module: website_blog
 #: model_terms:ir.ui.view,arch_db:website_blog.opt_blog_rc_follow_us
@@ -1001,35 +1046,35 @@ msgstr "Rød"
 #: model:ir.model.fields,help:website_blog.field_blog_blog__website_id
 #: model:ir.model.fields,help:website_blog.field_blog_post__website_id
 msgid "Restrict publishing to this website."
-msgstr ""
+msgstr "Begræns udgivelse til denne hjemmeside."
 
 #. module: website_blog
 #: model:ir.model.fields,field_description:website_blog.field_blog_blog__is_seo_optimized
 #: model:ir.model.fields,field_description:website_blog.field_blog_post__is_seo_optimized
 #: model:ir.model.fields,field_description:website_blog.field_blog_tag__is_seo_optimized
 msgid "SEO optimized"
-msgstr ""
+msgstr "SEO-optimering"
 
 #. module: website_blog
 #. openerp-web
 #: code:addons/website_blog/static/src/js/website_blog.editor.js:38
 #, python-format
 msgid "Select Blog"
-msgstr ""
+msgstr "Vælg Blog"
 
 #. module: website_blog
 #. openerp-web
 #: code:addons/website_blog/static/src/js/website.tour.blog.js:15
 #, python-format
 msgid "Select this menu item to create a new blog post."
-msgstr ""
+msgstr "Vælg denne menu for at oprette et nyt blog indlæg"
 
 #. module: website_blog
 #. openerp-web
 #: code:addons/website_blog/static/src/js/website.tour.blog.js:26
 #, python-format
 msgid "Set a blog post <b>cover</b>."
-msgstr ""
+msgstr "Angiv blog indlæg som <b>cover</b>"
 
 #. module: website_blog
 #: model_terms:ir.ui.view,arch_db:website_blog.website_blog
@@ -1043,6 +1088,9 @@ msgid ""
 "image, with aspect ratio preserved. Use this field anywhere a small image is"
 " required."
 msgstr ""
+"Lille billede størrelse for denne kontakt. Det omformes automatisk til et "
+"64x64px billede, med billedforholdet bibeholdt. Brug dette felt hvor end et "
+"lille billede påkræves."
 
 #. module: website_blog
 #. openerp-web
@@ -1050,7 +1098,7 @@ msgstr ""
 #: code:addons/website_blog/static/src/js/website.tour.blog.js:52
 #, python-format
 msgid "Start writing here..."
-msgstr ""
+msgstr "Begynd at skrive her..."
 
 #. module: website_blog
 #: model_terms:ir.ui.view,arch_db:website_blog.opt_blog_rc_status
@@ -1065,7 +1113,7 @@ msgstr ""
 #. module: website_blog
 #: model:ir.model.fields,field_description:website_blog.field_blog_post__subtitle
 msgid "Sub Title"
-msgstr "Undertitel"
+msgstr "Underoverskrift"
 
 #. module: website_blog
 #: model_terms:ir.ui.view,arch_db:website_blog.blog_post_complete
@@ -1077,32 +1125,32 @@ msgstr "Underoverskrift"
 #: model:ir.ui.menu,name:website_blog.menu_website_blog_tag_category_global
 #: model_terms:ir.ui.view,arch_db:website_blog.blog_tag_category_tree
 msgid "Tag Categories"
-msgstr ""
+msgstr "Tag kategorier"
 
 #. module: website_blog
 #: model:ir.actions.act_window,name:website_blog.action_tag_category
 msgid "Tag Category"
-msgstr ""
+msgstr "Tag kategori"
 
 #. module: website_blog
 #: model_terms:ir.ui.view,arch_db:website_blog.blog_tag_category_form
 msgid "Tag Category Form"
-msgstr ""
+msgstr "Tag kategori formular"
 
 #. module: website_blog
 #: model_terms:ir.ui.view,arch_db:website_blog.blog_tag_form
 msgid "Tag Form"
-msgstr ""
+msgstr "Tag formular"
 
 #. module: website_blog
 #: model_terms:ir.ui.view,arch_db:website_blog.blog_tag_tree
 msgid "Tag List"
-msgstr ""
+msgstr "Tag liste"
 
 #. module: website_blog
 #: sql_constraint:blog.tag.category:0
 msgid "Tag category already exists !"
-msgstr ""
+msgstr "Tag kategori eksistere allerede !"
 
 #. module: website_blog
 #: sql_constraint:blog.tag:0
@@ -1121,12 +1169,12 @@ msgstr "Tags"
 #. module: website_blog
 #: model:ir.model.fields,field_description:website_blog.field_blog_post__teaser
 msgid "Teaser"
-msgstr ""
+msgstr "Teaser"
 
 #. module: website_blog
 #: model:ir.model.fields,field_description:website_blog.field_blog_post__teaser_manual
 msgid "Teaser Content"
-msgstr ""
+msgstr "Teaser indhold"
 
 #. module: website_blog
 #: model_terms:ir.ui.view,arch_db:website_blog.view_blog_post_form
@@ -1141,7 +1189,7 @@ msgstr "Kommunikationsmekanismen i Odoo"
 #. module: website_blog
 #: model:blog.post,name:website_blog.blog_post_1
 msgid "The Future of Emails"
-msgstr "Fremtiden for Emails"
+msgstr "Fremtiden for e-mails"
 
 #. module: website_blog
 #: model:ir.model.fields,help:website_blog.field_blog_post__post_date
@@ -1177,7 +1225,7 @@ msgstr ""
 #. module: website_blog
 #: model:ir.model.fields,field_description:website_blog.field_blog_post__name
 msgid "Title"
-msgstr "Titel"
+msgstr "Overskrift"
 
 #. module: website_blog
 #: model_terms:blog.post,content:website_blog.blog_post_2
@@ -1209,7 +1257,7 @@ msgstr "Twitter"
 #. module: website_blog
 #: model_terms:ir.ui.view,arch_db:website_blog.opt_blog_rc_status
 msgid "Unpublished"
-msgstr "Ikke offentliggjort"
+msgstr "Ikke udgivet"
 
 #. module: website_blog
 #: model:ir.model.fields,field_description:website_blog.field_blog_blog__message_unread
@@ -1226,7 +1274,7 @@ msgstr "Ulæste besked tæller"
 #. module: website_blog
 #: model_terms:ir.ui.view,arch_db:website_blog.blog_post_short
 msgid "Untitled Post"
-msgstr "Indlæg uden Titel"
+msgstr "Indlæg uden overskrift"
 
 #. module: website_blog
 #. openerp-web
@@ -1245,7 +1293,7 @@ msgstr "Anvendt i:"
 #. module: website_blog
 #: model:ir.model.fields,field_description:website_blog.field_blog_post__website_published
 msgid "Visible on current website"
-msgstr ""
+msgstr "Synlig på denne hjemmeside"
 
 #. module: website_blog
 #: model:ir.model,name:website_blog.model_website
@@ -1257,7 +1305,7 @@ msgstr "Hjemmeside"
 #. module: website_blog
 #: model:ir.actions.act_url,name:website_blog.action_open_website
 msgid "Website Blogs"
-msgstr "Hjemmeside Blogs"
+msgstr "Hjemmeside blogs"
 
 #. module: website_blog
 #: model:ir.model.fields,field_description:website_blog.field_blog_blog__website_message_ids
@@ -1288,7 +1336,7 @@ msgstr "Meta beskrivelse"
 #: model:ir.model.fields,field_description:website_blog.field_blog_post__website_meta_keywords
 #: model:ir.model.fields,field_description:website_blog.field_blog_tag__website_meta_keywords
 msgid "Website meta keywords"
-msgstr "Meta nøgleord"
+msgstr "Meta søgeord"
 
 #. module: website_blog
 #: model:ir.model.fields,field_description:website_blog.field_blog_blog__website_meta_title
@@ -1302,7 +1350,7 @@ msgstr "Meta titel"
 #: model:ir.model.fields,field_description:website_blog.field_blog_post__website_meta_og_img
 #: model:ir.model.fields,field_description:website_blog.field_blog_tag__website_meta_og_img
 msgid "Website opengraph image"
-msgstr ""
+msgstr "Hjemmeside - opengraph-billede"
 
 #. module: website_blog
 #: model_terms:ir.ui.view,arch_db:website_blog.website_blog
@@ -1321,7 +1369,7 @@ msgstr ""
 #: code:addons/website_blog/static/src/js/website.tour.blog.js:20
 #, python-format
 msgid "Write a title, the subtitle is optional."
-msgstr "Skriv en titel, undertitlen er valgfri."
+msgstr "Skriv en overskrift, undertitlen er valgfri."
 
 #. module: website_blog
 #: model_terms:ir.ui.view,arch_db:website_blog.website_blog
@@ -1376,12 +1424,12 @@ msgstr "er udgivet den"
 #. module: website_blog
 #: model_terms:ir.ui.view,arch_db:website_blog.blog_post_short
 msgid "unpublished"
-msgstr "unpublished"
+msgstr "ikke udgivet"
 
 #. module: website_blog
 #: model_terms:ir.ui.view,arch_db:website_blog.blog_post_short
 msgid "view"
-msgstr ""
+msgstr "vis"
 
 #. module: website_blog
 #: model_terms:ir.ui.view,arch_db:website_blog.blog_post_short
