@@ -1,7 +1,7 @@
 version: "1"
 rules:
   - base: "master"
-    upstream: master
+    upstream: odoo:master
     mergeMethod: merge
     reviewers:
       - yelizariev
