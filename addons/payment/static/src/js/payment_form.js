@@ -22,6 +22,7 @@ publicWidget.registry.PaymentForm = publicWidget.Widget.extend({
      * @override
      */
     start: function () {
+        this._adaptPayButton();
         var self = this;
         return this._super.apply(this, arguments).then(function () {
             self.options = _.extend(self.$el.data(), self.options);
@@ -129,12 +130,14 @@ publicWidget.registry.PaymentForm = publicWidget.Widget.extend({
     },
 
     disableButton: function (button) {
+        $("body").block({overlayCSS: {backgroundColor: "#000", opacity: 0, zIndex: 1050}, message: false});
         $(button).attr('disabled', true);
         $(button).children('.fa-lock').removeClass('fa-lock');
         $(button).prepend('<span class="o_loader"><i class="fa fa-refresh fa-spin"></i>&nbsp;</span>');
     },
 
     enableButton: function (button) {
+        $('body').unblock();
         $(button).attr('disabled', false);
         $(button).children('.fa').addClass('fa-lock');
         $(button).find('span.o_loader').remove();
@@ -144,6 +147,11 @@ publicWidget.registry.PaymentForm = publicWidget.Widget.extend({
             return e.message.data.arguments[0] + e.message.data.arguments[1];
         }
         return e.message.data.arguments[0];
+    },
+    _adaptPayButton: function () {
+        var $payButton = $("#o_payment_form_pay");
+        var disabledReasons = $payButton.data('disabled_reasons') || {};
+        $payButton.prop('disabled', _.contains(disabledReasons, true));
     },
 
     //--------------------------------------------------------------------------

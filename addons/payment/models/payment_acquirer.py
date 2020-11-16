@@ -13,6 +13,7 @@ from odoo.exceptions import ValidationError
 from odoo.tools.misc import DEFAULT_SERVER_DATETIME_FORMAT
 from odoo.tools.misc import formatLang
 from odoo.http import request
+from odoo.osv import expression
 
 _logger = logging.getLogger(__name__)
 
@@ -61,6 +62,9 @@ class PaymentAcquirer(models.Model):
     _description = 'Payment Acquirer'
     _order = 'module_state, state, sequence, name'
 
+    def _valid_field_parameter(self, field, name):
+        return name == 'required_if_provider' or super()._valid_field_parameter(field, name)
+
     def _get_default_view_template_id(self):
         return self.env.ref('payment.default_acquirer_button', raise_if_not_found=False)
 
@@ -102,7 +106,7 @@ class PaymentAcquirer(models.Model):
              acquirer. Watch out, test and production modes require
              different credentials.""")
     capture_manually = fields.Boolean(string="Capture Amount Manually",
-        help="Capture the amount from Odoo, when the delivery is completed.")
+        help="Capture the amount from Odoo, when the delivery is completed. Use this if you want to charge your customers cards only once you are sure you can ship the goods to them.")
     journal_id = fields.Many2one(
         'account.journal', 'Payment Journal', domain="[('type', 'in', ['bank', 'cash']), ('company_id', '=', company_id)]",
         help="""Journal where the successful transactions will be posted""")
@@ -263,8 +267,7 @@ class PaymentAcquirer(models.Model):
             'sequence': 999,
             'type': 'bank',
             'company_id': self.company_id.id,
-            'default_debit_account_id': account.id,
-            'default_credit_account_id': account.id,
+            'default_account_id': account.id,
             # Show the journal on dashboard if the acquirer is published on the website.
             'show_on_dashboard': self.state == 'enabled',
             # Don't show payment methods in the backend.
@@ -340,7 +343,12 @@ class PaymentAcquirer(models.Model):
             company = self.env.company
         if not partner:
             partner = self.env.user.partner_id
-        active_acquirers = self.search([('state', 'in', ['enabled', 'test']), ('company_id', '=', company.id)])
+
+        domain = expression.AND([
+            ['&', ('state', 'in', ['enabled', 'test']), ('company_id', '=', company.id)],
+            ['|', ('country_ids', '=', False), ('country_ids', 'in', [partner.country_id.id])]
+        ])
+        active_acquirers = self.search(domain)
         acquirers = active_acquirers.filtered(lambda acq: (acq.payment_flow == 'form' and acq.view_template_id) or
                                                                (acq.payment_flow == 's2s' and acq.registration_view_template_id))
         return {
@@ -475,7 +483,7 @@ class PaymentAcquirer(models.Model):
         })
 
         _logger.info('payment.acquirer.render: <%s> values rendered for form payment:\n%s', self.provider, pprint.pformat(values))
-        return self.view_template_id.render(values, engine='ir.qweb')
+        return self.view_template_id._render(values, engine='ir.qweb')
 
     def get_s2s_form_xml_id(self):
         if self.registration_view_template_id:
@@ -596,7 +604,7 @@ class PaymentTransaction(models.Model):
                             help='Internal reference of the TX')
     acquirer_reference = fields.Char(string='Acquirer Reference', readonly=True, help='Reference of the TX as stored in the acquirer database')
     # duplicate partner / transaction data to store the values at transaction time
-    partner_id = fields.Many2one('res.partner', 'Customer', tracking=True)
+    partner_id = fields.Many2one('res.partner', 'Customer')
     partner_name = fields.Char('Partner Name')
     partner_lang = fields.Selection(_lang_get, 'Language', default=lambda self: self.env.lang)
     partner_email = fields.Char('Email')
@@ -636,22 +644,42 @@ class PaymentTransaction(models.Model):
         for trans in self:
             trans.invoice_ids_nbr = len(trans.invoice_ids)
 
-    def _prepare_account_payment_vals(self):
+    def _create_payment(self, add_payment_vals={}):
+        ''' Create an account.payment record for the current payment.transaction.
+        If the transaction is linked to some invoices, the reconciliation will be done automatically.
+        :param add_payment_vals:    Optional additional values to be passed to the account.payment.create method.
+        :return:                    An account.payment record.
+        '''
         self.ensure_one()
-        return {
+
+        payment_vals = {
             'amount': self.amount,
             'payment_type': 'inbound' if self.amount > 0 else 'outbound',
             'currency_id': self.currency_id.id,
             'partner_id': self.partner_id.id,
             'partner_type': 'customer',
-            'invoice_ids': [(6, 0, self.invoice_ids.ids)],
             'journal_id': self.acquirer_id.journal_id.id,
             'company_id': self.acquirer_id.company_id.id,
             'payment_method_id': self.env.ref('payment.account_payment_method_electronic_in').id,
             'payment_token_id': self.payment_token_id and self.payment_token_id.id or None,
             'payment_transaction_id': self.id,
-            'communication': self.reference,
+            'ref': self.reference,
+            **add_payment_vals,
         }
+        payment = self.env['account.payment'].create(payment_vals)
+        payment.action_post()
+
+        # Track the payment to make a one2one.
+        self.payment_id = payment
+
+        if self.invoice_ids:
+            self.invoice_ids.filtered(lambda move: move.state == 'draft')._post()
+
+            (payment.line_ids + self.invoice_ids.line_ids)\
+                .filtered(lambda line: line.account_id == payment.destination_account_id and not line.reconciled)\
+                .reconcile()
+
+        return payment
 
     def get_last_transaction(self):
         transactions = self.filtered(lambda t: t.state != 'draft')
@@ -785,24 +813,14 @@ class PaymentTransaction(models.Model):
     def _reconcile_after_transaction_done(self):
         # Validate invoices automatically upon the transaction is posted.
         invoices = self.mapped('invoice_ids').filtered(lambda inv: inv.state == 'draft')
-        invoices.post()
+        invoices._post()
 
         # Create & Post the payments.
-        payments = defaultdict(lambda: self.env['account.payment'])
         for trans in self:
             if trans.payment_id:
-                payments[trans.acquirer_id.company_id.id] += trans.payment_id
                 continue
 
-            payment_vals = trans._prepare_account_payment_vals()
-            payment = self.env['account.payment'].create(payment_vals)
-            payments[trans.acquirer_id.company_id.id] += payment
-
-            # Track the payment to make a one2one.
-            trans.payment_id = payment
-
-        for company in payments:
-            payments[company].with_company(company).with_context(company_id=company).post()
+            trans._create_payment()
 
     def _set_transaction_cancel(self):
         '''Move the transaction's payment to the cancel state(e.g. Paypal).'''
@@ -815,7 +833,7 @@ class PaymentTransaction(models.Model):
             _logger.warning('Processed tx with abnormal state (ref: %s, target state: %s, previous state %s, expected previous states: %s)' % (tx.reference, target_state, tx.state, allowed_states))
 
         # Cancel the existing payments.
-        tx_to_process.mapped('payment_id').cancel()
+        tx_to_process.mapped('payment_id').action_cancel()
 
         tx_to_process.write({'state': target_state, 'date': fields.Datetime.now()})
         tx_to_process._log_payment_transaction_received()
@@ -885,9 +903,8 @@ class PaymentTransaction(models.Model):
         :return: A unique reference for the transaction.
         '''
         if not prefix:
-            if values:
-                prefix = self._compute_reference_prefix(values)
-            else:
+            prefix = self._compute_reference_prefix(values)
+            if not prefix:
                 prefix = 'tx'
 
         # Fetch the last reference
@@ -932,7 +949,7 @@ class PaymentTransaction(models.Model):
     def _check_authorize_state(self):
         failed_tx = self.filtered(lambda tx: tx.state == 'authorized' and tx.acquirer_id.provider not in self.env['payment.acquirer']._get_feature_support()['authorize'])
         if failed_tx:
-            raise exceptions.ValidationError(_('The %s payment acquirers are not allowed to manual capture mode!' % failed_tx.mapped('acquirer_id.name')))
+            raise exceptions.ValidationError(_('The %s payment acquirers are not allowed to manual capture mode!', failed_tx.mapped('acquirer_id.name')))
 
     @api.model
     def create(self, values):
@@ -1072,13 +1089,13 @@ class PaymentTransaction(models.Model):
         return res
 
     def action_capture(self):
-        if any([t.state != 'authorized' for t in self]):
-            raise ValidationError(_('Only transactions having the capture status can be captured.'))
+        if any(t.state != 'authorized' for t in self):
+            raise ValidationError(_('Only transactions having the authorized status can be captured.'))
         for tx in self:
             tx.s2s_capture_transaction()
 
     def action_void(self):
-        if any([t.state != 'authorized' for t in self]):
+        if any(t.state != 'authorized' for t in self):
             raise ValidationError(_('Only transactions having the capture status can be voided.'))
         for tx in self:
             tx.s2s_void_transaction()
@@ -1116,7 +1133,6 @@ class PaymentToken(models.Model):
     """
         @TBE: stolen shamelessly from there https://www.paypal.com/us/selfhelp/article/why-is-there-a-$1.95-charge-on-my-card-statement-faq554
         Most of them are ~1.50€s
-        TODO: See this with @AL & @DBO
     """
     VALIDATION_AMOUNTS = {
         'CAD': 2.45,

@@ -197,16 +197,12 @@ QUnit.module('relational_fields', {
     });
 
     QUnit.test('do not call name_get if display_name already known', async function (assert) {
-        // default_get only returns the id for many2one fields
-        // onchange returns an array with the id and the display_name
-        // thus, when an onchange is performed, there is no need to call
-        // name_get as the display_name is alreay available
-        assert.expect(6);
+        assert.expect(4);
 
         this.data.partner.fields.product_id.default = 37;
         this.data.partner.onchanges = {
             trululu: function (obj) {
-                obj.trululu = [1, 'first record'];
+                obj.trululu = 1;
             },
         };
 
@@ -223,11 +219,7 @@ QUnit.module('relational_fields', {
 
         assert.strictEqual(form.$('.o_field_widget[name=trululu] input').val(), 'first record');
         assert.strictEqual(form.$('.o_field_widget[name=product_id] input').val(), 'xphone');
-        assert.verifySteps([
-            'default_get on partner',
-            'onchange on partner',
-            'name_get on product',
-        ]);
+        assert.verifySteps(['onchange on partner']);
 
         form.destroy();
     });
@@ -449,6 +441,29 @@ QUnit.module('relational_fields', {
         form.destroy();
     });
 
+    QUnit.test('prevent the dialog in readonly x2many tree view with option no_open True', async function (assert) {
+        assert.expect(2);
+        var form = await createView({
+            View: FormView,
+            model: 'partner',
+            data: this.data,
+            arch: '<form string="Partners">' +
+                    '<sheet>' +
+                        '<field name="turtles">' +
+                            '<tree editable="bottom" no_open="True">' +
+                                '<field name="turtle_foo"/>' +
+                            '</tree>' +
+                        '</field>' +
+                    '</sheet>' +
+                 '</form>',
+            res_id: 1,
+        });
+        assert.containsOnce(form, '.o_data_row:contains("blip")', "There should be one record in x2many list view")
+        await testUtils.dom.click(form.$('.o_data_row:first'));
+        assert.strictEqual($('.modal-dialog').length, 0, "There is should be no dialog open on click of readonly list row");
+        form.destroy();
+    });
+
     QUnit.test('delete a record while adding another one in a multipage', async function (assert) {
         // in a many2one with at least 2 pages, add a new line. Delete the line above it.
         // (the onchange makes it so that the virtualID is inserted in the middle of the currentResIDs.)
@@ -530,9 +545,9 @@ QUnit.module('relational_fields', {
         assert.verifySteps([
             'read partner',
             'read turtle',
-            'default_get turtle',
+            'onchange turtle',
             'onchange partner',
-            'default_get turtle',
+            'onchange turtle',
             'onchange partner',
         ]);
         form.destroy();
@@ -1005,7 +1020,7 @@ QUnit.module('relational_fields', {
     });
 
     QUnit.test('widget selection, edition and on many2one field', async function (assert) {
-        assert.expect(19);
+        assert.expect(21);
 
         this.data.partner.onchanges = {product_id: function () {}};
         this.data.partner.records[0].product_id = 37;
@@ -1032,10 +1047,14 @@ QUnit.module('relational_fields', {
         assert.containsNone(form.$('.o_form_view'), 'select');
         assert.strictEqual(form.$('.o_field_widget[name=product_id]').text(), 'xphone',
             "should have rendered the many2one field correctly");
+        assert.strictEqual(form.$('.o_field_widget[name=product_id]').attr('raw-value'), '37',
+            "should have set the raw-value attr for many2one field correctly");
         assert.strictEqual(form.$('.o_field_widget[name=trululu]').text(), '',
             "should have rendered the unset many2one field correctly");
         assert.strictEqual(form.$('.o_field_widget[name=color]').text(), 'Red',
             "should have rendered the selection field correctly");
+        assert.strictEqual(form.$('.o_field_widget[name=color]').attr('raw-value'), 'red',
+            "should have set the raw-value attr for selection field correctly");
 
         await testUtils.form.clickEdit(form);
 
@@ -1370,8 +1389,8 @@ QUnit.module('relational_fields', {
         // add an other existing tag
         var $input = form.$('.o_field_many2manytags input');
         await testUtils.fields.many2one.clickOpenDropdown('timmy');
-        assert.strictEqual($input.autocomplete('widget').find('li').length, 1,
-            "autocomplete dropdown should have 1 entry");
+        assert.strictEqual($input.autocomplete('widget').find('li').length, 2,
+            "autocomplete dropdown should have 2 entry");
         assert.strictEqual($input.autocomplete('widget').find('li a:contains("red")').length, 1,
             "autocomplete dropdown should contain 'red'");
         await testUtils.fields.many2one.clickHighlightedItem('timmy');
@@ -1479,8 +1498,8 @@ QUnit.module('relational_fields', {
         // add an other existing tag
         var $input = form.$('.o_field_many2manytags input');
         await testUtils.fields.many2one.clickOpenDropdown('timmy');
-        assert.strictEqual($input.autocomplete('widget').find('li').length, 1,
-        "autocomplete dropdown should have 1 entry");
+        assert.strictEqual($input.autocomplete('widget').find('li').length, 2,
+        "autocomplete dropdown should have 2 entry");
         assert.strictEqual($input.autocomplete('widget').find('li a:contains("silver")').length, 1,
         "autocomplete dropdown should contain 'silver'");
         await testUtils.fields.many2one.clickHighlightedItem('timmy');
@@ -1729,6 +1748,32 @@ QUnit.module('relational_fields', {
         });
         assert.containsN(form, '.o_field_widget[name="partner_ids"] .badge', 100,
             'should have rendered 100 tags');
+        form.destroy();
+    });
+
+    QUnit.test('many2many_tags loads records according to limit defined on widget prototype', async function (assert) {
+        assert.expect(1);
+
+        const M2M_LIMIT = relationalFields.FieldMany2ManyTags.prototype.limit;
+        relationalFields.FieldMany2ManyTags.prototype.limit = 30;
+        this.data.partner.fields.partner_ids = {string: "Partner", type: "many2many", relation: 'partner'};
+        this.data.partner.records[0].partner_ids = [];
+        for (var i = 15; i < 50; i++) {
+            this.data.partner.records.push({id: i, display_name: 'walter' + i});
+            this.data.partner.records[0].partner_ids.push(i);
+        }
+        const form = await createView({
+            View: FormView,
+            model: 'partner',
+            data: this.data,
+            arch: '<form><field name="partner_ids" widget="many2many_tags"/></form>',
+            res_id: 1,
+        });
+
+        assert.strictEqual(form.$('.o_field_widget[name="partner_ids"] .badge').length, 30,
+            'should have rendered 30 tags even though 35 records linked');
+
+        relationalFields.FieldMany2ManyTags.prototype.limit = M2M_LIMIT;
         form.destroy();
     });
 
@@ -2523,6 +2568,37 @@ QUnit.module('relational_fields', {
 
     QUnit.module('FieldReference');
 
+    QUnit.test('Reference field can quick create models', async function (assert) {
+        assert.expect(8);
+
+        const form = await createView({
+            View: FormView,
+            model: 'partner',
+            data: this.data,
+            arch: `<form><field name="reference"/></form>`,
+            mockRPC(route, args) {
+                assert.step(args.method || route);
+                return this._super(...arguments);
+            },
+        });
+
+        await testUtils.fields.editSelect(form.$('select'), 'partner');
+        await testUtils.fields.many2one.searchAndClickItem('reference', {search: 'new partner'});
+        await testUtils.form.clickSave(form);
+
+        assert.verifySteps([
+            'onchange',
+            'name_search', // for the select
+            'name_search', // for the spawned many2one
+            'name_create',
+            'create',
+            'read',
+            'name_get'
+        ], "The name_create method should have been called");
+
+        form.destroy();
+    });
+
     QUnit.test('Reference field in modal readonly mode', async function (assert) {
         assert.expect(4);
 
@@ -2758,7 +2834,7 @@ QUnit.module('relational_fields', {
         this.data.partner.fields.reference.default = 'product,37';
         this.data.partner.onchanges = {
             int_field: function (obj) {
-                if (obj.int_field !== 0) {
+                if (obj.int_field) {
                     obj.reference = 'partner_type,' + obj.int_field;
                 }
             },
@@ -3426,6 +3502,7 @@ QUnit.module('relational_fields', {
         relationalFields.FieldMany2One.prototype.AUTOCOMPLETE_DELAY = 0;
         await testUtils.dom.click(form.$el.find('.o_input_dropdown>input'));
 
+        await testUtils.fields.editInput(form.$('.o_field_many2one input'), 'ABC');
         // click create and edit
         await testUtils.dom.click($('.ui-autocomplete .ui-menu-item a:contains(Create and)').trigger('mouseenter'));
 

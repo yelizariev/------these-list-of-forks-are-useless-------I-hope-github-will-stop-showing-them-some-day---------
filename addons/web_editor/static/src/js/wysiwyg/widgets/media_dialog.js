@@ -39,12 +39,13 @@ var MediaDialog = Dialog.extend({
     init: function (parent, options, media) {
         var $media = $(media);
         media = $media[0];
+        var is_backend = parent.$el.hasClass("o_field_widget");
 
         options = _.extend({}, options);
         var onlyImages = options.onlyImages || this.multiImages || (media && ($media.parent().data('oeField') === 'image' || $media.parent().data('oeType') === 'image'));
         options.noDocuments = onlyImages || options.noDocuments;
         options.noIcons = onlyImages || options.noIcons;
-        options.noVideos = onlyImages || options.noVideos;
+        options.noVideos = onlyImages || options.noVideos || is_backend;
 
         this._super(parent, _.extend({}, {
             title: _t("Select a Media"),
@@ -80,8 +81,8 @@ var MediaDialog = Dialog.extend({
             this.activeWidget = this.videoWidget;
         } else if (this.iconWidget && $media.is('span, i')) {
             this.activeWidget = this.iconWidget;
-        } else if (this.imageWidget) {
-            this.activeWidget = this.imageWidget;
+        } else {
+            this.activeWidget = [this.imageWidget, this.documentWidget, this.videoWidget, this.iconWidget].find(w => !!w);
         }
     },
     /**

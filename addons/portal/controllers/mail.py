@@ -9,7 +9,7 @@ from odoo import http, _
 from odoo.http import request
 from odoo.osv import expression
 from odoo.tools import consteq, plaintext2html
-from odoo.addons.mail.controllers.main import MailController
+from odoo.addons.mail.controllers import main
 from odoo.addons.portal.controllers.portal import CustomerPortal
 from odoo.exceptions import AccessError, MissingError, UserError
 
@@ -111,7 +111,7 @@ class PortalChatter(http.Controller):
             try:
                 CustomerPortal._document_check_access(self, 'ir.attachment', attachment_id, access_token)
             except (AccessError, MissingError):
-                raise UserError(_("The attachment %s does not exist or you do not have the rights to access it.") % attachment_id)
+                raise UserError(_("The attachment %s does not exist or you do not have the rights to access it.", attachment_id))
 
     @http.route(['/mail/chatter_post'], type='http', methods=['POST'], auth='public', website=True)
     def portal_chatter_post(self, res_model, res_id, message, redirect=None, attachment_ids='', attachment_tokens='', **kw):
@@ -139,10 +139,20 @@ class PortalChatter(http.Controller):
                 'res_id': res_id,
                 'message': message,
                 'send_after_commit': False,
-                'attachment_ids': attachment_ids,
+                'attachment_ids': False,  # will be added afterward
             }
             post_values.update((fname, kw.get(fname)) for fname in self._portal_post_filter_params())
             message = _message_post_helper(**post_values)
+
+            if attachment_ids:
+                # sudo write the attachment to bypass the read access
+                # verification in mail message
+                record = request.env[res_model].browse(res_id)
+                message_values = {'res_id': res_id, 'model': res_model}
+                attachments = record._message_post_process_attachments([], attachment_ids, message_values)
+
+                if attachments.get('attachment_ids'):
+                    message.sudo().write(attachments)
 
         return request.redirect(url)
 
@@ -198,7 +208,7 @@ class PortalChatter(http.Controller):
         return message.is_internal
 
 
-class MailController(MailController):
+class MailController(main.MailController):
 
     @classmethod
     def _redirect_to_record(cls, model, res_id, access_token=None, **kwargs):

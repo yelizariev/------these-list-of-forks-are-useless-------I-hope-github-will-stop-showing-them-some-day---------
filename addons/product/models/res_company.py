@@ -18,7 +18,7 @@ class ResCompany(models.Model):
                 'name': _("Default %(currency)s pricelist") %  params,
                 'currency_id': new_company.currency_id.id,
             })
-        self.env['ir.property'].sudo().set_default(
+        self.env['ir.property']._set_default(
             'property_product_pricelist',
             'res.partner',
             pricelist,
@@ -38,7 +38,7 @@ class ResCompany(models.Model):
             for company in self:
                 existing_pricelist = ProductPricelist.search(
                     [('company_id', 'in', (False, company.id)),
-                     ('currency_id', '=', currency_id)])
+                     ('currency_id', 'in', (currency_id, company.currency_id.id))])
                 if existing_pricelist:
                     continue
                 if currency_id == company.currency_id.id:
@@ -54,7 +54,7 @@ class ResCompany(models.Model):
                         'name': _("Default %(currency)s pricelist") %  params,
                         'currency_id': currency_id,
                     })
-                    self.env['ir.property'].sudo().set_default(
+                    self.env['ir.property']._set_default(
                         'property_product_pricelist',
                         'res.partner',
                         pricelist,

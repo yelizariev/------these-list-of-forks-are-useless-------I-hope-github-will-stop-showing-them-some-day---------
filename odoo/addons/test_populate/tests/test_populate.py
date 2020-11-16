@@ -5,10 +5,7 @@ import logging
 from odoo.tests import common
 from odoo.cli.populate import Populate
 from odoo.tools import mute_logger, populate
-try:
-    from unittest.mock import patch
-except ImportError:
-    from mock import patch
+from unittest.mock import patch
 
 
 _logger = logging.getLogger(__name__)
@@ -50,6 +47,7 @@ class TestPopulate(common.TransactionCase):
         self.assertEqual(records.mapped('some_ref')[5:20], [
             1, 0, 2, 4, 4, 3, 4, 1, 2, 2, 2, 4, 4, 1, 2
         ])
+        self.assertEqual(records.mapped('sequence')[:20], [6, 10, 1, 1, 1, 3, 8, 9, 1, 5, 9, 5, 7, 3, 5, 3, 6, 4, 9, 2])  # Test randint
 
     @mute_logger('odoo.cli.populate')
     def test_populate_inherit(self):

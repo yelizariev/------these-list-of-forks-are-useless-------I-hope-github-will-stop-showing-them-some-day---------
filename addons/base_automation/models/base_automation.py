@@ -3,17 +3,14 @@
 
 import datetime
 import logging
-import time
 import traceback
 from collections import defaultdict
 
-import dateutil
 from dateutil.relativedelta import relativedelta
 
 from odoo import _, api, fields, models, SUPERUSER_ID
-from odoo.modules.registry import Registry
 from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
-from odoo.tools.safe_eval import safe_eval
+from odoo.tools import safe_eval
 
 _logger = logging.getLogger(__name__)
 
@@ -164,7 +161,7 @@ class BaseAutomation(models.Model):
         if '__action_done' not in self._context:
             self = self.with_context(__action_done={})
         domain = [('model_name', '=', records._name), ('trigger', 'in', triggers)]
-        actions = self.with_context(active_test=True).search(domain)
+        actions = self.with_context(active_test=True).sudo().search(domain)
         return actions.with_env(self.env)
 
     def _get_eval_context(self):
@@ -172,9 +169,9 @@ class BaseAutomation(models.Model):
             :returns: dict -- evaluation context given to safe_eval
         """
         return {
-            'datetime': datetime,
-            'dateutil': dateutil,
-            'time': time,
+            'datetime': safe_eval.datetime,
+            'dateutil': safe_eval.dateutil,
+            'time': safe_eval.time,
             'uid': self.env.uid,
             'user': self.env.user,
         }
@@ -197,8 +194,9 @@ class BaseAutomation(models.Model):
 
     def _filter_pre(self, records):
         """ Filter the records that satisfy the precondition of action ``self``. """
-        if self.filter_pre_domain and records:
-            domain = [('id', 'in', records.ids)] + safe_eval(self.filter_pre_domain, self._get_eval_context())
+        self_sudo = self.sudo()
+        if self_sudo.filter_pre_domain and records:
+            domain = [('id', 'in', records.ids)] + safe_eval.safe_eval(self_sudo.filter_pre_domain, self._get_eval_context())
             return records.sudo().search(domain).with_env(records.env)
         else:
             return records
@@ -208,8 +206,9 @@ class BaseAutomation(models.Model):
 
     def _filter_post_export_domain(self, records):
         """ Filter the records that satisfy the postcondition of action ``self``. """
-        if self.filter_domain and records:
-            domain = [('id', 'in', records.ids)] + safe_eval(self.filter_domain, self._get_eval_context())
+        self_sudo = self.sudo()
+        if self_sudo.filter_domain and records:
+            domain = [('id', 'in', records.ids)] + safe_eval.safe_eval(self_sudo.filter_domain, self._get_eval_context())
             return records.sudo().search(domain).with_env(records.env), domain
         else:
             return records, None
@@ -258,14 +257,15 @@ class BaseAutomation(models.Model):
                         'domain_post': domain_post,
                     }
                     try:
-                        self.action_server_id.with_context(**ctx).run()
+                        self.action_server_id.sudo().with_context(**ctx).run()
                     except Exception as e:
                         self._add_postmortem_action(e)
                         raise e
 
     def _check_trigger_fields(self, record):
         """ Return whether any of the trigger fields has been modified on ``record``. """
-        if not self.trigger_field_ids:
+        self_sudo = self.sudo()
+        if not self_sudo.trigger_field_ids:
             # all fields are implicit triggers
             return True
 
@@ -283,7 +283,7 @@ class BaseAutomation(models.Model):
                 field.convert_to_cache(record[name], record, validate=False) !=
                 field.convert_to_cache(old_vals[name], record, validate=False)
             )
-        return any(differ(field.name) for field in self.trigger_field_ids)
+        return any(differ(field.name) for field in self_sudo.trigger_field_ids)
 
     def _register_hook(self):
         """ Patch models that should trigger action rules based on creation,
@@ -304,6 +304,8 @@ class BaseAutomation(models.Model):
             def create(self, vals_list, **kw):
                 # retrieve the action rules to possibly execute
                 actions = self.env['base.automation']._get_actions(self, ['on_create', 'on_create_or_write'])
+                if not actions:
+                    return create.origin(self, vals_list, **kw)
                 # call original method
                 records = create.origin(self.with_env(actions.env), vals_list, **kw)
                 # check postconditions, and execute actions on the records that satisfy them
@@ -318,6 +320,8 @@ class BaseAutomation(models.Model):
             def write(self, vals, **kw):
                 # retrieve the action rules to possibly execute
                 actions = self.env['base.automation']._get_actions(self, ['on_write', 'on_create_or_write'])
+                if not (actions and self):
+                    return write.origin(self, vals, **kw)
                 records = self.with_env(actions.env)
                 # check preconditions on records
                 pre = {action: action._filter_pre(records) for action in actions}
@@ -343,12 +347,15 @@ class BaseAutomation(models.Model):
             #
             def _compute_field_value(self, field):
                 # determine fields that may trigger an action
-                stored_fields = [f for f in self._field_computed[field] if f.store]
+                stored_fields = [f for f in self.pool.field_computed[field] if f.store]
                 if not any(stored_fields):
                     return _compute_field_value.origin(self, field)
                 # retrieve the action rules to possibly execute
                 actions = self.env['base.automation']._get_actions(self, ['on_write', 'on_create_or_write'])
                 records = self.filtered('id').with_env(actions.env)
+                if not (actions and records):
+                    _compute_field_value.origin(self, field)
+                    return True
                 # check preconditions on records
                 pre = {action: action._filter_pre(records) for action in actions}
                 # read old values before the update
@@ -385,7 +392,7 @@ class BaseAutomation(models.Model):
             def base_automation_onchange(self):
                 action_rule = self.env['base.automation'].browse(action_rule_id)
                 result = {}
-                server_action = action_rule.action_server_id.with_context(active_model=self._name, onchange_self=self)
+                server_action = action_rule.sudo().action_server_id.with_context(active_model=self._name, onchange_self=self)
                 try:
                     res = server_action.run()
                 except Exception as e:
@@ -474,13 +481,14 @@ class BaseAutomation(models.Model):
         # retrieve all the action rules to run based on a timed condition
         eval_context = self._get_eval_context()
         for action in self.with_context(active_test=True).search([('trigger', '=', 'on_time')]):
+            _logger.info("Starting time-based automated action `%s`.", action.name)
             last_run = fields.Datetime.from_string(action.last_run) or datetime.datetime.utcfromtimestamp(0)
 
             # retrieve all the records that satisfy the action's condition
             domain = []
             context = dict(self._context)
             if action.filter_domain:
-                domain = safe_eval(action.filter_domain, eval_context)
+                domain = safe_eval.safe_eval(action.filter_domain, eval_context)
             records = self.env[action.model_name].with_context(context).search(domain)
 
             # determine when action should occur for the records
@@ -503,6 +511,7 @@ class BaseAutomation(models.Model):
                         _logger.error(traceback.format_exc())
 
             action.write({'last_run': now.strftime(DEFAULT_SERVER_DATETIME_FORMAT)})
+            _logger.info("Time-based automated action `%s` done.", action.name)
 
             if automatic:
                 # auto-commit for batch processing

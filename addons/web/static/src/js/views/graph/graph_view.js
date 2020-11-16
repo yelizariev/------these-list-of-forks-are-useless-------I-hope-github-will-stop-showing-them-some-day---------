@@ -11,7 +11,8 @@ var AbstractView = require('web.AbstractView');
 var core = require('web.core');
 var GraphModel = require('web.GraphModel');
 var Controller = require('web.GraphController');
-var GraphRenderer = require('web.GraphRenderer');
+const GraphRenderer = require("web/static/src/js/views/graph/graph_renderer");
+const RendererWrapper = require("web.RendererWrapper");
 
 var _t = core._t;
 var _lt = core._lt;
@@ -31,7 +32,7 @@ var GraphView = AbstractView.extend({
         Renderer: GraphRenderer,
     }),
     viewType: 'graph',
-    searchMenuTypes: ['filter', 'groupBy', 'timeRange', 'favorite'],
+    searchMenuTypes: ['filter', 'groupBy', 'comparison', 'favorite'],
 
     /**
      * @override
@@ -43,7 +44,7 @@ var GraphView = AbstractView.extend({
         let measure;
         const measures = {};
         const measureStrings = {};
-        const groupBys = [];
+        let groupBys = [];
         const groupableFields = {};
         this.fields.__count__ = { string: _t("Count"), type: 'integer' };
 
@@ -100,6 +101,20 @@ var GraphView = AbstractView.extend({
             }
         }
 
+        // Remove invisible fields from the measures
+        this.arch.children.forEach(field => {
+            let fieldName = field.attrs.name;
+            if (field.attrs.invisible && py.eval(field.attrs.invisible)) {
+                groupBys = groupBys.filter(groupBy => groupBy !== fieldName);
+                if (fieldName in groupableFields) {
+                    delete groupableFields[fieldName];
+                }
+                if (!additionalMeasures.includes(fieldName)) {
+                    delete measures[fieldName];
+                }
+            }
+        });
+
         const sortedMeasures = Object.values(measures).sort((a, b) => {
                 const descA = a.description.toLowerCase();
                 const descB = b.description.toLowerCase();
@@ -115,15 +130,40 @@ var GraphView = AbstractView.extend({
         this.controllerParams.withButtons = params.withButtons !== false;
         this.controllerParams.measures = [...sortedMeasures, countMeasure];
         this.controllerParams.groupableFields = groupableFields;
+        this.controllerParams.title = params.title || this.arch.attrs.string || _t("Untitled");
+        // retrieve form and list view ids from the action to open those views
+        // when the graph is clicked
+        function _findView(views, viewType) {
+            const view = views.find(view => {
+                return view.type === viewType;
+            });
+            return [view ? view.viewID : false, viewType];
+        }
+        this.controllerParams.views = [
+            _findView(params.actionViews, 'list'),
+            _findView(params.actionViews, 'form'),
+        ];
+
         this.rendererParams.fields = this.fields;
         this.rendererParams.title = this.arch.attrs.title; // TODO: use attrs.string instead
+        this.rendererParams.disableLinking = !!JSON.parse(this.arch.attrs.disable_linking || '0');
 
         this.loadParams.mode = this.arch.attrs.type || 'bar';
+        this.loadParams.orderBy = this.arch.attrs.order;
         this.loadParams.measure = measure || '__count__';
         this.loadParams.groupBys = groupBys;
         this.loadParams.fields = this.fields;
         this.loadParams.comparisonDomain = params.comparisonDomain;
         this.loadParams.stacked = this.arch.attrs.stacked !== "False";
+    },
+
+     /**
+     *
+     * @override
+     */
+    getRenderer(parent, props) {
+        props = Object.assign(props || {}, this.rendererParams);
+        return new RendererWrapper(null, this.config.Renderer, props);
     },
 });
 

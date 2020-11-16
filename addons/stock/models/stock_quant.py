@@ -146,7 +146,7 @@ class StockQuant(models.Model):
         """
         if self._is_inventory_mode() and 'inventory_quantity' in vals:
             allowed_fields = self._get_inventory_fields_create()
-            if any([field for field in vals.keys() if field not in allowed_fields]):
+            if any(field for field in vals.keys() if field not in allowed_fields):
                 raise UserError(_("Quant's creation is restricted, you can't do this operation."))
             inventory_quantity = vals.pop('inventory_quantity')
 
@@ -189,12 +189,12 @@ class StockQuant(models.Model):
 
     def write(self, vals):
         """ Override to handle the "inventory mode" and create the inventory move. """
-        if self._is_inventory_mode() and 'inventory_quantity' in vals:
+        allowed_fields = self._get_inventory_fields_write()
+        if self._is_inventory_mode() and any(field for field in allowed_fields if field in vals.keys()):
             if any(quant.location_id.usage == 'inventory' for quant in self):
                 # Do nothing when user tries to modify manually a inventory loss
                 return
-            allowed_fields = self._get_inventory_fields_write()
-            if any([field for field in vals.keys() if field not in allowed_fields]):
+            if any(field for field in vals.keys() if field not in allowed_fields):
                 raise UserError(_("Quant's editing is restricted, you can't do this operation."))
             self = self.sudo()
             return super(StockQuant, self).write(vals)
@@ -202,7 +202,7 @@ class StockQuant(models.Model):
 
     def action_view_stock_moves(self):
         self.ensure_one()
-        action = self.env.ref('stock.stock_move_line_action').read()[0]
+        action = self.env["ir.actions.actions"]._for_xml_id("stock.stock_move_line_action")
         action['domain'] = [
             ('product_id', '=', self.product_id.id),
             '|',
@@ -244,7 +244,7 @@ class StockQuant(models.Model):
     def check_location_id(self):
         for quant in self:
             if quant.location_id.usage == 'view':
-                raise ValidationError(_('You cannot take products from or deliver products to a location of type "view".'))
+                raise ValidationError(_('You cannot take products from or deliver products to a location of type "view" (%s).') % quant.location_id.name)
 
     @api.model
     def _get_removal_strategy(self, product_id, location_id):
@@ -456,12 +456,12 @@ class StockQuant(models.Model):
             # if we want to reserve
             available_quantity = self._get_available_quantity(product_id, location_id, lot_id=lot_id, package_id=package_id, owner_id=owner_id, strict=strict)
             if float_compare(quantity, available_quantity, precision_rounding=rounding) > 0:
-                raise UserError(_('It is not possible to reserve more products of %s than you have in stock.') % product_id.display_name)
+                raise UserError(_('It is not possible to reserve more products of %s than you have in stock.', product_id.display_name))
         elif float_compare(quantity, 0, precision_rounding=rounding) < 0:
             # if we want to unreserve
             available_quantity = sum(quants.mapped('reserved_quantity'))
             if float_compare(abs(quantity), available_quantity, precision_rounding=rounding) > 0:
-                raise UserError(_('It is not possible to unreserve more products of %s than you have in stock.') % product_id.display_name)
+                raise UserError(_('It is not possible to unreserve more products of %s than you have in stock.', product_id.display_name))
         else:
             return reserved_quants
 
@@ -514,15 +514,17 @@ class StockQuant(models.Model):
                             SELECT min(id) as to_update_quant_id,
                                 (array_agg(id ORDER BY id))[2:array_length(array_agg(id), 1)] as to_delete_quant_ids,
                                 SUM(reserved_quantity) as reserved_quantity,
-                                SUM(quantity) as quantity
+                                SUM(quantity) as quantity,
+                                MIN(in_date) as in_date
                             FROM stock_quant
-                            GROUP BY product_id, company_id, location_id, lot_id, package_id, owner_id, in_date
+                            GROUP BY product_id, company_id, location_id, lot_id, package_id, owner_id
                             HAVING count(id) > 1
                         ),
                         _up AS (
                             UPDATE stock_quant q
                                 SET quantity = d.quantity,
-                                    reserved_quantity = d.reserved_quantity
+                                    reserved_quantity = d.reserved_quantity,
+                                    in_date = d.in_date
                             FROM dupes d
                             WHERE d.to_update_quant_id = q.id
                         )
@@ -531,6 +533,7 @@ class StockQuant(models.Model):
         try:
             with self.env.cr.savepoint():
                 self.env.cr.execute(query)
+                self.invalidate_cache()
         except Error as e:
             _logger.info('an error occured while merging quants: %s', e.pgerror)
 
@@ -574,7 +577,7 @@ class StockQuant(models.Model):
             'product_id': self.product_id.id,
             'product_uom': self.product_uom_id.id,
             'product_uom_qty': qty,
-            'company_id': self.company_id.id or self.env.user.company_id.id,
+            'company_id': self.company_id.id or self.env.company.id,
             'state': 'confirmed',
             'location_id': location_id.id,
             'location_dest_id': location_dest_id.id,
@@ -584,7 +587,7 @@ class StockQuant(models.Model):
                 'qty_done': qty,
                 'location_id': location_id.id,
                 'location_dest_id': location_dest_id.id,
-                'company_id': self.company_id.id or self.env.user.company_id.id,
+                'company_id': self.company_id.id or self.env.company.id,
                 'lot_id': self.lot_id.id,
                 'package_id': out and self.package_id.id or False,
                 'result_package_id': (not out) and self.package_id.id or False,
@@ -605,9 +608,9 @@ class StockQuant(models.Model):
         ctx = dict(self.env.context or {})
         ctx.pop('group_by', None)
         action = {
-            'name': _('Update Quantity'),
+            'name': _('Stock On Hand'),
             'view_type': 'tree',
-            'view_mode': 'list',
+            'view_mode': 'list,form',
             'res_model': 'stock.quant',
             'type': 'ir.actions.act_window',
             'context': ctx,
@@ -621,22 +624,22 @@ class StockQuant(models.Model):
 
         if self._is_inventory_mode():
             action['view_id'] = self.env.ref('stock.view_stock_quant_tree_editable').id
+            form_view = self.env.ref('stock.view_stock_quant_form_editable').id
         else:
             action['view_id'] = self.env.ref('stock.view_stock_quant_tree').id
-            # Enables form view in readonly list
-            action.update({
-                'view_mode': 'tree,form',
-                'views': [
-                    (action['view_id'], 'list'),
-                    (self.env.ref('stock.view_stock_quant_form').id, 'form'),
-                ],
-            })
+            form_view = self.env.ref('stock.view_stock_quant_form').id
+        action.update({
+            'views': [
+                (action['view_id'], 'list'),
+                (form_view, 'form'),
+            ],
+        })
         if extend:
             action.update({
                 'view_mode': 'tree,form,pivot,graph',
                 'views': [
                     (action['view_id'], 'list'),
-                    (self.env.ref('stock.view_stock_quant_form').id, 'form'),
+                    (form_view, 'form'),
                     (self.env.ref('stock.view_stock_quant_pivot').id, 'pivot'),
                     (self.env.ref('stock.stock_quant_view_graph').id, 'graph'),
                 ],
@@ -666,6 +669,13 @@ class QuantPackage(models.Model):
     owner_id = fields.Many2one(
         'res.partner', 'Owner', compute='_compute_package_info', search='_search_owner',
         index=True, readonly=True, compute_sudo=True)
+    package_use = fields.Selection([
+        ('disposable', 'Disposable Box'),
+        ('reusable', 'Reusable Box'),
+        ], string='Package Use', default='disposable', required=True,
+        help="""Reusable boxes are used for batch picking and emptied afterwards to be reused. In the barcode application, scanning a reusable box will add the products in this box.
+        Disposable boxes aren't reused, when scanning a disposable box in the barcode application, the contained products are added to the transfer.""")
+
 
     @api.depends('quant_ids.package_id', 'quant_ids.location_id', 'quant_ids.company_id', 'quant_ids.owner_id', 'quant_ids.quantity', 'quant_ids.reserved_quantity')
     def _compute_package_info(self):
@@ -712,8 +722,13 @@ class QuantPackage(models.Model):
             move_line_to_modify.write({'package_id': False})
             package.mapped('quant_ids').sudo().write({'package_id': False})
 
+        # Quant clean-up, mostly to avoid multiple quants of the same product. For example, unpack
+        # 2 packages of 50, then reserve 100 => a quant of -50 is created at transfer validation.
+        self.env['stock.quant']._merge_quants()
+        self.env['stock.quant']._unlink_zero_quants()
+
     def action_view_picking(self):
-        action = self.env.ref('stock.action_picking_tree_all').read()[0]
+        action = self.env["ir.actions.actions"]._for_xml_id("stock.action_picking_tree_all")
         domain = ['|', ('result_package_id', 'in', self.ids), ('package_id', 'in', self.ids)]
         pickings = self.env['stock.move.line'].search(domain).mapped('picking_id')
         action['domain'] = [('id', 'in', pickings.ids)]

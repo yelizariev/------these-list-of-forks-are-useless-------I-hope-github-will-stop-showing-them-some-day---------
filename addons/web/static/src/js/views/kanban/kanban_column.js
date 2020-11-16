@@ -3,6 +3,7 @@ odoo.define('web.KanbanColumn', function (require) {
 
 var config = require('web.config');
 var core = require('web.core');
+var session = require('web.session');
 var Dialog = require('web.Dialog');
 var KanbanRecord = require('web.KanbanRecord');
 var RecordQuickCreate = require('web.kanban_record_quick_create');
@@ -29,7 +30,8 @@ var KanbanColumn = Widget.extend({
         'click .o_kanban_load_more': '_onLoadMore',
         'click .o_kanban_toggle_fold': '_onToggleFold',
         'click .o_column_archive_records': '_onArchiveRecords',
-        'click .o_column_unarchive_records': '_onUnarchiveRecords'
+        'click .o_column_unarchive_records': '_onUnarchiveRecords',
+        'click .o_kanban_config .dropdown-menu': '_onConfigDropdownClicked',
     },
     /**
      * @override
@@ -191,7 +193,7 @@ var KanbanColumn = Widget.extend({
      *
      * @returns {Promise}
      */
-    addQuickCreate: function () {
+    addQuickCreate: async function () {
         if (this.folded) {
             // first open the column, and then add the quick create
             this.trigger_up('column_toggle_fold', {
@@ -204,7 +206,6 @@ var KanbanColumn = Widget.extend({
             return Promise.reject();
         }
         this.trigger_up('close_quick_create'); // close other quick create widgets
-        this.trigger_up('start_quick_create');
         var context = this.data.getContext();
         context['default_' + this.groupedBy] = viewUtils.getGroupValue(this.data, this.groupedBy);
         this.quickCreateWidget = new RecordQuickCreate(this, {
@@ -212,7 +213,10 @@ var KanbanColumn = Widget.extend({
             formViewRef: this.quickCreateView,
             model: this.modelName,
         });
-        return this.quickCreateWidget.insertAfter(this.$header);
+        await this.quickCreateWidget.appendTo(document.createDocumentFragment());
+        this.trigger_up('start_quick_create');
+        this.quickCreateWidget.$el.insertAfter(this.$header);
+        this.quickCreateWidget.on_attach_callback();
     },
     /**
      * Closes the quick create widget if it isn't dirty.
@@ -285,13 +289,22 @@ var KanbanColumn = Widget.extend({
      * @private
      */
     _onAddQuickCreate: function () {
-        this.addQuickCreate();
+        this.trigger_up('add_quick_create', { groupId: this.db_id });
     },
     /**
      * @private
      */
     _onCancelQuickCreate: function () {
         this._cancelQuickCreate();
+    },
+    /**
+     * Prevent from closing the config dropdown when the user clicks on a
+     * disabled item (e.g. 'Fold' in sample mode).
+     *
+     * @private
+     */
+    _onConfigDropdownClicked(ev) {
+        ev.stopPropagation();
     },
     /**
      * @private
@@ -325,6 +338,7 @@ var KanbanColumn = Widget.extend({
         new view_dialogs.FormViewDialog(this, {
             res_model: this.relation,
             res_id: this.id,
+            context: session.user_context,
             title: _t("Edit Column"),
             on_saved: this.trigger_up.bind(this, 'reload'),
         }).open();

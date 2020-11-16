@@ -82,6 +82,7 @@ class Company(models.Model):
     country_id = fields.Many2one('res.country', compute='_compute_address', inverse='_inverse_country', string="Country")
     email = fields.Char(related='partner_id.email', store=True, readonly=False)
     phone = fields.Char(related='partner_id.phone', store=True, readonly=False)
+    mobile = fields.Char(related='partner_id.mobile', store=True, readonly=False)
     website = fields.Char(related='partner_id.website', readonly=False)
     vat = fields.Char(related='partner_id.vat', string="Tax ID", readonly=False)
     company_registry = fields.Char()
@@ -183,7 +184,7 @@ class Company(models.Model):
         """ Returns the user's company
             - Deprecated
         """
-        _logger.warning(_("The method '_company_default_get' on res.company is deprecated and shouldn't be used anymore"))
+        _logger.warning("The method '_company_default_get' on res.company is deprecated and shouldn't be used anymore")
         return self.env.company
 
     # deprecated, use clear_caches() instead
@@ -260,7 +261,7 @@ class Company(models.Model):
     @api.model
     def action_open_base_onboarding_company(self):
         """ Onboarding step for company basic information. """
-        action = self.env.ref('base.action_open_base_onboarding_company').read()[0]
+        action = self.env["ir.actions.actions"]._for_xml_id("base.action_open_base_onboarding_company")
         action['res_id'] = self.env.company.id
         return action
 

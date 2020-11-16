@@ -3,7 +3,7 @@
     <data noupdate="1">
         <record model="gamification.badge" id="vendor_certification_badge">
             <field name="name">MyCompany Vendor</field>
-            <field name="description">Congratulation, you are now official vendor of MyCompany</field>
+            <field name="description">Congratulations, you are now official vendor of MyCompany</field>
             <field name="rule_auth">nobody</field>
             <field name="image_1920" type="base64" file="gamification/static/img/badge_good_job-image.png"/>
         </record>
@@ -14,6 +14,7 @@
             <field name="access_token">4ead4bc8-b8f2-4760-a682-1fde8ddb95ac</field>
             <field name="state">open</field>
             <field name="access_mode">public</field>
+            <field name="questions_layout">page_per_question</field>
             <field name="users_can_go_back" eval="True" />
             <field name="users_login_required" eval="True" />
             <field name="scoring_type" >scoring_with_answers</field>
@@ -229,7 +230,7 @@
         <record model="survey.question" id="vendor_certification_page_2_question_2">
             <field name="survey_id" ref="vendor_certification" />
             <field name="sequence">9</field>
-            <field name="title">Select all the the products that sell for $100 or more</field>
+            <field name="title">Select all the products that sell for $100 or more</field>
             <field name="question_type">multiple_choice</field>
             <field name="column_nb">2</field>
         </record>

@@ -95,18 +95,20 @@
                                 </div>
 
                                 <div t-if="tx.acquirer_id.qr_code">
-                                    <t t-set="qr_code" t-value="tx.acquirer_id.journal_id.bank_account_id.build_qr_code_url(tx.amount, payment_tx_id.reference, None, tx.currency_id, tx.partner_id)"/>
+                                    <t t-set="qr_code" t-value="tx.acquirer_id.journal_id.bank_account_id.build_qr_code_url(tx.amount, tx.reference, None, tx.currency_id, tx.partner_id)"/>
                                     <div class="card-body" t-if="qr_code">
                                         <h3>Or scan me with your banking app.</h3>
                                         <img class="border border-dark rounded" t-att-src="qr_code"/>
                                     </div>
                                 </div>
-                                <div>
-                                    <a role="button" t-attf-class="btn btn-#{status} float-right" href="/my/home"><i class="fa fa-arrow-circle-right"/> Back to My Account</a>
-                                </div>
-                                <div class="col-md-6 offset-md-6 text-muted mt16"><!-- FIXME should be in a row... -->
-                                    <span t-field="tx.acquirer_id.image_128" t-att-title="tx.acquirer_id.name" role="img" t-att-aria-label="tx.acquirer_id.name" t-options='{"widget": "image", "style":"max-width: 60px; display: inline-block"}'/>
-                                    <span>Processed by <t t-esc="tx.acquirer_id.name"/>.</span>
+                                <div class="row">
+                                    <div class="col-md-5 offset-md-3 text-muted">
+                                        <span t-field="tx.acquirer_id.image_128" t-att-title="tx.acquirer_id.name" role="img" t-att-aria-label="tx.acquirer_id.name" t-options='{"widget": "image", "style":"max-width: 60px; display: inline-block"}'/>
+                                        <div>Processed by <t t-esc="tx.acquirer_id.name"/>.</div>
+                                    </div>
+                                    <div class="col-md-4 mt-2 pl-0">
+                                        <a role="button" t-attf-class="btn btn-#{status} float-right" href="/my/home"><i class="fa fa-arrow-circle-right"/> Back to My Account</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>

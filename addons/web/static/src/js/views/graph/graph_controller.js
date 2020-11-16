@@ -23,6 +23,7 @@ class CarretDropdownMenu extends DropdownMenu {
 var GraphController = AbstractController.extend({
     custom_events: _.extend({}, AbstractController.prototype.custom_events, {
         item_selected: '_onItemSelected',
+        open_view: '_onOpenView',
     }),
 
     /**
@@ -42,18 +43,15 @@ var GraphController = AbstractController.extend({
         // button in the control panel owned by the graph view.
         this.isEmbedded = params.isEmbedded;
         this.withButtons = params.withButtons;
+        // views to use in the action triggered when the graph is clicked
+        this.views = params.views;
+        this.title = params.title;
 
         // this parameter determines what is the list of fields
         // that may be used within the groupby menu available when
         // the view is embedded
         this.groupableFields = params.groupableFields;
-    },
-    /**
-     * @override
-     */
-    start: function () {
-        this.$el.addClass('o_graph_controller');
-        return this._super.apply(this, arguments);
+        this.buttonDropdownPromises = [];
     },
     /**
      * @todo check if this can be removed (mostly duplicate with
@@ -116,8 +114,6 @@ var GraphController = AbstractController.extend({
         this.$buttons.click(ev => this._onButtonClick(ev));
 
         if (this.withButtons) {
-            const actionsContainer = this.$buttons[0];
-            const promises = [];
             const state = this.model.get();
             const fragment = document.createDocumentFragment();
             // Instantiate and append MeasureMenu
@@ -126,38 +122,19 @@ var GraphController = AbstractController.extend({
                 title: "Measures",
                 items: this.measures,
             });
-            promises.push(this.measureMenu.mount(fragment).then(() => {
-                actionsContainer.appendChild(this.measureMenu.el);
-                this.measureMenu.el.classList.add('o_graph_measures_list');
-            }));
+            this.buttonDropdownPromises = [this.measureMenu.mount(fragment)];
+            if (this.isEmbedded) {
+                // Instantiate and append GroupBy menu
+                this.groupByMenu = new ComponentWrapper(this, CarretDropdownMenu, {
+                    title: "Group By",
+                    icon: 'fa fa-bars',
+                    items: this._getGroupBys(state.groupBy),
+                });
+                this.buttonDropdownPromises.push(this.groupByMenu.mount(fragment));
+            }
             if ($node) {
-                if (this.isEmbedded) {
-                    // Instantiate and append GroupBy menu
-                    this.groupByMenu = new ComponentWrapper(this, CarretDropdownMenu, {
-                        title: "Group By",
-                        icon: 'fa fa-bars',
-                        items: this._getGroupBys(state.groupBy),
-                    });
-                    promises.push(this.groupByMenu.mount(fragment).then(() => {
-                        actionsContainer.appendChild(this.groupByMenu.el);
-                        this.groupByMenu.el.classList.add('o_group_by_menu');
-                    }));
-                }
                 this.$buttons.appendTo($node);
             }
-            Promise.all(promises).then(() => {
-                // Similar behaviour for all buttons
-                const buttons = actionsContainer.querySelectorAll('.o_dropdown_toggler_btn');
-                for (const button of buttons) {
-                    button.classList.remove('o_dropdown_toggler_btn', 'btn-secondary');
-                    if (this.isEmbedded) {
-                        button.classList.add('btn-outline-secondary');
-                    } else {
-                        button.classList.add('btn-primary');
-                        button.tabIndex = 0;
-                    }
-                }
-            });
         }
     },
     /**
@@ -180,11 +157,49 @@ var GraphController = AbstractController.extend({
             .data('stacked', state.stacked)
             .toggleClass('active', state.stacked)
             .toggleClass('o_hidden', state.mode !== 'bar');
+        this.$buttons
+            .find('.o_graph_button[data-order]')
+            .toggleClass('o_hidden', state.mode === 'pie' || !!Object.keys(state.timeRanges).length)
+            .filter('.o_graph_button[data-order="' + state.orderBy + '"]')
+            .toggleClass('active', !!state.orderBy);
+
+        if (this.withButtons) {
+            this._attachDropdownComponents();
+        }
     },
 
     //--------------------------------------------------------------------------
     // Private
     //--------------------------------------------------------------------------
+
+    /**
+     * Attaches the different dropdown components to the buttons container.
+     *
+     * @returns {Promise}
+     */
+    async _attachDropdownComponents() {
+        await Promise.all(this.buttonDropdownPromises);
+        const actionsContainer = this.$buttons[0];
+        // Attach "measures" button
+        actionsContainer.appendChild(this.measureMenu.el);
+        this.measureMenu.el.classList.add('o_graph_measures_list');
+        if (this.isEmbedded) {
+            // Attach "groupby" button
+            actionsContainer.appendChild(this.groupByMenu.el);
+            this.groupByMenu.el.classList.add('o_group_by_menu');
+        }
+        // Update button classes accordingly to the current mode
+        const buttons = actionsContainer.querySelectorAll('.o_dropdown_toggler_btn');
+        for (const button of buttons) {
+            button.classList.remove('o_dropdown_toggler_btn', 'btn-secondary');
+            if (this.isEmbedded) {
+                button.classList.add('btn-outline-secondary');
+            } else {
+                button.classList.add('btn-primary');
+                button.tabIndex = 0;
+            }
+        }
+    },
 
     /**
      * Returns the items used by the Group By menu in embedded mode.
@@ -254,6 +269,10 @@ var GraphController = AbstractController.extend({
                 this.update({ mode: $target.data('mode') });
             } else if ($target.data('mode') === 'stack') {
                 this.update({ stacked: !$target.data('stacked') });
+            } else if (['asc', 'desc'].includes($target.data('order'))) {
+                const order = $target.data('order');
+                const state = this.model.get();
+                this.update({ orderBy: state.orderBy === order ? false : order });
             }
         }
     },
@@ -295,6 +314,32 @@ var GraphController = AbstractController.extend({
             this.measures.forEach(m => m.isActive = m.fieldName === item.fieldName);
             this.measureMenu.update({ items: this.measures });
         }
+    },
+
+    /**
+     * @private
+     * @param {OdooEvent} ev
+     * @param {Array[]} ev.data.domain
+     */
+    _onOpenView(ev) {
+        ev.stopPropagation();
+        const state = this.model.get();
+        const context = Object.assign({}, state.context);
+        Object.keys(context).forEach(x => {
+            if (x === 'group_by' || x.startsWith('search_default_')) {
+                delete context[x];
+            }
+        });
+        this.do_action({
+            context: context,
+            domain: ev.data.domain,
+            name: this.title,
+            res_model: this.modelName,
+            target: 'current',
+            type: 'ir.actions.act_window',
+            view_mode: 'list',
+            views: this.views,
+        });
     },
 });
 

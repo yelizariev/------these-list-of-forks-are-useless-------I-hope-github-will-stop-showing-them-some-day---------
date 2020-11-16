@@ -6,8 +6,6 @@ const fieldUtils = require('web.field_utils');
 
 const fieldRegistry = require('web.field_registry');
 
-const Timer = require('timer.Timer');
-
 // We need the field registry to be populated, as we bind the
 // timesheet_uom widget on existing field widgets.
 require('web._field_registry');
@@ -74,8 +72,7 @@ const FieldTimesheetToggle = basicFields.FieldFloatToggle.extend({
 
 
 /**
- * Extend float time widget to add the using of a timer for duration
- * (unit_amount) field.
+ * Extend float time widget
  */
 const FieldTimesheetTime = basicFields.FieldFloatTime.extend({
     init: function () {
@@ -85,46 +82,7 @@ const FieldTimesheetTime = basicFields.FieldFloatTime.extend({
             this.nodeOptions.factor = session.timesheet_uom_factor;
             this.parseOptions.factor = session.timesheet_uom_factor;
         }
-    },
-    _render: async function () {
-        this._super.apply(this, arguments);
-
-        // Check if the timer_start exists and it's not false
-        // In other word, when user clicks on play button, this button
-        // launches the "action_timer_start".
-        if (this.recordData.timer_start && !this.recordData.timer_pause) {
-            const time = await this._rpc({
-                model: 'timer.timer',
-                method: 'get_server_time',
-                args: []
-            });
-            this.time = Timer.createTimer(this.recordData.unit_amount, this.recordData.timer_start, time);
-            return this._startTimeCounter();
-        } else if (this.mode === "edit") {
-            return this._renderEdit();
-        } else if (this.mode === 'readonly') {
-            return this._renderReadonly();
-        }
-    },
-    /**
-     * @override
-     */
-    destroy: function () {
-        this._super.apply(this, arguments);
-        clearTimeout(this.timer);
-    },
-    _startTimeCounter: function () {
-        if (this.time) {
-            this.timer = setInterval(() => {
-                this.time.addSecond();
-                this.$el.text(this.time.toString());
-                this.$el.addClass('font-weight-bold text-danger');
-            }, 1000);
-        } else {
-            clearTimeout(this.timer);
-            this.$el.removeClass('font-weight-bold text-danger');
-        }
-    },
+    }
 });
 
 
@@ -151,8 +109,17 @@ if (widgetName === 'float_toggle') {
             fieldRegistry.get(widgetName).extend({})
         ) || FieldTimesheetFactor;
 }
-
 fieldRegistry.add('timesheet_uom', FieldTimesheetUom);
+
+// widget timesheet_uom_no_toggle is the same as timesheet_uom but without toggle.
+// We can modify easly huge amount of days.
+let FieldTimesheetUomWithoutToggle = null;
+if (widgetName === 'float_toggle') {
+    FieldTimesheetUomWithoutToggle = FieldTimesheetFactor;
+} else {
+    FieldTimesheetUomWithoutToggle = FieldTimesheetTime;
+}
+fieldRegistry.add('timesheet_uom_no_toggle', FieldTimesheetUomWithoutToggle);
 
 
 // bind the formatter and parser method, and tweak the options
@@ -170,6 +137,18 @@ fieldUtils.format.timesheet_uom = function(value, field, options) {
 };
 
 fieldUtils.parse.timesheet_uom = function(value, field, options) {
+    options = _tweak_options(options || {});
+    const parser = fieldUtils.parse[FieldTimesheetUom.prototype.formatType];
+    return parser(value, field, options);
+};
+
+fieldUtils.format.timesheet_uom_no_toggle = function(value, field, options) {
+    options = _tweak_options(options || {});
+    const formatter = fieldUtils.format[FieldTimesheetUom.prototype.formatType];
+    return formatter(value, field, options);
+};
+
+fieldUtils.parse.timesheet_uom_no_toggle = function(value, field, options) {
     options = _tweak_options(options || {});
     const parser = fieldUtils.parse[FieldTimesheetUom.prototype.formatType];
     return parser(value, field, options);

@@ -14,11 +14,11 @@
                     <button name="action_result_survey" string="See results" type="object" class="oe_highlight"
                       attrs="{'invisible': ['|', ('state', '=', 'draft'), ('answer_done_count', '&lt;=', 0)]}"/>
                     <button name="action_start_session" string="Create Live Session" type="object"
-                        attrs="{'invisible': ['|', ('session_state', '!=', False), ('state', '=', 'draft')]}" />
+                        attrs="{'invisible': ['|', ('session_state', '!=', False), '|', ('state', '!=', 'open'), ('certification', '=', True)]}" />
                     <button name="action_open_session_manager" string="Open Session Manager" type="object"
                         attrs="{'invisible': ['|', ('session_state', '=', False), ('state', '=', 'draft')]}" />
                     <button name="action_end_session" string="Close Live Session" type="object"
-                        attrs="{'invisible': ['|', ('session_state', '!=', 'in_progress'), ('state', '=', 'draft')]}" />
+                        attrs="{'invisible': ['|', ('session_state', 'not in', ['ready', 'in_progress']), ('state', '=', 'draft')]}" />
                     <button name="action_draft" string="Set to draft" type="object" states="closed"/>
                     <button name="action_test_survey" string="Test" type="object" attrs="{'invisible': ['|', ('state', '=', 'closed'), ('id', '=', False)]}"/>
                     <button name="action_print_survey" string="Print" type="object" attrs="{'invisible': [('id', '=', False)]}"/>
@@ -75,8 +75,8 @@
                                     <button icon="fa-code-fork" attrs="{'invisible': [('triggering_question_id', '=', False)]}"
                                         title="This question depends on another question's answer." class="icon_rotates"/>
                                     <control>
-                                        <create name="add_section_control" string="Add a section" context="{'default_is_page': True, 'default_questions_selection': 'all'}"/>
                                         <create name="add_question_control" string="Add a question"/>
+                                        <create name="add_section_control" string="Add a section" context="{'default_is_page': True, 'default_questions_selection': 'all'}"/>
                                     </control>
                                 </tree>
                             </field>
@@ -124,7 +124,7 @@
                                     <field name="certification_badge_id" attrs="{'invisible': ['|', ('certification_give_badge', '=', False), ('certification_badge_id', '!=', False)]}"
                                            domain="[('survey_id', '=', active_id), ('survey_id', '!=', False)]"
                                            context="{'default_name': title,
-                                                   'default_description': 'Congratulation, you succeeded this certification',
+                                                   'default_description': 'Congratulations, you have succeeded this certification',
                                                    'default_rule_auth': 'nobody',
                                                    'default_level': None,
                                                    'form_view_ref': 'survey.gamification_badge_form_view_simplified',
@@ -135,15 +135,23 @@
                                 </group>
                                 <group string="Live Session">
                                     <field name="session_speed_rating" />
+                                    <div class="o_td_label">
+                                        <label for="session_code" string="Session Code" class="oe_edit_only o_form_label" />
+                                        <label for="session_link" string="Session Link" class="oe_read_only o_form_label" />
+                                    </div>
+                                    <div class="d-flex">
+                                        <field name="session_code" nolabel="1" class="mr-2 oe_edit_only" />
+                                        <field name="session_link" nolabel="1" widget="CopyClipboardChar" class="oe_read_only" />
+                                    </div>
                                 </group>
                             </group>
                         </page>
                     </notebook>
                 </sheet>
                 <div class="oe_chatter">
-                    <field name="message_follower_ids" widget="mail_followers"/>
-                    <field name="activity_ids" widget="mail_activity"/>
-                    <field name="message_ids" widget="mail_thread"/>
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
                 </div>
             </form>
         </field>
@@ -152,11 +160,11 @@
         <field name="name">Tree view for survey</field>
         <field name="model">survey.survey</field>
         <field name="arch" type="xml">
-            <tree string="Survey">
+            <tree string="Survey" sample="1">
                 <field name="active" invisible="1"/>
                 <field name="certification" invisible="1"/>
                 <field name="title"/>
-                <field name="state"/>
+                <field name="state" widget="badge" decoration-info="state == 'draft'" decoration-success="state == 'open'"/>
                 <field name="answer_count"/>
                 <field name="answer_done_count"/>
                 <field name="success_count"/>
@@ -171,7 +179,7 @@
         <field name="name">Kanban view for survey</field>
         <field name="model">survey.survey</field>
         <field name="arch" type="xml">
-            <kanban>
+            <kanban sample="1">
                 <field name="state" />
                 <field name="title" />
                 <field name="answer_done_count" />

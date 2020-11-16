@@ -207,7 +207,7 @@ class IrFieldsConverter(models.AbstractModel):
                 ValueError,
                 _(u"'%s' does not seem to be a valid date for field '%%(field)s'"),
                 value,
-                {'moreinfo': _(u"Use the format '%s'") % u"2012-12-31"}
+                {'moreinfo': _(u"Use the format '%s'", u"2012-12-31")}
             )
 
     @api.model
@@ -239,7 +239,7 @@ class IrFieldsConverter(models.AbstractModel):
                 ValueError,
                 _(u"'%s' does not seem to be a valid datetime for field '%%(field)s'"),
                 value,
-                {'moreinfo': _(u"Use the format '%s'") % u"2012-12-31 23:59:59"}
+                {'moreinfo': _(u"Use the format '%s'", u"2012-12-31 23:59:59")}
             )
 
         input_tz = self._input_tz()# Apply input tz to the parsed naive datetime
@@ -300,7 +300,7 @@ class IrFieldsConverter(models.AbstractModel):
         """
         # the function 'flush' comes from BaseModel.load(), and forces the
         # creation/update of former records (batch creation)
-        flush = self._context.get('import_flush', lambda arg=None: None)
+        flush = self._context.get('import_flush', lambda **kw: None)
 
         id = None
         warnings = []
@@ -343,13 +343,13 @@ class IrFieldsConverter(models.AbstractModel):
                 xmlid = value
             else:
                 xmlid = "%s.%s" % (self._context.get('_import_current_module', ''), value)
-            flush(xmlid)
+            flush(xml_id=xmlid)
             id = self.env['ir.model.data'].xmlid_to_res_id(xmlid, raise_if_not_found=False) or None
         elif subfield is None:
             field_type = _(u"name")
             if value == '':
                 return False, field_type, warnings
-            flush()
+            flush(model=field.comodel_name)
             ids = RelatedModel.name_search(name=value, operator='=')
             if ids:
                 if len(ids) > 1:
@@ -363,7 +363,7 @@ class IrFieldsConverter(models.AbstractModel):
                     try:
                         id, _name = RelatedModel.name_create(name=value)
                     except (Exception, psycopg2.IntegrityError):
-                        error_msg = _(u"Cannot create new '%s' records from their name alone. Please create those records manually and try importing again.") % RelatedModel._description
+                        error_msg = _(u"Cannot create new '%s' records from their name alone. Please create those records manually and try importing again.", RelatedModel._description)
         else:
             raise self._format_import_error(
                 Exception,
@@ -439,6 +439,13 @@ class IrFieldsConverter(models.AbstractModel):
 
     @api.model
     def _str_to_one2many(self, model, field, records):
+        name_create_enabled_fields = self._context.get('name_create_enabled_fields') or {}
+        prefix = field.name + '/'
+        relative_name_create_enabled_fields = {
+            k[len(prefix):]: v
+            for k, v in name_create_enabled_fields.items()
+            if k.startswith(prefix)
+        }
         commands = []
         warnings = []
 
@@ -460,7 +467,7 @@ class IrFieldsConverter(models.AbstractModel):
                 raise exception
             warnings.append(exception)
 
-        convert = self.for_model(self.env[field.comodel_name])
+        convert = self.with_context(name_create_enabled_fields=relative_name_create_enabled_fields).for_model(self.env[field.comodel_name])
 
         for record in records:
             id = None

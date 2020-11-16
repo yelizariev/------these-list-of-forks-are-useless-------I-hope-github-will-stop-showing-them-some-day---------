@@ -267,13 +267,8 @@ var BoardRenderer = FormRenderer.extend({
                         orderedBy: context.orderedBy || [],
                     };
 
-                    if (['pivot', 'dashboard', 'graph', 'cohort'].includes(viewType)) {
-                        if (context.time_ranges) {
-                            const { field: fieldName, range, comparisonRange } = context.time_ranges;
-                            searchQuery.timeRanges = { fieldName, range, comparisonRange };
-                        } else {
-                            searchQuery.timeRanges = {};
-                        }
+                    if (View.prototype.searchMenuTypes.includes('comparison')) {
+                        searchQuery.timeRanges = context.comparison || {};
                     }
 
                     var view = new View(viewInfo, {
@@ -341,6 +336,7 @@ var BoardRenderer = FormRenderer.extend({
         });
 
         var $html = $('<div>').append($(QWeb.render('DashBoard', {node: node, isMobile: config.device.isMobile})));
+        this._boardSubcontrollers = []; // dashboard controllers are reset on re-render
 
         // render each view
         _.each(this.actionsDescr, function (action) {

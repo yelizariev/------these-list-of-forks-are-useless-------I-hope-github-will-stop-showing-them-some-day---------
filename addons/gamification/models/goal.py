@@ -3,12 +3,11 @@
 
 import ast
 import logging
-import time
 from datetime import date, datetime, timedelta
 
 from odoo import api, fields, models, _, exceptions
 from odoo.osv import expression
-from odoo.tools.safe_eval import safe_eval
+from odoo.tools.safe_eval import safe_eval, time
 
 _logger = logging.getLogger(__name__)
 
@@ -35,7 +34,7 @@ class GoalDefinition(models.Model):
         ('sum', "Automatic: sum on a field"),
         ('python', "Automatic: execute a specific Python code"),
     ], default='manually', string="Computation Mode", required=True,
-       help="Defined how will be computed the goals. The result of the operation will be stored in the field 'Current'.")
+       help="Define how the goals will be computed. The result of the operation will be stored in the field 'Current'.")
     display_mode = fields.Selection([
         ('progress', "Progressive (using numerical values)"),
         ('boolean', "Exclusive (done or not-done)"),
@@ -58,7 +57,7 @@ class GoalDefinition(models.Model):
              " user if not in batch mode.")
 
     batch_mode = fields.Boolean("Batch Mode", help="Evaluate the expression in batch instead of once for each user")
-    batch_distinctive_field = fields.Many2one('ir.model.fields', string="Distinctive field for batch user", help="In batch mode, this indicates which field distinct one user form the other, e.g. user_id, partner_id...")
+    batch_distinctive_field = fields.Many2one('ir.model.fields', string="Distinctive field for batch user", help="In batch mode, this indicates which field distinguishes one user from the other, e.g. user_id, partner_id...")
     batch_user_expression = fields.Char("Evaluated expression for batch mode", help="The value to compare with the distinctive field. The expression can contain reference to 'user' which is a browse record of the current user, e.g. user.id, user.partner_id.id...")
     compute_code = fields.Text("Python Code", help="Python code to be executed for each user. 'result' should contains the new current value. Evaluated user can be access through object.user_id.")
     condition = fields.Selection([
@@ -111,11 +110,17 @@ class GoalDefinition(models.Model):
                 Model = self.env[definition.model_id.model]
                 field = Model._fields.get(definition.field_id.name)
                 if not (field and field.store):
-                    raise exceptions.UserError(
-                        _("The model configuration for the definition %s seems incorrect, please check it.\n\n%s not stored") % (definition.name, definition.field_id.name))
+                    raise exceptions.UserError(_(
+                        "The model configuration for the definition %(name)s seems incorrect, please check it.\n\n%(field_name)s not stored",
+                        name=definition.name,
+                        field_name=definition.field_id.name
+                    ))
             except KeyError as e:
-                raise exceptions.UserError(
-                    _("The model configuration for the definition %s seems incorrect, please check it.\n\n%s not found") % (definition.name, e))
+                raise exceptions.UserError(_(
+                    "The model configuration for the definition %(name)s seems incorrect, please check it.\n\n%(error)s not found",
+                    name=definition.name,
+                    error=e
+                ))
 
     @api.model
     def create(self, vals):
@@ -153,9 +158,9 @@ class Goal(models.Model):
              "to generate goals with a value in this field.")
     start_date = fields.Date("Start Date", default=fields.Date.today)
     end_date = fields.Date("End Date")  # no start and end = always active
-    target_goal = fields.Float('To Reach', required=True, tracking=True)
+    target_goal = fields.Float('To Reach', required=True)
 # no goal = global index
-    current = fields.Float("Current Value", required=True, default=0, tracking=True)
+    current = fields.Float("Current Value", required=True, default=0)
     completeness = fields.Float("Completeness", compute='_get_completion')
     state = fields.Selection([
         ('draft', "Draft"),
@@ -163,7 +168,7 @@ class Goal(models.Model):
         ('reached', "Reached"),
         ('failed', "Failed"),
         ('canceled', "Canceled"),
-    ], default='draft', string='State', required=True, tracking=True)
+    ], default='draft', string='State', required=True)
     to_update = fields.Boolean('To update')
     closed = fields.Boolean('Closed goal', help="These goals will not be recomputed.")
 
@@ -430,7 +435,7 @@ class Goal(models.Model):
         if self.computation_mode == 'manually':
             # open a wizard window to update the value manually
             action = {
-                'name': _("Update %s") % self.definition_id.name,
+                'name': _("Update %s", self.definition_id.name),
                 'id': self.id,
                 'type': 'ir.actions.act_window',
                 'views': [[False, 'form']],

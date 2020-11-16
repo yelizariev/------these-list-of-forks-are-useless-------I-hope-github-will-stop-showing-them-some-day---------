@@ -4,7 +4,7 @@
 from psycopg2 import IntegrityError
 
 from odoo.exceptions import ValidationError
-from odoo.tests.common import TransactionCase, SavepointCase
+from odoo.tests.common import TransactionCase, SavepointCase, tagged
 from odoo.tools import mute_logger
 
 
@@ -142,14 +142,15 @@ class TestXMLID(TransactionCase):
 
     def test_create_xmlids(self):
         # create users and assign them xml ids
-        foo, bar = self.env['res.users'].create([
-            {'name': 'Foo', 'login': 'foo'},
-            {'name': 'Bar', 'login': 'bar'},
-        ])
-        self.env['ir.model.data']._update_xmlids([
-            dict(xml_id='test_convert.foo', record=foo, noupdate=True),
-            dict(xml_id='test_convert.bar', record=bar, noupdate=True),
-        ])
+        foo, bar = self.env['res.users']._load_records([{
+            'xml_id': 'test_convert.foo',
+            'values': {'name': 'Foo', 'login': 'foo'},
+            'noupdate': True,
+        }, {
+            'xml_id': 'test_convert.bar',
+            'values': {'name': 'Bar', 'login': 'bar'},
+            'noupdate': True,
+        }])
 
         self.assertEqual(foo, self.env.ref('test_convert.foo', raise_if_not_found=False))
         self.assertEqual(bar, self.env.ref('test_convert.bar', raise_if_not_found=False))
@@ -309,3 +310,20 @@ class TestIrModel(SavepointCase):
             '__domain': [('x_ripeness_id', '=', self.ripeness_gone[0])],
         }]
         self.assertEqual(groups, expected, 'should include 2 empty ripeness stages')
+
+
+@tagged('test_eval_context')
+class TestEvalContext(TransactionCase):
+
+    def test_module_usage(self):
+        self.env['ir.model.fields'].create({
+            'name': 'x_foo_bar_baz',
+            'model_id': self.env['ir.model'].search([('model', '=', 'res.partner')]).id,
+            'field_description': 'foo',
+            'ttype': 'integer',
+            'store': False,
+            'depends': 'name',
+            'compute': ("time.time()\ndatetime.datetime.now()\n"
+                        "dateutil.relativedelta.relativedelta(hours=1)")
+        })
+        self.env['res.partner'].create({'name': 'foo'}).x_foo_bar_baz

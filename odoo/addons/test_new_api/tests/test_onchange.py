@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
-try:
-    from unittest.mock import patch
-except ImportError:
-    from mock import patch
+from unittest.mock import patch
 
 from odoo.addons.base.tests.common import SavepointCaseWithUserDemo
 from odoo.tests import common
@@ -380,6 +377,19 @@ class TestOnChange(SavepointCaseWithUserDemo):
         values = {'name': 'X', 'value1': 24, 'value2': False}
         result = Foo.onchange(values, 'value1', field_onchange)
         self.assertEqual(result['value'], {})
+
+    def test_onchange_one2many_first(self):
+        partner = self.env['res.partner'].create({
+            'name': 'X',
+            'country_id': self.env.ref('base.be').id,
+        })
+        with common.Form(self.env['test_new_api.multi']) as form:
+            form.partner = partner
+            self.assertEqual(form.partner, partner)
+            self.assertEqual(form.name, partner.name)
+            with form.lines.new() as line:
+                # the first onchange() must have computed partner
+                self.assertEqual(line.partner, partner)
 
     def test_onchange_one2many_value(self):
         """ test the value of the one2many field inside the onchange """

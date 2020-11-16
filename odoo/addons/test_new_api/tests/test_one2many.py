@@ -183,7 +183,7 @@ class One2manyCase(TransactionCase):
         with self.assertQueryCount(0):
             self.assertEqual(attachment.name, record0.display_name,
                              "field should be computed")
-        with self.assertQueryCount(2):
+        with self.assertQueryCount(1):
             self.assertEqual(record0.attachment_ids, attachment, "inconsistent cache")
 
         # creating a host should not attempt to recompute attachment.name
@@ -201,9 +201,9 @@ class One2manyCase(TransactionCase):
         with self.assertQueryCount(0):
             self.assertEqual(attachment.name, record1.display_name,
                              "field should be recomputed")
-        with self.assertQueryCount(2):
+        with self.assertQueryCount(1):
             self.assertEqual(record1.attachment_ids, attachment, "inconsistent cache")
-        with self.assertQueryCount(2):
+        with self.assertQueryCount(1):
             self.assertFalse(record0.attachment_ids, "inconsistent cache")
 
     def test_recompute(self):
@@ -247,3 +247,11 @@ class One2manyCase(TransactionCase):
         # delete parent, and check that recomputation ends
         parent.unlink()
         parent.flush()
+
+    def test_compute_stored_many2one_one2many(self):
+        container = self.env['test_new_api.compute.container'].create({'name': 'Foo'})
+        self.assertFalse(container.member_ids)
+        member = self.env['test_new_api.compute.member'].create({'name': 'Foo'})
+        # at this point, member.container_id must be computed for member to
+        # appear in container.member_ids
+        self.assertEqual(container.member_ids, member)

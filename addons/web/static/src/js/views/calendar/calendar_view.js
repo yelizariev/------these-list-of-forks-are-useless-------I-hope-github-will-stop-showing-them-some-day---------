@@ -17,13 +17,34 @@ var fieldsToGather = [
     "date_delay",
     "date_stop",
     "all_day",
+    "recurrence_update",
+    "create_name_field",
 ];
+
+const scalesInfo = {
+    day: 'timeGridDay',
+    week: 'timeGridWeek',
+    month: 'dayGridMonth',
+    year: 'dayGridYear',
+};
 
 var CalendarView = AbstractView.extend({
     display_name: _lt('Calendar'),
     icon: 'fa-calendar',
-    jsLibs: ['/web/static/lib/fullcalendar/js/fullcalendar.js'],
-    cssLibs: ['/web/static/lib/fullcalendar/css/fullcalendar.css'],
+    jsLibs: [
+        '/web/static/lib/fullcalendar/core/main.js',
+        '/web/static/lib/fullcalendar/interaction/main.js',
+        '/web/static/lib/fullcalendar/moment/main.js',
+        '/web/static/lib/fullcalendar/daygrid/main.js',
+        '/web/static/lib/fullcalendar/timegrid/main.js',
+        '/web/static/lib/fullcalendar/list/main.js'
+    ],
+    cssLibs: [
+        '/web/static/lib/fullcalendar/core/main.css',
+        '/web/static/lib/fullcalendar/daygrid/main.css',
+        '/web/static/lib/fullcalendar/timegrid/main.css',
+        '/web/static/lib/fullcalendar/list/main.css'
+    ],
     config: _.extend({}, AbstractView.prototype.config, {
         Model: CalendarModel,
         Controller: CalendarController,
@@ -138,17 +159,29 @@ var CalendarView = AbstractView.extend({
             }
         }
 
+        let scales;
+        const allowedScales = Object.keys(scalesInfo);
+        if (arch.attrs.scales) {
+            scales = arch.attrs.scales.split(',')
+                .filter(x => allowedScales.includes(x));
+        } else {
+            scales = allowedScales;
+        }
+
         this.controllerParams.eventOpenPopup = utils.toBoolElse(attrs.event_open_popup || '', false);
         this.controllerParams.showUnusualDays = utils.toBoolElse(attrs.show_unusual_days || '', false);
         this.controllerParams.mapping = mapping;
         this.controllerParams.context = params.context || {};
         this.controllerParams.displayName = params.action && params.action.name;
+        this.controllerParams.scales = scales;
 
         this.rendererParams.displayFields = displayFields;
         this.rendererParams.model = viewInfo.model;
         this.rendererParams.hideDate = utils.toBoolElse(attrs.hide_date || '', false);
         this.rendererParams.hideTime = utils.toBoolElse(attrs.hide_time || '', false);
         this.rendererParams.canDelete = this.controllerParams.activeActions.delete;
+        this.rendererParams.canCreate = this.controllerParams.activeActions.create;
+        this.rendererParams.scalesInfo = scalesInfo;
 
         this.loadParams.fieldNames = _.uniq(fieldNames);
         this.loadParams.mapping = mapping;
@@ -161,7 +194,9 @@ var CalendarView = AbstractView.extend({
 
         this.loadParams.filters = filters;
         this.loadParams.mode = (params.context && params.context.default_mode) || attrs.mode;
+        this.loadParams.scales = scales;
         this.loadParams.initialDate = moment(params.initialDate || new Date());
+        this.loadParams.scalesInfo = scalesInfo;
     },
 });
 

@@ -8,6 +8,10 @@ from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError, UserError
 from odoo.tools import remove_accents, is_html_empty
 
+# see rfc5322 section 3.2.3
+atext = r"[a-zA-Z0-9!#$%&'*+\-/=?^_`{|}~]"
+dot_atom_text = re.compile(r"^%s+(\.%s+)*$" % (atext, atext))
+
 
 class Alias(models.Model):
     """A Mail Alias is a mapping of an email address with a given Odoo Document
@@ -26,6 +30,9 @@ class Alias(models.Model):
     _description = "Email Aliases"
     _rec_name = 'alias_name'
     _order = 'alias_model_id, alias_name'
+
+    def _default_alias_domain(self):
+        return self.env["ir.config_parameter"].sudo().get_param("mail.catchall.domain")
 
     alias_name = fields.Char('Alias Name', copy=False, help="The name of the email alias, e.g. 'jobs' if you want to catch emails for <jobs@example.odoo.com>")
     alias_model_id = fields.Many2one('ir.model', 'Aliased Model', required=True, ondelete="cascade",
@@ -48,8 +55,7 @@ class Alias(models.Model):
         'Record Thread ID',
         help="Optional ID of a thread (record) to which all incoming messages will be attached, even "
              "if they did not reply to it. If set, this will disable the creation of new records completely.")
-    alias_domain = fields.Char('Alias domain', compute='_get_alias_domain',
-                               default=lambda self: self.env["ir.config_parameter"].sudo().get_param("mail.catchall.domain"))
+    alias_domain = fields.Char('Alias domain', compute='_compute_alias_domain', default=_default_alias_domain)
     alias_parent_model_id = fields.Many2one(
         'ir.model', 'Parent Model',
         help="Parent model holding the alias. The model holding the alias reference "
@@ -73,8 +79,19 @@ class Alias(models.Model):
         ('alias_unique', 'UNIQUE(alias_name)', 'Unfortunately this email alias is already used, please choose a unique one')
     ]
 
-    def _get_alias_domain(self):
-        alias_domain = self.env["ir.config_parameter"].sudo().get_param("mail.catchall.domain")
+    @api.constrains('alias_name')
+    def _alias_is_ascii(self):
+        """ The local-part ("display-name" <local-part@domain>) of an
+            address only contains limited range of ascii characters.
+            We DO NOT allow anything else than ASCII dot-atom formed
+            local-part. Quoted-string and internationnal characters are
+            to be rejected. See rfc5322 sections 3.4.1 and 3.2.3
+        """
+        if self.alias_name and not dot_atom_text.match(self.alias_name):
+            raise ValidationError(_("You cannot use anything else than unaccented latin characters in the alias address."))
+
+    def _compute_alias_domain(self):
+        alias_domain = self._default_alias_domain()
         for record in self:
             record.alias_domain = alias_domain
 
@@ -94,16 +111,8 @@ class Alias(models.Model):
             model ID of the ``model_name`` context value, if provided. Also, it raises
             UserError if given alias name is already assigned.
         """
-        model_name = self._context.get('alias_model_name')
-        parent_model_name = self._context.get('alias_parent_model_name')
         if vals.get('alias_name'):
             vals['alias_name'] = self._clean_and_check_unique(vals.get('alias_name'))
-        if model_name:
-            model = self.env['ir.model']._get(model_name)
-            vals['alias_model_id'] = model.id
-        if parent_model_name:
-            model = self.env['ir.model']._get(parent_model_name)
-            vals['alias_parent_model_id'] = model.id
         return super(Alias, self).create(vals)
 
     def write(self, vals):
@@ -133,6 +142,7 @@ class Alias(models.Model):
         name already exists an UserError is raised. """
         sanitized_name = remove_accents(name).lower().split('@')[0]
         sanitized_name = re.sub(r'[^\w+.]+', '-', sanitized_name)
+        sanitized_name = sanitized_name.encode('ascii', errors='replace').decode()
 
         catchall_alias = self.env['ir.config_parameter'].sudo().get_param('mail.catchall.alias')
         bounce_alias = self.env['ir.config_parameter'].sudo().get_param('mail.bounce.alias')
@@ -166,7 +176,7 @@ class Alias(models.Model):
     def _get_alias_bounced_body_fallback(self, message_dict):
         return _("""Hi,<br/>
 The following email sent to %s cannot be accepted because this is a private email address.
-Only allowed people can contact us at this address.""" % message_dict.get('to'))
+Only allowed people can contact us at this address.""", message_dict.get('to'))
 
     def _get_alias_bounced_body(self, message_dict):
         """Get the body of the email return in case of bounced email.
@@ -188,7 +198,7 @@ Only allowed people can contact us at this address.""" % message_dict.get('to'))
         else:
             body = self._get_alias_bounced_body_fallback(message_dict)
         template = self.env.ref('mail.mail_bounce_alias_security', raise_if_not_found=True)
-        return template.render({
+        return template._render({
             'body': body,
             'message': message_dict
         }, engine='ir.qweb', minimal_qcontext=True)

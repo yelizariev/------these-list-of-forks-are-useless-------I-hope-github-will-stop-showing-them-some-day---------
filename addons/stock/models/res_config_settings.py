@@ -18,7 +18,7 @@ class ResConfigSettings(models.TransientModel):
         implied_group='stock.group_production_lot')
     group_lot_on_delivery_slip = fields.Boolean("Display Lots & Serial Numbers on Delivery Slips",
         implied_group='stock.group_lot_on_delivery_slip')
-    group_stock_tracking_lot = fields.Boolean("Delivery Packages",
+    group_stock_tracking_lot = fields.Boolean("Packages",
         implied_group='stock.group_tracking_lot')
     group_stock_tracking_owner = fields.Boolean("Consignment",
         implied_group='stock.group_tracking_owner')
@@ -41,18 +41,11 @@ class ResConfigSettings(models.TransientModel):
     module_delivery_easypost = fields.Boolean("Easypost Connector")
     group_stock_multi_locations = fields.Boolean('Storage Locations', implied_group='stock.group_stock_multi_locations',
         help="Store products in specific locations of your warehouse (e.g. bins, racks) and to track inventory accordingly.")
-    group_stock_multi_warehouses = fields.Boolean('Multi-Warehouses', implied_group='stock.group_stock_multi_warehouses')
 
     @api.onchange('group_stock_multi_locations')
     def _onchange_group_stock_multi_locations(self):
         if not self.group_stock_multi_locations:
-            self.group_stock_multi_warehouses = False
             self.group_stock_adv_location = False
-
-    @api.onchange('group_stock_multi_warehouses')
-    def _onchange_group_stock_multi_warehouses(self):
-        if self.group_stock_multi_warehouses:
-            self.group_stock_multi_locations = True
 
     @api.onchange('group_stock_production_lot')
     def _onchange_group_stock_production_lot(self):
@@ -65,7 +58,7 @@ class ResConfigSettings(models.TransientModel):
             self.group_stock_multi_locations = True
 
     def set_values(self):
-        super(ResConfigSettings, self).set_values()
+        res = super(ResConfigSettings, self).set_values()
 
         if not self.user_has_groups('stock.group_stock_manager'):
             return
@@ -86,13 +79,10 @@ class ResConfigSettings(models.TransientModel):
             active = False
         warehouses.mapped('int_type_id').write({'active': active})
 
-    def execute(self):
-        res = super(ResConfigSettings, self).execute()
-        self.ensure_one()
         if self.group_stock_multi_locations or self.group_stock_production_lot or self.group_stock_tracking_lot:
             picking_types = self.env['stock.picking.type'].with_context(active_test=False).search([
                 ('code', '!=', 'incoming'),
                 ('show_operations', '=', False)
             ])
-            picking_types.write({'show_operations': True})
+            picking_types.sudo().write({'show_operations': True})
         return res
