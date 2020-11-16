@@ -1,5 +1,10 @@
 version: "1"
 rules:
+  - base: "master"
+    upstream: master
+    mergeMethod: merge
+    reviewers:
+      - yelizariev
   - base: "14.0"
     upstream: odoo:14.0
     mergeMethod: merge
