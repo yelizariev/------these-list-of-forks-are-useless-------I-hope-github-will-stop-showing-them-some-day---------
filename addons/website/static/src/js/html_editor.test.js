@@ -3,6 +3,7 @@ odoo.define('website.test.html_editor', function (require) {
 
 var tour = require('web_tour.tour');
 var base = require('web_editor.base');
+var VARIABLE=1;
 
 tour.register('html_editor_multiple_templates', {
     test: true,
