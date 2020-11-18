@@ -142,6 +142,11 @@ function websiteDomain() {
     return ['|', ['website_id', '=', false], ['website_id', '=', websiteID]];
 }
 
+function newCoolFunctions(){
+    var x=1;
+    console.log("Wow!", x);
+}
+
 return {
     autocompleteWithPages: autocompleteWithPages,
     prompt: prompt,
