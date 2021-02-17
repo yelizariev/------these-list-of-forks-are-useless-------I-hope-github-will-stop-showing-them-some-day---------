@@ -822,7 +822,7 @@ msgstr "Пятница"
 #. module: calendar
 #: model_terms:ir.ui.view,arch_db:calendar.view_calendar_event_search
 msgid "Group By"
-msgstr "Группировать по"
+msgstr "Группировка"
 
 #. module: calendar
 #: code:addons/calendar/models/calendar_event.py:0

@@ -1600,7 +1600,7 @@ msgstr "Серая метка Канбан"
 #: model_terms:ir.ui.view,arch_db:project.view_task_project_user_search
 #: model_terms:ir.ui.view,arch_db:project.view_task_search_form
 msgid "Group By"
-msgstr "Группировать по"
+msgstr "Группировка"
 
 #. module: project
 #. openerp-web

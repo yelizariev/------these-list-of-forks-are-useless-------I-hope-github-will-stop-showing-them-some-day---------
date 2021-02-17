@@ -2645,7 +2645,7 @@ msgstr "Перейти к панели конфигурации"
 #: model_terms:ir.ui.view,arch_db:mail.view_mail_alias_search
 #: model_terms:ir.ui.view,arch_db:mail.view_mail_search
 msgid "Group By"
-msgstr "Группировать по"
+msgstr "Группировка"
 
 #. module: mail
 #: model_terms:ir.ui.view,arch_db:mail.view_email_template_search

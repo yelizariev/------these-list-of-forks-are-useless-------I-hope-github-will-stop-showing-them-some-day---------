@@ -418,7 +418,7 @@ msgstr "Google Play магазин"
 #. module: hr_timesheet
 #: model_terms:ir.ui.view,arch_db:hr_timesheet.hr_timesheet_line_search
 msgid "Group By"
-msgstr "Группировать по"
+msgstr "Группировка"
 
 #. module: hr_timesheet
 #: model:ir.model,name:hr_timesheet.model_ir_http

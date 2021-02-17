@@ -224,7 +224,7 @@ msgstr "Будущие действия"
 #. module: note
 #: model_terms:ir.ui.view,arch_db:note.view_note_note_filter
 msgid "Group By"
-msgstr "Группировать по"
+msgstr "Группировка"
 
 #. module: note
 #: model:ir.model.fields,field_description:note.field_mail_activity__id

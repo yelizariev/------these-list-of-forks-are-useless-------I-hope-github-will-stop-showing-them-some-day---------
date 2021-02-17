@@ -1356,7 +1356,7 @@ msgstr "Сетка"
 #: model_terms:ir.ui.view,arch_db:website_sale.sale_report_view_search_website
 #: model_terms:ir.ui.view,arch_db:website_sale.view_sales_order_filter_ecommerce_abondand
 msgid "Group By"
-msgstr "Группировать по"
+msgstr "Группировка"
 
 #. module: website_sale
 #: model:ir.model,name:website_sale.model_ir_http

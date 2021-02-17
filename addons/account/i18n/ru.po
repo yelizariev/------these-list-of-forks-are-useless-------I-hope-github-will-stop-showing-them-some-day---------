@@ -5677,7 +5677,7 @@ msgstr "Группа"
 #: model_terms:ir.ui.view,arch_db:account.view_account_template_search
 #: model_terms:ir.ui.view,arch_db:account.view_bank_statement_search
 msgid "Group By"
-msgstr "Группировать по"
+msgstr "Группировка"
 
 #. module: account
 #: model:ir.model.fields,field_description:account.field_account_payment_register__group_payment

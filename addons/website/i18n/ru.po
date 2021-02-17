@@ -3805,7 +3805,7 @@ msgstr "Сетка"
 #: model_terms:ir.ui.view,arch_db:website.website_visitor_page_view_search
 #: model_terms:ir.ui.view,arch_db:website.website_visitor_view_search
 msgid "Group By"
-msgstr "Группировать по"
+msgstr "Группировка"
 
 #. module: website
 #: model:ir.model.fields,field_description:website.field_website_page__groups_id

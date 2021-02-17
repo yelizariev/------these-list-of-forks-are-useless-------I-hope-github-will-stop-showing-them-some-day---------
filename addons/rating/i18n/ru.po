@@ -110,7 +110,7 @@ msgstr ""
 #. module: rating
 #: model_terms:ir.ui.view,arch_db:rating.rating_rating_view_search
 msgid "Group By"
-msgstr "Группировать по"
+msgstr "Группировка"
 
 #. module: rating
 #: model:ir.model.fields,help:rating.field_rating_rating__is_internal
