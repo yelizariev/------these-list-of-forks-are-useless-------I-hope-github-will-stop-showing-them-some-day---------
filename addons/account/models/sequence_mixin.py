@@ -2,6 +2,7 @@
 
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError
+from odoo.tools.misc import format_date
 
 import re
 from psycopg2 import sql
@@ -20,8 +21,8 @@ class SequenceMixin(models.AbstractModel):
     _sequence_field = "name"
     _sequence_date_field = "date"
     _sequence_index = False
-    _sequence_monthly_regex = r'^(?P<prefix1>.*?)(?P<year>(\d{4}|(\d{2}(?=\D))))(?P<prefix2>\D*?)(?P<month>\d{2})(?P<prefix3>\D+?)(?P<seq>\d*)(?P<suffix>\D*?)$'
-    _sequence_yearly_regex = r'^(?P<prefix1>.*?)(?P<year>(\d{4}|\d{2}))(?P<prefix2>\D+?)(?P<seq>\d*)(?P<suffix>\D*?)$'
+    _sequence_monthly_regex = r'^(?P<prefix1>.*?)(?P<year>((?<=\D)|(?<=^))((20|21)\d{2}|(\d{2}(?=\D))))(?P<prefix2>\D*?)(?P<month>(0[1-9]|1[0-2]))(?P<prefix3>\D+?)(?P<seq>\d*)(?P<suffix>\D*?)$'
+    _sequence_yearly_regex = r'^(?P<prefix1>.*?)(?P<year>((?<=\D)|(?<=^))((20|21)?\d{2}))(?P<prefix2>\D+?)(?P<seq>\d*)(?P<suffix>\D*?)$'
     _sequence_fixed_regex = r'^(?P<prefix1>.*?)(?P<seq>\d{0,9})(?P<suffix>\D*?)$'
 
     sequence_prefix = fields.Char(compute='_compute_split_sequence', store=True)
@@ -49,22 +50,29 @@ class SequenceMixin(models.AbstractModel):
         return super().__init__(pool, cr)
 
     def _constrains_date_sequence(self):
+        # Make it possible to bypass the constraint to allow edition of already messed up documents.
+        # /!\ Do not use this to completely disable the constraint as it will make this mixin unreliable.
+        constraint_date = fields.Date.to_date(self.env['ir.config_parameter'].sudo().get_param(
+            'sequence.mixin.constraint_start_date',
+            '1970-01-01'
+        ))
         for record in self:
             date = fields.Date.to_date(record[record._sequence_date_field])
             sequence = record[record._sequence_field]
-            if sequence and date:
+            if sequence and date and date > constraint_date:
                 format_values = record._get_sequence_format_param(sequence)[1]
                 if (
                     format_values['year'] and format_values['year'] != date.year % 10**len(str(format_values['year']))
                     or format_values['month'] and format_values['month'] != date.month
                 ):
                     raise ValidationError(_(
-                        "The date (%(date)s) doesn't match the sequence number (%(sequence)s).\n"
-                        "You might want to remove the sequence before proceeding with the change of the date."
-                    ) % {
-                        'date': date,
-                        'sequence': sequence,
-                    })
+                        "The %(date_field)s (%(date)s) doesn't match the %(sequence_field)s (%(sequence)s).\n"
+                        "You might want to clear the field %(sequence_field)s before proceeding with the change of the date.",
+                        date=format_date(self.env, date),
+                        sequence=sequence,
+                        date_field=record._fields[record._sequence_date_field]._description_string(self.env),
+                        sequence_field=record._fields[record._sequence_field]._description_string(self.env),
+                    ))
 
     @api.depends(lambda self: [self._sequence_field])
     def _compute_split_sequence(self):
@@ -83,30 +91,16 @@ class SequenceMixin(models.AbstractModel):
             periodicity. Typically, it is the last before the one you want to give a
             sequence.
         """
-        def _check_grouping(grouping, required):
-            sequence_dict = grouping.groupdict()
-            if 'seq' not in sequence_dict or any(not sequence_dict.get(key) for key in required):
-                return False
-            if 'year' in required and not (
-                2000 <= int(sequence_dict.get('year') or -1) <= 2100
-                or len(sequence_dict.get('year') or '') == 2
-            ):
-                return False
-            if 'month' in required and not 1 <= int(sequence_dict.get('month') or -1) <= 12:
-                return False
-            return True
-
-        if not name:
-            return False
-        sequence = re.match(self._sequence_monthly_regex, name)
-        if sequence and _check_grouping(sequence, ['year', 'month']):
-            return 'month'
-        sequence = re.match(self._sequence_yearly_regex, name)
-        if sequence and _check_grouping(sequence, ['year']):
-            return 'year'
-        sequence = re.match(self._sequence_fixed_regex, name)
-        if sequence and _check_grouping(sequence, []):
-            return 'never'
+        for regex, ret_val, requirements in [
+            (self._sequence_monthly_regex, 'month', ['seq', 'month', 'year']),
+            (self._sequence_yearly_regex, 'year', ['seq', 'year']),
+            (self._sequence_fixed_regex, 'never', ['seq']),
+        ]:
+            match = re.match(regex, name or '')
+            if match:
+                groupdict = match.groupdict()
+                if all(req in groupdict for req in requirements):
+                    return ret_val
         raise ValidationError(_(
             'The sequence regex should at least contain the seq grouping keys. For instance:\n'
             '^(?P<prefix1>.*?)(?P<seq>\d*)(?P<suffix>\D*?)$'
