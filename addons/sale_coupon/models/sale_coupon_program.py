@@ -168,7 +168,7 @@ class SaleCouponProgram(models.Model):
             message = {'error': _('A minimum of %s %s should be purchased to get the reward') % (self.rule_minimum_amount, self.currency_id.name)}
         elif self.promo_code and self.promo_code == order.promo_code:
             message = {'error': _('The promo code is already applied on this order')}
-        elif not self.promo_code and self in order.no_code_promo_program_ids:
+        elif self in order.no_code_promo_program_ids:
             message = {'error': _('The promotional offer is already applied on this order')}
         elif not self.active:
             message = {'error': _('Promo code is invalid')}
@@ -217,7 +217,7 @@ class SaleCouponProgram(models.Model):
             untaxed_amount = order_amount['amount_untaxed'] - sum(line.price_subtotal for line in lines)
             tax_amount = order_amount['amount_tax'] - sum(line.price_tax for line in lines)
             program_amount = program._compute_program_amount('rule_minimum_amount', order.currency_id)
-            if program.rule_minimum_amount_tax_inclusion == 'tax_included' and program_amount <= (untaxed_amount + tax_amount) or program.rule_minimum_amount_tax_inclusion == 'tax_excluded' and program_amount <= untaxed_amount:
+            if program.rule_minimum_amount_tax_inclusion == 'tax_included' and program_amount <= (untaxed_amount + tax_amount) or program_amount <= untaxed_amount:
                 program_ids.append(program.id)
 
         return self.env['sale.coupon.program'].browse(program_ids)
@@ -310,7 +310,7 @@ class SaleCouponProgram(models.Model):
         return programs
 
     def _is_valid_partner(self, partner):
-        if self.rule_partners_domain:
+        if self.rule_partners_domain and self.rule_partners_domain != '[]':
             domain = safe_eval(self.rule_partners_domain) + [('id', '=', partner.id)]
             return bool(self.env['res.partner'].search_count(domain))
         else:

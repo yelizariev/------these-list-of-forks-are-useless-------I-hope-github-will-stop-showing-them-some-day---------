@@ -257,7 +257,7 @@ msgstr "入力単位"
 #. module: hr_timesheet
 #: model:ir.model.fields,field_description:hr_timesheet.field_account_analytic_line__encoding_uom_id
 msgid "Encoding Uom"
-msgstr ""
+msgstr "Uomのエンコード"
 
 #. module: hr_timesheet
 #: model_terms:ir.ui.view,arch_db:hr_timesheet.res_config_settings_view_form
@@ -647,7 +647,7 @@ msgstr "残時間合計は定期的にタスクの担当者により再評価さ
 #. module: hr_timesheet
 #: model:ir.model.fields,field_description:hr_timesheet.field_uom_uom__timesheet_widget
 msgid "Widget"
-msgstr ""
+msgstr "ウィジェット"
 
 #. module: hr_timesheet
 #: model:ir.model.fields,help:hr_timesheet.field_uom_uom__timesheet_widget
@@ -678,6 +678,14 @@ msgstr ""
 "毎日プロジェクトごとに作業時間を登録して追跡することができます。\n"
 " プロジェクトに費やされるたびにコストが付き、必要に応じて顧客に\n"
 "再請求することができます。"
+
+#. module: hr_timesheet
+#: code:addons/hr_timesheet/models/project.py:0
+#, python-format
+msgid ""
+"You cannot delete a project containing timesheets. You can either archive it"
+" or first delete all of its timesheets."
+msgstr ""
 
 #. module: hr_timesheet
 #: model_terms:ir.ui.view,arch_db:hr_timesheet.report_timesheet

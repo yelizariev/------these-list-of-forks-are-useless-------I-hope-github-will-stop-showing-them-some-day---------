@@ -146,8 +146,6 @@ class StockPackageLevel(models.Model):
         if vals.get('location_dest_id'):
             result.mapped('move_line_ids').write({'location_dest_id': vals['location_dest_id']})
             result.mapped('move_ids').write({'location_dest_id': vals['location_dest_id']})
-        if result.picking_id.state != 'draft' and result.location_id and result.location_dest_id and not result.move_ids and not result.move_line_ids:
-            result._generate_moves()
         return result
 
     def write(self, vals):
@@ -158,7 +156,7 @@ class StockPackageLevel(models.Model):
         return result
 
     def unlink(self):
-        self.mapped('move_ids').unlink()
+        self.mapped('move_ids').write({'package_level_id': False})
         self.mapped('move_line_ids').write({'result_package_id': False})
         return super(StockPackageLevel, self).unlink()
 

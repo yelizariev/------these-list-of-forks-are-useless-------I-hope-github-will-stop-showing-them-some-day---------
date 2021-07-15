@@ -793,6 +793,44 @@ QUnit.module('Views', {
         form.destroy();
     });
 
+    QUnit.test('invisible attrs on notebook page which has only one page', async function (assert) {
+        assert.expect(4);
+
+        var form = await createView({
+            View: FormView,
+            model: 'partner',
+            data: this.data,
+            arch: '<form string="Partners">' +
+                    '<sheet>' +
+                        '<field name="bar"/>' +
+                        '<notebook>' +
+                            '<page string="Foo" attrs=\'{"invisible": [["bar", "!=", false]]}\'>' +
+                                '<field name="foo"/>' +
+                            '</page>' +
+                        '</notebook>' +
+                    '</sheet>' +
+                '</form>',
+            res_id: 1,
+            viewOptions: {
+                mode: 'edit',
+            },
+        });
+
+        assert.notOk(form.$('.o_notebook .nav .nav-link:first()').hasClass('active'),
+            'first tab should not be active');
+        assert.ok(form.$('.o_notebook .nav .nav-item:first()').hasClass('o_invisible_modifier'),
+            'first tab should be invisible');
+
+        // enable checkbox
+        await testUtils.dom.click(form.$('.o_field_boolean input'));
+        assert.ok(form.$('.o_notebook .nav .nav-link:first()').hasClass('active'),
+            'first tab should be active');
+        assert.notOk(form.$('.o_notebook .nav .nav-item:first()').hasClass('o_invisible_modifier'),
+            'first tab should be visible');
+
+        form.destroy();
+    });
+
     QUnit.test('first notebook page invisible', async function (assert) {
         assert.expect(2);
 
@@ -5182,6 +5220,44 @@ QUnit.module('Views', {
 
         assert.containsOnce(form.$('.o_control_panel'), 'button.infooter');
         assert.containsNone(form.$('.o_form_view'), 'button.infooter');
+
+        form.destroy();
+    });
+
+    QUnit.test('open new record even with warning message', async function (assert) {
+        assert.expect(3);
+
+        this.data.partner.onchanges = { foo: true };
+
+        var form = await createView({
+            View: FormView,
+            model: 'partner',
+            data: this.data,
+            arch: '<form string="Partners">' +
+                    '<group><field name="foo"/></group>' +
+                '</form>',
+            res_id: 2,
+            mockRPC: function (route, args) {
+                if (args.method === 'onchange') {
+                    return Promise.resolve({
+                        warning: {
+                            title: "Warning",
+                            message: "Any warning."
+                        }
+                    });
+                }
+                return this._super.apply(this, arguments);
+            },
+
+        });
+        await testUtils.dom.click(form.$buttons.find('.o_form_button_edit'));
+        assert.strictEqual(form.$('input').val(), 'blip', 'input should contain record value');
+        form.$('input').first().val("tralala").trigger('input');
+        assert.strictEqual(form.$('input').val(), 'tralala', 'input should contain new value');
+
+        await form.reload({ currentId: false });
+        assert.strictEqual(form.$('input').val(), 'My little Foo Value',
+            'input should contain default value after reload');
 
         form.destroy();
     });

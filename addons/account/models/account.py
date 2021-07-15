@@ -137,9 +137,8 @@ class AccountTaxReportLine(models.Model):
                 plus_child_tags.write({'name': '+' + vals['tag_name']})
 
             else:
-                # tag_name was set empty, so we remove the tags
-                self._delete_tags_from_taxes(self.mapped('tag_ids.id'))
-                self.write({'tag_ids': [(2, tag.id, 0) for tag in self.mapped('tag_ids')]})
+                # tag_name was set empty, so we remove the tags that are not shared
+                self._remove_tax_used_only_by_self()
 
         if 'country_id' in vals and self.tag_ids:
             # Writing the country of a tax report line should overwrite the country of its tags
@@ -148,16 +147,26 @@ class AccountTaxReportLine(models.Model):
         return rslt
 
     def unlink(self):
-        self._delete_tags_from_taxes(self.mapped('tag_ids.id'))
+        self._remove_tax_used_only_by_self()
         children = self.mapped('children_line_ids')
         if children:
             children.unlink()
         return super(AccountTaxReportLine, self).unlink()
 
+    def _remove_tax_used_only_by_self(self):
+        """ Deletes and removes from taxes and move lines all the
+        tags from the provided tax report lines that are not linked
+        to any other tax report lines.
+        """
+        all_tags = self.mapped('tag_ids')
+        tags_to_unlink = all_tags.filtered(lambda x: not (x.tax_report_line_ids - self))
+        self.write({'tag_ids': [(3, tag.id, 0) for tag in tags_to_unlink]})
+        self._delete_tags_from_taxes(tags_to_unlink.ids)
+
     def _delete_tags_from_taxes(self, tag_ids_to_delete):
         """ Based on a list of tag ids, removes them first from the
         repartition lines they are linked to, then deletes them
-        from the account move lines.
+        from the account move lines, and finally unlink them.
         """
         if not tag_ids_to_delete:
             # Nothing to do, then!
@@ -172,6 +181,8 @@ class AccountTaxReportLine(models.Model):
 
         self.env['account.move.line'].invalidate_cache(fnames=['tag_ids'])
         self.env['account.tax.repartition.line'].invalidate_cache(fnames=['tag_ids'])
+
+        self.env['account.account.tag'].browse(tag_ids_to_delete).unlink()
 
     @api.constrains('formula', 'tag_name')
     def _validate_formula(self):
@@ -240,7 +251,7 @@ class AccountAccount(models.Model):
         help="Forces all moves for this account to have this account currency.")
     code = fields.Char(size=64, required=True, index=True)
     deprecated = fields.Boolean(index=True, default=False)
-    used = fields.Boolean(store=False, search='_search_used')
+    used = fields.Boolean(compute='_compute_used', search='_search_used')
     user_type_id = fields.Many2one('account.account.type', string='Type', required=True,
         help="Account Type is used for information purpose, to generate country-specific legal reports, and set the rules to close a fiscal year and generate opening entries.")
     internal_type = fields.Selection(related='user_type_id.type', string="Internal Type", store=True, readonly=True)
@@ -329,6 +340,11 @@ class AccountAccount(models.Model):
         """)
         return [('id', 'in' if value else 'not in', [r[0] for r in self._cr.fetchall()])]
 
+    def _compute_used(self):
+        ids = set(self._search_used('=', True)[0][2])
+        for record in self:
+            record.used = record.id in ids
+
     @api.model
     def _search_new_account_code(self, company, digits, prefix):
         for num in range(1, 10000):
@@ -352,10 +368,12 @@ class AccountAccount(models.Model):
             record.opening_credit = opening_credit
 
     def _set_opening_debit(self):
-        self._set_opening_debit_credit(self.opening_debit, 'debit')
+        for record in self:
+            record._set_opening_debit_credit(record.opening_debit, 'debit')
 
     def _set_opening_credit(self):
-        self._set_opening_debit_credit(self.opening_credit, 'credit')
+        for record in self:
+            record._set_opening_debit_credit(record.opening_credit, 'credit')
 
     def _set_opening_debit_credit(self, amount, field):
         """ Generic function called by both opening_debit and opening_credit's
@@ -838,7 +856,10 @@ class AccountJournal(models.Model):
                 # A bank account can belong to a customer/supplier, in which case their partner_id is the customer/supplier.
                 # Or they are part of a bank journal and their partner_id must be the company's partner_id.
                 if journal.bank_account_id.partner_id != journal.company_id.partner_id:
-                    raise ValidationError(_('The holder of a journal\'s bank account must be the company (%s).') % journal.company_id.name)
+                    raise ValidationError(_('The holder of the bank account of a "Bank" type journal must be the company (%s).\n'
+                                            'However, the holder of "%s" is "%s".\n'
+                                            'Please select another bank account or change the holder of "%s".'
+                                            ) % (self.company_id.name, self.bank_account_id.acc_number, self.bank_account_id.partner_id.name, self.bank_account_id.acc_number))
 
     @api.constrains('company_id')
     def _check_company_consistency(self):
@@ -893,6 +914,12 @@ class AccountJournal(models.Model):
             _logger.warning("Cannot use '%s' as email alias, fallback to '%s'",
                 alias_name, safe_alias_name)
             alias_name = safe_alias_name
+
+        # Remove the following that is likely to be found in a company name:
+        # - Dot at the start of the string
+        # - Dot at the end of the string
+        # - Dot followed by another dot
+        alias_name = re.sub(r"(^\.|\.$|\.\.)", '', alias_name)
 
         return {
             'alias_defaults': {'type': type == 'purchase' and 'in_invoice' or 'out_invoice', 'company_id': self.company_id.id, 'journal_id': self.id},
@@ -1509,17 +1536,27 @@ class AccountTax(models.Model):
 
         return rslt
 
-    def flatten_taxes_hierarchy(self):
+    def flatten_taxes_hierarchy(self, create_map=False):
         # Flattens the taxes contained in this recordset, returning all the
         # children at the bottom of the hierarchy, in a recordset, ordered by sequence.
         #   Eg. considering letters as taxes and alphabetic order as sequence :
         #   [G, B([A, D, F]), E, C] will be computed as [A, D, F, C, E, G]
+        # If create_map is True, an additional value is returned, a dictionary
+        # mapping each child tax to its parent group
         all_taxes = self.env['account.tax']
+        groups_map = {}
         for tax in self.sorted(key=lambda r: r.sequence):
             if tax.amount_type == 'group':
-                all_taxes += tax.children_tax_ids.flatten_taxes_hierarchy()
+                flattened_children = tax.children_tax_ids.flatten_taxes_hierarchy()
+                all_taxes += flattened_children
+                for flat_child in flattened_children:
+                    groups_map[flat_child] = tax
             else:
                 all_taxes += tax
+
+        if create_map:
+            return all_taxes, groups_map
+
         return all_taxes
 
     def get_tax_tags(self, is_refund, repartition_type):
@@ -1555,7 +1592,7 @@ class AccountTax(models.Model):
             company = self[0].company_id
 
         # 1) Flatten the taxes.
-        taxes = self.flatten_taxes_hierarchy()
+        taxes, groups_map = self.flatten_taxes_hierarchy(create_map=True)
 
         # 2) Avoid mixing taxes having price_include=False && include_base_amount=True
         # with taxes having price_include=True. This use case is not supported as the
@@ -1650,9 +1687,12 @@ class AccountTax(models.Model):
         # For the computation of move lines, we could have a negative base value.
         # In this case, compute all with positive values and negate them at the end.
         sign = 1
-        if base <= 0:
-            base = -base
+        if currency.is_zero(base):
+            sign = self._context.get('force_sign', 1)
+        elif base < 0:
             sign = -1
+        if base < 0:
+            base = -base
 
         # Store the totals to reach when using price_include taxes (only the last price included in row)
         total_included_checkpoints = {}
@@ -1684,7 +1724,7 @@ class AccountTax(models.Model):
                         incl_fixed_amount += quantity * tax.amount * sum_repartition_factor
                     else:
                         # tax.amount_type == other (python)
-                        tax_amount = tax._compute_amount(base, sign * price_unit, quantity, product, partner) * sum_repartition_factor
+                        tax_amount = tax._compute_amount(base, sign * price_unit, abs(quantity), product, partner) * sum_repartition_factor
                         incl_fixed_amount += tax_amount
                         # Avoid unecessary re-computation
                         cached_tax_amounts[i] = tax_amount
@@ -1768,6 +1808,7 @@ class AccountTax(models.Model):
                     'price_include': price_include,
                     'tax_exigibility': tax.tax_exigibility,
                     'tax_repartition_line_id': repartition_line.id,
+                    'group': groups_map.get(tax),
                     'tag_ids': (repartition_line.tag_ids + subsequent_tags).ids,
                     'tax_ids': subsequent_taxes.ids,
                 })
@@ -1820,8 +1861,8 @@ class AccountTaxRepartitionLine(models.Model):
     repartition_type = fields.Selection(string="Based On", selection=[('base', 'Base'), ('tax', 'of tax')], required=True, default='tax', help="Base on which the factor will be applied.")
     account_id = fields.Many2one(string="Account", comodel_name='account.account', help="Account on which to post the tax amount")
     tag_ids = fields.Many2many(string="Tax Grids", comodel_name='account.account.tag', domain=[('applicability', '=', 'taxes')], copy=True)
-    invoice_tax_id = fields.Many2one(comodel_name='account.tax', help="The tax set to apply this repartition on invoices. Mutually exclusive with refund_tax_id")
-    refund_tax_id = fields.Many2one(comodel_name='account.tax', help="The tax set to apply this repartition on refund invoices. Mutually exclusive with invoice_tax_id")
+    invoice_tax_id = fields.Many2one(comodel_name='account.tax', ondelete='cascade', help="The tax set to apply this repartition on invoices. Mutually exclusive with refund_tax_id")
+    refund_tax_id = fields.Many2one(comodel_name='account.tax', ondelete='cascade', help="The tax set to apply this repartition on refund invoices. Mutually exclusive with invoice_tax_id")
     tax_id = fields.Many2one(comodel_name='account.tax', compute='_compute_tax_id')
     country_id = fields.Many2one(string="Country", comodel_name='res.country', related='company_id.country_id',  help="Technical field used to restrict tags domain in form view.")
     company_id = fields.Many2one(string="Company", comodel_name='res.company', required=True, default=lambda x: x.env.company, help="The company this repartition line belongs to.")
