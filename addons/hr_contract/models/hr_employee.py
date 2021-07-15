@@ -10,17 +10,22 @@ class Employee(models.Model):
 
     vehicle = fields.Char(string='Company Vehicle', groups="hr.group_hr_user")
     contract_ids = fields.One2many('hr.contract', 'employee_id', string='Employee Contracts')
-    contract_id = fields.Many2one('hr.contract', string='Current Contract',
-        groups="hr.group_hr_user",domain="[('company_id', '=', company_id)]", help='Current contract of the employee')
+    contract_id = fields.Many2one(
+        'hr.contract', string='Current Contract', groups="hr.group_hr_user",
+        domain="[('company_id', '=', company_id), ('employee_id', '=', id)]", help='Current contract of the employee')
     calendar_mismatch = fields.Boolean(related='contract_id.calendar_mismatch')
     contracts_count = fields.Integer(compute='_compute_contracts_count', string='Contract Count')
     contract_warning = fields.Boolean(string='Contract Warning', store=True, compute='_compute_contract_warning', groups="hr.group_hr_user")
     first_contract_date = fields.Date(compute='_compute_first_contract_date', groups="hr.group_hr_user", store=True)
 
-    @api.depends('contract_ids.state')
+    def _get_first_contracts(self):
+        self.ensure_one()
+        return self.sudo().contract_ids.filtered(lambda c: c.state != 'cancel')
+
+    @api.depends('contract_ids.state', 'contract_ids.date_start')
     def _compute_first_contract_date(self):
         for employee in self:
-            contracts = employee.sudo().contract_ids.filtered(lambda c: c.state != 'cancel')
+            contracts = employee._get_first_contracts()
             if contracts:
                 employee.first_contract_date = min(contracts.mapped('date_start'))
             else:
@@ -62,7 +67,7 @@ class Employee(models.Model):
         """
         Returns the contracts of all employees between date_from and date_to
         """
-        return self.search([])._get_contracts(date_from, date_to, states=states)
+        return self.search(['|', ('active', '=', True), ('active', '=', False)])._get_contracts(date_from, date_to, states=states)
 
     def write(self, vals):
         res = super(Employee, self).write(vals)

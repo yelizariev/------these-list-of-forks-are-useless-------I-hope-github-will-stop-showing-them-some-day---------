@@ -5,13 +5,14 @@
 <template id="snippets" inherit_id="web_editor.snippets" primary="True" groups="base.group_user">
     <xpath expr="//div[@id='snippets_menu']" position="inside">
         <button type="button" tabindex="3" class="o_we_customize_theme_btn text-uppercase"
-                data-title="Customize your theme"
                 groups="website.group_website_designer" accesskey="2">
-            <span>Options</span>
+            <span>Theme</span>
         </button>
     </xpath>
     <xpath expr="//t[@id='default_snippets']" position="replace">
         <t id="default_snippets">
+            <t t-set="cta_btn_text" t-value="False"/>
+            <t t-set="cta_btn_href">/contactus</t>
             <div id="snippet_mega_menu" class="o_panel d-none">
                 <div class="o_panel_header">Mega Menu</div>
                 <div class="o_panel_body">
@@ -109,11 +110,12 @@
                 <div class="o_panel_header">Dynamic Content</div>
                 <div class="o_panel_body">
                     <t id="form_form_hook"/>
-                    <t t-snippet="website.s_google_map" t-thumbnail="/website/static/src/img/snippets_thumbs/s_google_map.svg"/>
-                    <t t-snippet="website.s_dynamic_snippet" t-thumbnail="/website/static/src/img/snippets_thumbs/s_dynamic_snippet.svg"/>
-                    <t t-snippet="website.s_dynamic_snippet_carousel" t-thumbnail="/website/static/src/img/snippets_thumbs/s_dynamic_carousel.svg"/>
+                    <t t-set="google_maps_api_key" t-value="request.env['website'].get_current_website().google_maps_api_key"/>
+                    <t t-if="debug or not google_maps_api_key" t-snippet="website.s_map" t-thumbnail="/website/static/src/img/snippets_thumbs/s_map.svg"/>
+                    <t t-if="debug or google_maps_api_key" t-snippet="website.s_google_map" t-thumbnail="/website/static/src/img/snippets_thumbs/s_google_map.svg"/>
+                    <t t-if="debug" t-snippet="website.s_dynamic_snippet" t-thumbnail="/website/static/src/img/snippets_thumbs/s_dynamic_snippet.svg"/>
+                    <t t-if="debug" t-snippet="website.s_dynamic_snippet_carousel" t-thumbnail="/website/static/src/img/snippets_thumbs/s_dynamic_carousel.svg"/>
                     <t id="sale_products_hook"/>
-                    <t id="sale_recently_viewed_product_hook"/>
                     <t id="sale_product_search_section_hook"/>
                     <t id="blog_posts_hook"/>
                     <t id="event_local_events_hook"/>
@@ -125,8 +127,9 @@
                     <t t-snippet="website.s_countdown" t-thumbnail="/website/static/src/img/snippets_thumbs/s_countdown.svg">
                         <keywords>celebration, launch</keywords>
                     </t>
-                    <t id="mail_channel_discussion_group_hook"/>
+                    <t id="mail_group_hook"/>
                     <t id="twitter_favorite_tweets_hook"/>
+                    <t t-snippet="website.s_embed_code" t-thumbnail="/website/static/src/img/snippets_thumbs/s_embed_code.svg"/>
                 </div>
             </div>
 
@@ -170,7 +173,7 @@
     <xpath expr="//div[@id='snippet_effect']//t[@t-snippet][last()]" position="after">
         <t t-install="website_form" string="Form Builder" t-thumbnail="/website/static/src/img/snippets_thumbs/s_website_form.svg"/>
         <t id="newsletter_popup_snippet" t-install="mass_mailing" string="Newsletter Popup" t-thumbnail="/website/static/src/img/snippets_thumbs/newsletter_subscribe_popup.svg"/>
-        <t t-install="website_mail_channel" string="Discussion Group" t-thumbnail="/website/static/src/img/snippets_thumbs/s_channel.svg"/>
+        <t t-install="website_mail_group" string="Discussion Group" t-thumbnail="/website/static/src/img/snippets_thumbs/s_group.svg"/>
         <t t-install="website_twitter" string="Twitter Scroller" t-thumbnail="/website/static/src/img/snippets_thumbs/s_twitter_scroll.svg"/>
     </xpath>
     <xpath expr="//div[@id='snippet_content']//t[@t-snippet][last()]" position="after">
@@ -372,6 +375,9 @@
     <div data-js="Carousel"
          data-selector="section"
          data-target="> .carousel">
+        <we-row string="Slide">
+            <we-button data-add-slide="true" data-no-preview="true" class="o_we_bg_brand_primary">Add Slide</we-button>
+        </we-row>
         <we-select string="Style">
             <we-button data-select-class="s_carousel_default">Default</we-button>
             <we-button data-select-class="s_carousel_bordered">Bordered</we-button>
@@ -391,16 +397,16 @@
 
     <div data-js="CarouselItem"
          data-selector=".s_carousel .carousel-item, .s_quotes_carousel .carousel-item">
-        <we-button data-slide="left" data-no-preview="true">
+        <we-button data-slide="left" data-no-preview="true" data-tooltip="true" title="Move Backward">
             <i class="fa fa-fw fa-angle-left"/>
         </we-button>
-        <we-button data-slide="right" data-no-preview="true" class="mr-2">
+        <we-button data-slide="right" data-no-preview="true" class="mr-2" data-tooltip="true" title="Move Forward">
             <i class="fa fa-fw fa-angle-right"/>
         </we-button>
-        <we-button data-add-slide="true" data-no-preview="true" class="o_we_text_success">
+        <we-button data-add-slide-item="true" data-no-preview="true" class="o_we_bg_success" data-tooltip="true" title="Add Slide">
             <i class="fa fa-fw fa-plus"/>
         </we-button>
-        <we-button data-remove-slide="true" data-no-preview="true" class="o_we_text_danger">
+        <we-button data-remove-slide="true" data-no-preview="true" class="o_we_bg_danger" data-tooltip="true" title="Remove Slide">
             <i class="fa fa-fw fa-minus"/>
         </we-button>
     </div>
@@ -409,6 +415,14 @@
     <div data-js="collapse"
          data-selector='.accordion > .card'
          data-drop-in='.accordion:has(> .card)'/>
+
+    <div data-js="MultipleItems" data-selector=".s_faq_collapse">
+        <we-row string="Item">
+            <we-button data-add-item="" data-item=".accordion > .card:last" data-select-item="" data-no-preview="true" class="o_we_bg_brand_primary">
+                Add Item
+            </we-button>
+        </we-row>
+    </div>
 
     <div data-js="layout_column"
         data-selector="section"
@@ -425,8 +439,7 @@
     </div>
 
     <!-- Move snippets around -->
-    <div data-js="SnippetMove"
-         data-selector="section, .accordion > .card, .s_showcase .row:not(.s_col_no_resize) > div">
+    <div data-js="SnippetMove" data-selector="section, .accordion > .card, .s_showcase .row:not(.s_col_no_resize) > div" data-no-scroll=".accordion > .card">
         <we-button class="fa fa-fw fa-angle-up" data-move-snippet="prev" data-no-preview="true" data-name="move_up_opt"/>
         <we-button class="fa fa-fw fa-angle-down" data-move-snippet="next" data-no-preview="true" data-name="move_down_opt"/>
     </div>
@@ -447,7 +460,7 @@
     <t t-set="only_bg_image_exclude" t-value="''"/>
 
     <t t-set="both_bg_color_image_selector" t-value="'section, .carousel-item, .s_masonry_block .row > div, .s_color_blocks_2 .row > div, .parallax'"/>
-    <t t-set="both_bg_color_image_exclude" t-value="base_only_bg_image_selector + ', .s_carousel_wrapper, .s_color_blocks_2, .s_image_gallery .carousel-item, .s_google_map'"/>
+    <t t-set="both_bg_color_image_exclude" t-value="base_only_bg_image_selector + ', .s_carousel_wrapper, .s_color_blocks_2, .s_image_gallery .carousel-item, .s_google_map, .s_map, [data-snippet] .row > div *'"/>
 
     <t t-call="web_editor.snippet_options_background_options">
         <t t-set="selector" t-value="both_bg_color_image_selector"/>
@@ -481,9 +494,11 @@
     </div>
 
     <!-- Mobile display options -->
-    <div data-option-name="showMobile" data-selector="section .row > div"
+    <div data-js="MobileVisibility" data-selector="section, section .row > div"
          data-exclude=".s_col_no_resize.row > div">
-        <we-checkbox string="Shown On Mobile" data-select-class="d-none d-md-block|" data-no-preview="true"/>
+        <we-button class="o_we_link o_we_mobile" data-show-on-mobile="true" data-no-preview="true"
+                   data-img="/website/static/src/img/snippets_options/mobile_invisible.svg"
+                   data-active-img="/website/static/src/img/snippets_options/mobile_visible.svg"/>
     </div>
 
     <div data-js="sizing_y"
@@ -500,14 +515,15 @@
         t-att-data-selector="so_snippet_addition_selector"
         data-drop-in=":not(p).oe_structure:not(.oe_structure_solo), :not(p)[data-oe-type=html], :not(p).oe_structure.oe_structure_solo:not(:has(> section, > div))"/>
 
-    <t t-set="so_content_addition_selector" t-translation="off">blockquote, .s_card:not(.s_timeline_card), .s_alert, .o_facebook_page, .s_share, .s_rating, .s_hr, .s_google_map, .s_countdown, .s_chart, .s_text_highlight, .s_progress_bar, .s_badge</t>
+    <t t-set="so_content_addition_selector" t-translation="off">blockquote, .s_card:not(.s_timeline_card), .s_alert, .o_facebook_page, .s_share, .s_rating, .s_hr, .s_google_map, .s_map, .s_countdown, .s_chart, .s_text_highlight, .s_progress_bar, .s_badge</t>
     <div id="so_content_addition"
         t-att-data-selector="so_content_addition_selector"
-        t-attf-data-drop-near="p, h1, h2, h3, .row > div > img, #{so_content_addition_selector}"
+        t-attf-data-drop-near="p, h1, h2, h3, ul, ol, .row > div > img, #{so_content_addition_selector}"
         data-drop-in=".content, nav"/>
 
     <div data-js="SnippetSave"
-        t-attf-data-selector="#{so_snippet_addition_selector}, #{so_content_addition_selector}">
+        t-attf-data-selector="#{so_snippet_addition_selector}, #{so_content_addition_selector}"
+        data-exclude=".o_no_save">
         <we-button class="fa fa-fw fa-save o_we_link o_we_hover_warning"
                    title="Save the block to use it elsewhere"
                    data-save-snippet=""
@@ -934,7 +950,7 @@
     <!-- Anchor Name -->
     <div data-js="anchor"
         data-selector=":not(p).oe_structure > *, :not(p)[data-oe-type=html] > *"
-        data-exclude=".modal *, .oe_structure .oe_structure *, [data-oe-type=html] .oe_structure *">
+        data-exclude=".modal *, .oe_structure .oe_structure *, [data-oe-type=html] .oe_structure *, .s_popup">
         <we-button class="fa fa-fw fa-link o_we_link"
                    title="Create a link to target this section"
                    data-no-preview="true"/>
@@ -984,7 +1000,7 @@
 
     <!-- Stretch section -->
     <div data-js="ContainerWidth" data-selector="section, .s_carousel .carousel-item, s_quotes_carousel .carousel-item"
-        data-target="> .container, > .container-fluid, > .o_container_small">
+        data-exclude="[data-snippet] .row > div *" data-target="> .container, > .container-fluid, > .o_container_small">
         <we-button-group string="Content Width">
             <we-button data-select-class="o_container_small"
                        data-img="/website/static/src/img/snippets_options/content_width_small.svg"
@@ -998,20 +1014,19 @@
         </we-button-group>
     </div>
 
-    <!-- Min height of section -->
-    <div data-option-name="minHeight" data-selector="section">
-        <we-button-group string="Height">
-            <we-button data-select-class="" title="Fit content">Auto</we-button>
-            <we-button data-select-class="o_half_screen_height" title="Half screen">50%</we-button>
-            <we-button data-select-class="o_full_screen_height" title="Full screen">100%</we-button>
-        </we-button-group>
-    </div>
-
     <!-- Scroll to next section button (only for full height) -->
-    <div data-js="ScrollButton" data-selector="section">
-        <we-checkbox string="Scroll down button"
+    <div data-js="ScrollButton" data-selector="section" data-exclude="[data-snippet] .row > div *">
+        <!-- Min height of section -->
+        <we-button-group string="Height" data-show-scroll-button="">
+            <we-button data-name="minheight_auto_opt" data-select-class="" title="Fit content">Auto</we-button>
+            <we-button data-select-class="o_half_screen_height" title="Half screen">50%</we-button>
+            <we-button data-select-class="o_full_screen_height" title="Full screen" data-name="full_height_opt" data-show-scroll-button="true">100%</we-button>
+        </we-button-group>
+
+        <we-checkbox string="⌙ Scroll down button"
                      data-toggle-button="true"
                      data-no-preview="true"
+                     data-dependencies="full_height_opt"
                      data-name="scroll_button_opt"/>
         <!-- &emsp; -->
         <we-row string=" ⌙ Colors">
@@ -1077,17 +1092,17 @@
         <we-row class="o_we_theme_colors_selector">
             <we-colorpicker data-name="color_1_opt" title="Primary"
                             data-customize-website-color="" data-color="o-color-1"
-                            data-use-css-color="true"/>
+                            data-use-css-color="true" data-selected-tab="custom-colors"/>
             <we-colorpicker data-name="color_2_opt" title="Secondary"
                             data-customize-website-color="" data-color="o-color-2"
-                            data-use-css-color="true"/>
+                            data-use-css-color="true" data-selected-tab="custom-colors"/>
             <we-colorpicker data-customize-website-color="" data-color="o-color-3"
-                            data-use-css-color="true"/>
+                            data-use-css-color="true" data-selected-tab="custom-colors"/>
             <we-colorpicker data-customize-website-color="" data-color="o-color-4"
-                            data-use-css-color="true"/>
+                            data-use-css-color="true" data-selected-tab="custom-colors"/>
             <we-colorpicker data-customize-website-color="" data-color="o-color-5"
-                            data-use-css-color="true"/>
-            <we-select data-icon="fa-lightbulb-o" class="o_we_theme_colors_select" data-variable="color-palettes-number"/>
+                            data-use-css-color="true" data-selected-tab="custom-colors"/>
+            <we-select data-icon="fa-lightbulb-o" class="o_we_theme_colors_select" data-variable="color-palettes-name"/>
         </we-row>
     </div>
     <div data-js="OptionsTab" data-selector="theme-options" data-no-check="true">
@@ -1201,11 +1216,23 @@
         </we-collapse>
 
         <we-row string="Status Colors">
-            <we-colorpicker title="Success" data-customize-website-color="" data-color-type="theme" data-color="success"/>
-            <we-colorpicker title="Info" data-customize-website-color="" data-color-type="theme" data-color="info"/>
-            <we-colorpicker title="Warning" data-customize-website-color="" data-color-type="theme" data-color="warning"/>
-            <we-colorpicker title="Error" data-customize-website-color="" data-color-type="theme" data-color="danger"/>
+            <we-colorpicker title="Success" data-customize-website-color="" data-color-type="theme" data-color="success" data-selected-tab="custom-colors"/>
+            <we-colorpicker title="Info" data-customize-website-color="" data-color-type="theme" data-color="info" data-selected-tab="custom-colors"/>
+            <we-colorpicker title="Warning" data-customize-website-color="" data-color-type="theme" data-color="warning" data-selected-tab="custom-colors"/>
+            <we-colorpicker title="Error" data-customize-website-color="" data-color-type="theme" data-color="danger" data-selected-tab="custom-colors"/>
         </we-row>
+        <we-collapse>
+            <we-row string="Grays" class="o_we_gray_preview o_we_collapse_toggler">
+                <t t-foreach="9" t-as="i">
+                    <t t-set="grayCode" t-value="str((9 - i) * 100)"/>
+                    <span t-attf-title="Gray #{grayCode}"
+                          t-attf-variable="#{grayCode}"
+                          t-attf-class="o_we_user_value_widget o_we_gray_preview bg-#{grayCode}"/>
+                </t>
+            </we-row>
+            <we-range string="⌙ Hue" class="o_we_slider_tint" data-customize-gray="" data-param="gray-hue" data-min="0" data-max="359.9" data-step="0.1"/>
+            <we-range string="⌙ Saturation" data-customize-gray="" data-param="gray-extra-saturation" data-step="0.1"/>
+        </we-collapse>
     </div>
     <div data-js="OptionsTab" data-selector="website-settings" data-no-check="true">
         <we-row string="Theme">

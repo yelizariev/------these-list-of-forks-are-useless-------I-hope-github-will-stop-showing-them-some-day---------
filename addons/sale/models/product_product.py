@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 from datetime import timedelta, time
-from odoo import api, fields, models
+from odoo import fields, models
 from odoo.tools.float_utils import float_round
 
 
@@ -56,6 +56,12 @@ class ProductProduct(models.Model):
         self.ensure_one()
         return self.product_tmpl_id._get_combination_info(self.product_template_attribute_value_ids, self.id, add_qty, pricelist, parent_combination)
 
+    def _filter_to_unlink(self):
+        domain = [('product_id', 'in', self.ids)]
+        lines = self.env['sale.order.line'].read_group(domain, ['product_id'], ['product_id'])
+        linked_product_ids = [group['product_id'][0] for group in lines]
+        return super(ProductProduct, self - self.browse(linked_product_ids))._filter_to_unlink()
+
 
 class ProductAttributeCustomValue(models.Model):
     _inherit = "product.attribute.custom.value"
@@ -65,3 +71,8 @@ class ProductAttributeCustomValue(models.Model):
     _sql_constraints = [
         ('sol_custom_value_unique', 'unique(custom_product_template_attribute_value_id, sale_order_line_id)', "Only one Custom Value is allowed per Attribute Value per Sales Order Line.")
     ]
+
+class ProductPackaging(models.Model):
+    _inherit = 'product.packaging'
+
+    sales = fields.Boolean("Sales", default=True, help="If true, the packaging can be used for sales orders")

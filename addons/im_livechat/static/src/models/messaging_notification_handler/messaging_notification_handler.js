@@ -1,7 +1,6 @@
-odoo.define('im_livechat/static/src/models/messaging_notification_handler/messaging_notification_handler.js', function (require) {
-'use strict';
+/** @odoo-module **/
 
-const { registerInstancePatchModel } = require('mail/static/src/model/model_core.js');
+import { registerInstancePatchModel } from '@mail/model/model_core';
 
 registerInstancePatchModel('mail.messaging_notification_handler', 'im_livechat/static/src/models/messaging_notification_handler/messaging_notification_handler.js', {
 
@@ -23,7 +22,7 @@ registerInstancePatchModel('mail.messaging_notification_handler', 'im_livechat/s
         }
         let partnerId;
         let partnerName;
-        if (partner_id === this.env.messaging.publicPartner.id) {
+        if (this.env.messaging.publicPartners.some(publicPartner => publicPartner.id === partner_id)) {
             // Some shenanigans that this is a typing notification
             // from public partner.
             partnerId = channel.correspondent.id;
@@ -37,6 +36,4 @@ registerInstancePatchModel('mail.messaging_notification_handler', 'im_livechat/s
             partner_name: partnerName,
         }));
     },
-});
-
 });

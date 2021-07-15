@@ -1,16 +1,15 @@
-odoo.define('mail.Activity', function (require) {
-"use strict";
+/** @odoo-module **/
 
-var mailUtils = require('mail.utils');
+import * as mailUtils from '@mail/js/utils';
 
-var AbstractField = require('web.AbstractField');
-var BasicModel = require('web.BasicModel');
-var config = require('web.config');
-var core = require('web.core');
-var field_registry = require('web.field_registry');
-var session = require('web.session');
-var framework = require('web.framework');
-var time = require('web.time');
+import AbstractField from 'web.AbstractField';
+import BasicModel from 'web.BasicModel';
+import config from 'web.config';
+import core from 'web.core';
+import field_registry from 'web.field_registry';
+import session from 'web.session';
+import framework from 'web.framework';
+import time from 'web.time';
 
 var QWeb = core.qweb;
 var _t = core._t;
@@ -201,11 +200,11 @@ var BasicActivity = AbstractField.extend({
                 if (rslt_action) {
                     self.do_action(rslt_action, {
                         on_close: function () {
-                            self.trigger_up('reload');
+                            self.trigger_up('reload', { keepChanges: true });
                         },
                     });
                 } else {
-                    self.trigger_up('reload');
+                    self.trigger_up('reload', { keepChanges: true });
                 }
             }
         );
@@ -272,7 +271,7 @@ var BasicActivity = AbstractField.extend({
                         activityID: activity.id,
                         attachmentIds: _.pluck(files, 'id')
                     }).then(function () {
-                        self.trigger_up('reload');
+                        self.trigger_up('reload', { keepChanges: true });
                     });
                 });
             }
@@ -339,7 +338,7 @@ var BasicActivity = AbstractField.extend({
         var $markDoneBtn = $(ev.currentTarget);
         var activityID = $markDoneBtn.data('activity-id');
         var previousActivityTypeID = $markDoneBtn.data('previous-activity-type-id') || false;
-        var forceNextActivity = $markDoneBtn.data('force-next-activity');
+        var chainingTypeActivity = $markDoneBtn.data('chaining-type-activity');
 
         if ($markDoneBtn.data('toggle') === 'collapse') {
             var $actLi = $markDoneBtn.parents('.o_log_activity');
@@ -348,7 +347,7 @@ var BasicActivity = AbstractField.extend({
             if (!$panel.data('bs.collapse')) {
                 var $form = $(QWeb.render('mail.activity_feedback_form', {
                     previous_activity_type_id: previousActivityTypeID,
-                    force_next: forceNextActivity
+                    chaining_type: chainingTypeActivity
                 }));
                 $panel.append($form);
                 self._onMarkActivityDoneActions($markDoneBtn, $form, activityID);
@@ -388,7 +387,7 @@ var BasicActivity = AbstractField.extend({
                 content: function () {
                     var $popover = $(QWeb.render('mail.activity_feedback_form', {
                         previous_activity_type_id: previousActivityTypeID,
-                        force_next: forceNextActivity
+                        chaining_type: chainingTypeActivity
                     }));
                     self._onMarkActivityDoneActions($markDoneBtn, $popover, activityID);
                     return $popover;
@@ -476,7 +475,7 @@ var BasicActivity = AbstractField.extend({
             },
         };
         return this.do_action(action, { on_close: function () {
-            self.trigger_up('reload');
+            self.trigger_up('reload', { keepChanges: true });
         } });
     },
     /**
@@ -684,7 +683,7 @@ var KanbanActivity = BasicActivity.extend({
      * @private
      */
     _reload: function () {
-        this.trigger_up('reload', { db_id: this.record_id });
+        this.trigger_up('reload', { db_id: this.record_id, keepChanges: true });
     },
     /**
      * @override
@@ -863,6 +862,4 @@ field_registry
     .add('list_activity', ListActivity)
     .add('activity_exception', ActivityException);
 
-return Activity;
-
-});
+export default Activity;

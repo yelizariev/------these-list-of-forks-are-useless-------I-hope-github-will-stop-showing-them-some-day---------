@@ -226,6 +226,41 @@ odoo.define('website_form_editor.tour', function (require) {
 
         ...addExistingField('attachment_ids', 'file', 'Invoice Scan'),
 
+        {
+            content: "Insure the history step of the editor is not checking for unbreakable",
+            trigger: '#wrapwrap',
+            run: () => {
+                const wysiwyg = $('#wrapwrap').data('wysiwyg');
+                wysiwyg.odooEditor.historyStep(true);
+            },
+        },
+        // Edit the submit button using linkDialog.
+        {
+            content: "Click submit button to show edit popover",
+            trigger: '.s_website_form_send',
+        }, {
+            content: "Click on Edit Link in Popover",
+            trigger: '.o_edit_menu_popover .o_we_edit_link',
+        }, {
+            content: "Check that no URL field is suggested",
+            trigger: '#toolbar:has(#url_row:hidden)',
+            run: () => null,
+        }, {
+            content: "Change button's style",
+            trigger: '.dropdown-toggle[data-original-title="Link Style"]',
+            run: () => {
+                $('.dropdown-toggle[data-original-title="Link Style"]').click();
+                $('[data-value="secondary"]').click();
+                $('[data-original-title="Link Shape"]').click();
+                $('[data-value="rounded-circle"]').click();
+                $('[data-original-title="Link Size"]').click();
+                $('[data-value="sm"]').click();
+            },
+        }, {
+            content: "Check the resulting button",
+            trigger: '.s_website_form_send.btn.btn-sm.btn-secondary.rounded-circle',
+            run: () => null,
+        },
         // Save the page
         {
             trigger: 'body',
@@ -235,7 +270,7 @@ odoo.define('website_form_editor.tour', function (require) {
         },
         {
             content:  "Save the page",
-            trigger:  "button[name=save]",
+            trigger:  "button[data-action=save]",
         },
         {
             content:  "Wait reloading...",

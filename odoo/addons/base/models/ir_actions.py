@@ -2,10 +2,11 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 import odoo
-from odoo import api, fields, models, tools, SUPERUSER_ID, _
+from odoo import api, fields, models, tools, SUPERUSER_ID, _, Command
 from odoo.exceptions import MissingError, UserError, ValidationError, AccessError
 from odoo.osv import expression
 from odoo.tools.safe_eval import safe_eval, test_python_expr
+from odoo.tools.float_utils import float_compare
 
 import base64
 from collections import defaultdict
@@ -74,8 +75,10 @@ class IrActions(models.Model):
             'datetime': tools.safe_eval.datetime,
             'dateutil': tools.safe_eval.dateutil,
             'timezone': timezone,
+            'float_compare': float_compare,
             'b64encode': base64.b64encode,
             'b64decode': base64.b64decode,
+            'Command': Command,
         }
 
     @api.model
@@ -321,6 +324,13 @@ class IrActionsActWindowclose(models.Model):
 
     type = fields.Char(default='ir.actions.act_window_close')
 
+    def _get_readable_fields(self):
+        return super()._get_readable_fields() | {
+            # 'effect' is not a real field of ir.actions.act_window_close but is
+            # used to display the rainbowman
+            "effect"
+        }
+
 
 class IrActionsActUrl(models.Model):
     _name = 'ir.actions.act_url'
@@ -374,8 +384,10 @@ class IrActionsServer(models.Model):
 #  - record: record on which the action is triggered; may be void
 #  - records: recordset of all records on which the action is triggered in multi-mode; may be void
 #  - time, datetime, dateutil, timezone: useful Python libraries
+#  - float_compare: Odoo function to compare floats based on specific precisions
 #  - log: log(message, level='info'): logging function to record debug information in ir.logging table
 #  - UserError: Warning Exception to use with raise
+#  - Command: x2Many commands namespace
 # To return an action, assign: action = {...}\n\n\n\n"""
 
     @api.model
@@ -522,7 +534,7 @@ class IrActionsServer(models.Model):
         if self.link_field_id:
             record = self.env[self.model_id.model].browse(self._context.get('active_id'))
             if self.link_field_id.ttype in ['one2many', 'many2many']:
-                record.write({self.link_field_id.name: [(4, res.id)]})
+                record.write({self.link_field_id.name: [Command.link(res.id)]})
             else:
                 record.write({self.link_field_id.name: res.id})
 

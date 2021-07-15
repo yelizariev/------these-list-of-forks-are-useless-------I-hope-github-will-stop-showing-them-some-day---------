@@ -109,20 +109,13 @@ var VariantMixin = {
                         type: 'text',
                         'data-custom_product_template_attribute_value_id': attributeValueId,
                         'data-attribute_value_name': attributeValueName,
-                        class: 'variant_custom_value form-control'
+                        class: 'variant_custom_value form-control mt-2'
                     });
 
-                    var isRadioInput = $target.is('input[type=radio]') &&
-                        $target.closest('label.css_attribute_color').length === 0;
-
-                    if (isRadioInput && $customInput.data('is_single_and_custom') !== 'True') {
-                        $input.addClass('custom_value_radio');
-                        $target.closest('div').after($input);
-                    } else {
-                        $input.attr('placeholder', attributeValueName);
-                        $input.addClass('custom_value_own_line');
-                        $variantContainer.append($input);
-                    }
+                    $input.attr('placeholder', attributeValueName);
+                    $input.addClass('custom_value_radio');
+                    $variantContainer.append($input);
+                    $input[0].focus();
                 }
             } else {
                 $variantContainer.find('.variant_custom_value').remove();
@@ -231,12 +224,13 @@ var VariantMixin = {
 
         $container.find(variantsValuesSelectors.join(',')).each(function (){
             var $variantValueInput = $(this);
+            var singleNoCustom = $variantValueInput.data('is_single') && !$variantValueInput.data('is_custom');
 
             if ($variantValueInput.is('select')){
                 $variantValueInput = $variantValueInput.find('option[value=' + $variantValueInput.val() + ']');
             }
 
-            if ($variantValueInput.length !== 0){
+            if ($variantValueInput.length !== 0 && !singleNoCustom){
                 noVariantAttributeValues.push({
                     'custom_product_template_attribute_value_id': $variantValueInput.data('value_id'),
                     'attribute_value_name': $variantValueInput.data('value_name'),
@@ -339,10 +333,9 @@ var VariantMixin = {
             .data('attribute_exclusions');
 
         $parent
-            .find('option, input, label')
+            .find('option, input, label, .o_variant_pills')
             .removeClass('css_not_available')
-            .prop('disabled', false)
-            .attr('title', '')
+            .attr('title', function () { return $(this).data('value_name') || ''; })
             .data('excluded-by', '');
 
         // exclusion rules: array of ptav
@@ -414,7 +407,7 @@ var VariantMixin = {
             .find('option[value=' + attributeValueId + '], input[value=' + attributeValueId + ']');
         $input.addClass('css_not_available');
         $input.closest('label').addClass('css_not_available');
-        $input.prop('disabled', true);
+        $input.closest('.o_variant_pills').addClass('css_not_available');
 
         if (excludedBy && attributeNames) {
             var $target = $input.is('option') ? $input : $input.closest('label').add($input);

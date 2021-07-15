@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
+import base64
+
 import odoo
 import odoo.tests
 
@@ -110,7 +112,10 @@ class TestUiTranslate(odoo.tests.HttpCase):
 @odoo.tests.common.tagged('post_install', '-at_install')
 class TestUi(odoo.tests.HttpCase):
 
-    def test_01_restricted_editor(self):
+    def test_01_admin_tour_homepage(self):
+        self.start_tour("/?enable_editor=1", 'homepage', login='admin')
+
+    def test_02_restricted_editor(self):
         self.restricted_editor = self.env['res.users'].create({
             'name': 'Restricted Editor',
             'login': 'restricted',
@@ -122,10 +127,10 @@ class TestUi(odoo.tests.HttpCase):
         })
         self.start_tour("/", 'restricted_editor', login='restricted')
 
-    def test_02_backend_dashboard(self):
+    def test_03_backend_dashboard(self):
         self.start_tour("/", 'backend_dashboard', login='admin')
 
-    def test_03_website_navbar_menu(self):
+    def test_04_website_navbar_menu(self):
         website = self.env['website'].search([], limit=1)
         self.env['website.menu'].create({
             'name': 'Test Tour Menu',
@@ -136,23 +141,39 @@ class TestUi(odoo.tests.HttpCase):
         })
         self.start_tour("/", 'website_navbar_menu')
 
-    def test_04_specific_website_editor(self):
+    def test_05_specific_website_editor(self):
         website_default = self.env['website'].search([], limit=1)
         new_website = self.env['website'].create({'name': 'New Website'})
-        website_editor_assets_view = self.env.ref('website.assets_wysiwyg')
-        self.env['ir.ui.view'].create({
-            'name': 'Editor Extension',
-            'type': 'qweb',
-            'inherit_id': website_editor_assets_view.id,
-            'website_id': new_website.id,
-            'arch': """
-                <xpath expr="." position="inside">
-                    <script type="text/javascript">document.body.dataset.hello = 'world';</script>
-                </xpath>
-            """,
+
+        code = b"document.body.dataset.hello = 'world';"
+        attach = self.env['ir.attachment'].create({
+            'name': 'EditorExtension.js',
+            'mimetype': 'text/javascript',
+            'datas': base64.b64encode(code),
         })
-        self.start_tour("/?fw=%s" % website_default.id, "generic_website_editor", login='admin')
-        self.start_tour("/?fw=%s" % new_website.id, "specific_website_editor", login='admin')
+        custom_url = '/web/content/%s/%s' % (attach.id, attach.name)
+        attach.url = custom_url
+
+        self.env['ir.asset'].create({
+            'name': 'EditorExtension',
+            'bundle': 'website.assets_wysiwyg',
+            'path': custom_url,
+            'website_id': new_website.id,
+        })
+
+        self.start_tour("/website/force/%s" % website_default.id, "generic_website_editor", login='admin')
+        self.start_tour("/website/force/%s" % new_website.id, "specific_website_editor", login='admin')
+
+    def test_06_public_user_editor(self):
+        website_default = self.env['website'].search([], limit=1)
+        website_default.homepage_id.arch = """
+            <t name="Homepage" t-name="website.homepage">
+                <t t-call="website.layout">
+                    <textarea class="o_public_user_editor_test_textarea o_wysiwyg_loader"/>
+                </t>
+            </t>
+        """
+        self.start_tour("/", "public_user_editor", login=None)
 
     def test_07_snippet_version(self):
         website_snippets = self.env.ref('website.snippets')
@@ -175,3 +196,9 @@ class TestUi(odoo.tests.HttpCase):
             """,
         }])
         self.start_tour("/", 'snippet_version', login='admin')
+
+    def test_08_website_style_custo(self):
+        self.start_tour("/", "website_style_edition", login="admin")
+
+    def test_09_website_edit_link_popover(self):
+        self.start_tour("/", "edit_link_popover", login="admin")

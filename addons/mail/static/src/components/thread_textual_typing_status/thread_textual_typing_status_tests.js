@@ -1,17 +1,16 @@
-odoo.define('mail/static/src/components/thread_textual_typing_status/thread_textual_typing_status_tests.js', function (require) {
-'use strict';
+/** @odoo-module **/
 
-const components = {
-    ThreadTextualTypingStatus: require('mail/static/src/components/thread_textual_typing_status/thread_textual_typing_status.js'),
-};
-const {
+import { ThreadTextualTypingStatus } from '@mail/components/thread_textual_typing_status/thread_textual_typing_status';
+import {
     afterEach,
     afterNextRender,
     beforeEach,
     createRootComponent,
     nextAnimationFrame,
     start,
-} = require('mail/static/src/utils/test_utils.js');
+} from '@mail/utils/test_utils';
+
+const components = { ThreadTextualTypingStatus };
 
 QUnit.module('mail', {}, function () {
 QUnit.module('components', {}, function () {
@@ -49,10 +48,10 @@ QUnit.test('receive other member typing status "is typing"', async function (ass
         members: [this.data.currentPartnerId, 17],
     });
     await this.start();
-    const thread = this.env.models['mail.thread'].find(thread =>
-        thread.id === 20 &&
-        thread.model === 'mail.channel'
-    );
+    const thread = this.env.models['mail.thread'].findFromIdentifyingData({
+        id: 20,
+        model: 'mail.channel',
+    });
     await this.createThreadTextualTypingStatusComponent(thread);
 
     assert.strictEqual(
@@ -88,10 +87,10 @@ QUnit.test('receive other member typing status "is typing" then "no longer is ty
         members: [this.data.currentPartnerId, 17],
     });
     await this.start();
-    const thread = this.env.models['mail.thread'].find(thread =>
-        thread.id === 20 &&
-        thread.model === 'mail.channel'
-    );
+    const thread = this.env.models['mail.thread'].findFromIdentifyingData({
+        id: 20,
+        model: 'mail.channel',
+    });
     await this.createThreadTextualTypingStatusComponent(thread);
 
     assert.strictEqual(
@@ -146,10 +145,10 @@ QUnit.test('assume other member typing status becomes "no longer is typing" afte
     await this.start({
         hasTimeControl: true,
     });
-    const thread = this.env.models['mail.thread'].find(thread =>
-        thread.id === 20 &&
-        thread.model === 'mail.channel'
-    );
+    const thread = this.env.models['mail.thread'].findFromIdentifyingData({
+        id: 20,
+        model: 'mail.channel',
+    });
     await this.createThreadTextualTypingStatusComponent(thread);
 
     assert.strictEqual(
@@ -194,10 +193,10 @@ QUnit.test ('other member typing status "is typing" refreshes 60 seconds timer o
     await this.start({
         hasTimeControl: true,
     });
-    const thread = this.env.models['mail.thread'].find(thread =>
-        thread.id === 20 &&
-        thread.model === 'mail.channel'
-    );
+    const thread = this.env.models['mail.thread'].findFromIdentifyingData({
+        id: 20,
+        model: 'mail.channel',
+    });
     await this.createThreadTextualTypingStatusComponent(thread);
 
     assert.strictEqual(
@@ -262,10 +261,10 @@ QUnit.test('receive several other members typing status "is typing"', async func
         members: [this.data.currentPartnerId, 10, 11, 12],
     });
     await this.start();
-    const thread = this.env.models['mail.thread'].find(thread =>
-        thread.id === 20 &&
-        thread.model === 'mail.channel'
-    );
+    const thread = this.env.models['mail.thread'].findFromIdentifyingData({
+        id: 20,
+        model: 'mail.channel',
+    });
     await this.createThreadTextualTypingStatusComponent(thread);
 
     assert.strictEqual(
@@ -362,6 +361,4 @@ QUnit.test('receive several other members typing status "is typing"', async func
 
 });
 });
-});
-
 });

@@ -1,21 +1,22 @@
-odoo.define('mail/static/src/components/chatter_topbar/chatter_topbar.js', function (require) {
-'use strict';
+/** @odoo-module **/
 
-const components = {
-    FollowButton: require('mail/static/src/components/follow_button/follow_button.js'),
-    FollowerListMenu: require('mail/static/src/components/follower_list_menu/follower_list_menu.js'),
-};
-const useStore = require('mail/static/src/component_hooks/use_store/use_store.js');
+import { useShouldUpdateBasedOnProps } from '@mail/component_hooks/use_should_update_based_on_props/use_should_update_based_on_props';
+import { useStore } from '@mail/component_hooks/use_store/use_store';
+import { FollowButton } from '@mail/components/follow_button/follow_button';
+import { FollowerListMenu } from '@mail/components/follower_list_menu/follower_list_menu';
 
 const { Component } = owl;
 
-class ChatterTopbar extends Component {
+const components = { FollowButton, FollowerListMenu };
+
+export class ChatterTopbar extends Component {
 
     /**
      * @override
      */
     constructor(...args) {
         super(...args);
+        useShouldUpdateBasedOnProps();
         useStore(props => {
             const chatter = this.env.models['mail.chatter'].get(props.chatterLocalId);
             const thread = chatter ? chatter.thread : undefined;
@@ -23,7 +24,7 @@ class ChatterTopbar extends Component {
             return {
                 areThreadAttachmentsLoaded: thread && thread.areAttachmentsLoaded,
                 chatter: chatter ? chatter.__state : undefined,
-                composer: chatter && chatter.composer ? chatter.composer.__state : undefined,
+                composerIsLog: chatter && chatter.composer && chatter.composer.isLog,
                 threadAttachmentsAmount: threadAttachments.length,
             };
         });
@@ -99,8 +100,7 @@ class ChatterTopbar extends Component {
             action,
             options: {
                 on_close: () => {
-                    this.chatter.thread.refreshActivities();
-                    this.chatter.thread.refresh();
+                    this.trigger('reload', { keepChanges: true });
                 },
             },
         });
@@ -129,8 +129,4 @@ Object.assign(ChatterTopbar, {
         chatterLocalId: String,
     },
     template: 'mail.ChatterTopbar',
-});
-
-return ChatterTopbar;
-
 });

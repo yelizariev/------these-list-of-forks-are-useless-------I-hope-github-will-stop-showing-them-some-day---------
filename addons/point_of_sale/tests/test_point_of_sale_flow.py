@@ -13,6 +13,14 @@ from odoo.addons.point_of_sale.tests.common import TestPointOfSaleCommon
 @odoo.tests.tagged('post_install', '-at_install')
 class TestPointOfSaleFlow(TestPointOfSaleCommon):
 
+    def compute_tax(self, product, price, qty=1, taxes=None):
+        if not taxes:
+            taxes = product.taxes_id.filtered(lambda t: t.company_id.id == self.env.company.id)
+        currency = self.pos_config.pricelist_id.currency_id
+        res = taxes.compute_all(price, currency, qty, product=product)
+        untax = res['total_excluded']
+        return untax, sum(tax.get('amount', 0.0) for tax in res['taxes'])
+
     def test_order_refund(self):
         self.pos_config.open_session_cb(check_coa=False)
         current_session = self.pos_config.current_session_id
@@ -91,13 +99,6 @@ class TestPointOfSaleFlow(TestPointOfSaleCommon):
             'categ_id': self.env.ref('product.product_category_all').id,
         })
 
-        inventory = self.env['stock.inventory'].create({
-            'name': 'add product2',
-            'location_ids': [(4, self.stock_location.id)],
-            'product_ids': [(4, self.product2.id)],
-        })
-        inventory.action_start()
-
         lot1 = self.env['stock.production.lot'].create({
             'name': '1001',
             'product_id': self.product2.id,
@@ -109,24 +110,18 @@ class TestPointOfSaleFlow(TestPointOfSaleCommon):
             'company_id': self.env.company.id,
         })
 
-        self.env['stock.inventory.line'].create([
-            {
-            'inventory_id': inventory.id,
-            'location_id': self.stock_location.id,
+        self.env['stock.quant'].with_context(inventory_mode=True).create({
             'product_id': self.product2.id,
-            'prod_lot_id': lot1.id,
-            'product_qty': 1
-            },
-            {
-            'inventory_id': inventory.id,
+            'inventory_quantity': 1,
             'location_id': self.stock_location.id,
+            'lot_id': lot1.id
+        }).action_apply_inventory()
+        self.env['stock.quant'].with_context(inventory_mode=True).create({
             'product_id': self.product2.id,
-            'prod_lot_id': lot2.id,
-            'product_qty': 1
-            },
-        ])
-
-        inventory.action_validate()
+            'inventory_quantity': 1,
+            'location_id': self.stock_location.id,
+            'lot_id': lot2.id
+        }).action_apply_inventory()
 
         # create pos order with the two SN created before
 
@@ -196,22 +191,14 @@ class TestPointOfSaleFlow(TestPointOfSaleCommon):
             check the quantity, the locations and return picking logic
         """
 
-        def compute_tax(product, price, qty=1, taxes=None):
-            if taxes is None:
-                taxes = product.taxes_id.filtered(lambda t: t.company_id.id == self.env.company.id)
-            currency = self.pos_config.pricelist_id.currency_id
-            res = taxes.compute_all(price, currency, qty, product=product)
-            untax = res['total_excluded']
-            return untax, sum(tax.get('amount', 0.0) for tax in res['taxes'])
-
         # I click on create a new session button
         self.pos_config.open_session_cb(check_coa=False)
         current_session = self.pos_config.current_session_id
 
         # I create a PoS order with 2 units of PCSC234 at 450 EUR
         # and 3 units of PCSC349 at 300 EUR.
-        untax1, atax1 = compute_tax(self.product3, 450, 2)
-        untax2, atax2 = compute_tax(self.product4, 300, 3)
+        untax1, atax1 = self.compute_tax(self.product3, 450, 2)
+        untax2, atax2 = self.compute_tax(self.product4, 300, 3)
         self.pos_order_pos1 = self.PosOrder.create({
             'company_id': self.env.company.id,
             'session_id': current_session.id,
@@ -275,8 +262,8 @@ class TestPointOfSaleFlow(TestPointOfSaleCommon):
         )
 
         # I create a second order
-        untax1, atax1 = compute_tax(self.product3, 450, -2)
-        untax2, atax2 = compute_tax(self.product4, 300, -3)
+        untax1, atax1 = self.compute_tax(self.product3, 450, -2)
+        untax2, atax2 = self.compute_tax(self.product4, 300, -3)
         self.pos_order_pos2 = self.PosOrder.create({
             'company_id': self.env.company.id,
             'session_id': current_session.id,
@@ -339,8 +326,8 @@ class TestPointOfSaleFlow(TestPointOfSaleCommon):
             'Move Lines should be in done state.'
         )
 
-        untax1, atax1 = compute_tax(self.product3, 450, -2)
-        untax2, atax2 = compute_tax(self.product4, 300, 3)
+        untax1, atax1 = self.compute_tax(self.product3, 450, -2)
+        untax2, atax2 = self.compute_tax(self.product4, 300, 3)
         self.pos_order_pos3 = self.PosOrder.create({
             'company_id': self.env.company.id,
             'session_id': current_session.id,
@@ -407,19 +394,11 @@ class TestPointOfSaleFlow(TestPointOfSaleCommon):
 
     def test_order_to_invoice(self):
 
-        def compute_tax(product, price, qty=1, taxes=None):
-            if taxes is None:
-                taxes = product.taxes_id.filtered(lambda t: t.company_id.id == self.env.company.id)
-            currency = self.pos_config.pricelist_id.currency_id
-            res = taxes.compute_all(price, currency, qty, product=product)
-            untax = res['total_excluded']
-            return untax, sum(tax.get('amount', 0.0) for tax in res['taxes'])
-
         self.pos_config.open_session_cb(check_coa=False)
         current_session = self.pos_config.current_session_id
 
-        untax1, atax1 = compute_tax(self.product3, 450*0.95, 2)
-        untax2, atax2 = compute_tax(self.product4, 300*0.95, 3)
+        untax1, atax1 = self.compute_tax(self.product3, 450*0.95, 2)
+        untax2, atax2 = self.compute_tax(self.product4, 300*0.95, 3)
         # I create a new PoS order with 2 units of PC1 at 450 EUR (Tax Incl) and 3 units of PCSC349 at 300 EUR. (Tax Excl)
         self.pos_order_pos1 = self.PosOrder.create({
             'company_id': self.env.company.id,
@@ -471,7 +450,8 @@ class TestPointOfSaleFlow(TestPointOfSaleCommon):
 
         # I test that the total of the attached invoice is correct
         invoice = self.env['account.move'].browse(res['res_id'])
-        invoice.action_post()
+        if invoice.state != 'posted':
+            invoice.action_post()
         self.assertAlmostEqual(
             invoice.amount_total, self.pos_order_pos1.amount_total, places=2, msg="Invoice not correct")
 
@@ -529,21 +509,13 @@ class TestPointOfSaleFlow(TestPointOfSaleCommon):
         Simulation of sales coming from the interface, even after closing the session
         """
 
-        def compute_tax(product, price, qty=1, taxes=None):
-            if not taxes:
-                taxes = product.taxes_id.filtered(lambda t: t.company_id.id == self.env.company.id)
-            currency = self.pos_config.pricelist_id.currency_id
-            res = taxes.compute_all(price, currency, qty, product=product)
-            untax = res['total_excluded']
-            return untax, sum(tax.get('amount', 0.0) for tax in res['taxes'])
-
         # I click on create a new session button
         self.pos_config.open_session_cb(check_coa=False)
 
         current_session = self.pos_config.current_session_id
         num_starting_orders = len(current_session.order_ids)
 
-        untax, atax = compute_tax(self.led_lamp, 0.9)
+        untax, atax = self.compute_tax(self.led_lamp, 0.9)
         carrot_order = {'data':
           {'amount_paid': untax + atax,
            'amount_return': 0,
@@ -577,7 +549,7 @@ class TestPointOfSaleFlow(TestPointOfSaleCommon):
           'id': '00042-003-0014',
           'to_invoice': False}
 
-        untax, atax = compute_tax(self.whiteboard_pen, 1.2)
+        untax, atax = self.compute_tax(self.whiteboard_pen, 1.2)
         zucchini_order = {'data':
           {'amount_paid': untax + atax,
            'amount_return': 0,
@@ -611,7 +583,7 @@ class TestPointOfSaleFlow(TestPointOfSaleCommon):
           'id': '00043-003-0014',
           'to_invoice': False}
 
-        untax, atax = compute_tax(self.newspaper_rack, 1.28)
+        untax, atax = self.compute_tax(self.newspaper_rack, 1.28)
         newspaper_rack_order = {'data':
           {'amount_paid': untax + atax,
            'amount_return': 0,
@@ -689,14 +661,6 @@ class TestPointOfSaleFlow(TestPointOfSaleCommon):
             'currency_id': self.env.ref('base.EUR').id,
         })
 
-        def compute_tax(product, price, qty=1, taxes=None):
-            if not taxes:
-                taxes = product.taxes_id.filtered(lambda t: t.company_id.id == self.env.company.id)
-            currency = self.pos_config.pricelist_id.currency_id
-            res = taxes.compute_all(price, currency, qty, product=product)
-            untax = res['total_excluded']
-            return untax, sum(tax.get('amount', 0.0) for tax in res['taxes'])
-
         # make a config that has currency different from the company
         eur_pricelist = self.partner1.property_product_pricelist.copy(default={'currency_id': self.env.ref('base.EUR').id})
         sale_journal = self.env['account.journal'].create({
@@ -724,8 +688,8 @@ class TestPointOfSaleFlow(TestPointOfSaleCommon):
         # I create a PoS order with 2 units of PCSC234 at 450 EUR (Tax Incl)
         # and 3 units of PCSC349 at 300 EUR. (Tax Excl)
 
-        untax1, atax1 = compute_tax(self.product3, 450, 2)
-        untax2, atax2 = compute_tax(self.product4, 300, 3)
+        untax1, atax1 = self.compute_tax(self.product3, 450, 2)
+        untax2, atax2 = self.compute_tax(self.product4, 300, 3)
         self.pos_order_pos0 = self.PosOrder.create({
             'company_id': self.env.company.id,
             'session_id': current_session.id,
@@ -869,7 +833,8 @@ class TestPointOfSaleFlow(TestPointOfSaleCommon):
 
         # I test that the total of the attached invoice is correct
         invoice = self.env['account.move'].browse(res['res_id'])
-        invoice.action_post()
+        if invoice.state != 'posted':
+            invoice.action_post()
         self.assertAlmostEqual(
             invoice.amount_total, self.pos_order_pos1.amount_total, places=2, msg="Invoice not correct")
 
@@ -877,3 +842,74 @@ class TestPointOfSaleFlow(TestPointOfSaleCommon):
             self.assertFalse(iline.tax_ids)
 
         self.pos_config.current_session_id.action_pos_session_closing_control()
+
+    def test_order_with_deleted_tax(self):
+        # create tax
+        dummy_50_perc_tax = self.env['account.tax'].create({
+            'name': 'Tax 50%',
+            'amount_type': 'percent',
+            'amount': 50.0,
+            'price_include': 0
+        })
+
+        # set tax to product
+        product5 = self.env['product.product'].create({
+            'name': 'product5',
+            'type': 'product',
+            'categ_id': self.env.ref('product.product_category_all').id,
+            'taxes_id': dummy_50_perc_tax.ids
+        })
+
+        # sell product thru pos
+        self.pos_config.open_session_cb(check_coa=False)
+        pos_session = self.pos_config.current_session_id
+        untax, atax = self.compute_tax(product5, 10.0)
+        product5_order = {'data':
+          {'amount_paid': untax + atax,
+           'amount_return': 0,
+           'amount_tax': atax,
+           'amount_total': untax + atax,
+           'creation_date': fields.Datetime.to_string(fields.Datetime.now()),
+           'fiscal_position_id': False,
+           'pricelist_id': self.pos_config.available_pricelist_ids[0].id,
+           'lines': [[0,
+             0,
+             {'discount': 0,
+              'id': 42,
+              'pack_lot_ids': [],
+              'price_unit': 10.0,
+              'product_id': product5.id,
+              'price_subtotal': 10.0,
+              'price_subtotal_incl': 15.0,
+              'qty': 1,
+              'tax_ids': [(6, 0, product5.taxes_id.ids)]}]],
+           'name': 'Order 12345-123-1234',
+           'partner_id': False,
+           'pos_session_id': pos_session.id,
+           'sequence_number': 2,
+           'statement_ids': [[0,
+             0,
+             {'amount': untax + atax,
+              'name': fields.Datetime.now(),
+              'payment_method_id': self.cash_payment_method.id}]],
+           'uid': '12345-123-1234',
+           'user_id': self.env.uid},
+          'id': '12345-123-1234',
+          'to_invoice': False}
+        self.PosOrder.create_from_ui([product5_order])
+
+        # delete tax
+        dummy_50_perc_tax.unlink()
+
+        # close session (should not fail here)
+        # We don't call `action_pos_session_closing_control` to force the failed
+        # closing which will return the action because the internal rollback call messes
+        # with the rollback of the test runner. So instead, we directly call the method
+        # that returns the action by specifying the imbalance amount.
+        action = pos_session._close_session_action(5.0)
+        wizard = self.env['pos.close.session.wizard'].browse(action['res_id'])
+        wizard.with_context(action['context']).close_session()
+
+        # check the difference line
+        diff_line = pos_session.move_id.line_ids.filtered(lambda line: line.name == 'Difference at closing PoS session')
+        self.assertAlmostEqual(diff_line.credit, 5.0, msg="Missing amount of 5.0")

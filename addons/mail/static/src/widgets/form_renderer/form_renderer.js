@@ -1,12 +1,11 @@
-odoo.define('mail/static/src/widgets/form_renderer/form_renderer.js', function (require) {
-"use strict";
+/** @odoo-module **/
 
-const components = {
-    ChatterContainer: require('mail/static/src/components/chatter_container/chatter_container.js'),
-};
+import { ChatterContainer } from '@mail/components/chatter_container/chatter_container';
 
-const FormRenderer = require('web.FormRenderer');
-const { ComponentWrapper } = require('web.OwlCompatibility');
+import FormRenderer from 'web.FormRenderer';
+import { ComponentWrapper } from 'web.OwlCompatibility';
+
+const components = { ChatterContainer };
 
 class ChatterContainerWrapperComponent extends ComponentWrapper {}
 
@@ -72,16 +71,14 @@ FormRenderer.include({
         this.on('o_chatter_rendered', this, ev => this._onChatterRendered(ev));
         if (this.chatterFields.hasRecordReloadOnMessagePosted) {
             this.on('o_message_posted', this, ev => {
-                if(!this.state.isDirty()) {
-                    this.trigger_up('reload')
-                }
+                this.trigger_up('reload', { keepChanges: true });
             });
         }
         if (this.chatterFields.hasRecordReloadOnAttachmentsChanged) {
-            this.on('o_attachments_changed', this, ev => this.trigger_up('reload'));
+            this.on('o_attachments_changed', this, ev => this.trigger_up('reload', { keepChanges: true }));
         }
         if (this.chatterFields.hasRecordReloadOnFollowersUpdate) {
-            owl.Component.env.bus.on('mail.thread:promptAddFollower-closed', this, ev => this.trigger_up('reload'));
+            owl.Component.env.bus.on('mail.thread:promptAddFollower-closed', this, ev => this.trigger_up('reload', { keepChanges: true }));
         }
     },
     /**
@@ -147,7 +144,7 @@ FormRenderer.include({
      *
      * @override
      */
-    async _renderView() {
+    async __renderView() {
         await this._super(...arguments);
         if (this._hasChatter()) {
             if (!this._chatterContainerComponent) {
@@ -185,6 +182,4 @@ FormRenderer.include({
      * @param {mail.thread} ev.data.thread
      */
     _onChatterRendered(ev) {},
-});
-
 });

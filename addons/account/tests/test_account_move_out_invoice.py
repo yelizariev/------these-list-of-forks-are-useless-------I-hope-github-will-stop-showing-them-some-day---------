@@ -7,6 +7,7 @@ from odoo.exceptions import UserError
 
 from unittest.mock import patch
 from datetime import timedelta
+from freezegun import freeze_time
 
 
 @tagged('post_install', '-at_install')
@@ -140,6 +141,18 @@ class TestAccountMoveOutInvoiceOnchanges(AccountTestInvoicingCommon):
             self.tax_line_vals_2,
             self.term_line_vals_1,
         ], self.move_vals)
+
+    @freeze_time('2020-01-15')
+    def test_out_invoice_onchange_invoice_date(self):
+        for tax_date, invoice_date, accounting_date in [
+            ('2019-03-31', '2019-05-12', '2020-01-15'),
+            ('2019-03-31', '2019-02-10', '2020-01-15'),
+            ('2019-05-31', '2019-06-15', '2020-01-15'),
+        ]:
+            self.invoice.company_id.tax_lock_date = tax_date
+            with Form(self.invoice) as move_form:
+                move_form.invoice_date = invoice_date
+            self.assertEqual(self.invoice.date, fields.Date.to_date(accounting_date))
 
     def test_out_invoice_line_onchange_product_1(self):
         move_form = Form(self.invoice)
@@ -830,7 +843,7 @@ class TestAccountMoveOutInvoiceOnchanges(AccountTestInvoicingCommon):
             'amount_total': 1730.0,
         })
 
-    def test_out_invoice_line_onchange_rounding_price_subtotal(self):
+    def test_out_invoice_line_onchange_rounding_price_subtotal_1(self):
         ''' Seek for rounding issue on the price_subtotal when dealing with a price_unit having more digits than the
         foreign currency one.
         '''
@@ -903,6 +916,108 @@ class TestAccountMoveOutInvoiceOnchanges(AccountTestInvoicingCommon):
         })
 
         check_invoice_values(invoice_2)
+
+    def test_out_invoice_line_onchange_rounding_price_subtotal_2(self):
+        """ Ensure the cyclic computations implemented using onchanges are not leading to rounding issues when using
+        price-included taxes.
+        For example:
+        100 / 1.21 ~= 82.64 but 82.64 * 1.21 ~= 99.99 != 100.0.
+        """
+
+        def check_invoice_values(invoice):
+            self.assertInvoiceValues(invoice, [
+                {
+                    'price_unit': 100.0,
+                    'price_subtotal': 82.64,
+                    'debit': 0.0,
+                    'credit': 82.64,
+                },
+                {
+                    'price_unit': 17.36,
+                    'price_subtotal': 17.36,
+                    'debit': 0.0,
+                    'credit': 17.36,
+                },
+                {
+                    'price_unit': -100.0,
+                    'price_subtotal': -100.0,
+                    'debit': 100.0,
+                    'credit': 0.0,
+                },
+            ], {
+                'amount_untaxed': 82.64,
+                'amount_tax': 17.36,
+                'amount_total': 100.0,
+            })
+
+        tax = self.env['account.tax'].create({
+            'name': '21%',
+            'amount': 21.0,
+            'price_include': True,
+            'include_base_amount': True,
+        })
+
+        # == Test assigning tax directly ==
+
+        invoice_create = self.env['account.move'].create({
+            'move_type': 'out_invoice',
+            'invoice_date': '2017-01-01',
+            'date': '2017-01-01',
+            'partner_id': self.partner_a.id,
+            'invoice_line_ids': [(0, 0, {
+                'name': 'test line',
+                'price_unit': 100.0,
+                'account_id': self.company_data['default_account_revenue'].id,
+                'tax_ids': [(6, 0, tax.ids)],
+            })],
+        })
+
+        check_invoice_values(invoice_create)
+
+        move_form = Form(self.env['account.move'].with_context(default_move_type='out_invoice'))
+        move_form.invoice_date = fields.Date.from_string('2017-01-01')
+        move_form.partner_id = self.partner_a
+        with move_form.invoice_line_ids.new() as line_form:
+            line_form.name = 'test line'
+            line_form.price_unit = 100.0
+            line_form.account_id = self.company_data['default_account_revenue']
+            line_form.tax_ids.clear()
+            line_form.tax_ids.add(tax)
+        invoice_onchange = move_form.save()
+
+        check_invoice_values(invoice_onchange)
+
+        # == Test when the tax is set on a product ==
+
+        product = self.env['product.product'].create({
+            'name': 'product',
+            'lst_price': 100.0,
+            'property_account_income_id': self.company_data['default_account_revenue'].id,
+            'taxes_id': [(6, 0, tax.ids)],
+        })
+
+        move_form = Form(self.env['account.move'].with_context(default_move_type='out_invoice'))
+        move_form.invoice_date = fields.Date.from_string('2017-01-01')
+        move_form.partner_id = self.partner_a
+        with move_form.invoice_line_ids.new() as line_form:
+            line_form.product_id = product
+        invoice_onchange = move_form.save()
+
+        check_invoice_values(invoice_onchange)
+
+        # == Test with a fiscal position ==
+
+        fiscal_position = self.env['account.fiscal.position'].create({'name': 'fiscal_position'})
+
+        move_form = Form(self.env['account.move'].with_context(default_move_type='out_invoice'))
+        move_form.invoice_date = fields.Date.from_string('2017-01-01')
+        move_form.partner_id = self.partner_a
+        move_form.fiscal_position_id = fiscal_position
+        with move_form.invoice_line_ids.new() as line_form:
+            line_form.product_id = product
+        invoice_onchange = move_form.save()
+
+        check_invoice_values(invoice_onchange)
 
     def test_out_invoice_line_onchange_taxes_2_price_unit_tax_included(self):
         ''' Seek for rounding issue in the price unit. Suppose a price_unit of 2300 with a 5.5% price-included tax
@@ -1643,6 +1758,7 @@ class TestAccountMoveOutInvoiceOnchanges(AccountTestInvoicingCommon):
             'date': fields.Date.from_string('2019-02-01'),
             'reason': 'no reason',
             'refund_method': 'refund',
+            'journal_id': self.invoice.journal_id.id,
         })
         reversal = move_reversal.reverse_moves()
         reverse_move = self.env['account.move'].browse(reversal['res_id'])
@@ -1684,7 +1800,7 @@ class TestAccountMoveOutInvoiceOnchanges(AccountTestInvoicingCommon):
         ], {
             **self.move_vals,
             'invoice_payment_term_id': None,
-            'name': 'RINV/2019/02/0001',
+            'name': 'RINV/2019/00001',
             'date': move_reversal.date,
             'state': 'draft',
             'ref': 'Reversal of: %s, %s' % (self.invoice.name, move_reversal.reason),
@@ -1695,6 +1811,7 @@ class TestAccountMoveOutInvoiceOnchanges(AccountTestInvoicingCommon):
             'date': fields.Date.from_string('2019-02-01'),
             'reason': 'no reason',
             'refund_method': 'cancel',
+            'journal_id': self.invoice.journal_id.id,
         })
         reversal = move_reversal.reverse_moves()
         reverse_move = self.env['account.move'].browse(reversal['res_id'])
@@ -1758,6 +1875,7 @@ class TestAccountMoveOutInvoiceOnchanges(AccountTestInvoicingCommon):
             'date': fields.Date.from_string('2017-01-01'),
             'reason': 'no reason',
             'refund_method': 'refund',
+            'journal_id': self.invoice.journal_id.id,
         })
         reversal = move_reversal.reverse_moves()
         reverse_move = self.env['account.move'].browse(reversal['res_id'])
@@ -1815,6 +1933,7 @@ class TestAccountMoveOutInvoiceOnchanges(AccountTestInvoicingCommon):
             'date': fields.Date.from_string('2017-01-01'),
             'reason': 'no reason',
             'refund_method': 'cancel',
+            'journal_id': self.invoice.journal_id.id,
         })
         reversal = move_reversal.reverse_moves()
         reverse_move = self.env['account.move'].browse(reversal['res_id'])
@@ -1875,6 +1994,7 @@ class TestAccountMoveOutInvoiceOnchanges(AccountTestInvoicingCommon):
             'date': fields.Date.today() + timedelta(days=7),
             'reason': 'no reason',
             'refund_method': 'modify',
+            'journal_id': self.invoice.journal_id.id,
         })
         move_reversal.reverse_moves()
         refund = self.env['account.move'].search([('move_type', '=', 'out_refund'), ('company_id', '=', self.invoice.company_id.id)])
@@ -2138,8 +2258,9 @@ class TestAccountMoveOutInvoiceOnchanges(AccountTestInvoicingCommon):
                 'amount_total': 1430.0,
             })
 
+    @freeze_time('2017-01-15')
     def test_out_invoice_post_2(self):
-        ''' Check the date will be set automatically at the next available post date due to the tax lock date. '''
+        ''' Check the date will be set automatically at today due to the tax lock date. '''
         # Create an invoice with rate 1/3.
         move = self.env['account.move'].create({
             'move_type': 'out_invoice',
@@ -2183,7 +2304,7 @@ class TestAccountMoveOutInvoiceOnchanges(AccountTestInvoicingCommon):
         })
 
         # Set the tax lock date:
-        # - The date must be set automatically at the date after the tax_lock_date.
+        # - The date must be set automatically at the date of today (2017-01-15).
         # - As the date changed, the currency rate has changed (1/3 => 1/2).
         move.company_id.tax_lock_date = fields.Date.from_string('2016-12-31')
 
@@ -2237,7 +2358,7 @@ class TestAccountMoveOutInvoiceOnchanges(AccountTestInvoicingCommon):
             **self.move_vals,
             'payment_reference': move.name,
             'currency_id': self.currency_data['currency'].id,
-            'date': fields.Date.from_string('2017-01-01'),
+            'date': fields.Date.from_string('2017-01-15'),
             'amount_untaxed': 1200.0,
             'amount_tax': 230.0,
             'amount_total': 1430.0,
@@ -2506,7 +2627,7 @@ class TestAccountMoveOutInvoiceOnchanges(AccountTestInvoicingCommon):
             {
                 **self.term_line_vals_1,
                 'currency_id': self.currency_data['currency'].id,
-                'name': 'INV/2017/01/0001',
+                'name': 'INV/2017/00001',
                 'amount_currency': 1410.0,
                 'debit': 705.0,
                 'credit': 0.0,
@@ -2516,7 +2637,7 @@ class TestAccountMoveOutInvoiceOnchanges(AccountTestInvoicingCommon):
             **self.move_vals,
             'currency_id': self.currency_data['currency'].id,
             'date': fields.Date.from_string('2017-01-01'),
-            'payment_reference': 'INV/2017/01/0001',
+            'payment_reference': 'INV/2017/00001',
         })
 
         accrual_lines = self.env['account.move'].browse(wizard_res['domain'][0][2]).line_ids.sorted('date')

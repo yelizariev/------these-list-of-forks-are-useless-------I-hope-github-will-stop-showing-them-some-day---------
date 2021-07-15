@@ -1,22 +1,23 @@
-odoo.define('mail/static/src/components/attachment_delete_confirm_dialog/attachment_delete_confirm_dialog.js', function (require) {
-'use strict';
+/** @odoo-module **/
 
-const useStore = require('mail/static/src/component_hooks/use_store/use_store.js');
+import { useShouldUpdateBasedOnProps } from '@mail/component_hooks/use_should_update_based_on_props/use_should_update_based_on_props';
+import { useStore } from '@mail/component_hooks/use_store/use_store';
 
-const components = {
-    Dialog: require('web.OwlDialog'),
-};
+import Dialog from 'web.OwlDialog';
 
 const { Component } = owl;
 const { useRef } = owl.hooks;
 
-class AttachmentDeleteConfirmDialog extends Component {
+const components = { Dialog };
+
+export class AttachmentDeleteConfirmDialog extends Component {
 
     /**
      * @override
      */
     constructor(...args) {
         super(...args);
+        useShouldUpdateBasedOnProps();
         useStore(props => {
             const attachment = this.env.models['mail.attachment'].get(props.attachmentLocalId);
             return {
@@ -69,9 +70,9 @@ class AttachmentDeleteConfirmDialog extends Component {
     /**
      * @private
      */
-    _onClickOk() {
+    async _onClickOk() {
+        await this.attachment.remove();
         this._dialogRef.comp._close();
-        this.attachment.remove();
         this.trigger('o-attachment-removed', { attachmentLocalId: this.props.attachmentLocalId });
     }
 
@@ -83,8 +84,4 @@ Object.assign(AttachmentDeleteConfirmDialog, {
         attachmentLocalId: String,
     },
     template: 'mail.AttachmentDeleteConfirmDialog',
-});
-
-return AttachmentDeleteConfirmDialog;
-
 });

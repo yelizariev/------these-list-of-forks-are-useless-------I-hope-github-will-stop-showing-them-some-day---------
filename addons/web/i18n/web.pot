@@ -4,23 +4,16 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 14.0\n"
+"Project-Id-Version: Odoo Server saas~14.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-29 15:48+0000\n"
-"PO-Revision-Date: 2020-10-29 15:48+0000\n"
+"POT-Creation-Date: 2021-07-12 07:50+0000\n"
+"PO-Revision-Date: 2021-07-12 07:50+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
-
-#. module: web
-#. openerp-web
-#: code:addons/web/static/src/js/views/calendar/calendar_model.js:0
-#, python-format
-msgid " [Me]"
-msgstr ""
 
 #. module: web
 #. openerp-web
@@ -34,13 +27,6 @@ msgstr ""
 #: code:addons/web/static/src/xml/base.xml:0
 #, python-format
 msgid "# Code editor"
-msgstr ""
-
-#. module: web
-#. openerp-web
-#: code:addons/web/static/src/js/fields/basic_fields.js:0
-#, python-format
-msgid "${-diffDays} days ago"
 msgstr ""
 
 #. module: web
@@ -87,9 +73,9 @@ msgstr ""
 
 #. module: web
 #. openerp-web
-#: code:addons/web/static/src/xml/notification.xml:0
+#: code:addons/web/static/src/js/fields/basic_fields.js:0
 #, python-format
-msgid "&times;"
+msgid "%s days ago"
 msgstr ""
 
 #. module: web
@@ -139,6 +125,13 @@ msgstr ""
 #: code:addons/web/static/src/js/core/time.js:0
 #, python-format
 msgid "'%s' is not convertible to date, datetime nor time"
+msgstr ""
+
+#. module: web
+#. openerp-web
+#: code:addons/web/static/src/js/views/basic/basic_model.js:0
+#, python-format
+msgid "'%s' is unsynchronized with '%s'."
 msgstr ""
 
 #. module: web
@@ -218,13 +211,6 @@ msgstr ""
 #. module: web
 #: model_terms:ir.ui.view,arch_db:web.external_layout_background
 msgid "<i class=\"fa fa-phone\" role=\"img\" aria-label=\"Phone\" title=\"Phone\"/>"
-msgstr ""
-
-#. module: web
-#: model_terms:ir.ui.view,arch_db:web.frontend_layout
-msgid ""
-"<span class=\"o_footer_copyright_name mr-2\">Copyright &amp;copy; Company "
-"name</span>"
 msgstr ""
 
 #. module: web
@@ -939,7 +925,6 @@ msgstr ""
 #. openerp-web
 #: code:addons/web/static/src/js/core/dialog.js:0
 #: code:addons/web/static/src/js/core/dialog.js:0
-#: code:addons/web/static/src/js/fields/relational_fields.js:0
 #: code:addons/web/static/src/js/fields/upgrade_fields.js:0
 #: code:addons/web/static/src/js/services/crash_manager.js:0
 #: code:addons/web/static/src/js/views/calendar/calendar_quick_create.js:0
@@ -960,13 +945,6 @@ msgstr ""
 #: code:addons/web/static/src/xml/file_upload_progress_bar.xml:0
 #, python-format
 msgid "Cancel Upload"
-msgstr ""
-
-#. module: web
-#. openerp-web
-#: code:addons/web/static/src/js/views/graph/graph_renderer.js:0
-#, python-format
-msgid "Cannot render chart with mode : "
 msgstr ""
 
 #. module: web
@@ -1124,6 +1102,11 @@ msgid "Company Tagline"
 msgstr ""
 
 #. module: web
+#: model_terms:ir.ui.view,arch_db:web.frontend_layout
+msgid "Company name"
+msgstr ""
+
+#. module: web
 #. openerp-web
 #: code:addons/web/static/src/js/control_panel/comparison_menu.js:0
 #, python-format
@@ -1215,7 +1198,7 @@ msgstr ""
 #: code:addons/web/static/src/xml/base.xml:0
 #: code:addons/web/static/src/xml/base.xml:0
 #, python-format
-msgid "Copy Text"
+msgid "Copy"
 msgstr ""
 
 #. module: web
@@ -1229,8 +1212,14 @@ msgstr ""
 #. openerp-web
 #: code:addons/web/static/src/js/fields/basic_fields.js:0
 #: code:addons/web/static/src/js/fields/basic_fields.js:0
+#: code:addons/web/static/src/js/fields/basic_fields.js:0
 #, python-format
 msgid "Copy to Clipboard"
+msgstr ""
+
+#. module: web
+#: model_terms:ir.ui.view,arch_db:web.frontend_layout
+msgid "Copyright &amp;copy;"
 msgstr ""
 
 #. module: web
@@ -1290,10 +1279,10 @@ msgstr ""
 #. module: web
 #. openerp-web
 #: code:addons/web/static/src/js/fields/relational_fields.js:0
-#: code:addons/web/static/src/js/views/calendar/calendar_controller.js:0
 #: code:addons/web/static/src/js/views/calendar/calendar_quick_create.js:0
 #: code:addons/web/static/src/js/views/kanban/kanban_controller.js:0
 #: code:addons/web/static/src/js/views/view_dialogs.js:0
+#: code:addons/web/static/src/xml/base.xml:0
 #: code:addons/web/static/src/xml/base.xml:0
 #: code:addons/web/static/src/xml/base.xml:0
 #: code:addons/web/static/src/xml/web_calendar.xml:0
@@ -1334,21 +1323,7 @@ msgstr ""
 #. openerp-web
 #: code:addons/web/static/src/js/fields/relational_fields.js:0
 #, python-format
-msgid "Create and edit"
-msgstr ""
-
-#. module: web
-#. openerp-web
-#: code:addons/web/static/src/js/fields/relational_fields.js:0
-#, python-format
 msgid "Create: "
-msgstr ""
-
-#. module: web
-#. openerp-web
-#: code:addons/web/static/src/js/views/calendar/calendar_controller.js:0
-#, python-format
-msgid "Create: %s"
 msgstr ""
 
 #. module: web
@@ -1427,7 +1402,6 @@ msgstr ""
 #. module: web
 #. openerp-web
 #: code:addons/web/static/src/js/control_panel/search_utils.js:0
-#: code:addons/web/static/src/xml/pivot.xml:0
 #: code:addons/web/static/src/xml/web_calendar.xml:0
 #, python-format
 msgid "Day"
@@ -1444,6 +1418,13 @@ msgstr ""
 #: code:addons/web/static/src/js/fields/basic_fields.js:0
 #, python-format
 msgid "Decimal"
+msgstr ""
+
+#. module: web
+#. openerp-web
+#: code:addons/web/static/src/xml/debug.xml:0
+#, python-format
+msgid "Default"
 msgstr ""
 
 #. module: web
@@ -1508,6 +1489,7 @@ msgstr ""
 
 #. module: web
 #. openerp-web
+#: code:addons/web/static/src/js/fields/relational_fields.js:0
 #: code:addons/web/static/src/js/views/kanban/kanban_record.js:0
 #: code:addons/web/static/src/js/views/view_dialogs.js:0
 #: code:addons/web/static/src/js/widgets/colorpicker.js:0
@@ -1515,7 +1497,6 @@ msgstr ""
 #: code:addons/web/static/src/js/widgets/translation_dialog.js:0
 #: code:addons/web/static/src/xml/base.xml:0
 #: code:addons/web/static/src/xml/base.xml:0
-#: code:addons/web/static/src/xml/kanban.xml:0
 #, python-format
 msgid "Discard"
 msgstr ""
@@ -1529,11 +1510,6 @@ msgstr ""
 
 #. module: web
 #: model:ir.model.fields,field_description:web.field_base_document_layout__display_name
-#: model:ir.model.fields,field_description:web.field_ir_actions_act_window_view__display_name
-#: model:ir.model.fields,field_description:web.field_ir_http__display_name
-#: model:ir.model.fields,field_description:web.field_ir_qweb_field_image__display_name
-#: model:ir.model.fields,field_description:web.field_ir_qweb_field_image_url__display_name
-#: model:ir.model.fields,field_description:web.field_res_company__display_name
 msgid "Display Name"
 msgstr ""
 
@@ -1549,20 +1525,6 @@ msgstr ""
 #: code:addons/web/static/src/js/widgets/data_export.js:0
 #, python-format
 msgid "Do you really want to delete this export template?"
-msgstr ""
-
-#. module: web
-#. openerp-web
-#: code:addons/web/static/src/js/views/calendar/calendar_renderer.js:0
-#, python-format
-msgid "Do you really want to delete this filter from favorites ?"
-msgstr ""
-
-#. module: web
-#. openerp-web
-#: code:addons/web/static/src/xml/base.xml:0
-#, python-format
-msgid "Do you want to create"
 msgstr ""
 
 #. module: web
@@ -1731,6 +1693,13 @@ msgstr ""
 
 #. module: web
 #. openerp-web
+#: code:addons/web/static/src/xml/debug.xml:0
+#, python-format
+msgid "Enable profiling"
+msgstr ""
+
+#. module: web
+#. openerp-web
 #: code:addons/web/static/src/js/services/crash_manager.js:0
 #, python-format
 msgid "Error"
@@ -1781,6 +1750,7 @@ msgstr ""
 
 #. module: web
 #. openerp-web
+#: code:addons/web/static/src/xml/base.xml:0
 #: code:addons/web/static/src/xml/base.xml:0
 #, python-format
 msgid "Export All"
@@ -1998,6 +1968,7 @@ msgstr ""
 #. module: web
 #. openerp-web
 #: code:addons/web/static/src/js/control_panel/groupby_menu.js:0
+#: code:addons/web/static/src/js/views/graph/graph_controller.js:0
 #, python-format
 msgid "Group By"
 msgstr ""
@@ -2073,11 +2044,6 @@ msgstr ""
 
 #. module: web
 #: model:ir.model.fields,field_description:web.field_base_document_layout__id
-#: model:ir.model.fields,field_description:web.field_ir_actions_act_window_view__id
-#: model:ir.model.fields,field_description:web.field_ir_http__id
-#: model:ir.model.fields,field_description:web.field_ir_qweb_field_image__id
-#: model:ir.model.fields,field_description:web.field_ir_qweb_field_image_url__id
-#: model:ir.model.fields,field_description:web.field_res_company__id
 msgid "ID"
 msgstr ""
 
@@ -2086,6 +2052,15 @@ msgstr ""
 #: code:addons/web/static/src/xml/debug.xml:0
 #, python-format
 msgid "ID:"
+msgstr ""
+
+#. module: web
+#. openerp-web
+#: code:addons/web/static/src/js/views/basic/basic_model.js:0
+#, python-format
+msgid ""
+"If you change %s or %s, the synchronization will be reapplied and the data "
+"will be modified."
 msgstr ""
 
 #. module: web
@@ -2101,7 +2076,7 @@ msgstr ""
 #. openerp-web
 #: code:addons/web/static/src/js/fields/basic_fields.js:0
 #, python-format
-msgid "In ${diffDays} days"
+msgid "In %s days"
 msgstr ""
 
 #. module: web
@@ -2109,6 +2084,13 @@ msgstr ""
 #: code:addons/web/static/src/js/fields/basic_fields.js:0
 #, python-format
 msgid "Integer"
+msgstr ""
+
+#. module: web
+#. openerp-web
+#: code:addons/web/static/src/xml/debug.xml:0
+#, python-format
+msgid "Interval"
 msgstr ""
 
 #. module: web
@@ -2167,13 +2149,6 @@ msgstr ""
 
 #. module: web
 #. openerp-web
-#: code:addons/web/static/src/js/views/graph/graph_renderer.js:0
-#, python-format
-msgid "Invalid mode for chart"
-msgstr ""
-
-#. module: web
-#. openerp-web
 #: code:addons/web/static/src/js/tools/debug_manager_backend.js:0
 #, python-format
 msgid "JS Mobile Tests"
@@ -2215,11 +2190,6 @@ msgstr ""
 
 #. module: web
 #: model:ir.model.fields,field_description:web.field_base_document_layout____last_update
-#: model:ir.model.fields,field_description:web.field_ir_actions_act_window_view____last_update
-#: model:ir.model.fields,field_description:web.field_ir_http____last_update
-#: model:ir.model.fields,field_description:web.field_ir_qweb_field_image____last_update
-#: model:ir.model.fields,field_description:web.field_ir_qweb_field_image_url____last_update
-#: model:ir.model.fields,field_description:web.field_res_company____last_update
 msgid "Last Modified on"
 msgstr ""
 
@@ -2376,6 +2346,13 @@ msgstr ""
 
 #. module: web
 #. openerp-web
+#: code:addons/web/static/src/js/services/crash_manager.js:0
+#, python-format
+msgid "MailDeliveryException"
+msgstr ""
+
+#. module: web
+#. openerp-web
 #: code:addons/web/static/src/xml/base.xml:0
 #: code:addons/web/static/src/xml/base.xml:0
 #: code:addons/web/static/src/xml/base.xml:0
@@ -2450,6 +2427,7 @@ msgstr ""
 
 #. module: web
 #. openerp-web
+#: code:addons/web/static/src/js/views/graph/graph_controller.js:0
 #: code:addons/web/static/src/xml/base.xml:0
 #, python-format
 msgid "Measures"
@@ -2462,6 +2440,20 @@ msgstr ""
 #: code:addons/web/static/src/xml/base.xml:0
 #, python-format
 msgid "Medium blue"
+msgstr ""
+
+#. module: web
+#. openerp-web
+#: code:addons/web/static/src/js/views/calendar/calendar_quick_create.js:0
+#, python-format
+msgid "Meeting Subject"
+msgstr ""
+
+#. module: web
+#. openerp-web
+#: code:addons/web/static/src/xml/web_calendar.xml:0
+#, python-format
+msgid "Meeting Subject:"
 msgstr ""
 
 #. module: web
@@ -2532,7 +2524,6 @@ msgstr ""
 #. module: web
 #. openerp-web
 #: code:addons/web/static/src/js/control_panel/search_utils.js:0
-#: code:addons/web/static/src/xml/pivot.xml:0
 #: code:addons/web/static/src/xml/web_calendar.xml:0
 #, python-format
 msgid "Month"
@@ -2578,7 +2569,15 @@ msgstr ""
 #. openerp-web
 #: code:addons/web/static/src/js/fields/relational_fields.js:0
 #, python-format
-msgid "New ${this.name}"
+msgid "New %s"
+msgstr ""
+
+#. module: web
+#. openerp-web
+#: code:addons/web/static/src/js/views/calendar/calendar_controller.js:0
+#: code:addons/web/static/src/js/views/calendar/calendar_controller.js:0
+#, python-format
+msgid "New Event"
 msgstr ""
 
 #. module: web
@@ -2702,13 +2701,6 @@ msgstr ""
 #: code:addons/web/static/src/js/views/list/list_controller.js:0
 #, python-format
 msgid "No valid record to save"
-msgstr ""
-
-#. module: web
-#. openerp-web
-#: code:addons/web/static/src/js/core/utils.js:0
-#, python-format
-msgid "Node [%s] is not a JSONified XML node"
 msgstr ""
 
 #. module: web
@@ -2885,7 +2877,7 @@ msgstr ""
 #. openerp-web
 #: code:addons/web/static/src/xml/debug.xml:0
 #, python-format
-msgid "Open Developer Tools#{widget.debug_mode_help}"
+msgid "Open Developer Tools"
 msgstr ""
 
 #. module: web
@@ -2932,6 +2924,13 @@ msgstr ""
 #: code:addons/web/static/src/js/views/view_dialogs.js:0
 #, python-format
 msgid "Open: "
+msgstr ""
+
+#. module: web
+#. openerp-web
+#: code:addons/web/static/src/js/views/list/list_renderer.js:0
+#, python-format
+msgid "Optional columns"
 msgstr ""
 
 #. module: web
@@ -3050,6 +3049,12 @@ msgstr ""
 #: code:addons/web/static/src/js/views/pivot/pivot_view.js:0
 #, python-format
 msgid "Pivot"
+msgstr ""
+
+#. module: web
+#: code:addons/web/controllers/pivot.py:0
+#, python-format
+msgid "Pivot %(title)s (%(model_name)s)"
 msgstr ""
 
 #. module: web
@@ -3268,7 +3273,6 @@ msgstr ""
 #. module: web
 #. openerp-web
 #: code:addons/web/static/src/js/control_panel/search_utils.js:0
-#: code:addons/web/static/src/xml/pivot.xml:0
 #, python-format
 msgid "Quarter"
 msgstr ""
@@ -3313,6 +3317,20 @@ msgstr ""
 #: code:addons/web/static/src/js/fields/relational_fields.js:0
 #, python-format
 msgid "Radio"
+msgstr ""
+
+#. module: web
+#. openerp-web
+#: code:addons/web/static/src/xml/debug.xml:0
+#, python-format
+msgid "Record sql"
+msgstr ""
+
+#. module: web
+#. openerp-web
+#: code:addons/web/static/src/xml/debug.xml:0
+#, python-format
+msgid "Record traces"
 msgstr ""
 
 #. module: web
@@ -3533,6 +3551,7 @@ msgstr ""
 #: code:addons/web/static/src/xml/base.xml:0
 #: code:addons/web/static/src/xml/base.xml:0
 #: code:addons/web/static/src/xml/base.xml:0
+#: code:addons/web/static/src/xml/base.xml:0
 #, python-format
 msgid "Search"
 msgstr ""
@@ -3737,6 +3756,15 @@ msgid "Size:"
 msgstr ""
 
 #. module: web
+#. openerp-web
+#: code:addons/web/static/src/js/core/ajax.js:0
+#, python-format
+msgid ""
+"Something happened while trying to contact the server, check that the server"
+" is online and that you still have a working network connection."
+msgstr ""
+
+#. module: web
 #: code:addons/web/controllers/main.py:0
 #, python-format
 msgid "Something horrible happened"
@@ -3805,20 +3833,6 @@ msgstr ""
 #: code:addons/web/static/src/xml/name_and_signature.xml:0
 #, python-format
 msgid "Styles"
-msgstr ""
-
-#. module: web
-#. openerp-web
-#: code:addons/web/static/src/js/views/calendar/calendar_quick_create.js:0
-#, python-format
-msgid "Summary"
-msgstr ""
-
-#. module: web
-#. openerp-web
-#: code:addons/web/static/src/xml/web_calendar.xml:0
-#, python-format
-msgid "Summary:"
 msgstr ""
 
 #. module: web
@@ -3935,15 +3949,6 @@ msgstr ""
 msgid ""
 "The operation was interrupted. This usually means that the current operation"
 " is taking too much time."
-msgstr ""
-
-#. module: web
-#. openerp-web
-#: code:addons/web/static/src/js/views/basic/basic_controller.js:0
-#, python-format
-msgid ""
-"The record has been modified, your changes will be discarded. Do you want to"
-" proceed?"
 msgstr ""
 
 #. module: web
@@ -4380,6 +4385,13 @@ msgstr ""
 
 #. module: web
 #. openerp-web
+#: code:addons/web/static/src/xml/base.xml:0
+#, python-format
+msgid "View %s"
+msgstr ""
+
+#. module: web
+#. openerp-web
 #: code:addons/web/static/src/xml/debug.xml:0
 #, python-format
 msgid "View Access Rights"
@@ -4424,7 +4436,6 @@ msgstr ""
 #: code:addons/web/static/src/js/chrome/action_manager_report.js:0
 #: code:addons/web/static/src/js/services/crash_manager.js:0
 #: code:addons/web/static/src/js/views/basic/basic_controller.js:0
-#: code:addons/web/static/src/js/views/basic/basic_controller.js:0
 #: code:addons/web/static/src/js/views/list/list_controller.js:0
 #: code:addons/web/static/src/xml/base.xml:0
 #: code:addons/web/static/src/xml/base.xml:0
@@ -4456,7 +4467,6 @@ msgstr ""
 #. openerp-web
 #: code:addons/web/static/src/js/control_panel/search_utils.js:0
 #: code:addons/web/static/src/js/views/calendar/calendar_model.js:0
-#: code:addons/web/static/src/xml/pivot.xml:0
 #: code:addons/web/static/src/xml/web_calendar.xml:0
 #, python-format
 msgid "Week"
@@ -4506,7 +4516,6 @@ msgstr ""
 #. module: web
 #. openerp-web
 #: code:addons/web/static/src/js/control_panel/search_utils.js:0
-#: code:addons/web/static/src/xml/pivot.xml:0
 #: code:addons/web/static/src/xml/web_calendar.xml:0
 #, python-format
 msgid "Year"
@@ -4625,6 +4634,13 @@ msgstr ""
 
 #. module: web
 #. openerp-web
+#: code:addons/web/static/src/xml/pivot.xml:0
+#, python-format
+msgid "_onToggleCustomGroupbyItem"
+msgstr ""
+
+#. module: web
+#. openerp-web
 #: code:addons/web/static/src/js/core/translation.js:0
 #, python-format
 msgid "a day ago"
@@ -4734,6 +4750,7 @@ msgstr ""
 
 #. module: web
 #. openerp-web
+#: code:addons/web/static/src/js/control_panel/search_utils.js:0
 #: code:addons/web/static/src/js/control_panel/search_utils.js:0
 #, python-format
 msgid "greater than"
@@ -4859,6 +4876,7 @@ msgstr ""
 #: code:addons/web/static/src/js/control_panel/search_utils.js:0
 #: code:addons/web/static/src/js/control_panel/search_utils.js:0
 #: code:addons/web/static/src/js/control_panel/search_utils.js:0
+#: code:addons/web/static/src/js/control_panel/search_utils.js:0
 #: code:addons/web/static/src/js/widgets/domain_selector.js:0
 #, python-format
 msgid "is not set"
@@ -4866,6 +4884,7 @@ msgstr ""
 
 #. module: web
 #. openerp-web
+#: code:addons/web/static/src/js/control_panel/search_utils.js:0
 #: code:addons/web/static/src/js/control_panel/search_utils.js:0
 #: code:addons/web/static/src/js/control_panel/search_utils.js:0
 #: code:addons/web/static/src/js/control_panel/search_utils.js:0
@@ -4906,6 +4925,7 @@ msgstr ""
 
 #. module: web
 #. openerp-web
+#: code:addons/web/static/src/js/control_panel/search_utils.js:0
 #: code:addons/web/static/src/js/control_panel/search_utils.js:0
 #, python-format
 msgid "less than or equal to"
@@ -4960,13 +4980,6 @@ msgstr ""
 #: code:addons/web/static/src/xml/base.xml:0
 #, python-format
 msgid "or"
-msgstr ""
-
-#. module: web
-#. openerp-web
-#: code:addons/web/static/src/xml/colorpicker.xml:0
-#, python-format
-msgid "p-0 border-0 text-center text-monospace bg-transparent text-white"
 msgstr ""
 
 #. module: web

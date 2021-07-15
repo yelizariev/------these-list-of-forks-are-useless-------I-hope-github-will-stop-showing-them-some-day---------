@@ -1,41 +1,43 @@
-odoo.define('mail/static/src/components/thread_needaction_preview/thread_needaction_preview.js', function (require) {
-'use strict';
+/** @odoo-module **/
 
-const components = {
-    MessageAuthorPrefix: require('mail/static/src/components/message_author_prefix/message_author_prefix.js'),
-    PartnerImStatusIcon: require('mail/static/src/components/partner_im_status_icon/partner_im_status_icon.js'),
-};
-const useStore = require('mail/static/src/component_hooks/use_store/use_store.js');
-const mailUtils = require('mail.utils');
+import * as mailUtils from '@mail/js/utils';
+
+import { useShouldUpdateBasedOnProps } from '@mail/component_hooks/use_should_update_based_on_props/use_should_update_based_on_props';
+import { useStore } from '@mail/component_hooks/use_store/use_store';
+import { MessageAuthorPrefix } from '@mail/components/message_author_prefix/message_author_prefix';
+import { PartnerImStatusIcon } from '@mail/components/partner_im_status_icon/partner_im_status_icon';
 
 const { Component } = owl;
 const { useRef } = owl.hooks;
 
-class ThreadNeedactionPreview extends Component {
+const components = { MessageAuthorPrefix, PartnerImStatusIcon };
+
+export class ThreadNeedactionPreview extends Component {
 
     /**
      * @override
      */
     constructor(...args) {
         super(...args);
+        useShouldUpdateBasedOnProps();
         useStore(props => {
             const thread = this.env.models['mail.thread'].get(props.threadLocalId);
             const mainThreadCache = thread ? thread.mainCache : undefined;
-            let lastNeedactionMessageAuthor;
-            let lastNeedactionMessage;
+            let lastNeedactionMessageAsOriginThreadAuthor;
+            let lastNeedactionMessageAsOriginThread;
             let threadCorrespondent;
             if (thread) {
-                lastNeedactionMessage = mainThreadCache.lastNeedactionMessage;
+                lastNeedactionMessageAsOriginThread = mainThreadCache.lastNeedactionMessageAsOriginThread;
                 threadCorrespondent = thread.correspondent;
             }
-            if (lastNeedactionMessage) {
-                lastNeedactionMessageAuthor = lastNeedactionMessage.author;
+            if (lastNeedactionMessageAsOriginThread) {
+                lastNeedactionMessageAsOriginThreadAuthor = lastNeedactionMessageAsOriginThread.author;
             }
             return {
                 isDeviceMobile: this.env.messaging.device.isMobile,
-                lastNeedactionMessage: lastNeedactionMessage ? lastNeedactionMessage.__state : undefined,
-                lastNeedactionMessageAuthor: lastNeedactionMessageAuthor
-                    ? lastNeedactionMessageAuthor.__state
+                lastNeedactionMessageAsOriginThread: lastNeedactionMessageAsOriginThread ? lastNeedactionMessageAsOriginThread.__state : undefined,
+                lastNeedactionMessageAsOriginThreadAuthor: lastNeedactionMessageAsOriginThreadAuthor
+                    ? lastNeedactionMessageAsOriginThreadAuthor.__state
                     : undefined,
                 thread: thread ? thread.__state : undefined,
                 threadCorrespondent: threadCorrespondent
@@ -77,11 +79,11 @@ class ThreadNeedactionPreview extends Component {
      *
      * @returns {string}
      */
-    get inlineLastNeedactionMessageBody() {
-        if (!this.thread.lastNeedactionMessage) {
+    get inlineLastNeedactionMessageAsOriginThreadBody() {
+        if (!this.thread.lastNeedactionMessageAsOriginThread) {
             return '';
         }
-        return mailUtils.htmlToTextContentInline(this.thread.lastNeedactionMessage.prettyBody);
+        return mailUtils.htmlToTextContentInline(this.thread.lastNeedactionMessageAsOriginThread.prettyBody);
     }
 
     /**
@@ -105,7 +107,6 @@ class ThreadNeedactionPreview extends Component {
             // handled in `_onClickMarkAsRead`
             return;
         }
-        this.thread.markNeedactionMessagesAsRead();
         this.thread.open();
         if (!this.env.messaging.device.isMobile) {
             this.env.messaging.messagingMenu.close();
@@ -117,7 +118,10 @@ class ThreadNeedactionPreview extends Component {
      * @param {MouseEvent} ev
      */
     _onClickMarkAsRead(ev) {
-        this.thread.markNeedactionMessagesAsRead();
+        this.env.models['mail.message'].markAllAsRead([
+            ['model', '=', this.thread.model],
+            ['res_id', '=', this.thread.id],
+        ]);
     }
 
 }
@@ -128,8 +132,4 @@ Object.assign(ThreadNeedactionPreview, {
         threadLocalId: String,
     },
     template: 'mail.ThreadNeedactionPreview',
-});
-
-return ThreadNeedactionPreview;
-
 });

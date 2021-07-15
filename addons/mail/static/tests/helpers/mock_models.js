@@ -1,7 +1,4 @@
-odoo.define('mail/static/tests/helpers/mock_models.js', function (require) {
-'use strict';
-
-const patchMixin = require('web.patchMixin');
+/** @odoo-module **/
 
 /**
  * Allows to generate mocked models that will be used by the mocked server.
@@ -9,7 +6,7 @@ const patchMixin = require('web.patchMixin');
  * data object is generated every time to ensure any test can modify it without
  * impacting other tests.
  */
-class MockModels {
+export class MockModels {
 
     //--------------------------------------------------------------------------
     // Public
@@ -42,6 +39,7 @@ class MockModels {
                     activity_category: { string: "Category", type: 'selection', selection: [['default', 'Other'], ['upload_file', 'Upload File']] },
                     activity_type_id: { string: "Activity type", type: "many2one", relation: "mail.activity.type" },
                     can_write: { string: "Can write", type: "boolean" },
+                    chaining_type: { string: 'Chaining Type', type: 'selection', selection: [['suggest', 'Suggest Next Activity'], ['trigger', 'Trigger Next Activity']], default: 'suggest' },
                     create_uid: { string: "Created By", type: "many2one", relation: 'res.users' },
                     display_name: { string: "Display name", type: "char" },
                     date_deadline: { string: "Due Date", type: "date", default() { return moment().format('YYYY-MM-DD'); } },
@@ -56,6 +54,7 @@ class MockModels {
             },
             'mail.activity.type': {
                 fields: {
+                    chaining_type: { string: 'Chaining Type', type: 'selection', selection: [['suggest', 'Suggest Next Activity'], ['trigger', 'Trigger Next Activity']], default: 'suggest' },
                     category: { string: 'Category', type: 'selection', selection: [['default', 'Other'], ['upload_file', 'Upload File']] },
                     decoration_type: { string: "Decoration Type", type: "selection", selection: [['warning', 'Alert'], ['danger', 'Error']] },
                     icon: { string: 'icon', type: "char" },
@@ -68,6 +67,8 @@ class MockModels {
             'mail.channel': {
                 fields: {
                     channel_type: { string: "Channel Type", type: "selection", default: 'channel' },
+                    // Equivalent to members but required due to some RPC giving this field in domain.
+                    channel_partner_ids: { string: "Channel Partner Ids", type: 'many2many', relation: 'res.partner' },
                     // In python this belongs to mail.channel.partner. Here for simplicity.
                     custom_channel_name: { string: "Custom channel name", type: 'char' },
                     fetched_message_id: { string: "Last Fetched", type: 'many2one', relation: 'mail.message' },
@@ -75,15 +76,10 @@ class MockModels {
                     id: { string: "Id", type: 'integer' },
                     // In python this belongs to mail.channel.partner. Here for simplicity.
                     is_minimized: { string: "isMinimized", type: "boolean", default: false },
-                    // In python it is moderator_ids. Here for simplicity.
-                    is_moderator: { string: "Is current partner moderator?", type: "boolean", default: false },
                     // In python this belongs to mail.channel.partner. Here for simplicity.
                     is_pinned: { string: "isPinned", type: "boolean", default: true },
-                    // In python: email_send.
-                    mass_mailing: { string: "Send messages by email", type: "boolean", default: false },
                     members: { string: "Members", type: 'many2many', relation: 'res.partner', default() { return [this.currentPartnerId]; } },
                     message_unread_counter: { string: "# unread messages", type: 'integer' },
-                    moderation: { string: "Moderation", type: 'boolean', default: false },
                     name: { string: "Name", type: "char", required: true },
                     public: { string: "Public", type: "boolean", default: 'groups' },
                     seen_message_id: { string: "Last Seen", type: 'many2one', relation: 'mail.message' },
@@ -106,7 +102,6 @@ class MockModels {
             },
             'mail.followers': {
                 fields: {
-                    channel_id: { type: 'integer' },
                     email: { type: 'char' },
                     id: { type: 'integer' },
                     is_active: { type: 'boolean' },
@@ -124,8 +119,7 @@ class MockModels {
                     attachment_ids: { string: "Attachments", type: 'many2many', relation: 'ir.attachment', default: [] },
                     author_id: { string: "Author", type: 'many2one', relation: 'res.partner', default() { return this.currentPartnerId; } },
                     body: { string: "Contents", type: 'html', default: "<p></p>" },
-                    channel_ids: { string: "Channels", type: 'many2many', relation: 'mail.channel' },
-                    date: { string: "Date", type: 'datetime' },
+                    date: { string: "Date", type: 'datetime', default() { return moment.utc().format("YYYY-MM-DD HH:mm:ss"); } },
                     email_from: { string: "From", type: 'char' },
                     history_partner_ids: { string: "Partners with History", type: 'many2many', relation: 'res.partner' },
                     id: { string: "Id", type: 'integer' },
@@ -136,7 +130,6 @@ class MockModels {
                     model: { string: "Related Document model", type: 'char' },
                     needaction: { string: "Need Action", type: 'boolean' },
                     needaction_partner_ids: { string: "Partners with Need Action", type: 'many2many', relation: 'res.partner' },
-                    moderation_status: { string: "Moderation status", type: 'selection', selection: [['pending_moderation', "Pending Moderation"], ['accepted', "Accepted"], ['rejected', "Rejected"]], default: false },
                     notification_ids: { string: "Notifications", type: 'one2many', relation: 'mail.notification' },
                     partner_ids: { string: "Recipients", type: 'many2many', relation: 'res.partner' },
                     record_name: { string: "Name", type: 'char' },
@@ -213,7 +206,7 @@ class MockModels {
                     description: { string: 'description', type: 'text' },
                     display_name: { string: "Displayed name", type: "char" },
                     email: { type: 'char' },
-                    image_128: { string: "Image 128", type: 'image' },
+                    avatar_128: { string: "Image 128", type: 'image' },
                     im_status: { string: "IM Status", type: 'char' },
                     message_follower_ids: { relation: 'mail.followers', string: "Followers", type: "one2many" },
                     message_attachment_count: { string: 'Attachment count', type: 'integer' },
@@ -236,6 +229,7 @@ class MockModels {
             },
             'res.fake': {
                 fields: {
+                    activity_ids: { string: "Activities", type: 'one2many', relation: 'mail.activity' },
                     email_cc: { type: 'char' },
                     partner_ids: {
                         string: "Related partners",
@@ -249,7 +243,3 @@ class MockModels {
     }
 
 }
-
-return patchMixin(MockModels);
-
-});

@@ -74,8 +74,8 @@ $-seen-urls: ();
     @include print-variable('input-border-radius-sm', $input-border-radius-sm);
     @include print-variable('input-border-radius-lg', $input-border-radius-lg);
 
-    @include print-variable('number-of-color-palettes', length($o-color-palettes) - 1); // -1 since the last one is the user customized one
-    @include print-variable('color-palettes-number', $o-original-color-palette-number);
+    @include print-variable('color-palettes-name', $o-original-color-palette-name);
+
     @include print-variable('has-customized-colors', $o-has-customized-colors);
 
     // 6) Get list of colorpalette custom colors
@@ -87,11 +87,6 @@ $-seen-urls: ();
 }
 
 #wrapwrap {
-    // When the modal is in #wrapwrap, position top should be size of the navbar
-    .modal {
-        top: $o-navbar-height;
-    }
-
     @if o-website-value('body-image') {
         background-image: url("/#{str-slice(o-website-value('body-image'), 2)}");
         background-position: center;
@@ -178,6 +173,13 @@ $-seen-urls: ();
                 }
             }
         }
+    }
+}
+
+#oe_main_menu_navbar:not(.o_hidden) + #wrapwrap {
+    .o_header_affixed, .modal:not(.s_popup_bottom) {
+        // For these elements, in #wrapwrap, position top should be size of the navbar
+        top: $o-navbar-height;
     }
 }
 
@@ -770,9 +772,6 @@ $-transition-duration: 200ms;
         }
     }
 }
-#oe_main_menu_navbar + #wrapwrap .o_header_affixed {
-    top: $o-navbar-height;
-}
 
 // Navbar
 .navbar .o_extra_menu_items.show > ul {
@@ -807,11 +806,13 @@ $-hamburger-left: o-website-value('hamburger-position') == 'left';
 $-hamburger-center: o-website-value('hamburger-position') == 'center';
 $-hamburger-right: o-website-value('hamburger-position') == 'right';
 
-$zindex-website-header: $zindex-modal - 20;
+$zindex-website-header: $zindex-fixed !default;
 
 header {
     &#top {
-        // We need this z-index for the shadow option of the header
+        // We need this z-index for the shadow option of the header but also
+        // to create a stacking context so that header dropdowns appear below
+        // and above the same elements as the header.
         z-index: $zindex-website-header;
     }
     &:not(.o_header_no_transition) {
@@ -1074,13 +1075,20 @@ header {
                         white-space: initial;
                     }
                     .dropdown-menu {
-                        position: relative;
+                        position: static;
                     }
                 }
             }
         }
-        body.o_connected_user:not(.editor_has_snippets) #wrapwrap > header {
-            top: $o-navbar-height;
+        body.o_connected_user {
+            &:not(.editor_has_snippets) #wrapwrap > header {
+                top: $o-navbar-height;
+            }
+            &.editor_has_snippets #wrapwrap > header {
+                @if $-hamburger-right {
+                    right: $o-we-sidebar-width;
+                }
+            }
         }
     }
 } @else if o-website-value('header-template') == 'boxed' {
@@ -1154,14 +1162,17 @@ header {
         z-index: 1000;
 
         > .navbar {
+            @include o-apply-colors(1); // Reset to default colored components
             background-color: transparent !important;
             border-color: transparent;
             color: inherit;
 
             .nav-item {
                 > .nav-link {
-                    background-color: transparent;
-                    color: inherit;
+                    &, &:hover {
+                        background-color: transparent;
+                        color: inherit;
+                    }
 
                     &.active {
                         font-weight: bolder;
@@ -1360,6 +1371,7 @@ header {
     }
 }
 
+// Ribbons
 $ribbon-padding: 100px;
 .o_ribbon {
     margin: 0;
@@ -1371,30 +1383,19 @@ $ribbon-padding: 100px;
 }
 
 .o_ribbon_right {
-    @include o-position-absolute($top: 0, $right: 0);
-    padding: 0.5rem $ribbon-padding;
-    // 0.708 is 1 - cos(45deg)
-    // Transforms are applied right-to-left
-    // Cannot use matrix because of the use of % values.
-    transform: translateX(calc(-0.708 * (100% - #{2 * $ribbon-padding}))) rotate(45deg) translateX(calc(100% - #{$ribbon-padding}));
-    transform-origin: top right;
+    @include o-ribbon-right();
 }
 
 .o_ribbon_left {
-    @include o-position-absolute($top: 0, $left: 0);
-    padding: 0.5rem $ribbon-padding;
-    transform: translateX(calc(0.708 * (100% - #{2 * $ribbon-padding}) - 100%)) rotate(-45deg) translateX($ribbon-padding);
-    transform-origin: top right;
+    @include o-ribbon-left();
 }
 
 .o_tag_right {
-    @include o-position-absolute($top: 0, $right: 0);
-    padding: 0.25rem 1rem;
+    @include o-tag-right();
 }
 
 .o_tag_left {
-    @include o-position-absolute($top: 0, $left: 0);
-    padding: 0.25rem 1rem;
+    @include o-tag-left();
 }
 
 // Cookies Bar
@@ -1402,4 +1403,17 @@ $ribbon-padding: 100px;
     :not(.o_cookies_popup) {
         bottom: 0;
     }
+}
+
+.o_website_btn_loading {
+    cursor: wait;
+    opacity: $btn-disabled-opacity;
+    .fa:not(.fa-spin) {
+        display: none;
+    }
+}
+
+ul.o_checklist > li.o_checked::after {
+    left: - ($o-checklist-margin-left - $o-checklist-checkmark-width) - 1;
+    top: 0;
 }

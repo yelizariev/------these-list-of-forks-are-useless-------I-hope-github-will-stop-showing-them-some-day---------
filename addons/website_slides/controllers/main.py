@@ -76,21 +76,18 @@ class WebsiteSlides(WebsiteProfile):
 
     def _get_slide_detail(self, slide):
         base_domain = self._get_channel_slides_base_domain(slide.channel_id)
-        if slide.channel_id.channel_type == 'documentation':
-            related_domain = expression.AND([base_domain, [('category_id', '=', slide.category_id.id)]])
+        category_data = slide.channel_id._get_categorized_slides(
+            base_domain,
+            order=request.env['slide.slide']._order_by_strategy['sequence'],
+            force_void=True
+        )
 
+        if slide.channel_id.channel_type == 'documentation':
             most_viewed_slides = request.env['slide.slide'].search(base_domain, limit=self._slides_per_aside, order='total_views desc')
+            related_domain = expression.AND([base_domain, [('category_id', '=', slide.category_id.id)]])
             related_slides = request.env['slide.slide'].search(related_domain, limit=self._slides_per_aside)
-            category_data = []
-            uncategorized_slides = request.env['slide.slide']
         else:
             most_viewed_slides, related_slides = request.env['slide.slide'], request.env['slide.slide']
-            category_data = slide.channel_id._get_categorized_slides(
-                base_domain, order=request.env['slide.slide']._order_by_strategy['sequence'],
-                force_void=True)
-            # temporarily kept for fullscreen, to remove asap
-            uncategorized_domain = expression.AND([base_domain, [('channel_id', '=', slide.channel_id.id), ('category_id', '=', False)]])
-            uncategorized_slides = request.env['slide.slide'].search(uncategorized_domain)
 
         channel_slides_ids = slide.channel_id.slide_content_ids.ids
         slide_index = channel_slides_ids.index(slide.id)
@@ -105,7 +102,6 @@ class WebsiteSlides(WebsiteProfile):
             'related_slides': related_slides,
             'previous_slide': previous_slide,
             'next_slide': next_slide,
-            'uncategorized_slides': uncategorized_slides,
             'category_data': category_data,
             # user
             'user': request.env.user,
@@ -438,8 +434,7 @@ class WebsiteSlides(WebsiteProfile):
     def _get_top3_users(self):
         return request.env['res.users'].sudo().search_read([
             ('karma', '>', 0),
-            ('website_published', '=', True),
-            ('image_1920', '!=', False)], ['id'], limit=3, order='karma desc')
+            ('website_published', '=', True)], ['id'], limit=3, order='karma desc')
 
     @http.route([
         '/slides/<model("slide.channel"):channel>',
@@ -453,9 +448,6 @@ class WebsiteSlides(WebsiteProfile):
         """
         Will return all necessary data to display the requested slide_channel along with a possible category.
         """
-        if not channel.can_access_from_current_website():
-            raise werkzeug.exceptions.NotFound()
-
         domain = self._get_channel_slides_base_domain(channel)
 
         pager_url = "/slides/%s" % (channel.id)
@@ -608,7 +600,7 @@ class WebsiteSlides(WebsiteProfile):
     @http.route('/slides/channel/add', type='http', auth='user', methods=['POST'], website=True)
     def slide_channel_create(self, *args, **kw):
         channel = request.env['slide.channel'].create(self._slide_channel_prepare_values(**kw))
-        return werkzeug.utils.redirect("/slides/%s" % (slug(channel)))
+        return request.redirect("/slides/%s" % (slug(channel)))
 
     def _slide_channel_prepare_values(self, **kw):
         # `tag_ids` is a string representing a list of int with coma. i.e.: '2,5,7'
@@ -632,7 +624,7 @@ class WebsiteSlides(WebsiteProfile):
         if not request.website.is_public_user():
             channel = request.env['slide.channel'].browse(int(channel_id))
             channel.action_add_member()
-        return werkzeug.utils.redirect("/slides/%s" % (slug(channel)))
+        return request.redirect("/slides/%s" % (slug(channel)))
 
     @http.route(['/slides/channel/join'], type='json', auth='public', website=True)
     def slide_channel_join(self, channel_id):
@@ -803,7 +795,7 @@ class WebsiteSlides(WebsiteProfile):
         next_slide = None
         if next_slide_id:
             next_slide = self._fetch_slide(next_slide_id).get('slide', None)
-        return werkzeug.utils.redirect("/slides/slide/%s" % (slug(next_slide) if next_slide else slug(slide)))
+        return request.redirect("/slides/slide/%s" % (slug(next_slide) if next_slide else slug(slide)))
 
     @http.route('/slides/slide/set_completed', website=True, type="json", auth="public")
     def slide_set_completed(self, slide_id):
@@ -1039,7 +1031,7 @@ class WebsiteSlides(WebsiteProfile):
             'can_create': can_create,
         }
 
-    @http.route('/slides/category/add', type="http", website=True, auth="user")
+    @http.route('/slides/category/add', type="http", website=True, auth="user", methods=['POST'])
     def slide_category_add(self, channel_id, name):
         """ Adds a category to the specified channel. Slide is added at the end
         of slide list based on sequence. """
@@ -1049,7 +1041,7 @@ class WebsiteSlides(WebsiteProfile):
 
         request.env['slide.slide'].create(self._get_new_slide_category_values(channel, name))
 
-        return werkzeug.utils.redirect("/slides/%s" % (slug(channel)))
+        return request.redirect("/slides/%s" % (slug(channel)))
 
     # --------------------------------------------------
     # SLIDE.UPLOAD
@@ -1162,13 +1154,13 @@ class WebsiteSlides(WebsiteProfile):
         # slide, the error will be the website.403 page instead of the one of the website_slides.embed_slide.
         # Do not forget the rendering here will be displayed in the embedded iframe
 
-        # determine if it is embedded from external web page
-        referrer_url = request.httprequest.headers.get('Referer', '')
-        base_url = request.env['ir.config_parameter'].sudo().get_param('web.base.url')
-        is_embedded = referrer_url and not bool(base_url in referrer_url) or False
         # try accessing slide, and display to corresponding template
         try:
             slide = request.env['slide.slide'].browse(slide_id)
+            # determine if it is embedded from external web page
+            referrer_url = request.httprequest.headers.get('Referer', '')
+            base_url = slide.get_base_url()
+            is_embedded = referrer_url and not bool(base_url in referrer_url) or False
             if is_embedded:
                 request.env['slide.embed'].sudo()._add_embed_url(slide.id, referrer_url)
             values = self._get_slide_detail(slide)

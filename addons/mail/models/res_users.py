@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
-from odoo import _, api, exceptions, fields, models, modules
+from odoo import _, api, exceptions, fields, models, modules, Command
 from odoo.addons.base.models.res_users import is_selection_groups
 
 
@@ -25,51 +25,14 @@ class Users(models.Model):
         help="Policy on how to handle Chatter notifications:\n"
              "- Handle by Emails: notifications are sent to your email address\n"
              "- Handle in Odoo: notifications appear in your Odoo Inbox")
-    # channel-specific: moderation
-    is_moderator = fields.Boolean(string='Is moderator', compute='_compute_is_moderator')
-    moderation_counter = fields.Integer(string='Moderation count', compute='_compute_moderation_counter')
-    moderation_channel_ids = fields.Many2many(
-        'mail.channel', 'mail_channel_moderator_rel',
-        string='Moderated channels')
 
-    @api.depends('moderation_channel_ids.moderation', 'moderation_channel_ids.moderator_ids')
-    def _compute_is_moderator(self):
-        moderated = self.env['mail.channel'].search([
-            ('id', 'in', self.mapped('moderation_channel_ids').ids),
-            ('moderation', '=', True),
-            ('moderator_ids', 'in', self.ids)
-        ])
-        user_ids = moderated.mapped('moderator_ids')
-        for user in self:
-            user.is_moderator = user in user_ids
+    @property
+    def SELF_READABLE_FIELDS(self):
+        return super().SELF_READABLE_FIELDS + ['notification_type']
 
-    def _compute_moderation_counter(self):
-        self._cr.execute("""
-SELECT channel_moderator.res_users_id, COUNT(msg.id)
-FROM "mail_channel_moderator_rel" AS channel_moderator
-JOIN "mail_message" AS msg
-ON channel_moderator.mail_channel_id = msg.res_id
-    AND channel_moderator.res_users_id IN %s
-    AND msg.model = 'mail.channel'
-    AND msg.moderation_status = 'pending_moderation'
-GROUP BY channel_moderator.res_users_id""", [tuple(self.ids)])
-        result = dict(self._cr.fetchall())
-        for user in self:
-            user.moderation_counter = result.get(user.id, 0)
-
-    def __init__(self, pool, cr):
-        """ Override of __init__ to add access rights on notification_email_send
-            fields. Access rights are disabled by default, but allowed on some
-            specific fields defined in self.SELF_{READ/WRITE}ABLE_FIELDS.
-        """
-        init_res = super(Users, self).__init__(pool, cr)
-        # duplicate list to avoid modifying the original reference
-        type(self).SELF_WRITEABLE_FIELDS = list(self.SELF_WRITEABLE_FIELDS)
-        type(self).SELF_WRITEABLE_FIELDS.extend(['notification_type'])
-        # duplicate list to avoid modifying the original reference
-        type(self).SELF_READABLE_FIELDS = list(self.SELF_READABLE_FIELDS)
-        type(self).SELF_READABLE_FIELDS.extend(['notification_type'])
-        return init_res
+    @property
+    def SELF_WRITEABLE_FIELDS(self):
+        return super().SELF_WRITEABLE_FIELDS + ['notification_type']
 
     @api.model_create_multi
     def create(self, vals_list):
@@ -80,38 +43,42 @@ GROUP BY channel_moderator.res_users_id""", [tuple(self.ids)])
                 raise exceptions.RedirectWarning(msg, action.id, _('Go to the configuration panel'))
 
         users = super(Users, self).create(vals_list)
-        # Auto-subscribe to channels
-        self.env['mail.channel'].search([('group_ids', 'in', users.groups_id.ids)])._subscribe_users()
+        # Auto-subscribe to channels unless skip explicitly requested
+        if not self.env.context.get('mail_channel_nosubscribe'):
+            self.env['mail.channel'].search([('group_ids', 'in', users.groups_id.ids)])._subscribe_users_automatically()
         return users
 
     def write(self, vals):
         write_res = super(Users, self).write(vals)
         if 'active' in vals and not vals['active']:
-            self._unsubscribe_from_channels()
+            self._unsubscribe_from_non_public_channels()
         sel_groups = [vals[k] for k in vals if is_selection_groups(k) and vals[k]]
         if vals.get('groups_id'):
             # form: {'group_ids': [(3, 10), (3, 3), (4, 10), (4, 3)]} or {'group_ids': [(6, 0, [ids]}
             user_group_ids = [command[1] for command in vals['groups_id'] if command[0] == 4]
             user_group_ids += [id for command in vals['groups_id'] if command[0] == 6 for id in command[2]]
-            self.env['mail.channel'].search([('group_ids', 'in', user_group_ids)])._subscribe_users()
+            self.env['mail.channel'].search([('group_ids', 'in', user_group_ids)])._subscribe_users_automatically()
         elif sel_groups:
-            self.env['mail.channel'].search([('group_ids', 'in', sel_groups)])._subscribe_users()
+            self.env['mail.channel'].search([('group_ids', 'in', sel_groups)])._subscribe_users_automatically()
         return write_res
 
     def unlink(self):
-        self._unsubscribe_from_channels()
+        self._unsubscribe_from_non_public_channels()
         return super().unlink()
 
-    def _unsubscribe_from_channels(self):
+    def _unsubscribe_from_non_public_channels(self):
         """ This method un-subscribes users from private mail channels. Main purpose of this
             method is to prevent sending internal communication to archived / deleted users.
             We do not un-subscribes users from public channels because in most common cases,
             public channels are mailing list (e-mail based) and so users should always receive
             updates from public channels until they manually un-subscribe themselves.
         """
-        self.mapped('partner_id.channel_ids').filtered(lambda c: c.public != 'public').write({
-            'channel_partner_ids': [(3, pid) for pid in self.mapped('partner_id').ids]
-        })
+        current_cp = self.env['mail.channel.partner'].sudo().search([
+            ('partner_id', 'in', self.partner_id.ids),
+        ])
+        current_cp.filtered(
+            lambda cp: cp.channel_id.public != 'public' and cp.channel_id.channel_type == 'channel'
+        ).unlink()
 
     @api.model
     def systray_get_activities(self):
@@ -172,5 +139,5 @@ class res_groups_mail_channel(models.Model):
             # form: {'group_ids': [(3, 10), (3, 3), (4, 10), (4, 3)]} or {'group_ids': [(6, 0, [ids]}
             user_ids = [command[1] for command in vals['users'] if command[0] == 4]
             user_ids += [id for command in vals['users'] if command[0] == 6 for id in command[2]]
-            self.env['mail.channel'].search([('group_ids', 'in', self._ids)])._subscribe_users()
+            self.env['mail.channel'].search([('group_ids', 'in', self._ids)])._subscribe_users_automatically()
         return write_res

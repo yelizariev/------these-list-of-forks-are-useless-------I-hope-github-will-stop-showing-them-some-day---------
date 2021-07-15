@@ -74,7 +74,7 @@ class Survey(http.Controller):
         if survey_sudo.users_login_required and request.env.user._is_public():
             return 'survey_auth'
 
-        if (survey_sudo.state == 'closed' or survey_sudo.state == 'draft' or not survey_sudo.active) and (not answer_sudo or not answer_sudo.test_entry):
+        if not survey_sudo.active and (not answer_sudo or not answer_sudo.test_entry):
             return 'survey_closed'
 
         if (not survey_sudo.page_ids and survey_sudo.questions_layout == 'page_per_section') or not survey_sudo.question_ids:
@@ -141,7 +141,7 @@ class Survey(http.Controller):
         elif error_key == 'answer_deadline' and answer_sudo.access_token:
             return request.render("survey.survey_closed_expired", {'survey': survey_sudo})
 
-        return werkzeug.utils.redirect("/")
+        return request.redirect("/")
 
     # ------------------------------------------------------------
     # TEST / RETRY SURVEY ROUTES
@@ -155,7 +155,7 @@ class Survey(http.Controller):
         try:
             answer_sudo = survey_sudo._create_answer(user=request.env.user, test_entry=True)
         except:
-            return werkzeug.utils.redirect('/')
+            return request.redirect('/')
         return request.redirect('/survey/start/%s?%s' % (survey_sudo.access_token, keep_query('*', answer_token=answer_sudo.access_token)))
 
     @http.route('/survey/retry/<string:survey_token>/<string:answer_token>', type='http', auth='public', website=True)
@@ -169,7 +169,7 @@ class Survey(http.Controller):
         survey_sudo, answer_sudo = access_data['survey_sudo'], access_data['answer_sudo']
         if not answer_sudo:
             # attempts to 'retry' without having tried first
-            return werkzeug.utils.redirect("/")
+            return request.redirect("/")
 
         try:
             retry_answer_sudo = survey_sudo._create_answer(
@@ -181,7 +181,7 @@ class Survey(http.Controller):
                 **self._prepare_retry_additional_values(answer_sudo)
             )
         except:
-            return werkzeug.utils.redirect("/")
+            return request.redirect("/")
         return request.redirect('/survey/start/%s?%s' % (survey_sudo.access_token, keep_query('*', answer_token=retry_answer_sudo.access_token)))
 
     def _prepare_retry_additional_values(self, answer):
@@ -194,7 +194,7 @@ class Survey(http.Controller):
         if token:
             values['token'] = token
         if survey.scoring_type != 'no_scoring' and survey.certification:
-            values['graph_data'] = json.dumps(answer._prepare_statistics()[0])
+            values['graph_data'] = json.dumps(answer._prepare_statistics()[answer])
         return values
 
     # ------------------------------------------------------------
@@ -227,7 +227,7 @@ class Survey(http.Controller):
                 survey_sudo.with_user(request.env.user).check_access_rights('read')
                 survey_sudo.with_user(request.env.user).check_access_rule('read')
             except:
-                return werkzeug.utils.redirect("/")
+                return request.redirect("/")
             else:
                 return request.render("survey.survey_403_page", {'survey': survey_sudo})
 
@@ -358,8 +358,12 @@ class Survey(http.Controller):
         if access_data['validity_code'] is not True:
             return self._redirect_with_error(access_data, access_data['validity_code'])
 
+        answer_sudo = access_data['answer_sudo']
+        if answer_sudo.state != 'done' and answer_sudo.survey_time_limit_reached:
+            answer_sudo._mark_done()
+
         return request.render('survey.survey_page_fill',
-            self._prepare_survey_data(access_data['survey_sudo'], access_data['answer_sudo'], **post))
+            self._prepare_survey_data(access_data['survey_sudo'], answer_sudo, **post))
 
     @http.route('/survey/get_background_image/<string:survey_token>/<string:answer_token>', type='http', auth="public", website=True, sitemap=False)
     def survey_get_background(self, survey_token, answer_token):
@@ -463,8 +467,8 @@ class Survey(http.Controller):
 
         errors = {}
         # Prepare answers / comment by question, validate and save answers
-        inactive_questions = request.env['survey.question'] if answer_sudo.is_session_answer else answer_sudo._get_inactive_conditional_questions()
         for question in questions:
+            inactive_questions = request.env['survey.question'] if answer_sudo.is_session_answer else answer_sudo._get_inactive_conditional_questions()
             if question in inactive_questions:  # if question is inactive, skip validation and save
                 continue
             answer, comment = self._extract_comment_from_answers(question, post.get(str(question.id)))
@@ -531,7 +535,7 @@ class Survey(http.Controller):
                 if not isinstance(answers, list):
                     answers = [answers]
                 for answer in answers:
-                    if 'comment' in answer:
+                    if isinstance(answer, dict) and 'comment' in answer:
                         comment = answer['comment'].strip()
                     else:
                         answers_no_comment.append(answer)
@@ -566,6 +570,14 @@ class Survey(http.Controller):
             'format_date': lambda date: format_date(request.env, date),
         })
 
+    @http.route('/survey/<model("survey.survey"):survey>/certification_preview', type="http", auth="user", website=True)
+    def show_certification_pdf(self, survey, **kwargs):
+        preview_url = '/survey/%s/get_certification_preview' % survey.id
+        return request.render('survey.certification_preview', {
+            'preview_url': preview_url,
+            'page_title': survey.title,
+        })
+
     @http.route(['/survey/<model("survey.survey"):survey>/get_certification_preview'], type="http", auth="user", methods=['GET'], website=True)
     def survey_get_certification_preview(self, survey, **kwargs):
         if not request.env.user.has_group('survey.group_survey_user'):
@@ -586,7 +598,7 @@ class Survey(http.Controller):
 
         if not survey:
             # no certification found
-            return werkzeug.utils.redirect("/")
+            return request.redirect("/")
 
         succeeded_attempt = request.env['survey.user_input'].sudo().search([
             ('partner_id', '=', request.env.user.partner_id.id),

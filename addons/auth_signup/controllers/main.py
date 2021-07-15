@@ -22,7 +22,7 @@ class AuthSignupHome(Home):
         response.qcontext.update(self.get_auth_signup_config())
         if request.httprequest.method == 'GET' and request.session.uid and request.params.get('redirect'):
             # Redirect if already logged in and redirect param is present
-            return http.redirect_with_hash(request.params.get('redirect'))
+            return request.redirect(request.params.get('redirect'))
         return response
 
     @http.route('/web/signup', type='http', auth='public', website=True, sitemap=False)
@@ -116,17 +116,21 @@ class AuthSignupHome(Home):
                 qcontext['invalid_token'] = True
         return qcontext
 
-    def do_signup(self, qcontext):
-        """ Shared helper that creates a res.partner out of a token """
+    def _prepare_signup_values(self, qcontext):
         values = { key: qcontext.get(key) for key in ('login', 'name', 'password') }
         if not values:
             raise UserError(_("The form was not properly filled in."))
         if values.get('password') != qcontext.get('confirm_password'):
             raise UserError(_("Passwords do not match; please retype them."))
         supported_lang_codes = [code for code, _ in request.env['res.lang'].get_installed()]
-        lang = request.context.get('lang', '').split('_')[0]
+        lang = request.context.get('lang', '')
         if lang in supported_lang_codes:
             values['lang'] = lang
+        return values
+
+    def do_signup(self, qcontext):
+        """ Shared helper that creates a res.partner out of a token """
+        values = self._prepare_signup_values(qcontext)
         self._signup_with_values(qcontext.get('token'), values)
         request.env.cr.commit()
 

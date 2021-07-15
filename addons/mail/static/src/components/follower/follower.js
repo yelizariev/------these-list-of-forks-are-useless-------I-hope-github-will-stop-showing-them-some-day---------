@@ -1,20 +1,21 @@
-odoo.define('mail/static/src/components/follower/follower.js', function (require) {
-'use strict';
+/** @odoo-module **/
 
-const components = {
-    FollowerSubtypeList: require('mail/static/src/components/follower_subtype_list/follower_subtype_list.js'),
-};
-const useStore = require('mail/static/src/component_hooks/use_store/use_store.js');
+import { useShouldUpdateBasedOnProps } from '@mail/component_hooks/use_should_update_based_on_props/use_should_update_based_on_props';
+import { useStore } from '@mail/component_hooks/use_store/use_store';
+import { FollowerSubtypeList } from '@mail/components/follower_subtype_list/follower_subtype_list';
 
 const { Component } = owl;
 
-class Follower extends Component {
+const components = { FollowerSubtypeList };
+
+export class Follower extends Component {
 
     /**
      * @override
      */
     constructor(...args) {
         super(...args);
+        useShouldUpdateBasedOnProps();
         useStore(props => {
             const follower = this.env.models['mail.follower'].get(props.followerLocalId);
             return [follower ? follower.__state : undefined];
@@ -71,8 +72,4 @@ Object.assign(Follower, {
         followerLocalId: String,
     },
     template: 'mail.Follower',
-});
-
-return Follower;
-
 });

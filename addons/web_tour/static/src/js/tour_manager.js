@@ -7,7 +7,6 @@ var local_storage = require('web.local_storage');
 var mixins = require('web.mixins');
 var utils = require('web_tour.utils');
 var TourStepUtils = require('web_tour.TourStepUtils');
-var RainbowMan = require('web.RainbowMan');
 var RunningTourActionHelper = require('web_tour.RunningTourActionHelper');
 var ServicesMixin = require('web.ServicesMixin');
 var session = require('web.session');
@@ -26,7 +25,7 @@ var do_before_unload = utils.do_before_unload;
 var get_jquery_element_from_selector = utils.get_jquery_element_from_selector;
 
 return core.Class.extend(mixins.EventDispatcherMixin, ServicesMixin, {
-    init: function(parent, consumed_tours) {
+    init: function(parent, consumed_tours, disabled = false) {
         mixins.EventDispatcherMixin.init.call(this);
         this.setParent(parent);
 
@@ -37,6 +36,7 @@ return core.Class.extend(mixins.EventDispatcherMixin, ServicesMixin, {
         this.consumed_tours = (consumed_tours || []).filter(tourName => {
             return !local_storage.getItem(get_debugging_key(tourName));
         });
+        this.disabled = disabled;
         this.running_tour = local_storage.getItem(get_running_key());
         this.running_step_delay = parseInt(local_storage.getItem(get_running_delay_key()), 10) || 0;
         this.edition = (_.last(session.server_version_info) === 'e') ? 'enterprise' : 'community';
@@ -128,6 +128,11 @@ return core.Class.extend(mixins.EventDispatcherMixin, ServicesMixin, {
         });
     },
     _register: function (do_update, tour, name) {
+        const debuggingTour = local_storage.getItem(get_debugging_key(name));
+        if (this.disabled && !this.running_tour && !debuggingTour) {
+            this.consumed_tours.push(name);
+        }
+
         if (tour.ready) return Promise.resolve();
 
         const tour_is_consumed = this._isTourConsumed(name);
@@ -146,7 +151,6 @@ return core.Class.extend(mixins.EventDispatcherMixin, ServicesMixin, {
 
             tour.ready = true;
 
-            const debuggingTour = local_storage.getItem(get_debugging_key(name));
             if (debuggingTour ||
                 (do_update && (this.running_tour === name ||
                               (!this.running_tour && !tour.test && !tour_is_consumed)))) {
@@ -156,7 +160,7 @@ return core.Class.extend(mixins.EventDispatcherMixin, ServicesMixin, {
     },
     /**
      * Resets the given tour to its initial step, and prevent it from being
-     * marked as consumed at reload, by the include in tour_disable.js
+     * marked as consumed at reload.
      *
      * @param {string} tourName
      */
@@ -428,7 +432,12 @@ return core.Class.extend(mixins.EventDispatcherMixin, ServicesMixin, {
                 message = _t('<strong><b>Good job!</b> You went through all steps of this tour.</strong>');
             }
             const fadeout = this.tours[tour_name].fadeout;
-            new RainbowMan({message, fadeout}).appendTo(this.$body);
+            core.bus.trigger('show-effect', {
+                type: "rainbowman",
+                message,
+                fadeout,
+                messageIsHtml: true,
+            });
         }
         this.tours[tour_name].current_step = 0;
         local_storage.removeItem(get_step_key(tour_name));

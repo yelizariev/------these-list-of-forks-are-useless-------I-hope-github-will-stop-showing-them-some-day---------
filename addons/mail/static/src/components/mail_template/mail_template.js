@@ -1,17 +1,18 @@
-odoo.define('mail/static/src/components/mail_template/mail_template.js', function (require) {
-'use strict';
+/** @odoo-module **/
 
-const useStore = require('mail/static/src/component_hooks/use_store/use_store.js');
+import { useShouldUpdateBasedOnProps } from '@mail/component_hooks/use_should_update_based_on_props/use_should_update_based_on_props';
+import { useStore } from '@mail/component_hooks/use_store/use_store';
 
 const { Component } = owl;
 
-class MailTemplate extends Component {
+export class MailTemplate extends Component {
 
     /**
      * @override
      */
     constructor(...args) {
         super(...args);
+        useShouldUpdateBasedOnProps();
         useStore(props => {
             const activity = this.env.models['mail.activity'].get(props.activityLocalId);
             const mailTemplate = this.env.models['mail.mail_template'].get(props.mailTemplateLocalId);
@@ -72,8 +73,4 @@ Object.assign(MailTemplate, {
         mailTemplateLocalId: String,
     },
     template: 'mail.MailTemplate',
-});
-
-return MailTemplate;
-
 });

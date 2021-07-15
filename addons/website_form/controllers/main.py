@@ -3,21 +3,23 @@
 
 import base64
 import json
-import pytz
 
-from datetime import datetime
 from psycopg2 import IntegrityError
 from werkzeug.exceptions import BadRequest
 
 from odoo import http, SUPERUSER_ID, _
 from odoo.http import request
-from odoo.tools import DEFAULT_SERVER_DATE_FORMAT, DEFAULT_SERVER_DATETIME_FORMAT
-from odoo.tools.translate import _
+from odoo.tools import plaintext2html
 from odoo.exceptions import ValidationError, UserError
 from odoo.addons.base.models.ir_qweb_fields import nl2br
 
 
 class WebsiteForm(http.Controller):
+
+    @http.route('/website_form/', type='http', auth="public", methods=['POST'], multilang=False)
+    def website_form_empty(self, **kwargs):
+        # This is a workaround to don't add language prefix to <form action="/website_form/" ...>
+        return ""
 
     # Check and insert values from the form on the model <model>
     @http.route('/website_form/<string:model_name>', type='http', auth="public", methods=['POST'], website=True, csrf=False)
@@ -31,8 +33,13 @@ class WebsiteForm(http.Controller):
             raise BadRequest('Session expired (invalid CSRF token)')
 
         try:
-            if request.env['ir.http']._verify_request_recaptcha_token('website_form'):
-                return self._handle_website_form(model_name, **kwargs)
+            # The except clause below should not let what has been done inside
+            # here be committed. It should not either roll back everything in
+            # this controller method. Instead, we use a savepoint to roll back
+            # what has been done inside the try clause.
+            with request.env.cr.savepoint():
+                if request.env['ir.http']._verify_request_recaptcha_token('website_form'):
+                    return self._handle_website_form(model_name, **kwargs)
             error = _("Suspicious activity detected by Google reCaptcha.")
         except (ValidationError, UserError) as e:
             error = e.args[0]
@@ -90,6 +97,9 @@ class WebsiteForm(http.Controller):
     def floating(self, field_label, field_input):
         return float(field_input)
 
+    def html(self, field_label, field_input):
+        return plaintext2html(field_input)
+
     def boolean(self, field_label, field_input):
         return bool(field_input)
 
@@ -105,7 +115,7 @@ class WebsiteForm(http.Controller):
     _input_filters = {
         'char': identity,
         'text': identity,
-        'html': identity,
+        'html': html,
         'date': identity,
         'datetime': identity,
         'many2one': integer,
@@ -218,7 +228,6 @@ class WebsiteForm(http.Controller):
                     'body': nl2br(custom_content),
                     'model': model_name,
                     'message_type': 'comment',
-                    'no_auto_thread': False,
                     'res_id': record.id,
                 }
                 mail_id = request.env['mail.message'].with_user(SUPERUSER_ID).create(values)
@@ -253,9 +262,9 @@ class WebsiteForm(http.Controller):
                     'body': _('<p>Attached files : </p>'),
                     'model': model_name,
                     'message_type': 'comment',
-                    'no_auto_thread': False,
                     'res_id': id_record,
                     'attachment_ids': [(6, 0, orphan_attachment_ids)],
+                    'subtype_id': request.env['ir.model.data'].xmlid_to_res_id('mail.mt_comment'),
                 }
                 mail_id = request.env['mail.message'].with_user(SUPERUSER_ID).create(values)
         else:

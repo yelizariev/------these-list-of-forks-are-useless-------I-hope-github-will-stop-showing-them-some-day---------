@@ -75,10 +75,7 @@ var RunningTourActionHelper = core.Class.extend({
 
         function trigger_mouse_event($element, type, count) {
             var e = document.createEvent("MouseEvents");
-            const offset = $element.offset();
-            const elementTop = offset.top + 1;
-            const elementLeft = offset.left + 1;
-            e.initMouseEvent(type, true, true, window, count || 0, elementLeft,  elementTop,  elementLeft,  elementTop, false, false, false, false, 0, $element[0]);
+            e.initMouseEvent(type, true, true, window, count || 0, 0, 0, 0, 0, false, false, false, false, 0, $element[0]);
             $element[0].dispatchEvent(e);
         }
     },
@@ -104,8 +101,10 @@ var RunningTourActionHelper = core.Class.extend({
             $selectedOption.prop("selected", true);
             this._click(values);
         } else {
+            values.$element.focusIn();
             values.$element.trigger($.Event( "keydown", {key: '_', keyCode: 95}));
             values.$element.text(text).trigger("input");
+            values.$element.focusInEnd();
             values.$element.trigger($.Event( "keyup", {key: '_', keyCode: 95}));
         }
         values.$element.trigger("change");
@@ -117,29 +116,43 @@ var RunningTourActionHelper = core.Class.extend({
     },
     _drag_and_drop: function (values, to) {
         var $to;
+        var elementCenter = values.
+        $element.offset();
+        elementCenter.left += values.$element.outerWidth() / 2;
+        elementCenter.top += values.$element.outerHeight() / 2;
         if (to) {
             $to = get_jquery_element_from_selector(to);
         } else {
             $to = $(document.body);
         }
-        var elementCenter = values.$element.offset();
-        elementCenter.left += values.$element.outerWidth()/2;
-        elementCenter.top += values.$element.outerHeight()/2;
 
-        var toCenter = $to.offset();
+        const calculateCenter = () => {
+            const toCenter = $to.offset();
 
-        if (to && to.indexOf('iframe') !== -1) {
-            var iFrameOffset = $('iframe').offset();
-            toCenter.left += iFrameOffset.left;
-            toCenter.top += iFrameOffset.top;
-        }
-        toCenter.left += $to.outerWidth()/2;
-        toCenter.top += $to.outerHeight()/2;
+            if (to && to.indexOf('iframe') !== -1) {
+                const iFrameOffset = $('iframe').offset();
+                toCenter.left += iFrameOffset.left;
+                toCenter.top += iFrameOffset.top;
+            }
+            toCenter.left += $to.outerWidth() / 2;
+            toCenter.top += $to.outerHeight() / 2;
+            return toCenter;
+        };
 
         values.$element.trigger($.Event("mouseenter"));
-        values.$element.trigger($.Event("mousedown", {which: 1, pageX: elementCenter.left, pageY: elementCenter.top, clientX: elementCenter.left - window.pageXOffset, clientY: elementCenter.top - window.pageYOffset}));
-        values.$element.trigger($.Event("mousemove", {which: 1, pageX: toCenter.left, pageY: toCenter.top, clientX: elementCenter.left - window.pageXOffset, clientY: elementCenter.top - window.pageYOffset}));
-        values.$element.trigger($.Event("mouseup", {which: 1, pageX: toCenter.left, pageY: toCenter.top, clientX: elementCenter.left - window.pageXOffset, clientY: elementCenter.top - window.pageYOffset}));
+        values.$element.trigger($.Event("mousedown", {which: 1, pageX: elementCenter.left, pageY: elementCenter.top}));
+        // Some tests depends on elements present only when the element to drag
+        // start to move while some other tests break while moving.
+        if (!$to.length) {
+            values.$element.trigger($.Event("mousemove", {which: 1, pageX: elementCenter.left + 1, pageY: elementCenter.top}));
+            $to = get_jquery_element_from_selector(to);
+        }
+
+        let toCenter = calculateCenter();
+        values.$element.trigger($.Event("mousemove", {which: 1, pageX: toCenter.left, pageY: toCenter.top}));
+        // Recalculate the center as the mousemove might have made the element bigger.
+        toCenter = calculateCenter();
+        values.$element.trigger($.Event("mouseup", {which: 1, pageX: toCenter.left, pageY: toCenter.top}));
      },
     _keydown: function (values, keyCodes) {
         while (keyCodes.length) {

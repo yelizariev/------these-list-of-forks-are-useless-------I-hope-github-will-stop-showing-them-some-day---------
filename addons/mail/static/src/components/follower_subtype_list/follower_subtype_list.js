@@ -1,20 +1,21 @@
-odoo.define('mail/static/src/components/follower_subtype_list/follower_subtype_list.js', function (require) {
-'use strict';
+/** @odoo-module **/
 
-const components = {
-    FollowerSubtype: require('mail/static/src/components/follower_subtype/follower_subtype.js'),
-};
-const useStore = require('mail/static/src/component_hooks/use_store/use_store.js');
+import { useShouldUpdateBasedOnProps } from '@mail/component_hooks/use_should_update_based_on_props/use_should_update_based_on_props';
+import { useStore } from '@mail/component_hooks/use_store/use_store';
+import { FollowerSubtype } from '@mail/components/follower_subtype/follower_subtype';
 
 const { Component, QWeb } = owl;
 
-class FollowerSubtypeList extends Component {
+const components = { FollowerSubtype };
+
+export class FollowerSubtypeList extends Component {
 
     /**
      * @override
      */
     constructor(...args) {
         super(...args);
+        useShouldUpdateBasedOnProps();
         useStore(props => {
             const followerSubtypeList = this.env.models['mail.follower_subtype_list'].get(props.localId);
             const follower = followerSubtypeList
@@ -81,7 +82,3 @@ Object.assign(FollowerSubtypeList, {
 });
 
 QWeb.registerComponent('FollowerSubtypeList', FollowerSubtypeList);
-
-return FollowerSubtypeList;
-
-});

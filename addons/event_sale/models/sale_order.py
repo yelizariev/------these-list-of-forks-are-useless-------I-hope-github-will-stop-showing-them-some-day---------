@@ -23,7 +23,7 @@ class SaleOrder(models.Model):
         for so in self:
             # confirm registration if it was free (otherwise it will be confirmed once invoice fully paid)
             so.order_line._update_registrations(confirm=so.amount_total == 0, cancel_to_draft=False)
-            if any(line.event_id for line in so.order_line):
+            if any(line.event_ok for line in so.order_line):
                 return self.env['ir.actions.act_window'] \
                     .with_context(default_sale_order_id=so.id) \
                     ._for_xml_id('event_sale.action_sale_order_event_registration')
@@ -46,6 +46,10 @@ class SaleOrder(models.Model):
         }
         for sale_order in self:
             sale_order.attendee_count = attendee_count_data.get(sale_order.id, 0)
+
+    def unlink(self):
+        self.order_line._unlink_associated_registrations()
+        return super(SaleOrder, self).unlink()
 
 
 class SaleOrderLine(models.Model):
@@ -74,7 +78,7 @@ class SaleOrderLine(models.Model):
         RegistrationSudo = self.env['event.registration'].sudo()
         registrations = RegistrationSudo.search([('sale_order_line_id', 'in', self.ids)])
         registrations_vals = []
-        for so_line in self.filtered('event_id'):
+        for so_line in self.filtered('event_ok'):
             existing_registrations = registrations.filtered(lambda self: self.sale_order_line_id.id == so_line.id)
             if confirm:
                 existing_registrations.filtered(lambda self: self.state not in ['open', 'cancel']).action_confirm()
@@ -120,6 +124,13 @@ class SaleOrderLine(models.Model):
         # we call this to force update the default name
         self.product_id_change()
 
+    def unlink(self):
+        self._unlink_associated_registrations()
+        return super(SaleOrderLine, self).unlink()
+
+    def _unlink_associated_registrations(self):
+        self.env['event.registration'].search([('sale_order_line_id', 'in', self.ids)]).unlink()
+
     def get_sale_order_line_multiline_description_sale(self, product):
         """ We override this method because we decided that:
                 The default description of a sales order line containing a ticket must be different than the default description when no ticket is present.
@@ -137,11 +148,6 @@ class SaleOrderLine(models.Model):
 
     def _get_display_price(self, product):
         if self.event_ticket_id and self.event_id:
-            company = self.event_id.company_id or self.env.company
-            currency = company.currency_id
-            return currency._convert(
-                self.event_ticket_id.price, self.order_id.currency_id,
-                self.order_id.company_id or self.env.company.id,
-                self.order_id.date_order or fields.Date.today())
+            return self.event_ticket_id.with_context(pricelist=self.order_id.pricelist_id.id, uom=self.product_uom.id).price_reduce
         else:
             return super()._get_display_price(product)

@@ -1,8 +1,10 @@
 odoo.define('web_tour.tour_manager_tests', async function (require) {
     "use strict";
 
+    const KanbanView = require('web.KanbanView');
     const TourManager = require('web_tour.TourManager');
     const testUtils = require('web.test_utils');
+    const createView = testUtils.createView;
 
     const ajax = require('web.ajax');
     const { qweb } = require('web.core');
@@ -12,16 +14,18 @@ odoo.define('web_tour.tour_manager_tests', async function (require) {
 
     /**
      * Create a widget and a TourManager instance with a list of given Tour objects.
-     * @see TourManager.register() for more details on the Tours registry system.
-     * @param {Object} params
+     * @see `TourManager.register()` for more details on the Tours registry system.
+     * @param {Object} params aside from the parameters defined below, passed
+     *                        to {@see addMockEnvironment}.
      * @param {string[]} [params.consumed_tours]
-     * @param {boolean} [params.debug]
+     * @param {boolean} [params.debug] also passed along
+     * @param {boolean} [params.disabled]
      * @param {string} params.template inner HTML content of the widget
      * @param {Object[]} params.tours { {string} name, {Object} option, {Object[]} steps }
      */
-    async function createTourManager({ consumed_tours, debug, template, tours }) {
-        const parent = await testUtils.createParent({ debug });
-        const tourManager = new TourManager(parent, consumed_tours);
+    async function createTourManager({ consumed_tours, disabled, template, tours, ...params }) {
+        const parent = await testUtils.createParent(params);
+        const tourManager = new TourManager(parent, consumed_tours, disabled);
         tourManager.running_step_delay = 0;
         for (const { name, options, steps } of tours) {
             tourManager.register(name, options, steps);
@@ -31,25 +35,15 @@ odoo.define('web_tour.tour_manager_tests', async function (require) {
             tourManager.destroy = _destroy;
             parent.destroy();
         };
-        await parent.prependTo(testUtils.prepareTarget(debug));
+        await parent.prependTo(testUtils.prepareTarget(params.debug));
         parent.el.innerHTML = template;
-        testUtils.mock.patch(TourManager, {
-            // Since the `tour_disable.js` script automatically sets tours as consumed
-            // as soon as they are registered, we override the "is consumed" to
-            // assert that the tour is in the `consumed_tours` param key.
-            _isTourConsumed: name => (consumed_tours || []).includes(name),
-        });
         await tourManager._register_all(true);
         // Wait for possible tooltips to be loaded and appended.
         await testUtils.nextTick();
         return tourManager;
     }
 
-    QUnit.module("Tours", {
-        afterEach() {
-            testUtils.mock.unpatch(TourManager);
-        },
-    }, function () {
+    QUnit.module("Tours", function () {
 
         QUnit.module("Tour manager");
 
@@ -82,6 +76,7 @@ odoo.define('web_tour.tour_manager_tests', async function (require) {
             assert.expect(5);
 
             const tourManager = await createTourManager({
+                data: { 'web_tour.tour': {  fields: {}, consume() {} } },
                 template: `
                     <button class="btn anchor1">Anchor</button>
                     <button class="btn anchor2">Anchor</button>
@@ -146,6 +141,79 @@ odoo.define('web_tour.tour_manager_tests', async function (require) {
             assert.containsNone(document.body, '.o_tooltip:visible');
 
             tourManager.destroy();
+        });
+
+        QUnit.test("kanban quick create VS tour tooltips", async function (assert) {
+            assert.expect(3);
+
+            const kanban = await createView({
+                View: KanbanView,
+                model: 'partner',
+                data: {
+                    partner: {
+                        fields: {
+                            foo: {string: "Foo", type: "char"},
+                            bar: {string: "Bar", type: "boolean"},
+                        },
+                        records: [
+                            {id: 1, bar: true, foo: "yop"},
+                        ]
+                    }
+                },
+                arch: `<kanban>
+                        <field name="bar"/>
+                        <templates><t t-name="kanban-box">
+                            <div><field name="foo"/></div>
+                        </t></templates>
+                        </kanban>`,
+                groupBy: ['bar'],
+            });
+
+            // click to add an element
+            await testUtils.dom.click(kanban.$('.o_kanban_header .o_kanban_quick_add i').first());
+            assert.containsOnce(kanban, '.o_kanban_quick_create',
+                "should have open the quick create widget");
+
+            // create tour manager targeting the kanban quick create in its steps
+            const tourManager = await createTourManager({
+                observe: true,
+                template: kanban.$el.html(),
+                tours: [{
+                    name: "Tour",
+                    options: { rainbowMan: false },
+                    steps: [{ trigger: "input[name='display_name']" }],
+                }],
+            });
+
+            assert.containsOnce(document.body, '.o_tooltip:visible');
+
+            await testUtils.dom.click($('.o_tooltip:visible'));
+            assert.containsOnce(kanban, '.o_kanban_quick_create',
+                "the quick create should not have been destroyed when tooltip is clicked");
+
+            kanban.destroy();
+            tourManager.destroy();
+        });
+
+        QUnit.test("Automatic tour disabling", async function (assert) {
+            assert.expect(2);
+
+            const options = {
+                template: `<button class="btn anchor">Anchor</button>`,
+                tours: [{ name: "Tour", options: {}, steps: [{ trigger: '.anchor' }] }],
+            };
+
+            const enabledTM = await createTourManager({ disabled: false, ...options });
+
+            assert.containsOnce(document.body, '.o_tooltip:visible');
+
+            enabledTM.destroy();
+
+            const disabledTM = await createTourManager({ disabled: true, ...options });
+
+            assert.containsNone(document.body, '.o_tooltip:visible');
+
+            disabledTM.destroy();
         });
     });
 });

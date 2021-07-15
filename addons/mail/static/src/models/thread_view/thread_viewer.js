@@ -1,8 +1,8 @@
-odoo.define('mail/static/src/models/thread_viewer/thread_viewer.js', function (require) {
-'use strict';
+/** @odoo-module **/
 
-const { registerNewModel } = require('mail/static/src/model/model_core.js');
-const { attr, many2one, one2one } = require('mail/static/src/model/model_field.js');
+import { registerNewModel } from '@mail/model/model_core';
+import { attr, many2one, one2one } from '@mail/model/model_field';
+import { create, insert, link, unlink } from '@mail/model/model_field_command';
 
 function factory(dependencies) {
 
@@ -14,9 +14,11 @@ function factory(dependencies) {
 
         /**
          * @param {integer} scrollHeight
+         * @param {mail.thread_cache} threadCache
          */
-        saveThreadCacheScrollHeightAsInitial(scrollHeight) {
-            if (!this.threadCache) {
+        saveThreadCacheScrollHeightAsInitial(scrollHeight, threadCache) {
+            threadCache = threadCache || this.threadCache;
+            if (!threadCache) {
                 return;
             }
             if (this.chatter) {
@@ -27,16 +29,18 @@ function factory(dependencies) {
             }
             this.update({
                 threadCacheInitialScrollHeights: Object.assign({}, this.threadCacheInitialScrollHeights, {
-                    [this.threadCache.localId]: scrollHeight,
+                    [threadCache.localId]: scrollHeight,
                 }),
             });
         }
 
         /**
          * @param {integer} scrollTop
+         * @param {mail.thread_cache} threadCache
          */
-        saveThreadCacheScrollPositionsAsInitial(scrollTop) {
-            if (!this.threadCache) {
+        saveThreadCacheScrollPositionsAsInitial(scrollTop, threadCache) {
+            threadCache = threadCache || this.threadCache;
+            if (!threadCache) {
                 return;
             }
             if (this.chatter) {
@@ -47,7 +51,7 @@ function factory(dependencies) {
             }
             this.update({
                 threadCacheInitialScrollPositions: Object.assign({}, this.threadCacheInitialScrollPositions, {
-                    [this.threadCache.localId]: scrollTop,
+                    [threadCache.localId]: scrollTop,
                 }),
             });
         }
@@ -58,73 +62,16 @@ function factory(dependencies) {
 
         /**
          * @private
-         * @returns {boolean}
-         */
-        _computeHasThreadView() {
-            if (this.chatter) {
-                return this.chatter.hasThreadView;
-            }
-            if (this.chatWindow) {
-                return this.chatWindow.hasThreadView;
-            }
-            if (this.discuss) {
-                return this.discuss.hasThreadView;
-            }
-            return this.hasThreadView;
-        }
-
-        /**
-         * @private
-         * @returns {string}
-         */
-        _computeStringifiedDomain() {
-            if (this.chatter) {
-                return '[]';
-            }
-            if (this.chatWindow) {
-                return '[]';
-            }
-            if (this.discuss) {
-                return this.discuss.stringifiedDomain;
-            }
-            return this.stringifiedDomain;
-        }
-
-        /**
-         * @private
-         * @returns {mail.thread|undefined}
-         */
-         _computeThread() {
-            if (this.chatter) {
-                if (!this.chatter.thread) {
-                    return [['unlink']];
-                }
-                return [['link', this.chatter.thread]];
-            }
-            if (this.chatWindow) {
-                if (!this.chatWindow.thread) {
-                    return [['unlink']];
-                }
-                return [['link', this.chatWindow.thread]];
-            }
-            if (this.discuss) {
-                if (!this.discuss.thread) {
-                    return [['unlink']];
-                }
-                return [['link', this.discuss.thread]];
-            }
-            return [];
-        }
-
-        /**
-         * @private
          * @returns {mail.thread_cache|undefined}
          */
         _computeThreadCache() {
             if (!this.thread) {
-                return [['unlink']];
+                return unlink();
             }
-            return [['link', this.thread.cache(this.stringifiedDomain)]];
+            return insert({
+                stringifiedDomain: this.stringifiedDomain,
+                thread: link(this.thread),
+            });
         }
 
         /**
@@ -133,113 +80,37 @@ function factory(dependencies) {
          */
         _computeThreadView() {
             if (!this.hasThreadView) {
-                return [['unlink']];
+                return unlink();
             }
             if (this.threadView) {
-                return [];
+                return;
             }
-            return [['create']];
+            return create();
         }
 
     }
 
     ThreadViewer.fields = {
         /**
-         * States the `mail.chatter` managing `this`. This field is computed
-         * through the inverse relation and should be considered read-only.
-         */
-        chatter: one2one('mail.chatter', {
-            inverse: 'threadViewer',
-        }),
-        /**
-         * Serves as compute dependency.
-         */
-        chatterHasThreadView: attr({
-            related: 'chatter.hasThreadView',
-        }),
-        /**
-         * Serves as compute dependency.
-         */
-        chatterThread: many2one('mail.thread', {
-            related: 'chatter.thread',
-        }),
-        /**
-         * States the `mail.chat_window` managing `this`. This field is computed
-         * through the inverse relation and should be considered read-only.
-         */
-        chatWindow: one2one('mail.chat_window', {
-            inverse: 'threadViewer',
-        }),
-        /**
-         * Serves as compute dependency.
-         */
-        chatWindowHasThreadView: attr({
-            related: 'chatWindow.hasThreadView',
-        }),
-        /**
-         * Serves as compute dependency.
-         */
-        chatWindowThread: many2one('mail.thread', {
-            related: 'chatWindow.thread',
-        }),
-        /**
-         * States the `mail.discuss` managing `this`. This field is computed
-         * through the inverse relation and should be considered read-only.
-         */
-        discuss: one2one('mail.discuss', {
-            inverse: 'threadViewer',
-        }),
-        /**
-         * Serves as compute dependency.
-         */
-        discussHasThreadView: attr({
-            related: 'discuss.hasThreadView',
-        }),
-        /**
-         * Serves as compute dependency.
-         */
-        discussStringifiedDomain: attr({
-            related: 'discuss.stringifiedDomain',
-        }),
-        /**
-         * Serves as compute dependency.
-         */
-        discussThread: many2one('mail.thread', {
-            related: 'discuss.thread',
-        }),
-        /**
          * Determines whether `this.thread` should be displayed.
          */
         hasThreadView: attr({
-            compute: '_computeHasThreadView',
             default: false,
-            dependencies: [
-                'chatterHasThreadView',
-                'chatWindowHasThreadView',
-                'discussHasThreadView',
-            ],
         }),
+        /**
+         * Determines the selected `mail.message`.
+         */
+        selectedMessage: many2one('mail.message'),
         /**
          * Determines the domain to apply when fetching messages for `this.thread`.
          */
         stringifiedDomain: attr({
-            compute: '_computeStringifiedDomain',
             default: '[]',
-            dependencies: [
-                'discussStringifiedDomain',
-            ],
         }),
         /**
          * Determines the `mail.thread` that should be displayed by `this`.
          */
-        thread: many2one('mail.thread', {
-            compute: '_computeThread',
-            dependencies: [
-                'chatterThread',
-                'chatWindowThread',
-                'discussThread',
-            ],
-        }),
+        thread: many2one('mail.thread'),
         /**
          * States the `mail.thread_cache` that should be displayed by `this`.
          */
@@ -288,5 +159,3 @@ function factory(dependencies) {
 }
 
 registerNewModel('mail.thread_viewer', factory);
-
-});

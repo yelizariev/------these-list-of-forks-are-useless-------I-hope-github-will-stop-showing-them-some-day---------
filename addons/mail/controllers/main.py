@@ -23,7 +23,7 @@ class MailController(http.Controller):
     @classmethod
     def _redirect_to_messaging(cls):
         url = '/web#%s' % url_encode({'action': 'mail.action_discuss'})
-        return werkzeug.utils.redirect(url)
+        return request.redirect(url)
 
     @classmethod
     def _check_token(cls, token):
@@ -106,7 +106,7 @@ class MailController(http.Controller):
         record_action.pop('target_type', None)
         # the record has an URL redirection: use it directly
         if record_action['type'] == 'ir.actions.act_url':
-            return werkzeug.utils.redirect(record_action['url'])
+            return request.redirect(record_action['url'])
         # other choice: act_window (no support of anything else currently)
         elif not record_action['type'] == 'ir.actions.act_window':
             return cls._redirect_to_messaging()
@@ -124,7 +124,7 @@ class MailController(http.Controller):
         if cids:
             url_params['cids'] = ','.join([str(cid) for cid in cids])
         url = '/web?#%s' % url_encode(url_params)
-        return werkzeug.utils.redirect(url)
+        return request.redirect(url)
 
     @http.route('/mail/read_followers', type='json', auth='user')
     def read_followers(self, res_model, res_id):
@@ -141,8 +141,8 @@ class MailController(http.Controller):
             followers.append({
                 'id': follower.id,
                 'partner_id': follower.partner_id.id,
-                'channel_id': follower.channel_id.id,
                 'name': follower.name,
+                'display_name': follower.display_name,
                 'email': follower.email,
                 'is_active': follower.is_active,
                 # When editing the followers, the "pencil" icon that leads to the edition of subtypes
@@ -235,7 +235,7 @@ class MailController(http.Controller):
                 request.env[res_model].browse(res_id).check_access_rule('read')
                 if partner_id in request.env[res_model].browse(res_id).sudo().exists().message_ids.mapped('author_id').ids:
                     status, headers, _content = request.env['ir.http'].sudo().binary_content(
-                        model='res.partner', id=partner_id, field='image_128', default_mimetype='image/png')
+                        model='res.partner', id=partner_id, field='avatar_128', default_mimetype='image/png')
                     # binary content return an empty string and not a placeholder if obj[field] is False
                     if _content != '':
                         content = _content
@@ -261,13 +261,10 @@ class MailController(http.Controller):
             'channel_slots': request.env['mail.channel'].channel_fetch_slot(),
             'mail_failures': request.env['mail.message'].message_fetch_failed(),
             'commands': request.env['mail.channel'].get_mention_commands(),
-            'mention_partner_suggestions': request.env['res.partner'].get_static_mention_suggestions(),
             'shortcodes': request.env['mail.shortcode'].sudo().search_read([], ['source', 'substitution', 'description']),
             'menu_id': request.env['ir.model.data'].xmlid_to_res_id('mail.menu_root_discuss'),
-            'moderation_counter': request.env.user.moderation_counter,
-            'moderation_channel_ids': request.env.user.moderation_channel_ids.ids,
             'partner_root': request.env.ref('base.partner_root').sudo().mail_partner_format(),
-            'public_partner': request.env.ref('base.public_partner').sudo().mail_partner_format(),
+            'public_partners': [partner.mail_partner_format() for partner in request.env.ref('base.group_public').sudo().with_context(active_test=False).users.partner_id],
             'current_partner': request.env.user.partner_id.mail_partner_format(),
             'current_user_id': request.env.user.id,
         }

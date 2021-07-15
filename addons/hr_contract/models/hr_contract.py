@@ -30,10 +30,11 @@ class Contract(models.Model):
         help="End date of the trial period (if there is one).")
     resource_calendar_id = fields.Many2one(
         'resource.calendar', 'Working Schedule', compute='_compute_employee_contract', store=True, readonly=False,
-        default=lambda self: self.env.company.resource_calendar_id.id, copy=False,
+        default=lambda self: self.env.company.resource_calendar_id.id, copy=False, index=True,
         domain="['|', ('company_id', '=', False), ('company_id', '=', company_id)]")
     wage = fields.Monetary('Wage', required=True, tracking=True, help="Employee's monthly gross wage.")
-    notes = fields.Text('Notes')
+    contract_wage = fields.Monetary('Contract Wage', compute='_compute_contract_wage')
+    notes = fields.Html('Notes')
     state = fields.Selection([
         ('draft', 'New'),
         ('open', 'Running'),
@@ -44,6 +45,7 @@ class Contract(models.Model):
     company_id = fields.Many2one('res.company', compute='_compute_employee_contract', store=True, readonly=False,
         default=lambda self: self.env.company, required=True)
     company_country_id = fields.Many2one('res.country', string="Company country", related='company_id.country_id', readonly=True)
+    country_code = fields.Char(related='company_country_id.code', readonly=True)
     contract_type_id = fields.Many2one('hr.contract.type', "Contract Type")
 
     """
@@ -126,8 +128,12 @@ class Contract(models.Model):
 
     @api.constrains('date_start', 'date_end')
     def _check_dates(self):
-        if self.filtered(lambda c: c.date_end and c.date_start > c.date_end):
-            raise ValidationError(_('Contract start date must be earlier than contract end date.'))
+        for contract in self:
+            if contract.date_end and contract.date_start > contract.date_end:
+                raise ValidationError(_(
+                    'Contract %(contract)s: start date (%(start)s) must be earlier than contract end date (%(end)s).',
+                    contract=contract.name, start=contract.date_start, end=contract.date_end,
+                ))
 
     @api.model
     def update_state(self):
@@ -187,6 +193,11 @@ class Contract(models.Model):
     def _assign_open_contract(self):
         for contract in self:
             contract.employee_id.sudo().write({'contract_id': contract.id})
+
+    @api.depends('wage')
+    def _compute_contract_wage(self):
+        for contract in self:
+            contract.contract_wage = contract._get_contract_wage()
 
     def _get_contract_wage(self):
         self.ensure_one()

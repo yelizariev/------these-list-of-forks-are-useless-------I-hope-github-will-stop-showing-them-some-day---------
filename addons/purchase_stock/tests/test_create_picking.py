@@ -90,6 +90,7 @@ class TestCreatePicking(common.TestProductCommon):
         self.assertEqual(self.po.state, 'to approve', 'Purchase: PO state should be "to approve".')
 
         # PO approved by manager
+        self.po.env.user.groups_id += self.env.ref("purchase.group_purchase_manager")
         self.po.button_approve()
         self.assertEqual(self.po.state, 'purchase', 'PO state should be "Purchase".')
 
@@ -101,6 +102,7 @@ class TestCreatePicking(common.TestProductCommon):
         """
         stock_location = self.env['ir.model.data'].xmlid_to_object('stock.stock_location_stock')
         customer_location = self.env['ir.model.data'].xmlid_to_object('stock.stock_location_customers')
+        picking_type_out = self.env['ir.model.data'].xmlid_to_object('stock.picking_type_out')
         # route buy should be there by default
         partner = self.env['res.partner'].create({
             'name': 'Jhon'
@@ -132,6 +134,7 @@ class TestCreatePicking(common.TestProductCommon):
             'product_uom': product.uom_id.id,
             'product_uom_qty': 100.0,
             'procure_method': 'make_to_order',
+            'picking_type_id': picking_type_out.id,
         })
 
         customer_move._action_confirm()

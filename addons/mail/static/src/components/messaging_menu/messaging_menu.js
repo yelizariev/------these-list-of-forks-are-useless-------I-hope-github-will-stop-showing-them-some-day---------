@@ -1,17 +1,20 @@
-odoo.define('mail/static/src/components/messaging_menu/messaging_menu.js', function (require) {
-'use strict';
+/** @odoo-module **/
 
-const components = {
-    AutocompleteInput: require('mail/static/src/components/autocomplete_input/autocomplete_input.js'),
-    MobileMessagingNavbar: require('mail/static/src/components/mobile_messaging_navbar/mobile_messaging_navbar.js'),
-    NotificationList: require('mail/static/src/components/notification_list/notification_list.js'),
-};
-const useStore = require('mail/static/src/component_hooks/use_store/use_store.js');
+import { useShouldUpdateBasedOnProps } from '@mail/component_hooks/use_should_update_based_on_props/use_should_update_based_on_props';
+import { useStore } from '@mail/component_hooks/use_store/use_store';
+import { AutocompleteInput } from '@mail/components/autocomplete_input/autocomplete_input';
+import { MobileMessagingNavbar } from '@mail/components/mobile_messaging_navbar/mobile_messaging_navbar';
+import { NotificationList } from '@mail/components/notification_list/notification_list';
 
 const { Component } = owl;
-const { useRef } = owl.hooks;
 
-class MessagingMenu extends Component {
+const components = {
+    AutocompleteInput,
+    MobileMessagingNavbar,
+    NotificationList,
+};
+
+export class MessagingMenu extends Component {
 
     /**
      * @override
@@ -24,6 +27,7 @@ class MessagingMenu extends Component {
          * item is not considered as a click away from messaging menu in mobile.
          */
         this.id = _.uniqueId('o_messagingMenu_');
+        useShouldUpdateBasedOnProps();
         useStore(props => {
             return {
                 isDeviceMobile: this.env.messaging && this.env.messaging.device.isMobile,
@@ -36,9 +40,14 @@ class MessagingMenu extends Component {
         // bind since passed as props
         this._onMobileNewMessageInputSelect = this._onMobileNewMessageInputSelect.bind(this);
         this._onMobileNewMessageInputSource = this._onMobileNewMessageInputSource.bind(this);
-
         this._onClickCaptureGlobal = this._onClickCaptureGlobal.bind(this);
+        this._constructor(...args);
     }
+
+    /**
+     * Allows patching constructor.
+     */
+    _constructor() {}
 
     mounted() {
         document.addEventListener('click', this._onClickCaptureGlobal, true);
@@ -109,12 +118,6 @@ class MessagingMenu extends Component {
              * messaging menu are not ready, so user interactions are omitted
              * during this (short) period of time.
              */
-            return;
-        }
-        // in mobile: keeps the messaging menu open in background
-        // TODO: maybe need to move this to a mobile component?
-        // task-2089887
-        if (this.env.messaging.device.isMobile) {
             return;
         }
         // ignore click inside the menu
@@ -225,8 +228,4 @@ Object.assign(MessagingMenu, {
     components,
     props: {},
     template: 'mail.MessagingMenu',
-});
-
-return MessagingMenu;
-
 });

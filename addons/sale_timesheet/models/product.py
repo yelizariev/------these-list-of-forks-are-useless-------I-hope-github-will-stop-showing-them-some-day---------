@@ -11,7 +11,7 @@ class ProductTemplate(models.Model):
     _inherit = 'product.template'
 
     service_policy = fields.Selection([
-        ('ordered_timesheet', 'Ordered quantities'),
+        ('ordered_timesheet', 'Prepaid'),
         ('delivered_timesheet', 'Timesheets on tasks'),
         ('delivered_manual', 'Milestones (manually set quantities on order)')
     ], string="Service Invoicing Policy", compute='_compute_service_policy', inverse='_inverse_service_policy')
@@ -19,8 +19,10 @@ class ProductTemplate(models.Model):
         ('timesheet', 'Timesheets on project (one fare per SO/Project)'),
     ], ondelete={'timesheet': 'set default'})
     # override domain
-    project_id = fields.Many2one(domain="[('allow_billable', '=', True), ('bill_type', '=', 'customer_task'), ('allow_timesheets', 'in', [service_policy == 'delivered_timesheet' or '', True])]")
-    project_template_id = fields.Many2one(domain="[('allow_billable', '=', True), ('bill_type', '=', 'customer_project'), ('allow_timesheets', 'in', [service_policy == 'delivered_timesheet' or '', True])]")
+    project_id = fields.Many2one(domain="[('company_id', '=', current_company_id), ('allow_billable', '=', True), ('pricing_type', '=', 'task_rate'), ('allow_timesheets', 'in', [service_policy == 'delivered_timesheet', True])]")
+    project_template_id = fields.Many2one(domain="[('company_id', '=', current_company_id), ('allow_billable', '=', True), ('pricing_type', '!=', 'task_rate'), ('allow_timesheets', 'in', [service_policy == 'delivered_timesheet', True])]")
+    service_upsell_warning = fields.Boolean('Upsell Warning', help="The salesperson in charge will be assigned an activity informing him of an upselling opportunity once the selected threshold is reached.")
+    service_upsell_threshold = fields.Float('Threshold', help="Percentage of time delivered compared to the prepaid amount that must be reached for the upselling opportunity activity to be triggered.")
 
     def _default_visible_expense_policy(self):
         visibility = self.user_has_groups('project.group_project_user')
@@ -68,11 +70,30 @@ class ProductTemplate(models.Model):
             self.invoice_policy = 'order'
         return res
 
-    def unlink(self):
+    @api.model
+    def _get_onchange_service_policy_updates(self, service_tracking, service_policy, project_id, project_template_id):
+        vals = {}
+        if service_tracking != 'no' and service_policy == 'delivered_timesheet':
+            if project_id and not project_id.allow_timesheets:
+                vals['project_id'] = False
+            elif project_template_id and not project_template_id.allow_timesheets:
+                vals['project_template_id'] = False
+        return vals
+
+    @api.onchange('service_policy')
+    def _onchange_service_policy(self):
+        vals = self._get_onchange_service_policy_updates(self.service_tracking,
+                                                        self.service_policy,
+                                                        self.project_id,
+                                                        self.project_template_id)
+        if vals:
+            self.update(vals)
+
+    @api.ondelete(at_uninstall=False)
+    def _unlink_except_master_data(self):
         time_product = self.env.ref('sale_timesheet.time_product')
         if time_product.product_tmpl_id in self:
-            raise ValidationError(_('The %s product is required by the Timesheet app and cannot be archived/deleted.') % time_product.name)
-        return super(ProductTemplate, self).unlink()
+            raise ValidationError(_('The %s product is required by the Timesheets app and cannot be archived nor deleted.') % time_product.name)
 
     def write(self, vals):
         # timesheet product can't be archived
@@ -80,7 +101,7 @@ class ProductTemplate(models.Model):
         if not test_mode and 'active' in vals and not vals['active']:
             time_product = self.env.ref('sale_timesheet.time_product')
             if time_product.product_tmpl_id in self:
-                raise ValidationError(_('The %s product is required by the Timesheet app and cannot be archived/deleted.') % time_product.name)
+                raise ValidationError(_('The %s product is required by the Timesheets app and cannot be archived nor deleted.') % time_product.name)
         return super(ProductTemplate, self).write(vals)
 
 
@@ -92,11 +113,20 @@ class ProductProduct(models.Model):
         self.ensure_one()
         return self.type == 'service' and self.service_policy == 'delivered_timesheet'
 
-    def unlink(self):
+    @api.onchange('service_policy')
+    def _onchange_service_policy(self):
+        vals = self.product_tmpl_id._get_onchange_service_policy_updates(self.service_tracking,
+                                                                        self.service_policy,
+                                                                        self.project_id,
+                                                                        self.project_template_id)
+        if vals:
+            self.update(vals)
+
+    @api.ondelete(at_uninstall=False)
+    def _unlink_except_master_data(self):
         time_product = self.env.ref('sale_timesheet.time_product')
         if time_product in self:
-            raise ValidationError(_('The %s product is required by the Timesheet app and cannot be archived/deleted.') % time_product.name)
-        return super(ProductProduct, self).unlink()
+            raise ValidationError(_('The %s product is required by the Timesheets app and cannot be archived nor deleted.') % time_product.name)
 
     def write(self, vals):
         # timesheet product can't be archived
@@ -104,5 +134,5 @@ class ProductProduct(models.Model):
         if not test_mode and 'active' in vals and not vals['active']:
             time_product = self.env.ref('sale_timesheet.time_product')
             if time_product in self:
-                raise ValidationError(_('The %s product is required by the Timesheet app and cannot be archived/deleted.') % time_product.name)
+                raise ValidationError(_('The %s product is required by the Timesheets app and cannot be archived nor deleted.') % time_product.name)
         return super(ProductProduct, self).write(vals)

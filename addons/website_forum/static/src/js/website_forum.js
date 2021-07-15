@@ -12,7 +12,11 @@ var _t = core._t;
 
 publicWidget.registry.websiteForum = publicWidget.Widget.extend({
     selector: '.website_forum',
-    xmlDependencies: ['/website_forum/static/src/xml/website_forum_share_templates.xml'],
+    xmlDependencies: [
+        '/web_editor/static/src/xml/editor.xml',
+        '/website_forum/static/src/xml/website_forum_templates.xml',
+        '/website_forum/static/src/xml/website_forum_share_templates.xml',
+    ],
     events: {
         'click .karma_required': '_onKarmaRequiredClick',
         'mouseenter .o_js_forum_tag_follow': '_onTagFollowBoxMouseEnter',
@@ -113,33 +117,21 @@ publicWidget.registry.websiteForum = publicWidget.Widget.extend({
             },
         });
 
-        _.each($('textarea.o_wysiwyg_loader'), async function (textarea) {
+        _.each($('textarea.o_wysiwyg_loader'), function (textarea) {
             var $textarea = $(textarea);
             var editorKarma = $textarea.data('karma') || 0; // default value for backward compatibility
+            var $form = $textarea.closest('form');
             var hasFullEdit = parseInt($("#karma").val()) >= editorKarma;
-            var toolbar = [
-                ['style', ['style']],
-                ['font', ['bold', 'italic', 'underline', 'clear']],
-                ['para', ['ul', 'ol', 'paragraph']],
-                ['table', ['table']],
-            ];
-            if (hasFullEdit) {
-                toolbar.push(['insert', ['link', 'picture']]);
-            }
-            toolbar.push(['history', ['undo', 'redo']]);
 
             var options = {
-                height: 200,
-                minHeight: 80,
-                toolbar: toolbar,
-                styleWithSpan: false,
-                wrapperClass: 'note-editable flex-grow-1 ',
+                toolbarTemplate: 'website_forum.web_editor_toolbar',
                 recordInfo: {
                     context: self._getContext(),
                     res_model: 'forum.post',
                     res_id: +window.location.pathname.split('-').pop(),
                 },
-                value: textarea.value.trim() ? textarea.value : '<p><br/></p>',
+                resizable: true,
+                userGeneratedContent: true,
             };
             if (!hasFullEdit) {
                 options.plugins = {
@@ -147,8 +139,13 @@ publicWidget.registry.websiteForum = publicWidget.Widget.extend({
                     MediaPlugin: false,
                 };
             }
-
-            await wysiwygLoader.loadFromTextarea(this, $textarea, options);
+            wysiwygLoader.loadFromTextarea(self, $textarea[0], options).then(wysiwyg => {
+                if (!hasFullEdit) {
+                    wysiwyg.toolbar.$el.find('#link, #media').remove();
+                }
+                // float-left class messes up the post layout OPW 769721
+                $form.find('.note-editable').find('img.float-left').removeClass('float-left');
+            });
         });
 
         _.each(this.$('.o_wforum_bio_popover'), authorBox => {
@@ -157,7 +154,7 @@ publicWidget.registry.websiteForum = publicWidget.Widget.extend({
                 offset: 10,
                 animation: false,
                 html: true,
-            });
+            }).popover('hide').data('bs.popover').tip.classList.add('o_wforum_bio_popover_container');
         });
 
         this.$('#post_reply').on('shown.bs.collapse', function (e) {
@@ -187,7 +184,7 @@ publicWidget.registry.websiteForum = publicWidget.Widget.extend({
         let $title = $form.find('input[name=post_name]');
         let $textarea = $form.find('textarea[name=content]');
         // It's not really in the textarea that the user write at first
-        let textareaContent = $form.find('.note-editable').text().trim();
+        let textareaContent = $form.find('.o_wysiwyg_textarea_wrapper').text().trim();
 
         if ($title.length && $title[0].required) {
             if ($title.val()) {
@@ -200,7 +197,7 @@ publicWidget.registry.websiteForum = publicWidget.Widget.extend({
 
         // Because the textarea is hidden, we add the red or green border to its container
         if ($textarea[0] && $textarea[0].required) {
-            let $textareaContainer = $form.find('.note-editable');
+            let $textareaContainer = $form.find('.o_wysiwyg_textarea_wrapper');
             if (!textareaContent.length) {
                 $textareaContainer.addClass('border border-danger rounded-top');
                 validForm = false;
@@ -249,11 +246,11 @@ publicWidget.registry.websiteForum = publicWidget.Widget.extend({
             msg = _t("Sorry you must be logged in to perform this action");
             title = _t("Access Denied");
         }
-        this.call('crash_manager', 'show_warning', {
+        this.displayNotification({
             message: msg,
             title: title,
-        }, {
             sticky: false,
+            type: "warning",
         });
     },
     /**
@@ -311,11 +308,11 @@ publicWidget.registry.websiteForum = publicWidget.Widget.extend({
                 } else if (data.error === 'post_non_flaggable') {
                     message = _t("This post can not be flagged");
                 }
-                self.call('crash_manager', 'show_warning', {
+                this.displayNotification({
                     message: message,
                     title: _t("Access Denied"),
-                }, {
                     sticky: false,
+                    type: "warning",
                 });
             } else if (data.success) {
                 var elem = $link;
@@ -351,11 +348,11 @@ publicWidget.registry.websiteForum = publicWidget.Widget.extend({
                 } else if (data.error === 'anonymous_user') {
                     message = _t('Sorry you must be logged to vote');
                 }
-                self.call('crash_manager', 'show_warning', {
+                this.displayNotification({
                     message: message,
                     title: _t("Access Denied"),
-                }, {
                     sticky: false,
+                    type: "warning",
                 });
             } else {
                 var $container = $btn.closest('.vote');
@@ -430,11 +427,11 @@ publicWidget.registry.websiteForum = publicWidget.Widget.extend({
                 if (data.error === 'anonymous_user') {
                     var message = _t("Sorry, anonymous users cannot choose correct answer.");
                 }
-                this.call('crash_manager', 'show_warning', {
+                this.displayNotification({
                     message: message,
                     title: _t("Access Denied"),
-                }, {
                     sticky: false,
+                    type: "warning",
                 });
             } else {
                 _.each(this.$('.forum_answer'), answer => {

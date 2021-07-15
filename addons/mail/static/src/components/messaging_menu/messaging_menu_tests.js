@@ -1,15 +1,14 @@
-odoo.define('mail/static/src/components/messaging_menu/messaging_menu_tests.js', function (require) {
-'use strict';
+/** @odoo-module **/
 
-const {
+import {
     afterEach,
     afterNextRender,
     beforeEach,
     nextAnimationFrame,
     start,
-} = require('mail/static/src/utils/test_utils.js');
+} from '@mail/utils/test_utils';
 
-const { makeTestPromise } = require('web.test_utils');
+import { makeTestPromise } from 'web.test_utils';
 
 QUnit.module('mail', {}, function () {
 QUnit.module('components', {}, function () {
@@ -504,7 +503,6 @@ QUnit.test('channel preview: basic rendering', async function (assert) {
     this.data['mail.message'].records.push({
         author_id: 7, // not current partner, will be asserted in the test
         body: "<p>test</p>", // random body, will be asserted in the test
-        channel_ids: [20], // id of related channel
         model: 'mail.channel', // necessary to link message to channel
         res_id: 20, // id of related channel
     });
@@ -597,12 +595,10 @@ QUnit.test('filtered previews', async function (assert) {
     );
     this.data['mail.message'].records.push(
         {
-            channel_ids: [10], // id of related channel
             model: 'mail.channel', // to link message to channel
             res_id: 10, // id of related channel
         },
         {
-            channel_ids: [20], // id of related channel
             model: 'mail.channel', // to link message to channel
             res_id: 20, // id of related channel
         },
@@ -621,10 +617,10 @@ QUnit.test('filtered previews', async function (assert) {
         document.querySelectorAll(`
             .o_MessagingMenu_dropdownMenu
             .o_ThreadPreview[data-thread-local-id="${
-                this.env.models['mail.thread'].find(thread =>
-                    thread.id === 10 &&
-                    thread.model === 'mail.channel'
-                ).localId
+                this.env.models['mail.thread'].findFromIdentifyingData({
+                    id: 10,
+                    model: 'mail.channel',
+                }).localId
             }"]
         `).length,
         1,
@@ -634,10 +630,10 @@ QUnit.test('filtered previews', async function (assert) {
         document.querySelectorAll(`
             .o_MessagingMenu_dropdownMenu
             .o_ThreadPreview[data-thread-local-id="${
-                this.env.models['mail.thread'].find(thread =>
-                    thread.id === 20 &&
-                    thread.model === 'mail.channel'
-                ).localId
+                this.env.models['mail.thread'].findFromIdentifyingData({
+                    id: 20,
+                    model: 'mail.channel',
+                }).localId
             }"]
         `).length,
         1,
@@ -656,10 +652,10 @@ QUnit.test('filtered previews', async function (assert) {
         document.querySelectorAll(`
             .o_MessagingMenu_dropdownMenu
             .o_ThreadPreview[data-thread-local-id="${
-                this.env.models['mail.thread'].find(thread =>
-                    thread.id === 10 &&
-                    thread.model === 'mail.channel'
-                ).localId
+                this.env.models['mail.thread'].findFromIdentifyingData({
+                    id: 10,
+                    model: 'mail.channel',
+                }).localId
             }"]
         `).length,
         1,
@@ -669,10 +665,10 @@ QUnit.test('filtered previews', async function (assert) {
         document.querySelectorAll(`
             .o_MessagingMenu_dropdownMenu
             .o_ThreadPreview[data-thread-local-id="${
-                this.env.models['mail.thread'].find(thread =>
-                    thread.id === 20 &&
-                    thread.model === 'mail.channel'
-                ).localId
+                this.env.models['mail.thread'].findFromIdentifyingData({
+                    id: 20,
+                    model: 'mail.channel',
+                }).localId
             }"]
         `).length,
         0,
@@ -694,10 +690,10 @@ QUnit.test('filtered previews', async function (assert) {
         document.querySelectorAll(`
             .o_MessagingMenu_dropdownMenu
             .o_ThreadPreview[data-thread-local-id="${
-                this.env.models['mail.thread'].find(thread =>
-                    thread.id === 10 &&
-                    thread.model === 'mail.channel'
-                ).localId
+                this.env.models['mail.thread'].findFromIdentifyingData({
+                    id: 10,
+                    model: 'mail.channel',
+                }).localId
             }"]
         `).length,
         0,
@@ -707,10 +703,10 @@ QUnit.test('filtered previews', async function (assert) {
         document.querySelectorAll(`
             .o_MessagingMenu_dropdownMenu
             .o_ThreadPreview[data-thread-local-id="${
-                this.env.models['mail.thread'].find(thread =>
-                    thread.id === 20 &&
-                    thread.model === 'mail.channel'
-                ).localId
+                this.env.models['mail.thread'].findFromIdentifyingData({
+                    id: 20,
+                    model: 'mail.channel',
+                }).localId
             }"]
         `).length,
         1,
@@ -729,10 +725,10 @@ QUnit.test('filtered previews', async function (assert) {
         document.querySelectorAll(`
             .o_MessagingMenu_dropdownMenu
             .o_ThreadPreview[data-thread-local-id="${
-                this.env.models['mail.thread'].find(thread =>
-                    thread.id === 10 &&
-                    thread.model === 'mail.channel'
-                ).localId
+                this.env.models['mail.thread'].findFromIdentifyingData({
+                    id: 10,
+                    model: 'mail.channel',
+                }).localId
             }"]
         `).length,
         1,
@@ -742,10 +738,10 @@ QUnit.test('filtered previews', async function (assert) {
         document.querySelectorAll(`
             .o_MessagingMenu_dropdownMenu
             .o_ThreadPreview[data-thread-local-id="${
-                this.env.models['mail.thread'].find(thread =>
-                    thread.id === 20 &&
-                    thread.model === 'mail.channel'
-                ).localId
+                this.env.models['mail.thread'].findFromIdentifyingData({
+                    id: 20,
+                    model: 'mail.channel',
+                }).localId
             }"]
         `).length,
         1,
@@ -781,7 +777,8 @@ QUnit.test('no code injection in message body preview', async function (assert) 
     this.data['mail.channel'].records.push({ id: 11 });
     this.data['mail.message'].records.push({
         body: "<p><em>&shoulnotberaised</em><script>throw new Error('CodeInjectionError');</script></p>",
-        channel_ids: [11],
+        model: "mail.channel",
+        res_id: 11,
     });
     await this.start();
 
@@ -822,7 +819,8 @@ QUnit.test('no code injection in message body preview from sanitized message', a
     this.data['mail.channel'].records.push({ id: 11 });
     this.data['mail.message'].records.push({
         body: "<p>&lt;em&gt;&shoulnotberaised&lt;/em&gt;&lt;script&gt;throw new Error('CodeInjectionError');&lt;/script&gt;</p>",
-        channel_ids: [11],
+        model: "mail.channel",
+        res_id: 11,
     });
     await this.start();
 
@@ -863,7 +861,8 @@ QUnit.test('<br/> tags in message body preview are transformed in spaces', async
     this.data['mail.channel'].records.push({ id: 11 });
     this.data['mail.message'].records.push({
         body: "<p>a<br/>b<br>c<br   />d<br     ></p>",
-        channel_ids: [11],
+        model: "mail.channel",
+        res_id: 11,
     });
     await this.start();
 
@@ -989,7 +988,7 @@ QUnit.test('rendering without OdooBot has a request (accepted)', async function 
 });
 
 QUnit.test('respond to notification prompt (denied)', async function (assert) {
-    assert.expect(3);
+    assert.expect(4);
 
     await this.start({
         env: {
@@ -1002,6 +1001,15 @@ QUnit.test('respond to notification prompt (denied)', async function (assert) {
                     },
                 },
             },
+            services: {
+                notification: {
+                    notify() {
+                        assert.step(
+                            "should display a toast notification with the deny confirmation"
+                        );
+                    }
+                }
+            }
         },
     });
 
@@ -1011,11 +1019,10 @@ QUnit.test('respond to notification prompt (denied)', async function (assert) {
     await afterNextRender(() =>
         document.querySelector('.o_NotificationRequest').click()
     );
-    assert.containsOnce(
-        document.body,
-        '.toast .o_notification_content',
-        "should display a toast notification with the deny confirmation"
-    );
+    assert.verifySteps([
+        "should display a toast notification with the deny confirmation",
+    ]);
+
     assert.containsNone(
         document.body,
         '.o_MessagingMenu_counter',
@@ -1034,6 +1041,4 @@ QUnit.test('respond to notification prompt (denied)', async function (assert) {
 
 });
 });
-});
-
 });

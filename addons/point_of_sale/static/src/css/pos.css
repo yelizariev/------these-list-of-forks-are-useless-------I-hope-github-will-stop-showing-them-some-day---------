@@ -1349,6 +1349,12 @@ td {
     flex-direction: column;
 }
 
+@media screen and (min-width: 768px) {
+    .screen .left-content {
+        max-width: 34%
+    }
+}
+
 .pos .btn-switch-payment {
     background-color: #6ec89b;
     border-radius: 0px;
@@ -1690,6 +1696,9 @@ td {
 }
 
 @media print {
+    body {
+        background: white;
+    }
     body * {
         visibility: hidden;
     }
@@ -1701,7 +1710,7 @@ td {
         top: 0;
         left: 0;
     }
-    .pos .receipt-screen .pos-receipt-container * {
+    .pos .receipt-screen .pos-receipt-container, .pos .receipt-screen .pos-receipt-container  * {
         visibility: visible;
         background: white !important;
         color: black !important;
@@ -1711,7 +1720,7 @@ td {
         margin-left: auto !important;
         margin-right: auto !important;
         border: none !important;
-        font-size: 13px !important;
+        font-size: 14px !important;
         width: 266px !important;
     }
 }
@@ -2661,6 +2670,7 @@ td {
 
 .pos .popup.popup-password {
     width: 254px;
+    height: 510px;
 }
 .pos .popup-password .mode-button.add,
 .pos .popup-password .input-button.dot {
@@ -2672,6 +2682,9 @@ td {
 .pos .popup-password .popup-input {
     width: 70%;
  }
+.pos .popup-input.value .highlight {
+    background: lightblue;
+}
 
 .pos .popup .body ul,
 .pos .popup ul.body {
@@ -3592,4 +3605,8 @@ td {
     left: 50%;
     bottom: 5%;
     font-size: 17px;
+}
+
+.pos .pos-topheader .oe_status:hover {
+    background: rgb(104,69,95);
 }

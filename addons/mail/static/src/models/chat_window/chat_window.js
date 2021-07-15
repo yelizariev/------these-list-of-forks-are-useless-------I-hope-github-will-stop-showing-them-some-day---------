@@ -1,9 +1,8 @@
-odoo.define('mail/static/src/models/chat_window/chat_window.js', function (require) {
-'use strict';
+/** @odoo-module **/
 
-const { registerNewModel } = require('mail/static/src/model/model_core.js');
-const { attr, many2one, one2many, one2one } = require('mail/static/src/model/model_field.js');
-const { clear } = require('mail/static/src/model/model_field_command.js');
+import { registerNewModel } from '@mail/model/model_core';
+import { attr, many2one, one2many, one2one } from '@mail/model/model_field';
+import { clear, create, link, unlink, update } from '@mail/model/model_field_command';
 
 function factory(dependencies) {
 
@@ -39,9 +38,12 @@ function factory(dependencies) {
          * Close this chat window.
          *
          * @param {Object} [param0={}]
-         * @param {boolean} [param0.notifyServer=true]
+         * @param {boolean} [param0.notifyServer]
          */
-        close({ notifyServer = true } = {}) {
+        close({ notifyServer } = {}) {
+            if (notifyServer === undefined) {
+                notifyServer = !this.env.messaging.device.isMobile;
+            }
             const thread = this.thread;
             this.delete();
             // Flux specific: 'closed' fold state should only be saved on the
@@ -49,6 +51,13 @@ function factory(dependencies) {
             // or sync from server value for example should not save the value.
             if (thread && notifyServer) {
                 thread.notifyFoldStateToServer('closed');
+            }
+            if (this.env.device.isMobile && !this.env.messaging.discuss.isOpen) {
+                // If we are in mobile and discuss is not open, it means the
+                // chat window was opened from the messaging menu. In that
+                // case it should be re-opened to simulate it was always
+                // there in the background.
+                this.env.messaging.messagingMenu.update({ isOpen: true });
             }
         }
 
@@ -82,9 +91,12 @@ function factory(dependencies) {
 
         /**
          * @param {Object} [param0={}]
-         * @param {boolean} [param0.notifyServer=true]
+         * @param {boolean} [param0.notifyServer]
          */
-        fold({ notifyServer = true } = {}) {
+        fold({ notifyServer } = {}) {
+            if (notifyServer === undefined) {
+                notifyServer = !this.env.messaging.device.isMobile;
+            }
             this.update({ isFolded: true });
             // Flux specific: manually folding the chat window should save the
             // new state on the server.
@@ -118,24 +130,27 @@ function factory(dependencies) {
         }
 
         /**
-         * Shift this chat window to the left on screen.
+         * Swap this chat window with the previous one.
          */
-        shiftLeft() {
-            this.manager.shiftLeft(this);
+        shiftPrev() {
+            this.manager.shiftPrev(this);
         }
 
         /**
-         * Shift this chat window to the right on screen.
+         * Swap this chat window with the next one.
          */
-        shiftRight() {
-            this.manager.shiftRight(this);
+        shiftNext() {
+            this.manager.shiftNext(this);
         }
 
         /**
          * @param {Object} [param0={}]
-         * @param {boolean} [param0.notifyServer=true]
+         * @param {boolean} [param0.notifyServer]
          */
-        unfold({ notifyServer = true } = {}) {
+        unfold({ notifyServer } = {}) {
+            if (notifyServer === undefined) {
+                notifyServer = !this.env.messaging.device.isMobile;
+            }
             this.update({ isFolded: false });
             // Flux specific: manually opening the chat window should save the
             // new state on the server.
@@ -160,7 +175,7 @@ function factory(dependencies) {
          * @private
          * @returns {boolean}
          */
-        _computeHasShiftLeft() {
+        _computeHasShiftPrev() {
             if (!this.manager) {
                 return false;
             }
@@ -176,7 +191,7 @@ function factory(dependencies) {
          * @private
          * @returns {boolean}
          */
-        _computeHasShiftRight() {
+        _computeHasShiftNext() {
             if (!this.manager) {
                 return false;
             }
@@ -227,6 +242,21 @@ function factory(dependencies) {
                 return this.thread.displayName;
             }
             return this.env._t("New message");
+        }
+
+        /**
+         * @private
+         * @returns {mail.thread_viewer}
+         */
+        _computeThreadViewer() {
+            const threadViewerData = {
+                hasThreadView: this.hasThreadView,
+                thread: this.thread ? link(this.thread) : unlink(),
+            };
+            if (!this.threadViewer) {
+                return create(threadViewerData);
+            }
+            return update(threadViewerData);
         }
 
         /**
@@ -342,13 +372,13 @@ function factory(dependencies) {
                 'thread',
             ],
         }),
-        hasShiftLeft: attr({
-            compute: '_computeHasShiftLeft',
+        hasShiftPrev: attr({
+            compute: '_computeHasShiftPrev',
             dependencies: ['managerAllOrderedVisible'],
             default: false,
         }),
-        hasShiftRight: attr({
-            compute: '_computeHasShiftRight',
+        hasShiftNext: attr({
+            compute: '_computeHasShiftNext',
             dependencies: ['managerAllOrderedVisible'],
             default: false,
         }),
@@ -431,9 +461,14 @@ function factory(dependencies) {
          * Determines the `mail.thread_viewer` managing the display of `this.thread`.
          */
         threadViewer: one2one('mail.thread_viewer', {
-            default: [['create']],
-            inverse: 'chatWindow',
+            compute: '_computeThreadViewer',
+            dependencies: [
+                'hasThreadView',
+                'thread',
+            ],
             isCausal: true,
+            readonly: true,
+            required: true,
         }),
         /**
          * This field handle the "order" (index) of the visible chatWindow inside the UI.
@@ -460,5 +495,3 @@ function factory(dependencies) {
 }
 
 registerNewModel('mail.chat_window', factory);
-
-});

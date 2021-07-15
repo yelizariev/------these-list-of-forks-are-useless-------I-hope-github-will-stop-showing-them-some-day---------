@@ -1,30 +1,42 @@
-odoo.define('mail/static/src/components/discuss_sidebar_item/discuss_sidebar_item.js', function (require) {
-'use strict';
+/** @odoo-module **/
 
-const components = {
-    EditableText: require('mail/static/src/components/editable_text/editable_text.js'),
-    ThreadIcon: require('mail/static/src/components/thread_icon/thread_icon.js'),
-};
-const useStore = require('mail/static/src/component_hooks/use_store/use_store.js');
+import { useShouldUpdateBasedOnProps } from '@mail/component_hooks/use_should_update_based_on_props/use_should_update_based_on_props';
+import { useStore } from '@mail/component_hooks/use_store/use_store';
+import { EditableText } from '@mail/components/editable_text/editable_text';
+import { ThreadIcon } from '@mail/components/thread_icon/thread_icon';
+import { isEventHandled } from '@mail/utils/utils';
 
-const Dialog = require('web.Dialog');
+import Dialog from 'web.Dialog';
 
 const { Component } = owl;
 
-class DiscussSidebarItem extends Component {
+const components = { EditableText, ThreadIcon };
+
+export class DiscussSidebarItem extends Component {
 
     /**
      * @override
      */
     constructor(...args) {
         super(...args);
+        useShouldUpdateBasedOnProps();
         useStore(props => {
+            const discuss = this.env.messaging.discuss;
             const thread = this.env.models['mail.thread'].get(props.threadLocalId);
             const correspondent = thread ? thread.correspondent : undefined;
             return {
-                correspondent: correspondent ? correspondent.__state : undefined,
-                discuss: this.env.messaging.discuss.__state,
-                thread: thread ? thread.__state : undefined,
+                correspondentName: correspondent && correspondent.name,
+                discussIsRenamingThread: discuss && discuss.renamingThreads.includes(thread),
+                isDiscussThread: discuss && discuss.thread === thread,
+                starred: this.env.messaging.starred,
+                thread,
+                threadChannelType: thread && thread.channel_type,
+                threadCounter: thread && thread.counter,
+                threadDisplayName: thread && thread.displayName,
+                threadGroupBasedSubscription: thread && thread.group_based_subscription,
+                threadLocalMessageUnreadCounter: thread && thread.localMessageUnreadCounter,
+                threadMessageNeedactionCounter: thread && thread.message_needaction_counter,
+                threadModel: thread && thread.model,
             };
         });
     }
@@ -117,6 +129,9 @@ class DiscussSidebarItem extends Component {
      * @param {MouseEvent} ev
      */
     _onClick(ev) {
+        if (isEventHandled(ev, 'EditableText.click')) {
+            return;
+        }
         this.thread.open();
     }
 
@@ -196,8 +211,4 @@ Object.assign(DiscussSidebarItem, {
         threadLocalId: String,
     },
     template: 'mail.DiscussSidebarItem',
-});
-
-return DiscussSidebarItem;
-
 });

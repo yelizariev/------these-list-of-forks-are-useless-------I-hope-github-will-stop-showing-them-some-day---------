@@ -3,7 +3,6 @@
 
 import datetime
 import json
-import werkzeug
 
 from dateutil.relativedelta import relativedelta
 from werkzeug.exceptions import NotFound
@@ -28,7 +27,6 @@ class UserInputSession(http.Controller):
         We limit to sessions opened within the last 7 days to avoid potential abuses. """
         if session_code:
             matching_survey = request.env['survey.survey'].sudo().search([
-                ('state', '=', 'open'),
                 ('session_start_time', '>', fields.Datetime.now() - relativedelta(days=7)),
                 ('session_code', '=', session_code),
             ], limit=1)
@@ -47,6 +45,8 @@ class UserInputSession(http.Controller):
         - If the state of the session is 'ready'
           We render a template allowing the host to showcase the different options of the session
           and to actually start the session.
+          If there are no questions, a "void content" is displayed instead to avoid displaying a
+          blank survey.
         - If the state of the session is 'in_progress'
           We render a template allowing the host to show the question results, display the attendees
           leaderboard or go to the next question of the session. """
@@ -58,6 +58,11 @@ class UserInputSession(http.Controller):
             return NotFound()
 
         if survey.session_state == 'ready':
+            if not survey.question_ids:
+                return request.render('survey.survey_void_content', {
+                    'survey': survey,
+                    'answer': request.env['survey.user_input'],
+                })
             return request.render('survey.user_input_session_open', {
                 'survey': survey
             })
@@ -66,7 +71,7 @@ class UserInputSession(http.Controller):
             return request.render('survey.user_input_session_manage', template_values)
 
     @http.route('/survey/session/next_question/<string:survey_token>', type='json', auth='user', website=True)
-    def survey_session_next_question(self, survey_token, **kwargs):
+    def survey_session_next_question(self, survey_token, go_back=False, **kwargs):
         """ This route is called when the host goes to the next question of the session.
 
         It's not a regular 'request.render' route because we handle the transition between
@@ -93,7 +98,7 @@ class UserInputSession(http.Controller):
         if survey.session_state == 'ready':
             survey._session_open()
 
-        next_question = survey._get_session_next_question()
+        next_question = survey._get_session_next_question(go_back)
 
         # using datetime.datetime because we want the millis portion
         if next_question:
@@ -171,9 +176,9 @@ class UserInputSession(http.Controller):
 
         survey = self._fetch_from_session_code(session_code)
         if survey and survey.session_state in ['ready', 'in_progress']:
-            return werkzeug.utils.redirect("/survey/start/%s" % survey.access_token)
+            return request.redirect("/survey/start/%s" % survey.access_token)
 
-        return werkzeug.utils.redirect("/s")
+        return request.redirect("/s")
 
     @http.route('/survey/check_session_code/<string:session_code>', type='json', auth='public', website=True)
     def survey_check_session_code(self, session_code):
@@ -190,14 +195,16 @@ class UserInputSession(http.Controller):
         return {"error": "survey_wrong"}
 
     def _prepare_manage_session_values(self, survey):
-        is_last_question = False
+        is_first_question, is_last_question = False, False
         if survey.question_ids:
             most_voted_answers = survey._get_session_most_voted_answers()
+            is_first_question = survey._is_first_page_or_question(survey.session_question_id)
             is_last_question = survey._is_last_page_or_question(most_voted_answers, survey.session_question_id)
 
         values = {
             'survey': survey,
             'is_last_question': is_last_question,
+            'is_first_question': is_first_question,
         }
 
         values.update(self._prepare_question_results_values(survey, request.env['survey.user_input.line']))

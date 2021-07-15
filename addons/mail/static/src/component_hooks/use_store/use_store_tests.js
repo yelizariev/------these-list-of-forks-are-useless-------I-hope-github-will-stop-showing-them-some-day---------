@@ -1,14 +1,13 @@
-odoo.define('mail/static/src/component_hooks/use_store/use_store_tests.js', function (require) {
-'use strict';
+/** @odoo-module **/
 
-const useStore = require('mail/static/src/component_hooks/use_store/use_store.js');
-const {
+import { useStore } from '@mail/component_hooks/use_store/use_store';
+import {
     afterNextRender,
     nextAnimationFrame,
-} = require('mail/static/src/utils/test_utils.js');
+} from '@mail/utils/test_utils';
 
 const { Component, QWeb, Store } = owl;
-const { useGetters } = owl.hooks;
+const { onPatched, useGetters } = owl.hooks;
 const { xml } = owl.tags;
 
 QUnit.module('mail', {}, function () {
@@ -54,10 +53,9 @@ QUnit.test("compare keys, no depth, primitives", async function (assert) {
                 return {
                     res: obj.use1 ? obj.subObj1 : obj.subObj2,
                 };
-            }, {
-                onUpdate: () => {
-                    count++;
-                },
+            });
+            onPatched(() => {
+                count++;
             });
         }
     }
@@ -135,9 +133,9 @@ QUnit.test("compare keys, depth 1, proxy", async function (assert) {
                 compareDepth: {
                     array: 1,
                 },
-                onUpdate: () => {
-                    count++;
-                },
+            });
+            onPatched(() => {
+                count++;
             });
         }
     }
@@ -185,6 +183,4 @@ QUnit.test("compare keys, depth 1, proxy", async function (assert) {
 
 });
 });
-});
-
 });

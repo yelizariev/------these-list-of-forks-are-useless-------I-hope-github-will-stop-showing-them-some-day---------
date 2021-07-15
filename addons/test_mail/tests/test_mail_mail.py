@@ -4,13 +4,23 @@
 import psycopg2
 
 from odoo import api
-from odoo.addons.base.models.ir_mail_server import MailDeliveryException
 from odoo.addons.test_mail.tests.common import TestMailCommon
-from odoo.tests import common
+from odoo.tests import common, tagged
 from odoo.tools import mute_logger
 
 
+@tagged('mail_mail')
 class TestMailMail(TestMailCommon):
+
+    @classmethod
+    def setUpClass(cls):
+        super(TestMailMail, cls).setUpClass()
+        cls._init_mail_gateway()
+
+        cls.test_record = cls.env['mail.test.gateway'].with_context(cls._test_context).create({
+            'name': 'Test',
+            'email_from': 'ignasse@example.com',
+        }).with_context({})
 
     @mute_logger('odoo.addons.mail.models.mail_mail')
     def test_mail_message_notify_from_mail_mail(self):
@@ -24,6 +34,27 @@ class TestMailMail(TestMailCommon):
             mail.send()
         self.assertSentEmail(mail.env.user.partner_id, ['test@example.com'])
         self.assertEqual(len(self._mails), 1)
+
+    def test_mail_mail_return_path(self):
+        # mail without thread-enabled record
+        base_values = {
+            'body_html': '<p>Test</p>',
+            'email_to': 'test@example.com',
+        }
+
+        mail = self.env['mail.mail'].create(base_values)
+        with self.mock_mail_gateway():
+            mail.send()
+        self.assertEqual(self._mails[0]['headers']['Return-Path'], '%s@%s' % (self.alias_bounce, self.alias_domain))
+
+        # mail on thread-enabled record
+        mail = self.env['mail.mail'].create(dict(base_values, **{
+            'model': self.test_record._name,
+            'res_id': self.test_record.id,
+        }))
+        with self.mock_mail_gateway():
+            mail.send()
+        self.assertEqual(self._mails[0]['headers']['Return-Path'], '%s@%s' % (self.alias_bounce, self.alias_domain))
 
 
 class TestMailMailRace(common.TransactionCase):
@@ -64,7 +95,7 @@ class TestMailMailRace(common.TransactionCase):
             with this.registry.cursor() as cr, mute_logger('odoo.sql_db'):
                 try:
                     # try ro aquire lock (no wait) on notification (should fail)
-                    cr.execute("SELECT notification_status FROM mail_message_res_partner_needaction_rel WHERE id = %s FOR UPDATE NOWAIT", [notif.id])
+                    cr.execute("SELECT notification_status FROM mail_notification WHERE id = %s FOR UPDATE NOWAIT", [notif.id])
                 except psycopg2.OperationalError:
                     # record already locked by send, all good
                     bounce_deferred.append(True)
@@ -73,7 +104,7 @@ class TestMailMailRace(common.TransactionCase):
                     # Only here to simulate the initial use case
                     # If the record is lock, this line would create a deadlock since we are in the same thread
                     # In practice, the update will wait the end of the send() transaction and set the notif as bounce, as expeced
-                    cr.execute("UPDATE mail_message_res_partner_needaction_rel SET notification_status='bounce' WHERE id = %s", [notif.id])
+                    cr.execute("UPDATE mail_notification SET notification_status='bounce' WHERE id = %s", [notif.id])
             return message['Message-Id']
         self.env['ir.mail_server']._patch_method('send_email', send_email)
 
@@ -90,3 +121,7 @@ class TestMailMailRace(common.TransactionCase):
         mail.unlink()
         self.partner.unlink()
         self.env.cr.commit()
+
+        # because we committed the cursor, the savepoint of the test method is
+        # gone, and this would break TransactionCase cleanups
+        self.cr.execute('SAVEPOINT test_%d' % self._savepoint_id)

@@ -29,7 +29,11 @@ class Warehouse(models.Model):
     # namedtuple used in helper methods generating values for routes
     Routing = namedtuple('Routing', ['from_loc', 'dest_loc', 'picking_type', 'action'])
 
-    name = fields.Char('Warehouse', index=True, required=True, default=lambda self: self.env.company.name)
+    def _default_name(self):
+        count = self.env['stock.warehouse'].with_context(active_test=False).search_count([('company_id', '=', self.env.company.id)])
+        return "%s - warehouse # %s" % (self.env.company.name, count + 1) if count else self.env.company.name
+
+    name = fields.Char('Warehouse', index=True, required=True, default=_default_name)
     active = fields.Boolean('Active', default=True)
     company_id = fields.Many2one(
         'res.company', 'Company', default=lambda self: self.env.company,
@@ -85,8 +89,21 @@ class Warehouse(models.Model):
         help="Gives the sequence of this line when displaying the warehouses.")
     _sql_constraints = [
         ('warehouse_name_uniq', 'unique(name, company_id)', 'The name of the warehouse must be unique per company!'),
-        ('warehouse_code_uniq', 'unique(code, company_id)', 'The code of the warehouse must be unique per company!'),
+        ('warehouse_code_uniq', 'unique(code, company_id)', 'The short name of the warehouse must be unique per company!'),
     ]
+
+    @api.onchange('company_id')
+    def _onchange_company_id(self):
+        group_user = self.env.ref('base.group_user')
+        group_stock_multi_warehouses = self.env.ref('stock.group_stock_multi_warehouses')
+        group_stock_multi_location = self.env.ref('stock.group_stock_multi_locations')
+        if group_stock_multi_warehouses not in group_user.implied_ids and group_stock_multi_location not in group_user.implied_ids:
+            return {
+                'warning': {
+                    'title': _('Warning'),
+                    'message': _('Creating a new warehouse will automatically activate the Storage Locations setting')
+                }
+            }
 
     @api.model
     def create(self, vals):
@@ -202,9 +219,9 @@ class Warehouse(models.Model):
                                     (', '.join(picking_type_using_locations.mapped('name')), warehouse.name))
                 warehouse.view_location_id.write({'active': vals['active']})
 
-                rule_ids = self.env['stock.rule'].with_context(active_test=False).search([('warehouse_id', '=', self.id)])
+                rule_ids = self.env['stock.rule'].with_context(active_test=False).search([('warehouse_id', '=', warehouse.id)])
                 # Only modify route that apply on this warehouse.
-                route_ids = warehouse.route_ids.filtered(lambda r: len(r.warehouse_ids) == 1).write({'active': vals['active']})
+                warehouse.route_ids.filtered(lambda r: len(r.warehouse_ids) == 1).write({'active': vals['active']})
                 rule_ids.write({'active': vals['active']})
 
                 if warehouse.active:
@@ -245,6 +262,9 @@ class Warehouse(models.Model):
                         ('active', '=', True)
                     ])
                     to_disable_route_ids.toggle_active()
+
+        if 'active' in vals:
+            self._check_multiwarehouse_group()
         return res
 
     def unlink(self):
@@ -484,6 +504,7 @@ class Warehouse(models.Model):
                 },
                 'rules_values': {
                     'active': True,
+                    'propagate_carrier': True
                 }
             },
             'crossdock_route_id': {
@@ -787,8 +808,8 @@ class Warehouse(models.Model):
 
     def _update_reception_delivery_resupply(self, reception_new, delivery_new):
         """ Check if we need to change something to resupply warehouses and associated MTO rules """
-        input_loc, output_loc = self._get_input_output_locations(reception_new, delivery_new)
         for warehouse in self:
+            input_loc, output_loc = warehouse._get_input_output_locations(reception_new, delivery_new)
             if reception_new and warehouse.reception_steps != reception_new and (warehouse.reception_steps == 'one_step' or reception_new == 'one_step'):
                 warehouse._check_reception_resupply(input_loc)
             if delivery_new and warehouse.delivery_steps != delivery_new and (warehouse.delivery_steps == 'ship_only' or delivery_new == 'ship_only'):
@@ -883,12 +904,12 @@ class Warehouse(models.Model):
                 'barcode': self.code.replace(" ", "").upper() + "-DELIVERY",
             },
             'pick_type_id': {
-                'active': self.delivery_steps != 'ship_only',
+                'active': self.delivery_steps != 'ship_only' and self.active,
                 'default_location_dest_id': output_loc.id if self.delivery_steps == 'pick_ship' else self.wh_pack_stock_loc_id.id,
                 'barcode': self.code.replace(" ", "").upper() + "-PICK",
             },
             'pack_type_id': {
-                'active': self.delivery_steps == 'pick_pack_ship',
+                'active': self.delivery_steps == 'pick_pack_ship' and self.active,
                 'barcode': self.code.replace(" ", "").upper() + "-PACK",
             },
             'int_type_id': {
@@ -912,6 +933,7 @@ class Warehouse(models.Model):
                 'default_location_src_id': False,
                 'sequence': max_sequence + 1,
                 'show_reserved': False,
+                'show_operations': False,
                 'sequence_code': 'IN',
                 'company_id': self.company_id.id,
             }, 'out_type_id': {
@@ -922,6 +944,7 @@ class Warehouse(models.Model):
                 'default_location_dest_id': False,
                 'sequence': max_sequence + 5,
                 'sequence_code': 'OUT',
+                'print_label': True,
                 'company_id': self.company_id.id,
             }, 'pack_type_id': {
                 'name': _('Pack'),

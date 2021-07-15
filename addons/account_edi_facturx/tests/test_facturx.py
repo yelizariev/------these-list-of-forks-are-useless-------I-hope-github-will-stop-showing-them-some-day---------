@@ -66,6 +66,7 @@ class TestAccountEdiFacturx(AccountEdiTestCommon):
                     </GuidelineSpecifiedDocumentContextParameter>
                 </ExchangedDocumentContext>
                 <ExchangedDocument>
+                    <ID>INV/2017/00001</ID>
                     <TypeCode>380</TypeCode>
                     <IssueDateTime>
                         <DateTimeString format="102">20170101</DateTimeString>
@@ -118,7 +119,7 @@ class TestAccountEdiFacturx(AccountEdiTestCommon):
                             <PostalTradeAddress/>
                         </BuyerTradeParty>
                         <BuyerOrderReferencedDocument>
-                            <IssuerAssignedID>INV/2017/01/0001: INV/2017/01/0001</IssuerAssignedID>
+                            <IssuerAssignedID>INV/2017/00001: INV/2017/00001</IssuerAssignedID>
                         </BuyerOrderReferencedDocument>
                     </ApplicableHeaderTradeAgreement>
                     <ApplicableHeaderTradeDelivery/>
@@ -181,14 +182,14 @@ class TestAccountEdiFacturx(AccountEdiTestCommon):
             <xpath expr="//ApplicableHeaderTradeSettlement" position="replace">
                 <ApplicableHeaderTradeSettlement>
                     <ApplicableTradeTax>
-                        <CalculatedAmount currencyID="Gol">220.000</CalculatedAmount>
-                        <BasisAmount currencyID="Gol">1100.000</BasisAmount>
-                        <RateApplicablePercent>20.0</RateApplicablePercent>
-                    </ApplicableTradeTax>
-                    <ApplicableTradeTax>
                         <CalculatedAmount currencyID="Gol">100.000</CalculatedAmount>
                         <BasisAmount currencyID="Gol">1000.000</BasisAmount>
                         <RateApplicablePercent>10.0</RateApplicablePercent>
+                    </ApplicableTradeTax>
+                    <ApplicableTradeTax>
+                        <CalculatedAmount currencyID="Gol">220.000</CalculatedAmount>
+                        <BasisAmount currencyID="Gol">1100.000</BasisAmount>
+                        <RateApplicablePercent>20.0</RateApplicablePercent>
                     </ApplicableTradeTax>
                     <SpecifiedTradePaymentTerms>
                         <DueDateDateTime>
@@ -209,12 +210,17 @@ class TestAccountEdiFacturx(AccountEdiTestCommon):
 
         self.assert_generated_file_equal(self.invoice, self.expected_invoice_facturx_values, applied_xpath)
 
+    def test_export_pdf(self):
+        self.invoice.action_post()
+        pdf_values = self.edi_format._get_embedding_to_invoice_pdf_values(self.invoice)
+        self.assertEqual(pdf_values['name'], 'factur-x.xml')
+
     ####################################################
     # Test import
     ####################################################
 
     def test_invoice_edi_pdf(self):
-        invoice = self.env['account.move'].with_context(default_move_type='in_invoice').create({})
+        invoice = self._create_empty_vendor_bill()
         invoice_count = len(self.env['account.move'].search([]))
         self.update_invoice_from_file('account_edi_facturx', 'test_file', 'test_facturx.pdf', invoice)
 
@@ -227,7 +233,7 @@ class TestAccountEdiFacturx(AccountEdiTestCommon):
         self.assertEqual(len(self.env['account.move'].search([])), invoice_count + 1)
 
     def test_invoice_edi_xml(self):
-        invoice = self.env['account.move'].with_context(default_move_type='in_invoice').create({})
+        invoice = self._create_empty_vendor_bill()
         invoice_count = len(self.env['account.move'].search([]))
         self.update_invoice_from_file('account_edi_facturx', 'test_file', 'test_facturx.xml', invoice)
 

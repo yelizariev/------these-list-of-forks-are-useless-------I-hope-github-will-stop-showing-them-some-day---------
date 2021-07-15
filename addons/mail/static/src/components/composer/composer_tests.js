@@ -1,10 +1,8 @@
-odoo.define('mail/static/src/components/composer/composer_tests.js', function (require) {
-'use strict';
+/** @odoo-module **/
 
-const components = {
-    Composer: require('mail/static/src/components/composer/composer.js'),
-};
-const {
+import { Composer } from '@mail/components/composer/composer';
+import { create } from '@mail/model/model_field_command';
+import {
     afterEach,
     afterNextRender,
     beforeEach,
@@ -14,15 +12,15 @@ const {
     nextAnimationFrame,
     pasteFiles,
     start,
-} = require('mail/static/src/utils/test_utils.js');
+} from '@mail/utils/test_utils';
 
-const {
-    file: {
-        createFile,
-        inputFiles,
-    },
+import {
+    file,
     makeTestPromise,
-} = require('web.test_utils');
+} from 'web.test_utils';
+
+const { createFile, inputFiles } = file;
+const components = { Composer };
 
 QUnit.module('mail', {}, function () {
 QUnit.module('components', {}, function () {
@@ -58,7 +56,7 @@ QUnit.test('composer text input: basic rendering when posting a message', async 
 
     await this.start();
     const thread = this.env.models['mail.thread'].create({
-        composer: [['create', { isLog: false }]],
+        composer: create({ isLog: false }),
         id: 20,
         model: 'res.partner',
     });
@@ -94,7 +92,7 @@ QUnit.test('composer text input: basic rendering when logging note', async funct
 
     await this.start();
     const thread = this.env.models['mail.thread'].create({
-        composer: [['create', { isLog: true }]],
+        composer: create({ isLog: true }),
         id: 20,
         model: 'res.partner',
     });
@@ -126,10 +124,11 @@ QUnit.test('composer text input: basic rendering when logging note', async funct
 });
 
 QUnit.test('composer text input: basic rendering when linked thread is a mail.channel', async function (assert) {
-    assert.expect(5);
+    assert.expect(4);
 
+    this.data['mail.channel'].records.push({ id: 20 });
     await this.start();
-    const thread = this.env.models['mail.thread'].create({
+    const thread = this.env.models['mail.thread'].findFromIdentifyingData({
         id: 20,
         model: 'mail.channel',
     });
@@ -153,43 +152,63 @@ QUnit.test('composer text input: basic rendering when linked thread is a mail.ch
         1,
         "should have editable part inside composer text input"
     );
+});
+
+QUnit.test('composer text input placeholder should contain channel name when thread does not have specific correspondent', async function (assert) {
+    assert.expect(1);
+
+    this.data['mail.channel'].records.push({
+        channel_type: 'channel',
+        id: 20,
+        name: 'General',
+    });
+    await this.start();
+    const thread = this.env.models['mail.thread'].findFromIdentifyingData({
+        id: 20,
+        model: 'mail.channel',
+    });
+    await this.createComposerComponent(thread.composer);
     assert.strictEqual(
         document.querySelector(`.o_ComposerTextInput_textarea`).placeholder,
-        "Write something...",
-        "should have 'Write something...' as placeholder in composer text input if composer is for a 'mail.channel'"
+        "Message #General...",
+        "should have 'Message #General...' as placeholder for composer text input when thread does not have specific correspondent"
     );
 });
 
-QUnit.test('mailing channel composer: basic rendering', async function (assert) {
-    assert.expect(2);
+QUnit.test('composer text input placeholder should contain correspondent name when thread has exactly one correspondent', async function (assert) {
+    assert.expect(1);
 
-    // channel that is expected to be rendered, with proper mass_mailing
-    // value and a random unique id that will be referenced in the test
-    this.data['mail.channel'].records.push({ id: 20, mass_mailing: true });
+    this.data['res.partner'].records.push({ id: 7, name: 'Marc Demo' });
+    this.data['mail.channel'].records.push({
+        channel_type: 'chat',
+        id: 20,
+        members: [this.data.currentPartnerId, 7],
+    });
     await this.start();
-    const thread = this.env.models['mail.thread'].find(thread =>
-        thread.id === 20 &&
-        thread.model === 'mail.channel'
-    );
+    const thread = this.env.models['mail.thread'].findFromIdentifyingData({
+        id: 20,
+        model: 'mail.channel',
+    });
     await this.createComposerComponent(thread.composer);
-    assert.containsOnce(
-        document.body,
-        '.o_ComposerTextInput',
-        "Composer should have a text input"
-    );
-    assert.containsOnce(
-        document.body,
-        '.o_Composer_subjectInput',
-        "Composer should have a subject input"
+    assert.strictEqual(
+        document.querySelector(`.o_ComposerTextInput_textarea`).placeholder,
+        "Message Marc Demo...",
+        "should have 'Message Marc Demo...' as placeholder for composer text input when thread has exactly one correspondent"
     );
 });
 
 QUnit.test('add an emoji', async function (assert) {
     assert.expect(1);
 
+    this.data['mail.channel'].records.push({
+        id: 20,
+    });
     await this.start();
-    const composer = this.env.models['mail.composer'].create();
-    await this.createComposerComponent(composer);
+    const thread = this.env.models['mail.thread'].findFromIdentifyingData({
+        id: 20,
+        model: 'mail.channel',
+    });
+    await this.createComposerComponent(thread.composer);
     await afterNextRender(() =>
         document.querySelector('.o_Composer_buttonEmojis').click()
     );
@@ -210,9 +229,15 @@ QUnit.test('add an emoji', async function (assert) {
 QUnit.test('add an emoji after some text', async function (assert) {
     assert.expect(2);
 
+    this.data['mail.channel'].records.push({
+        id: 20,
+    });
     await this.start();
-    const composer = this.env.models['mail.composer'].create();
-    await this.createComposerComponent(composer);
+    const thread = this.env.models['mail.thread'].findFromIdentifyingData({
+        id: 20,
+        model: 'mail.channel',
+    });
+    await this.createComposerComponent(thread.composer);
     await afterNextRender(() => {
         document.querySelector(`.o_ComposerTextInput_textarea`).focus();
         document.execCommand('insertText', false, "Blabla");
@@ -241,9 +266,15 @@ QUnit.test('add an emoji after some text', async function (assert) {
 QUnit.test('add emoji replaces (keyboard) text selection', async function (assert) {
     assert.expect(2);
 
+    this.data['mail.channel'].records.push({
+        id: 20,
+    });
     await this.start();
-    const composer = this.env.models['mail.composer'].create();
-    await this.createComposerComponent(composer);
+    const thread = this.env.models['mail.thread'].findFromIdentifyingData({
+        id: 20,
+        model: 'mail.channel',
+    });
+    await this.createComposerComponent(thread.composer);
     const composerTextInputTextArea = document.querySelector(`.o_ComposerTextInput_textarea`);
     await afterNextRender(() => {
         composerTextInputTextArea.focus();
@@ -283,9 +314,15 @@ QUnit.test('display canned response suggestions on typing ":"', async function (
         substitution: "Hello! How are you?",
     });
 
+    this.data['mail.channel'].records.push({
+        id: 20,
+    });
     await this.start();
-    const composer = this.env.models['mail.composer'].create();
-    await this.createComposerComponent(composer);
+    const thread = this.env.models['mail.thread'].findFromIdentifyingData({
+        id: 20,
+        model: 'mail.channel',
+    });
+    await this.createComposerComponent(thread.composer);
 
     assert.containsNone(
         document.body,
@@ -316,9 +353,15 @@ QUnit.test('use a canned response', async function (assert) {
         substitution: "Hello! How are you?",
     });
 
+    this.data['mail.channel'].records.push({
+        id: 20,
+    });
     await this.start();
-    const composer = this.env.models['mail.composer'].create();
-    await this.createComposerComponent(composer);
+    const thread = this.env.models['mail.thread'].findFromIdentifyingData({
+        id: 20,
+        model: 'mail.channel',
+    });
+    await this.createComposerComponent(thread.composer);
 
     assert.containsNone(
         document.body,
@@ -333,8 +376,6 @@ QUnit.test('use a canned response', async function (assert) {
     await afterNextRender(() => {
         document.querySelector(`.o_ComposerTextInput_textarea`).focus();
         document.execCommand('insertText', false, ":");
-    });
-    await afterNextRender(() => {
         document.querySelector(`.o_ComposerTextInput_textarea`)
             .dispatchEvent(new window.KeyboardEvent('keydown'));
         document.querySelector(`.o_ComposerTextInput_textarea`)
@@ -364,9 +405,15 @@ QUnit.test('use a canned response some text', async function (assert) {
         substitution: "Hello! How are you?",
     });
 
+    this.data['mail.channel'].records.push({
+        id: 20,
+    });
     await this.start();
-    const composer = this.env.models['mail.composer'].create();
-    await this.createComposerComponent(composer);
+    const thread = this.env.models['mail.thread'].findFromIdentifyingData({
+        id: 20,
+        model: 'mail.channel',
+    });
+    await this.createComposerComponent(thread.composer);
 
     assert.containsNone(
         document.body,
@@ -387,10 +434,8 @@ QUnit.test('use a canned response some text', async function (assert) {
         "bluhbluh ",
         "text content of composer should have content"
     );
-    await afterNextRender(() =>
-        document.execCommand('insertText', false, ":")
-    );
     await afterNextRender(() => {
+        document.execCommand('insertText', false, ":");
         document.querySelector(`.o_ComposerTextInput_textarea`)
             .dispatchEvent(new window.KeyboardEvent('keydown'));
         document.querySelector(`.o_ComposerTextInput_textarea`)
@@ -420,9 +465,15 @@ QUnit.test('add an emoji after a canned response', async function (assert) {
         substitution: "Hello! How are you?",
     });
 
+    this.data['mail.channel'].records.push({
+        id: 20,
+    });
     await this.start();
-    const composer = this.env.models['mail.composer'].create();
-    await this.createComposerComponent(composer);
+    const thread = this.env.models['mail.thread'].findFromIdentifyingData({
+        id: 20,
+        model: 'mail.channel',
+    });
+    await this.createComposerComponent(thread.composer);
 
     assert.containsNone(
         document.body,
@@ -437,8 +488,6 @@ QUnit.test('add an emoji after a canned response', async function (assert) {
     await afterNextRender(() => {
         document.querySelector(`.o_ComposerTextInput_textarea`).focus();
         document.execCommand('insertText', false, ":");
-    });
-    await afterNextRender(() => {
         document.querySelector(`.o_ComposerTextInput_textarea`)
             .dispatchEvent(new window.KeyboardEvent('keydown'));
         document.querySelector(`.o_ComposerTextInput_textarea`)
@@ -482,9 +531,13 @@ QUnit.test('display channel mention suggestions on typing "#"', async function (
         name: "General",
         public: "groups",
     });
+
     await this.start();
-    const composer = this.env.models['mail.composer'].create();
-    await this.createComposerComponent(composer);
+    const thread = this.env.models['mail.thread'].findFromIdentifyingData({
+        id: 7,
+        model: 'mail.channel',
+    });
+    await this.createComposerComponent(thread.composer);
 
     assert.containsNone(
         document.body,
@@ -515,8 +568,11 @@ QUnit.test('mention a channel', async function (assert) {
         public: "groups",
     });
     await this.start();
-    const composer = this.env.models['mail.composer'].create();
-    await this.createComposerComponent(composer);
+    const thread = this.env.models['mail.thread'].findFromIdentifyingData({
+        id: 7,
+        model: 'mail.channel',
+    });
+    await this.createComposerComponent(thread.composer);
 
     assert.containsNone(
         document.body,
@@ -531,8 +587,6 @@ QUnit.test('mention a channel', async function (assert) {
     await afterNextRender(() => {
         document.querySelector(`.o_ComposerTextInput_textarea`).focus();
         document.execCommand('insertText', false, "#");
-    });
-    await afterNextRender(() => {
         document.querySelector(`.o_ComposerTextInput_textarea`)
             .dispatchEvent(new window.KeyboardEvent('keydown'));
         document.querySelector(`.o_ComposerTextInput_textarea`)
@@ -562,8 +616,11 @@ QUnit.test('mention a channel after some text', async function (assert) {
         public: "groups",
     });
     await this.start();
-    const composer = this.env.models['mail.composer'].create();
-    await this.createComposerComponent(composer);
+    const thread = this.env.models['mail.thread'].findFromIdentifyingData({
+        id: 7,
+        model: 'mail.channel',
+    });
+    await this.createComposerComponent(thread.composer);
 
     assert.containsNone(
         document.body,
@@ -584,10 +641,8 @@ QUnit.test('mention a channel after some text', async function (assert) {
         "bluhbluh ",
         "text content of composer should have content"
     );
-    await afterNextRender(() =>
-        document.execCommand('insertText', false, "#")
-    );
     await afterNextRender(() => {
+        document.execCommand('insertText', false, "#");
         document.querySelector(`.o_ComposerTextInput_textarea`)
             .dispatchEvent(new window.KeyboardEvent('keydown'));
         document.querySelector(`.o_ComposerTextInput_textarea`)
@@ -617,8 +672,11 @@ QUnit.test('add an emoji after a channel mention', async function (assert) {
         public: "groups",
     });
     await this.start();
-    const composer = this.env.models['mail.composer'].create();
-    await this.createComposerComponent(composer);
+    const thread = this.env.models['mail.thread'].findFromIdentifyingData({
+        id: 7,
+        model: 'mail.channel',
+    });
+    await this.createComposerComponent(thread.composer);
 
     assert.containsNone(
         document.body,
@@ -633,8 +691,6 @@ QUnit.test('add an emoji after a channel mention', async function (assert) {
     await afterNextRender(() => {
         document.querySelector(`.o_ComposerTextInput_textarea`).focus();
         document.execCommand('insertText', false, "#");
-    });
-    await afterNextRender(() => {
         document.querySelector(`.o_ComposerTextInput_textarea`)
             .dispatchEvent(new window.KeyboardEvent('keydown'));
         document.querySelector(`.o_ComposerTextInput_textarea`)
@@ -708,6 +764,85 @@ QUnit.test('display command suggestions on typing "/"', async function (assert) 
     );
 });
 
+QUnit.test('do not send typing notification on typing "/" command', async function (assert) {
+    assert.expect(1);
+
+    this.data['mail.channel'].records.push({ id: 20 });
+    this.data['mail.channel_command'].records.push({
+        channel_types: ['channel'],
+        help: "List users in the current channel",
+        name: "who",
+    });
+    await this.start({
+        async mockRPC(route, args) {
+            if (args.method === 'notify_typing') {
+                assert.step(`notify_typing:${args.kwargs.is_typing}`);
+            }
+            return this._super(...arguments);
+        },
+    });
+    const thread = this.env.models['mail.thread'].findFromIdentifyingData({
+        id: 20,
+        model: 'mail.channel',
+    });
+    await this.createComposerComponent(thread.composer, { hasThreadTyping: true });
+
+    await afterNextRender(() => {
+        document.querySelector(`.o_ComposerTextInput_textarea`).focus();
+        document.execCommand('insertText', false, "/");
+        document.querySelector(`.o_ComposerTextInput_textarea`)
+            .dispatchEvent(new window.KeyboardEvent('keydown'));
+        document.querySelector(`.o_ComposerTextInput_textarea`)
+            .dispatchEvent(new window.KeyboardEvent('keyup'));
+    });
+    assert.verifySteps([], "No rpc done");
+});
+
+QUnit.test('do not send typing notification on typing after selecting suggestion from "/" command', async function (assert) {
+    assert.expect(1);
+
+    this.data['mail.channel'].records.push({ id: 20 });
+    this.data['mail.channel_command'].records.push({
+        channel_types: ['channel'],
+        help: "List users in the current channel",
+        name: "who",
+    });
+    await this.start({
+        async mockRPC(route, args) {
+            if (args.method === 'notify_typing') {
+                assert.step(`notify_typing:${args.kwargs.is_typing}`);
+            }
+            return this._super(...arguments);
+        },
+    });
+    const thread = this.env.models['mail.thread'].findFromIdentifyingData({
+        id: 20,
+        model: 'mail.channel',
+    });
+    await this.createComposerComponent(thread.composer, { hasThreadTyping: true });
+
+    await afterNextRender(() => {
+        document.querySelector(`.o_ComposerTextInput_textarea`).focus();
+        document.execCommand('insertText', false, "/");
+        document.querySelector(`.o_ComposerTextInput_textarea`)
+            .dispatchEvent(new window.KeyboardEvent('keydown'));
+        document.querySelector(`.o_ComposerTextInput_textarea`)
+            .dispatchEvent(new window.KeyboardEvent('keyup'));
+    });
+    await afterNextRender(() =>
+        document.querySelector('.o_ComposerSuggestion').click()
+    );
+    await afterNextRender(() => {
+        document.querySelector(`.o_ComposerTextInput_textarea`).focus();
+        document.execCommand('insertText', false, " is user?");
+        document.querySelector(`.o_ComposerTextInput_textarea`)
+            .dispatchEvent(new window.KeyboardEvent('keydown'));
+        document.querySelector(`.o_ComposerTextInput_textarea`)
+            .dispatchEvent(new window.KeyboardEvent('keyup'));
+    });
+    assert.verifySteps([], "No rpc done");
+});
+
 QUnit.test('use a command for a specific channel type', async function (assert) {
     assert.expect(4);
 
@@ -739,8 +874,6 @@ QUnit.test('use a command for a specific channel type', async function (assert) 
     await afterNextRender(() => {
         document.querySelector(`.o_ComposerTextInput_textarea`).focus();
         document.execCommand('insertText', false, "/");
-    });
-    await afterNextRender(() => {
         document.querySelector(`.o_ComposerTextInput_textarea`)
             .dispatchEvent(new window.KeyboardEvent('keydown'));
         document.querySelector(`.o_ComposerTextInput_textarea`)
@@ -781,8 +914,6 @@ QUnit.test("channel with no commands should not prompt any command suggestions o
     await afterNextRender(() => {
         document.querySelector('.o_ComposerTextInput_textarea').focus();
         document.execCommand('insertText', false, "/");
-    });
-    await afterNextRender(() => {
         const composer_text_input = document.querySelector('.o_ComposerTextInput_textarea');
         composer_text_input.dispatchEvent(new window.KeyboardEvent('keydown'));
         composer_text_input.dispatchEvent(new window.KeyboardEvent('keyup'));
@@ -794,8 +925,8 @@ QUnit.test("channel with no commands should not prompt any command suggestions o
     );
 });
 
-QUnit.test('use a command after some text', async function (assert) {
-    assert.expect(5);
+QUnit.test('command suggestion should only open if command is the first character', async function (assert) {
+    assert.expect(4);
 
     this.data['mail.channel'].records.push({ channel_type: 'channel', id: 20 });
     this.data['mail.channel_command'].records.push(
@@ -830,27 +961,17 @@ QUnit.test('use a command after some text', async function (assert) {
         "bluhbluh ",
         "text content of composer should have content"
     );
-    await afterNextRender(() =>
-        document.execCommand('insertText', false, "/")
-    );
     await afterNextRender(() => {
+        document.execCommand('insertText', false, "/");
         document.querySelector(`.o_ComposerTextInput_textarea`)
             .dispatchEvent(new window.KeyboardEvent('keydown'));
         document.querySelector(`.o_ComposerTextInput_textarea`)
             .dispatchEvent(new window.KeyboardEvent('keyup'));
     });
-    assert.containsOnce(
+    assert.containsNone(
         document.body,
         '.o_ComposerSuggestion',
-        "should have a command suggestion"
-    );
-    await afterNextRender(() =>
-        document.querySelector('.o_ComposerSuggestion').click()
-    );
-    assert.strictEqual(
-        document.querySelector(`.o_ComposerTextInput_textarea`).value.replace(/\s/, " "),
-        "bluhbluh /who ",
-        "text content of composer should have previous content + used command + additional whitespace afterwards"
+        "should not have a command suggestion"
     );
 });
 
@@ -885,8 +1006,6 @@ QUnit.test('add an emoji after a command', async function (assert) {
     await afterNextRender(() => {
         document.querySelector(`.o_ComposerTextInput_textarea`).focus();
         document.execCommand('insertText', false, "/");
-    });
-    await afterNextRender(() => {
         document.querySelector(`.o_ComposerTextInput_textarea`)
             .dispatchEvent(new window.KeyboardEvent('keydown'));
         document.querySelector(`.o_ComposerTextInput_textarea`)
@@ -939,9 +1058,15 @@ QUnit.test('display partner mention suggestions on typing "@"', async function (
         partner_id: 11,
     });
 
+    this.data['mail.channel'].records.push({
+        id: 20,
+    });
     await this.start();
-    const composer = this.env.models['mail.composer'].create();
-    await this.createComposerComponent(composer);
+    const thread = this.env.models['mail.thread'].findFromIdentifyingData({
+        id: 20,
+        model: 'mail.channel',
+    });
+    await this.createComposerComponent(thread.composer);
 
     assert.containsNone(
         document.body,
@@ -975,9 +1100,15 @@ QUnit.test('mention a partner', async function (assert) {
         email: "testpartner@odoo.com",
         name: "TestPartner",
     });
+    this.data['mail.channel'].records.push({
+        id: 20,
+    });
     await this.start();
-    const composer = this.env.models['mail.composer'].create();
-    await this.createComposerComponent(composer);
+    const thread = this.env.models['mail.thread'].findFromIdentifyingData({
+        id: 20,
+        model: 'mail.channel',
+    });
+    await this.createComposerComponent(thread.composer);
 
     assert.containsNone(
         document.body,
@@ -1029,9 +1160,15 @@ QUnit.test('mention a partner after some text', async function (assert) {
         email: "testpartner@odoo.com",
         name: "TestPartner",
     });
+    this.data['mail.channel'].records.push({
+        id: 20,
+    });
     await this.start();
-    const composer = this.env.models['mail.composer'].create();
-    await this.createComposerComponent(composer);
+    const thread = this.env.models['mail.thread'].findFromIdentifyingData({
+        id: 20,
+        model: 'mail.channel',
+    });
+    await this.createComposerComponent(thread.composer);
 
     assert.containsNone(
         document.body,
@@ -1092,9 +1229,15 @@ QUnit.test('add an emoji after a partner mention', async function (assert) {
         email: "testpartner@odoo.com",
         name: "TestPartner",
     });
+    this.data['mail.channel'].records.push({
+        id: 20,
+    });
     await this.start();
-    const composer = this.env.models['mail.composer'].create();
-    await this.createComposerComponent(composer);
+    const thread = this.env.models['mail.thread'].findFromIdentifyingData({
+        id: 20,
+        model: 'mail.channel',
+    });
+    await this.createComposerComponent(thread.composer);
 
     assert.containsNone(
         document.body,
@@ -1157,9 +1300,16 @@ QUnit.test('add an emoji after a partner mention', async function (assert) {
 QUnit.test('composer: add an attachment', async function (assert) {
     assert.expect(2);
 
+    this.data['mail.channel'].records.push({
+        id: 20,
+    });
     await this.start();
-    const composer = this.env.models['mail.composer'].create();
-    await this.createComposerComponent(composer, { attachmentsDetailsMode: 'card' });
+    const thread = this.env.models['mail.thread'].findFromIdentifyingData({
+        id: 20,
+        model: 'mail.channel',
+    });
+    await this.createComposerComponent(thread.composer, { attachmentsDetailsMode: 'card' });
+
     const file = await createFile({
         content: 'hello, world',
         contentType: 'text/plain',
@@ -1184,9 +1334,15 @@ QUnit.test('composer: add an attachment', async function (assert) {
 QUnit.test('composer: drop attachments', async function (assert) {
     assert.expect(4);
 
+    this.data['mail.channel'].records.push({
+        id: 20,
+    });
     await this.start();
-    const composer = this.env.models['mail.composer'].create();
-    await this.createComposerComponent(composer);
+    const thread = this.env.models['mail.thread'].findFromIdentifyingData({
+        id: 20,
+        model: 'mail.channel',
+    });
+    await this.createComposerComponent(thread.composer);
     const files = [
         await createFile({
             content: 'hello, world',
@@ -1245,9 +1401,15 @@ QUnit.test('composer: drop attachments', async function (assert) {
 QUnit.test('composer: paste attachments', async function (assert) {
     assert.expect(2);
 
+    this.data['mail.channel'].records.push({
+        id: 20,
+    });
     await this.start();
-    const composer = this.env.models['mail.composer'].create();
-    await this.createComposerComponent(composer);
+    const thread = this.env.models['mail.thread'].findFromIdentifyingData({
+        id: 20,
+        model: 'mail.channel',
+    });
+    await this.createComposerComponent(thread.composer);
     const files = [
         await createFile({
             content: 'hello, world',
@@ -1286,10 +1448,10 @@ QUnit.test('send message when enter is pressed while holding ctrl key (this shor
             return this._super(...arguments);
         },
     });
-    const thread = this.env.models['mail.thread'].find(thread =>
-        thread.id === 20 &&
-        thread.model === 'mail.channel'
-    );
+    const thread = this.env.models['mail.thread'].findFromIdentifyingData({
+        id: 20,
+        model: 'mail.channel',
+    });
     await this.createComposerComponent(thread.composer, {
         textInputSendShortcuts: ['ctrl-enter'],
     });
@@ -1341,10 +1503,10 @@ QUnit.test('send message when enter is pressed while holding meta key (this shor
             return this._super(...arguments);
         },
     });
-    const thread = this.env.models['mail.thread'].find(thread =>
-        thread.id === 20 &&
-        thread.model === 'mail.channel'
-    );
+    const thread = this.env.models['mail.thread'].findFromIdentifyingData({
+        id: 20,
+        model: 'mail.channel',
+    });
     await this.createComposerComponent(thread.composer, {
         textInputSendShortcuts: ['meta-enter'],
     });
@@ -1395,10 +1557,10 @@ QUnit.test('composer text input cleared on message post', async function (assert
             return this._super(...arguments);
         },
     });
-    const thread = this.env.models['mail.thread'].find(thread =>
-        thread.id === 20 &&
-        thread.model === 'mail.channel'
-    );
+    const thread = this.env.models['mail.thread'].findFromIdentifyingData({
+        id: 20,
+        model: 'mail.channel',
+    });
     await this.createComposerComponent(thread.composer);
     // Type message
     await afterNextRender(() => {
@@ -1420,81 +1582,6 @@ QUnit.test('composer text input cleared on message post', async function (assert
         document.querySelector(`.o_ComposerTextInput_textarea`).value,
         "",
         "should have no content in composer input after posting message"
-    );
-});
-
-QUnit.test('composer inputs cleared on message post in composer of a mailing channel', async function (assert) {
-    assert.expect(10);
-
-    // channel that is expected to be rendered, with proper mass_mailing
-    // value and a random unique id that will be referenced in the test
-    this.data['mail.channel'].records.push({ id: 20, mass_mailing: true });
-    await this.start({
-        async mockRPC(route, args) {
-            if (args.method === 'message_post') {
-                assert.step('message_post');
-                assert.ok(
-                    'body' in args.kwargs,
-                    "body should be posted with the message"
-                );
-                assert.strictEqual(
-                    args.kwargs.body,
-                    "test message",
-                    "posted body should be the one typed in text input"
-                );
-                assert.ok(
-                    'subject' in args.kwargs,
-                    "subject should be posted with the message"
-                );
-                assert.strictEqual(
-                    args.kwargs.subject,
-                    "test subject",
-                    "posted subject should be the one typed in subject input"
-                );
-            }
-            return this._super(...arguments);
-        },
-    });
-    const thread = this.env.models['mail.thread'].find(thread =>
-        thread.id === 20 &&
-        thread.model === 'mail.channel'
-    );
-    await this.createComposerComponent(thread.composer);
-    // Type message
-    await afterNextRender(() => {
-        document.querySelector(`.o_ComposerTextInput_textarea`).focus();
-        document.execCommand('insertText', false, "test message");
-    });
-    assert.strictEqual(
-        document.querySelector(`.o_ComposerTextInput_textarea`).value,
-        "test message",
-        "should have inserted text content in editable"
-    );
-
-    await afterNextRender(() => {
-        document.querySelector(`.o_Composer_subjectInput`).focus();
-        document.execCommand('insertText', false, "test subject");
-    });
-    assert.strictEqual(
-        document.querySelector(`.o_Composer_subjectInput`).value,
-        "test subject",
-        "should have inserted text content in input"
-    );
-
-    // Send message
-    await afterNextRender(() =>
-        document.querySelector('.o_Composer_buttonSend').click()
-    );
-    assert.verifySteps(['message_post']);
-    assert.strictEqual(
-        document.querySelector(`.o_ComposerTextInput_textarea`).value,
-        "",
-        "should have no content in composer input after posting message"
-    );
-    assert.strictEqual(
-        document.querySelector(`.o_Composer_subjectInput`).value,
-        "",
-        "should have no content in composer subject input after posting message"
     );
 });
 
@@ -1505,10 +1592,10 @@ QUnit.test('composer with thread typing notification status', async function (as
     // with a random unique id that will be referenced in the test
     this.data['mail.channel'].records.push({ id: 20 });
     await this.start();
-    const thread = this.env.models['mail.thread'].find(thread =>
-        thread.id === 20 &&
-        thread.model === 'mail.channel'
-    );
+    const thread = this.env.models['mail.thread'].findFromIdentifyingData({
+        id: 20,
+        model: 'mail.channel',
+    });
     await this.createComposerComponent(thread.composer, { hasThreadTyping: true });
 
     assert.containsOnce(
@@ -1537,10 +1624,10 @@ QUnit.test('current partner notify is typing to other thread members', async fun
             return this._super(...arguments);
         },
     });
-    const thread = this.env.models['mail.thread'].find(thread =>
-        thread.id === 20 &&
-        thread.model === 'mail.channel'
-    );
+    const thread = this.env.models['mail.thread'].findFromIdentifyingData({
+        id: 20,
+        model: 'mail.channel',
+    });
     await this.createComposerComponent(thread.composer, { hasThreadTyping: true });
 
     document.querySelector(`.o_ComposerTextInput_textarea`).focus();
@@ -1569,10 +1656,10 @@ QUnit.test('current partner is typing should not translate on textual typing sta
             return this._super(...arguments);
         },
     });
-    const thread = this.env.models['mail.thread'].find(thread =>
-        thread.id === 20 &&
-        thread.model === 'mail.channel'
-    );
+    const thread = this.env.models['mail.thread'].findFromIdentifyingData({
+        id: 20,
+        model: 'mail.channel',
+    });
     await this.createComposerComponent(thread.composer, { hasThreadTyping: true });
 
     document.querySelector(`.o_ComposerTextInput_textarea`).focus();
@@ -1608,10 +1695,10 @@ QUnit.test('current partner notify no longer is typing to thread members after 5
             return this._super(...arguments);
         },
     });
-    const thread = this.env.models['mail.thread'].find(thread =>
-        thread.id === 20 &&
-        thread.model === 'mail.channel'
-    );
+    const thread = this.env.models['mail.thread'].findFromIdentifyingData({
+        id: 20,
+        model: 'mail.channel',
+    });
     await this.createComposerComponent(thread.composer, { hasThreadTyping: true });
 
     document.querySelector(`.o_ComposerTextInput_textarea`).focus();
@@ -1646,10 +1733,10 @@ QUnit.test('current partner notify is typing again to other members every 50s of
             return this._super(...arguments);
         },
     });
-    const thread = this.env.models['mail.thread'].find(thread =>
-        thread.id === 20 &&
-        thread.model === 'mail.channel'
-    );
+    const thread = this.env.models['mail.thread'].findFromIdentifyingData({
+        id: 20,
+        model: 'mail.channel',
+    });
     await this.createComposerComponent(thread.composer, { hasThreadTyping: true });
 
     document.querySelector(`.o_ComposerTextInput_textarea`).focus();
@@ -1682,6 +1769,9 @@ QUnit.test('composer: send button is disabled if attachment upload is not finish
     assert.expect(8);
 
     const attachmentUploadedPromise = makeTestPromise();
+    this.data['mail.channel'].records.push({
+        id: 20,
+    });
     await this.start({
         async mockFetch(resource, init) {
             const res = this._super(...arguments);
@@ -1691,8 +1781,11 @@ QUnit.test('composer: send button is disabled if attachment upload is not finish
             return res;
         }
     });
-    const composer = this.env.models['mail.composer'].create();
-    await this.createComposerComponent(composer);
+    const thread = this.env.models['mail.thread'].findFromIdentifyingData({
+        id: 20,
+        model: 'mail.channel',
+    });
+    await this.createComposerComponent(thread.composer);
     const file = await createFile({
         content: 'hello, world',
         contentType: 'text/plain',
@@ -1711,7 +1804,7 @@ QUnit.test('composer: send button is disabled if attachment upload is not finish
     );
     assert.containsOnce(
         document.body,
-        '.o_Attachment.o-temporary',
+        '.o_Attachment.o-isUploading',
         "attachment displayed is being uploaded"
     );
     assert.containsOnce(
@@ -1733,7 +1826,7 @@ QUnit.test('composer: send button is disabled if attachment upload is not finish
     );
     assert.containsNone(
         document.body,
-        '.o_Attachment.o-temporary',
+        '.o_Attachment.o-isUploading',
         "attachment displayed should be uploaded"
     );
     assert.containsOnce(
@@ -1778,7 +1871,7 @@ QUnit.test('warning on send with shortcut when attempting to post message with s
         },
     });
     const thread = this.env.models['mail.thread'].create({
-        composer: [['create', { isLog: false }]],
+        composer: create({ isLog: false }),
         id: 20,
         model: 'res.partner',
     });
@@ -1803,7 +1896,7 @@ QUnit.test('warning on send with shortcut when attempting to post message with s
     );
     assert.containsOnce(
         document.body,
-        '.o_Attachment.o-temporary',
+        '.o_Attachment.o-isUploading',
         "attachment displayed is being uploaded"
     );
     assert.containsOnce(
@@ -1825,9 +1918,15 @@ QUnit.test('warning on send with shortcut when attempting to post message with s
 QUnit.test('remove an attachment from composer does not need any confirmation', async function (assert) {
     assert.expect(3);
 
+    this.data['mail.channel'].records.push({
+        id: 20,
+    });
     await this.start();
-    const composer = this.env.models['mail.composer'].create();
-    await this.createComposerComponent(composer);
+    const thread = this.env.models['mail.thread'].findFromIdentifyingData({
+        id: 20,
+        model: 'mail.channel',
+    });
+    await this.createComposerComponent(thread.composer);
     const file = await createFile({
         content: 'hello, world',
         contentType: 'text/plain',
@@ -1863,6 +1962,9 @@ QUnit.test('remove an attachment from composer does not need any confirmation', 
 QUnit.test('remove an uploading attachment', async function (assert) {
     assert.expect(4);
 
+    this.data['mail.channel'].records.push({
+        id: 20,
+    });
     await this.start({
         async mockFetch(resource, init) {
             const res = this._super(...arguments);
@@ -1873,8 +1975,11 @@ QUnit.test('remove an uploading attachment', async function (assert) {
             return res;
         }
     });
-    const composer = this.env.models['mail.composer'].create();
-    await this.createComposerComponent(composer);
+    const thread = this.env.models['mail.thread'].findFromIdentifyingData({
+        id: 20,
+        model: 'mail.channel',
+    });
+    await this.createComposerComponent(thread.composer);
     const file = await createFile({
         content: 'hello, world',
         contentType: 'text/plain',
@@ -1898,7 +2003,7 @@ QUnit.test('remove an uploading attachment', async function (assert) {
     );
     assert.containsOnce(
         document.body,
-        '.o_Composer .o_Attachment.o-temporary',
+        '.o_Attachment.o-isUploading',
         "should have an uploading attachment"
     );
 
@@ -1907,13 +2012,16 @@ QUnit.test('remove an uploading attachment', async function (assert) {
     assert.containsNone(
         document.body,
         '.o_Composer .o_Attachment',
-        "should not have any attachment left after unlinking temporary one"
+        "should not have any attachment left after unlinking uploading one"
     );
 });
 
 QUnit.test('remove an uploading attachment aborts upload', async function (assert) {
     assert.expect(1);
 
+    this.data['mail.channel'].records.push({
+        id: 20,
+    });
     await this.start({
         async mockFetch(resource, init) {
             const res = this._super(...arguments);
@@ -1924,8 +2032,11 @@ QUnit.test('remove an uploading attachment aborts upload', async function (asser
             return res;
         }
     });
-    const composer = this.env.models['mail.composer'].create();
-    await this.createComposerComponent(composer);
+    const thread = this.env.models['mail.thread'].findFromIdentifyingData({
+        id: 20,
+        model: 'mail.channel',
+    });
+    await this.createComposerComponent(thread.composer);
     const file = await createFile({
         content: 'hello, world',
         contentType: 'text/plain',
@@ -1961,7 +2072,7 @@ QUnit.test("Show a default status in the recipient status text when the thread d
 
     await this.start();
     const thread = this.env.models['mail.thread'].create({
-        composer: [['create', { isLog: false }]],
+        composer: create({ isLog: false }),
         id: 20,
         model: 'res.partner',
     });
@@ -1979,7 +2090,7 @@ QUnit.test("Show a thread name in the recipient status text.", async function (a
     await this.start();
     const thread = this.env.models['mail.thread'].create({
         name: "test name",
-        composer: [['create', { isLog: false }]],
+        composer: create({ isLog: false }),
         id: 20,
         model: 'res.partner',
     });
@@ -1991,8 +2102,134 @@ QUnit.test("Show a thread name in the recipient status text.", async function (a
     );
 });
 
-});
-});
+QUnit.test('send message only once when button send is clicked twice quickly', async function (assert) {
+    assert.expect(2);
+
+    this.data['mail.channel'].records.push({ id: 20 });
+    await this.start({
+        async mockRPC(route, args) {
+            if (args.method === 'message_post') {
+                assert.step('message_post');
+            }
+            return this._super(...arguments);
+        },
+    });
+    const thread = this.env.models['mail.thread'].findFromIdentifyingData({
+        id: 20,
+        model: 'mail.channel',
+    });
+    await this.createComposerComponent(thread.composer);
+    // Type message
+    await afterNextRender(() => {
+        document.querySelector(`.o_ComposerTextInput_textarea`).focus();
+        document.execCommand('insertText', false, "test message");
+    });
+
+    await afterNextRender(() => {
+        document.querySelector(`.o_Composer_buttonSend`).click();
+        document.querySelector(`.o_Composer_buttonSend`).click();
+    });
+    assert.verifySteps(
+        ['message_post'],
+        "The message has been posted only once"
+    );
 });
 
+QUnit.test('send message only once when enter is pressed twice quickly', async function (assert) {
+    assert.expect(2);
+
+    this.data['mail.channel'].records.push({ id: 20 });
+    await this.start({
+        async mockRPC(route, args) {
+            if (args.method === 'message_post') {
+                assert.step('message_post');
+            }
+            return this._super(...arguments);
+        },
+    });
+    const thread = this.env.models['mail.thread'].findFromIdentifyingData({
+        id: 20,
+        model: 'mail.channel',
+    });
+    await this.createComposerComponent(thread.composer, {
+        textInputSendShortcuts: ['enter'],
+    });
+    // Type message
+    await afterNextRender(() => {
+        document.querySelector(`.o_ComposerTextInput_textarea`).focus();
+        document.execCommand('insertText', false, "test message");
+    });
+    await afterNextRender(() => {
+        const enterEvent = new window.KeyboardEvent('keydown', { key: 'Enter' });
+        document.querySelector(`.o_ComposerTextInput_textarea`)
+            .dispatchEvent(enterEvent);
+        document.querySelector(`.o_ComposerTextInput_textarea`)
+            .dispatchEvent(enterEvent);
+    });
+    assert.verifySteps(
+        ['message_post'],
+        "The message has been posted only once"
+    );
+});
+
+QUnit.test('[technical] does not crash when an attachment is removed before its upload starts', async function (assert) {
+    // Uploading multiple files uploads attachments one at a time, this test
+    // ensures that there is no crash when an attachment is destroyed before its
+    // upload started.
+    assert.expect(1);
+
+    // Promise to block attachment uploading
+    const uploadPromise = makeTestPromise();
+    this.data['mail.channel'].records.push({
+        id: 20,
+    });
+    await this.start({
+        async mockFetch(resource) {
+            const _super = this._super.bind(this, ...arguments);
+            if (resource === '/web/binary/upload_attachment') {
+                await uploadPromise;
+            }
+            return _super();
+        },
+    });
+    const thread = this.env.models['mail.thread'].findFromIdentifyingData({
+        id: 20,
+        model: 'mail.channel',
+    });
+    await this.createComposerComponent(thread.composer);
+    const file1 = await createFile({
+        name: 'text1.txt',
+        content: 'hello, world',
+        contentType: 'text/plain',
+    });
+    const file2 = await createFile({
+        name: 'text2.txt',
+        content: 'hello, world',
+        contentType: 'text/plain',
+    });
+    await afterNextRender(() =>
+        inputFiles(
+            document.querySelector('.o_FileUploader_input'),
+            [file1, file2]
+        )
+    );
+    await afterNextRender(() => {
+            Array.from(document.querySelectorAll('div'))
+            .find(el => el.textContent === 'text2.txt')
+            .closest('.o_Attachment')
+            .querySelector('.o_Attachment_asideItemUnlink')
+            .click();
+        }
+    );
+    // Simulates the completion of the upload of the first attachment
+    uploadPromise.resolve();
+    assert.containsOnce(
+        document.body,
+        '.o_Attachment:contains("text1.txt")',
+        "should only have the first attachment after cancelling the second attachment"
+    );
+});
+
+});
+});
 });

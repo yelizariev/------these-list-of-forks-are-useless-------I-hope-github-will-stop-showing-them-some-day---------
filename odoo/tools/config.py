@@ -1,4 +1,3 @@
-#odoo.loggers.handlers. -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 import configparser as ConfigParser
@@ -163,14 +162,23 @@ class configmanager(object):
                          dest='test_enable',
                          help="Enable unit tests.")
         group.add_option("--test-tags", dest="test_tags",
-                         help="""Comma-separated list of spec to filter which tests to execute. Enable unit tests if set.
-                         A filter spec has the format: [-][tag][/module][:class][.method]
-                         The '-' specifies if we want to include or exclude tests matching this spec.
-                         The tag will match tags added on a class with a @tagged decorator. By default tag value is 'standard' when not
-                         given on include mode. '*' will match all tags. Tag will also match module name (deprecated, use /module)
-                         The module, class, and method will respectively match the module name, test class name and test method name.
-                         examples: :TestClass.test_func,/test_module,external
-                         """)
+                         help="Comma-separated list of specs to filter which tests to execute. Enable unit tests if set. "
+                         "A filter spec has the format: [-][tag][/module][:class][.method] "
+                         "The '-' specifies if we want to include or exclude tests matching this spec. "
+                         "The tag will match tags added on a class with a @tagged decorator "
+                         "(all Test classes have 'standard' and 'at_install' tags "
+                         "until explicitly removed, see the decorator documentation). "
+                         "'*' will match all tags. "
+                         "If tag is omitted on include mode, its value is 'standard'. "
+                         "If tag is omitted on exclude mode, its value is '*'. "
+                         "The module, class, and method will respectively match the module name, test class name and test method name. "
+                         "Example: --test-tags :TestClass.test_func,/test_module,external "
+
+                         "Filtering and executing the tests happens twice: right "
+                         "after each module installation/update and at the end "
+                         "of the modules loading. At each stage tests are filtered "
+                         "by --test-tags specs and additionally by dynamic specs "
+                         "'at_install' and 'post_install' correspondingly.")
 
         group.add_option("--screencasts", dest="screencasts", action="store", my_default=None,
                          metavar='DIR',
@@ -241,7 +249,7 @@ class configmanager(object):
                          help="specify a custom database template to create a new database")
         parser.add_option_group(group)
 
-        group = optparse.OptionGroup(parser, "Internationalisation options. ",
+        group = optparse.OptionGroup(parser, "Internationalisation options",
             "Use these options to translate Odoo to another language. "
             "See i18n section of the user manual. Option '-d' is mandatory. "
             "Option '-l' is mandatory in case of importation"
@@ -279,11 +287,11 @@ class configmanager(object):
                           help="stop the server after its initialization")
         group.add_option("--osv-memory-count-limit", dest="osv_memory_count_limit", my_default=False,
                          help="Force a limit on the maximum number of records kept in the virtual "
-                              "osv_memory tables. The default is False, which means no count-based limit.",
+                              "osv_memory tables. By default there is no limit.",
                          type="int")
         group.add_option("--transient-age-limit", dest="transient_age_limit", my_default=1.0,
                          help="Time limit (decimal value in hours) records created with a "
-                              "TransientModel (mosly wizard) are kept in the database. Default to 1 hour.",
+                              "TransientModel (mostly wizard) are kept in the database. Default to 1 hour.",
                          type="float")
         group.add_option("--osv-memory-age-limit", dest="osv_memory_age_limit", my_default=False,
                          help="Deprecated alias to the transient-age-limit option",
@@ -556,7 +564,7 @@ class configmanager(object):
             path = path.strip()
             res = os.path.abspath(os.path.expanduser(path))
             if not os.path.isdir(res):
-                raise optparse.OptionValueError("option %s: no such directory: %r" % (opt, path))
+                raise optparse.OptionValueError("option %s: no such directory: %r" % (opt, res))
             if not self._is_addons_path(res):
                 raise optparse.OptionValueError("option %s: the path %r is not a valid addons directory" % (opt, path))
             ad_paths.append(res)

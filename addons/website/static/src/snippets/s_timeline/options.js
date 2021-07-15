@@ -1,14 +1,16 @@
 odoo.define('website.s_timeline_options', function (require) {
 'use strict';
 
-const snippetOptions = require('web_editor.snippets.options');
+const options = require('web_editor.snippets.options');
 
-snippetOptions.registry.Timeline = snippetOptions.SnippetOptionWidget.extend({
+options.registry.Timeline = options.Class.extend({
+    displayOverlayOptions: true,
+
     /**
      * @override
      */
     start: function () {
-        var $buttons = this.$el.find('we-button');
+        var $buttons = this.$el.find('we-button.o_we_overlay_opt');
         var $overlayArea = this.$overlay.find('.o_overlay_options_wrap');
         $overlayArea.append($('<div/>').append($buttons));
 
@@ -24,9 +26,9 @@ snippetOptions.registry.Timeline = snippetOptions.SnippetOptionWidget.extend({
      *
      * @see this.selectClass for parameters
      */
-    timelineCard: async function (previewMode, widgetValue, params) {
+    timelineCard: function (previewMode, widgetValue, params) {
         const $timelineRow = this.$target.closest('.s_timeline_row');
-        await this.editorHelpers.toggleClass(this.wysiwyg.editor, $timelineRow[0], 'flex-row-reverse flex-row');
+        $timelineRow.toggleClass('flex-row-reverse flex-row');
     },
 });
 });

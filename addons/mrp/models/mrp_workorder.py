@@ -29,7 +29,7 @@ class MrpWorkorder(models.Model):
         states={'done': [('readonly', True)], 'cancel': [('readonly', True)], 'progress': [('readonly', True)]},
         group_expand='_read_group_workcenter_id', check_company=True)
     working_state = fields.Selection(
-        string='Workcenter Status', related='workcenter_id.working_state', readonly=False,
+        string='Workcenter Status', related='workcenter_id.working_state',
         help='Technical: used in views only')
     product_id = fields.Many2one(related='production_id.product_id', readonly=True, store=True, check_company=True)
     product_tracking = fields.Selection(related="product_id.tracking")
@@ -60,10 +60,12 @@ class MrpWorkorder(models.Model):
         compute='_compute_is_produced')
     state = fields.Selection([
         ('pending', 'Waiting for another WO'),
+        ('waiting', 'Waiting for components'),
         ('ready', 'Ready'),
         ('progress', 'In Progress'),
         ('done', 'Finished'),
         ('cancel', 'Cancelled')], string='Status',
+        compute='_compute_state', store=True,
         default='pending', copy=False, readonly=True)
     leave_id = fields.Many2one(
         'resource.calendar.leaves',
@@ -112,7 +114,7 @@ class MrpWorkorder(models.Model):
         string='Worksheet Type', related='operation_id.worksheet_type', readonly=True)
     worksheet_google_slide = fields.Char(
         'Worksheet URL', related='operation_id.worksheet_google_slide', readonly=True)
-    operation_note = fields.Text("Description", related='operation_id.note', readonly=True)
+    operation_note = fields.Html("Description", related='operation_id.note', readonly=True)
     move_raw_ids = fields.One2many(
         'stock.move', 'workorder_id', 'Raw Moves',
         domain=[('raw_material_production_id', '!=', False), ('production_id', '=', False)])
@@ -137,15 +139,25 @@ class MrpWorkorder(models.Model):
     next_work_order_id = fields.Many2one('mrp.workorder', "Next Work Order", check_company=True)
     scrap_ids = fields.One2many('stock.scrap', 'workorder_id')
     scrap_count = fields.Integer(compute='_compute_scrap_move_count', string='Scrap Move')
-    production_date = fields.Datetime('Production Date', related='production_id.date_planned_start', store=True, readonly=False)
+    production_date = fields.Datetime('Production Date', related='production_id.date_planned_start', store=True)
     json_popover = fields.Char('Popover Data JSON', compute='_compute_json_popover')
     show_json_popover = fields.Boolean('Show Popover?', compute='_compute_json_popover')
-    consumption = fields.Selection([
-        ('strict', 'Strict'),
-        ('warning', 'Warning'),
-        ('flexible', 'Flexible')],
-        required=True,
-    )
+    consumption = fields.Selection(related='production_id.consumption')
+
+    @api.depends('production_availability')
+    def _compute_state(self):
+        # Force the flush of the production_availability, the wo state is modify in the _compute_reservation_state
+        # It is a trick to force that the state of workorder is computed as the end of the
+        # cyclic depends with the mo.state, mo.reservation_state and wo.state
+        for workorder in self:
+            if workorder.state not in ('waiting', 'ready'):
+                continue
+            if workorder.production_id.reservation_state not in ('waiting', 'confirmed', 'assigned'):
+                continue
+            if workorder.production_id.reservation_state == 'assigned' and workorder.state == 'waiting':
+                workorder.state = 'ready'
+            elif workorder.production_id.reservation_state != 'assigned' and workorder.state == 'ready':
+                workorder.state = 'waiting'
 
     @api.depends('production_state', 'date_planned_start', 'date_planned_finished')
     def _compute_json_popover(self):
@@ -166,7 +178,7 @@ class MrpWorkorder(models.Model):
                 wo.show_json_popover = False
                 wo.json_popover = False
                 continue
-            if wo.state in ['pending', 'ready']:
+            if wo.state in ('pending', 'waiting', 'ready'):
                 previous_wo = previous_wo_dict.get(wo.id)
                 prev_start = previous_wo and previous_wo['date_planned_start'] or False
                 prev_finished = previous_wo and previous_wo['date_planned_finished'] or False
@@ -425,10 +437,7 @@ class MrpWorkorder(models.Model):
             moves = production.move_raw_ids | production.move_finished_ids
 
             for workorder in self:
-                if workorder.operation_id.bom_id:
-                    bom = workorder.operation_id.bom_id
-                if not bom:
-                    bom = workorder.production_id.bom_id
+                bom = workorder.operation_id.bom_id or workorder.production_id.bom_id
                 previous_workorder = workorders_by_bom[bom][-1:]
                 previous_workorder.next_work_order_id = workorder.id
                 workorders_by_bom[bom] |= workorder
@@ -456,8 +465,10 @@ class MrpWorkorder(models.Model):
                     })
 
             for workorders in workorders_by_bom.values():
+                if not workorders:
+                    continue
                 if workorders[0].state == 'pending':
-                    workorders[0].state = 'ready'
+                    workorders[0].state = 'ready' if workorders[0].production_availability == 'assigned' else 'waiting'
                 for workorder in workorders:
                     workorder._start_nextworkorder()
 
@@ -466,7 +477,7 @@ class MrpWorkorder(models.Model):
 
     def _start_nextworkorder(self):
         if self.state == 'done' and self.next_work_order_id.state == 'pending':
-            self.next_work_order_id.state = 'ready'
+            self.next_work_order_id.state = 'ready' if self.next_work_order_id.production_availability == 'assigned' else 'waiting'
 
     @api.model
     def gantt_unavailability(self, start_date, end_date, scale, group_bys=None, rows=None):
@@ -514,6 +525,8 @@ class MrpWorkorder(models.Model):
 
         if self.product_tracking == 'serial':
             self.qty_producing = 1.0
+        else:
+            self.qty_producing = self.qty_remaining
 
         self.env['mrp.workcenter.productivity'].create(
             self._prepare_timeline_vals(self.duration, datetime.now())
@@ -554,6 +567,7 @@ class MrpWorkorder(models.Model):
                 continue
             workorder.end_all()
             vals = {
+                'qty_produced': workorder.qty_produced or workorder.qty_producing or workorder.qty_production,
                 'state': 'done',
                 'date_finished': end_date,
                 'date_planned_finished': end_date
@@ -701,8 +715,8 @@ class MrpWorkorder(models.Model):
             FROM mrp_workorder wo1, mrp_workorder wo2
             WHERE
                 wo1.id IN %s
-                AND wo1.state IN ('pending','ready')
-                AND wo2.state IN ('pending','ready')
+                AND wo1.state IN ('pending', 'waiting', 'ready')
+                AND wo2.state IN ('pending', 'waiting', 'ready')
                 AND wo1.id != wo2.id
                 AND wo1.workcenter_id = wo2.workcenter_id
                 AND (DATE_TRUNC('second', wo2.date_planned_start), DATE_TRUNC('second', wo2.date_planned_finished))
@@ -771,7 +785,8 @@ class MrpWorkorder(models.Model):
                 move_line.product_uom_qty += self.qty_producing
                 move_line.qty_done += self.qty_producing
             else:
-                location_dest_id = production_move.location_dest_id._get_putaway_strategy(self.product_id).id or production_move.location_dest_id.id
+                quantity = self.product_uom_id._compute_quantity(self.qty_producing, self.product_id.uom_id, rounding_method='HALF-UP')
+                putaway_location = production_move.location_dest_id._get_putaway_strategy(self.product_id, quantity)
                 move_line.create({
                     'move_id': production_move.id,
                     'product_id': production_move.product_id.id,
@@ -780,7 +795,7 @@ class MrpWorkorder(models.Model):
                     'product_uom_id': self.product_uom_id.id,
                     'qty_done': self.qty_producing,
                     'location_id': production_move.location_id.id,
-                    'location_dest_id': location_dest_id,
+                    'location_dest_id': putaway_location.id,
                 })
         else:
             rounding = production_move.product_uom.rounding

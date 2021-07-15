@@ -46,19 +46,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-12 col-lg-6 o_setting_box" title="Reserving products manually in delivery orders or by running the scheduler is advised to better manage priorities in case of long customer lead times or/and frequent stock-outs. By default, the scheduler runs automatically every 24 hours.">
-                    <div class="o_setting_right_pane">
-                        <label for="module_procurement_jit"/>
-                        <div class="text-muted">
-                            When to reserve sold products
-                        </div>
-                        <div class="content-group">
-                            <div class="mt16">
-                                <field name="module_procurement_jit" class="o_light_label" widget="radio"/>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
             <xpath expr="//h2[@id='schedule_info']" position="attributes">
                 <attribute name="invisible">0</attribute>
@@ -70,7 +57,7 @@
                     </div>
                     <div class="o_setting_right_pane">
                         <label for="use_security_lead"/>
-                        <a href="https://www.odoo.com/documentation/user/14.0/inventory/management/planning/scheduled_date.html" title="Documentation" class="mr-2 o_doc_link" target="_blank"></a>
+                        <a href="https://www.odoo.com/documentation/14.0/applications/inventory_and_mrp/inventory/management/planning/scheduled_dates.html" title="Documentation" class="mr-2 o_doc_link" target="_blank"></a>
                         <span class="fa fa-lg fa-building-o" title="Values set here are company-specific." role="img" aria-label="Values set here are company-specific." groups="base.group_multi_company"/>
                         <div class="text-muted">
                             Schedule deliveries earlier to avoid delays

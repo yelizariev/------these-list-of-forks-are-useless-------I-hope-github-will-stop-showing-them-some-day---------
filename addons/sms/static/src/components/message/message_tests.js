@@ -1,18 +1,20 @@
 odoo.define('sms/static/src/components/message/message_tests.js', function (require) {
 'use strict';
 
-const components = {
-    Message: require('mail/static/src/components/message/message.js'),
-};
+const { Message } = require('@mail/components/message/message');
+const { create, insert, link } = require('@mail/model/model_field_command');
+const { makeDeferred } = require('@mail/utils/deferred/deferred');
 const {
     afterEach,
     afterNextRender,
     beforeEach,
     createRootComponent,
     start,
-} = require('mail/static/src/utils/test_utils.js');
+} = require('@mail/utils/test_utils');
 
 const Bus = require('web.Bus');
+
+const components = { Message };
 
 QUnit.module('sms', {}, function () {
 QUnit.module('components', {}, function () {
@@ -48,21 +50,21 @@ QUnit.test('Notification Sent', async function (assert) {
     await this.start();
     const threadViewer = this.env.models['mail.thread_viewer'].create({
         hasThreadView: true,
-        thread: [['create', {
+        thread: create({
             id: 11,
             model: 'mail.channel',
-        }]],
+        }),
     });
     const message = this.env.models['mail.message'].create({
         id: 10,
         message_type: 'sms',
-        notifications: [['insert', {
+        notifications: insert({
             id: 11,
             notification_status: 'sent',
             notification_type: 'sms',
-            partner: [['insert', { id: 12, name: "Someone" }]],
-        }]],
-        originThread: [['link', threadViewer.thread]]
+            partner: insert({ id: 12, name: "Someone" }),
+        }),
+        originThread: link(threadViewer.thread)
     });
     await this.createMessageComponent(message, {
         threadViewLocalId: threadViewer.threadView.localId
@@ -122,6 +124,7 @@ QUnit.test('Notification Sent', async function (assert) {
 QUnit.test('Notification Error', async function (assert) {
     assert.expect(8);
 
+    const openResendActionDef = makeDeferred();
     const bus = new Bus();
     bus.on('do-action', null, payload => {
         assert.step('do_action');
@@ -135,25 +138,26 @@ QUnit.test('Notification Error', async function (assert) {
             10,
             "action should have correct message id"
         );
+        openResendActionDef.resolve();
     });
 
     await this.start({ env: { bus } });
     const threadViewer = this.env.models['mail.thread_viewer'].create({
         hasThreadView: true,
-        thread: [['create', {
+        thread: create({
             id: 11,
             model: 'mail.channel',
-        }]],
+        }),
     });
     const message = this.env.models['mail.message'].create({
         id: 10,
         message_type: 'sms',
-        notifications: [['insert', {
+        notifications: insert({
             id: 11,
             notification_status: 'exception',
             notification_type: 'sms',
-        }]],
-        originThread: [['link', threadViewer.thread]]
+        }),
+        originThread: link(threadViewer.thread)
     });
     await this.createMessageComponent(message, {
         threadViewLocalId: threadViewer.threadView.localId
@@ -179,10 +183,8 @@ QUnit.test('Notification Error', async function (assert) {
         'fa-mobile',
         "icon should represent sms"
     );
-
-    await afterNextRender(() => {
-        document.querySelector('.o_Message_notificationIconClickable').click();
-    });
+    document.querySelector('.o_Message_notificationIconClickable').click();
+    await openResendActionDef;
     assert.verifySteps(
         ['do_action'],
         "should do an action to display the resend sms dialog"

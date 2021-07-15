@@ -28,16 +28,36 @@ const ReplenishReport = clientAction.extend({
         this._super.apply(this, arguments);
         this.context = action.context;
         this.productId = this.context.active_id;
-        this.resModel = this.context.active_model || 'product.template';
+        this.resModel = this.context.active_model || this.context.params.active_model || 'product.template';
         const isTemplate = this.resModel === 'product.template';
         this.actionMethod = `action_product_${isTemplate ? 'tmpl_' : ''}forecast_report`;
         const reportName = `report_product_${isTemplate ? 'template' : 'product'}_replenishment`;
         this.report_url = `/report/html/stock.${reportName}/${this.productId}`;
-        if (this.context.warehouse) {
-            this.active_warehouse = {id: this.context.warehouse};
-        }
-        this.report_url += `?context=${JSON.stringify(this.context)}`;
         this._title = action.name;
+    },
+
+    /**
+     * @override
+     */
+    willStart: function() {
+        var loadWarehouses = this._rpc({
+            model: 'report.stock.report_product_product_replenishment',
+            method: 'get_warehouses',
+        }).then((res) => {
+            this.warehouses = res;
+            if (this.context.warehouse) {
+                this.active_warehouse = this.warehouses.find(w => w.id == this.context.warehouse);
+            }
+            else {
+                this.active_warehouse = this.warehouses[0];
+                this.context.warehouse = this.active_warehouse.id;
+            }
+            this.report_url += `?context=${JSON.stringify(this.context)}`;
+        });
+        return Promise.all([
+            this._super.apply(this, arguments),
+            loadWarehouses
+        ]);
     },
 
     /**
@@ -46,8 +66,8 @@ const ReplenishReport = clientAction.extend({
     start: function () {
         return Promise.all([
             this._super(...arguments),
-            this._renderWarehouseFilters(),
         ]).then(() => {
+            this._renderWarehouseFilters();
             this._renderButtons();
         });
     },
@@ -81,6 +101,11 @@ const ReplenishReport = clientAction.extend({
             in_DOM: true,
             callbacks: [{ widget: graphController }],
         });
+        // Hack to put the res_model on the url. This way, the report always know on with res_model it refers.
+        if (location.href.indexOf('active_model') === -1) {
+            const url = window.location.href + `&active_model=${this.resModel}`;
+            window.history.pushState({}, "", url);
+        }
     },
 
     /**
@@ -178,30 +203,17 @@ const ReplenishReport = clientAction.extend({
     },
 
     /**
-     * TODO
-     * @returns {Promise}
+     * Renders the Warehouses filter
      */
     _renderWarehouseFilters: function () {
-        return this._rpc({
-            model: 'report.stock.report_product_product_replenishment',
-            method: 'get_filter_state',
-        }).then((res) => {
-            const warehouses = res.warehouses;
-            const active_warehouse = (this.active_warehouse && this.active_warehouse.id) || res.active_warehouse;
-            if (active_warehouse) {
-                this.active_warehouse = _.findWhere(warehouses, {id: active_warehouse});
-            } else {
-                this.active_warehouse = warehouses[0];
-            }
-            const $filters = $(qweb.render('warehouseFilter', {
-                active_warehouse: this.active_warehouse,
-                warehouses: warehouses,
-                displayWarehouseFilter: (warehouses.length > 1),
-            }));
-            // Bind handlers.
-            $filters.on('click', '.warehouse_filter', this._onClickFilter.bind(this));
-            this.$('.o_search_options').append($filters);
-        });
+        const $filters = $(qweb.render('warehouseFilter', {
+            active_warehouse: this.active_warehouse,
+            warehouses: this.warehouses,
+            displayWarehouseFilter: (this.warehouses.length > 1),
+        }));
+        // Bind handlers.
+        $filters.on('click', '.warehouse_filter', this._onClickFilter.bind(this));
+        this.$('.o_search_options').append($filters);
     },
 
     /**
@@ -215,6 +227,7 @@ const ReplenishReport = clientAction.extend({
         rr.on('mouseenter', '.o_report_replenish_change_priority', this._onMouseEnterPriority.bind(this));
         rr.on('mouseleave', '.o_report_replenish_change_priority', this._onMouseLeavePriority.bind(this));
         rr.on('click', '.o_report_replenish_unreserve', this._onClickUnreserve.bind(this));
+        rr.on('click', '.o_report_replenish_reserve', this._onClickReserve.bind(this));
     },
 
     //--------------------------------------------------------------------------
@@ -304,13 +317,26 @@ const ReplenishReport = clientAction.extend({
     _onClickUnreserve: function(ev) {
         const model = ev.target.getAttribute('model');
         const modelId = parseInt(ev.target.getAttribute('model-id'));
-        this._rpc( {
-            model: model,
+        return this._rpc( {
+            model,
             args: [[modelId]],
             method: 'do_unreserve'
-        }).then((result) => {
-            return this._reloadReport();
-        });
+        }).then(() => this._reloadReport());
+    },
+
+    /**
+     * Reserve the specified model/id, then reload this report.
+     *
+     * @returns {Promise}
+     */
+    _onClickReserve: function(ev) {
+        const model = ev.target.getAttribute('model');
+        const modelId = parseInt(ev.target.getAttribute('model-id'));
+        return this._rpc( {
+            model,
+            args: [[modelId]],
+            method: 'action_assign'
+        }).then(() => this._reloadReport());
     }
 
 });

@@ -1,23 +1,30 @@
-odoo.define('mail/static/src/components/thread_view/thread_view.js', function (require) {
-'use strict';
+/** @odoo-module **/
 
-const components = {
-    Composer: require('mail/static/src/components/composer/composer.js'),
-    MessageList: require('mail/static/src/components/message_list/message_list.js'),
-};
-const useStore = require('mail/static/src/component_hooks/use_store/use_store.js');
+import { useShouldUpdateBasedOnProps } from '@mail/component_hooks/use_should_update_based_on_props/use_should_update_based_on_props';
+import { useStore } from '@mail/component_hooks/use_store/use_store';
+import { useUpdate } from '@mail/component_hooks/use_update/use_update';
+import { Composer } from '@mail/components/composer/composer';
+import { MessageList } from '@mail/components/message_list/message_list';
 
 const { Component } = owl;
 const { useRef } = owl.hooks;
 
-class ThreadView extends Component {
+const components = { Composer, MessageList };
+
+export class ThreadView extends Component {
 
     /**
      * @param {...any} args
      */
     constructor(...args) {
         super(...args);
-        useStore((...args) => this._useStoreSelector(...args));
+        useShouldUpdateBasedOnProps();
+        useStore((...args) => this._useStoreSelector(...args), {
+            compareDepth: {
+                threadTextInputSendShortcuts: 1,
+            },
+        });
+        useUpdate({ func: () => this._update() });
         /**
          * Reference of the composer. Useful to set focus on composer when
          * thread has the focus.
@@ -27,14 +34,6 @@ class ThreadView extends Component {
          * Reference of the message list. Useful to determine scroll positions.
          */
         this._messageListRef = useRef('messageList');
-    }
-
-    mounted() {
-        this._update();
-    }
-
-    patched() {
-        this._update();
     }
 
     //--------------------------------------------------------------------------
@@ -113,18 +112,7 @@ class ThreadView extends Component {
      * @private
      */
     _update() {
-        const messageList = this._messageListRef.comp;
         this.trigger('o-rendered');
-        /**
-         * Control panel may offset scrolling position of message list due to
-         * height of buttons. To prevent this, control panel re-render is
-         * triggered before message list. Correct way should be to adjust
-         * scroll positions after everything has been rendered, but OWL doesn't
-         * have such an API for the moment.
-         */
-        if (messageList) {
-            messageList.adjustFromComponentHints();
-        }
     }
 
     /**
@@ -138,12 +126,37 @@ class ThreadView extends Component {
         const threadView = this.env.models['mail.thread_view'].get(props.threadViewLocalId);
         const thread = threadView ? threadView.thread : undefined;
         const threadCache = threadView ? threadView.threadCache : undefined;
+        const correspondent = thread && thread.correspondent;
         return {
+            composer: thread && thread.composer,
+            correspondentId: correspondent && correspondent.id,
             isDeviceMobile: this.env.messaging.device.isMobile,
-            thread: thread ? thread.__state : undefined,
-            threadCache: threadCache ? threadCache.__state : undefined,
-            threadView: threadView ? threadView.__state : undefined,
+            thread,
+            threadCacheIsLoaded: threadCache && threadCache.isLoaded,
+            threadCacheHasLoadingFailed: threadCache && threadCache.hasLoadingFailed,
+            threadIsTemporary: thread && thread.isTemporary,
+            threadModel: thread && thread.model,
+            threadTextInputSendShortcuts: thread && thread.textInputSendShortcuts || [],
+            threadView,
+            threadViewIsLoading: threadView && threadView.isLoading,
         };
+    }
+
+    //--------------------------------------------------------------------------
+    // Handlers
+    //--------------------------------------------------------------------------
+
+    /**
+     * @private
+     */
+    _onClickRetryLoadMessages() {
+        if (!this.threadView) {
+            return;
+        }
+        if (!this.threadView.threadCache) {
+            return;
+        }
+        this.threadView.threadCache.update({ hasLoadingFailed: false });
     }
 
 }
@@ -153,10 +166,10 @@ Object.assign(ThreadView, {
     defaultProps: {
         composerAttachmentsDetailsMode: 'auto',
         hasComposer: false,
-        hasMessageCheckbox: false,
         hasSquashCloseMessages: false,
         haveMessagesMarkAsReadIcon: false,
         haveMessagesReplyIcon: false,
+        isDoFocus: false,
         order: 'asc',
         showComposerAttachmentsExtensions: true,
         showComposerAttachmentsFilenames: true,
@@ -165,6 +178,14 @@ Object.assign(ThreadView, {
         composerAttachmentsDetailsMode: {
             type: String,
             validate: prop => ['auto', 'card', 'hover', 'none'].includes(prop),
+        },
+        /**
+         * Function returns the exact scrollable element from the parent
+         * to manage proper scroll heights which affects the load more messages.
+         */
+        getScrollableElement: {
+            type: Function,
+            optional: true,
         },
         hasComposer: Boolean,
         hasComposerCurrentPartnerAvatar: {
@@ -184,7 +205,6 @@ Object.assign(ThreadView, {
             type: Boolean,
             optional: true,
         },
-        hasMessageCheckbox: Boolean,
         hasScrollAdjust: {
             type: Boolean,
             optional: true,
@@ -192,21 +212,17 @@ Object.assign(ThreadView, {
         hasSquashCloseMessages: Boolean,
         haveMessagesMarkAsReadIcon: Boolean,
         haveMessagesReplyIcon: Boolean,
+        /**
+         * Determines whether this should become focused.
+         */
+        isDoFocus: Boolean,
         order: {
             type: String,
             validate: prop => ['asc', 'desc'].includes(prop),
-        },
-        selectedMessageLocalId: {
-            type: String,
-            optional: true,
         },
         showComposerAttachmentsExtensions: Boolean,
         showComposerAttachmentsFilenames: Boolean,
         threadViewLocalId: String,
     },
     template: 'mail.ThreadView',
-});
-
-return ThreadView;
-
 });

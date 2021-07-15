@@ -20,6 +20,7 @@ class RatingParentMixin(models.AbstractModel):
         "Rating Satisfaction",
         compute="_compute_rating_percentage_satisfaction", compute_sudo=True,
         store=False, help="Percentage of happy ratings")
+    rating_count = fields.Integer(string='# Ratings', compute="_compute_rating_percentage_satisfaction", compute_sudo=True)
 
     @api.depends('rating_ids.rating', 'rating_ids.consumed')
     def _compute_rating_percentage_satisfaction(self):
@@ -45,6 +46,7 @@ class RatingParentMixin(models.AbstractModel):
         # compute percentage per parent
         for record in self:
             repartition = grades_per_parent.get(record.id, default_grades)
+            record.rating_count = sum(repartition.values())
             record.rating_percentage_satisfaction = repartition['great'] * 100 / sum(repartition.values()) if sum(repartition.values()) else -1
 
 
@@ -59,10 +61,10 @@ class RatingMixin(models.AbstractModel):
     rating_count = fields.Integer('Rating count', compute="_compute_rating_stats", compute_sudo=True)
     rating_avg = fields.Float("Rating Average", compute='_compute_rating_stats', compute_sudo=True)
 
-    @api.depends('rating_ids.rating')
+    @api.depends('rating_ids.rating', 'rating_ids.consumed')
     def _compute_rating_last_value(self):
         for record in self:
-            ratings = self.env['rating.rating'].search([('res_model', '=', self._name), ('res_id', '=', record.id)], limit=1)
+            ratings = self.env['rating.rating'].search([('res_model', '=', self._name), ('res_id', '=', record.id), ('consumed', '=', True)], limit=1)
             record.rating_last_value = ratings and ratings.rating or 0
 
     @api.depends('rating_ids.res_id', 'rating_ids.rating')
@@ -248,7 +250,7 @@ class RatingMixin(models.AbstractModel):
         for key in data:
             if key >= RATING_LIMIT_SATISFIED:
                 res['great'] += data[key]
-            elif key > RATING_LIMIT_OK:
+            elif key >= RATING_LIMIT_OK:
                 res['okay'] += data[key]
             else:
                 res['bad'] += data[key]

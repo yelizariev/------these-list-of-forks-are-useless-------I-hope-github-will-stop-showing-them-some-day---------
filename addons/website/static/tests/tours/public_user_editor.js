@@ -25,7 +25,7 @@ const tour = require('web_tour.tour');
 tour.register('public_user_editor', {
     test: true,
 }, [{
-    trigger: '.o_editor_center:has(>:first-child)',
+    trigger: '.note-editable',
     run: function () {}, // Simple check
 }]);
 });

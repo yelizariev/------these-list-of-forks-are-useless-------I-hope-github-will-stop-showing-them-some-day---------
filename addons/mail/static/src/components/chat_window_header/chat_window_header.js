@@ -1,31 +1,37 @@
-odoo.define('mail/static/src/components/chat_window_header/chat_window_header.js', function (require) {
-'use strict';
+/** @odoo-module **/
 
-const components = {
-    ThreadIcon: require('mail/static/src/components/thread_icon/thread_icon.js'),
-};
-const useStore = require('mail/static/src/component_hooks/use_store/use_store.js');
-const {
+import { useShouldUpdateBasedOnProps } from '@mail/component_hooks/use_should_update_based_on_props/use_should_update_based_on_props';
+import { useStore } from '@mail/component_hooks/use_store/use_store';
+import {
     isEventHandled,
     markEventHandled,
-} = require('mail/static/src/utils/utils.js');
+} from '@mail/utils/utils';
+import { ThreadIcon } from '@mail/components/thread_icon/thread_icon';
 
 const { Component } = owl;
 
-class ChatWindowHeader extends Component {
+const components = { ThreadIcon };
+
+export class ChatWindowHeader extends Component {
 
     /**
      * @override
      */
     constructor(...args) {
         super(...args);
+        useShouldUpdateBasedOnProps();
         useStore(props => {
             const chatWindow = this.env.models['mail.chat_window'].get(props.chatWindowLocalId);
             const thread = chatWindow && chatWindow.thread;
             return {
-                chatWindow: chatWindow ? chatWindow.__state : undefined,
+                chatWindow,
+                chatWindowHasShiftNext: chatWindow && chatWindow.hasShiftNext,
+                chatWindowHasShiftPrev: chatWindow && chatWindow.hasShiftPrev,
+                chatWindowName: chatWindow && chatWindow.name,
                 isDeviceMobile: this.env.messaging.device.isMobile,
-                thread: thread ? thread.__state : undefined,
+                thread,
+                threadLocalMessageUnreadCounter: thread && thread.localMessageUnreadCounter,
+                threadModel: thread && thread.model,
             };
         });
     }
@@ -41,6 +47,26 @@ class ChatWindowHeader extends Component {
         return this.env.models['mail.chat_window'].get(this.props.chatWindowLocalId);
     }
 
+    /**
+     * @returns {string}
+     */
+    get shiftNextText() {
+        if (this.env.messaging.locale.textDirection === 'rtl') {
+            return this.env._t("Shift left");
+        }
+        return this.env._t("Shift right");
+    }
+
+    /**
+     * @returns {string}
+     */
+    get shiftPrevText() {
+        if (this.env.messaging.locale.textDirection === 'rtl') {
+            return this.env._t("Shift right");
+        }
+        return this.env._t("Shift left");
+    }
+
     //--------------------------------------------------------------------------
     // Handlers
     //--------------------------------------------------------------------------
@@ -50,7 +76,10 @@ class ChatWindowHeader extends Component {
      * @param {MouseEvent} ev
      */
     _onClick(ev) {
-        if (isEventHandled(ev, 'ChatWindowHeader.openProfile')) {
+        if (isEventHandled(ev, 'ChatWindowHeader.ClickShiftNext')) {
+            return;
+        }
+        if (isEventHandled(ev, 'ChatWindowHeader.ClickShiftPrev')) {
             return;
         }
         const chatWindow = this.chatWindow;
@@ -61,19 +90,11 @@ class ChatWindowHeader extends Component {
      * @private
      * @param {MouseEvent} ev
      */
-    _onClickName(ev) {
-        if (this.chatWindow.thread && this.chatWindow.thread.correspondent) {
-            markEventHandled(ev, 'ChatWindowHeader.openProfile');
-            this.chatWindow.thread.correspondent.openProfile();
-        }
-    }
-
-    /**
-     * @private
-     * @param {MouseEvent} ev
-     */
     _onClickClose(ev) {
         ev.stopPropagation();
+        if (!this.chatWindow) {
+            return;
+        }
         this.chatWindow.close();
     }
 
@@ -90,18 +111,18 @@ class ChatWindowHeader extends Component {
      * @private
      * @param {MouseEvent} ev
      */
-    _onClickShiftLeft(ev) {
-        ev.stopPropagation();
-        this.chatWindow.shiftLeft();
+    _onClickShiftPrev(ev) {
+        markEventHandled(ev, 'ChatWindowHeader.ClickShiftPrev');
+        this.chatWindow.shiftPrev();
     }
 
     /**
      * @private
      * @param {MouseEvent} ev
      */
-    _onClickShiftRight(ev) {
-        ev.stopPropagation();
-        this.chatWindow.shiftRight();
+    _onClickShiftNext(ev) {
+        markEventHandled(ev, 'ChatWindowHeader.ClickShiftNext');
+        this.chatWindow.shiftNext();
     }
 
 }
@@ -118,8 +139,4 @@ Object.assign(ChatWindowHeader, {
         isExpandable: Boolean,
     },
     template: 'mail.ChatWindowHeader',
-});
-
-return ChatWindowHeader;
-
 });

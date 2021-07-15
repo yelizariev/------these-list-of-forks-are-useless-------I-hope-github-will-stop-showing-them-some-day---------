@@ -11,21 +11,22 @@ from odoo.tests import Form, tagged
 @tagged('post_install', '-at_install')
 class TestSaleStock(TestSaleCommon, ValuationReconciliationTestCommon):
 
-    def _get_new_sale_order(self, amount=10.0):
+    def _get_new_sale_order(self, amount=10.0, product=False):
         """ Creates and returns a sale order with one default order line.
 
         :param float amount: quantity of product for the order line (10 by default)
         """
+        product = product or self.company_data['product_delivery_no']
         sale_order_vals = {
             'partner_id': self.partner_a.id,
             'partner_invoice_id': self.partner_a.id,
             'partner_shipping_id': self.partner_a.id,
             'order_line': [(0, 0, {
-                'name': self.company_data['product_delivery_no'].name,
-                'product_id': self.company_data['product_delivery_no'].id,
+                'name': product.name,
+                'product_id': product.id,
                 'product_uom_qty': amount,
-                'product_uom': self.company_data['product_delivery_no'].uom_id.id,
-                'price_unit': self.company_data['product_delivery_no'].list_price})],
+                'product_uom': product.uom_id.id,
+                'price_unit': product.list_price})],
             'pricelist_id': self.company_data['default_pricelist'].id,
         }
         sale_order = self.env['sale.order'].create(sale_order_vals)
@@ -770,6 +771,172 @@ class TestSaleStock(TestSaleCommon, ValuationReconciliationTestCommon):
         # Checks the delivery amount (must still be 10).
         self.assertEqual(sale_order.order_line.qty_delivered, 10)
 
+    def test_13_delivered_qty(self):
+        """ Creates a sale order, valids it and adds a new move line in the delivery for a
+        product with an invoicing policy on 'order', then checks a new SO line was created.
+        After that, creates a second sale order and does the same thing but with a product
+        with and invoicing policy on 'ordered'.
+        """
+        product_inv_on_delivered = self.company_data['product_delivery_no']
+        # Configure a product with invoicing policy on order.
+        product_inv_on_order = self.env['product.product'].create({
+            'name': 'Shenaniffluffy',
+            'type': 'consu',
+            'invoice_policy': 'order',
+            'list_price': 55.0,
+        })
+        # Creates a sale order for 3 products invoiced on qty. delivered.
+        sale_order = self._get_new_sale_order(amount=3)
+        # Confirms the sale order, then increases the delivered qty., adds a new
+        # line and valids the delivery.
+        sale_order.action_confirm()
+        self.assertTrue(sale_order.picking_ids)
+        self.assertEqual(len(sale_order.order_line), 1)
+        self.assertEqual(sale_order.order_line.qty_delivered, 0)
+        picking = sale_order.picking_ids
+
+        picking_form = Form(picking)
+        with picking_form.move_line_ids_without_package.edit(0) as move:
+            move.qty_done = 5
+        with picking_form.move_line_ids_without_package.new() as new_move:
+            new_move.product_id = product_inv_on_order
+            new_move.qty_done = 5
+        picking = picking_form.save()
+        picking.button_validate()
+
+        # Check a new sale order line was correctly created.
+        self.assertEqual(len(sale_order.order_line), 2)
+        so_line_1 = sale_order.order_line[0]
+        so_line_2 = sale_order.order_line[1]
+        self.assertEqual(so_line_1.product_id.id, product_inv_on_delivered.id)
+        self.assertEqual(so_line_1.product_uom_qty, 3)
+        self.assertEqual(so_line_1.qty_delivered, 5)
+        self.assertEqual(so_line_1.price_unit, 70.0)
+        self.assertEqual(so_line_2.product_id.id, product_inv_on_order.id)
+        self.assertEqual(so_line_2.product_uom_qty, 0)
+        self.assertEqual(so_line_2.qty_delivered, 5)
+        self.assertEqual(
+            so_line_2.price_unit, 0,
+            "Shouldn't get the product price as the invoice policy is on qty. ordered")
+
+        # Creates a second sale order for 3 product invoiced on qty. ordered.
+        sale_order = self._get_new_sale_order(product=product_inv_on_order, amount=3)
+        # Confirms the sale order, then increases the delivered qty., adds a new
+        # line and valids the delivery.
+        sale_order.action_confirm()
+        self.assertTrue(sale_order.picking_ids)
+        self.assertEqual(len(sale_order.order_line), 1)
+        self.assertEqual(sale_order.order_line.qty_delivered, 0)
+        picking = sale_order.picking_ids
+
+        picking_form = Form(picking)
+        with picking_form.move_line_ids_without_package.edit(0) as move:
+            move.qty_done = 5
+        with picking_form.move_line_ids_without_package.new() as new_move:
+            new_move.product_id = product_inv_on_delivered
+            new_move.qty_done = 5
+        picking = picking_form.save()
+        picking.button_validate()
+
+        # Check a new sale order line was correctly created.
+        self.assertEqual(len(sale_order.order_line), 2)
+        so_line_1 = sale_order.order_line[0]
+        so_line_2 = sale_order.order_line[1]
+        self.assertEqual(so_line_1.product_id.id, product_inv_on_order.id)
+        self.assertEqual(so_line_1.product_uom_qty, 3)
+        self.assertEqual(so_line_1.qty_delivered, 5)
+        self.assertEqual(so_line_1.price_unit, 55.0)
+        self.assertEqual(so_line_2.product_id.id, product_inv_on_delivered.id)
+        self.assertEqual(so_line_2.product_uom_qty, 0)
+        self.assertEqual(so_line_2.qty_delivered, 5)
+        self.assertEqual(
+            so_line_2.price_unit, 70.0,
+            "Should get the product price as the invoice policy is on qty. delivered")
+
+    def test_14_delivered_qty_in_multistep(self):
+        """ Creates a sale order with delivery in two-step. Process the pick &
+        ship and check we don't have extra SO line. Then, do the same but with
+        adding a extra move and check only one extra SO line was created.
+        """
+        # Set the delivery in two steps.
+        warehouse = self.company_data['default_warehouse']
+        warehouse.delivery_steps = 'pick_ship'
+        # Configure a product with invoicing policy on order.
+        product_inv_on_order = self.env['product.product'].create({
+            'name': 'Shenaniffluffy',
+            'type': 'consu',
+            'invoice_policy': 'order',
+            'list_price': 55.0,
+        })
+        # Create a sale order.
+        sale_order = self._get_new_sale_order()
+        # Confirms the sale order, then valids pick and delivery.
+        sale_order.action_confirm()
+        self.assertTrue(sale_order.picking_ids)
+        self.assertEqual(len(sale_order.order_line), 1)
+        self.assertEqual(sale_order.order_line.qty_delivered, 0)
+        pick = sale_order.picking_ids.filtered(lambda p: p.picking_type_code == 'internal')
+        delivery = sale_order.picking_ids.filtered(lambda p: p.picking_type_code == 'outgoing')
+
+        picking_form = Form(pick)
+        with picking_form.move_line_ids_without_package.edit(0) as move:
+            move.qty_done = 10
+        pick = picking_form.save()
+        pick.button_validate()
+
+        picking_form = Form(delivery)
+        with picking_form.move_line_ids_without_package.edit(0) as move:
+            move.qty_done = 10
+        delivery = picking_form.save()
+        delivery.button_validate()
+
+        # Check no new sale order line was created.
+        self.assertEqual(len(sale_order.order_line), 1)
+        self.assertEqual(sale_order.order_line.product_uom_qty, 10)
+        self.assertEqual(sale_order.order_line.qty_delivered, 10)
+        self.assertEqual(sale_order.order_line.price_unit, 70.0)
+
+        # Creates a second sale order.
+        sale_order = self._get_new_sale_order()
+        # Confirms the sale order then add a new line for an another product in the pick/out.
+        sale_order.action_confirm()
+        self.assertTrue(sale_order.picking_ids)
+        self.assertEqual(len(sale_order.order_line), 1)
+        self.assertEqual(sale_order.order_line.qty_delivered, 0)
+        pick = sale_order.picking_ids.filtered(lambda p: p.picking_type_code == 'internal')
+        delivery = sale_order.picking_ids.filtered(lambda p: p.picking_type_code == 'outgoing')
+
+        picking_form = Form(pick)
+        with picking_form.move_line_ids_without_package.edit(0) as move:
+            move.qty_done = 10
+        with picking_form.move_line_ids_without_package.new() as new_move:
+            new_move.product_id = product_inv_on_order
+            new_move.qty_done = 10
+        pick = picking_form.save()
+        pick.button_validate()
+
+        picking_form = Form(delivery)
+        with picking_form.move_line_ids_without_package.edit(0) as move:
+            move.qty_done = 10
+        with picking_form.move_line_ids_without_package.new() as new_move:
+            new_move.product_id = product_inv_on_order
+            new_move.qty_done = 10
+        delivery = picking_form.save()
+        delivery.button_validate()
+
+        # Check a new sale order line was correctly created.
+        self.assertEqual(len(sale_order.order_line), 2)
+        so_line_1 = sale_order.order_line[0]
+        so_line_2 = sale_order.order_line[1]
+        self.assertEqual(so_line_1.product_id.id, self.company_data['product_delivery_no'].id)
+        self.assertEqual(so_line_1.product_uom_qty, 10)
+        self.assertEqual(so_line_1.qty_delivered, 10)
+        self.assertEqual(so_line_1.price_unit, 70.0)
+        self.assertEqual(so_line_2.product_id.id, product_inv_on_order.id)
+        self.assertEqual(so_line_2.product_uom_qty, 0)
+        self.assertEqual(so_line_2.qty_delivered, 10)
+        self.assertEqual(so_line_2.price_unit, 0)
+
     def test_08_sale_return_qty_and_cancel(self):
         """
         Test a SO with a product on delivery with a 5 quantity.
@@ -822,3 +989,103 @@ class TestSaleStock(TestSaleCommon, ValuationReconciliationTestCommon):
         wizard.action_cancel()
         self.assertEqual(inv_1.state, 'posted', 'A posted invoice state should remain posted')
         self.assertEqual(inv_2.state, 'cancel', 'A drafted invoice state should be cancelled')
+
+    def test_reservation_method_w_sale(self):
+        picking_type_out = self.company_data['default_warehouse'].out_type_id
+        # make sure generated picking will auto-assign
+        picking_type_out.reservation_method = 'at_confirm'
+        product = self.company_data['product_delivery_no']
+        product.type = 'product'
+        self.env['stock.quant']._update_available_quantity(product, self.company_data['default_warehouse'].lot_stock_id, 20)
+
+        sale_order1 = self._get_new_sale_order(amount=10.0)
+        # Validate the sale order, picking should automatically assign stock
+        sale_order1.action_confirm()
+        picking1 = sale_order1.picking_ids
+        self.assertTrue(picking1)
+        self.assertEqual(picking1.state, 'assigned')
+        picking1.unlink()
+
+        # make sure generated picking will does not auto-assign
+        picking_type_out.reservation_method = 'manual'
+        sale_order2 = self._get_new_sale_order(amount=10.0)
+        # Validate the sale order, picking should not automatically assign stock
+        sale_order2.action_confirm()
+        picking2 = sale_order2.picking_ids
+        self.assertTrue(picking2)
+        self.assertEqual(picking2.state, 'confirmed')
+        picking2.unlink()
+
+        # make sure generated picking auto-assigns according to (picking) scheduled date
+        picking_type_out.reservation_method = 'by_date'
+        picking_type_out.reservation_days_before = 2
+        # too early for scheduled date => don't auto-assign
+        sale_order3 = self._get_new_sale_order(amount=10.0)
+        sale_order3.commitment_date = datetime.now() + timedelta(days=10)
+        sale_order3.action_confirm()
+        picking3 = sale_order3.picking_ids
+        self.assertTrue(picking3)
+        self.assertEqual(picking3.state, 'confirmed')
+        picking3.unlink()
+        # within scheduled date + reservation days before => auto-assign
+        sale_order4 = self._get_new_sale_order(amount=10.0)
+        sale_order4.commitment_date = datetime.now() + timedelta(days=1)
+        sale_order4.action_confirm()
+        self.assertTrue(sale_order4.picking_ids)
+        self.assertEqual(sale_order4.picking_ids.state, 'assigned')
+
+    def test_packaging_propagation(self):
+        """Create a SO with lines using packaging, check the packaging propagate
+        to its move.
+        """
+        product = self.env['product.product'].create({
+            'name': 'Product with packaging',
+            'type': 'product',
+        })
+
+        packaging = self.env['product.packaging'].create({
+            'name': 'box',
+            'product_id': product.id,
+        })
+
+        so = self.env['sale.order'].create({
+            'partner_id': self.partner_a.id,
+            'order_line': [
+                (0, 0, {
+                    'product_id': product.id,
+                    'product_uom_qty': 1.0,
+                    'product_uom': product.uom_id.id,
+                    'product_packaging_id': packaging.id,
+                })],
+        })
+        so.action_confirm()
+        self.assertEqual(so.order_line.move_ids.product_packaging_id, packaging)
+
+    def test_15_cancel_delivery(self):
+        """ Suppose the option "Lock Confirmed Sales" enabled and a product with the invoicing
+        policy set to "Delivered quantities". When cancelling the delivery of such a product, the
+        invoice status of the associated SO should be 'Nothing to Invoice'
+        """
+        group_auto_done = self.env['ir.model.data'].xmlid_to_object('sale.group_auto_done_setting')
+        self.env.user.groups_id = [(4, group_auto_done.id)]
+
+        product = self.product_a
+        product.invoice_policy = 'delivery'
+        partner = self.partner_a
+        so = self.env['sale.order'].create({
+            'partner_id': partner.id,
+            'partner_invoice_id': partner.id,
+            'partner_shipping_id': partner.id,
+            'order_line': [(0, 0, {
+                'name': product.name,
+                'product_id': product.id,
+                'product_uom_qty': 2,
+                'product_uom': product.uom_id.id,
+                'price_unit': product.list_price
+            })],
+            'pricelist_id': self.env.ref('product.list0').id,
+        })
+        so.action_confirm()
+        so.picking_ids.action_cancel()
+
+        self.assertEqual(so.invoice_status, 'no')

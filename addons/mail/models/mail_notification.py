@@ -4,12 +4,13 @@
 from dateutil.relativedelta import relativedelta
 
 from odoo import api, fields, models
+from odoo.exceptions import AccessError
 from odoo.tools.translate import _
 
 
 class MailNotification(models.Model):
     _name = 'mail.notification'
-    _table = 'mail_message_res_partner_needaction_rel'
+    _table = 'mail_notification'
     _rec_name = 'res_partner_id'
     _log_access = False
     _description = 'Message Notifications'
@@ -48,22 +49,24 @@ class MailNotification(models.Model):
     ]
 
     def init(self):
-        self._cr.execute('SELECT indexname FROM pg_indexes WHERE indexname = %s',
-                         ('mail_notification_res_partner_id_is_read_notification_status_mail_message_id',))
-        if not self._cr.fetchone():
-            self._cr.execute("""
-                CREATE INDEX mail_notification_res_partner_id_is_read_notification_status_mail_message_id
-                          ON mail_message_res_partner_needaction_rel (res_partner_id, is_read, notification_status, mail_message_id)
-            """)
+        self._cr.execute("""
+            CREATE INDEX IF NOT EXISTS mail_notification_res_partner_id_is_read_notification_status_mail_message_id
+                                    ON mail_notification (res_partner_id, is_read, notification_status, mail_message_id)
+        """)
 
     @api.model_create_multi
     def create(self, vals_list):
+        messages = self.env['mail.message'].browse(vals['mail_message_id'] for vals in vals_list)
+        messages.check_access_rights('read')
+        messages.check_access_rule('read')
         for vals in vals_list:
             if vals.get('is_read'):
                 vals['read_date'] = fields.Datetime.now()
         return super(MailNotification, self).create(vals_list)
 
     def write(self, vals):
+        if ('mail_message_id' in vals or 'res_partner_id' in vals) and not self.env.is_admin():
+            raise AccessError(_("Can not update the message or recipient of a notification."))
         if vals.get('is_read'):
             vals['read_date'] = fields.Datetime.now()
         return super(MailNotification, self).write(vals)

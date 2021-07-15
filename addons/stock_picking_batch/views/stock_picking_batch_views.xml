@@ -68,13 +68,16 @@
         <field name="arch" type="xml">
             <form string="Stock Batch Transfer">
                 <field name="show_check_availability" invisible="1"/>
+                <field name="show_validate" invisible="1"/>
                 <header>
                     <button name="action_confirm" states="draft" string="Confirm" type="object" class="oe_highlight"/>
                     <button name="action_done" string="Validate" type="object" class="oe_highlight"
                         attrs="{'invisible': [
                             '|',
                                 ('state', '!=', 'in_progress'),
-                                ('show_check_availability', '=', True)]}"/>
+                                '|',
+                                    ('show_check_availability', '=', True),
+                                    ('show_validate', '=', False)]}"/>
                     <button name="action_assign" string="Check Availability" type="object" class="oe_highlight"
                         attrs="{'invisible': [
                             '|',
@@ -84,7 +87,14 @@
                         attrs="{'invisible': [
                             '|',
                                 ('state', '!=', 'in_progress'),
-                                ('show_check_availability', '=', False)]}"/>
+                                '|',
+                                    ('show_check_availability', '=', False),
+                                    ('show_validate', '=', False)]}"/>
+                    <button name="action_set_quantities_to_reservation" string="Set quantities" type="object"
+                        attrs="{'invisible': [
+                            '|',
+                                ('state', '!=', 'in_progress'),
+                                ('show_validate', '=', False)]}"/>
                     <button name="action_assign" string="Check Availability" type="object"
                         attrs="{'invisible': [
                             '|',
@@ -198,12 +208,12 @@
                 <filter name="done" string="Done" domain="[('state', '=', 'done')]"/>
                 <separator/>
                 <filter invisible="1" string="Late Activities" name="activities_overdue"
-                    domain="[('activity_ids.date_deadline', '&lt;', context_today().strftime('%Y-%m-%d'))]"
+                    domain="[('my_activity_date_deadline', '&lt;', context_today().strftime('%Y-%m-%d'))]"
                     help="Show all records which has next action date is before today"/>
                 <filter invisible="1" string="Today Activities" name="activities_today"
-                    domain="[('activity_ids.date_deadline', '=', context_today().strftime('%Y-%m-%d'))]"/>
+                    domain="[('my_activity_date_deadline', '=', context_today().strftime('%Y-%m-%d'))]"/>
                 <filter invisible="1" string="Future Activities" name="activities_upcoming_all"
-                    domain="[('activity_ids.date_deadline', '&gt;', context_today().strftime('%Y-%m-%d'))]"/>
+                    domain="[('my_activity_date_deadline', '&gt;', context_today().strftime('%Y-%m-%d'))]"/>
                 <group expand="0" string="Group By">
                     <filter string="Responsible" name="user" domain="[]" context="{'group_by': 'user_id'}"/>
                     <filter string="State" name="state" domain="[]" context="{'group_by': 'state'}"/>

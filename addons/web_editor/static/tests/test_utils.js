@@ -4,32 +4,32 @@ odoo.define('web_editor.test_utils', function (require) {
 var ajax = require('web.ajax');
 var MockServer = require('web.MockServer');
 var testUtils = require('web.test_utils');
+var OdooEditorLib = require('@web_editor/../lib/odoo-editor/src/OdooEditor');
 var Widget = require('web.Widget');
 var Wysiwyg = require('web_editor.wysiwyg');
-var snippetOptions = require('web_editor.snippets.options');
+var options = require('web_editor.snippets.options');
 
 const COLOR_PICKER_TEMPLATE = `
-    <t t-name="web_editor.colorpicker">
-        <colorpicker>
-            <div class="o_colorpicker_section" data-name="theme" data-display="Theme Colors" data-icon-class="fa fa-flask">
-                <button data-color="o-color-1"/>
-                <button data-color="o-color-2"/>
-                <button data-color="o-color-3"/>
-                <button data-color="o-color-4"/>
-                <button data-color="o-color-5"/>
-            </div>
-            <div class="o_colorpicker_section" data-name="transparent_grayscale" data-display="Transparent Colors" data-icon-class="fa fa-eye-slash">
-                <button class="o_btn_transparent"/>
-                <button data-color="black-25"/>
-                <button data-color="black-50"/>
-                <button data-color="black-75"/>
-                <button data-color="white-25"/>
-                <button data-color="white-50"/>
-                <button data-color="white-75"/>
-            </div>
-            <div class="o_colorpicker_section" data-name="common" data-display="Common Colors" data-icon-class="fa fa-paint-brush"/>
-        </colorpicker>
-    </t>`;
+    <colorpicker>
+        <div class="o_colorpicker_section" data-name="theme" data-display="Theme Colors" data-icon-class="fa fa-flask">
+            <button data-color="o-color-1"/>
+            <button data-color="o-color-2"/>
+            <button data-color="o-color-3"/>
+            <button data-color="o-color-4"/>
+            <button data-color="o-color-5"/>
+        </div>
+        <div class="o_colorpicker_section" data-name="transparent_grayscale" data-display="Transparent Colors" data-icon-class="fa fa-eye-slash">
+            <button class="o_btn_transparent"/>
+            <button data-color="black-25"/>
+            <button data-color="black-50"/>
+            <button data-color="black-75"/>
+            <button data-color="white-25"/>
+            <button data-color="white-50"/>
+            <button data-color="white-75"/>
+        </div>
+        <div class="o_colorpicker_section" data-name="common" data-display="Common Colors" data-icon-class="fa fa-paint-brush"/>
+    </colorpicker>
+`;
 const SNIPPETS_TEMPLATE = `
     <h2 id="snippets_menu">Add blocks</h2>
     <div id="o_scroll">
@@ -92,11 +92,11 @@ MockServer.include({
      * @returns {Promise}
      */
     async _performRpc(route, args) {
-        if (args.model === "ir.ui.view") {
-            if (args.method === 'read_template' && args.args[0] === "web_editor.colorpicker") {
+        if (args.model === "ir.ui.view" && args.method === 'render_public_asset') {
+            if (args.args[0] === "web_editor.colorpicker") {
                 return COLOR_PICKER_TEMPLATE;
             }
-            if (args.method === 'render_public_asset' && args.args[0] === "web_editor.snippets") {
+            if (args.args[0] === "web_editor.snippets") {
                 return SNIPPETS_TEMPLATE;
             }
         }
@@ -107,7 +107,7 @@ MockServer.include({
 /**
  * Options with animation and edition for test.
  */
-snippetOptions.registry.option_test = snippetOptions.SnippetOptionWidget.extend({
+options.registry.option_test = options.Class.extend({
     cleanForSave: function () {
         this.$target.addClass('cleanForSave');
     },
@@ -192,12 +192,10 @@ function wysiwygData(data) {
                 },
             },
             records: [],
-            read_template(args) {
+            render_template(args) {
                 if (args[0] === 'web_editor.colorpicker') {
                     return COLOR_PICKER_TEMPLATE;
                 }
-            },
-            render_template(args) {
                 if (args[0] === 'web_editor.snippets') {
                     return SNIPPETS_TEMPLATE;
                 }
@@ -288,15 +286,17 @@ function wysiwygData(data) {
 
 /**
  * Create the wysiwyg instance for test (contains patch, usefull ir.ui.view, snippets).
+ *
+ * @param {object} params
  */
-async function createWysiwyg() {
+async function createWysiwyg(params) {
     patch();
-    var params = {data: wysiwygData({})};
+    params.data = wysiwygData(params.data);
 
     var parent = new Widget();
     await testUtils.mock.addMockEnvironment(parent, params);
 
-    var wysiwygOptions = _.extend(this._getWysiwygOptions(), await this._getWysiwygOptions(), {
+    var wysiwygOptions = _.extend({}, params.wysiwygOptions, {
         recordInfo: {
             context: {},
             res_model: 'module.test',
@@ -304,20 +304,28 @@ async function createWysiwyg() {
         },
         useOnlyTestUnbreakable: params.useOnlyTestUnbreakable,
     });
-    this.wysiwyg = new WysiwygTest(this, wysiwygOptions);
-    this.wysiwyg._parentToDestroyForTest = this;
 
-    var self = this
-    return this.wysiwyg.attachTo(this).then(function () {
-        self._appendTranslateButton();
+    var wysiwyg = new WysiwygTest(parent, wysiwygOptions);
+    wysiwyg._parentToDestroyForTest = parent;
+
+    var $textarea = $('<textarea/>');
+    if (wysiwygOptions.value) {
+        $textarea.val(wysiwygOptions.value);
+    }
+    var selector = params.debug ? 'body' : '#qunit-fixture';
+    $textarea.prependTo($(selector));
+    if (params.debug) {
+        $('body').addClass('debug');
+    }
+    return wysiwyg.attachTo($textarea).then(function () {
         if (wysiwygOptions.snippets) {
             var defSnippets = testUtils.makeTestPromise();
-            testUtils.mock.intercept(self.wysiwyg, "snippets_loaded", function () {
-                defSnippets.resolve(self.wysiwyg);
+            testUtils.mock.intercept(wysiwyg, "snippets_loaded", function () {
+                defSnippets.resolve(wysiwyg);
             });
             return defSnippets;
         }
-        return self.wysiwyg;
+        return wysiwyg;
     });
 }
 
@@ -377,6 +385,245 @@ _.each(_.range(40, 127), function (keyCode) {
  * @param {function($editable, assert)} [keyboardTests.test.check]
  * @param {Number} addTests
  */
+var testKeyboard = function ($editable, assert, keyboardTests, addTests) {
+    var tests = _.compact(_.pluck(keyboardTests, 'test'));
+    var testNumber = _.compact(_.pluck(tests, 'start')).length +
+        _.compact(_.pluck(tests, 'content')).length +
+        _.compact(_.pluck(tests, 'check')).length +
+        (addTests | 0);
+    assert.expect(testNumber);
+
+    function keydown(target, keypress) {
+        var $target = $(target.tagName ? target : target.parentNode);
+        if (!keypress.keyCode) {
+            keypress.keyCode = +_.findKey(keyboardMap, function (key) {
+                return key === keypress.key;
+            });
+        } else {
+            keypress.key = keyboardMap[keypress.keyCode] || String.fromCharCode(keypress.keyCode);
+        }
+        var event = $.Event("keydown", keypress);
+        $target.trigger(event);
+
+        if (!event.isDefaultPrevented()) {
+            if (keypress.key.length === 1) {
+                textInput($target[0], keypress.key);
+            } else {
+                console.warn('Native "' + keypress.key + '" is not supported in test');
+            }
+        }
+        $target.trigger($.Event("keyup", keypress));
+        return $target;
+    }
+
+    function _select(selector) {
+        // eg: ".class:contents()[0]->1" selects the first contents of the 'class' class, with an offset of 1
+        var reDOMSelection = /^(.+?)(:contents(\(\)\[|\()([0-9]+)[\]|\)])?(->([0-9]+))?$/;
+        var sel = selector.match(reDOMSelection);
+        var $node = $editable.find(sel[1]);
+        var point = {
+            node: sel[3] ? $node.contents()[+sel[4]] : $node[0],
+            offset: sel[5] ? +sel[6] : 0,
+        };
+        if (!point.node || point.offset > (point.node.tagName ? point.node.childNodes : point.node.textContent).length) {
+            assert.notOk("Node not found: '" + selector + "' " + (point.node ? "(container: '" + (point.node.outerHTML || point.node.textContent) + "')" : ""));
+        }
+        return point;
+    }
+
+    function selectText(start, end) {
+        start = _select(start);
+        var target = start.node;
+        $(target.tagName ? target : target.parentNode).trigger("mousedown");
+        if (end) {
+            end = _select(end);
+            Wysiwyg.setRange(start.node, start.offset, end.node, end.offset);
+        } else {
+            Wysiwyg.setRange(start.node, start.offset);
+        }
+        target = end ? end.node : start.node;
+        $(target.tagName ? target : target.parentNode).trigger('mouseup');
+    }
+
+    function nextPoint(point) {
+        var node, offset;
+        if (OdooEditorLib.nodeSize(point.node) === point.offset) {
+            node = point.node.parentNode;
+            offset = OdooEditorLib.childNodeIndex(point.node) + 1;
+        } else if (point.node.hasChildNodes()) {
+            node = point.node.childNodes[point.offset];
+            offset = 0;
+        } else {
+            node = point.node;
+            offset = point.offset + 1;
+        }
+        return {
+            node: node,
+            offset: offset
+        };
+    }
+
+    function endOfAreaBetweenTwoNodes(point) {
+        // move the position because some browser make the caret on the end of the previous area after normalize
+        if (
+            !point.node.tagName &&
+            point.offset === point.node.textContent.length &&
+            !/\S|\u00A0/.test(point.node.textContent)
+        ) {
+            point = nextPoint(nextPoint(point));
+            while (point.node.tagName && point.node.textContent.length) {
+                point = nextPoint(point);
+            }
+        }
+        return point;
+    }
+
+    var defPollTest = Promise.resolve();
+
+    function pollTest(test) {
+        var def = Promise.resolve();
+        $editable.data('wysiwyg').setValue(test.content);
+
+        function poll(step) {
+            var def = testUtils.makeTestPromise();
+            if (step.start) {
+                selectText(step.start, step.end);
+                if (!Wysiwyg.getRange()) {
+                    throw 'Wrong range! \n' +
+                        'Test: ' + test.name + '\n' +
+                        'Selection: ' + step.start + '" to "' + step.end + '"\n' +
+                        'DOM: ' + $editable.html();
+                }
+            }
+            setTimeout(function () {
+                if (step.keyCode || step.key) {
+                    var target = Wysiwyg.getRange().ec;
+                    if (window.location.search.indexOf('notrycatch') !== -1) {
+                        keydown(target, {
+                            key: step.key,
+                            keyCode: step.keyCode,
+                            ctrlKey: !!step.ctrlKey,
+                            shiftKey: !!step.shiftKey,
+                            altKey: !!step.altKey,
+                            metaKey: !!step.metaKey,
+                        });
+                    } else {
+                        try {
+                            keydown(target, {
+                                key: step.key,
+                                keyCode: step.keyCode,
+                                ctrlKey: !!step.ctrlKey,
+                                shiftKey: !!step.shiftKey,
+                                altKey: !!step.altKey,
+                                metaKey: !!step.metaKey,
+                            });
+                        } catch (e) {
+                            assert.notOk(e.name + '\n\n' + e.stack, test.name);
+                        }
+                    }
+                }
+                setTimeout(function () {
+                    if (step.keyCode || step.key) {
+                        var $target = $(target.tagName ? target : target.parentNode);
+                        $target.trigger($.Event('keyup', {
+                            key: step.key,
+                            keyCode: step.keyCode,
+                            ctrlKey: !!step.ctrlKey,
+                            shiftKey: !!step.shiftKey,
+                            altKey: !!step.altKey,
+                            metaKey: !!step.metaKey,
+                        }));
+                    }
+                    setTimeout(def.resolve.bind(def));
+                });
+            });
+            return def;
+        }
+        while (test.steps.length) {
+            def = def.then(poll.bind(null, test.steps.shift()));
+        }
+
+        return def.then(function () {
+            if (!test.test) {
+                return;
+            }
+
+            if (test.test.check) {
+                test.test.check($editable, assert);
+            }
+
+            // test content
+            if (test.test.content) {
+                var value = $editable.data('wysiwyg').getValue({
+                    keepPopover: true,
+                });
+                var allInvisible = /\u200B/g;
+                value = value.replace(allInvisible, '&#8203;');
+                var result = test.test.content.replace(allInvisible, '&#8203;');
+                assert.strictEqual(value, result, test.name);
+
+                if (test.test.start && value !== result) {
+                    assert.notOk("Wrong DOM (see previous assert)", test.name + " (carret position)");
+                    return;
+                }
+            }
+
+            $editable[0].normalize();
+
+            // test carret position
+            if (test.test.start) {
+                var start = _select(test.test.start);
+                var range = Wysiwyg.getRange();
+                if ((range.sc !== range.ec || range.so !== range.eo) && !test.test.end) {
+                    assert.ok(false, test.name + ": the carret is not colapsed and the 'end' selector in test is missing");
+                    return;
+                }
+                var end = test.test.end ? _select(test.test.end) : start;
+                if (start.node && end.node) {
+                    range = Wysiwyg.getRange();
+                    var startPoint = endOfAreaBetweenTwoNodes({
+                        node: range.sc,
+                        offset: range.so,
+                    });
+                    var endPoint = endOfAreaBetweenTwoNodes({
+                        node: range.ec,
+                        offset: range.eo,
+                    });
+                    var sameDOM = (startPoint.node.outerHTML || startPoint.node.textContent) === (start.node.outerHTML || start.node.textContent);
+                    var stringify = function (obj) {
+                        if (!sameDOM) {
+                            delete obj.sameDOMsameNode;
+                        }
+                        return JSON.stringify(obj, null, 2)
+                            .replace(/"([^"\s-]+)":/g, "\$1:")
+                            .replace(/([^\\])"/g, "\$1'")
+                            .replace(/\\"/g, '"');
+                    };
+                    assert.deepEqual(stringify({
+                            startNode: startPoint.node.outerHTML || startPoint.node.textContent,
+                            startOffset: startPoint.offset,
+                            endPoint: endPoint.node.outerHTML || endPoint.node.textContent,
+                            endOffset: endPoint.offset,
+                            sameDOMsameNode: sameDOM && startPoint.node === start.node,
+                        }),
+                        stringify({
+                            startNode: start.node.outerHTML || start.node.textContent,
+                            startOffset: start.offset,
+                            endPoint: end.node.outerHTML || end.node.textContent,
+                            endOffset: end.offset,
+                            sameDOMsameNode: true,
+                        }),
+                        test.name + " (carret position)");
+                }
+            }
+        });
+    }
+    while (keyboardTests.length) {
+        defPollTest = defPollTest.then(pollTest.bind(null, keyboardTests.shift()));
+    }
+
+    return defPollTest;
+};
 
 
 /**
@@ -427,7 +674,7 @@ var keydown = function (key, $editable, options) {
         keyPress.key = keyboardMap[key] || String.fromCharCode(key);
         keyPress.keyCode = key;
     }
-    var range = Wysiwyg.getRange($editable[0]);
+    var range = Wysiwyg.getRange();
     if (!range) {
         console.error("Editor have not any range");
         return;
@@ -478,6 +725,7 @@ var textInput = function (target, char) {
 return {
     wysiwygData: wysiwygData,
     createWysiwyg: createWysiwyg,
+    testKeyboard: testKeyboard,
     select: select,
     keydown: keydown,
     patch: patch,

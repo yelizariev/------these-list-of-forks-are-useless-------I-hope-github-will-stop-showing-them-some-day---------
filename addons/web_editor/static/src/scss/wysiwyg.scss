@@ -7,52 +7,41 @@ $o-we-zindex: $o-we-overlay-zindex + 1 !default;
     @include print-variable('o-we-toolbar-height', $o-we-toolbar-height);
 }
 
-// EDITOR TOP BAR AND POPOVER
-.note-popover .popover {
-    max-width: 350px;
-    left: 50% !important;
-    transform: translate(-50%, 0);
+.o_we_command_protector {
+    font-weight: 400 !important;
 
-    .popover-body {
-        white-space: normal;
+    b, strong {
+        font-weight: 700 !important;
+    }
+    * {
+        font-weight: inherit !important;
+    }
+    .btn {
+        text-align: unset !important;
     }
 }
 
-#web_editor-top-edit {
-    @include o-position-absolute(0, 0, auto, 0);
-    position: fixed;
-    z-index: $o-we-zindex + 1;
-    height: var(--o-we-toolbar-height);
-    background-color: $o-we-bg;
-
-    .note-popover .popover {
-        top: 0 !important;
-        left: 0 !important;
-        right: 0 !important;
-        border: none !important;
-        max-width: none;
-        transform: none;
-    }
-    .note-popover .popover .popover-body {
-        height: var(--o-we-toolbar-height);
-    }
+// Editor website toolbar
+.wysiwyg_iframe,
+.note-editor {
+    border: $o-we-border-width solid $o-we-fg-light;
+    margin: 0;
+    padding: 0;
 }
-// avoid popover bar over its opened modal
-.note-popover .popover {
-    z-index: $o-we-overlay-zindex;
-}
-.note-popover .popover .popover-body,
-.panel-heading.note-toolbar {
+.oe-toolbar {
     padding-bottom: 0;
-    border-bottom: $o-we-border-width solid $o-we-border-color;
+    border-bottom: $o-we-border-width solid $o-we-fg-light;
     background-color: $o-we-bg;
     color: $o-we-color;
     font-family: $o-we-font-family;
 
+    &.noarrow::before {
+        display: none;
+    }
+
     // Main layout of buttons
     .btn-group, .btn {
         width: auto !important;
-        height: 100% !important;
         margin-top: 0;
         margin-bottom: 0;
         background: transparent;
@@ -61,31 +50,6 @@ $o-we-zindex: $o-we-overlay-zindex + 1 !default;
     }
     .btn-secondary {
         color: inherit;
-    }
-
-    // Active buttons and opened dropdowns
-    .btn {
-        padding: 0.5em 0.75em !important;
-        border-left: $o-we-item-border-width solid $o-we-item-border-color;
-        border-right: $o-we-item-border-width solid $o-we-item-border-color;
-        background: $o-we-sidebar-content-field-clickable-bg;
-        color: inherit;
-        font-size: $o-we-font-size !important;
-
-        &.active,
-        &:focus, &:active, &:focus:active {
-            @extend %we-active-button;
-        }
-
-        // This element should have been removed but still exists in 13.0 by
-        // mistake. This takes advantage of it to restore the color preview
-        // feature which disappeared and cannot be fixed as in 12.0.
-        // TODO fix the right way in 14.0.
-        > .caret {
-            display: block;
-            @include o-position-absolute(auto, 0, 0, 0);
-            border-bottom: 2px solid transparent;
-        }
     }
     .btn-group.show {
         > .btn {
@@ -109,11 +73,22 @@ $o-we-zindex: $o-we-overlay-zindex + 1 !default;
         border: $o-we-dropdown-border-width solid $o-we-dropdown-border-color;
         background-color: $o-we-dropdown-bg;
         box-shadow: $o-we-dropdown-shadow;
+
+        &.colorpicker-menu {
+            bottom: 100%;
+            margin-top: 0;
+            margin-bottom: 0.125rem;
+            min-width: 222px !important;
+            height: auto !important;
+        }
+    }
+    .dropdown-toggle::after {
+        display: none;
     }
     .dropdown-menu.show { // To overcome .note-XXX .dropdown-menu rules
         min-width: 0;
     }
-    .dropdown-item { // To overcome summernote rules breaking this in iframes
+    .dropdown-item { // To overcome wysiwyg rules breaking this in iframes
         display: block;
         max-width: none;
         overflow: visible;
@@ -143,50 +118,67 @@ $o-we-zindex: $o-we-overlay-zindex + 1 !default;
         border-top: $o-we-dropdown-item-spacing solid transparent;
     }
 
-    .note-style {
-        .dropdown-item {
-            > * {
-                display: inline;;
-            }
-            &, > * {
-                line-height: 2;
-            }
-            &[data-value="blockquote"] {
-                padding-top: 0.5em;
-                padding-bottom: 0.5em;
+    // Specific elements
+    #colorInputButtonGroup label:last-of-type .btn {
+        margin: 0 1px 0 -1px;
+    }
+    .oe-tablepicker {
+        margin: 1px 2px -8px 2px !important;
 
-                > * {
-                    display: block;
-                }
-            }
+        .oe-tablepicker-cell {
+            width: 5px !important;
         }
     }
-
-    // Specific elements
     .o_image_alt {
         @include o-text-overflow();
         max-width: 150px;
     }
-    .note-color-palette div .note-color-btn {
-        border-color: $o-we-dropdown-bg;
+}
+body:not(.editor_has_snippets) {
+    .oe-toolbar {
+        // Bootstrap sets .modal z-index at 1050. Ensure toolbar is visible in
+        // modals. Only apply this to the toolbar if it's not in a snippets menu.
+        z-index: 1051;
     }
-    .note-custom-color-palette .note-color-row {
-        height: auto!important;
-        .note-color-btn {
-            float: left;
-            height: 20px;
-            width: 20px;
-            padding: 0;
-            margin: 0;
-            border: 1px solid $o-we-dropdown-bg;
+}
+@media only screen and (max-width: 767px) {
+    .oe-toolbar {
+        background-color: white;
+
+        .btn {
+            color: black;
+        }
+        &::before {
+            display: none;
+        }
+        &::after {
+            display: none;
         }
     }
 }
-.note-color ul.show {
-    min-width: 216px !important;
+
+.oe_edited_link {
+    position: relative;
+    display: inline-block;
+    &::before {
+        content: '';
+        border: dashed 3px #01bad2;
+        position: absolute;
+        inset: -5px;
+    }
 }
 
 // ANIMATIONS
+@keyframes fadeInDownSmall {
+    0% {
+        opacity: 0;
+        transform: translate(0, -5px);
+    }
+    100% {
+        opacity: 1;
+        transform: translate(0, 0);
+    }
+}
 
 @keyframes inputHighlighter {
     from {
@@ -253,6 +245,10 @@ body .modal {
                     }
                 }
 
+                .o_file_name {
+                    @include o-text-overflow;
+                }
+
                 &:hover {
                     .o_existing_attachment_optimize, .o_existing_attachment_remove {
                         opacity: 1;
@@ -265,8 +261,7 @@ body .modal {
             }
 
             .o_we_attachment_selected {
-                border-color: $o-brand-primary;
-                box-shadow: 0px 0px 2px 2px $o-brand-primary;
+                @include o-we-active-wrapper($top: 5px, $left: 5px);
             }
 
             .o_we_attachment_optimized .badge {
@@ -283,7 +278,7 @@ body .modal {
                     margin: 5px;
                     width: 50px;
                     height: 50px;
-                    padding: 15px;
+                    padding: 15px 0; // 0 allows to center properly
                     cursor: pointer;
                 }
             }
@@ -350,30 +345,19 @@ body .modal {
 
         .o_link_dialog_preview {
             border-left: 1px solid gray('200');
-            #link-preview a {
-                &:first-child {
-                    display: none;
-                }
-            }
         }
     }
+}
 
-    .o_we_image_optimize_dialog {
-        .o_we_title_label {
-            font-size: $o-we-font-size;
-        }
-        .o_we_preview_area {
-            max-height: 400px;
-            overflow: auto;
-        }
+.o_we_progressbar:last-child {
+    hr {
+        display: none;
     }
 }
 
 // Highlight selected image/icon
 %o-we-selected-image {
-    $o-selected-image-color: green;
-    background: $o-selected-image-color;
-    outline: 3px solid $o-selected-image-color;
+    outline: 3px solid rgba(150, 150, 220, 0.3);
 }
 
 img.o_we_selected_image {
@@ -398,6 +382,15 @@ img::selection {
     background-color: rgba(255, 255, 255, .7);
 }
 
+@include media-breakpoint-down(md) {
+    #web_editor-top-edit {
+        position: initial !important;
+        height: initial !important;
+        top: initial !important;
+        left: initial !important;
+    }
+}
+
 // User modal in edit mode
 .editor_enable, .note-editable {
     .modal:not(.o_technical_modal) {
@@ -412,6 +405,34 @@ img::selection {
             padding: 0.5rem 0; // To use more editor space if necessary
         }
     }
+}
+
+.o_wysiwyg_wrapper {
+    position: relative;
+    margin-bottom: 11px;
+}
+.o_wysiwyg_resizer {
+    background: #f5f5f5;
+    height: 10px;
+    width: 100%;
+    border-left: $o-we-border-width solid $o-we-fg-light;
+    border-bottom: $o-we-border-width solid $o-we-fg-light;
+    border-right: $o-we-border-width solid $o-we-fg-light;
+    cursor: row-resize;
+    padding-top: 1px;
+}
+.o_wysiwyg_resizer_hook {
+    width: 20px;
+    margin: 1px auto;
+    border-top: 1px solid #a9a9a9;
+}
+.note-editable {
+    border: $o-we-border-width solid $o-we-fg-light;
+    overflow: auto;
+    background: white;
+    color: black;
+    height: 100%;
+    padding: 5px 10px;
 }
 
 .o_we_no_pointer_events {
@@ -449,6 +470,10 @@ img::selection {
         label {
             display: flex;
             align-items: center;
+
+            &.active {
+                background-color: $o-we-bg-darkest;
+            }
         }
 
         button:not(.btn), label {
@@ -471,184 +496,7 @@ img::selection {
         }
     }
 }
-.wrap_editor {
-    height: 100vh;
-}
-.o_main_sidebar {
-    display: flex;
-}
-.o_editor_center {
-    flex: 1 1 auto;
+
+[data-oe-xpath], [data-oe-xpath] [contenteditable=true] {
     outline: none;
-}
-
-jw-toolbar {
-    display: block;
-    text-align: center;
-
-    jw-group {
-        display: inline-block;
-        margin: 5px 0;
-        &>*:first-child{
-            margin-left:5px;
-        }
-        &>*:last-child{
-            margin-right:5px;
-        }
-    }
-    jw-group jw-separator {
-        margin-top: 0;
-        margin-bottom: 0;
-    }
-
-    span {
-        font-weight: 600;
-        padding: 5px;
-    }
-
-    select, option {
-        padding: 5px 10px;
-    }
-
-    option.label {
-        font-weight: bold;
-    }
-
-    .h1 {
-        font-size: 2em;
-        font-weight: bold;
-    }
-    .h2 {
-        font-size: 1.5em;
-        font-weight: bold;
-    }
-    .h3 {
-        font-size: 1.17em;
-        font-weight: bold;
-    }
-    .h4 {
-        font-size: 1em;
-        font-weight: bold;
-    }
-    .h5 {
-        font-size: 0.83em;
-        font-weight: bold;
-    }
-    .h6 {
-        font-size: 0.67em;
-        font-weight: bold;
-    }
-    input[type=text], input[type=number], select {
-        flex: 0 1 auto;
-        height: 27px;
-        vertical-align: middle;
-        width: $o-we-sidebar-content-field-input-max-width;
-        border: $o-we-sidebar-content-field-border-width solid $o-we-sidebar-content-field-border-color;
-        border-radius: $o-we-sidebar-content-field-border-radius;
-
-        &:focus {
-            border-color: $o-we-sidebar-content-field-input-border-color;
-        }
-    }
-    jw-button {
-        width: auto !important;
-        height: 27px;
-        padding: 7px;
-
-        &:hover {
-            background-color: rgb(241, 243, 244);
-            cursor: pointer;
-        }
-
-        &.active {
-            background: #e5e5e5;
-            -webkit-box-shadow: inset 0px 0px 5px #c1c1c1;
-            -moz-box-shadow: inset 0px 0px 5px #c1c1c1;
-            box-shadow: inset 0px 0px 5px #c1c1c1;
-            outline: none;
-        }
-    }
-    .jw-primary-button {
-        background-color: #00A09D;
-        color: white;
-    }
-    .jw-danger-button {
-        background-color: #af120c;
-        color: white;
-    }
-}
-
-jw-follow-range jw-toolbar {
-    background-color: #444444;
-    color: #dddddd;
-    border-radius: 30px;
-    margin: -5px 5px 0 5px;
-    padding: 0 5px 0 5px;
-
-    jw-group {
-        margin: 2px;
-    }
-    jw-button {
-        line-height: normal;
-        border-radius: 6px;
-        &:hover {
-            background-color: #777777;
-        }
-        &.active {
-            background-color: #686767;
-            -webkit-box-shadow: inset 0px 0px 5px #777777;
-            -moz-box-shadow: inset 0px 0px 5px #777777;
-            box-shadow: inset 0px 0px 5px #777777;
-        }
-    }
-    &:before {
-        border-color: transparent transparent #444444 transparent;
-        border-width: 9px;
-        left: 30%;
-        bottom: 109%;
-        border-style: solid;
-        content: '';
-        position: absolute;
-    }
-}
-
-jw-follow-range {
-    z-index: 1050;
-}
-table.table-picker {
-    position: fixed !important;
-}
-
-.oe_absolute_dropdown {
-    border: $o-we-sidebar-content-field-border-width solid $o-we-sidebar-content-field-border-color;
-    border-radius: $o-we-sidebar-content-field-border-radius;
-    background-color: $o-we-sidebar-content-field-clickable-bg;
-    color: $o-we-sidebar-content-field-clickable-color;
-
-    padding-left: 0;
-    padding-right: 0;
-
-    a {
-        padding: 0 10px;
-        color: white;
-    }
-
-    .dropdown-menu a {
-        display: block;
-    }
-}
-
-// mobile preview
-
-#jw-iframe, #jw-iframe jw-iframe {
-    position: fixed;
-    height: 100%;
-}
-.note-editable {
-    height: 100%;
-    overflow: auto;
-}
-body .note-editable {
-    height: initial;
-    overflow: initial;
 }

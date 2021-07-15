@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
+from unittest.mock import patch
+
 from odoo.addons.account.tests.common import AccountTestInvoicingCommon
+from odoo.addons.account.models.account_payment_method import AccountPaymentMethod
 from odoo.tests import tagged
 from odoo.exceptions import UserError, ValidationError
 
@@ -17,22 +20,6 @@ class TestAccountJournal(AccountTestInvoicingCommon):
         # Try to set a different currency on the 'debit' account.
         with self.assertRaises(ValidationError), self.cr.savepoint():
             journal_bank.default_account_id.currency_id = self.company_data['currency']
-
-    def test_constraint_shared_accounts(self):
-        ''' Ensure the bank/outstanding accounts are not shared between multiple journals. '''
-        journal_bank = self.company_data['default_journal_bank']
-
-        account_fields = (
-            'default_account_id',
-            'payment_debit_account_id',
-            'payment_credit_account_id',
-        )
-        for account_field in account_fields:
-            with self.assertRaises(ValidationError), self.cr.savepoint():
-                journal_bank.copy(default={
-                    'name': 'test_constraint_shared_accounts %s' % account_field,
-                    account_field: journal_bank[account_field].id,
-                })
 
     def test_changing_journal_company(self):
         ''' Ensure you can't change the company of an account.journal if there are some journal entries '''
@@ -98,3 +85,53 @@ class TestAccountJournal(AccountTestInvoicingCommon):
         # Assigning both should be allowed
         self.company_data['default_journal_misc'].account_control_ids = \
             self.company_data['default_account_revenue'] + self.company_data['default_account_expense']
+
+    def test_account_journal_add_new_payment_method_multi(self):
+        """
+        Test the automatic creation of payment method lines with the mode set to multi
+        """
+        Method_get_payment_method_information = AccountPaymentMethod._get_payment_method_information
+
+        def _get_payment_method_information(self):
+            res = Method_get_payment_method_information(self)
+            res['multi'] = {'mode': 'multi', 'domain': [('type', '=', 'bank')]}
+            return res
+
+        with patch.object(AccountPaymentMethod, '_get_payment_method_information', _get_payment_method_information):
+            self.env['account.payment.method'].create({
+                'name': 'Multi method',
+                'code': 'multi',
+                'payment_type': 'inbound'
+            })
+
+            journals = self.env['account.journal'].search([('inbound_payment_method_line_ids.code', '=', 'multi')])
+
+            # The two bank journals have been set
+            self.assertEqual(len(journals), 2)
+
+    def test_remove_payment_method_lines(self):
+        """
+        Payment method lines are a bit special in the way their removal is handled.
+        If they are linked to a payment at the moment of the deletion, they won't be deleted but the journal_id will be
+        set to False.
+        If they are not linked to any payment, they will be deleted as expected.
+        """
+
+        # Linked to a payment. It will not be deleted, but its journal_id will be set to False.
+        first_method = self.inbound_payment_method_line
+        self.env['account.payment'].create({
+            'amount': 100.0,
+            'payment_type': 'inbound',
+            'partner_type': 'customer',
+            'payment_method_line_id': first_method.id,
+        })
+
+        first_method.unlink()
+
+        self.assertFalse(first_method.journal_id)
+
+        # Not linked to anything. It will be deleted.
+        second_method = self.outbound_payment_method_line
+        second_method.unlink()
+
+        self.assertFalse(second_method.exists())

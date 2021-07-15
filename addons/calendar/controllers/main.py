@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
-import werkzeug
-
 import odoo.http as http
 
 from odoo.http import request
@@ -70,7 +68,7 @@ class CalendarController(http.Controller):
         # If user is internal and logged, redirect to form view of event
         # otherwise, display the simplifyed web page with event informations
         if request.session.uid and request.env['res.users'].browse(request.session.uid).user_has_groups('base.group_user'):
-            return werkzeug.utils.redirect('/web?db=%s#id=%s&view_type=form&model=calendar.event' % (request.env.cr.dbname, id))
+            return request.redirect('/web?db=%s#id=%s&view_type=form&model=calendar.event' % (request.env.cr.dbname, id))
 
         # NOTE : we don't use request.render() since:
         # - we need a template rendering which is not lazy, to render before cursor closing
@@ -82,6 +80,16 @@ class CalendarController(http.Controller):
                 'attendee': attendee,
             })
         return request.make_response(response_content, headers=[('Content-Type', 'text/html')])
+
+    @http.route('/calendar/meeting/join', type='http', auth="user", website=True)
+    def calendar_join_meeting(self, token, **kwargs):
+        event = request.env['calendar.event'].sudo().search([
+            ('access_token', '=', token)])
+        if not event:
+            return request.not_found()
+        event.action_join_meeting(request.env.user.partner_id.id)
+        attendee = request.env['calendar.attendee'].sudo().search([('partner_id', '=', request.env.user.partner_id.id), ('event_id', '=', event.id)])
+        return request.redirect('/calendar/meeting/view?token=%s&id=%s' % (attendee.access_token, event.id))
 
     # Function used, in RPC to check every 5 minutes, if notification to do for an event or not
     @http.route('/calendar/notify', type='json', auth="user")

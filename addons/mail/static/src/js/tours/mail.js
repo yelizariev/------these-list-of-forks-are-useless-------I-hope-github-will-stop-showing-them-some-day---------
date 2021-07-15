@@ -1,13 +1,13 @@
-odoo.define('mail.tour', function (require) {
-"use strict";
+/** @odoo-module **/
 
-var core = require('web.core');
-var tour = require('web_tour.tour');
+import core from 'web.core';
+import tour from 'web_tour.tour';
 
 var _t = core._t;
 
 tour.register('mail_tour', {
     url: "/web#action=mail.widgets.discuss",
+    sequence: 80,
 }, [{
     trigger: '.o_DiscussSidebar_groupChannel .o_DiscussSidebar_groupHeaderItemAdd',
     content: _t("<p>Channels make it easy to organize information across different topics and groups.</p> <p>Try to <b>create your first channel</b> (e.g. sales, marketing, product XYZ, after work party, etc).</p>"),
@@ -54,5 +54,3 @@ tour.register('mail_tour', {
     content: _t("<p><b>Chat with coworkers</b> in real-time using direct messages.</p><p><i>You might need to invite users from the Settings app first.</i></p>"),
     position: 'bottom',
 }]);
-
-});

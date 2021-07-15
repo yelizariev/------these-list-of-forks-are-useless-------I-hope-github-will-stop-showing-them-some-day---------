@@ -262,6 +262,38 @@ class TestBoM(TestMrpCommon):
             # Check consumed materials in production order.
             self.assertEqual(mrp_order.move_raw_ids.product_id, consumed_products)
 
+    def test_13_bom_kit_qty(self):
+        self.env['mrp.bom'].create({
+            'product_id': self.product_7_3.id,
+            'product_tmpl_id': self.product_7_template.id,
+            'product_uom_id': self.uom_unit.id,
+            'product_qty': 4.0,
+            'type': 'phantom',
+            'bom_line_ids': [
+                (0, 0, {
+                    'product_id': self.product_2.id,
+                    'product_qty': 2,
+                }),
+                (0, 0, {
+                    'product_id': self.product_3.id,
+                    'product_qty': 2,
+                })
+            ]
+        })
+        location = self.env.ref('stock.stock_location_stock')
+        self.env['stock.quant']._update_available_quantity(self.product_2, location, 4.0)
+        self.env['stock.quant']._update_available_quantity(self.product_3, location, 8.0)
+        # Force the kit product available qty to be computed at the same time than its component quantities
+        # Because `qty_available` of a bom kit "recurse" on `qty_available` of its component,
+        # and this is a tricky thing for the ORM:
+        # `qty_available` gets called for `product_7_3`, `product_2` and `product_3`
+        # which then recurse on calling `qty_available` for `product_2` and `product_3` to compute the quantity of
+        # the kit `product_7_3`. `product_2` and `product_3` gets protected at the first call of the compute method,
+        # ending the recurse call to not call the compute method and just left the Falsy value `0.0`
+        # for the components available qty.
+        kit_product_qty, _, _ = (self.product_7_3 + self.product_2 + self.product_3).mapped("qty_available")
+        self.assertEqual(kit_product_qty, 2)
+
     def test_20_bom_report(self):
         """ Simulate a crumble receipt with mrp and open the bom structure
         report and check that data insde are correct.
@@ -312,14 +344,17 @@ class TestBoM(TestMrpCommon):
                 operation.workcenter_id = workcenter
                 operation.name = 'Prepare biscuits'
                 operation.time_cycle_manual = 5
+                operation.bom_id = bom_crumble  # Can't handle by the testing env
             with bom.operation_ids.new() as operation:
                 operation.workcenter_id = workcenter
                 operation.name = 'Prepare butter'
                 operation.time_cycle_manual = 3
+                operation.bom_id = bom_crumble
             with bom.operation_ids.new() as operation:
                 operation.workcenter_id = workcenter
                 operation.name = 'Mix manually'
                 operation.time_cycle_manual = 5
+                operation.bom_id = bom_crumble
 
         # TEST BOM STRUCTURE VALUE WITH BOM QUANTITY
         report_values = self.env['report.mrp.report_bom_structure']._get_report_data(bom_id=bom_crumble.id, searchQty=11, searchVariant=False)
@@ -409,10 +444,12 @@ class TestBoM(TestMrpCommon):
                 operation.workcenter_id = workcenter
                 operation.name = 'Mix cheese and crumble'
                 operation.time_cycle_manual = 10
+                operation.bom_id = bom_cheese_cake
             with bom.operation_ids.new() as operation:
                 operation.workcenter_id = workcenter_2
                 operation.name = 'Cake mounting'
                 operation.time_cycle_manual = 5
+                operation.bom_id = bom_cheese_cake
 
 
         # TEST CHEESE BOM STRUCTURE VALUE WITH BOM QUANTITY
@@ -798,3 +835,51 @@ class TestBoM(TestMrpCommon):
             line.product_uom_id = uom_unit
             line.product_qty = 5
         bom_finished = bom_finished.save()
+
+    def test_replenishment(self):
+        """ Tests the auto generation of manual orderpoints.
+            The multiple quantity of the orderpoint should be the
+            quantity of the BoM in the UoM of the product.
+        """
+
+        uom_kg = self.env.ref('uom.product_uom_kgm')
+        uom_gram = self.env.ref('uom.product_uom_gram')
+
+        product_gram = self.env['product.product'].create({
+            'name': 'Product sold in grams',
+            'type': 'product',
+            'uom_id': uom_gram.id,
+            'uom_po_id': uom_gram.id,
+        })
+        # We create a BoM that manufactures 2kg of product
+        self.env['mrp.bom'].create({
+            'product_id': product_gram.id,
+            'product_tmpl_id': product_gram.product_tmpl_id.id,
+            'product_uom_id': uom_kg.id,
+            'product_qty': 2.0,
+            'type': 'normal',
+        })
+        # We create a delivery order of 2300 grams
+        picking_form = Form(self.env['stock.picking'])
+        picking_form.picking_type_id = self.env.ref('stock.picking_type_out')
+        with picking_form.move_ids_without_package.new() as move:
+            move.product_id = product_gram
+            move.product_uom_qty = 2300.0
+        customer_picking = picking_form.save()
+        customer_picking.action_confirm()
+
+        # We check the created orderpoint without manufacturing route manufacturing
+        self.env['stock.warehouse.orderpoint']._get_orderpoint_action()
+        self.env['stock.warehouse.orderpoint']._get_orderpoint_action()
+        orderpoint = self.env['stock.warehouse.orderpoint'].search([('product_id', '=', product_gram.id)])
+        self.assertEqual(orderpoint.qty_multiple, 0.0)
+        self.assertEqual(orderpoint.qty_to_order, 2300.0)
+
+        # We select the manufacturing route and check the impact on the quantities
+        manufacturing_route_id = self.ref('mrp.route_warehouse0_manufacture')
+        manufacturing_route = self.env['stock.location.route'].search([('id', '=', manufacturing_route_id)])
+        orderpoint_form = Form(orderpoint)
+        orderpoint_form.route_id = manufacturing_route
+        orderpoint_form.save()
+        self.assertEqual(orderpoint.qty_multiple, 2000.0)
+        self.assertEqual(orderpoint.qty_to_order, 4000.0)

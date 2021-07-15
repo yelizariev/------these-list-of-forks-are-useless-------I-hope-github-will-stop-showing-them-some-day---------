@@ -29,7 +29,7 @@ class Website(models.Model):
             return None
 
     salesteam_id = fields.Many2one('crm.team',
-        string='Sales Team',
+        string='Sales Team', ondelete="set null",
         default=_get_default_website_team)
     pricelist_ids = fields.One2many('product.pricelist', compute="_compute_pricelist_ids",
                                     string='Price list available for this Ecommerce/Website')
@@ -49,6 +49,8 @@ class Website(models.Model):
     shop_ppr = fields.Integer(default=4, string="Number of grid columns on the shop")
 
     shop_extra_field_ids = fields.One2many('website.sale.extra.field', 'website_id', string='E-Commerce Extra Fields')
+
+    cart_add_on_page = fields.Boolean("Stay on page after adding to cart", default=True)
 
     @api.depends('all_pricelist_ids')
     def _compute_pricelist_ids(self):
@@ -200,9 +202,12 @@ class Website(models.Model):
 
     @api.model
     def sale_get_payment_term(self, partner):
+        pt = self.env.ref('account.account_payment_term_immediate', False).sudo()
+        if pt:
+            pt = (not pt.company_id.id or self.company_id.id == pt.company_id.id) and pt
         return (
             partner.property_payment_term_id or
-            self.env.ref('account.account_payment_term_immediate', False) or
+            pt or
             self.env['account.payment.term'].sudo().search([('company_id', '=', self.company_id.id)], limit=1)
         ).id
 
@@ -213,7 +218,7 @@ class Website(models.Model):
         addr = partner.address_get(['delivery'])
         if not request.website.is_public_user():
             last_sale_order = self.env['sale.order'].sudo().search([('partner_id', '=', partner.id)], limit=1, order="date_order desc, id desc")
-            if last_sale_order:  # first = me
+            if last_sale_order and last_sale_order.partner_shipping_id.active:  # first = me
                 addr['delivery'] = last_sale_order.partner_shipping_id.id
         default_user_id = partner.parent_id.user_id.id or partner.user_id.id
         values = {
@@ -264,7 +269,7 @@ class Website(models.Model):
                 self.env['account.fiscal.position'].sudo()
                 .with_company(sale_order.company_id.id)
                 .get_fiscal_position(sale_order.partner_id.id, delivery_id=sale_order.partner_shipping_id.id)
-            )
+            ).id
             if sale_order.fiscal_position_id.id != fpos_id:
                 sale_order = None
 
@@ -394,7 +399,7 @@ class WebsiteSaleExtraField(models.Model):
     sequence = fields.Integer(default=10)
     field_id = fields.Many2one(
         'ir.model.fields',
-        domain=[('model_id.model', '=', 'product.template')]
+        domain=[('model_id.model', '=', 'product.template'), ('ttype', 'in', ['char', 'binary'])]
     )
     label = fields.Char(related='field_id.field_description')
     name = fields.Char(related='field_id.name')

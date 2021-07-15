@@ -1,31 +1,34 @@
-odoo.define('mail/static/src/components/composer_suggested_recipient_list/composer_suggested_recipient_list.js', function (require) {
-'use strict';
+/** @odoo-module **/
 
-const useStore = require('mail/static/src/component_hooks/use_store/use_store.js');
+import { useShouldUpdateBasedOnProps } from '@mail/component_hooks/use_should_update_based_on_props/use_should_update_based_on_props';
+import { useStore } from '@mail/component_hooks/use_store/use_store';
+import { ComposerSuggestedRecipient } from '@mail/components/composer_suggested_recipient/composer_suggested_recipient';
 
 const { Component } = owl;
 const { useState } = owl.hooks;
 
-const components = {
-    ComposerSuggestedRecipient: require('mail/static/src/components/composer_suggested_recipient/composer_suggested_recipient.js'),
-};
+const components = { ComposerSuggestedRecipient };
 
-class ComposerSuggestedRecipientList extends Component {
+export class ComposerSuggestedRecipientList extends Component {
 
     /**
      * @override
      */
     constructor(...args) {
         super(...args);
+        useShouldUpdateBasedOnProps();
         this.state = useState({
             hasShowMoreButton: false,
         });
-
         useStore(props => {
             const thread = this.env.models['mail.thread'].get(props.threadLocalId);
             return {
-                thread: thread ? thread.__state : undefined,
+                threadSuggestedRecipientInfoList: thread ? thread.suggestedRecipientInfoList : [],
             };
+        }, {
+            compareDepth: {
+                threadSuggestedRecipientInfoList: 1,
+            },
         });
     }
 
@@ -66,7 +69,4 @@ Object.assign(ComposerSuggestedRecipientList, {
         threadLocalId: String,
     },
     template: 'mail.ComposerSuggestedRecipientList',
-});
-
-return ComposerSuggestedRecipientList;
 });

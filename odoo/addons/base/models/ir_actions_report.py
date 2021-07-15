@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
+from markupsafe import Markup
+
 from odoo import api, fields, models, tools, SUPERUSER_ID, _
 from odoo.exceptions import UserError, AccessError
 from odoo.tools.safe_eval import safe_eval, time
 from odoo.tools.misc import find_in_path
-from odoo.tools import config
+from odoo.tools import config, is_html_empty
 from odoo.sql_db import TestCursor
 from odoo.http import request
 from odoo.osv.expression import NEGATIVE_TERM_OPERATORS, FALSE_DOMAIN
@@ -23,7 +25,7 @@ from lxml import etree
 from contextlib import closing
 from distutils.version import LooseVersion
 from reportlab.graphics.barcode import createBarcodeDrawing
-from PyPDF2 import PdfFileWriter, PdfFileReader
+from PyPDF2 import PdfFileWriter, PdfFileReader, utils
 from collections import OrderedDict
 from collections.abc import Iterable
 from PIL import Image, ImageFile
@@ -248,7 +250,6 @@ class IrActionsReport(models.Model):
         '''
         return wkhtmltopdf_state
 
-    @api.model
     def get_paperformat(self):
         return self.paperformat_id or self.env.company.paperformat_id
 
@@ -324,6 +325,8 @@ class IrActionsReport(models.Model):
                 command_args.extend(['--orientation', str(paperformat_id.orientation)])
             if paperformat_id.header_line:
                 command_args.extend(['--header-line'])
+            if paperformat_id.disable_shrinking:
+                command_args.extend(['--disable-smart-shrinking'])
 
         if landscape:
             command_args.extend(['--orientation', 'landscape'])
@@ -345,13 +348,13 @@ class IrActionsReport(models.Model):
         :return: bodies, header, footer, specific_paperformat_args
         '''
         IrConfig = self.env['ir.config_parameter'].sudo()
-        base_url = IrConfig.get_param('report.url') or IrConfig.get_param('web.base.url')
 
         # Return empty dictionary if 'web.minimal_layout' not found.
         layout = self.env.ref('web.minimal_layout', False)
         if not layout:
             return {}
         layout = self.env['ir.ui.view'].browse(self.env['ir.ui.view'].get_view_id('web.minimal_layout'))
+        base_url = IrConfig.get_param('report.url') or layout.get_base_url()
 
         root = lxml.html.fromstring(html)
         match_klass = "//div[contains(concat(' ', normalize-space(@class), ' '), ' {} ')]"
@@ -380,7 +383,11 @@ class IrActionsReport(models.Model):
             # set context language to body language
             if node.get('data-oe-lang'):
                 layout_with_lang = layout_with_lang.with_context(lang=node.get('data-oe-lang'))
-            body = layout_with_lang._render(dict(subst=False, body=lxml.html.tostring(node), base_url=base_url))
+            body = layout_with_lang._render({
+                'subst': False,
+                'body': Markup(lxml.html.tostring(node, encoding='unicode')),
+                'base_url': base_url
+            })
             bodies.append(body)
             if node.get('data-oe-model') == self.model:
                 res_ids.append(int(node.get('data-oe-id', 0)))
@@ -388,7 +395,7 @@ class IrActionsReport(models.Model):
                 res_ids.append(None)
 
         if not bodies:
-            body = bytearray().join([lxml.html.tostring(c) for c in body_parent.getchildren()])
+            body = b''.join(lxml.html.tostring(c, encoding='utf-8') for c in body_parent.getchildren())
             bodies.append(body)
 
         # Get paperformat arguments set in the root html tag. They are prioritized over
@@ -398,8 +405,16 @@ class IrActionsReport(models.Model):
             if attribute[0].startswith('data-report-'):
                 specific_paperformat_args[attribute[0]] = attribute[1]
 
-        header = layout._render(dict(subst=True, body=lxml.html.tostring(header_node), base_url=base_url))
-        footer = layout._render(dict(subst=True, body=lxml.html.tostring(footer_node), base_url=base_url))
+        header = layout._render({
+            'subst': True,
+            'body': Markup(lxml.html.tostring(header_node, encoding='unicode')),
+            'base_url': base_url
+        })
+        footer = layout._render({
+            'subst': True,
+            'body': Markup(lxml.html.tostring(footer_node, encoding='unicode')),
+            'base_url': base_url
+        })
 
         return bodies, res_ids, header, footer, specific_paperformat_args
 
@@ -507,6 +522,9 @@ class IrActionsReport(models.Model):
             barcode_type = 'EAN13'
             if len(value) in (11, 12):
                 value = '0%s' % value
+        elif barcode_type == 'auto':
+            symbology_guess = {8: 'EAN8', 13: 'EAN13'}
+            barcode_type = symbology_guess.get(len(value), 'Code128')
         try:
             width, height, humanreadable, quiet = int(width), int(height), bool(int(humanreadable)), bool(int(quiet))
             # for `QR` type, `quiet` is not supported. And is simply ignored.
@@ -678,11 +696,38 @@ class IrActionsReport(models.Model):
         if len(streams) == 1:
             result = streams[0].getvalue()
         else:
-            result = self._merge_pdfs(streams)
+            try:
+                result = self._merge_pdfs(streams)
+            except utils.PdfReadError:
+                raise UserError(_("One of the documents, you try to merge is encrypted"))
 
         # We have to close the streams after PdfFileWriter's call to write()
         close_streams(streams)
         return result
+
+    def _get_unreadable_pdfs(self, streams):
+        unreadable_streams = []
+
+        writer = PdfFileWriter()
+        for stream in streams:
+            try:
+                reader = PdfFileReader(stream)
+                writer.appendPagesFromReader(reader)
+            except utils.PdfReadError:
+                unreadable_streams.append(stream)
+
+        return unreadable_streams
+
+    def _raise_on_unreadable_pdfs(self, streams, stream_record):
+        unreadable_pdfs = self._get_unreadable_pdfs(streams)
+        if unreadable_pdfs:
+            records = [stream_record[s].name for s in unreadable_pdfs if s in stream_record]
+            raise UserError(_(
+                "Odoo is unable to merge the PDFs attached to the following records:\n"
+                "%s\n\n"
+                "Please exclude them from the selection to continue. It's possible to "
+                "still retrieve those PDFs by selecting each of the affected records "
+                "individually, which will avoid merging.") % "\n".join(records))
 
     def _merge_pdfs(self, streams):
         writer = PdfFileWriter()
@@ -735,6 +780,8 @@ class IrActionsReport(models.Model):
             return self_sudo.with_context(context)._render_qweb_html(res_ids, data=data)[0]
 
         save_in_attachment = OrderedDict()
+        # Maps the streams in `save_in_attachment` back to the records they came from
+        stream_record = dict()
         if res_ids:
             # Dispatch the records by ones having an attachment and ones requesting a call to
             # wkhtmltopdf.
@@ -745,7 +792,9 @@ class IrActionsReport(models.Model):
                 for record_id in record_ids:
                     attachment = self_sudo.retrieve_attachment(record_id)
                     if attachment:
-                        save_in_attachment[record_id.id] = self_sudo._retrieve_stream_from_attachment(attachment)
+                        stream = self_sudo._retrieve_stream_from_attachment(attachment)
+                        save_in_attachment[record_id.id] = stream
+                        stream_record[stream] = record_id
                     if not self_sudo.attachment_use or not attachment:
                         wk_record_ids += record_id
             else:
@@ -757,6 +806,7 @@ class IrActionsReport(models.Model):
         # - The report is not fully present in attachments.
         if save_in_attachment and not res_ids:
             _logger.info('The PDF report has been generated from attachments.')
+            self._raise_on_unreadable_pdfs(save_in_attachment.values(), stream_record)
             return self_sudo._post_pdf(save_in_attachment), 'pdf'
 
         if self.get_wkhtmltopdf_state() == 'install':
@@ -786,6 +836,7 @@ class IrActionsReport(models.Model):
             set_viewport_size=context.get('set_viewport_size'),
         )
         if res_ids:
+            self._raise_on_unreadable_pdfs(save_in_attachment.values(), stream_record)
             _logger.info('The PDF report has been generated for model: %s, records %s.' % (self_sudo.model, str(res_ids)))
             return self_sudo._post_pdf(save_in_attachment, pdf_content=pdf_content, res_ids=html_ids), 'pdf'
         return pdf_content, 'pdf'
@@ -795,6 +846,7 @@ class IrActionsReport(models.Model):
         if not data:
             data = {}
         data.setdefault('report_type', 'text')
+        data.setdefault('__keep_empty_lines', True)
         data = self._get_rendering_context(docids, data)
         return self._render_template(self.sudo().report_name, data), 'text'
 
@@ -808,12 +860,10 @@ class IrActionsReport(models.Model):
         data = self._get_rendering_context(docids, data)
         return self._render_template(self.sudo().report_name, data), 'html'
 
-    @api.model
     def _get_rendering_context_model(self):
         report_model_name = 'report.%s' % self.report_name
         return self.env.get(report_model_name)
 
-    @api.model
     def _get_rendering_context(self, docids, data):
         # access the report details with sudo() but evaluation context as current user
         self_sudo = self.sudo()
@@ -833,6 +883,7 @@ class IrActionsReport(models.Model):
                 'doc_model': self_sudo.model,
                 'docs': docs,
             })
+        data['is_html_empty'] = is_html_empty
         return data
 
     def _render(self, res_ids, data=None):

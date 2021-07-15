@@ -1,12 +1,12 @@
-odoo.define('mail/static/src/models/message/message.js', function (require) {
-'use strict';
+/** @odoo-module **/
 
-const emojis = require('mail.emojis');
-const { registerNewModel } = require('mail/static/src/model/model_core.js');
-const { attr, many2many, many2one, one2many } = require('mail/static/src/model/model_field.js');
-const { addLink, htmlToTextContentInline, parseAndTransform } = require('mail.utils');
+import { registerNewModel } from '@mail/model/model_core';
+import { attr, many2many, many2one, one2many } from '@mail/model/model_field';
+import { clear, insert, insertAndReplace, link, replace, unlink, unlinkAll } from '@mail/model/model_field_command';
+import emojis from '@mail/js/emojis';
+import { addLink, htmlToTextContentInline, parseAndTransform, timeFromNow } from '@mail/js/utils';
 
-const { str_to_datetime } = require('web.time');
+import { str_to_datetime } from 'web.time';
 
 function factory(dependencies) {
 
@@ -18,16 +18,6 @@ function factory(dependencies) {
 
         /**
          * @static
-         * @param {mail.thread} thread
-         * @param {string} threadStringifiedDomain
-         */
-        static checkAll(thread, threadStringifiedDomain) {
-            const threadCache = thread.cache(threadStringifiedDomain);
-            threadCache.update({ checkedMessages: [['link', threadCache.messages]] });
-        }
-
-        /**
-         * @static
          * @param {Object} data
          * @return {Object}
          */
@@ -35,42 +25,28 @@ function factory(dependencies) {
             const data2 = {};
             if ('attachment_ids' in data) {
                 if (!data.attachment_ids) {
-                    data2.attachments = [['unlink-all']];
+                    data2.attachments = unlinkAll();
                 } else {
-                    data2.attachments = [
-                        ['insert-and-replace', data.attachment_ids.map(attachmentData =>
-                            this.env.models['mail.attachment'].convertData(attachmentData)
-                        )],
-                    ];
+                    data2.attachments = insertAndReplace(data.attachment_ids.map(attachmentData =>
+                        this.env.models['mail.attachment'].convertData(attachmentData)
+                    ));
                 }
             }
             if ('author_id' in data) {
                 if (!data.author_id) {
-                    data2.author = [['unlink-all']];
+                    data2.author = unlinkAll();
                 } else if (data.author_id[0] !== 0) {
                     // partner id 0 is a hack of message_format to refer to an
                     // author non-related to a partner. display_name equals
                     // email_from, so this is omitted due to being redundant.
-                    data2.author = [
-                        ['insert', {
-                            display_name: data.author_id[1],
-                            id: data.author_id[0],
-                        }],
-                    ];
+                    data2.author = insert({
+                        display_name: data.author_id[1],
+                        id: data.author_id[0],
+                    });
                 }
             }
             if ('body' in data) {
                 data2.body = data.body;
-            }
-            if ('channel_ids' in data && data.channel_ids) {
-                const channels = data.channel_ids
-                    .map(channelId =>
-                        this.env.models['mail.thread'].findFromIdentifyingData({
-                            id: channelId,
-                            model: 'mail.channel',
-                        })
-                    ).filter(channel => !!channel);
-                data2.serverChannels = [['replace', channels]];
             }
             if ('date' in data && data.date) {
                 data2.date = moment(str_to_datetime(data.date));
@@ -110,18 +86,18 @@ function factory(dependencies) {
                 if ('module_icon' in data) {
                     originThreadData.moduleIcon = data.module_icon;
                 }
-                data2.originThread = [['insert', originThreadData]];
-            }
-            if ('moderation_status' in data) {
-                data2.moderation_status = data.moderation_status;
+                data2.originThread = insert(originThreadData);
             }
             if ('needaction_partner_ids' in data) {
                 data2.isNeedaction = data.needaction_partner_ids.includes(this.env.messaging.currentPartner.id);
             }
             if ('notifications' in data) {
-                data2.notifications = [['insert', data.notifications.map(notificationData =>
+                data2.notifications = insert(data.notifications.map(notificationData =>
                     this.env.models['mail.notification'].convertData(notificationData)
-                )]];
+                ));
+            }
+            if ('partner_ids' in data) {
+                data2.isCurrentPartnerMentioned = data.partner_ids.includes(this.env.messaging.currentPartner.id);
             }
             if ('starred_partner_ids' in data) {
                 data2.isStarred = data.starred_partner_ids.includes(this.env.messaging.currentPartner.id);
@@ -177,37 +153,15 @@ function factory(dependencies) {
         }
 
         /**
-         * Applies the moderation `decision` on the provided messages.
-         *
-         * @static
-         * @param {mail.message[]} messages
-         * @param {string} decision: 'accept', 'allow', ban', 'discard', or 'reject'
-         * @param {Object|undefined} [kwargs] optional data to pass on
-         *  message moderation. This is provided when rejecting the messages
-         *  for which title and comment give reason(s) for reject.
-         * @param {string} [kwargs.title]
-         * @param {string} [kwargs.comment]
-         */
-        static async moderate(messages, decision, kwargs) {
-            const messageIds = messages.map(message => message.id);
-            await this.env.services.rpc({
-                model: 'mail.message',
-                method: 'moderate',
-                args: [messageIds, decision],
-                kwargs: kwargs,
-            });
-        }
-        /**
          * Performs the `message_fetch` RPC on `mail.message`.
          *
          * @static
          * @param {Array[]} domain
          * @param {integer} [limit]
-         * @param {integer[]} [moderated_channel_ids]
          * @param {Object} [context]
          * @returns {mail.message[]}
          */
-        static async performRpcMessageFetch(domain, limit, moderated_channel_ids, context) {
+        static async performRpcMessageFetch(domain, limit, context) {
             const messagesData = await this.env.services.rpc({
                 model: 'mail.message',
                 method: 'message_fetch',
@@ -215,7 +169,6 @@ function factory(dependencies) {
                     context,
                     domain,
                     limit,
-                    moderated_channel_ids,
                 },
             }, { shadow: true });
             const messages = this.env.models['mail.message'].insert(messagesData.map(
@@ -239,16 +192,6 @@ function factory(dependencies) {
         }
 
         /**
-         * @static
-         * @param {mail.thread} thread
-         * @param {string} threadStringifiedDomain
-         */
-        static uncheckAll(thread, threadStringifiedDomain) {
-            const threadCache = thread.cache(threadStringifiedDomain);
-            threadCache.update({ checkedMessages: [['unlink', threadCache.messages]] });
-        }
-
-        /**
          * Unstar all starred messages of current user.
          */
         static async unstarAll() {
@@ -256,22 +199,6 @@ function factory(dependencies) {
                 model: 'mail.message',
                 method: 'unstar_all',
             });
-        }
-
-        /**
-         * @param {mail.thread} thread
-         * @param {string} threadStringifiedDomain
-         * @returns {boolean}
-         */
-        isChecked(thread, threadStringifiedDomain) {
-            // aku todo
-            const relatedCheckedThreadCache = this.checkedThreadCaches.find(
-                threadCache => (
-                    threadCache.thread === thread &&
-                    threadCache.stringifiedDomain === threadStringifiedDomain
-                )
-            );
-            return !!relatedCheckedThreadCache;
         }
 
         /**
@@ -284,20 +211,6 @@ function factory(dependencies) {
                 method: 'set_message_done',
                 args: [[this.id]]
             }));
-        }
-
-        /**
-         * Applies the moderation `decision` on this message.
-         *
-         * @param {string} decision: 'accept', 'allow', ban', 'discard', or 'reject'
-         * @param {Object|undefined} [kwargs] optional data to pass on
-         *  message moderation. This is provided when rejecting the messages
-         *  for which title and comment give reason(s) for reject.
-         * @param {string} [kwargs.title]
-         * @param {string} [kwargs.comment]
-         */
-        async moderate(decision, kwargs) {
-            await this.async(() => this.constructor.moderate([this], decision, kwargs));
         }
 
         /**
@@ -315,27 +228,18 @@ function factory(dependencies) {
         }
 
         /**
+         * Refreshes the value of `dateFromNow` field to the "current now".
+         */
+        refreshDateFromNow() {
+            this.update({ dateFromNow: this._computeDateFromNow() });
+        }
+
+        /**
          * Action to initiate reply to current message in Discuss Inbox. Assumes
          * that Discuss and Inbox are already opened.
          */
         replyTo() {
             this.env.messaging.discuss.replyToMessage(this);
-        }
-
-        /**
-         * Toggle check state of this message in the context of the provided
-         * thread and its stringifiedDomain.
-         *
-         * @param {mail.thread} thread
-         * @param {string} threadStringifiedDomain
-         */
-        toggleCheck(thread, threadStringifiedDomain) {
-            const threadCache = thread.cache(threadStringifiedDomain);
-            if (threadCache.checkedMessages.includes(this)) {
-                threadCache.update({ checkedMessages: [['unlink', this]] });
-            } else {
-                threadCache.update({ checkedMessages: [['link', this]] });
-            }
         }
 
         /**
@@ -361,20 +265,22 @@ function factory(dependencies) {
         }
 
         /**
-         * @returns {boolean}
+         * @returns {string}
          */
-        _computeFailureNotifications() {
-            return [['replace', this.notifications.filter(notifications =>
-                ['exception', 'bounce'].includes(notifications.notification_status)
-            )]];
+        _computeDateFromNow() {
+            if (!this.date) {
+                return clear();
+            }
+            return timeFromNow(this.date);
         }
 
         /**
-         * @private
          * @returns {boolean}
          */
-        _computeHasCheckbox() {
-            return this.isModeratedByCurrentPartner;
+        _computeFailureNotifications() {
+            return replace(this.notifications.filter(notifications =>
+                ['exception', 'bounce'].includes(notifications.notification_status)
+            ));
         }
 
         /**
@@ -402,11 +308,34 @@ function factory(dependencies) {
         }
 
         /**
+         * The method does not attempt to cover all possible cases of empty
+         * messages, but mostly those that happen with a standard flow. Indeed
+         * it is preferable to be defensive and show an empty message sometimes
+         * instead of hiding a non-empty message.
+         *
+         * The main use case for when a message should become empty is for a
+         * message posted with only an attachment (no body) and then the
+         * attachment is deleted.
+         *
+         * The main use case for being defensive with the check is when
+         * receiving a message that has no textual content but has other
+         * meaningful HTML tags (eg. just an <img/>).
+         *
          * @private
+         * @returns {boolean}
          */
         _computeIsEmpty() {
+            const isBodyEmpty = (
+                !this.body ||
+                [
+                    '',
+                    '<p></p>',
+                    '<p><br></p>',
+                    '<p><br/></p>',
+                ].includes(this.body.replace(/\s/g, ''))
+            );
             return (
-                (!this.body || htmlToTextContentInline(this.body) === '') &&
+                isBodyEmpty &&
                 this.attachments.length === 0 &&
                 this.tracking_value_ids.length === 0 &&
                 !this.subtype_description
@@ -417,12 +346,44 @@ function factory(dependencies) {
          * @private
          * @returns {boolean}
          */
-        _computeIsModeratedByCurrentPartner() {
+        _computeIsHighlighted() {
             return (
-                this.moderation_status === 'pending_moderation' &&
+                this.isCurrentPartnerMentioned &&
                 this.originThread &&
-                this.originThread.isModeratedByCurrentPartner
+                this.originThread.model === 'mail.channel'
             );
+        }
+
+        /**
+         * @private
+         * @returns {boolean}
+         */
+        _computeIsSubjectSimilarToOriginThreadName() {
+            if (
+                !this.subject ||
+                !this.originThread ||
+                !this.originThread.name
+            ) {
+                return false;
+            }
+            const threadName = this.originThread.name.toLowerCase().trim();
+            const prefixList = ['re:', 'fw:', 'fwd:'];
+            let cleanedSubject = this.subject.toLowerCase();
+            let wasSubjectCleaned = true;
+            while (wasSubjectCleaned) {
+                wasSubjectCleaned = false;
+                if (threadName === cleanedSubject) {
+                    return true;
+                }
+                for (const prefix of prefixList) {
+                    if (cleanedSubject.startsWith(prefix)) {
+                        cleanedSubject = cleanedSubject.replace(prefix, '').trim();
+                        wasSubjectCleaned = true;
+                        break;
+                    }
+                }
+            }
+            return false;
         }
 
         /**
@@ -430,7 +391,7 @@ function factory(dependencies) {
          * @returns {mail.messaging}
          */
         _computeMessaging() {
-            return [['link', this.env.messaging]];
+            return link(this.env.messaging);
         }
 
         /**
@@ -473,7 +434,7 @@ function factory(dependencies) {
          * @returns {mail.thread[]}
          */
         _computeThreads() {
-            const threads = [...this.serverChannels];
+            const threads = [];
             if (this.isHistory) {
                 threads.push(this.env.messaging.history);
             }
@@ -483,13 +444,10 @@ function factory(dependencies) {
             if (this.isStarred) {
                 threads.push(this.env.messaging.starred);
             }
-            if (this.env.messaging.moderation && this.isModeratedByCurrentPartner) {
-                threads.push(this.env.messaging.moderation);
-            }
             if (this.originThread) {
                 threads.push(this.originThread);
             }
-            return [['replace', threads]];
+            return replace(threads);
         }
 
     }
@@ -510,23 +468,27 @@ function factory(dependencies) {
         body: attr({
             default: "",
         }),
-        checkedThreadCaches: many2many('mail.thread_cache', {
-            inverse: 'checkedMessages',
-        }),
-        date: attr({
-            default: moment(),
+        /**
+         * Determines the date of the message as a moment object.
+         */
+        date: attr(),
+        /**
+         * States the time elapsed since date up to now.
+         */
+        dateFromNow: attr({
+            compute: '_computeDateFromNow',
+            dependencies: [
+                'date',
+            ],
         }),
         email_from: attr(),
         failureNotifications: one2many('mail.notification', {
             compute: '_computeFailureNotifications',
             dependencies: ['notificationsStatus'],
         }),
-        hasCheckbox: attr({
-            compute: '_computeHasCheckbox',
-            default: false,
-            dependencies: ['isModeratedByCurrentPartner'],
+        id: attr({
+            required: true,
         }),
-        id: attr(),
         isCurrentPartnerAuthor: attr({
             compute: '_computeIsCurrentPartnerAuthor',
             default: false,
@@ -573,16 +535,24 @@ function factory(dependencies) {
             dependencies: [
                 'attachments',
                 'body',
+                'subtype_description',
                 'tracking_value_ids',
             ],
         }),
-        isModeratedByCurrentPartner: attr({
-            compute: '_computeIsModeratedByCurrentPartner',
-            default: false,
+        /**
+         * States whether `originThread.name` and `subject` contain similar
+         * values except it contains the extra prefix at the start
+         * of the subject.
+         *
+         * This is necessary to avoid displaying the subject, if
+         * the subject is same as threadname.
+         */
+        isSubjectSimilarToOriginThreadName: attr({
+            compute: '_computeIsSubjectSimilarToOriginThreadName',
             dependencies: [
-                'moderation_status',
                 'originThread',
-                'originThreadIsModeratedByCurrentPartner',
+                'originThreadName',
+                'subject',
             ],
         }),
         isTemporary: attr({
@@ -615,6 +585,23 @@ function factory(dependencies) {
             default: false,
         }),
         /**
+         * Determine whether the current partner is mentioned.
+         */
+        isCurrentPartnerMentioned: attr({
+            default: false,
+        }),
+        /**
+         * Determine whether the message is highlighted.
+         */
+        isHighlighted: attr({
+            compute: '_computeIsHighlighted',
+            dependencies: [
+                'isCurrentPartnerMentioned',
+                'originThread',
+                'originThreadModel',
+            ],
+        }),
+        /**
          * Determine whether the message is starred. Useful to make it present
          * in starred mailbox.
          */
@@ -634,13 +621,9 @@ function factory(dependencies) {
         messagingInbox: many2one('mail.thread', {
             related: 'messaging.inbox',
         }),
-        messagingModeration: many2one('mail.thread', {
-            related: 'messaging.moderation',
-        }),
         messagingStarred: many2one('mail.thread', {
             related: 'messaging.starred',
         }),
-        moderation_status: attr(),
         notifications: one2many('mail.notification', {
             inverse: 'message',
             isCausal: true,
@@ -652,10 +635,20 @@ function factory(dependencies) {
         /**
          * Origin thread of this message (if any).
          */
-        originThread: many2one('mail.thread'),
-        originThreadIsModeratedByCurrentPartner: attr({
-            default: false,
-            related: 'originThread.isModeratedByCurrentPartner',
+        originThread: many2one('mail.thread', {
+            inverse: 'messagesAsOriginThread',
+        }),
+        /**
+         * Serves as compute dependency.
+         */
+        originThreadModel: attr({
+            related: 'originThread.model',
+        }),
+        /**
+         * Serves as compute dependency for isSubjectSimilarToOriginThreadName
+         */
+        originThreadName: attr({
+            related: 'originThread.name',
         }),
         /**
          * This value is meant to be based on field body which is
@@ -677,27 +670,17 @@ function factory(dependencies) {
             compute: '_computeThreads',
             dependencies: [
                 'isHistory',
-                'isModeratedByCurrentPartner',
                 'isNeedaction',
                 'isStarred',
                 'messagingHistory',
                 'messagingInbox',
-                'messagingModeration',
                 'messagingStarred',
                 'originThread',
-                'serverChannels',
             ],
             inverse: 'messages',
         }),
         tracking_value_ids: attr({
             default: [],
-        }),
-        /**
-         * All channels containing this message on the server.
-         * Equivalent of python field `channel_ids`.
-         */
-        serverChannels: many2many('mail.thread', {
-            inverse: 'messagesAsServerChannel',
         }),
     };
 
@@ -707,5 +690,3 @@ function factory(dependencies) {
 }
 
 registerNewModel('mail.message', factory);
-
-});

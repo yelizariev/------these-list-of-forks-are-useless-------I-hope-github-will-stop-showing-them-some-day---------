@@ -3,9 +3,11 @@
 // ------------------------------------------------------------------
 
 .o_Chatter {
+    position: relative;
     display: flex;
     flex: 1 1 auto;
     flex-direction: column;
+    width: map-get($sizes, 100);
 }
 
 .o_Chatter_composer {
@@ -26,7 +28,7 @@
 // ------------------------------------------------------------------
 
 .o_Chatter {
-    background-color: white;
+    background-color: $white;
     border-color: $border-color;
 }
 

@@ -20,12 +20,13 @@ _logger = logging.getLogger(__name__)
 class HolidaysType(models.Model):
     _name = "hr.leave.type"
     _description = "Time Off Type"
+    _order = 'sequence'
 
     @api.model
     def _model_sorting_key(self, leave_type):
         remaining = leave_type.virtual_remaining_leaves > 0
         taken = leave_type.leaves_taken > 0
-        return leave_type.allocation_type == 'fixed' and remaining, leave_type.allocation_type == 'fixed_allocation' and remaining, taken
+        return -1*leave_type.sequence, leave_type.allocation_type == 'fixed' and remaining, leave_type.allocation_type == 'fixed_allocation' and remaining, taken
 
     name = fields.Char('Time Off Type', required=True, translate=True)
     code = fields.Char('Code')
@@ -74,7 +75,7 @@ class HolidaysType(models.Model):
     responsible_id = fields.Many2one('res.users', 'Responsible',
         domain=lambda self: [('groups_id', 'in', self.env.ref('hr_holidays.group_hr_holidays_user').id)],
         help="This user will be responsible for approving this type of time off. "
-        "This is only used when validation is 'hr' or 'both'",)
+        "This is only used when validation is 'By Time Off Officer' or 'By Employee's Manager and Time Off Officer'",)
     leave_validation_type = fields.Selection([
         ('no_validation', 'No Validation'),
         ('hr', 'By Time Off Officer'),
@@ -104,6 +105,7 @@ class HolidaysType(models.Model):
     unpaid = fields.Boolean('Is Unpaid', default=False)
     leave_notif_subtype_id = fields.Many2one('mail.message.subtype', string='Time Off Notification Subtype', default=lambda self: self.env.ref('hr_holidays.mt_leave', raise_if_not_found=False))
     allocation_notif_subtype_id = fields.Many2one('mail.message.subtype', string='Allocation Notification Subtype', default=lambda self: self.env.ref('hr_holidays.mt_leave_allocation', raise_if_not_found=False))
+    support_document = fields.Boolean(string='Supporting Document')
 
     @api.constrains('validity_start', 'validity_stop')
     def _check_validity_dates(self):
@@ -188,10 +190,6 @@ class HolidaysType(models.Model):
 
         return [('id', 'in', valid_leave_types.ids)]
 
-    # YTI TODO: Remove me in master
-    def get_days(self, employee_id):
-        return self.get_employees_days([employee_id])[employee_id]
-
     def get_employees_days(self, employee_ids):
         result = {
             employee_id: {
@@ -252,16 +250,20 @@ class HolidaysType(models.Model):
 
     @api.model
     def get_days_all_request(self):
-        leave_types = sorted(self.search([]).filtered(lambda x: x.virtual_remaining_leaves or x.max_leaves), key=self._model_sorting_key, reverse=True)
-        return [(lt.name, {
-                    'remaining_leaves': ('%.2f' % lt.remaining_leaves).rstrip('0').rstrip('.'),
-                    'virtual_remaining_leaves': ('%.2f' % lt.virtual_remaining_leaves).rstrip('0').rstrip('.'),
-                    'max_leaves': ('%.2f' % lt.max_leaves).rstrip('0').rstrip('.'),
-                    'leaves_taken': ('%.2f' % lt.leaves_taken).rstrip('0').rstrip('.'),
-                    'virtual_leaves_taken': ('%.2f' % lt.virtual_leaves_taken).rstrip('0').rstrip('.'),
-                    'request_unit': lt.request_unit,
-                }, lt.allocation_type, lt.validity_stop)
-            for lt in leave_types]
+        leave_types = sorted(self.search([]).filtered(lambda x: ((not x.validity_stop or x.validity_stop >= fields.Date.today())
+                                                            and (x.virtual_remaining_leaves or x.max_leaves))), key=self._model_sorting_key, reverse=True)
+        return [lt._get_days_request() for lt in leave_types]
+
+    def _get_days_request(self):
+        self.ensure_one()
+        return (self.name, {
+                'remaining_leaves': ('%.2f' % self.remaining_leaves).rstrip('0').rstrip('.'),
+                'virtual_remaining_leaves': ('%.2f' % self.virtual_remaining_leaves).rstrip('0').rstrip('.'),
+                'max_leaves': ('%.2f' % self.max_leaves).rstrip('0').rstrip('.'),
+                'leaves_taken': ('%.2f' % self.leaves_taken).rstrip('0').rstrip('.'),
+                'virtual_leaves_taken': ('%.2f' % self.virtual_leaves_taken).rstrip('0').rstrip('.'),
+                'request_unit': self.request_unit,
+                }, self.allocation_type, self.validity_stop, self.id)
 
     def _get_contextual_employee_id(self):
         if 'employee_id' in self._context:

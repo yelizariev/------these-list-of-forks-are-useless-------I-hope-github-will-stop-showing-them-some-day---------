@@ -1,538 +1,259 @@
 odoo.define('web_editor.wysiwyg', function (require) {
 'use strict';
+const core = require('web.core');
+const Widget = require('web.Widget');
+const Dialog = require('web.Dialog');
+const customColors = require('web_editor.custom_colors');
+const {ColorPaletteWidget} = require('web_editor.ColorPalette');
+const {ColorpickerWidget} = require('web.Colorpicker');
+const concurrency = require('web.concurrency');
+const { device } = require('web.config');
+const weContext = require('web_editor.context');
+const OdooEditorLib = require('@web_editor/../lib/odoo-editor/src/OdooEditor');
+const snippetsEditor = require('web_editor.snippet.editor');
+const Toolbar = require('web_editor.toolbar');
+const weWidgets = require('wysiwyg.widgets');
+const wysiwygUtils = require('@web_editor/js/wysiwyg/wysiwyg_utils');
 
-var Dialog = require('web.Dialog');
-var Widget = require('web.Widget');
-var JWEditorLib = require('web_editor.jabberwock');
-var SnippetsMenu = require('web_editor.snippet.editor').SnippetsMenu;
-var weWidgets = require('wysiwyg.widgets');
-var ColorPaletteWidget = require('web_editor.ColorPalette').ColorPaletteWidget;
-var AttributeTranslateDialog = require('web_editor.wysiwyg.translate_attributes');
-var config = require('web.config');
-
-var core = require('web.core');
 var _t = core._t;
 
+const OdooEditor = OdooEditorLib.OdooEditor;
+const getDeepRange = OdooEditorLib.getDeepRange;
+const getInSelection = OdooEditorLib.getInSelection;
+const isBlock = OdooEditorLib.isBlock;
+const rgbToHex = OdooEditorLib.rgbToHex;
+const preserveCursor = OdooEditorLib.preserveCursor;
+const closestElement = OdooEditorLib.closestElement;
+
+var id = 0;
 const faZoomClassRegex = RegExp('fa-[0-9]x');
+const mediaSelector = 'img, .fa, .o_image, .media_iframe_video';
 
-var Wysiwyg = Widget.extend({
+const Wysiwyg = Widget.extend({
+    xmlDependencies: [
+    ],
     defaultOptions: {
-        'recordInfo': {
-            'context': {},
-        },
+        lang: 'odoo',
+        colors: customColors,
+        recordInfo: {context: {}},
     },
-
-    /**
-     * @options {Object} options
-     * @options {Object} options.recordInfo
-     * @options {Object} options.recordInfo.context
-     * @options {String} [options.recordInfo.context]
-     * @options {integer} [options.recordInfo.res_id]
-     * @options {String} [options.recordInfo.data_res_model]
-     * @options {integer} [options.recordInfo.data_res_id]
-     *   @see _onGetRecordInfo
-     *   @see _getAttachmentsDomain in /wysiwyg/widgets/media.js
-     * @options {Object} options.attachments
-     *   @see _onGetRecordInfo
-     *   @see _getAttachmentsDomain in /wysiwyg/widgets/media.js (for attachmentIDs)
-     * @options {function} options.generateOptions
-     *   called with the summernote configuration object used before sending to summernote
-     *   @see _editorOptions
-     **/
     init: function (parent, options) {
         this._super.apply(this, arguments);
-        this.value = options.value || '';
+        this.id = ++id;
         this.options = options;
-        this.colorPickers = [];
-        this.JWEditorLib = JWEditorLib;
-        if (this.options.enableTranslation) {
-            this._modeConfig = {
-                id: 'translate',
-                rules: [
-                    {
-                        selector: [],
-                        properties: {
-                            editable: {
-                                value: false,
-                                cascading: true,
-                            },
-                        },
-                    },
-                    {
-                        selector: [this.JWEditorLib.ContainerNode],
-                        properties: {
-                            breakable: { value: false },
-                        },
-                    },
-                    {
-                        selector: [node => !!node.modifiers.find(this.JWEditorLib.OdooTranslationFormat)],
-                        properties: {
-                            editable: {
-                                value: true,
-                                cascading: true,
-                            },
-                        },
-                    },
-                    {
-                        selector: [node => {
-                            const attributes = node.modifiers.find(this.JWEditorLib.Attributes);
-                            return attributes &&
-                                (
-                                    attributes.classList.has('o_not_editable') ||
-                                    attributes.has('data-oe-readonly')
-                                );
-                        }, () => true],
-                        properties: {
-                            editable: {
-                                value: false,
-                                cascading: true,
-                            },
-                        },
-                    },
-                ],
-            };
-        } else if (this.options.enableWebsite) {
-            this._modeConfig = {
-                id: 'edit',
-                rules: [
-                    {
-                        selector: [
-                            (node) => {
-                                const attributes = node.modifiers.find(this.JWEditorLib.Attributes);
-                                const isWrapper = attributes && attributes.classList.has('oe_structure') ;
-                                return isWrapper;
-                            },
-                        ],
-                        properties: {
-                            breakable: { value: false },
-                            allowEmpty: { value: true },
-                        },
-                    },
-                    {
-                        selector: [this.JWEditorLib.DividerNode],
-                        properties: {
-                            breakable: { value: false },
-                            allowEmpty: { value: false },
-                        },
-                    },
-                    {
-                        selector: [
-                            (node) => {
-                                const attributes = node.modifiers.find(this.JWEditorLib.Attributes);
-
-                                const isCountdown = attributes && attributes.classList.has('s_countdown');
-                                const isNewsletterPopup = attributes && attributes.classList.has('o_newsletter_popup');
-                                const isPopup = attributes && attributes.classList.has('s_popup');
-
-                                return isCountdown || isPopup || isNewsletterPopup;
-                            },
-                            this.JWEditorLib.ContainerNode],
-                        properties: {
-                            allowEmpty: { value: true },
-                        },
-                    },
-                    {
-                        selector: [this.JWEditorLib.OdooFieldNode],
-                        properties: {
-                            allowEmpty: { value: true },
-                        },
-                    },
-
-                    // o_header_standard and its descendants.
-                    {
-                        selector: [
-                            (node) => {
-                                const attributes = node.modifiers.find(this.JWEditorLib.Attributes);
-                                return attributes && attributes.classList.has('o_header_standard');
-                            },
-                        ],
-                        properties: {
-                            editable: {
-                                value: false,
-                                cascading: true,
-                            },
-                        },
-                    },
-                    {
-                        selector: [
-                            (node) => {
-                                const attributes = node.modifiers.find(this.JWEditorLib.Attributes);
-                                return attributes && attributes.classList.has('o_header_standard');
-                            },
-                            (node) => {
-                                const attributes = node.modifiers.find(this.JWEditorLib.Attributes);
-                                const linkFormat = node.modifiers.find(this.JWEditorLib.LinkFormat);
-                                const linkAttributes = linkFormat && linkFormat.modifiers.find(this.JWEditorLib.Attributes);
-
-                                const hasNavLink = linkAttributes && (linkAttributes.classList.has('nav-link'));
-                                const hasContainer = attributes && attributes.classList.has('container');
-
-                                return hasNavLink || hasContainer;
-                            },
-                        ],
-                        properties: {
-                            editable: {
-                                value: true,
-                                cascading: true,
-                            },
-                        },
-                    },
-
-                    // blockquote and alert snippets and their descendants:
-                    {
-                        selector: [node => {
-                            const attributes = node.modifiers.find(this.JWEditorLib.Attributes);
-                            return attributes && (
-                                attributes.classList.has('s_blockquote') ||
-                                attributes.classList.has('s_alert')
-                            );
-                        }],
-                        properties: {
-                            editable: {
-                                value: false,
-                                cascading: true,
-                            },
-                        },
-                    },
-                    {
-                        selector: [node => {
-                            // Blockquote and alert snippets's children are not
-                            // editable...
-                            const attributes = node.modifiers.find(this.JWEditorLib.Attributes);
-                            return attributes && (
-                                attributes.classList.has('s_blockquote') ||
-                                attributes.classList.has('s_alert')
-                            );
-                        }, node => {
-                            // ...except for their _content child and its
-                            // descendants.
-                            const attributes = node.modifiers.find(this.JWEditorLib.Attributes);
-                            return attributes && (
-                                attributes.classList.has('s_blockquote_content') ||
-                                attributes.classList.has('s_alert_content')
-                            );
-                        }],
-                        properties: {
-                            editable: {
-                                value: true,
-                                cascading: true,
-                            },
-                        },
-                    },
-
-                    // s_process_step
-                    {
-                        selector: [node => {
-                            const attributes = node.modifiers.find(this.JWEditorLib.Attributes);
-                            return attributes && attributes.classList.has('s_process_step_icon');
-                        }],
-                        properties: {
-                            editable: {
-                                value: false,
-                                cascading: true,
-                            },
-                        },
-                    },
-                ],
-            };
-        }
-    },
-    /**
-     * Load assets and color picker template then call summernote API
-     * and replace $el by the summernote editable node.
-     *
-     * @override
-     **/
-    willStart: async function () {
-        this.$target = this.$el;
-        return this._super();
+        // autohideToolbar is true by default (false by default if navbar present).
+        this.options.autohideToolbar = typeof this.options.autohideToolbar === 'boolean'
+            ? this.options.autohideToolbar
+            : !options.snippets;
+        this.saving_mutex = new concurrency.Mutex();
+        this._onDocumentMousedown = this._onDocumentMousedown.bind(this);
+        this._onBlur = this._onBlur.bind(this);
     },
     /**
      *
      * @override
      */
     start: async function () {
-        const self = this;
         const _super = this._super;
+        const self = this;
 
-        if (this.options.enableWebsite) {
-            $(document.body).addClass('o_connected_user editor_enable');
-        }
+        var options = this._editorOptions();
+        this._value = options.value;
 
-        const $mainSidebar = $('<div class="o_main_sidebar">');
-        const $snippetManipulators = $('<div id="oe_manipulators" />');
+        this.$editable = this.$editable || this.$el;
+        this.$editable.html(this._value);
+        this.$editable.data('wysiwyg', this);
+        this.$editable.data('oe-model', options.recordInfo.res_model);
+        this.$editable.data('oe-id', options.recordInfo.res_id);
+        document.addEventListener('mousedown', this._onDocumentMousedown, true);
+        this.$editable.on('blur', this._onBlur);
 
-        const customCommands = {
-            openTextColorPicker: { handler: this.toggleTextColorPicker.bind(this) },
-            openBackgroundColorPicker: { handler: this.toggleBackgroundColorPicker.bind(this) },
-            discardOdoo: { handler: this.discardEditions.bind(this) },
-            saveOdoo: { handler: this.saveContent.bind(this) },
-        };
-        if (!this.options.enableTranslation) {
-            Object.assign(customCommands, {
-                openMedia: { handler: this.openMediaDialog.bind(this) },
-                openLinkDialog: { handler: this.openLinkDialog.bind(this) },
-                cropImage: { handler: this.cropImage.bind(this) },
-                transformImage: { handler: this.transformImage.bind(this) },
-                describeImage: { handler: this.describeImage.bind(this) },
-            });
-        }
-        const plugins = []
-        if (this.options.enableWebsite && !this.options.enableTranslation) {
-            plugins.push([JWEditorLib.OdooField]);
-        }
-        if (this.options.enableResizer) {
-            plugins.push([JWEditorLib.Resizer]);
-        }
-        this.editor = new JWEditorLib.OdooWebsiteEditor(Object.assign({}, this.options, {
-            snippetMenuElement: $mainSidebar[0],
-            snippetManipulators: $snippetManipulators[0],
-            customCommands: Object.assign(customCommands, this.options.customCommands),
-            plugins: plugins,
-            source: this.value,
-            location: this.options.location || [this.el, 'replace'],
-            mode: this._modeConfig,
-        }));
+        this.toolbar = new Toolbar(this, this.options.toolbarTemplate);
+        await this.toolbar.appendTo(document.createElement('void'));
+        const commands = this._getCommands();
+        this.odooEditor = new OdooEditor(this.$editable[0], {
+            _t: _t,
+            toolbar: this.toolbar.$el[0],
+            document: this.options.document,
+            autohideToolbar: !!this.options.autohideToolbar,
+            isRootEditable: this.options.isRootEditable,
+            controlHistoryFromDocument: this.options.controlHistoryFromDocument,
+            getContentEditableAreas: this.options.getContentEditableAreas,
+            defaultLinkAttributes: this.options.userGeneratedContent ? {rel: 'ugc' } : {},
+            getContextFromParentRect: options.getContextFromParentRect,
+            noScrollSelector: 'body, .note-editable, .o_content, #wrapwrap',
+            commands: commands,
+        });
 
-        if (typeof odoo.debug === 'string' && config.isDebug('assets') && JWEditorLib.DevTools) {
-            this.editor.load(JWEditorLib.DevTools);
-        }
-        await this.editor.start();
-        this._bindAfterStart();
-
-
-        this.editorHelpers = this.editor.plugins.get(JWEditorLib.DomHelpers);
-        const domLayout = this.editor.plugins.get(JWEditorLib.Layout).engines.dom;
-        this.zoneMain = domLayout.root.firstDescendant(node => node.managedZones && node.managedZones.includes('main'));
-        const rootElement = this.editorHelpers.getDomNodes(domLayout.root.firstDescendant(JWEditorLib.ContainerNode))[0];
-        this.editorEditable = this.editorHelpers.getDomNodes(this.zoneMain)[0] || this.editorHelpers.getDomNodes(this.zoneMain.parent)[0];
-
-        this.$toolbar = $(rootElement).find('jw-toolbar').detach();
-
-        if (this.options.enableWebsite) {
-            const $wrapwrap = $('#wrapwrap');
-            $wrapwrap.removeClass('o_editable'); // clean the dom before edition
-            this._getEditable($wrapwrap).addClass('o_editable o_editable_no_shadow');
-            $wrapwrap.data('wysiwyg', this);
-
-            // add class when page content is empty to show the "DRAG BUILDING BLOCKS HERE" block
-            const $targetNode = $(this.editorEditable).find(".oe_structure");
-            if ($targetNode.length) {
-                $targetNode.attr('data-editor-message', _t('DRAG BUILDING BLOCKS HERE'));
-            }
-        }
-
-        if (this.options.enableTranslation) {
-            this._setupTranslation();
-        }
-
-        // Make sure to warn the user if they're about to leave the page and
-        // they have changes that would be lost if they did.
-        let flag = false;
-        window.onbeforeunload = () => {
-            if (!flag) {
-                flag = true;
-                _.defer(() => (flag = false));
-                return _t('This document is not saved!');
-            }
-        };
-
-        if (this.options.snippets) {
-            document.body.classList.add('editor_has_snippets');
-            this.$webEditorToolbar = $('<div id="web_editor-toolbars">');
-
-            var $toolbarHandler = $('#web_editor-top-edit');
-            $toolbarHandler.append(this.$webEditorToolbar);
-
-            this.snippetsMenu = new SnippetsMenu(this, Object.assign({
-                $el: $(this.editorEditable),
-                snippets: this.options.snippets,
-                selectorEditableArea: '.o_editable',
-                $snippetEditorArea: $snippetManipulators,
-                wysiwyg: this,
-                JWEditorLib: JWEditorLib,
-                onlyStyleTab: this.options.enableTranslation,
-            }, this.options));
-            await this.snippetsMenu.appendTo($mainSidebar);
-
-            // Place the history buttons in their right location.
-            const $undoButton = $('<button name="undo" class="btn btn-secondary fa fa-undo"></button>');
-            const $redoButton = $('<button name="redo" class="btn btn-secondary fa fa-repeat"></button>');
-            $undoButton.on('click', () => this.editor.execCommand('undo'));
-            $redoButton.on('click', () => this.editor.execCommand('redo'));
-            const reactiveEditorInfo = this.editor.plugins.get(JWEditorLib.ReactiveEditorInfo);
-            const updateButtons = () => {
-                const state = reactiveEditorInfo.editorInfo.get();
-                state.canUndo ? $undoButton.removeAttr('disabled') : $undoButton.attr('disabled', true);
-                state.canRedo ? $redoButton.removeAttr('disabled') : $redoButton.attr('disabled', true);
-            };
-            reactiveEditorInfo.editorInfo.on('set', updateButtons);
-            updateButtons();
-
-            $('.o_we_website_top_actions .o_we_external_history_buttons').append($undoButton, $redoButton);
-
-            this.$el.on('content_changed', function (e) {
-                self.trigger_up('wysiwyg_change');
-            });
-
-            const onCommitCheckSnippets = (params) => {
-                const range = this.editor.selection.range;
-                let currentSelectionType = "text";
-                if(!range.isCollapsed()) {
-                    const nextStartSibling = range.start.nextSibling();
-                    const prevEndSibling = range.end.previousSibling();
-                    if (nextStartSibling && prevEndSibling && nextStartSibling.id === prevEndSibling.id) {
-                        switch (nextStartSibling.name) {
-                            case "ImageNode":
-                                currentSelectionType = "image";
-                                break;
-                            case "OdooVideoNode":
-                                currentSelectionType = "video";
-                                break;
-                            case "FontAwesomeNode":
-                                currentSelectionType = "picto";
-                                break;
-                            default:
-                                currentSelectionType = "text";
-                                break;
-                        }
-
-                    }
+        this._observeOdooFieldChanges();
+        this.$editable.on(
+            'mousedown touchstart',
+            '[data-oe-field]',
+            function () {
+                self.odooEditor.observerUnactive();
+                const $field = $(this);
+                if (($field.data('oe-type') === "datetime" || $field.data('oe-type') === "date") && !$field.hasClass('o_editable_date_field_format_changed')) {
+                    $field.text($field.data('oe-original-with-format'));
+                    $field.addClass('o_editable_date_field_format_changed');
                 }
-                this.snippetsMenu.updateJabberwockToolbarContainer(currentSelectionType);//.bind(this.snippetsMenu);
+                if ($field.data('oe-type') === "monetary") {
+                    $field.attr('contenteditable', false);
+                    $field.find('.oe_currency_value').attr('contenteditable', true);
+                }
+                if ($field.data('oe-type') === "image") {
+                    $field.attr('contenteditable', false);
+                    $field.find('img').attr('contenteditable', true);
+                }
+                if ($field.is('[data-oe-many2one-id]')) {
+                    $field.attr('contenteditable', false);
+                }
+                self.odooEditor.observerActive();
+            }
+        );
 
-                if (params.commandNames.includes('undo') || params.commandNames.includes('redo')) {
-                    setTimeout(() => {
-                        // use setTimeout to reload snippets after the redraw
-                        this.snippetsMenu.trigger('reload_snippet_dropzones');
+        this.$editable.on('click', '.o_image, .media_iframe_video', e => e.preventDefault());
+        this.showTooltip = true;
+        this.$editable.on('dblclick', mediaSelector, function () {
+            self.showTooltip = false;
+            const $el = $(this);
+            let params = {node: $el};
+            $el.selectElement();
+
+            if ($el.is('.fa')) {
+                // save layouting classes from icons to not break the page if you edit an icon
+                params.htmlClass = [...$el[0].classList].filter((className) => {
+                    return !className.startsWith('fa') || faZoomClassRegex.test(className);
+                }).join(' ');
+            }
+
+            self.openMediaDialog(params);
+        });
+        if (!this.options.preventLinkDoubleClick) {
+            this.$editable.on('dblclick', 'a', function () {
+                if (!this.getAttribute('data-oe-model') && self.toolbar.$el.is(':visible')) {
+                    self.showTooltip = false;
+                    self.toggleLinkTools({
+                        forceOpen: true,
+                        link: this,
                     });
                 }
-            };
-            const onSelectionUpdateColorPreview = (param) => {
-                let color, bgColor = undefined;
-
-                const findColorsIn = (object) => {
-                    const attributes = object.modifiers.find(JWEditorLib.Attributes);
-                    const curentTextStyle = attributes ? attributes.style : false;
-                    if (curentTextStyle && !color) {
-                        color = curentTextStyle.get('color') ;
-                    }
-                    if (curentTextStyle && !bgColor) {
-                        bgColor = curentTextStyle.get('background-color');
-                    }
-                }
-
-                const rangeStart = param.context.range.start
-                const node = rangeStart.nextSibling(node => !(node instanceof JWEditorLib.SeparatorNode) || rangeStart.nextSibling())
-                if(node) {
-                    findColorsIn(node);
-                    if (!color || !bgColor) {
-                        const formats = node.modifiers.filter(JWEditorLib.Format);
-                        for (const format of formats) {
-                            findColorsIn(format)
-                        }
-                    }
-                }
-
-                if(!color) color = "#000";
-                if(!bgColor) bgColor = "rgba(255,255,255,0)";
-
-                this.$toolbar.find(".jw-dropdown-textcolor>jw-button").css("background-color", color);
-                this.$toolbar.find(".jw-dropdown-backgroundcolor>jw-button").css("background-color", bgColor);
-            }
-            this.editor.dispatcher.registerCommandHook('setSelection', onSelectionUpdateColorPreview);
-            this.editor.dispatcher.registerCommandHook('@commit', onCommitCheckSnippets);
-
-        } else {
-            return _super.apply(this, arguments);
+            });
         }
+
+        if (options.snippets) {
+            $(this.odooEditor.document.body).addClass('editor_enable');
+            this.snippetsMenu = new snippetsEditor.SnippetsMenu(this, Object.assign({
+                wysiwyg: this,
+                selectorEditableArea: '.o_editable',
+            }, options));
+            await this._insertSnippetMenu();
+        }
+        if (this.options.getContentEditableAreas) {
+            $(this.options.getContentEditableAreas()).find('*').off('mousedown mouseup click');
+        }
+        // The toolbar must be configured after the snippetMenu is loaded
+        // because if snippetMenu is loaded in an iframe, binding of the color
+        // buttons must use the jquery loaded in that iframe. See
+        // _createPalette.
+        this._configureToolbar(options);
+
+        $(this.odooEditor.editable).on('click', this._updateEditorUI.bind(this));
+        $(this.odooEditor.editable).on('keydown', this._updateEditorUI.bind(this));
+        $(this.odooEditor.editable).on('keydown', this._handleShortcuts.bind(this));
+        // Ensure the Toolbar always have the correct layout in note.
+        this._updateEditorUI();
+
+        return _super.apply(this, arguments).then(() => {
+            if (this.options.autohideToolbar) {
+                if (this.odooEditor.isMobile) {
+                    $(this.odooEditor.editable).before(this.toolbar.$el);
+                } else {
+                    $(document.body).append(this.toolbar.$el);
+                }
+            }
+        });
     },
     /**
      * @override
      */
     destroy: function () {
-        this.editor.stop();
+        if (this.odooEditor) {
+            this.odooEditor.destroy();
+        }
+        this.$editable && this.$editable.off('blur', this._onBlur);
+        document.removeEventListener('mousedown', this._onDocumentMousedown, true);
+        const $body = $(document.body);
+        $body.off('mousemove', this.resizerMousemove);
+        $body.off('mouseup', this.resizerMouseup);
         this._super();
     },
+    /**
+     * @override
+     */
+    renderElement: function () {
+        this.$editable = this.options.editable || $('<div class="note-editable">');
 
+        if (this.options.resizable && !device.isMobile) {
+            const $wrapper = $('<div class="o_wysiwyg_wrapper odoo-editor">');
+            $wrapper.append(this.$editable);
+            this.$resizer = $(`<div class="o_wysiwyg_resizer">
+                <div class="o_wysiwyg_resizer_hook"></div>
+                <div class="o_wysiwyg_resizer_hook"></div>
+                <div class="o_wysiwyg_resizer_hook"></div>
+            </div>`);
+            $wrapper.append(this.$resizer);
+            this._replaceElement($wrapper);
+
+            const minHeight = this.options.minHeight || 100;
+            this.$editable.height(this.options.height || minHeight);
+
+            // resizer hooks
+            let startOffsetTop;
+            let startHeight;
+            const $body = $(document.body);
+            const resizerMousedown = (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                $body.on('mousemove', this.resizerMousemove);
+                $body.on('mouseup', this.resizerMouseup);
+                startHeight = this.$editable.height();
+                startOffsetTop = e.pageY;
+            };
+            this.resizerMousemove = (e) => {
+                const offsetTop = e.pageY - startOffsetTop;
+                let height = startHeight + offsetTop;
+                if (height < minHeight) {
+                    height = minHeight;
+                }
+                this.$editable.height(height);
+            };
+            this.resizerMouseup = () => {
+                $body.off('mousemove', this.resizerMousemove);
+                $body.off('mouseup', this.resizerMouseup);
+            };
+            this.$resizer.on('mousedown', resizerMousedown);
+        } else {
+            this._replaceElement(this.$editable);
+        }
+    },
     //--------------------------------------------------------------------------
     // Public
     //--------------------------------------------------------------------------
-
-    cropImage: async function (params) {
-        const imageNodes = params.context.range.targetedNodes(JWEditorLib.ImageNode);
-        const imageNode = imageNodes.length === 1 && imageNodes[0];
-        if (imageNode) {
-            const domEngine = this.editor.plugins.get(JWEditorLib.Layout).engines.dom;
-            const $node = $(domEngine.getDomNodes(imageNode)[0]);
-            $node.off('image_cropped');
-            $node.on('image_cropped', () => this._updateAttributes($node[0]));
-            new weWidgets.ImageCropWidget(this, $node[0]).appendTo($('#wrap'));
-        }
-    },
-    describeImage: async function (params) {
-        const imageNodes = params.context.range.targetedNodes(JWEditorLib.ImageNode);
-        const imageNode = imageNodes.length === 1 && imageNodes[0];
-        if (imageNode) {
-            const domEngine = this.editor.plugins.get(JWEditorLib.Layout).engines.dom;
-            const node = domEngine.getDomNodes(imageNode)[0];
-            var altDialog = new weWidgets.AltDialog(this, {}, node);
-            altDialog.on('save', this, () => this._updateAttributes(node));
-            altDialog.open();
-        }
-    },
-    discardEditions: async function () {
-        let self = this;
-        return new Promise(function (resolve, reject) {
-            // Only show an alert if there is a risk that changes would be lost.
-            if (self.isDirty()) {
-                const confirmMessage = `If you discard the current edits, all
-                    unsaved changes will be lost. You can cancel to return to
-                    edit mode.`.replace(/[\n\s]+/g, ' ');
-                const confirm = Dialog.confirm(this, _t(confirmMessage), {
-                    confirm_callback: resolve,
-                });
-                confirm.on('closed', self, reject);
-            } else {
-                resolve();
-            }
-        }).then(function () {
-            window.onbeforeunload = null;
-            window.location.reload();
-        });
-    },
-    /**
-     * Set the focus on the element.
-     */
-    focus: function () {
-        // todo: handle tab that need to go to next field if the editor does not
-        //       catch it.
-        this.$el.find('[contenteditable="true"]').focus();
-    },
-    /**
-     * Return dirty Odoo structure nodes and Odoo field nodes.
-     *
-     * @returns {Array<OdooStructureNode | OdooFieldNode>}
-     */
-    getDirtyNodes: function () {
-        return this.zoneMain.descendants(node => {
-            if (node instanceof JWEditorLib.OdooStructureNode) {
-                return node.dirty;
-            } else if (node instanceof JWEditorLib.OdooFieldNode) {
-                return node.fieldInfo.originalValue !== node.fieldInfo.value.get();
-            }
-        });
-    },
     /**
      * Return the editable area.
      *
      * @returns {jQuery}
      */
     getEditable: function () {
-        return this.$editor;
+        return this.$editable;
     },
-    getFormatInfo: function() {
-        return this.editor.plugins.get(JWEditorLib.Odoo).formatInfo;
+    /**
+     * Return true if the content has changed.
+     *
+     * @returns {Boolean}
+     */
+    isDirty: function () {
+        return this._value !== (this.$editable.html() || this.$editable.val());
     },
     /**
      * Get the value of the editable element.
@@ -541,222 +262,135 @@ var Wysiwyg = Widget.extend({
      * @param {jQueryElement} [options.$layout]
      * @returns {String}
      */
-    getValue: async function (format) {
-        return this.editor.getValue(format || 'text/html');
-    },
-    async initColorPicker($dropdownNode, setCommandId, unsetCommandId) {
-        if (!$dropdownNode.hasClass("colorpicker-initalized")) {
-            $dropdownNode.addClass("colorpicker-initalized");
-            // Init the colorPalete for this color picker Dropdown.
-            const colorpicker = new ColorPaletteWidget(this, {});
-
-            // Prevent the dropdown to be closed when click inside it
-            $dropdownNode.on('click', (e)=> {
-                e.stopImmediatePropagation();
-                e.preventDefault();
-            })
-            $dropdownNode.find('.dropdown-menu').empty();
-            await colorpicker.appendTo($dropdownNode.find('.dropdown-menu'));
-            // Events listeners to trigger color changes
-            colorpicker.on('custom_color_picked', this, (e) => {
-                this._setColor(colorpicker, setCommandId, unsetCommandId, e.data.color, $dropdownNode);
-            });
-            colorpicker.on('color_picked', this, (e) => {
-                this._setColor(colorpicker, setCommandId, unsetCommandId, e.data.color, $dropdownNode, true);
-            });
-        }
+    getValue: function (options) {
+        var $editable = options && options.$layout || this.$editable.clone();
+        $editable.find('[contenteditable]').removeAttr('contenteditable');
+        $editable.find('[class=""]').removeAttr('class');
+        $editable.find('[style=""]').removeAttr('style');
+        $editable.find('[title=""]').removeAttr('title');
+        $editable.find('[alt=""]').removeAttr('alt');
+        $editable.find('[data-original-title=""]').removeAttr('data-original-title');
+        $editable.find('a.o_image, span.fa, i.fa').html('');
+        $editable.find('[aria-describedby]').removeAttr('aria-describedby').removeAttr('data-original-title');
+        return $editable.html();
     },
     /**
-     * Return true if the content has changed.
-     *
-     * @returns {boolean}
+     * Save the content in the target
+     *      - in init option beforeSave
+     *      - receive editable jQuery DOM as attribute
+     *      - called after deactivate codeview if needed
+     * @returns {Promise}
+     *      - resolve with true if the content was dirty
      */
-    isDirty: function () {
-        return !!this.getDirtyNodes().length;
-    },
-    async openLinkDialog(params) {
-        const range = this.editor.selection.range;
-        const Link = JWEditorLib.Link;
-
-        const previousNode = range.start.previousSibling();
-        const nextNode = range.start.nextSibling();
-        const node = previousNode && (Link.isLink(previousNode) || !nextNode) ? previousNode : nextNode;
-        const currentLink = node && Link.isLink(node) && node.modifiers.find(JWEditorLib.LinkFormat);
-
-        let text = '';
-        const images = [];
-        const domSelection = this.editorEditable.ownerDocument.getSelection();
-        if (domSelection.rangeCount) {
-            let domRange = domSelection.getRangeAt(0);
-            const ancestor = domRange.commonAncestorContainer.nodeType === Node.ELEMENT_NODE ?
-                domRange.commonAncestorContainer : domRange.commonAncestorContainer.parentNode;
-
-            let container;
-            if (domSelection.isCollapsed && currentLink) {
-                // If colapse in a link, select all the link.
-                container = ancestor.closest('a');
-                const nodes = this.editorHelpers.getNodes(container);
-                await params.context.execCommand('setSelection', {
-                    vSelection: {
-                        anchorNode: nodes[0],
-                        anchorPosition: 'BEFORE',
-                        focusNode: nodes[nodes.length - 1],
-                        focusPosition: 'AFTER',
-                        direction: 'FORWARD',
-                    },
-                });
-            } else {
-                // If a selection exists, create a text value with \n to split each block (for the preview)
-                domRange = domSelection.getRangeAt(0);
-                container = document.createElement('w-clone');
-                container.appendChild(domRange.cloneContents());
-                ancestor.appendChild(container);
-            }
-
-            const blocks = [''];
-            let domNode = container && container.firstChild;
-            if (domNode) {
-                while (domNode.childNodes && domNode.childNodes.length) {
-                    domNode = domNode.childNodes[0];
-                }
-                while (domNode && domNode !== container) {
-                    if (domNode.nodeName === 'IMG' || domNode.classList && domNode.classList.contains('fa')) {
-                        images.push(domNode.outerHTML);
-                        blocks[blocks.length - 1] += '[IMG]';
-                    } else if (domNode.classList && domNode.classList.contains('media_iframe_video')) {
-                        blocks.push('');
-                    } else if (domNode.nodeType === Node.ELEMENT_NODE && window.getComputedStyle(domNode).display === 'block') {
-                        blocks.push('');
-                    } else if (domNode.nodeType === Node.TEXT_NODE) {
-                        blocks[blocks.length - 1] += domNode.textContent;
-                    }
-
-                    if (domNode.childNodes && domNode.childNodes.length) {
-                        domNode = domNode.childNodes[0];
-                    } else if (domNode.nextSibling) {
-                        domNode = domNode.nextSibling;
-                    } else {
-                        while (domNode && !domNode.nextSibling && domNode !== container) {
-                            domNode = domNode.parentNode;
-                        }
-                        domNode = domNode && domNode !== container && domNode.nextSibling;
-                    }
-                }
-                text = blocks.filter(str => str.length).join('\n');
-            }
-
-            if (!domSelection.isCollapsed || !currentLink) {
-                container.remove();
-            }
-        }
-
-        const modifiers = range.modifiers;
-        const linkFormat = modifiers && modifiers.find(JWEditorLib.LinkFormat);
-        let classes = '';
-        let target;
-        if (currentLink) {
-            const linkAttributes = currentLink.modifiers.find(JWEditorLib.Attributes);
-            classes = (linkAttributes && linkAttributes.get('class')) || '';
-            target = linkAttributes && linkAttributes.get('target');
-        }
-
-        const coloredLevelParent = node ? node.ancestor(cNode => {
-            const attributes = cNode.modifiers.find(JWEditorLib.Attributes);
-            return attributes && attributes.get('class') && attributes.get('class').includes('o_cc')
-        }) : false;
-
-        let colorCombinationClass = "";
-        if (coloredLevelParent) {
-            let allClasses = coloredLevelParent.modifiers.find(JWEditorLib.Attributes).get('class').split(" ");
-            colorCombinationClass = allClasses.find(classStr => classStr.match(/o_cc[0-9]+/));
-        }
-
-        const linkDialog = new weWidgets.LinkDialog(this,
-            {
-                props: {
-                    text: text,
-                    images: images,
-                    url: linkFormat && linkFormat.url || '',
-                    initialClassNames: classes,
-                    colorCombinationClass: colorCombinationClass,
-                    target: target,
-
-                    __editorEditable: this.editorEditable,
-                },
-            },
-        );
-        linkDialog.open();
-        linkDialog.on('save', this, async (params)=> {
-            const onSaveLinkDialog = async (context) => {
-                const linkParams = {
-                    url: params.url,
-                    label: range.isCollapsed() && params.text,
-                    target: params.isNewWindow ? '_blank' : '',
-                };
-                const nodes = range.targetedNodes(JWEditorLib.InlineNode);
-                await context.execCommand('link', linkParams);
-                const links = nodes.map(node => node.modifiers.find(JWEditorLib.LinkFormat)).filter(f => f);
-                for (const link of links) {
-                    link.modifiers.get(JWEditorLib.Attributes).set('class', params.classes);
-                }
-            };
-            await this.editor.execCommand(onSaveLinkDialog);
-        });
-    },
-    openMediaDialog(params) {
-        const nodes = params.media ? [params.media] : params.context.range.selectedNodes();
-        const node = nodes[0];
-        let $baseNode;
-
-        if (nodes.length === 1){
-            if (node instanceof JWEditorLib.FontAwesomeNode || node instanceof JWEditorLib.OdooVideoNode) {
-                const $originalDomNode = this.editorHelpers.getDomNodes(node).filter(dom => dom.nodeType === Node.ELEMENT_NODE);
-                $baseNode = $($originalDomNode).clone();
-            }
-            if (node instanceof JWEditorLib.FontAwesomeNode) {
-                params.htmlClass = [...$baseNode[0].classList].filter((className) => {
-                    return !className.startsWith('fa') || faZoomClassRegex.test(className);
-                }).join(' ');
-            }
-        }
-
-        // avoid circular reference
-        delete params.context;
-
-        let mediaDialog = new weWidgets.MediaDialog(this, params, $baseNode);
-        mediaDialog.open();
-        mediaDialog.on('save', this, async (element) => {
-            if (params.htmlClass) element.className += " " + params.htmlClass;
-            return this.editor.execCommand('insertMedia', { element: element });
-        });
-    },
-    async saveContent(context = this.editor) {
-        if (this.options.enableTranslation) {
-            await this._onSaveTranslation(context);
+    save: function () {
+        var isDirty = this.isDirty();
+        var html = this.getValue();
+        if (this.$editable.is('textarea')) {
+            this.$editable.val(html);
         } else {
-            await this.saveToServer(context);
+            this.$editable.html(html);
         }
+        return Promise.resolve({isDirty:isDirty, html:html});
     },
-    saveToServer: async function (context = this.editor, reload = true) {
+    /**
+     * Save the content for the normal mode or the translation mode.
+     */
+    saveContent: async function (reload = true) {
+        await this.saveToServer(reload);
+    },
+    /**
+     * Reset the history.
+     */
+    resetHistory: function () {
+        this.odooEditor.resetHistory();
+    },
+
+    /**
+     * Save the content to the server for the normal mode.
+     */
+    saveToServer: async function (reload = true) {
         const defs = [];
         this.trigger_up('edition_will_stopped');
         this.trigger_up('ready_to_save', {defs: defs});
         await Promise.all(defs);
 
+        this._cleanForSave();
+
         if (this.snippetsMenu) {
             await this.snippetsMenu.cleanForSave();
         }
 
-        return this._saveWebsiteContent(context)
-            .then(() => {
-                this.trigger_up('edition_was_stopped');
+        await this.saveModifiedImages();
+        await this._saveViewBlocks();
+
+        this.trigger_up('edition_was_stopped');
+        window.onbeforeunload = null;
+        if (reload) {
+            window.location.reload();
+        }
+    },
+    /**
+     * Asks the user if he really wants to discard its changes (if there are
+     * some of them), then simply reload the page if he wants to.
+     *
+     * @param {boolean} [reload=true]
+     *        true if the page has to be reloaded when the user answers yes
+     *        (do nothing otherwise but add this to allow class extension)
+     * @returns {Promise}
+     */
+    cancel: function (reload) {
+        var self = this;
+        return new Promise((resolve, reject) => {
+            if (!this.odooEditor.historySize().length) {
+                resolve();
+            } else {
+                var confirm = Dialog.confirm(this, _t("If you discard the current edits, all unsaved changes will be lost. You can cancel to return to edit mode."), {
+                    confirm_callback: resolve,
+                });
+                confirm.on('closed', self, reject);
+            }
+        }).then(function () {
+            if (reload !== false) {
                 window.onbeforeunload = null;
-                if (reload) {
-                    window.location.reload();
+                return self._reload();
+            }
+        });
+    },
+    /**
+     * Create/Update cropped attachments.
+     *
+     * @param {jQuery} $editable
+     * @returns {Promise}
+     */
+    saveModifiedImages: function ($editable = this.$editable) {
+        const defs = _.map($editable, async editableEl => {
+            const {oeModel: resModel, oeId: resId} = editableEl.dataset;
+            const proms = [...editableEl.querySelectorAll('.o_modified_image_to_save')].map(async el => {
+                const isBackground = !el.matches('img');
+                el.classList.remove('o_modified_image_to_save');
+                // Modifying an image always creates a copy of the original, even if
+                // it was modified previously, as the other modified image may be used
+                // elsewhere if the snippet was duplicated or was saved as a custom one.
+                const newAttachmentSrc = await this._rpc({
+                    route: `/web_editor/modify_image/${el.dataset.originalId}`,
+                    params: {
+                        res_model: resModel,
+                        res_id: parseInt(resId),
+                        data: (isBackground ? el.dataset.bgSrc : el.getAttribute('src')).split(',')[1],
+                        mimetype: el.dataset.mimetype,
+                        name: (el.dataset.fileName ? el.dataset.fileName : null),
+                    },
+                });
+                if (isBackground) {
+                    $(el).css('background-image', `url('${newAttachmentSrc}')`);
+                    delete el.dataset.bgSrc;
+                } else {
+                    el.setAttribute('src', newAttachmentSrc);
                 }
-            }).catch(error => {
-                console.error('Impossible to save.', error);
             });
+            return Promise.all(proms);
+        });
+        return Promise.all(defs);
     },
     /**
      * @param {String} value
@@ -764,96 +398,1016 @@ var Wysiwyg = Widget.extend({
      * @param {Boolean} [options.notifyChange]
      * @returns {String}
      */
-    setValue: function (value, options) {
-        this._value = value;
+    setValue: function (value) {
+        this.$editable.html(value);
     },
-    async toggleBackgroundColorPicker() {
-        // event.target equal the current toggle button clicked.
-        // window.event can be undefined during Qunit test
-        const $backgroundColorDropdown = event ? $(event.target).parent() : $(".jw-dropdown-backgroundcolor");
-        await this.initColorPicker(
-            $backgroundColorDropdown,
-            "colorBackground",
-            "uncolorBackground");
+    /**
+     * Undo one step of change in the editor.
+     */
+    undo: function () {
+        this.odooEditor.historyUndo();
+    },
+    /**
+     * Redo one step of change in the editor.
+     */
+    redo: function () {
+        this.odooEditor.historyRedo();
+    },
+    /**
+     * Focus inside the editor.
+     *
+     * Set cursor to the editor latest position before blur or to the last editable node, ready to type.
+     */
+    focus: function () {
+        if(!this.odooEditor.resetCursorOnLastHistoryCursor()) {
+            // If the editor don't have an history step to focus to,
+            // We place the cursor after the end of the editor exiting content.
+            const range = document.createRange();
+            const elementToTarget = this.$editable[0].lastElementChild ? this.$editable[0].lastElementChild : this.$editable[0];
+            range.selectNodeContents(elementToTarget);
+            range.collapse();
 
-        $backgroundColorDropdown.find(".dropdown-toggle").dropdown("toggle");
-    },
-    async toggleTextColorPicker() {
-        // event.target equal the current toggle button clicked.
-        // window.event can be undefined during Qunit test
-        const $textColorDropdown = event ? $(event.target).parent() : $(".jw-dropdown-textcolor");
-        await this.initColorPicker(
-            $textColorDropdown,
-            "colorText",
-            "uncolorText");
-
-        $textColorDropdown.find(".dropdown-toggle").dropdown("toggle");
-    },
-    transformImage: async function (params) {
-        const imageNodes = params.context.range.targetedNodes(JWEditorLib.ImageNode);
-        const imageNode = imageNodes.length === 1 && imageNodes[0];
-        if (imageNode) {
-            const domEngine = this.editor.plugins.get(JWEditorLib.Layout).engines.dom;
-            const $node = $(domEngine.getDomNodes(imageNode)[0]);
-            this._transform($node);
+            const selection = this.odooEditor.document.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
         }
     },
-    async updateChanges($target, context = this.editor) {
-        const updateChanges = async (context) => {
-            const html = $target.html();
-            $target.html('');
-            const attributes = [...$target[0].attributes].reduce( (acc, attribute) => {
-                acc[attribute.name] = attribute.value;
-                return acc
-            }, {});
-            await this.editorHelpers.updateAttributes(context, $target[0], attributes);
-            await this.editorHelpers.empty(context, $target[0]);
-            await this.editorHelpers.insertHtml(context, html, $target[0], 'INSIDE');
+    /**
+     * Start or resume the Odoo field changes muation observers.
+     *
+     * Necessary to keep all copies of a given field at the same value throughout the page.
+     */
+    _observeOdooFieldChanges: function () {
+        const observerOptions = {
+            childList: true,
+            subtree: true,
+            attributes: true,
+            characterData: true,
         };
-        await context.execCommand(updateChanges);
-    },
-    withDomMutationsObserver ($target, callback) {
-        callback();
-        this.updateChanges($target);
-    },
+        if (this.odooFieldObservers) {
+            for (let observerData of this.odooFieldObservers) {
+                observerData.observer.observe(observerData.field, observerOptions);
+            }
+        } else {
+            const odooFieldSelector = '[data-oe-model], [data-oe-translation-id]';
+            const $odooFields = this.$editable.find(odooFieldSelector);
+            this.odooFieldObservers = [];
 
+            $odooFields.each((i, field) => {
+                const observer = new MutationObserver(() => {
+                    let $node = $(field);
+                    let $nodes = $odooFields.filter(function () {
+                        return this !== field;
+                    });
+                    if ($node.data('oe-model')) {
+                        $nodes = $nodes.filter('[data-oe-model="' + $node.data('oe-model') + '"]')
+                            .filter('[data-oe-id="' + $node.data('oe-id') + '"]')
+                            .filter('[data-oe-field="' + $node.data('oe-field') + '"]');
+                    }
+
+                    if ($node.data('oe-translation-id')) {
+                        $nodes = $nodes.filter('[data-oe-translation-id="' + $node.data('oe-translation-id') + '"]');
+                    }
+                    if ($node.data('oe-type')) {
+                        $nodes = $nodes.filter('[data-oe-type="' + $node.data('oe-type') + '"]');
+                    }
+                    if ($node.data('oe-expression')) {
+                        $nodes = $nodes.filter('[data-oe-expression="' + $node.data('oe-expression') + '"]');
+                    } else if ($node.data('oe-xpath')) {
+                        $nodes = $nodes.filter('[data-oe-xpath="' + $node.data('oe-xpath') + '"]');
+                    }
+                    if ($node.data('oe-contact-options')) {
+                        $nodes = $nodes.filter("[data-oe-contact-options='" + $node[0].dataset.oeContactOptions + "']");
+                    }
+
+                    let nodes = $node.get();
+
+                    if ($node.data('oe-type') === "many2one") {
+                        $nodes = $nodes.add($('[data-oe-model]')
+                            .filter(function () {
+                                return this !== $node[0] && nodes.indexOf(this) === -1;
+                            })
+                            .filter('[data-oe-many2one-model="' + $node.data('oe-many2one-model') + '"]')
+                            .filter('[data-oe-many2one-id="' + $node.data('oe-many2one-id') + '"]')
+                            .filter('[data-oe-type="many2one"]'));
+
+                        $nodes = $nodes.add($('[data-oe-model]')
+                            .filter(function () {
+                                return this !== $node[0] && nodes.indexOf(this) === -1;
+                            })
+                            .filter('[data-oe-model="' + $node.data('oe-many2one-model') + '"]')
+                            .filter('[data-oe-id="' + $node.data('oe-many2one-id') + '"]')
+                            .filter('[data-oe-field="name"]'));
+                    }
+
+                    this._pauseOdooFieldObservers();
+                    // Tag the date fields to only replace the value
+                    // with the original date value once (see mouseDown event)
+                    if ($node.hasClass('o_editable_date_field_format_changed')) {
+                        $nodes.addClass('o_editable_date_field_format_changed');
+                    }
+                    $nodes.html($node.html());
+                    this._observeOdooFieldChanges();
+                });
+                observer.observe(field, observerOptions);
+                this.odooFieldObservers.push({field: field, observer: observer});
+            });
+        }
+    },
+    /**
+     * Stop the field changes mutation observers.
+     */
+    _pauseOdooFieldObservers: function () {
+        for (let observerData of this.odooFieldObservers) {
+            observerData.observer.disconnect();
+        }
+    },
+    /**
+     * Toggle the Link tools/dialog to edit links. If a snippet menu is present,
+     * use the link tools, otherwise use the dialog.
+     *
+     * @param {boolean} [options.forceOpen] default: false
+     * @param {boolean} [options.forceDialog] force to open the dialog
+     * @param {boolean} [options.link] The anchor element to edit if it is known.
+     */
+    toggleLinkTools(options = {}) {
+        if (this.snippetsMenu && !options.forceDialog) {
+            if (this.linkTools) {
+                this.linkTools.destroy();
+            }
+            if (options.forceOpen || !this.linkTools) {
+                const $btn = this.toolbar.$el.find('#create-link');
+                this.linkTools = new weWidgets.LinkTools(this, {wysiwyg: this}, this.odooEditor.editable, {}, $btn, options.link || this.lastMediaClicked);
+                const _onMousedown = ev => {
+                    if (!ev.target.closest('.oe-toolbar') && !ev.target.closest('.ui-autocomplete')) {
+                        // Destroy the link tools on click anywhere outside the
+                        // toolbar.
+                        this.linkTools && this.linkTools.destroy();
+                        this.linkTools = undefined;
+                        this.odooEditor.document.removeEventListener('mousedown', _onMousedown, true);
+                    }
+                };
+                this.odooEditor.document.addEventListener('mousedown', _onMousedown, true);
+                this.linkTools.appendTo(this.toolbar.$el);
+            } else {
+                this.linkTools = undefined;
+            }
+        } else {
+            const linkDialog = new weWidgets.LinkDialog(this, {
+                forceNewWindow: this.options.linkForceNewWindow,
+                wysiwyg: this,
+            }, this.$editable[0], {}, undefined, options.link);
+            const restoreSelection = preserveCursor(this.odooEditor.document);
+            linkDialog.open();
+            linkDialog.on('save', this, data => {
+                const linkWidget = linkDialog.linkWidget;
+                getDeepRange(this.$editable[0], {range: data.range, select: true});
+                if (!linkWidget.$link.length) {
+                    linkWidget.$link = $(linkWidget.getOrCreateLink(this.$editable[0]));
+                }
+                if (this.options.userGeneratedContent) {
+                    data.rel = 'ugc';
+                }
+                linkWidget.applyLinkToDom(data);
+                this.odooEditor.historyStep();
+                // At this point, the dialog is still open and prevents the
+                // focus in the editable, even though that is where the
+                // selection is. This waits so the dialog is destroyed when we
+                // set the focus.
+                setTimeout(() => this.odooEditor.document.getSelection().collapseToEnd(), 0);
+            });
+            linkDialog.on('closed', this, function () {
+                // If the linkDialog content has been saved
+                // the previous selection in not relevant anymore.
+                if (linkDialog.destroyAction !== 'save') {
+                    restoreSelection();
+                }
+            });
+        }
+    },
+    /**
+     * Open the media dialog.
+     *
+     * Used to insert or change image, icon, document and video.
+     *
+     * @param {object} params
+     * @param {Node} [params.node] Optionnal
+     * @param {Node} [params.htmlClass] Optionnal
+     */
+    openMediaDialog(params = {}) {
+        const sel = this.odooEditor.document.getSelection();
+        const fontawesomeIcon = getInSelection(this.odooEditor.document, '.fa');
+        if (fontawesomeIcon && sel.toString().trim() === "") {
+            params.node = $(fontawesomeIcon);
+            // save layouting classes from icons to not break the page if you edit an icon
+            params.htmlClass = [...fontawesomeIcon.classList].filter((className) => {
+                return !className.startsWith('fa') || faZoomClassRegex.test(className);
+            }).join(' ');
+        }
+        if (!sel.rangeCount) {
+            return;
+        }
+        const range = sel.getRangeAt(0);
+        // We lose the current selection inside the content editable when we
+        // click the media dialog button so we need to be able to restore the
+        // selection when the modal is closed.
+        const restoreSelection = preserveCursor(this.odooEditor.document);
+
+        const $node = $(params.node);
+        const $editable = $(OdooEditorLib.closestElement(range.startContainer, '.o_editable'));
+        const model = $editable.data('oe-model');
+        const field = $editable.data('oe-field');
+        const type = $editable.data('oe-type');
+
+        const mediaParams = Object.assign({
+            res_model: model,
+            res_id: $editable.data('oe-id'),
+            domain: $editable.data('oe-media-domain'),
+            useMediaLibrary: field && (model === 'ir.ui.view' && field === 'arch' || type === 'html'),
+        }, this.options.mediaModalParams, params);
+        const mediaDialog = new weWidgets.MediaDialog(this, mediaParams, $node);
+        mediaDialog.open();
+
+        mediaDialog.on('save', this, function (element) {
+            // restore saved html classes
+            if (params.htmlClass) {
+                element.className += " " + params.htmlClass;
+            }
+            restoreSelection();
+            if (wysiwygUtils.isImg($node[0])) {
+                $node.replaceWith(element);
+                this.odooEditor.unbreakableStepUnactive();
+                this.odooEditor.historyStep();
+            } else {
+                this.odooEditor.execCommand('insertHTML', element.outerHTML);
+            }
+        });
+        mediaDialog.on('closed', this, function () {
+            // if the mediaDialog content has been saved
+            // the previous selection in not relevant anymore
+            if (mediaDialog.destroyAction !== 'save') {
+                restoreSelection();
+            }
+        });
+    },
     //--------------------------------------------------------------------------
     // Private
     //--------------------------------------------------------------------------
 
+    _configureToolbar: function (options) {
+        const $toolbar = this.toolbar.$el;
+        const openTools = e => {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            e.stopPropagation();
+            switch (e.target.id) {
+                case 'create-link':
+                    this.toggleLinkTools();
+                    break;
+                case 'media-insert':
+                case 'media-replace':
+                    this.openMediaDialog();
+                    break;
+                case 'media-description':
+                    new weWidgets.AltDialog(this, {}, this.lastMediaClicked).open();
+                    break;
+            }
+        };
+        if (!this.options.snippets) {
+            $toolbar.find('#justify, #table, #media-insert').remove();
+        }
+        $toolbar.find('#create-link, #media-insert, #media-replace, #media-description').click(openTools);
+        $toolbar.find('#image-shape div, #fa-spin').click(e => {
+            if (!this.lastMediaClicked) {
+                return;
+            }
+            this.lastMediaClicked.classList.toggle(e.target.id);
+            e.target.classList.toggle('active', $(this.lastMediaClicked).hasClass(e.target.id));
+        });
+        const $imageWidthButtons = $toolbar.find('#image-width div');
+        $imageWidthButtons.click(e => {
+            if (!this.lastMediaClicked) {
+                return;
+            }
+            this.lastMediaClicked.style.width = e.target.id;
+            for (const button of $imageWidthButtons) {
+                button.classList.toggle('active', this.lastMediaClicked.style.width === button.id);
+            }
+        });
+        $toolbar.find('#image-padding .dropdown-item').click(e => {
+            if (!this.lastMediaClicked) {
+                return;
+            }
+            $(this.lastMediaClicked).removeClass((index, className) => (
+                (className.match(/(^|\s)padding-\w+/g) || []).join(' ')
+            )).addClass(e.target.dataset.class);
+        });
+        $toolbar.on('mousedown', e => {
+            const justifyBtn = e.target.closest('#justify div.btn');
+            if (!justifyBtn || !this.lastMediaClicked) {
+                return;
+            }
+            e.originalEvent.stopImmediatePropagation();
+            e.originalEvent.stopPropagation();
+            e.originalEvent.preventDefault();
+            const mode = justifyBtn.id.replace('justify', '').toLowerCase();
+            const classes = mode === 'center' ? ['d-block', 'mx-auto'] : ['float-' + mode];
+            const doAdd = classes.some(className => !this.lastMediaClicked.classList.contains(className));
+            this.lastMediaClicked.classList.remove('float-left', 'float-right');
+            if (this.lastMediaClicked.classList.contains('mx-auto')) {
+                this.lastMediaClicked.classList.remove('d-block', 'mx-auto');
+            }
+            if (doAdd) {
+                this.lastMediaClicked.classList.add(...classes);
+            }
+            this._updateMediaJustifyButton(justifyBtn.id);
+        });
+        $toolbar.find('#image-crop').click(e => {
+            if (!this.lastMediaClicked) {
+                return;
+            }
+            new weWidgets.ImageCropWidget(this, this.lastMediaClicked).appendTo(this.$editable);
+        });
+        $toolbar.find('#image-transform').click(e => {
+            if (!this.lastMediaClicked) {
+                return;
+            }
+            const $image = $(this.lastMediaClicked);
+            if ($image.data('transfo-destroy')) {
+                $image.removeData('transfo-destroy');
+                return;
+            }
+            $image.transfo({document: this.odooEditor.document});
+            const mouseup = () => {
+                $('#image-transform').toggleClass('active', $image.is('[style*="transform"]'));
+            };
+            $(this.odooEditor.document).on('mouseup', mouseup);
+            const mousedown = mousedownEvent => {
+                if (!$(mousedownEvent.target).closest('.transfo-container').length) {
+                    $image.transfo('destroy');
+                    $(this.odooEditor.document).off('mousedown', mousedown).off('mouseup', mouseup);
+                }
+                if ($(mousedownEvent.target).closest('#image-transform').length) {
+                    $image.data('transfo-destroy', true).attr('style', ($image.attr('style') || '').replace(/[^;]*transform[\w:]*;?/g, ''));
+                }
+                $image.trigger('content_changed');
+            };
+            $(this.odooEditor.document).on('mousedown', mousedown);
+        });
+        $toolbar.find('#image-delete').click(e => {
+            if (!this.lastMediaClicked) {
+                return;
+            }
+            $(this.lastMediaClicked).remove();
+            this.lastMediaClicked = undefined;
+        });
+        $toolbar.find('#fa-resize div').click(e => {
+            if (!this.lastMediaClicked) {
+                return;
+            }
+            const $target = $(this.lastMediaClicked);
+            const sValue = e.target.dataset.value;
+            $target.attr('class', $target.attr('class').replace(/\s*fa-[0-9]+x/g, ''));
+            if (+sValue > 1) {
+                $target.addClass('fa-' + sValue + 'x');
+            }
+            this._updateFaResizeButtons();
+        });
+        const $colorpickerGroup = $toolbar.find('#colorInputButtonGroup');
+        if ($colorpickerGroup.length) {
+            this._createPalette();
+        }
+        // we need the Timeout to be sure the editable content is loaded
+        // before calculating the scrollParent() element.
+        setTimeout(() => {
+            const scrollableContainer = this.$el.scrollParent();
+            if (!options.snippets && scrollableContainer.length) {
+                this.odooEditor.addDomListener(
+                  scrollableContainer[0],
+                  'scroll',
+                  this.odooEditor.updateToolbarPosition.bind(this.odooEditor),
+                );
+            }
+        }, 0);
+    },
+    _createPalette() {
+        const $dropdownContent = this.toolbar.$el.find('#colorInputButtonGroup .colorPalette');
+        // The editor's root widget can be website or web's root widget and cannot be properly retrieved...
+        for (const elem of $dropdownContent) {
+            const eventName = elem.dataset.eventName;
+            let colorpicker = null;
+            const mutex = new concurrency.MutexedDropPrevious();
+            // If the element is within an iframe, access the jquery loaded in
+            // the iframe because it is the one who will trigger the dropdown
+            // events (i.e hide.bs.dropdown and show.bs.dropdown).
+            const $ = elem.ownerDocument.defaultView.$;
+            const $dropdown = $(elem).closest('.colorpicker-group , .dropdown');
+            let manualOpening = false;
+            // Prevent dropdown closing on colorpicker click
+            $dropdown.on('hide.bs.dropdown', ev => {
+                return !(ev.clickEvent && ev.clickEvent.originalEvent && ev.clickEvent.originalEvent.__isColorpickerClick);
+            });
+            $dropdown.on('show.bs.dropdown', () => {
+                if (manualOpening) {
+                    return true;
+                }
+                mutex.exec(() => {
+                    const oldColorpicker = colorpicker;
+                    const hookEl = oldColorpicker ? oldColorpicker.el : elem;
+
+                    const selection = this.odooEditor.document.getSelection();
+                    const range = selection.rangeCount && selection.getRangeAt(0);
+                    const targetNode = range && range.startContainer;
+                    const targetElement = targetNode && targetNode.nodeType === Node.ELEMENT_NODE
+                        ? targetNode
+                        : targetNode && targetNode.parentNode;
+                    colorpicker = new ColorPaletteWidget(this, {
+                        excluded: ['transparent_grayscale'],
+                        $editable: $(this.odooEditor.editable), // Our parent is the root widget, we can't retrieve the editable section from it...
+                        selectedColor: $(targetElement).css(eventName === "foreColor" ? 'color' : 'backgroundColor'),
+                    });
+                    colorpicker.on('custom_color_picked color_picked', null, ev => {
+                        this._processAndApplyColor(eventName, ev.data.color);
+                        this.odooEditor.historyStep();
+                    });
+                    colorpicker.on('color_hover color_leave', null, ev => {
+                        this._processAndApplyColor(eventName, ev.data.color);
+                    });
+                    colorpicker.on('enter_key_color_colorpicker', null, () => {
+                        $dropdown.children('.dropdown-toggle').dropdown('hide');
+                    });
+                    return colorpicker.replace(hookEl).then(() => {
+                        if (oldColorpicker) {
+                            oldColorpicker.destroy();
+                        }
+                        manualOpening = true;
+                        $dropdown.children('.dropdown-toggle').dropdown('show');
+                        const $colorpickerMenu = $dropdown.find('.colorpicker-menu');
+                        const $colorpicker = $dropdown.find('.colorpicker');
+                        const colorpickerHeight = $colorpicker.outerHeight();
+                        const toolbarPos = this.toolbar.$el.offset();
+                        let top;
+                        if (colorpickerHeight < toolbarPos.top) {
+                            top = 'auto';
+                        } else {
+                            const colorpickerBottom = toolbarPos.top + this.toolbar.$el.outerHeight() + colorpickerHeight;
+                            const clientHeight = this.odooEditor.document.documentElement.clientHeight;
+                            top = colorpickerBottom > clientHeight ? colorpickerHeight - clientHeight : '';
+                        }
+                        $colorpickerMenu.css({top, height: $colorpicker.outerHeight() + 2});
+                        manualOpening = false;
+                    });
+                });
+                return false;
+            });
+        }
+    },
+    _processAndApplyColor: function (eventName, color) {
+        if (!color) {
+            color = 'inherit';
+        } else if (!ColorpickerWidget.isCSSColor(color)) {
+            color = (eventName === "foreColor" ? 'text-' : 'bg-') + color;
+        }
+        this.odooEditor.execCommand('applyColor', color, eventName === 'foreColor' ? 'color' : 'backgroundColor', this.lastMediaClicked);
+        const hexColor = this._colorToHex(color);
+        this.odooEditor.updateColorpickerLabels({
+            [eventName === 'foreColor' ? 'foreColor' : 'hiliteColor']: hexColor,
+        });
+    },
+    _colorToHex: function (color) {
+        if (color.startsWith('#')) {
+            return color;
+        } else {
+            let rgbColor;
+            if (color.startsWith('rgb')) {
+                rgbColor = color;
+            } else {
+                const $font = $(`<font class="${color}"/>`);
+                $(document.body).append($font);
+                const propertyName = color.startsWith('text') ? 'color' : 'backgroundColor';
+                rgbColor = $font.css(propertyName);
+                $font.remove();
+            }
+            return rgbToHex(rgbColor);
+        }
+    },
     /**
-     * Additional binding after start.
-     *
-     * Meant to be overridden
+     * Handle custom keyboard shortcuts.
      */
-    _bindAfterStart() {},
+    _handleShortcuts: function (e) {
+        // Open the link modal / tool when CTRL+K is pressed.
+        if (e && e.key === 'k' && (e.ctrlKey || e.metaKey)) {
+            e.preventDefault();
+            this.toggleLinkTools();
+        }
+        // Override selectAll (CTRL+A) to restrict it to the editable zone / current snippet and prevent traceback.
+        if (e && e.key === 'a' && (e.ctrlKey || e.metaKey)) {
+            e.preventDefault();
+            const selection = this.odooEditor.document.getSelection();
+            const containerSelector = '#wrap>*, [contenteditable], .oe_structure>*';
+            let $deepestParent =
+                selection ?
+                    $(selection.anchorNode).parentsUntil(containerSelector).last() :
+                    $();
+
+            if ($deepestParent.is('html')) {
+                // In case we didn't find a suitable container
+                // we need to restrict the selection inside to the editable area.
+                $deepestParent = this.$editable.find(containerSelector);
+            }
+
+            if ($deepestParent.length) {
+                const range = document.createRange();
+                range.selectNodeContents($deepestParent.parent()[0]);
+                selection.removeAllRanges();
+                selection.addRange(range);
+            }
+        }
+    },
+    /**
+     * Update any editor UI that is not handled by the editor itself.
+     */
+    _updateEditorUI: function (e) {
+        this.odooEditor.automaticStepSkipStack();
+        // We need to use the editor's window so the tooltip displays in its
+        // document even if it's in an iframe.
+        const editorWindow = this.odooEditor.document.defaultView;
+        const $target = e ? editorWindow.$(e.target) : editorWindow.$();
+        // Restore paragraph dropdown button's default ID.
+        this.toolbar.$el.find('#mediaParagraphDropdownButton').attr('id', 'paragraphDropdownButton');
+        // Hide the create-link button if the selection spans several blocks.
+        const selection = this.odooEditor.document.getSelection();
+        const range = selection.rangeCount && selection.getRangeAt(0);
+        const $rangeContainer = range && $(range.commonAncestorContainer);
+        const spansBlocks = range && !!$rangeContainer.contents().filter((i, node) => isBlock(node)).length;
+        this.toolbar.$el.find('#create-link').toggleClass('d-none', !range || spansBlocks);
+        // Only show the media tools in the toolbar if the current selected
+        // snippet is a media.
+        const isInMedia = $target.is(mediaSelector);
+        this.toolbar.$el.find([
+            '#image-shape',
+            '#image-width',
+            '#image-padding',
+            '#image-edit',
+            '#media-replace',
+        ].join(',')).toggleClass('d-none', !isInMedia);
+        // The image replace button is in the image options when the sidebar
+        // exists.
+        if (this.snippetsMenu && $target.is('img')) {
+            this.toolbar.$el.find('#media-replace').toggleClass('d-none', true);
+        }
+        // Only show the image-transform, image-crop and media-description
+        // buttons if the current selected snippet is an image.
+        this.toolbar.$el.find([
+            '#image-transform',
+            '#image-crop',
+            '#media-description',
+        ].join(',')).toggleClass('d-none', !$target.is('img'));
+        this.lastMediaClicked = isInMedia && e.target;
+        this.lastElement = $target[0];
+        // Hide the irrelevant text buttons for media.
+        this.toolbar.$el.find([
+            '#style',
+            '#decoration',
+            '#font-size',
+            '#justifyFull',
+            '#list',
+            '#colorInputButtonGroup',
+            '#table',
+            '#create-link',
+            '#media-insert', // "Insert media" should be replaced with "Replace media".
+        ].join(',')).toggleClass('d-none', isInMedia);
+        // Some icons are relevant for icons, that aren't for other media.
+        this.toolbar.$el.find('#colorInputButtonGroup, #create-link').toggleClass('d-none', isInMedia && !$target.is('.fa'));
+        this.toolbar.$el.find('.only_fa').toggleClass('d-none', !$target.is('.fa'));
+        // Toggle the toolbar arrow.
+        this.toolbar.$el.toggleClass('noarrow', isInMedia);
+        // Unselect all media.
+        this.$editable.find('.o_we_selected_image').removeClass('o_we_selected_image');
+        if (isInMedia) {
+            this.odooEditor.automaticStepSkipStack();
+            // Select the media in the DOM.
+            const selection = this.odooEditor.document.getSelection();
+            const range = this.odooEditor.document.createRange();
+            range.selectNode(this.lastMediaClicked);
+            selection.removeAllRanges();
+            selection.addRange(range);
+            // Always hide the unlink button on media.
+            this.toolbar.$el.find('#unlink').toggleClass('d-none', true);
+            // Show the floatingtoolbar on the topleft of the media.
+            if (this.options.autohideToolbar) {
+                const imagePosition = this.lastMediaClicked.getBoundingClientRect();
+                this.toolbar.$el.css({
+                    visibility: 'visible',
+                    top: imagePosition.top + 10 + 'px',
+                    left: imagePosition.left + 10 + 'px',
+                });
+            }
+            // Toggle the 'active' class on the active image tool buttons.
+            for (const button of this.toolbar.$el.find('#image-shape div, #fa-spin')) {
+                button.classList.toggle('active', $(e.target).hasClass(button.id));
+            }
+            for (const button of this.toolbar.$el.find('#image-width div')) {
+                button.classList.toggle('active', e.target.style.width === button.id);
+            }
+            this._updateMediaJustifyButton();
+            this._updateFaResizeButtons();
+        }
+        const link = getInSelection(this.odooEditor.document, 'a');
+        if (isInMedia || link && !this.options.preventLinkDoubleClick) {
+            // Handle the media/link's tooltip.
+            this.showTooltip = true;
+            setTimeout(() => {
+                // Do not show tooltip on double-click and if there is already one
+                if (!this.showTooltip || $target.attr('title') !== undefined) {
+                    return;
+                }
+                $target.tooltip({title: _t('Double-click to edit'), trigger: 'manual', container: 'body'}).tooltip('show');
+                setTimeout(() => $target.tooltip('dispose'), 800);
+            }, 400);
+        }
+    },
+    _updateMediaJustifyButton: function (commandState) {
+        if (!this.lastMediaClicked) {
+            return;
+        }
+        const $paragraphDropdownButton = this.toolbar.$el.find('#paragraphDropdownButton, #mediaParagraphDropdownButton');
+        // Change the ID to prevent OdooEditor from controlling it as this is
+        // custom behavior for media.
+        $paragraphDropdownButton.attr('id', 'mediaParagraphDropdownButton');
+        let resetAlignment = true;
+        if (!commandState) {
+            const justifyMapping = [
+                ['float-left', 'justifyLeft'],
+                ['mx-auto', 'justifyCenter'],
+                ['float-right', 'justifyRight'],
+            ];
+            commandState = (justifyMapping.find(pair => (
+                this.lastMediaClicked.classList.contains(pair[0]))
+            ) || [])[1];
+            resetAlignment = !commandState;
+        }
+        const $buttons = this.toolbar.$el.find('#justify div.btn');
+        let newClass;
+        if (commandState) {
+            const direction = commandState.replace('justify', '').toLowerCase();
+            newClass = `fa-align-${direction === 'full' ? 'justify' : direction}`;
+            resetAlignment = !['float-left', 'mx-auto', 'float-right'].some(className => (
+                this.lastMediaClicked.classList.contains(className)
+            ));
+        }
+        for (const button of $buttons) {
+            button.classList.toggle('active', !resetAlignment && button.id === commandState);
+        }
+        $paragraphDropdownButton.removeClass((index, className) => (
+            (className.match(/(^|\s)fa-align-\w+/g) || []).join(' ')
+        ));
+        if (commandState && !resetAlignment) {
+            $paragraphDropdownButton.addClass(newClass);
+        } else {
+            // Ensure we always display an icon in the align toolbar button.
+            $paragraphDropdownButton.addClass('fa-align-justify');
+        }
+    },
+    _updateFaResizeButtons: function () {
+        if (!this.lastMediaClicked) {
+            return;
+        }
+        const $buttons = this.toolbar.$el.find('#fa-resize div');
+        const match = this.lastMediaClicked.className.match(/\s*fa-([0-9]+)x/);
+        const value = match && match[1] ? match[1] : '1';
+        for (const button of $buttons) {
+            button.classList.toggle('active', button.dataset.value === value);
+        }
+    },
+    _editorOptions: function () {
+        var self = this;
+        var options = Object.assign({}, this.defaultOptions, this.options);
+        options.onChange = function (html, $editable) {
+            $editable.trigger('content_changed');
+            self.trigger_up('wysiwyg_change');
+        };
+        options.onUpload = function (attachments) {
+            self.trigger_up('wysiwyg_attachment', attachments);
+        };
+        options.onFocus = function () {
+            self.trigger_up('wysiwyg_focus');
+        };
+        options.onBlur = function () {
+            self.trigger_up('wysiwyg_blur');
+        };
+        return options;
+    },
+    _insertSnippetMenu: function () {
+        return this.snippetsMenu.insertBefore(this.$el);
+    },
+    /**
+     * If the element holds a translation, saves it. Otherwise, fallback to the
+     * standard saving but with the lang kept.
+     *
+     * @override
+     */
+    _saveTranslationElement: function ($el, context, withLang = true) {
+        if ($el.data('oe-translation-id')) {
+            return this._rpc({
+                model: 'ir.translation',
+                method: 'save_html',
+                args: [
+                    [+$el.data('oe-translation-id')],
+                    this._getEscapedElement($el).html()
+                ],
+                context: context,
+            });
+        } else {
+            var viewID = $el.data('oe-id');
+            if (!viewID) {
+                return Promise.resolve();
+            }
+
+            return this._rpc({
+                model: 'ir.ui.view',
+                method: 'save',
+                args: [
+                    viewID,
+                    this._getEscapedElement($el).prop('outerHTML'),
+                    !$el.data('oe-expression') && $el.data('oe-xpath') || null, // Note: hacky way to get the oe-xpath only if not a t-field
+                ],
+                context: context,
+            }, withLang ? undefined : {
+                noContextKeys: 'lang',
+            });
+        }
+    },
+    _cleanForSave: function () {
+        this.odooEditor.clean();
+        this.$editable.find('.oe_edited_link').removeClass('oe_edited_link');
+    },
+    _getCommands: function () {
+        const commands = [
+            {
+                groupName: 'Basic blocks',
+                title: 'Quote',
+                description: 'Add a blockquote section.',
+                fontawesome: 'fa-quote-right',
+                callback: () => {
+                    this.odooEditor.execCommand('setTag', 'blockquote');
+                },
+            },
+            {
+                groupName: 'Basic blocks',
+                title: 'Code',
+                description: 'Add a code section.',
+                fontawesome: 'fa-code',
+                callback: () => {
+                    this.odooEditor.execCommand('setTag', 'pre');
+                },
+            },
+            {
+                groupName: 'Navigation',
+                title: 'Link',
+                description: 'Add a link.',
+                fontawesome: 'fa-link',
+                callback: () => {
+                    this.toggleLinkTools({forceDialog: true});
+                },
+            },
+            {
+                groupName: 'Navigation',
+                title: 'Button',
+                description: 'Add a button.',
+                fontawesome: 'fa-link',
+                callback: () => {
+                    this.toggleLinkTools({forceDialog: true});
+                    // Force the button style after the link modal is open.
+                    setTimeout(() => {
+                        $(".o_link_dialog .link-style[value=primary]").click();
+                    }, 150);
+                },
+            },
+            {
+                groupName: 'Medias',
+                title: 'Image',
+                description: 'Insert an image.',
+                fontawesome: 'fa-file-image-o',
+                callback: () => {
+                    this.openMediaDialog();
+                },
+            },
+            {
+                groupName: 'Medias',
+                title: 'Video',
+                description: 'Insert a video.',
+                fontawesome: 'fa-file-video-o',
+                callback: () => {
+                    this.openMediaDialog({noVideos: false, noImages: true, noIcons: true, noDocuments: true});
+                },
+            },
+        ];
+        if (this.options.snippets) {
+            commands.push(...this._getSnippetsCommands());
+        }
+        return commands;
+    },
+
+    _getSnippetsCommands: function () {
+        const snippetCommandCallback = (selector) => {
+            const $separatorBody = $(selector);
+            const $clonedBody = $separatorBody.clone();
+            const range = getDeepRange(this.odooEditor.editable);
+            const block = closestElement(range.endContainer, 'p, div, ol, ul, cl, h1, h2, h3, h4, h5, h6');
+            block && block.after($clonedBody[0]);
+        };
+        return [
+            {
+                groupName: 'Website',
+                title: 'Alert',
+                description: 'Insert an alert snippet.',
+                fontawesome: 'fa-info',
+                callback: () => {
+                    snippetCommandCallback('.oe_snippet_body[data-snippet="s_alert"]');
+                },
+            },
+            {
+                groupName: 'Website',
+                title: 'Rating',
+                description: 'Insert a rating snippet.',
+                fontawesome: 'fa-star-half-o',
+                callback: () => {
+                    snippetCommandCallback('.oe_snippet_body[data-snippet="s_rating"]');
+                },
+            },
+            {
+                groupName: 'Website',
+                title: 'Card',
+                description: 'Insert a card snippet.',
+                fontawesome: 'fa-sticky-note',
+                callback: () => {
+                    snippetCommandCallback('.oe_snippet_body[data-snippet="s_card"]');
+                },
+            },
+            {
+                groupName: 'Website',
+                title: 'Share',
+                description: 'Insert a share snippet.',
+                fontawesome: 'fa-share-square-o',
+                callback: () => {
+                    snippetCommandCallback('.oe_snippet_body[data-snippet="s_share"]');
+                },
+            },
+            {
+                groupName: 'Website',
+                title: 'Text Highlight',
+                description: 'Insert a text Highlight snippet.',
+                fontawesome: 'fa-sticky-note',
+                callback: () => {
+                    snippetCommandCallback('.oe_snippet_body[data-snippet="s_text_highlight"]');
+                },
+            },
+            {
+                groupName: 'Website',
+                title: 'Chart',
+                description: 'Insert a chart snippet.',
+                fontawesome: 'fa-bar-chart',
+                callback: () => {
+                    snippetCommandCallback('.oe_snippet_body[data-snippet="s_chart"]');
+                },
+            },
+            {
+                groupName: 'Website',
+                title: 'Progress Bar',
+                description: 'Insert a progress bar snippet.',
+                fontawesome: 'fa-spinner',
+                callback: () => {
+                    snippetCommandCallback('.oe_snippet_body[data-snippet="s_progress_bar"]');
+                },
+            },
+            {
+                groupName: 'Website',
+                title: 'Badge',
+                description: 'Insert a badge snippet.',
+                fontawesome: 'fa-tags',
+                callback: () => {
+                    snippetCommandCallback('.oe_snippet_body[data-snippet="s_badge"]');
+                },
+            },
+            {
+                groupName: 'Website',
+                title: 'Blockquote',
+                description: 'Insert a blockquote snippet.',
+                fontawesome: 'fa-quote-left',
+                callback: () => {
+                    snippetCommandCallback('.oe_snippet_body[data-snippet="s_blockquote"]');
+                },
+            },
+            {
+                groupName: 'Website',
+                title: 'Separator',
+                description: 'Insert an horizontal separator sippet.',
+                fontawesome: 'fa-minus',
+                callback: () => {
+                    snippetCommandCallback('.oe_snippet_body[data-snippet="s_hr"]');
+                },
+            },
+        ];
+    },
+
     /**
      * Returns the editable areas on the page.
      *
-     * @param {JQuery} $element
-     * @returns {JQuery}
+     * @returns {jQuery}
      */
-    _getEditable($element) {
-        const $editable = $element.find('[data-oe-model]')
+    editable: function () {
+        return $('#wrapwrap [data-oe-model]')
             .not('.o_not_editable')
             .filter(function () {
-                var $parent = $(this).closest('.o_editable, .o_not_editable');
-                return !$parent.length || $parent.hasClass('o_editable');
+                return !$(this).closest('.o_not_editable').length;
             })
             .not('link, script')
+            .not('[data-oe-readonly]')
             .not('img[data-oe-field="arch"], br[data-oe-field="arch"], input[data-oe-field="arch"]')
             .not('.oe_snippet_editor')
-            .not('hr, br, input, textarea')
             .add('.o_editable');
-        if (this.options.enableTranslation) {
-            const selector = '[data-oe-translation-id], '+
-                '[data-oe-model][data-oe-id][data-oe-field], ' +
-                '[placeholder*="data-oe-translation-id="], ' +
-                '[title*="data-oe-translation-id="], ' +
-                '[alt*="data-oe-translation-id="]';
-            $editable.filter(':has(' + selector + ')').attr('data-oe-readonly', true);
-        }
-        return $editable.not('[data-oe-readonly]')
+    },
+
+    /**
+     * Searches all the dirty element on the page and saves them one by one. If
+     * one cannot be saved, this notifies it to the user and restarts rte
+     * edition.
+     *
+     * @param {Object} [context] - the context to use for saving rpc, default to
+     *                           the editor context found on the page
+     * @return {Promise} rejected if the save cannot be done
+     */
+    _saveViewBlocks: function (context) {
+
+        const $allBlocks = $((this.options || {}).savableSelector).filter('.o_dirty');
+
+        const $dirty = $('.o_dirty');
+        $dirty
+            .removeAttr('contentEditable')
+            .removeClass('o_dirty oe_carlos_danger o_is_inline_editable');
+
+        $('.o_editable')
+            .removeClass('o_editable o_is_inline_editable o_editable_date_field_linked o_editable_date_field_format_changed');
+
+        const defs = _.map($allBlocks, (el) => {
+            const $el = $(el);
+
+            $el.find('[class]').filter(function () {
+                if (!this.getAttribute('class').match(/\S/)) {
+                    this.removeAttribute('class');
+                }
+            });
+
+            // TODO: Add a queue with concurrency limit in webclient
+            return this.saving_mutex.exec(() => {
+                let saveElement = '_saveElement';
+                if (this.options.enableTranslation) {
+                    saveElement = '_saveTranslationElement';
+                }
+                return this[saveElement]($el, context || weContext.get())
+                .then(function () {
+                    $el.removeClass('o_dirty');
+                }).guardedCatch(function (response) {
+                    // because ckeditor regenerates all the dom, we can't just
+                    // setup the popover here as everything will be destroyed by
+                    // the DOM regeneration. Add markings instead, and returns a
+                    // new rejection with all relevant info
+                    var id = _.uniqueId('carlos_danger_');
+                    $el.addClass('o_dirty oe_carlos_danger ' + id);
+                    $('.o_editable.' + id)
+                        .removeClass(id)
+                        .popover({
+                            trigger: 'hover',
+                            content: response.message.data.message || '',
+                            placement: 'auto top',
+                        })
+                        .popover('show');
+                });
+            });
+        });
+        return Promise.all(defs).then(function () {
+            window.onbeforeunload = null;
+        }).guardedCatch((failed) => {
+            // If there were errors, re-enable edition
+            this.cancel();
+            this.start();
+        });
+    },
+
+    _attachTooltips: function () {
+        $(document.body)
+            .tooltip({
+                selector: '[data-oe-readonly]',
+                container: 'body',
+                trigger: 'hover',
+                delay: {'show': 1000, 'hide': 100},
+                placement: 'bottom',
+                title: _t("Readonly field")
+            })
+            .on('click', function () {
+                $(this).tooltip('hide');
+            });
     },
     /**
      * Gets jQuery cloned element with internal text nodes escaped for XML
@@ -875,543 +1429,98 @@ var Wysiwyg = Widget.extend({
         return escaped_el;
     },
     /**
-     * Returns a translation object.
+     * Saves one (dirty) element of the page.
      *
      * @private
-     * @param {Node} node
-     * @returns {Object}
+     * @param {jQuery} $el - the element to save
+     * @param {Object} context - the context to use for the saving rpc
+     * @param {boolean} [withLang=false]
+     *        false if the lang must be omitted in the context (saving "master"
+     *        page element)
      */
-    _getTranslationObject: function (node) {
-        var $node = $(node);
-        var id = +$node.data('oe-translation-id');
-        if (!id) {
-            id = $node.data('oe-model') + ',' + $node.data('oe-id') + ',' + $node.data('oe-field');
-        }
-        var translation = _.find(this.translations, function (translation) {
-            return translation.id === id;
-        });
-        if (!translation) {
-            this.translations.push(translation = {'id': id});
-        }
-        return translation;
-    },
-    /**
-     * @private
-     */
-    _markTranslatableNodes: function () {
-        const self = this;
-        const $editable = $(this.editorEditable);
-        $editable.prependEvent('click.translator', function (ev) {
-            if (ev.ctrlKey || !$(ev.target).is(':o_editable')) {
-                return;
-            }
-            ev.preventDefault();
-            ev.stopPropagation();
-        });
-
-        // attributes
-
-        this.$nodesToTranslateAttributes.each(function () {
-            var $node = $(this);
-            var translation = $node.data('translation');
-            _.each(translation, function (node) {
-                if (node) {
-                    var translation = self._getTranslationObject(node);
-                    translation.value = (translation.value ? translation.value : $node.html()).replace(/[ \t\n\r]+/, ' ');
-                    $node.attr('data-oe-translation-state', (translation.state || 'to_translate'));
-                }
-            });
-        });
-
-        this.$nodesToTranslateAttributes.prependEvent('mousedown.translator click.translator mouseup.translator', function (ev) {
-            if (ev.ctrlKey) {
-                return;
-            }
-            ev.preventDefault();
-            ev.stopPropagation();
-            if (ev.type !== 'mousedown') {
-                return;
-            }
-
-            new AttributeTranslateDialog(self, {
-                editor: self.editor,
-                editorHelpers: self.editorHelpers,
-            }, ev.target).open();
-        });
-    },
-    /**
-     * Save all translation blocks.
-     *
-     * @private
-     */
-    _onSaveTranslation: async function (context) {
-        const defs = [];
-        this.trigger_up('edition_will_stopped');
-        this.trigger_up('ready_to_save', {defs: defs});
-        await Promise.all(defs);
-
-        const promises = [];
-        const translationContainers = {};
-        const getTranslationNodes = () => {
-            let previousTranslationId;
-            this.zoneMain.descendants(descendant => {
-                const format = descendant.modifiers.find(JWEditorLib.OdooTranslationFormat);
-                const formatAttributes = format && format.modifiers.find(JWEditorLib.Attributes);
-                const translationId = format && (format.translationId || +formatAttributes.get('data-oe-id'));
-                if (this.editor.mode.is(descendant, 'editable')) {
-                    translationContainers[translationId] = translationContainers[translationId] || [];
-                    const containers = translationContainers[translationId];
-                    if (previousTranslationId !== translationId) {
-                        containers.push(new JWEditorLib.ContainerNode());
-                    }
-                    const lastContainer = containers[containers.length-1];
-                    lastContainer.append(descendant.clone());
-                }
-                previousTranslationId = translationId;
-            });
-        }
-        await context.execCommand(getTranslationNodes);
-
-        // Save the odoo translation formats.
-        for (const id of Object.keys(translationContainers)) {
-            const containers = translationContainers[id];
-            // todo: check that all container render the same way otherwise
-            // inform the user that there is conflict between the same
-            // traduction.
-            const lastContainer = containers[containers.length-1];
-            const translationNode = lastContainer.children()[0];
-            const renderer = this.editor.plugins.get(JWEditorLib.Renderer);
-
-            const renderedNode = (await renderer.render('dom/html', lastContainer))[0].firstChild;
-            const translationFormat = translationNode.modifiers.find(JWEditorLib.OdooTranslationFormat);
-
-            let $renderedTranslation = $(renderedNode);
-            if (!$renderedTranslation.data('oe-translation-state')) {
-                $renderedTranslation = $renderedTranslation.find('[data-oe-translation-state]');
-            }
-
-            if (translationFormat.translationId) {
-                promises.push(this._saveTranslationTo($renderedTranslation, +translationFormat.translationId));
-            } else {
-                const attributes = translationFormat.modifiers.find(JWEditorLib.Attributes);
-                promises.push(this._saveViewTo(
-                    $renderedTranslation,
-                    attributes.get('data-oe-id'),
-                    attributes.get('data-oe-xpath')
-                ));
-            }
+    _saveElement: function ($el, context, withLang) {
+        var viewID = $el.data('oe-id');
+        if (!viewID) {
+            return Promise.resolve();
         }
 
-        // Save attributes
-        for (const attribute_translation of this.$attribute_translations) {
-            const $attribute_translations = $(attribute_translation);
-            promises.push(this._saveTranslationTo(
-                $attribute_translations,
-                +$attribute_translations.data('oe-translation-id')
-            ));
-        }
-
-        await Promise.all(promises);
-        this.trigger_up('edition_was_stopped');
-        window.location.reload();
-    },
-    /**
-     * Save all "cover properties" blocks.
-     *
-     * @private
-     */
-    _saveCoverPropertiesBlocks: async function (context) {
-        let rpcResult;
-        const wysiwygSaveCoverPropertiesBlocks = async () => {
-            const covers = this.zoneMain.descendants(node => {
-                const attributes = node.modifiers.find(JWEditorLib.Attributes);
-
-                if (attributes && attributes.length && typeof attributes.get('class') === 'string') {
-                    return attributes.classList.has('o_record_cover_container');
-                }
-            });
-            const el = covers && covers[0] && this.editorHelpers.getDomNodes(covers[0])[0];
-            if (!el) {
-                console.warn('No cover found.');
-                return;
-            }
-
-            var resModel = el.dataset.resModel;
-            var resID = parseInt(el.dataset.resId);
-            if (!resModel || !resID) {
-                throw new Error('There should be a model and id associated to the cover.');
-            }
-
-            this.__savedCovers = this.__savedCovers || {};
-            this.__savedCovers[resModel] = this.__savedCovers[resModel] || [];
-
-            if (this.__savedCovers[resModel].includes(resID)) {
-                return;
-            }
-            this.__savedCovers[resModel].push(resID);
-
-            var cssBgImage = $(el.querySelector('.o_record_cover_image')).css('background-image');
-            var coverProps = {
-                'background-image': cssBgImage.replace(/"/g, '').replace(window.location.protocol + "//" + window.location.host, ''),
-                'background_color_class': el.dataset.bgColorClass,
-                'background_color_style': el.dataset.bgColorStyle,
-                'opacity': el.dataset.filterValue,
-                'resize_class': el.dataset.coverClass,
-                'text_align_class': el.dataset.textAlignClass,
-            };
-
-            rpcResult = this._rpc({
-                model: resModel,
-                method: 'write',
-                args: [
-                    resID,
-                    {'cover_properties': JSON.stringify(coverProps)}
-                ],
-            });
-        };
-        await context.execCommand(wysiwygSaveCoverPropertiesBlocks);
-        return rpcResult;
-    },
-    /**
-     * Save all "mega menu" classes.
-     *
-     * @private
-     */
-    _saveMegaMenuClasses: async function () {
-        const structureNodes = this.zoneMain.descendants((node) => {
-            return node.modifiers.get(JWEditorLib.Attributes).get('data-oe-field') === 'mega_menu_content';
-        });
-        const promises = [];
-        for (const node of structureNodes) {
-            // On top of saving the mega menu content like any other field
-            // content, we must save the custom classes that were set on the
-            // menu itself.
-            // FIXME: normally removing the 'show' class should not be necessary here
-            // TODO: check that editor classes are removed here as well
-            let promises = [];
-            const items = node.modifiers.get(JWEditorLib.Attributes).classList.items();
-            var classes = _.without(items, 'dropdown-menu', 'o_mega_menu', 'show');
-
-            const itemId = node.modifiers.get(JWEditorLib.Attributes).get('data-oe-id');
-
-            promises.push(this._rpc({
-                model: 'website.menu',
-                method: 'write',
-                args: [
-                    [parseInt(itemId)],
-                    {
-                        'mega_menu_classes': classes.join(' '),
-                    },
-                ],
-            }));
-        }
-
-        await Promise.all(promises);
-    },
-    /**
-     * Save all modified images.
-     *
-     * @private
-     */
-    _saveModifiedImages: async function (context) {
-        const wysiwygSaveModifiedImages = async (context) => {
-            const defs = _.map(this._getEditable($('#wrapwrap')), async editableEl => {
-                const {oeModel: resModel, oeId: resId} = editableEl.dataset;
-                const proms = [...editableEl.querySelectorAll('.o_modified_image_to_save')].map(async el => {
-                    const isBackground = !el.matches('img');
-                    el.classList.remove('o_modified_image_to_save');
-
-                    await this.editorHelpers.removeClass(context, el, 'o_modified_image_to_save');
-                    // Modifying an image always creates a copy of the original, even if
-                    // it was modified previously, as the other modified image may be used
-                    // elsewhere if the snippet was duplicated or was saved as a custom one.
-                    const newAttachmentSrc = await this._rpc({
-                        route: `/web_editor/modify_image/${el.dataset.originalId}`,
-                        params: {
-                            res_model: resModel,
-                            res_id: parseInt(resId),
-                            data: (isBackground ? el.dataset.bgSrc : el.getAttribute('src')).split(',')[1],
-                        },
-                    });
-                    if (isBackground) {
-                        await this.editorHelpers.setStyle(context, el, 'background-image', `url('${newAttachmentSrc}')`);
-                        await this.editorHelpers.setAttribute(context, el, 'data-bgSrc', '');
-                    } else {
-                        await this.editorHelpers.setAttribute(context, el, 'src', newAttachmentSrc);
-                    }
-                });
-                return Promise.all(proms);
-            });
-            await Promise.all(defs);
-        };
-        return context.execCommand(wysiwygSaveModifiedImages);
-    },
-    /**
-     * Save all "newsletter" blocks.
-     *
-     * @private
-     */
-    _saveNewsletterBlocks: async function () {
-        const defs = [];
-        const wysiwygSaveNewsletterBlocks = async () => {
-            defs.push(this._super.apply(this, arguments));
-            const $popups = $(this.editorEditable).find('.o_newsletter_popup');
-            for (const popup of $popups) {
-                const $popup = $(popup);
-                const content = $popup.data('content');
-                if (content) {
-                    defs.push(this._rpc({
-                        route: '/website_mass_mailing/set_content',
-                        params: {
-                            'newsletter_id': parseInt($popup.attr('data-list-id')),
-                            'content': content,
-                        },
-                    }));
-                }
-            }
-        };
-        await this.editor.execCommand(wysiwygSaveNewsletterBlocks);
-        return Promise.all(defs);
-    },
-    /**
-     * Return a promise resulting from a rpc to 'ir.translation' to save the
-     * given view to the given translationId.
-     *
-     * @param {JQuery} $elem
-     * @param {number} translationId
-     * @param {string} [xpath]
-     */
-    _saveTranslationTo($elem, translationId) {
-        const $escapedElement = this._getEscapedElement($elem);
-        return this._rpc({
-            model: 'ir.translation',
-            method: 'save_html',
-            args: [
-                [translationId],
-                $escapedElement.html() || $escapedElement.text() || '',
-            ],
-            context: this.options.recordInfo.context,
-        });
-    },
-    /**
-     * Save all "view" blocks.
-     *
-     * @private
-     */
-    _saveViewBlocks: async function () {
-        const promises = [];
-        const nodes = this.zoneMain.descendants(node => {
-            return (
-                node instanceof JWEditorLib.OdooStructureNode ||
-                node instanceof JWEditorLib.OdooFieldNode
-            );
-        });
-        for (const node of nodes) {
-            const renderer = this.editor.plugins.get(JWEditorLib.Renderer);
-            const renderedNode = (await renderer.render('dom/html', node))[0];
-            $(renderedNode).find('.o_snippet_editor_updated').addBack().removeClass('o_snippet_editor_updated');
-            let $saveNode = $(renderedNode).find('[data-oe-expression][data-oe-id]');
-            if ($saveNode.length === 0) {
-                $saveNode = $(renderedNode)
-            }
-            const isStructureDirty = node instanceof JWEditorLib.OdooStructureNode && node.dirty;
-            const isFieldDirty = node instanceof JWEditorLib.OdooFieldNode && node.fieldInfo.originalValue !== node.fieldInfo.value.get();
-            if (isStructureDirty || isFieldDirty) {
-                const promise = this._saveViewTo($saveNode, +$saveNode[0].dataset.oeId, node.xpath);
-                promise.catch(() => { console.error('Fail to save:', $saveNode[0]); });
-                promises.push(promise);
-            }
-        }
-        return Promise.all(promises);
-    },
-    /**
-     * Return a promise resulting from a rpc to 'ir.ui.view' to save the given
-     * view to the given viewId.
-     *
-     * @param {JQuery} $elem
-     * @param {number} viewId
-     * @param {string} [xpath]
-     */
-    _saveViewTo($elem, viewId, xpath = null) {
-        const $escapedElement = this._getEscapedElement($elem);
         return this._rpc({
             model: 'ir.ui.view',
             method: 'save',
             args: [
-                viewId,
-                $escapedElement.prop('outerHTML'),
-                xpath,
+                viewID,
+                this._getEscapedElement($el).prop('outerHTML'),
+                !$el.data('oe-expression') && $el.data('oe-xpath') || null, // Note: hacky way to get the oe-xpath only if not a t-field
             ],
-            context: this.options.recordInfo.context,
+            context: context,
+        }, withLang ? undefined : {
+            noContextKeys: 'lang',
         });
     },
+
     /**
-     * Save after any cleaning has been done and before reloading
-     * the page.
-     */
-    async _saveWebsiteContent(context = this.editor) {
-        return new Promise((resolve, reject) => {
-            const wysiwygSaveContent = async (context)=> {
-                await this._saveModifiedImages(context);
-                await this._saveViewBlocks();
-                await this._saveCoverPropertiesBlocks(context);
-                await this._saveMegaMenuClasses();
-            };
-            context.execCommand(wysiwygSaveContent).then(params => {
-                if (params && params.error) {
-                    reject(params.error.message);
-                } else {
-                    resolve();
-                }
-            });
-        });
-    },
-    _setColor(colorpicker, setCommandId, unsetCommandId, color, $dropDownToToggle, closeColorPicker = false) {
-        if(color === "") {
-            this.editor.execCommand(unsetCommandId);
-        } else {
-            if (colorpicker.colorNames.indexOf(color) !== -1) {
-                // todo : find a better way to detect and send css variable
-                color = "var(--" + color + ")";
-            }
-            this.editor.execCommand(setCommandId, {color: color});
-        }
-        const $jwButton = $dropDownToToggle.find(".dropdown-toggle")
-        // Only adapt the color preview in the toolbar for the web_editor.
-        if(this.options.snippets) $jwButton.css("background-color", color);
-        if(closeColorPicker) {
-            $jwButton.dropdown("toggle");
-            colorpicker.selectedColor = '';
-        }
-    },
-    /**
-     * Initialize the editor for a translation.
+     * Reloads the page in non-editable mode, with the right scrolling.
      *
      * @private
+     * @returns {Promise} (never resolved, the page is reloading anyway)
      */
-    _setupTranslation: function () {
-        const attributeNames = ['placeholder', 'title', 'alt'];
-        const nodesToTranslateAttributes = this.zoneMain.descendants(node => {
-            const attributes = node.modifiers.find(JWEditorLib.Attributes);
-            return attributes && attributes.keys().some(key => {
-                if (attributeNames.includes(key)) {
-                    const div = document.createElement('div');
-                    div.innerHTML = attributes.get(key);
-                    // The attribute is translatable if its value is the HTML
-                    // of a node with attributes that include
-                    // data-oe-translation-state.
-                    return div.querySelector('[data-oe-translation-state]');
-                }
-            });
-        });
-        const domNodesToTranslateAttributes = nodesToTranslateAttributes.flatMap(nodeToTranslateAttributes => {
-            return this.editorHelpers.getDomNodes(nodeToTranslateAttributes)[0];
-        });
-        this.$nodesToTranslateAttributes = $(domNodesToTranslateAttributes);
-        for (const attr of attributeNames) {
-            this.$nodesToTranslateAttributes.each(function () {
-                var $node = $(this);
-                var translation = $node.data('translation') || {};
-                var attributeTranslation = $node.attr(attr);
-                if (attributeTranslation) {
-                    var match = attributeTranslation.match(/<span [^>]*data-oe-translation-id="([0-9]+)"[^>]*>(.*)<\/span>/);
-                    if (match) {
-                        var $translatedAttributeNode = $(attributeTranslation).addClass('d-none o_editable o_editable_translatable_attribute').appendTo('body');
-                        $translatedAttributeNode.data('$node', $node).data('attribute', attr);
-                        translation[attr] = $translatedAttributeNode[0];
-                        $node.attr(attr, match[2]);
-                    }
-                }
-                var select2 = $node.data('select2');
-                if (select2) {
-                    select2.blur();
-                    $node.on('translate', function () {
-                        select2.blur();
-                    });
-                    $node = select2.container.find('input');
-                }
-                $node.addClass('o_translatable_attribute').data('translation', translation);
-            });
+    _reload: function () {
+        window.location.hash = 'scrollTop=' + window.document.body.scrollTop;
+        if (window.location.search.indexOf('enable_editor') >= 0) {
+            window.location.href = window.location.href.replace(/&?enable_editor(=[^&]*)?/g, '');
+        } else {
+            window.location.reload(true);
         }
-        this.$attribute_translations = $('.o_editable_translatable_attribute');
-        this.translations = [];
-        this._markTranslatableNodes();
-
-        // We don't want the BS dropdown to close
-        // when clicking in a element to translate
-        $('.dropdown-menu').on('click', '.o_editable', function (ev) {
-            ev.stopPropagation();
-        });
-
-        // Add a tooltip for not-editable areas
-        $(document.body)
-            .tooltip({
-                selector: '[data-oe-readonly], .o_not_editable',
-                container: 'body',
-                trigger: 'hover',
-                delay: { 'show': 1000, 'hide': 100 },
-                placement: 'bottom',
-                title: _t("Readonly field")
-            })
-            .on('click', function () {
-                $(this).tooltip('hide');
-            });
+        return new Promise(function () {});
     },
-    _transform($image) {
-        if ($image.data('transfo-destroy')) {
-            $image.removeData('transfo-destroy');
-            return;
+    _onDocumentMousedown: function (e) {
+        if (e.target.closest('.oe-toolbar')) {
+            this._onToolbar = true;
+        } else {
+            if (this._pendingBlur && !e.target.closest('.o_wysiwyg_wrapper')) {
+                this.trigger_up('wysiwyg_blur');
+                this._pendingBlur = false;
+            }
+            this._onToolbar = false;
         }
-
-        $image.transfo();
-
-        const mouseup = (event) => {
-            $('.note-popover button[data-event="transform"]').toggleClass('active', $image.is('[style*="transform"]'));
-        };
-        $(document).on('mouseup', mouseup);
-
-        const mousedown = (event) => {
-            if (!$(event.target).closest('.transfo-container').length) {
-                $image.transfo('destroy');
-                $(document).off('mousedown', mousedown).off('mouseup', mouseup);
-            }
-            if ($(event.target).closest('.note-popover').length) {
-                $image.data('transfo-destroy', true).attr('style', ($image.attr('style') || '').replace(/[^;]*transform[\w:]*;?/g, ''));
-            }
-            this._updateAttributes($image[0])
-        };
-        $(document).on('mousedown', mousedown);
     },
-    _updateAttributes(node) {
-        const attributes = {}
-        for (const attr of node.attributes){
-            attributes[attr.name] = attr.value;
+    _onBlur: function () {
+        if (this._onToolbar) {
+            this._pendingBlur = true;
+        } else {
+            this.trigger_up('wysiwyg_blur');
         }
-        this.editorHelpers.updateAttributes(this.editor, node, attributes);
     },
 });
-
 //--------------------------------------------------------------------------
 // Public helper
 //--------------------------------------------------------------------------
 /**
- * @param {Node} node (editable or node inside)
+ * @param {Node} [ownerDocument] (document on which to get the selection)
  * @returns {Object}
  * @returns {Node} sc - start container
  * @returns {Number} so - start offset
  * @returns {Node} ec - end container
  * @returns {Number} eo - end offset
  */
-Wysiwyg.getRange = function (node) {
-    const selection = window.getSelection();
+Wysiwyg.getRange = function (ownerDocument) {
+    const selection = (ownerDocument || document).getSelection();
+    if (selection.rangeCount === 0) {
+        return {
+            sc: null,
+            so: 0,
+            ec: null,
+            eo: 0,
+        };
+    }
     const range = selection.getRangeAt(0);
-    var result = range && {
+
+    return {
         sc: range.startContainer,
         so: range.startOffset,
         ec: range.endContainer,
         eo: range.endOffset,
     };
-    return result;
 };
 /**
  * @param {Node} startNode
@@ -1419,16 +1528,22 @@ Wysiwyg.getRange = function (node) {
  * @param {Node} endNode
  * @param {Number} endOffset
  */
-Wysiwyg.setRange = async function (wysiwyg, startNode, startOffset, endNode, endOffset) {
-    endNode = endNode || startNode;
-    endOffset = endOffset || startOffset-1;
-    const wysiwygSetRange = async () => {
-        const startVNode = wysiwyg.editorHelpers.getNodes(startNode);
-        const endVNode = wysiwyg.editorHelpers.getNodes(endNode);
-        wysiwyg.editor.selection.select(startVNode[startOffset], endVNode[endOffset]);
-    };
-    await wysiwyg.editor.execCommand(wysiwygSetRange);
-};
+Wysiwyg.setRange = function (startNode, startOffset = 0, endNode = startNode, endOffset = startOffset) {
+    const selection = document.getSelection();
+    selection.removeAllRanges();
 
+    const range = new Range();
+    range.setStart(startNode, startOffset);
+    range.setEnd(endNode, endOffset);
+    selection.addRange(range);
+};
 return Wysiwyg;
+});
+odoo.define('web_editor.widget', function (require) {
+'use strict';
+    return {
+        Dialog: require('wysiwyg.widgets.Dialog'),
+        MediaDialog: require('wysiwyg.widgets.MediaDialog'),
+        LinkDialog: require('wysiwyg.widgets.LinkDialog'),
+    };
 });

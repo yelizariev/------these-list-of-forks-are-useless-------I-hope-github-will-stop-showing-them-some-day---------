@@ -5,7 +5,7 @@ import ast
 import base64
 import re
 
-from odoo import _, api, fields, models, tools
+from odoo import _, api, fields, models, tools, Command
 from odoo.exceptions import UserError
 
 
@@ -37,6 +37,7 @@ class MailComposer(models.TransientModel):
             before being sent to each recipient.
     """
     _name = 'mail.compose.message'
+    _inherit = 'mail.composer.mixin'
     _description = 'Email composition wizard'
     _log_access = True
     _batch_size = 500
@@ -63,29 +64,26 @@ class MailComposer(models.TransientModel):
             if missing_author:
                 result['author_id'] = author_id
 
-        result['composition_mode'] = result.get('composition_mode', 'comment')
-        result['model'] = result.get('model', self._context.get('active_model'))
-        result['res_id'] = result.get('res_id', self._context.get('active_id'))
-        if 'no_auto_thread' not in result and (result['model'] not in self.env or not hasattr(self.env[result['model']], 'message_post')):
-            result['no_auto_thread'] = True
+        if 'model' in fields and 'model' not in result:
+            result['model'] = self._context.get('active_model')
+        if 'res_id' in fields and 'res_id' not in result:
+            result['res_id'] = self._context.get('active_id')
+        if 'reply_to_mode' in fields and 'reply_to_mode' not in result and result.get('model'):
+            # doesn't support threading
+            if result['model'] not in self.env or not hasattr(self.env[result['model']], 'message_post'):
+                result['reply_to_mode'] = 'new'
 
-        vals = {}
         if 'active_domain' in self._context:  # not context.get() because we want to keep global [] domains
-            vals['active_domain'] = '%s' % self._context.get('active_domain')
-        if result['composition_mode'] == 'comment':
-            vals.update(self.get_record_data(result))
+            result['active_domain'] = '%s' % self._context.get('active_domain')
+        if result.get('composition_mode') == 'comment' and (set(fields) & set(['model', 'res_id', 'partner_ids', 'record_name', 'subject'])):
+            result.update(self.get_record_data(result))
 
-        for field in vals:
-            if field in fields:
-                result[field] = vals[field]
-
-        if fields is not None:
-            [result.pop(field, None) for field in list(result) if field not in fields]
-        return result
+        filtered_result = dict((fname, result[fname]) for fname in result if fname in fields)
+        return filtered_result
 
     # content
-    subject = fields.Char('Subject')
-    body = fields.Html('Contents', default='', sanitize_style=True)
+    subject = fields.Char('Subject', compute=False)
+    body = fields.Html('Contents', compute=False, default='', sanitize_style=True)
     parent_id = fields.Many2one(
         'mail.message', 'Parent Message', index=True, ondelete='set null',
         help="Initial thread message.")
@@ -126,21 +124,42 @@ class MailComposer(models.TransientModel):
         'mail.activity.type', 'Mail Activity Type',
         index=True, ondelete='set null')
     # destination
-    reply_to = fields.Char('Reply-To', help='Reply email address. Setting the reply_to bypasses the automatic thread creation.')
-    no_auto_thread = fields.Boolean(
-        'No threading for answers',
-        help='Answers do not go in the original document discussion thread. This has an impact on the generated message-id.')
+    reply_to = fields.Char('Reply To', help='Reply email address. Setting the reply_to bypasses the automatic thread creation.')
+    reply_to_force_new = fields.Boolean(
+        string='Considers answers as new thread',
+        help='Manage answers as new incoming emails instead of replies going to the same thread.')
+    reply_to_mode = fields.Selection([
+        ('update', 'Log in the original discussion thread'),
+        ('new', 'Redirect to another email address')],
+        string='Replies', compute='_compute_reply_to_mode', inverse='_inverse_reply_to_mode',
+        help="Original Discussion: Answers go in the original document discussion thread. \n Another Email Address: Answers go to the email address mentioned in the tracking message-id instead of original document discussion thread. \n This has an impact on the generated message-id.")
     is_log = fields.Boolean('Log an Internal Note',
                             help='Whether the message is an internal note (comment mode only)')
     partner_ids = fields.Many2many(
         'res.partner', 'mail_compose_message_res_partner_rel',
-        'wizard_id', 'partner_id', 'Additional Contacts')
+        'wizard_id', 'partner_id', 'Additional Contacts',
+        domain=[('type', '!=', 'private')])
     # mass mode options
     notify = fields.Boolean('Notify followers', help='Notify followers of the document (mass post only)')
     auto_delete = fields.Boolean('Delete Emails',
         help='This option permanently removes any track of email after it\'s been sent, including from the Technical menu in the Settings, in order to preserve storage space of your Odoo database.')
     auto_delete_message = fields.Boolean('Delete Message Copy', help='Do not keep a copy of the email in the document communication history (mass mailing only)')
     mail_server_id = fields.Many2one('ir.mail_server', 'Outgoing mail server')
+
+    @api.depends('reply_to_force_new')
+    def _compute_reply_to_mode(self):
+        for composer in self:
+            composer.reply_to_mode = 'new' if composer.reply_to_force_new else 'update'
+
+    def _inverse_reply_to_mode(self):
+        for composer in self:
+            composer.reply_to_force_new = composer.reply_to_mode == 'new'
+
+    # Overrides of mail.render.mixin
+    @api.depends('model')
+    def _compute_render_model(self):
+        for composer in self:
+            composer.render_model = composer.model
 
     @api.model
     def get_record_data(self, values):
@@ -178,7 +197,7 @@ class MailComposer(models.TransientModel):
     # to ensure the context is passed correctly
     def action_send_mail(self):
         self.send_mail()
-        return {'type': 'ir.actions.act_window_close', 'infos': 'mail_sent'}
+        return {'type': 'ir.actions.act_window_close'}
 
     def send_mail(self, auto_commit=False):
         """ Process the wizard content and proceed with sending the related
@@ -204,7 +223,7 @@ class MailComposer(models.TransientModel):
                     else:
                         new_attachment_ids.append(attachment.id)
                 new_attachment_ids.reverse()
-                wizard.write({'attachment_ids': [(6, 0, new_attachment_ids)]})
+                wizard.write({'attachment_ids': [Command.set(new_attachment_ids)]})
 
             # Mass Mailing
             mass_mode = wizard.composition_mode in ('mass_mail', 'mass_post')
@@ -248,7 +267,7 @@ class MailComposer(models.TransientModel):
                             subtype_id=subtype_id,
                             email_layout_xmlid=notif_layout,
                             add_sign=not bool(wizard.template_id),
-                            mail_auto_delete=wizard.template_id.auto_delete if wizard.template_id else False,
+                            mail_auto_delete=wizard.template_id.auto_delete if wizard.template_id else self._context.get('mail_auto_delete', True),
                             model_description=model_description)
                         post_params.update(mail_values)
                         if ActiveModel._name == 'mail.thread':
@@ -277,14 +296,14 @@ class MailComposer(models.TransientModel):
             rendered_values = self.render_message(res_ids)
         # compute alias-based reply-to in batch
         reply_to_value = dict.fromkeys(res_ids, None)
-        if mass_mail_mode and not self.no_auto_thread:
+        if mass_mail_mode and not self.reply_to_force_new:
             records = self.env[self.model].browse(res_ids)
             reply_to_value = records._notify_get_reply_to(default=self.email_from)
 
         blacklisted_rec_ids = set()
         if mass_mail_mode and issubclass(type(self.env[self.model]), self.pool['mail.thread.blacklist']):
             self.env['mail.blacklist'].flush(['email'])
-            self._cr.execute("SELECT email FROM mail_blacklist")
+            self._cr.execute("SELECT email FROM mail_blacklist WHERE active=true")
             blacklist = {x[0] for x in self._cr.fetchall()}
             if blacklist:
                 targets = self.env[self.model].browse(res_ids).read(['email_normalized'])
@@ -303,7 +322,7 @@ class MailComposer(models.TransientModel):
                 'author_id': self.author_id.id,
                 'email_from': self.email_from,
                 'record_name': self.record_name,
-                'no_auto_thread': self.no_auto_thread,
+                'reply_to_force_new': self.reply_to_force_new,
                 'mail_server_id': self.mail_server_id.id,
                 'mail_activity_type_id': self.mail_activity_type_id.id,
             }
@@ -321,15 +340,15 @@ class MailComposer(models.TransientModel):
                 email_dict = rendered_values[res_id]
                 mail_values['partner_ids'] += email_dict.pop('partner_ids', [])
                 mail_values.update(email_dict)
-                if not self.no_auto_thread:
+                if not self.reply_to_force_new:
                     mail_values.pop('reply_to')
                     if reply_to_value.get(res_id):
                         mail_values['reply_to'] = reply_to_value[res_id]
-                if self.no_auto_thread and not mail_values.get('reply_to'):
+                if self.reply_to_force_new and not mail_values.get('reply_to'):
                     mail_values['reply_to'] = mail_values['email_from']
                 # mail_mail values: body -> body_html, partner_ids -> recipient_ids
                 mail_values['body_html'] = mail_values.get('body', '')
-                mail_values['recipient_ids'] = [(4, id) for id in mail_values.pop('partner_ids', [])]
+                mail_values['recipient_ids'] = [Command.link(id) for id in mail_values.pop('partner_ids', [])]
 
                 # process attachments: should not be encoded before being processed by message_post / mail_mail create
                 mail_values['attachments'] = [(name, base64.b64decode(enc_cont)) for name, enc_cont in email_dict.pop('attachments', list())]
@@ -338,7 +357,7 @@ class MailComposer(models.TransientModel):
                     new_attach_id = self.env['ir.attachment'].browse(attach_id).copy({'res_model': self._name, 'res_id': self.id})
                     attachment_ids.append(new_attach_id.id)
                 attachment_ids.reverse()
-                mail_values['attachment_ids'] = self.env['mail.thread']._message_post_process_attachments(
+                mail_values['attachment_ids'] = self.env['mail.thread'].with_context(attached_to=record)._message_post_process_attachments(
                     mail_values.pop('attachments', []),
                     attachment_ids,
                     {'model': 'mail.message', 'res_id': 0}
@@ -395,7 +414,7 @@ class MailComposer(models.TransientModel):
                 }
                 attachment_ids.append(Attachment.create(data_attach).id)
             if values.get('attachment_ids', []) or attachment_ids:
-                values['attachment_ids'] = [(6, 0, values.get('attachment_ids', []) + attachment_ids)]
+                values['attachment_ids'] = [Command.set(values.get('attachment_ids', []) + attachment_ids)]
         else:
             default_values = self.with_context(default_composition_mode=composition_mode, default_model=model, default_res_id=res_id).default_get(['composition_mode', 'model', 'res_id', 'parent_id', 'partner_ids', 'subject', 'body', 'email_from', 'reply_to', 'attachment_ids', 'mail_server_id'])
             values = dict((key, default_values[key]) for key in ['subject', 'body', 'partner_ids', 'email_from', 'reply_to', 'attachment_ids', 'mail_server_id'] if key in default_values)
@@ -420,7 +439,7 @@ class MailComposer(models.TransientModel):
                 'subject': record.subject or False,
                 'body_html': record.body or False,
                 'model_id': model.id or False,
-                'attachment_ids': [(6, 0, [att.id for att in record.attachment_ids])],
+                'attachment_ids': [Command.set([att.id for att in record.attachment_ids])],
             }
             template = self.env['mail.template'].create(values)
             # generate the saved template
@@ -457,10 +476,10 @@ class MailComposer(models.TransientModel):
             multi_mode = False
             res_ids = [res_ids]
 
-        subjects = self.env['mail.render.mixin']._render_template(self.subject, self.model, res_ids)
-        bodies = self.env['mail.render.mixin']._render_template(self.body, self.model, res_ids, post_process=True)
-        emails_from = self.env['mail.render.mixin']._render_template(self.email_from, self.model, res_ids)
-        replies_to = self.env['mail.render.mixin']._render_template(self.reply_to, self.model, res_ids)
+        subjects = self._render_field('subject', res_ids, options={"render_safe": True})
+        bodies = self._render_field('body', res_ids, post_process=True)
+        emails_from = self._render_field('email_from', res_ids)
+        replies_to = self._render_field('reply_to', res_ids)
         default_recipients = {}
         if not self.partner_ids:
             records = self.env[self.model].browse(res_ids).sudo()

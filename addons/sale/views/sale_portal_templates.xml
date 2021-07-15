@@ -155,9 +155,7 @@
                             <t t-if="not sale_order.is_expired and sale_order.state in ['draft', 'sent']">
                                 <li t-if="sale_order.validity_date" class="list-group-item">
                                     <small><b class="text-muted">This offer expires on</b></small>
-                                    <div>
-                                        <t t-esc="sale_order.validity_date.strftime('%d %B %Y')"/>
-                                    </div>
+                                    <div t-field="sale_order.validity_date"></div>
                                 </li>
                                 <li t-if="sale_order.amount_undiscounted - sale_order.amount_untaxed &gt; 0.01" class="list-group-item flex-grow-1">
                                     <small><b class="text-muted">Your advantage</b></small>
@@ -182,8 +180,7 @@
                                 <div class="small mb-1"><strong class="text-muted">Salesperson</strong></div>
                                 <div class="row flex-nowrap">
                                     <div class="col flex-grow-0 pr-2">
-                                        <img class="rounded-circle mr4 float-left o_portal_contact_img" t-if="sale_order.user_id.image_1024" t-att-src="image_data_uri(sale_order.user_id.image_1024)" alt="Contact"/>
-                                        <img class="rounded-circle mr4 float-left o_portal_contact_img" t-if="not sale_order.user_id.image_1024" src="/web/static/src/img/placeholder.png" alt="Contact"/>
+                                        <img class="rounded-circle mr4 float-left o_portal_contact_img" t-att-src="image_data_uri(sale_order.user_id.avatar_1024)" alt="Contact"/>
                                     </div>
                                     <div class="col pl-0" style="min-width: 150px">
                                         <span t-field="sale_order.user_id" t-options='{"widget": "contact", "fields": ["name", "phone"], "no_marker": True}'/>
@@ -205,7 +202,7 @@
                                 <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
                                 <header class="modal-header">
                                     <h4 class="modal-title">Validate Order</h4>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">&amp;times;</button>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
                                 </header>
                                 <main class="modal-body" id="sign-dialog">
                                     <p>
@@ -228,7 +225,7 @@
                             <div class="modal-content">
                                 <header class="modal-header">
                                     <h4 class="modal-title">Validate Order</h4>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">&amp;times;</button>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
                                 </header>
                                 <main class="modal-body" id="sign-dialog">
                                     <p>
@@ -239,16 +236,13 @@
                                             <li t-if="sale_order.payment_term_id"><span>With payment terms:</span> <b t-field="sale_order.payment_term_id.note"/></li>
                                         </ul>
                                     </p>
-                                    <div t-if="pms or acquirers" id="payment_method" class="text-left">
+                                    <div t-if="acquirers or tokens" id="payment_method" class="text-left">
                                         <h3 class="mb24">Pay with</h3>
-                                        <t t-call="payment.payment_tokens_list">
-                                            <t t-set="mode" t-value="'payment'"/>
-                                            <t t-set="submit_txt">Pay &amp; Confirm</t>
-                                            <t t-set="icon_class" t-value="'fa-lock'"/>
-                                            <t t-set="form_action" t-value="sale_order.get_portal_url(suffix='/transaction/token')"/>
-                                            <t t-set="prepare_tx_url" t-value="sale_order.get_portal_url(suffix='/transaction/')"/>
-                                            <t t-set="access_token" t-value="sale_order.access_token"/>
-                                        </t>
+                                        <t t-call="payment.checkout"/>
+                                    </div>
+                                    <div t-else="" class="alert alert-warning">
+                                        <strong>No suitable payment option could be found.</strong><br/>
+                                        If you believe that it is an error, please contact the website administrator.
                                     </div>
                                 </main>
                             </div>
@@ -262,7 +256,7 @@
                                 <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
                                 <header class="modal-header">
                                     <h4 class="modal-title">Reject This Quotation</h4>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">&amp;times;</button>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
                                 </header>
                                 <main class="modal-body">
                                     <p>
@@ -280,7 +274,7 @@
 
                     <!-- status messages -->
                     <div t-if="message == 'sign_ok'" class="alert alert-success alert-dismissable d-print-none" role="status">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">&amp;times;</button>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">×</button>
                         <strong>Thank You!</strong><br/>
                         <t t-if="message == 'sign_ok' and sale_order.state in ['sale', 'done']">Your order has been confirmed.</t>
                         <t t-elif="message == 'sign_ok' and sale_order.has_to_be_paid()">Your order has been signed but still needs to be paid to be confirmed.</t>
@@ -288,24 +282,23 @@
                     </div>
 
                     <div t-if="message == 'cant_reject' and sale_order.has_to_be_signed()" class="alert alert-danger alert-dismissable d-print-none" role="alert">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">&amp;times;</button>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">×</button>
                         Your order is not in a state to be rejected.
                     </div>
 
                     <t t-if="sale_order.transaction_ids">
-                        <t t-call="payment.payment_confirmation_status">
-                            <t t-set="payment_tx_id" t-value="sale_order.get_portal_last_transaction()"/>
-                            <t t-set="reference" t-value="sale_order.reference"/>
+                        <t t-call="payment.transaction_status">
+                            <t t-set="tx" t-value="sale_order.get_portal_last_transaction()"/>
                         </t>
                     </t>
 
                     <div t-if="sale_order.state == 'cancel'" class="alert alert-danger alert-dismissable d-print-none" role="alert">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="close">&amp;times;</button>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="close">×</button>
                         <strong>This quotation has been canceled.</strong> <a role="button" href="#discussion"><i class="fa fa-comment"/> Contact us to get a new quotation.</a>
                     </div>
 
                     <div t-if="sale_order.is_expired" class="alert alert-warning alert-dismissable d-print-none" role="alert">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="close">&amp;times;</button>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="close">×</button>
                         <strong>This offer expired!</strong> <a role="button" href="#discussion"><i class="fa fa-comment"/> Contact us to get a new quotation.</a>
                     </div>
 
@@ -366,19 +359,18 @@
             <div id="informations">
                 <div t-if="sale_order.transaction_ids and not invoices and sale_order.state in ('sent', 'sale') and portal_confirmation == 'pay' and not success and not error" t-att-data-order-id="sale_order.id">
                     <t t-if="sale_order.transaction_ids">
-                        <t t-call="payment.payment_confirmation_status">
-                            <t t-set="payment_tx_id" t-value="sale_order.get_portal_last_transaction()"/>
-                            <t t-set="reference" t-value="sale_order.reference"/>
+                        <t t-call="payment.transaction_status">
+                            <t t-set="tx" t-value="sale_order.get_portal_last_transaction()"/>
                         </t>
                     </t>
                 </div>
                 <div class="row" id="so_date">
                     <div class="mb-3 col-6">
-                      <t t-if="sale_order.state == 'draft'">
-                        <strong>Quotation Date:</strong> 
-                      </t>
                       <t t-if="sale_order.state in ['sale', 'done', 'cancel']">
                         <strong>Order Date:</strong> 
+                      </t>
+                      <t t-else="">
+                         <strong>Quotation Date:</strong>
                       </t>
                       <span t-field="sale_order.date_order" t-options='{"widget": "date"}'/>
                     </div>
@@ -461,7 +453,7 @@
                                     <td class="text-right">
                                         <div id="quote_qty">
                                             <span t-field="line.product_uom_qty"/>
-                                            <span t-field="line.product_uom" groups="uom.group_uom"/>
+                                            <span t-field="line.product_uom"/>
                                         </div>
                                     </td>
                                     <td t-attf-class="text-right {{ 'd-none d-sm-table-cell' if report_type == 'html' else '' }}">
@@ -534,7 +526,7 @@
                 </div>
             </section>
 
-            <section id="terms" class="mt-5" t-if="sale_order.note">
+            <section id="terms" class="mt-5" t-if="not is_html_empty(sale_order.note)">
                 <h3 class="">Terms &amp; Conditions</h3>
                 <hr class="mt-0 mb-1"/>
                 <t t-if="sale_order.terms_type == 'html'">

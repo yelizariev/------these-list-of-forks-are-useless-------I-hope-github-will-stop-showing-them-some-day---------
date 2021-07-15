@@ -1,9 +1,16 @@
-odoo.define('mail/static/src/components/editable_text/editable_text.js', function (require) {
-'use strict';
+/** @odoo-module **/
+
+import { useShouldUpdateBasedOnProps } from '@mail/component_hooks/use_should_update_based_on_props/use_should_update_based_on_props';
+import { markEventHandled } from '@mail/utils/utils';
 
 const { Component } = owl;
 
-class EditableText extends Component {
+export class EditableText extends Component {
+
+    constructor(...args) {
+        super(...args);
+        useShouldUpdateBasedOnProps();
+    }
 
     mounted() {
         this.el.focus();
@@ -31,6 +38,7 @@ class EditableText extends Component {
      * @param {MouseEvent} ev
      */
     _onClick(ev) {
+        markEventHandled(ev, 'EditableText.click');
         this.trigger('o-clicked');
     }
 
@@ -75,8 +83,4 @@ Object.assign(EditableText, {
         value: String,
     },
     template: 'mail.EditableText',
-});
-
-return EditableText;
-
 });

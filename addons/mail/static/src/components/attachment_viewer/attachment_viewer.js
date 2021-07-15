@@ -1,7 +1,11 @@
-odoo.define('mail/static/src/components/attachment_viewer/attachment_viewer.js', function (require) {
-'use strict';
+/** @odoo-module **/
 
-const useStore = require('mail/static/src/component_hooks/use_store/use_store.js');
+import { useRefs } from '@mail/component_hooks/use_refs/use_refs';
+import { useShouldUpdateBasedOnProps } from '@mail/component_hooks/use_should_update_based_on_props/use_should_update_based_on_props';
+import { useStore } from '@mail/component_hooks/use_store/use_store';
+import { link } from '@mail/model/model_field_command';
+
+import { hidePDFJSButtons } from '@web/legacy/js/libs/pdfjs';
 
 const { Component, QWeb } = owl;
 const { useRef } = owl.hooks;
@@ -10,7 +14,7 @@ const MIN_SCALE = 0.5;
 const SCROLL_ZOOM_STEP = 0.1;
 const ZOOM_STEP = 0.5;
 
-class AttachmentViewer extends Component {
+export class AttachmentViewer extends Component {
 
     /**
      * @override
@@ -18,8 +22,10 @@ class AttachmentViewer extends Component {
     constructor(...args) {
         super(...args);
         this.MIN_SCALE = MIN_SCALE;
+        useShouldUpdateBasedOnProps();
         useStore(props => {
             const attachmentViewer = this.env.models['mail.attachment_viewer'].get(props.localId);
+            const device = this.env.messaging && this.env.messaging.device;
             return {
                 attachment: attachmentViewer && attachmentViewer.attachment
                     ? attachmentViewer.attachment.__state
@@ -28,8 +34,16 @@ class AttachmentViewer extends Component {
                     ? attachmentViewer.attachments.map(attachment => attachment.__state)
                     : [],
                 attachmentViewer: attachmentViewer ? attachmentViewer.__state : undefined,
+                deviceIsMobile: device && device.isMobile,
+                deviceSizeClass: device && device.sizeClass,
             };
         });
+        /**
+         * Used to ensure that the ref is always up to date, which seems to be needed if the element
+         * has a t-key, which was added to force the rendering of a new element when the src of the image changes.
+         * This was made to remove the display of the previous image as soon as the src changes.
+         */
+        this._getRefs = useRefs();
         /**
          * Determine whether the user is currently dragging the image.
          * This is useful to determine whether a click outside of the image
@@ -37,15 +51,14 @@ class AttachmentViewer extends Component {
          */
         this._isDragging = false;
         /**
-         * Reference to the image node. Useful in the computation of the zoomer
-         * style (based on user zoom in/out interactions).
-         */
-        this._imageRef = useRef('image');
-        /**
          * Reference of the zoomer node. Useful to apply translate
          * transformation on image visualisation.
          */
         this._zoomerRef = useRef('zoomer');
+        /**
+         * Reference of the IFRAME node when the attachment is a PDF.
+         */
+        this._iframeViewerPdfRef = useRef('iframeViewerPdf');
         /**
          * Tracked translate transformations on image visualisation. This is
          * not observed with `useStore` because they are used to compute zoomer
@@ -54,18 +67,13 @@ class AttachmentViewer extends Component {
          * position changes while dragging)
          */
         this._translate = { x: 0, y: 0, dx: 0, dy: 0 };
-        /**
-         * Tracked last rendered attachment. Useful to detect a new image is
-         * loading, in order to display spinner until it is fully loaded.
-         */
-        this._renderedAttachment = undefined;
         this._onClickGlobal = this._onClickGlobal.bind(this);
     }
 
     mounted() {
         this.el.focus();
         this._handleImageLoad();
-        this._renderedAttachment = this.attachmentViewer.attachment;
+        this._hideUnwantedPdfJsButtons();
         document.addEventListener('click', this._onClickGlobal);
     }
 
@@ -74,7 +82,7 @@ class AttachmentViewer extends Component {
      */
     patched() {
         this._handleImageLoad();
-        this._renderedAttachment = this.attachmentViewer.attachment;
+        this._hideUnwantedPdfJsButtons();
     }
 
     willUnmount() {
@@ -156,12 +164,27 @@ class AttachmentViewer extends Component {
      * @private
      */
     _handleImageLoad() {
+        if (!this.attachmentViewer || !this.attachmentViewer.attachment) {
+            return;
+        }
+        const refs = this._getRefs();
+        const image = refs[`image_${this.attachmentViewer.attachment.id}`];
         if (
             this.attachmentViewer.attachment.fileType === 'image' &&
-            this._renderedAttachment !== this.attachmentViewer.attachment
+            (!image || !image.complete)
         ) {
             this.attachmentViewer.update({ isImageLoading: true });
-            this._imageRef.el.addEventListener('load', ev => this._onLoadImage(ev));
+        }
+    }
+
+    /**
+     * @see 'hidePDFJSButtons'
+     *
+     * @private
+     */
+    _hideUnwantedPdfJsButtons() {
+        if (this._iframeViewerPdfRef.el) {
+            hidePDFJSButtons(this._iframeViewerPdfRef.el);
         }
     }
 
@@ -177,7 +200,7 @@ class AttachmentViewer extends Component {
         );
         const nextIndex = (index + 1) % attachmentViewer.attachments.length;
         attachmentViewer.update({
-            attachment: [['link', attachmentViewer.attachments[nextIndex]]],
+            attachment: link(attachmentViewer.attachments[nextIndex]),
         });
     }
 
@@ -195,7 +218,7 @@ class AttachmentViewer extends Component {
             ? attachmentViewer.attachments.length - 1
             : index - 1;
         attachmentViewer.update({
-            attachment: [['link', attachmentViewer.attachments[nextIndex]]],
+            attachment: link(attachmentViewer.attachments[nextIndex]),
         });
     }
 
@@ -260,10 +283,12 @@ class AttachmentViewer extends Component {
      */
     _updateZoomerStyle() {
         const attachmentViewer = this.attachmentViewer;
-        const tx = this._imageRef.el.offsetWidth * attachmentViewer.scale > this._zoomerRef.el.offsetWidth
+        const refs = this._getRefs();
+        const image = refs[`image_${this.attachmentViewer.attachment.id}`];
+        const tx = image.offsetWidth * attachmentViewer.scale > this._zoomerRef.el.offsetWidth
             ? this._translate.x + this._translate.dx
             : 0;
-        const ty = this._imageRef.el.offsetHeight * attachmentViewer.scale > this._zoomerRef.el.offsetHeight
+        const ty = image.offsetHeight * attachmentViewer.scale > this._zoomerRef.el.offsetHeight
             ? this._translate.y + this._translate.dy
             : 0;
         if (tx === 0) {
@@ -589,7 +614,3 @@ Object.assign(AttachmentViewer, {
 });
 
 QWeb.registerComponent('AttachmentViewer', AttachmentViewer);
-
-return AttachmentViewer;
-
-});

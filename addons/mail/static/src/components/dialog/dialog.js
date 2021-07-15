@@ -1,12 +1,12 @@
-odoo.define('mail/static/src/components/dialog/dialog.js', function (require) {
-'use strict';
+/** @odoo-module **/
 
-const useStore = require('mail/static/src/component_hooks/use_store/use_store.js');
+import { useShouldUpdateBasedOnProps } from '@mail/component_hooks/use_should_update_based_on_props/use_should_update_based_on_props';
+import { useStore } from '@mail/component_hooks/use_store/use_store';
 
 const { Component } = owl;
 const { useRef } = owl.hooks;
 
-class Dialog extends Component {
+export class Dialog extends Component {
 
     /**
      * @param {...any} args
@@ -19,13 +19,20 @@ class Dialog extends Component {
         this._componentRef = useRef('component');
         this._onClickGlobal = this._onClickGlobal.bind(this);
         this._onKeydownDocument = this._onKeydownDocument.bind(this);
+        useShouldUpdateBasedOnProps();
         useStore(props => {
             const dialog = this.env.models['mail.dialog'].get(props.dialogLocalId);
             return {
                 dialog: dialog ? dialog.__state : undefined,
             };
         });
+        this._constructor();
     }
+
+    /**
+     * Allows patching constructor.
+     */
+    _constructor() {}
 
     mounted() {
         document.addEventListener('click', this._onClickGlobal, true);
@@ -102,8 +109,4 @@ Object.assign(Dialog, {
         dialogLocalId: String,
     },
     template: 'mail.Dialog',
-});
-
-return Dialog;
-
 });

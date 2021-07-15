@@ -3,6 +3,7 @@
 
 from datetime import datetime, timedelta
 
+from odoo.exceptions import UserError
 from odoo.tests import Form
 from odoo.tests.common import TransactionCase
 
@@ -15,6 +16,7 @@ class TestBatchPicking(TransactionCase):
         self.stock_location = self.env.ref('stock.stock_location_stock')
         self.customer_location = self.env.ref('stock.stock_location_customers')
         self.picking_type_out = self.env['ir.model.data'].xmlid_to_res_id('stock.picking_type_out')
+        self.env['stock.picking.type'].browse(self.picking_type_out).reservation_method = 'manual'
         self.productA = self.env['product.product'].create({
             'name': 'Product A',
             'type': 'product',
@@ -136,10 +138,9 @@ class TestBatchPicking(TransactionCase):
         # self.assertEqual(self.batch.scheduled_date, self.picking_client_3.scheduled_date)
         # self.batch.write({'picking_ids': [(3, self.picking_client_3.id)]})
 
-
-        # remove all pickings and batch scheduled date should default to none
-        self.batch.write({'picking_ids': [(3, self.picking_client_1.id)]})
-        self.batch.write({'picking_ids': [(3, self.picking_client_2.id)]})
+        # cancelling batch should auto-remove all pickings => scheduled_date should default to none
+        self.batch.action_cancel()
+        self.assertEqual(len(self.batch.picking_ids), 0)
         self.assertEqual(self.batch.scheduled_date, False)
 
     def test_simple_batch_with_manual_qty_done(self):
@@ -171,6 +172,10 @@ class TestBatchPicking(TransactionCase):
         # ensure that quantity for picking has been moved
         self.assertFalse(sum(quant_A.mapped('quantity')))
         self.assertFalse(sum(quant_B.mapped('quantity')))
+
+        # ensure that batch cannot be deleted now that it is done
+        with self.assertRaises(UserError):
+            self.batch.unlink()
 
     def test_simple_batch_with_wizard(self):
         """ Test a simple batch picking with all quantity for picking available.

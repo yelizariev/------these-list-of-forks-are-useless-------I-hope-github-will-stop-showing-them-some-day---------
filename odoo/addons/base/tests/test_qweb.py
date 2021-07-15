@@ -12,7 +12,7 @@ from lxml.builder import E
 from odoo.modules import get_module_resource
 from odoo.tests.common import TransactionCase
 from odoo.addons.base.models.qweb import QWebException
-from odoo.tools import misc, ustr
+from odoo.tools import misc, mute_logger
 
 
 class TestQWebTField(TransactionCase):
@@ -82,7 +82,7 @@ class TestQWebTField(TransactionCase):
                 <t t-name="base.dummy">
                     <root>
                         <script type="application/javascript">
-                            var s = <t t-raw="json.dumps({'key': malicious})"/>;
+                            var s = <t t-esc="json.dumps({'key': malicious})"/>;
                         </script>
                     </root>
                 </t>
@@ -557,6 +557,30 @@ class TestQWebNS(TransactionCase):
         rendered = view2.with_context(lang=current_lang)._render().strip()
         self.assertEqual(rendered, b'9/000/000*00')
 
+    def test_render_barcode(self):
+        partner = self.env['res.partner'].create({
+            'name': 'bacode_test',
+            'barcode': 'test'
+        })
+
+        view = self.env['ir.ui.view'].create({
+            'name': "a_barcode_view",
+            'type': 'qweb',
+        })
+
+        view.arch = u"""<div t-field="partner.barcode" t-options="{'widget': 'barcode', 'width': 100, 'height': 30}"/>"""
+        rendered = view._render(values={'partner': partner}).strip().decode()
+        self.assertRegex(rendered, r'<div><img alt="Barcode test" src="data:image/png;base64,\S+"></div>')
+
+        partner.barcode = '4012345678901'
+        view.arch = u"""<div t-field="partner.barcode" t-options="{'widget': 'barcode', 'symbology': 'EAN13', 'width': 100, 'height': 30, 'img_style': 'width:100%;', 'img_alt': 'Barcode'}"/>"""
+        ean_rendered = view._render(values={'partner': partner}).strip().decode()
+        self.assertRegex(ean_rendered, r'<div><img style="width:100%;" alt="Barcode" src="data:image/png;base64,\S+"></div>')
+
+        view.arch = u"""<div t-field="partner.barcode" t-options="{'widget': 'barcode', 'symbology': 'auto', 'width': 100, 'height': 30, 'img_style': 'width:100%;', 'img_alt': 'Barcode'}"/>"""
+        auto_rendered = view._render(values={'partner': partner}).strip().decode()
+        self.assertRegex(auto_rendered, r'<div><img style="width:100%;" alt="Barcode" src="data:image/png;base64,\S+"></div>')
+
 
 from copy import deepcopy
 class FileSystemLoader(object):
@@ -607,6 +631,7 @@ class TestQWeb(TransactionCase):
 
         return lambda: self.run_test_file(os.path.join(path, f))
 
+    @mute_logger('odoo.addons.base.models.qweb') # tests t-raw which is deprecated
     def run_test_file(self, path):
         self.env.user.tz = 'Europe/Brussels'
         doc = etree.parse(path).getroot()
@@ -619,11 +644,12 @@ class TestQWeb(TransactionCase):
             # OrderedDict to ensure JSON mappings are iterated in source order
             # so output is predictable & repeatable
             params = {} if param is None else json.loads(param.text, object_pairs_hook=collections.OrderedDict)
+            params.setdefault('__keep_empty_lines', True)
 
             result = doc.find('result[@id="{}"]'.format(template)).text
             self.assertEqual(
                 qweb._render(template, values=params, load=loader).strip(),
-                (result or u'').strip().encode('utf-8'),
+                (result or u'').strip().replace('&quot;', '&#34;').encode('utf-8'),
                 template
             )
 
@@ -699,6 +725,36 @@ class TestPageSplit(TransactionCase):
             rendered,
             E.div(E.table(E.tr(), E.tr(), E.tr()))
         )
+
+class TestEmptyLines(TransactionCase):
+    arch = '''<t t-name='test'>
+            
+                <div>
+                    
+                </div>
+                
+                
+            </t>'''
+
+    def test_no_empty_lines(self):
+        t = self.env['ir.ui.view'].create({
+            'name': 'test',
+            'type': 'qweb',
+            'arch_db': self.arch
+        })
+        rendered = str(self.env['ir.qweb']._render(t.id), 'utf-8')
+        self.assertFalse(re.compile('^\s+\n').match(rendered))
+        self.assertFalse(re.compile('\n\s+\n').match(rendered))
+
+    def test_keep_empty_lines(self):
+        t = self.env['ir.ui.view'].create({
+            'name': 'test',
+            'type': 'qweb',
+            'arch_db': self.arch
+        })
+        rendered = str(self.env['ir.qweb']._render(t.id, {'__keep_empty_lines': True}), 'utf-8')
+        self.assertTrue(re.compile('^\s+\n').match(rendered))
+        self.assertTrue(re.compile('\n\s+\n').match(rendered))
 
 def load_tests(loader, suite, _):
     # can't override TestQWeb.__dir__ because dir() called on *class* not

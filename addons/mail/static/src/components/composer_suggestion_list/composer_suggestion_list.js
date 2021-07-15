@@ -1,45 +1,43 @@
-odoo.define('mail/static/src/components/composer_suggestion_list/composer_suggestion_list.js', function (require) {
-'use strict';
+/** @odoo-module **/
 
-const components = {
-    ComposerSuggestion: require('mail/static/src/components/composer_suggestion/composer_suggestion.js'),
-};
-const useStore = require('mail/static/src/component_hooks/use_store/use_store.js');
+import { ComposerSuggestion } from '@mail/components/composer_suggestion/composer_suggestion';
+import { useShouldUpdateBasedOnProps } from '@mail/component_hooks/use_should_update_based_on_props/use_should_update_based_on_props';
+import { useStore } from '@mail/component_hooks/use_store/use_store';
 
 const { Component } = owl;
 
-class ComposerSuggestionList extends Component {
+const components = { ComposerSuggestion };
+
+export class ComposerSuggestionList extends Component {
 
     /**
      * @override
      */
     constructor(...args) {
         super(...args);
+        useShouldUpdateBasedOnProps();
         useStore(props => {
             const composer = this.env.models['mail.composer'].get(props.composerLocalId);
             const activeSuggestedRecord = composer
                 ? composer.activeSuggestedRecord
                 : undefined;
-            const extraSuggestedRecordsList = composer
-                ? composer.extraSuggestedRecordsList
+            const extraSuggestedRecords = composer
+                ? composer.extraSuggestedRecords
                 : [];
-            const mainSuggestedRecordsList = composer
-                ? composer.mainSuggestedRecordsList
+            const mainSuggestedRecords = composer
+                ? composer.mainSuggestedRecords
                 : [];
             return {
-                activeSuggestedRecord: activeSuggestedRecord ? activeSuggestedRecord.__state : undefined,
-                composer: composer ? composer.__state : undefined,
-                extraSuggestedRecordsList: extraSuggestedRecordsList
-                    ? extraSuggestedRecordsList.map(record => record.__state)
-                    : [],
-                mainSuggestedRecordsList: mainSuggestedRecordsList
-                    ? mainSuggestedRecordsList.map(record => record.__state)
-                    : [],
+                activeSuggestedRecord,
+                composer,
+                composerSuggestionModelName: composer && composer.suggestionModelName,
+                extraSuggestedRecords,
+                mainSuggestedRecords,
             };
         }, {
             compareDepth: {
-                extraSuggestedRecordsList: 1,
-                mainSuggestedRecordsList: 1,
+                extraSuggestedRecords: 1,
+                mainSuggestedRecords: 1,
             },
         });
     }
@@ -67,8 +65,4 @@ Object.assign(ComposerSuggestionList, {
         isBelow: Boolean,
     },
     template: 'mail.ComposerSuggestionList',
-});
-
-return ComposerSuggestionList;
-
 });

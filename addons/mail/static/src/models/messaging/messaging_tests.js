@@ -1,7 +1,6 @@
-odoo.define('mail/static/src/models/messaging/messaging_tests.js', function (require) {
-'use strict';
+/** @odoo-module **/
 
-const { afterEach, beforeEach, start } = require('mail/static/src/utils/test_utils.js');
+import { afterEach, beforeEach, start } from '@mail/utils/test_utils';
 
 QUnit.module('mail', {}, function () {
 QUnit.module('models', {}, function () {
@@ -27,38 +26,50 @@ QUnit.test('openChat: display notification for partner without user', async func
     assert.expect(2);
 
     this.data['res.partner'].records.push({ id: 14 });
-    await this.start();
+    await this.start({
+        services: {
+            notification: {
+                notify(notification) {
+                    assert.ok(
+                        true,
+                        "should display a toast notification after failing to open chat"
+                    );
+                    assert.strictEqual(
+                        notification.message,
+                        "You can only chat with partners that have a dedicated user.",
+                        "should display the correct information in the notification"
+                    );
+                },
+            },
+        },
+    });
 
     await this.env.messaging.openChat({ partnerId: 14 });
-    assert.containsOnce(
-        document.body,
-        '.toast .o_notification_content',
-        "should display a toast notification after failing to open chat"
-    );
-    assert.strictEqual(
-        document.querySelector('.o_notification_content').textContent,
-        "You can only chat with partners that have a dedicated user.",
-        "should display the correct information in the notification"
-    );
 });
 
 QUnit.test('openChat: display notification for wrong user', async function (assert) {
     assert.expect(2);
 
-    await this.start();
+    await this.start({
+        services: {
+            notification: {
+                notify(notification) {
+                    assert.ok(
+                        true,
+                        "should display a toast notification after failing to open chat"
+                    );
+                    assert.strictEqual(
+                        notification.message,
+                        "You can only chat with existing users.",
+                        "should display the correct information in the notification"
+                    );
+                },
+            },
+        },
+    });
 
     // user id not in this.data
     await this.env.messaging.openChat({ userId: 14 });
-    assert.containsOnce(
-        document.body,
-        '.toast .o_notification_content',
-        "should display a toast notification after failing to open chat"
-    );
-    assert.strictEqual(
-        document.querySelector('.o_notification_content').textContent,
-        "You can only chat with existing users.",
-        "should display the correct information in the notification"
-    );
 });
 
 QUnit.test('openChat: open new chat for user', async function (assert) {
@@ -121,6 +132,4 @@ QUnit.test('openChat: open existing chat for user', async function (assert) {
 
 });
 });
-});
-
 });

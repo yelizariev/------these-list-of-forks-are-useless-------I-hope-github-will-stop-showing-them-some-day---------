@@ -3,7 +3,7 @@ from random import randint
 
 from odoo import fields, tools
 from odoo.addons.stock_account.tests.test_anglo_saxon_valuation_reconciliation_common import ValuationReconciliationTestCommon
-from odoo.tests.common import SavepointCase, Form
+from odoo.tests.common import Form
 from odoo.tests import tagged
 
 
@@ -258,7 +258,12 @@ class TestPoSCommon(ValuationReconciliationTestCommon):
             'is_cash_count': True,
             'cash_journal_id': cls.company_data['default_journal_cash'].id,
         })
-        config.write({'payment_method_ids': [(4, cash_split_pm.id), (4, cash_payment_method.id), (4, bank_payment_method.id)]})
+        bank_split_pm = cls.env['pos.payment.method'].create({
+            'name': 'Split (Bank) PM',
+            'receivable_account_id': cls.pos_receivable_account.id,
+            'split_transactions': True,
+        })
+        config.write({'payment_method_ids': [(4, cash_split_pm.id), (4, bank_split_pm.id), (4, cash_payment_method.id), (4, bank_payment_method.id)]})
         return config
 
     @classmethod
@@ -474,19 +479,12 @@ class TestPoSCommon(ValuationReconciliationTestCommon):
     def adjust_inventory(cls, products, quantities):
         """ Adjust inventory of the given products
         """
-        inventory = cls.env['stock.inventory'].create({
-            'name': 'Inventory adjustment'
-        })
         for product, qty in zip(products, quantities):
-            cls.env['stock.inventory.line'].create({
+            cls.env['stock.quant'].with_context(inventory_mode=True).create({
                 'product_id': product.id,
-                'product_uom_id': cls.env.ref('uom.product_uom_unit').id,
-                'inventory_id': inventory.id,
-                'product_qty': qty,
+                'inventory_quantity': qty,
                 'location_id': cls.stock_location_components.id,
-            })
-        inventory._action_start()
-        inventory.action_validate()
+            }).action_apply_inventory()
 
     def open_new_session(self):
         """ Used to open new pos session in each configuration.
@@ -506,6 +504,7 @@ class TestPoSCommon(ValuationReconciliationTestCommon):
             * cash_pm : cash payment method of the session
             * bank_pm : bank payment method of the session
             * cash_split_pm : credit payment method of the session
+            * bank_split_pm : split bank payment method of the session
         """
         self.config.open_session_cb(check_coa=False)
         self.pos_session = self.config.current_session_id
@@ -514,3 +513,4 @@ class TestPoSCommon(ValuationReconciliationTestCommon):
         self.cash_pm = self.pos_session.payment_method_ids.filtered(lambda pm: pm.is_cash_count and not pm.split_transactions)[:1]
         self.bank_pm = self.pos_session.payment_method_ids.filtered(lambda pm: not pm.is_cash_count and not pm.split_transactions)[:1]
         self.cash_split_pm = self.pos_session.payment_method_ids.filtered(lambda pm: pm.is_cash_count and pm.split_transactions)[:1]
+        self.bank_split_pm = self.pos_session.payment_method_ids.filtered(lambda pm: not pm.is_cash_count and pm.split_transactions)[:1]

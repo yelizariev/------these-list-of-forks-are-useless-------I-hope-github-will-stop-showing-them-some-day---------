@@ -54,21 +54,24 @@ publicWidget.registry.websiteProfileEditor = publicWidget.Widget.extend({
      * @override
      */
     start: async function () {
-        await this._super.apply(this, arguments);
-
+        var def = this._super.apply(this, arguments);
         if (this.editableMode) {
-            return;
+            return def;
         }
 
         var $textarea = this.$('textarea.o_wysiwyg_loader');
-        await wysiwygLoader.loadFromTextarea(this, $textarea, {
+
+        this._wysiwyg = await wysiwygLoader.loadFromTextarea(this, $textarea[0], {
             recordInfo: {
                 context: this._getContext(),
                 res_model: 'res.users',
                 res_id: parseInt(this.$('input[name=user_id]').val()),
             },
-            value: $textarea[0].value,
+            resizable: true,
+            userGeneratedContent: true,
         });
+
+        return Promise.all([def]);
     },
 
     //--------------------------------------------------------------------------
@@ -105,7 +108,7 @@ publicWidget.registry.websiteProfileEditor = publicWidget.Widget.extend({
      */
     _onProfilePicClearClick: function (ev) {
         var $form = $(ev.currentTarget).closest('form');
-        $form.find('.o_forum_avatar_img').attr('src', '/web/static/src/img/placeholder.png');
+        $form.find('.o_forum_avatar_img').attr('src', '/web/static/img/placeholder.png');
         $form.append($('<input/>', {
             name: 'clear_image',
             id: 'forum_clear_image',

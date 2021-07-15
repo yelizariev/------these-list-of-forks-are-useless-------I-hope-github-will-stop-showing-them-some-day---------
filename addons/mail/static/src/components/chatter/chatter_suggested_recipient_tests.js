@@ -1,17 +1,16 @@
-odoo.define('mail/static/src/components/chatter/chatter_suggested_recipient_tests', function (require) {
-'use strict';
+/** @odoo-module **/
 
-const components = {
-    Chatter: require('mail/static/src/components/chatter/chatter.js'),
-    Composer: require('mail/static/src/components/composer/composer.js'),
-};
-const {
+import { Chatter } from '@mail/components/chatter/chatter';
+import { Composer } from '@mail/components/composer/composer';
+import {
     afterEach,
     afterNextRender,
     beforeEach,
     createRootComponent,
     start,
-} = require('mail/static/src/utils/test_utils.js');
+} from '@mail/utils/test_utils';
+
+const components = { Chatter, Composer };
 
 QUnit.module('mail', {}, function () {
 QUnit.module('components', {}, function () {
@@ -374,8 +373,45 @@ QUnit.test("suggested recipients list display 3 suggested recipient and 'show mo
     );
 });
 
-});
-});
+QUnit.test("suggested recipients should not be notified when posting an internal note", async function (assert) {
+    assert.expect(1);
+
+    this.data['res.partner'].records.push({
+        display_name: "John Jane",
+        email: "john@jane.be",
+        id: 100,
+    });
+    this.data['res.fake'].records.push({
+        id: 10,
+        partner_ids: [100],
+    });
+    await this.start({
+        async mockRPC(route, args) {
+            if (args.model === 'res.fake' && args.method === 'message_post') {
+                assert.strictEqual(
+                    args.kwargs.partner_ids.length,
+                    0,
+                    "message_post should not contain suggested recipients when posting an internal note"
+                );
+            }
+            return this._super(...arguments);
+        },
+    });
+    const chatter = this.env.models['mail.chatter'].create({
+        threadId: 10,
+        threadModel: 'res.fake',
+    });
+    await this.createChatterComponent({ chatter });
+    await afterNextRender(() =>
+        document.querySelector(`.o_ChatterTopbar_buttonLogNote`).click()
+    );
+    document.querySelector('.o_ComposerTextInput_textarea').focus();
+    await afterNextRender(() => document.execCommand('insertText', false, "Dummy Message"));
+    await afterNextRender(() => {
+        document.querySelector('.o_Composer_buttonSend').click();
+    });
 });
 
+});
+});
 });

@@ -84,7 +84,7 @@ class SaleOrder(models.Model):
         taxes = carrier.product_id.taxes_id.filtered(lambda t: t.company_id.id == self.company_id.id)
         taxes_ids = taxes.ids
         if self.partner_id and self.fiscal_position_id:
-            taxes_ids = self.fiscal_position_id.map_tax(taxes, carrier.product_id, self.partner_id).ids
+            taxes_ids = self.fiscal_position_id.map_tax(taxes).ids
 
         # Create the sales order line
         carrier_with_partner_lang = carrier.with_context(lang=self.partner_id.lang)
@@ -122,8 +122,7 @@ class SaleOrder(models.Model):
             post = u'\N{NO-BREAK SPACE}{symbol}'.format(symbol=self.currency_id.symbol or '')
         return u' {pre}{0}{post}'.format(amount, pre=pre, post=post)
 
-    @api.depends('order_line.is_delivery', 'order_line.is_downpayment',
-                 'order_line.product_id.invoice_policy')
+    @api.depends('order_line.is_delivery', 'order_line.is_downpayment')
     def _get_invoice_status(self):
         super()._get_invoice_status()
         for order in self:
@@ -148,6 +147,9 @@ class SaleOrderLine(models.Model):
     product_qty = fields.Float(compute='_compute_product_qty', string='Product Qty', digits='Product Unit of Measure')
     recompute_delivery_price = fields.Boolean(related='order_id.recompute_delivery_price')
 
+    def _is_not_sellable_line(self):
+        return self.is_delivery or super(SaleOrderLine, self)._is_not_sellable_line()
+
     @api.depends('product_id', 'product_uom', 'product_uom_qty')
     def _compute_product_qty(self):
         for line in self:
@@ -160,7 +162,7 @@ class SaleOrderLine(models.Model):
         for line in self:
             if line.is_delivery:
                 line.order_id.carrier_id = False
-        super(SaleOrderLine, self).unlink()
+        return super(SaleOrderLine, self).unlink()
 
     def _is_delivery(self):
         self.ensure_one()

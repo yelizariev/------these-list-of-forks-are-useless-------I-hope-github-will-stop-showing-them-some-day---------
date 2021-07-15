@@ -18,7 +18,16 @@ models which only purpose is to run tests.""",
     'data': [
         'views/templates.xml',
         'data/test_website_data.xml',
+        'security/ir.model.access.csv',
     ],
     'installable': True,
     'application': False,
+    'assets': {
+        'web.assets_frontend': [
+            'test_website/static/src/**/*',
+        ],
+        'web.assets_tests': [
+            'test_website/static/tests/**/*',
+        ],
+    }
 }

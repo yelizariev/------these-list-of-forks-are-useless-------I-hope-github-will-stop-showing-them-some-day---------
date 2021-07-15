@@ -48,24 +48,15 @@ def after_commit(func):
 
 @contextmanager
 def microsoft_calendar_token(user):
-    try:
-        yield user._get_microsoft_calendar_token()
-    except requests.HTTPError as e:
-        if e.response.status_code == 401:  # Invalid token.
-            # The transaction should be rolledback, but the user's tokens
-            # should be reset. The user will be asked to authenticate again next time.
-            # Rollback manually first to avoid concurrent access errors/deadlocks.
-            user.env.cr.rollback()
-            with user.pool.cursor() as cr:
-                env = user.env(cr=cr)
-                user.with_env(env)._set_microsoft_auth_tokens(False, False, 0)
-        raise e
+    yield user._get_microsoft_calendar_token()
+
 
 class MicrosoftSync(models.AbstractModel):
     _name = 'microsoft.calendar.sync'
     _description = "Synchronize a record with Microsoft Calendar"
 
     microsoft_id = fields.Char('Microsoft Calendar Id', copy=False)
+    # This field helps to known when a microsoft event need to be resynced
     need_sync_m = fields.Boolean(default=True, copy=False)
     active = fields.Boolean(default=True)
 
@@ -74,7 +65,7 @@ class MicrosoftSync(models.AbstractModel):
         if 'microsoft_id' in vals:
             self._from_microsoft_ids.clear_cache(self)
         synced_fields = self._get_microsoft_synced_fields()
-        if 'need_sync_m' not in vals and vals.keys() & synced_fields:
+        if 'need_sync_m' not in vals and vals.keys() & synced_fields and not self.env.user.microsoft_synchronization_stopped:
             fields_to_sync = [x for x in vals.keys() if x in synced_fields]
             if fields_to_sync:
                 vals['need_sync_m'] = True
@@ -95,6 +86,9 @@ class MicrosoftSync(models.AbstractModel):
     def create(self, vals_list):
         if any(vals.get('microsoft_id') for vals in vals_list):
             self._from_microsoft_ids.clear_cache(self)
+        if self.env.user.microsoft_synchronization_stopped:
+            for vals in vals_list:
+                vals.update({'need_sync_m': False})
         records = super().create(vals_list)
 
         microsoft_service = MicrosoftCalendarService(self.env['microsoft.service'])
@@ -102,6 +96,13 @@ class MicrosoftSync(models.AbstractModel):
         for record in records_to_sync:
             record._microsoft_insert(microsoft_service, record._microsoft_values(self._get_microsoft_synced_fields()), timeout=3)
         return records
+
+    @api.ondelete(at_uninstall=False)
+    def _unlink_except_synchronized(self):
+        if self.env.context.get('archive_on_error') and self._active_name:
+            return
+        if self.filtered('microsoft_id'):
+            raise UserError(_("You cannot delete a record synchronized with Microsoft Calendar, archive it instead."))
 
     def unlink(self):
         """We can't delete an event that is also in Microsoft Calendar. Otherwise we would
@@ -111,8 +112,6 @@ class MicrosoftSync(models.AbstractModel):
         if self.env.context.get('archive_on_error') and self._active_name:
             synced.write({self._active_name: False})
             self = self - synced
-        elif synced:
-            raise UserError(_("You cannot delete a record synchronized with Outlook Calendar, archive it instead."))
         return super().unlink()
 
     @api.model
@@ -131,6 +130,7 @@ class MicrosoftSync(models.AbstractModel):
             records_to_sync = self
         cancelled_records = self - records_to_sync
 
+        records_to_sync._ensure_attendees_have_email()
         updated_records = records_to_sync.filtered('microsoft_id')
         new_records = records_to_sync - updated_records
         for record in cancelled_records.filtered('microsoft_id'):
@@ -299,6 +299,7 @@ class MicrosoftSync(models.AbstractModel):
     def _microsoft_patch(self, microsoft_service: MicrosoftCalendarService, microsoft_id, values, timeout=TIMEOUT):
         with microsoft_calendar_token(self.env.user.sudo()) as token:
             if token:
+                self._ensure_attendees_have_email()
                 microsoft_service.patch(microsoft_id, values, token=token, timeout=timeout)
                 self.need_sync_m = False
 
@@ -308,9 +309,21 @@ class MicrosoftSync(models.AbstractModel):
             return
         with microsoft_calendar_token(self.env.user.sudo()) as token:
             if token:
+                self._ensure_attendees_have_email()
                 microsoft_id = microsoft_service.insert(values, token=token, timeout=timeout)
                 self.write({
                     'microsoft_id': microsoft_id,
+                    'need_sync_m': False,
+                })
+
+    def _microsoft_attendee_answer(self, microsoft_service: MicrosoftCalendarService, microsoft_id, answer, params, timeout=TIMEOUT):
+        if not answer:
+            return
+        with microsoft_calendar_token(self.env.user.sudo()) as token:
+            if token:
+                self._ensure_attendees_have_email()
+                microsoft_service.answer(microsoft_id, answer, params, token=token, timeout=timeout)
+                self.write({
                     'need_sync_m': False,
                 })
 
@@ -345,6 +358,9 @@ class MicrosoftSync(models.AbstractModel):
         """
         raise NotImplementedError()
 
+    def _ensure_attendees_have_email(self):
+        raise NotImplementedError()
+
     def _get_microsoft_sync_domain(self):
         """Return a domain used to search records to synchronize.
         e.g. return a domain to synchronize records owned by the current user.
@@ -354,5 +370,12 @@ class MicrosoftSync(models.AbstractModel):
     def _get_microsoft_synced_fields(self):
         """Return a set of field names. Changing one of these fields
         marks the record to be re-synchronized.
+        """
+        raise NotImplementedError()
+
+    @api.model
+    def _restart_microsoft_sync(self):
+        """ Turns on the microsoft synchronization for all the events of
+        a given user.
         """
         raise NotImplementedError()

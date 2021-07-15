@@ -76,6 +76,9 @@ class PosConfig(models.Model):
     _name = 'pos.config'
     _description = 'Point of Sale Configuration'
 
+    def _default_warehouse_id(self):
+        return self.env['stock.warehouse'].search([('company_id', '=', self.env.company.id)], limit=1).id
+
     def _default_picking_type_id(self):
         return self.env['stock.warehouse'].search([('company_id', '=', self.env.company.id)], limit=1).pos_type_id.id
 
@@ -147,7 +150,7 @@ class PosConfig(models.Model):
     proxy_ip = fields.Char(string='IP Address', size=45,
         help='The hostname or ip address of the hardware proxy, Will be autodetected if left empty.')
     active = fields.Boolean(default=True)
-    uuid = fields.Char(readonly=True, default=lambda self: str(uuid4()),
+    uuid = fields.Char(readonly=True, default=lambda self: str(uuid4()), copy=False,
         help='A globally unique identifier for this pos configuration, used to prevent conflicts in client-generated data.')
     sequence_id = fields.Many2one('ir.sequence', string='Order IDs Sequence', readonly=True,
         help="This sequence is automatically created by Odoo but you can change it "
@@ -217,6 +220,15 @@ class PosConfig(models.Model):
     has_active_session = fields.Boolean(compute='_compute_current_session')
     show_allow_invoicing_alert = fields.Boolean(compute="_compute_show_allow_invoicing_alert")
     manual_discount = fields.Boolean(string="Manual Discounts", default=True)
+    ship_later = fields.Boolean(string="Ship Later")
+    warehouse_id = fields.Many2one('stock.warehouse', default=_default_warehouse_id, ondelete='restrict')
+    route_id = fields.Many2one('stock.location.route', string="Spefic route for products delivered later.")
+    picking_policy = fields.Selection([
+        ('direct', 'As soon as possible'),
+        ('one', 'When all products are ready')],
+        string='Shipping Policy', required=True, default='direct',
+        help="If you deliver all products at once, the delivery order will be scheduled based on the greatest "
+        "product lead time. Otherwise, it will be based on the shortest.")
 
     @api.depends('use_pricelist', 'available_pricelist_ids')
     def _compute_allowed_pricelist_ids(self):
@@ -322,19 +334,30 @@ class PosConfig(models.Model):
 
     @api.constrains('cash_control')
     def _check_session_state(self):
-        open_session = self.env['pos.session'].search([('config_id', '=', self.id), ('state', '!=', 'closed')])
+        open_session = self.env['pos.session'].search([('config_id', 'in', self.ids), ('state', '!=', 'closed')], limit=1)
         if open_session:
             raise ValidationError(_("You are not allowed to change the cash control status while a session is already opened."))
 
     @api.constrains('rounding_method')
     def _check_rounding_method_strategy(self):
-        if self.cash_rounding and self.rounding_method.strategy != 'add_invoice_line':
-            raise ValidationError(_("Cash rounding strategy must be: 'Add a rounding line'"))
+        for config in self:
+            if config.cash_rounding and config.rounding_method.strategy != 'add_invoice_line':
+                selection_value = "Add a rounding line"
+                for key, val in self.env["account.cash.rounding"]._fields["stategy"]._description_selection(config.env):
+                    if key == "add_invoice_line":
+                        selection_value = val
+                        break
+                raise ValidationError(_(
+                    "The cash rounding strategy of the point of sale %(pos)s must be: '%(value)s'",
+                    pos=config.name,
+                    value=selection_value,
+                ))
 
     @api.constrains('company_id', 'journal_id')
     def _check_company_journal(self):
-        if self.journal_id and self.journal_id.company_id.id != self.company_id.id:
-            raise ValidationError(_("The sales journal and the point of sale must belong to the same company."))
+        for config in self:
+            if config.journal_id and config.journal_id.company_id.id != config.company_id.id:
+                raise ValidationError(_("The sales journal of the point of sale %s must belong to its company.", config.name))
 
     def _check_profit_loss_cash_journal(self):
         if self.cash_control and self.payment_method_ids:
@@ -344,13 +367,15 @@ class PosConfig(models.Model):
 
     @api.constrains('company_id', 'invoice_journal_id')
     def _check_company_invoice_journal(self):
-        if self.invoice_journal_id and self.invoice_journal_id.company_id.id != self.company_id.id:
-            raise ValidationError(_("The invoice journal and the point of sale must belong to the same company."))
+        for config in self:
+            if config.invoice_journal_id and config.invoice_journal_id.company_id.id != config.company_id.id:
+                raise ValidationError(_("The invoice journal of the point of sale %s must belong to the same company.", config.name))
 
     @api.constrains('company_id', 'payment_method_ids')
     def _check_company_payment(self):
-        if self.env['pos.payment.method'].search_count([('id', 'in', self.payment_method_ids.ids), ('company_id', '!=', self.company_id.id)]):
-            raise ValidationError(_("The payment methods and the point of sale must belong to the same company."))
+        for config in self:
+            if self.env['pos.payment.method'].search_count([('id', 'in', config.payment_method_ids.ids), ('company_id', '!=', config.company_id.id)]):
+                raise ValidationError(_("The payment methods for the point of sale %s must belong to its company.", self.name))
 
     @api.constrains('pricelist_id', 'use_pricelist', 'available_pricelist_ids', 'journal_id', 'invoice_journal_id', 'payment_method_ids')
     def _check_currencies(self):
@@ -384,10 +409,18 @@ class PosConfig(models.Model):
                 _("You must configure an intermediary account for the payment methods: %s.") % method_names
             )
 
+    def _check_payment_method_ids(self):
+        self.ensure_one()
+        if not self.payment_method_ids:
+            raise ValidationError(
+                _("You must have at least one payment method configured to launch a session.")
+            )
+
     @api.constrains('company_id', 'available_pricelist_ids')
     def _check_companies(self):
-        if any(self.available_pricelist_ids.mapped(lambda pl: pl.company_id.id not in (False, self.company_id.id))):
-            raise ValidationError(_("The selected pricelists must belong to no company or the company of the point of sale."))
+        for config in self:
+            if any(pricelist.company_id.id not in [False, config.company_id.id] for pricelist in config.available_pricelist_ids):
+                raise ValidationError(_("The selected pricelists must belong to no company or the company of the point of sale."))
 
     @api.onchange('iface_tipproduct')
     def _onchange_tipproduct(self):
@@ -604,6 +637,7 @@ class PosConfig(models.Model):
             self._check_company_payment()
             self._check_currencies()
             self._check_profit_loss_cash_journal()
+            self._check_payment_method_ids()
             self._check_payment_method_receivable_accounts()
             self.env['pos.session'].create({
                 'user_id': self.env.uid,
@@ -654,7 +688,7 @@ class PosConfig(models.Model):
 
     def assign_payment_journals(self, company):
         for pos_config in self:
-            if pos_config.payment_method_ids:
+            if pos_config.payment_method_ids or pos_config.has_active_session:
                 continue
             cash_journal = self.env['account.journal'].search([('company_id', '=', company.id), ('type', '=', 'cash')], limit=1)
             pos_receivable_account = company.account_default_pos_receivable_account_id

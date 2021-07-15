@@ -1,8 +1,8 @@
-odoo.define('mail/static/src/models/thread_cache/thread_cache.js', function (require) {
-'use strict';
+/** @odoo-module **/
 
-const { registerNewModel } = require('mail/static/src/model/model_core.js');
-const { attr, many2many, many2one, one2many } = require('mail/static/src/model/model_field.js');
+import { registerNewModel } from '@mail/model/model_core';
+import { attr, many2many, many2one, one2many } from '@mail/model/model_field';
+import { link, replace, unlink, unlinkAll } from '@mail/model/model_field_command';
 
 function factory(dependencies) {
 
@@ -12,9 +12,6 @@ function factory(dependencies) {
         // Public
         //----------------------------------------------------------------------
 
-        /**
-         * @returns {mail.message[]|undefined}
-         */
         async loadMoreMessages() {
             if (this.isAllHistoryLoaded || this.isLoading) {
                 return;
@@ -26,18 +23,26 @@ function factory(dependencies) {
             this.update({ isLoadingMore: true });
             const messageIds = this.fetchedMessages.map(message => message.id);
             const limit = 30;
-            const fetchedMessages = await this.async(() => this._loadMessages({
-                extraDomain: [['id', '<', Math.min(...messageIds)]],
-                limit,
-            }));
-            for (const threadView of this.threadViews) {
-                threadView.addComponentHint('more-messages-loaded', { fetchedMessages });
+            let fetchedMessages;
+            let success;
+            try {
+                fetchedMessages = await this.async(() => this._loadMessages({
+                    extraDomain: [['id', '<', Math.min(...messageIds)]],
+                    limit,
+                }));
+                success = true;
+            }  catch (e) {
+                success = false;
+            }
+            if (success) {
+                if (fetchedMessages.length < limit) {
+                    this.update({ isAllHistoryLoaded: true });
+                }
+                for (const threadView of this.threadViews) {
+                    threadView.addComponentHint('more-messages-loaded', { fetchedMessages });
+                }
             }
             this.update({ isLoadingMore: false });
-            if (fetchedMessages.length < limit) {
-                this.update({ isAllHistoryLoaded: true });
-            }
-            return fetchedMessages;
         }
 
         /**
@@ -56,6 +61,9 @@ function factory(dependencies) {
                 extraDomain: [['id', '>', Math.max(...messageIds)]],
                 limit: false,
             });
+            if (!fetchedMessages) {
+                return;
+            }
             for (const threadView of this.threadViews) {
                 threadView.addComponentHint('new-messages-loaded', { fetchedMessages });
             }
@@ -72,19 +80,9 @@ function factory(dependencies) {
         static _createRecordLocalId(data) {
             const {
                 stringifiedDomain = '[]',
-                thread: [[commandInsert, thread]],
+                thread: { value: thread },
             } = data;
             return `${this.modelName}_[${thread.localId}]_<${stringifiedDomain}>`;
-        }
-
-        /**
-         * @private
-         */
-        _computeCheckedMessages() {
-            const messagesWithoutCheckbox = this.checkedMessages.filter(
-                message => !message.hasCheckbox
-            );
-            return [['unlink', messagesWithoutCheckbox]];
         }
 
         /**
@@ -93,7 +91,7 @@ function factory(dependencies) {
          */
         _computeFetchedMessages() {
             if (!this.thread) {
-                return [['unlink-all']];
+                return unlinkAll();
             }
             const toUnlinkMessages = [];
             for (const message of this.fetchedMessages) {
@@ -101,7 +99,7 @@ function factory(dependencies) {
                     toUnlinkMessages.push(message);
                 }
             }
-            return [['unlink', toUnlinkMessages]];
+            return unlink(toUnlinkMessages);
         }
 
         /**
@@ -114,9 +112,9 @@ function factory(dependencies) {
                 [l - 1]: lastFetchedMessage,
             } = this.orderedFetchedMessages;
             if (!lastFetchedMessage) {
-                return [['unlink']];
+                return unlink();
             }
-            return [['link', lastFetchedMessage]];
+            return link(lastFetchedMessage);
         }
 
         /**
@@ -129,9 +127,9 @@ function factory(dependencies) {
                 [l - 1]: lastMessage,
             } = this.orderedMessages;
             if (!lastMessage) {
-                return [['unlink']];
+                return unlink();
             }
-            return [['link', lastMessage]];
+            return link(lastMessage);
         }
 
         /**
@@ -140,11 +138,11 @@ function factory(dependencies) {
          */
         _computeMessages() {
             if (!this.thread) {
-                return [['unlink-all']];
+                return unlinkAll();
             }
             let messages = this.fetchedMessages;
             if (this.stringifiedDomain !== '[]') {
-                return [['replace', messages]];
+                return replace(messages);
             }
             // main cache: adjust with newer messages
             let newerMessages;
@@ -156,7 +154,7 @@ function factory(dependencies) {
                 );
             }
             messages = messages.concat(newerMessages);
-            return [['replace', messages]];
+            return replace(messages);
         }
 
         /**
@@ -165,7 +163,7 @@ function factory(dependencies) {
          * @returns {mail.message[]}
          */
         _computeNonEmptyMessages() {
-            return [['replace', this.messages.filter(message => !message.isEmpty)]]
+            return replace(this.messages.filter(message => !message.isEmpty));
         }
 
         /**
@@ -173,7 +171,7 @@ function factory(dependencies) {
          * @returns {mail.message[]}
          */
         _computeOrderedFetchedMessages() {
-            return [['replace', this.fetchedMessages.sort((m1, m2) => m1.id < m2.id ? -1 : 1)]];
+            return replace(this.fetchedMessages.sort((m1, m2) => m1.id < m2.id ? -1 : 1));
         }
 
         /**
@@ -181,7 +179,7 @@ function factory(dependencies) {
          * @returns {mail.message[]}
          */
         _computeOrderedMessages() {
-            return [['replace', this.messages.sort((m1, m2) => m1.id < m2.id ? -1 : 1)]];
+            return replace(this.messages.sort((m1, m2) => m1.id < m2.id ? -1 : 1));
         }
 
         /**
@@ -189,28 +187,34 @@ function factory(dependencies) {
          * @returns {boolean}
          */
         _computeHasToLoadMessages() {
+            const res = { hasToLoadMessages: false };
             if (!this.thread) {
                 // happens during destroy or compute executed in wrong order
-                return false;
+                return res;
+            }
+            if (this.hasLoadingFailed) {
+                return res;
             }
             const wasCacheRefreshRequested = this.isCacheRefreshRequested;
             // mark hint as processed
-            this.update({ isCacheRefreshRequested: false });
+            if (this.isCacheRefreshRequested) {
+                res.isCacheRefreshRequested = false;
+            }
             if (this.thread.isTemporary) {
                 // temporary threads don't exist on the server
-                return false;
+                return res;
             }
             if (!wasCacheRefreshRequested && this.threadViews.length === 0) {
                 // don't load message that won't be used
-                return false;
+                return res;
             }
             if (this.isLoading) {
                 // avoid duplicate RPC
-                return false;
+                return res;
             }
             if (!wasCacheRefreshRequested && this.isLoaded) {
                 // avoid duplicate RPC
-                return false;
+                return res;
             }
             const isMainCache = this.thread.mainCache === this;
             if (isMainCache && this.isLoaded) {
@@ -218,19 +222,10 @@ function factory(dependencies) {
                 // loading. Indeed the main cache is automatically sync with
                 // server updates already, so there is never a need to refresh
                 // it past the first time.
-                return false;
+                return res;
             }
-            return true;
-        }
-
-        /**
-         * @private
-         * @returns {mail.message[]}
-         */
-        _computeUncheckedMessages() {
-            return [['replace', this.messages.filter(
-                message => message.hasCheckbox && !this.checkedMessages.includes(message)
-            )]];
+            res.hasToLoadMessages = true;
+            return res;
         }
 
         /**
@@ -240,9 +235,7 @@ function factory(dependencies) {
          */
         _extendMessageDomain(domain) {
             const thread = this.thread;
-            if (thread.model === 'mail.channel') {
-                return domain.concat([['channel_ids', 'in', [thread.id]]]);
-            } else if (thread === this.env.messaging.inbox) {
+            if (thread === this.env.messaging.inbox) {
                 return domain.concat([['needaction', '=', true]]);
             } else if (thread === this.env.messaging.starred) {
                 return domain.concat([
@@ -250,8 +243,6 @@ function factory(dependencies) {
                 ]);
             } else if (thread === this.env.messaging.history) {
                 return domain.concat([['needaction', '=', false]]);
-            } else if (thread === this.env.messaging.moderation) {
-                return domain.concat([['moderation_status', '=', 'pending_moderation']]);
             } else {
                 // Avoid to load user_notification as these messages are not
                 // meant to be shown on chatters.
@@ -269,6 +260,7 @@ function factory(dependencies) {
          * @param {Array[]} [param0.extraDomain]
          * @param {integer} [param0.limit=30]
          * @returns {mail.message[]}
+         * @throws {Error} when failed to load messages
          */
         async _loadMessages({ extraDomain, limit = 30 } = {}) {
             this.update({ isLoading: true });
@@ -279,19 +271,25 @@ function factory(dependencies) {
                 domain = extraDomain.concat(domain);
             }
             const context = this.env.session.user_context;
-            const moderated_channel_ids = this.thread.moderation
-                ? [this.thread.id]
-                : undefined;
-            const messages = await this.async(() =>
-                this.env.models['mail.message'].performRpcMessageFetch(
-                    domain,
-                    limit,
-                    moderated_channel_ids,
-                    context,
-                )
-            );
+            let messages;
+            try {
+                messages = await this.async(() =>
+                    this.env.models['mail.message'].performRpcMessageFetch(
+                        domain,
+                        limit,
+                        context,
+                    )
+                );
+            } catch(e) {
+                this.update({
+                    hasLoadingFailed: true,
+                    isLoading: false,
+                });
+                throw e;
+            }
             this.update({
-                fetchedMessages: [['link', messages]],
+                fetchedMessages: link(messages),
+                hasLoadingFailed: false,
                 isLoaded: true,
                 isLoading: false,
             });
@@ -306,6 +304,54 @@ function factory(dependencies) {
         }
 
         /**
+         * Split method for `_computeHasToLoadMessages` because it has to write
+         * on 2 fields at once which is not supported by standard compute.
+         *
+         * @private
+         */
+        _onChangeForHasToLoadMessages() {
+            this.update(this._computeHasToLoadMessages());
+        }
+
+        /**
+         * Calls "mark all as read" when this thread becomes displayed in a
+         * view (which is notified by `isMarkAllAsReadRequested` being `true`),
+         * but delays the call until some other conditions are met, such as the
+         * messages being loaded.
+         * The reason to wait until messages are loaded is to avoid a race
+         * condition because "mark all as read" will change the state of the
+         * messages in parallel to fetch reading them.
+         *
+         * @private
+         */
+        _onChangeMarkAllAsRead() {
+            if (
+                !this.isMarkAllAsReadRequested ||
+                !this.thread ||
+                !this.thread.mainCache ||
+                !this.isLoaded ||
+                this.isLoading
+            ) {
+                // wait for change of state before deciding what to do
+                return;
+            }
+            this.update({ isMarkAllAsReadRequested: false });
+            if (
+                this.thread.isTemporary ||
+                this.thread.model === 'mail.box' ||
+                this.thread.mainCache !== this ||
+                this.threadViews.length === 0
+            ) {
+                // ignore the request
+                return;
+            }
+            this.env.models['mail.message'].markAllAsRead([
+                ['model', '=', this.thread.model],
+                ['res_id', '=', this.thread.id],
+            ]);
+        }
+
+        /**
          * Loads this thread cache, by fetching the most recent messages in this
          * conversation.
          *
@@ -315,11 +361,20 @@ function factory(dependencies) {
             if (!this.hasToLoadMessages) {
                 return;
             }
-            this._loadMessages().then(fetchedMessages => {
-                for (const threadView of this.threadViews) {
-                    threadView.addComponentHint('messages-loaded', { fetchedMessages });
-                }
-            });
+            this._onHasToLoadMessagesChangedAsync();
+        }
+
+        /**
+         * Async version of `_onHasToLoadMessagesChanged` split here because
+         * an "on change" compute should not return a Promise.
+         *
+         * @private
+         */
+        async _onHasToLoadMessagesChangedAsync() {
+            const fetchedMessages = await this.async(() => this._loadMessages());
+            for (const threadView of this.threadViews) {
+                threadView.addComponentHint('messages-loaded', { fetchedMessages });
+            }
         }
 
         /**
@@ -345,14 +400,6 @@ function factory(dependencies) {
     }
 
     ThreadCache.fields = {
-        checkedMessages: many2many('mail.message', {
-            compute: '_computeCheckedMessages',
-            dependencies: [
-                'checkedMessages',
-                'messagesCheckboxes',
-            ],
-            inverse: 'checkedThreadCaches',
-        }),
         /**
          * List of messages that have been fetched by this cache.
          *
@@ -375,22 +422,18 @@ function factory(dependencies) {
             dependencies: ['threadMessages'],
         }),
         /**
-         * Determines whether `this` should load initial messages. This field is
-         * computed and should be considered read-only.
+         * Determines whether the last message fetch failed.
+         */
+        hasLoadingFailed: attr({
+            default: false,
+        }),
+        /**
+         * Determines whether `this` should load initial messages.
+         * @see `onChangeForHasToLoadMessages` value of this field is mainly set
+         *  from this "on change".
          * @see `isCacheRefreshRequested` to request manual refresh of messages.
          */
-        hasToLoadMessages: attr({
-            compute: '_computeHasToLoadMessages',
-            dependencies: [
-                'isCacheRefreshRequested',
-                'isLoaded',
-                'isLoading',
-                'thread',
-                'threadIsTemporary',
-                'threadMainCache',
-                'threadViews',
-            ],
-        }),
+        hasToLoadMessages: attr(),
         isAllHistoryLoaded: attr({
             default: false,
         }),
@@ -412,6 +455,16 @@ function factory(dependencies) {
             default: false,
         }),
         /**
+         * Determines whether this cache should consider calling "mark all as
+         * read" on this thread.
+         *
+         * This field is a hint that may or may not lead to an actual call.
+         * @see `_onChangeMarkAllAsRead`
+         */
+        isMarkAllAsReadRequested: attr({
+            default: false,
+        }),
+        /**
          * Last message that has been fetched by this thread cache.
          *
          * This DOES NOT necessarily mean the last message linked to this thread
@@ -425,9 +478,6 @@ function factory(dependencies) {
         lastMessage: many2one('mail.message', {
             compute: '_computeLastMessage',
             dependencies: ['orderedMessages'],
-        }),
-        messagesCheckboxes: attr({
-            related: 'messages.hasCheckbox',
         }),
         /**
          * List of messages linked to this cache.
@@ -457,6 +507,41 @@ function factory(dependencies) {
             ],
         }),
         /**
+         * @see hasToLoadMessages
+         */
+        onChangeForHasToLoadMessages: attr({
+            compute: '_onChangeForHasToLoadMessages',
+            dependencies: [
+                'hasLoadingFailed',
+                'isCacheRefreshRequested',
+                'isLoaded',
+                'isLoading',
+                'thread',
+                'threadIsTemporary',
+                'threadMainCache',
+                'threadViews',
+            ],
+            isOnChange: true,
+        }),
+        /**
+         * Not a real field, used to trigger its compute method when one of the
+         * dependencies changes.
+         */
+        onChangeMarkAllAsRead: attr({
+            compute: '_onChangeMarkAllAsRead',
+            dependencies: [
+                'isLoaded',
+                'isLoading',
+                'isMarkAllAsReadRequested',
+                'thread',
+                'threadIsTemporary',
+                'threadMainCache',
+                'threadModel',
+                'threadViews',
+            ],
+            isOnChange: true,
+        }),
+        /**
          * Loads initial messages from `this`.
          * This is not a "real" field, its compute function is used to trigger
          * the load of messages at the right time.
@@ -466,6 +551,7 @@ function factory(dependencies) {
             dependencies: [
                 'hasToLoadMessages',
             ],
+            isOnChange: true,
         }),
         /**
          * Not a real field, used to trigger `_onMessagesChanged` when one of
@@ -478,6 +564,7 @@ function factory(dependencies) {
                 'thread',
                 'threadMainCache',
             ],
+            isOnChange: true,
         }),
         /**
          * Ordered list of messages that have been fetched by this cache.
@@ -519,18 +606,16 @@ function factory(dependencies) {
             related: 'thread.messages',
         }),
         /**
+         * Serves as compute dependency.
+         */
+        threadModel: attr({
+            related: 'thread.model',
+        }),
+        /**
          * States the 'mail.thread_view' that are currently displaying `this`.
          */
         threadViews: one2many('mail.thread_view', {
             inverse: 'threadCache',
-        }),
-        uncheckedMessages: many2many('mail.message', {
-            compute: '_computeUncheckedMessages',
-            dependencies: [
-                'checkedMessages',
-                'messagesCheckboxes',
-                'messages',
-            ],
         }),
     };
 
@@ -540,5 +625,3 @@ function factory(dependencies) {
 }
 
 registerNewModel('mail.thread_cache', factory);
-
-});

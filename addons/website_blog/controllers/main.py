@@ -116,7 +116,10 @@ class WebsiteBlog(http.Controller):
             step=self._blog_post_per_page,
         )
 
-        all_tags = blog and blogs.all_tags()[blog.id] or blogs.all_tags(join=True)
+        if not blogs:
+            all_tags = request.env['blog.tag']
+        else:
+            all_tags = blogs.all_tags(join=True) if not blog else blogs.all_tags().get(blog.id, request.env['blog.tag'])
         tag_category = sorted(all_tags.mapped('category_id'), key=lambda category: category.name.upper())
         other_tags = sorted(all_tags.filtered(lambda x: not x.category_id), key=lambda tag: tag.name.upper())
 
@@ -155,13 +158,10 @@ class WebsiteBlog(http.Controller):
     ], type='http', auth="public", website=True, sitemap=True)
     def blog(self, blog=None, tag=None, page=1, search=None, **opt):
         Blog = request.env['blog.blog']
-        if blog and not blog.can_access_from_current_website():
-            raise werkzeug.exceptions.NotFound()
-
         blogs = Blog.search(request.website.website_domain(), order="create_date asc, id asc")
 
         if not blog and len(blogs) == 1:
-            return werkzeug.utils.redirect('/blog/%s' % slug(blogs[0]), code=302)
+            return request.redirect('/blog/%s' % slug(blogs[0]), code=302)
 
         date_begin, date_end, state = opt.get('date_begin'), opt.get('date_end'), opt.get('state')
 
@@ -221,9 +221,6 @@ class WebsiteBlog(http.Controller):
          - 'nav_list': a dict [year][month] for archives navigation
          - 'next_post': next blog post, to direct the user towards the next interesting post
         """
-        if not blog.can_access_from_current_website():
-            raise werkzeug.exceptions.NotFound()
-
         BlogPost = request.env['blog.post']
         date_begin, date_end = post.get('date_begin'), post.get('date_end')
 
@@ -292,7 +289,7 @@ class WebsiteBlog(http.Controller):
             'blog_id': blog_id,
             'is_published': False,
         })
-        return werkzeug.utils.redirect("/blog/%s/%s?enable_editor=1" % (slug(new_blog_post.blog_id), slug(new_blog_post)))
+        return request.redirect("/blog/%s/%s?enable_editor=1" % (slug(new_blog_post.blog_id), slug(new_blog_post)))
 
     @http.route('/blog/post_duplicate', type='http', auth="user", website=True, methods=['POST'])
     def blog_post_copy(self, blog_post_id, **post):
@@ -303,15 +300,4 @@ class WebsiteBlog(http.Controller):
         :return redirect to the new blog created
         """
         new_blog_post = request.env['blog.post'].with_context(mail_create_nosubscribe=True).browse(int(blog_post_id)).copy()
-        return werkzeug.utils.redirect("/blog/%s/%s?enable_editor=1" % (slug(new_blog_post.blog_id), slug(new_blog_post)))
-
-    @http.route(['/blog/render_latest_posts'], type='json', auth='public', website=True)
-    def render_latest_posts(self, template, domain, limit=None, order='published_date desc'):
-        dom = expression.AND([
-            [('website_published', '=', True), ('post_date', '<=', fields.Datetime.now())],
-            request.website.website_domain()
-        ])
-        if domain:
-            dom = expression.AND([dom, domain])
-        posts = request.env['blog.post'].search(dom, limit=limit, order=order)
-        return request.website.viewref(template)._render({'posts': posts})
+        return request.redirect("/blog/%s/%s?enable_editor=1" % (slug(new_blog_post.blog_id), slug(new_blog_post)))

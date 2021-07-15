@@ -14,6 +14,7 @@ from odoo import api, fields, models, tools, _
 from odoo.exceptions import AccessError, ValidationError, MissingError, UserError
 from odoo.tools import config, human_size, ustr, html_escape
 from odoo.tools.mimetypes import guess_mimetype
+from odoo.osv import expression
 
 _logger = logging.getLogger(__name__)
 
@@ -53,20 +54,33 @@ class IrAttachment(models.Model):
         return config.filestore(self._cr.dbname)
 
     @api.model
+    def _get_storage_domain(self):
+        # domain to retrieve the attachments to migrate
+        return {
+            'db': [('store_fname', '!=', False)],
+            'file': [('db_datas', '!=', False)],
+        }[self._storage()]
+
+    @api.model
     def force_storage(self):
         """Force all attachments to be stored in the currently configured storage"""
         if not self.env.is_admin():
             raise AccessError(_('Only administrators can execute this action.'))
 
-        # domain to retrieve the attachments to migrate
-        domain = {
-            'db': [('store_fname', '!=', False)],
-            'file': [('db_datas', '!=', False)],
-        }[self._storage()]
+        # Migrate only binary attachments and bypass the res_field automatic
+        # filter added in _search override
+        self.search(expression.AND([
+            self._get_storage_domain(),
+            ['&', ('type', '=', 'binary'), '|', ('res_field', '=', False), ('res_field', '!=', False)]
+        ]))._migrate()
 
-        for attach in self.search(domain):
+    def _migrate(self):
+        record_count = len(self)
+        storage = self._storage().upper()
+        for index, attach in enumerate(self):
+            _logger.debug("Migrate attachment %s/%s to %s", index + 1, record_count, storage)
+            # pass mimetype, to avoid recomputation
             attach.write({'raw': attach.raw, 'mimetype': attach.mimetype})
-        return True
 
     @api.model
     def _full_path(self, path):
@@ -432,7 +446,9 @@ class IrAttachment(models.Model):
     def _search(self, args, offset=0, limit=None, order=None, count=False, access_rights_uid=None):
         # add res_field=False in domain if not present; the arg[0] trick below
         # works for domain items and '&'/'|'/'!' operators too
+        discard_binary_fields_attachments = False
         if not any(arg[0] in ('id', 'res_field') for arg in args):
+            discard_binary_fields_attachments = True
             args.insert(0, ('res_field', '=', False))
 
         ids = super(IrAttachment, self)._search(args, offset=offset, limit=limit, order=order,
@@ -463,8 +479,8 @@ class IrAttachment(models.Model):
                 continue
             # model_attachments = {res_model: {res_id: set(ids)}}
             model_attachments[row['res_model']][row['res_id']].add(row['id'])
-            # Should not retrieve binary fields attachments
-            if row['res_field']:
+            # Should not retrieve binary fields attachments if not explicitly required
+            if discard_binary_fields_attachments and row['res_field']:
                 binary_fields_attachments.add(row['id'])
 
         if binary_fields_attachments:
@@ -489,11 +505,14 @@ class IrAttachment(models.Model):
         result = [id for id in orig_ids if id in ids]
 
         # If the original search reached the limit, it is important the
-        # filtered record set does so too. When a JS view recieve a
-        # record set whose length is bellow the limit, it thinks it
-        # reached the last page.
-        if len(orig_ids) == limit and len(result) < len(orig_ids):
-            result.extend(self._search(args, offset=offset + len(orig_ids),
+        # filtered record set does so too. When a JS view receive a
+        # record set whose length is below the limit, it thinks it
+        # reached the last page. To avoid an infinite recursion due to the
+        # permission checks the sub-call need to be aware of the number of
+        # expected records to retrieve
+        if len(orig_ids) == limit and len(result) < self._context.get('need', limit):
+            need = self._context.get('need', limit) - len(result)
+            result.extend(self.with_context(need=need)._search(args, offset=offset + len(orig_ids),
                                        limit=limit, order=order, count=count,
                                        access_rights_uid=access_rights_uid)[:limit - len(result)])
 

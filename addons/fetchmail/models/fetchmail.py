@@ -64,8 +64,6 @@ class FetchmailServer(models.Model):
             self.port = self.is_ssl and 995 or 110
         elif self.server_type == 'imap':
             self.port = self.is_ssl and 993 or 143
-        else:
-            self.server = ''
 
         conf = {
             'dbname': self.env.cr.dbname,
@@ -80,9 +78,9 @@ Example configuration for the postfix mta running locally:
 odoo_mailgate: "|/path/to/odoo-mailgate.py --host=localhost -u %(uid)d -p PASSWORD -d %(dbname)s"
         """ % conf
 
-    @api.model
-    def create(self, values):
-        res = super(FetchmailServer, self).create(values)
+    @api.model_create_multi
+    def create(self, vals_list):
+        res = super(FetchmailServer, self).create(vals_list)
         self._update_cron()
         return res
 

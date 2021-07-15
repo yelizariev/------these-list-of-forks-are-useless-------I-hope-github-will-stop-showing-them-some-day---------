@@ -5,7 +5,6 @@ import datetime
 import json
 import os
 import logging
-import pytz
 import requests
 import werkzeug.urls
 import werkzeug.utils
@@ -18,7 +17,8 @@ import odoo
 
 from odoo import http, models, fields, _
 from odoo.http import request
-from odoo.tools import OrderedSet
+from odoo.osv import expression
+from odoo.tools import OrderedSet, escape_psql
 from odoo.addons.http_routing.models.ir_http import slug, slugify, _guess_mimetype
 from odoo.addons.web.controllers.main import Binary
 from odoo.addons.portal.controllers.portal import pager as portal_pager
@@ -85,10 +85,34 @@ class Website(Home):
 
         raise request.not_found()
 
-    @http.route('/website/force_website', type='json', auth="user")
-    def force_website(self, website_id):
-        request.env['website']._force_website(website_id)
-        return True
+    @http.route('/website/force/<int:website_id>', type='http', auth="user", website=True, sitemap=False, multilang=False)
+    def website_force(self, website_id, path='/', isredir=False, **kw):
+        """ To switch from a website to another, we need to force the website in
+        session, AFTER landing on that website domain (if set) as this will be a
+        different session.
+        """
+        if not (request.env.user.has_group('website.group_multi_website')
+           and request.env.user.has_group('website.group_website_publisher')):
+            # The user might not be logged in on the forced website, so he won't
+            # have rights. We just redirect to the path as the user is already
+            # on the domain (basically a no-op as it won't change domain or
+            # force website).
+            # Website 1 : 127.0.0.1 (admin)
+            # Website 2 : 127.0.0.2 (not logged in)
+            # Click on "Website 2" from Website 1
+            return request.redirect(path)
+
+        website = request.env['website'].browse(website_id)
+
+        if not isredir and website.domain:
+            domain_from = request.httprequest.environ.get('HTTP_HOST', '')
+            domain_to = werkzeug.urls.url_parse(website._get_http_domain()).netloc
+            if domain_from != domain_to:
+                # redirect to correct domain for a correct routing map
+                url_to = werkzeug.urls.url_join(website._get_http_domain(), '/website/force/%s?isredir=1&path=%s' % (website.id, path))
+                return request.redirect(url_to)
+        website._force()
+        return request.redirect(path)
 
     # ------------------------------------------------------
     # Login - overwrite of the web login so that regular users are redirected to the backend
@@ -101,7 +125,7 @@ class Website(Home):
         """
         if not redirect and request.params.get('login_success'):
             if request.env['res.users'].browse(uid).has_group('base.group_user'):
-                redirect = b'/web?' + request.httprequest.query_string
+                redirect = '/web?' + request.httprequest.query_string.decode()
             else:
                 redirect = '/my'
         return super()._login_redirect(uid, redirect=redirect)
@@ -212,7 +236,7 @@ class Website(Home):
         try:
             request.website.get_template('website.website_info').name
         except Exception as e:
-            return request.env['ir.http']._handle_exception(e, 404)
+            return request.env['ir.http']._handle_exception(e)
         Module = request.env['ir.module.module'].sudo()
         apps = Module.search([('state', '=', 'installed'), ('application', '=', True)])
         l10n = Module.search([('state', '=', 'installed'), ('name', '=like', 'l10n_%')])
@@ -223,12 +247,22 @@ class Website(Home):
         }
         return request.render('website.website_info', values)
 
+    @http.route(['/website/configurator', '/website/configurator/<int:step>'], type='http', auth="user", website=True, multilang=False)
+    def website_configurator(self, step=1, **kwargs):
+        if not request.env.user.has_group('website.group_website_designer'):
+            raise werkzeug.exceptions.NotFound()
+        website_id = request.env['website'].get_current_website()
+        if website_id.configurator_done is False:
+            return request.render('website.website_configurator', {'lang': request.env.user.lang})
+        else:
+            return request.redirect('/')
+
     @http.route(['/website/social/<string:social>'], type='http', auth="public", website=True, sitemap=False)
     def social(self, social, **kwargs):
         url = getattr(request.website, 'social_%s' % social, False)
         if not url:
             raise werkzeug.exceptions.NotFound()
-        return request.redirect(url)
+        return request.redirect(url, local=False)
 
     @http.route('/website/get_suggested_links', type='json', auth="user", website=True)
     def get_suggested_link(self, needle, limit=10):
@@ -254,8 +288,8 @@ class Website(Home):
         suggested_controllers = []
         for name, url, mod in current_website.get_suggested_controllers():
             if needle.lower() in name.lower() or needle.lower() in url.lower():
-                module = mod and request.env.ref('base.module_%s' % mod, False)
-                icon = mod and "<img src='%s' width='24px' class='mr-2 rounded' /> " % (module and module.icon or mod) or ''
+                module_sudo = mod and request.env.ref('base.module_%s' % mod, False).sudo()
+                icon = mod and "<img src='%s' width='24px' class='mr-2 rounded' /> " % (module_sudo and module_sudo.icon or mod) or ''
                 suggested_controllers.append({
                     'value': url,
                     'label': '%s%s (%s)' % (icon, url, name),
@@ -270,25 +304,33 @@ class Website(Home):
         }
 
     @http.route('/website/snippet/filters', type='json', auth='public', website=True)
-    def get_dynamic_filter(self, filter_id, template_key, limit=None, search_domain=None):
+    def get_dynamic_filter(self, filter_id, template_key, limit=None, search_domain=None, with_sample=False):
         dynamic_filter = request.env['website.snippet.filter'].sudo().search(
             [('id', '=', filter_id)] + request.website.website_domain()
         )
-        return dynamic_filter and dynamic_filter.render(template_key, limit, search_domain) or ''
+        return dynamic_filter and dynamic_filter.render(template_key, limit, search_domain, with_sample) or ''
 
     @http.route('/website/snippet/options_filters', type='json', auth='user', website=True)
-    def get_dynamic_snippet_filters(self):
+    def get_dynamic_snippet_filters(self, model_name=None, search_domain=None):
+        domain = request.website.website_domain()
+        if search_domain:
+            domain = expression.AND([domain, search_domain])
+        if model_name:
+            domain = expression.AND([
+                domain,
+                ['|', ('filter_id.model_id', '=', model_name), ('action_server_id.model_id.model', '=', model_name)]
+            ])
         dynamic_filter = request.env['website.snippet.filter'].sudo().search_read(
-            request.website.website_domain(), ['id', 'name', 'limit']
+            domain, ['id', 'name', 'limit', 'model_name'], order='id asc'
         )
         return dynamic_filter
 
     @http.route('/website/snippet/filter_templates', type='json', auth='public', website=True)
-    def get_dynamic_snippet_templates(self, filter_id=False):
-        # todo: if filter_id.model -> filter template
-        templates = request.env['ir.ui.view'].sudo().search_read(
-            [['key', 'ilike', '.dynamic_filter_template_'], ['type', '=', 'qweb']], ['key', 'name']
-        )
+    def get_dynamic_snippet_templates(self, filter_name=False):
+        domain = [['key', 'ilike', '.dynamic_filter_template_'], ['type', '=', 'qweb']]
+        if filter_name:
+            domain.append(['key', 'ilike', escape_psql('_%s_' % filter_name)])
+        templates = request.env['ir.ui.view'].sudo().search_read(domain, ['key', 'name'])
         return templates
 
     # ------------------------------------------------------
@@ -314,7 +356,7 @@ class Website(Home):
             domain += ['|', ('name', 'ilike', search), ('url', 'ilike', search)]
 
         pages = Page.search(domain, order=sort_order)
-        if sortby != 'url' or not request.env.user.has_group('website.group_multi_website'):
+        if sortby != 'url' or not request.session.debug:
             pages = pages.filtered(pages._is_most_specific_page)
         pages_count = len(pages)
 
@@ -335,10 +377,11 @@ class Website(Home):
             'search': search,
             'sortby': sortby,
             'searchbar_sortings': searchbar_sortings,
+            'search_count': pages_count,
         }
         return request.render("website.list_website_pages", values)
 
-    @http.route(['/website/add/', '/website/add/<path:path>'], type='http', auth="user", website=True, methods=['POST'])
+    @http.route(['/website/add', '/website/add/<path:path>'], type='http', auth="user", website=True, methods=['POST'])
     def pagenew(self, path="", noredirect=False, add_menu=False, template=False, **kwargs):
         # for supported mimetype, get correct default template
         _, ext = os.path.splitext(path)
@@ -475,8 +518,8 @@ class Website(Home):
         :param enable: list of views' keys to enable
         :param disable: list of views' keys to disable
         """
-        self._get_customize_views(disable).write({'active': False})
-        self._get_customize_views(enable).write({'active': True})
+        self._get_customize_views(disable).filtered('active').write({'active': False})
+        self._get_customize_views(enable).filtered(lambda x: not x.active).write({'active': True})
 
     @http.route(['/website/theme_customize_bundle_reload'], type='json', auth='user', website=True)
     def theme_customize_bundle_reload(self):
@@ -523,22 +566,22 @@ class Website(Home):
 
         # find the action_id: either an xml_id, the path, or an ID
         if isinstance(path_or_xml_id_or_id, str) and '.' in path_or_xml_id_or_id:
-            action = request.env.ref(path_or_xml_id_or_id, raise_if_not_found=False)
+            action = request.env.ref(path_or_xml_id_or_id, raise_if_not_found=False).sudo()
         if not action:
-            action = ServerActions.search([('website_path', '=', path_or_xml_id_or_id), ('website_published', '=', True)], limit=1)
+            action = ServerActions.sudo().search(
+                [('website_path', '=', path_or_xml_id_or_id), ('website_published', '=', True)], limit=1)
         if not action:
             try:
                 action_id = int(path_or_xml_id_or_id)
+                action = ServerActions.sudo().browse(action_id).exists()
             except ValueError:
                 pass
 
-        # check it effectively exists
-        if action_id:
-            action = ServerActions.browse(action_id).exists()
         # run it, return only if we got a Response object
         if action:
             if action.state == 'code' and action.website_published:
-                action_res = action.run()
+                # use main session env for execution
+                action_res = ServerActions.browse(action.id).run()
                 if isinstance(action_res, werkzeug.wrappers.Response):
                     return action_res
 

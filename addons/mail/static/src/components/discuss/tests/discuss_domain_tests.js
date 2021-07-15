@@ -1,12 +1,11 @@
-odoo.define('mail/static/src/components/discuss/tests/discuss_domain_tests.js', function (require) {
-'use strict';
+/** @odoo-module **/
 
-const {
+import {
     afterEach,
     afterNextRender,
     beforeEach,
     start,
-} = require('mail/static/src/utils/test_utils.js');
+} from '@mail/utils/test_utils';
 
 QUnit.module('mail', {}, function () {
 QUnit.module('components', {}, function () {
@@ -63,6 +62,7 @@ QUnit.test('discuss should filter messages based on given domain', async functio
         predicate: ({ hint, threadViewer }) => {
             return (
                 hint.type === 'messages-loaded' &&
+                hint.data.fetchedMessages.length === 1 &&
                 threadViewer.thread.model === 'mail.box' &&
                 threadViewer.thread.id === 'inbox'
             );
@@ -81,10 +81,12 @@ QUnit.test('discuss should keep filter domain on changing thread', async functio
     this.data['mail.channel'].records.push({ id: 20 });
     this.data['mail.message'].records.push({
         body: "test",
-        channel_ids: [20],
+        model: "mail.channel",
+        res_id: 20,
     }, {
         body: "not empty",
-        channel_ids: [20],
+        model: "mail.channel",
+        res_id: 20,
     });
     await this.start();
     const channel = this.env.models['mail.thread'].findFromIdentifyingData({
@@ -197,8 +199,8 @@ QUnit.test('discuss should refresh filtered thread on receiving new message', as
         func: () => this.env.services.rpc({
             route: '/mail/chat_post',
             params: {
-                uuid: channel.uuid,
                 message_content: "test",
+                uuid: channel.uuid,
             },
         }),
         message: "should wait until channel 20 refreshed its filtered message list",
@@ -294,8 +296,8 @@ QUnit.test('discuss should refresh filtered thread on changing thread', async fu
     await this.env.services.rpc({
         route: '/mail/chat_post',
         params: {
-            uuid: channel20.uuid,
             message_content: "test",
+            uuid: channel20.uuid,
         },
     });
     assert.containsNone(
@@ -328,80 +330,6 @@ QUnit.test('discuss should refresh filtered thread on changing thread', async fu
     );
 });
 
-QUnit.test('select all and unselect all buttons should work on filtered thread', async function (assert) {
-    assert.expect(4);
-
-    this.data['mail.channel'].records.push({
-        id: 20,
-        is_moderator: true,
-        moderation: true,
-        name: "general",
-    });
-    this.data['mail.message'].records.push({
-        body: "<p>test</p>",
-        model: 'mail.channel',
-        moderation_status: 'pending_moderation',
-        res_id: 20,
-    });
-    await this.start();
-    await this.afterEvent({
-        eventName: 'o-thread-view-hint-processed',
-        func: () => {
-            document.querySelector(`
-                .o_DiscussSidebar_item[data-thread-local-id="${this.env.messaging.moderation.localId}"]
-            `).click();
-        },
-        message: "should wait until moderation box is loaded after clicking on it",
-        predicate: ({ hint, threadViewer }) => {
-            return (
-                hint.type === 'messages-loaded' &&
-                threadViewer.thread.model === 'mail.box' &&
-                threadViewer.thread.id === 'moderation'
-            );
-        },
-    });
-    await this.afterEvent({
-        eventName: 'o-thread-view-hint-processed',
-        func: () => {
-            // simulate control panel search
-            this.env.messaging.discuss.update({
-                stringifiedDomain: JSON.stringify([['body', 'ilike', 'test']]),
-            });
-        },
-        message: "should wait until search filter is applied",
-        predicate: ({ hint, threadViewer }) => {
-            return (
-                hint.type === 'messages-loaded' &&
-                threadViewer.thread.model === 'mail.box' &&
-                threadViewer.thread.id === 'moderation'
-            );
-        },
-    });
-    assert.containsOnce(
-        document.body,
-        '.o_Message',
-        "should only have the 1 message containing 'test' in moderation box"
-    );
-    assert.notOk(
-        document.querySelector('.o_Message_checkbox').checked,
-        "the moderation checkbox should not be checked initially"
-    );
-
-    await afterNextRender(() => document.querySelector('.o_widget_Discuss_controlPanelButtonSelectAll').click());
-    assert.ok(
-        document.querySelector('.o_Message_checkbox').checked,
-        "the moderation checkbox should be checked after clicking on 'select all'"
-    );
-
-    await afterNextRender(() => document.querySelector('.o_widget_Discuss_controlPanelButtonUnselectAll').click());
-    assert.notOk(
-        document.querySelector('.o_Message_checkbox').checked,
-        "the moderation checkbox should be unchecked after clicking on 'unselect all'"
-    );
-});
-
 });
 });
-});
-
 });

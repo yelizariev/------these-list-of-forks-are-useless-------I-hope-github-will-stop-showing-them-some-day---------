@@ -25,6 +25,12 @@
         color: $o-enterprise-color;
     }
 }
+.hr_expense {
+    &.o_list_view, &.o_kanban_view {
+        height: auto;
+        min-height: auto;
+    }
+}
 .hr_expense .o_view_nocontent {
     top: 10%;
 }
@@ -37,5 +43,10 @@
             background-size: 300px 230px;
             margin-bottom: 1rem;
         }
+    }
+}
+.o_control_panel .o_list_buttons {
+    .o_button_upload_expense {
+        margin-left: 3px;
     }
 }

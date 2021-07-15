@@ -1,28 +1,31 @@
-odoo.define('mail/static/src/components/message/message.js', function (require) {
-'use strict';
+/** @odoo-module **/
 
-const components = {
-    AttachmentList: require('mail/static/src/components/attachment_list/attachment_list.js'),
-    MessageSeenIndicator: require('mail/static/src/components/message_seen_indicator/message_seen_indicator.js'),
-    ModerationBanDialog: require('mail/static/src/components/moderation_ban_dialog/moderation_ban_dialog.js'),
-    ModerationDiscardDialog: require('mail/static/src/components/moderation_discard_dialog/moderation_discard_dialog.js'),
-    ModerationRejectDialog: require('mail/static/src/components/moderation_reject_dialog/moderation_reject_dialog.js'),
-    NotificationPopover: require('mail/static/src/components/notification_popover/notification_popover.js'),
-    PartnerImStatusIcon: require('mail/static/src/components/partner_im_status_icon/partner_im_status_icon.js'),
-};
-const useStore = require('mail/static/src/component_hooks/use_store/use_store.js');
-const { timeFromNow } = require('mail.utils');
+import { useShouldUpdateBasedOnProps } from '@mail/component_hooks/use_should_update_based_on_props/use_should_update_based_on_props';
+import { useStore } from '@mail/component_hooks/use_store/use_store';
+import { useUpdate } from '@mail/component_hooks/use_update/use_update';
+import { AttachmentList } from '@mail/components/attachment_list/attachment_list';
+import { MessageSeenIndicator } from '@mail/components/message_seen_indicator/message_seen_indicator';
+import { NotificationPopover } from '@mail/components/notification_popover/notification_popover';
+import { PartnerImStatusIcon } from '@mail/components/partner_im_status_icon/partner_im_status_icon';
+import { isEventHandled, markEventHandled } from '@mail/utils/utils';
 
-const { _lt } = require('web.core');
-const { getLangDatetimeFormat } = require('web.time');
+import { _lt } from 'web.core';
+import { format } from 'web.field_utils';
+import { getLangDatetimeFormat } from 'web.time';
 
 const { Component, useState } = owl;
 const { useRef } = owl.hooks;
 
 const READ_MORE = _lt("read more");
 const READ_LESS = _lt("read less");
+const components = {
+    AttachmentList,
+    MessageSeenIndicator,
+    NotificationPopover,
+    PartnerImStatusIcon,
+};
 
-class Message extends Component {
+export class Message extends Component {
 
     /**
      * @override
@@ -30,22 +33,13 @@ class Message extends Component {
     constructor(...args) {
         super(...args);
         this.state = useState({
-            // Determine if the moderation ban dialog is displayed.
-            hasModerationBanDialog: false,
-            // Determine if the moderation discard dialog is displayed.
-            hasModerationDiscardDialog: false,
-            // Determine if the moderation reject dialog is displayed.
-            hasModerationRejectDialog: false,
             /**
              * Determine whether the message is clicked. When message is in
              * clicked state, it keeps displaying the commands.
              */
             isClicked: false,
-            /**
-             * Time elapsed from message datetime to current datetime.
-             */
-            timeElapsed: null,
         });
+        useShouldUpdateBasedOnProps();
         useStore(props => {
             const message = this.env.models['mail.message'].get(props.messageLocalId);
             const author = message ? message.author : undefined;
@@ -53,35 +47,50 @@ class Message extends Component {
             const originThread = message ? message.originThread : undefined;
             const threadView = this.env.models['mail.thread_view'].get(props.threadViewLocalId);
             const thread = threadView ? threadView.thread : undefined;
-            const threadStringifiedDomain = threadView
-                ? threadView.stringifiedDomain
-                : undefined;
             return {
                 attachments: message
                     ? message.attachments.map(attachment => attachment.__state)
-                    : undefined,
-                author: author ? author.__state : undefined,
-                hasMessageCheckbox: message ? message.hasCheckbox : false,
+                    : [],
+                author,
+                authorAvatarUrl: author && author.avatarUrl,
+                authorImStatus: author && author.im_status,
+                authorNameOrDisplayName: author && author.nameOrDisplayName,
+                correspondent: thread && thread.correspondent,
                 isDeviceMobile: this.env.messaging.device.isMobile,
-                isMessageChecked: message && threadView
-                    ? message.isChecked(thread, threadStringifiedDomain)
+                isMessageSelected: message && threadView && threadView.threadViewer
+                    ? threadView.threadViewer.selectedMessage === message
                     : false,
                 message: message ? message.__state : undefined,
                 notifications: message ? message.notifications.map(notif => notif.__state) : [],
-                originThread: originThread ? originThread.__state : undefined,
-                partnerRoot: partnerRoot ? partnerRoot.__state : undefined,
-                thread: thread ? thread.__state : undefined,
-                threadView: threadView ? threadView.__state : undefined,
+                originThread,
+                originThreadModel: originThread && originThread.model,
+                originThreadDisplayName: originThread && originThread.displayName,
+                originThreadUrl: originThread && originThread.url,
+                partnerRoot,
+                thread,
+                threadHasSeenIndicators: thread && thread.hasSeenIndicators,
             };
         }, {
             compareDepth: {
+                attachments: 1,
                 notifications: 1,
             },
         });
+        useUpdate({ func: () => this._update() });
         /**
          * The intent of the reply button depends on the last rendered state.
          */
         this._wasSelected;
+        /**
+         * Value of the last rendered prettyBody. Useful to compare to new value
+         * to decide if it has to be updated.
+         */
+        this._lastPrettyBody;
+        /**
+         * Reference to element containing the prettyBody. Useful to be able to
+         * replace prettyBody with new value in JS (which is faster than t-raw).
+         */
+        this._prettyBodyRef = useRef('prettyBody');
         /**
          * Reference to the content of the message.
          */
@@ -102,14 +111,6 @@ class Message extends Component {
      * Allows patching constructor.
      */
     _constructor() {}
-
-    mounted() {
-        this._update();
-    }
-
-    patched() {
-        this._update();
-    }
 
     willUnmount() {
         clearInterval(this._intervalId);
@@ -163,13 +164,6 @@ class Message extends Component {
     }
 
     /**
-     * @returns {mail.attachment[]}
-     */
-    get imageAttachments() {
-        return this.message.attachments.filter(attachment => attachment.fileType === 'image');
-    }
-
-    /**
      * Tell whether the bottom of this message is visible or not.
      *
      * @param {Object} param0
@@ -211,19 +205,24 @@ class Message extends Component {
     }
 
     /**
+     * Tell whether the message is selected in the current thread viewer.
+     *
+     * @returns {boolean}
+     */
+    get isSelected() {
+        return (
+            this.threadView &&
+            this.threadView.threadViewer &&
+            this.threadView.threadViewer.selectedMessage === this.message
+        );
+    }
+
+    /**
      * @returns {mail.message}
      */
     get message() {
         return this.env.models['mail.message'].get(this.props.messageLocalId);
     }
-
-    /**
-     * @returns {mail.attachment[]}
-     */
-    get nonImageAttachments() {
-        return this.message.attachments.filter(attachment => attachment.fileType !== 'image');
-    }
-
     /**
      * @returns {string}
      */
@@ -276,24 +275,76 @@ class Message extends Component {
         return this.message.tracking_value_ids.map(trackingValue => {
             const value = Object.assign({}, trackingValue);
             value.changed_field = _.str.sprintf(this.env._t("%s:"), value.changed_field);
-            if (value.field_type === 'datetime') {
-                if (value.old_value) {
-                    value.old_value =
-                        moment.utc(value.old_value).local().format('LLL');
-                }
-                if (value.new_value) {
-                    value.new_value =
-                        moment.utc(value.new_value).local().format('LLL');
-                }
-            } else if (value.field_type === 'date') {
-                if (value.old_value) {
-                    value.old_value =
-                        moment(value.old_value).local().format('LL');
-                }
-                if (value.new_value) {
-                    value.new_value =
-                        moment(value.new_value).local().format('LL');
-                }
+            /**
+             * Maps tracked field type to a JS formatter. Tracking values are
+             * not always stored in the same field type as their origin type.
+             * Field types that are not listed here are not supported by
+             * tracking in Python. Also see `create_tracking_values` in Python.
+             */
+            switch (value.field_type) {
+                case 'boolean':
+                    value.old_value = format.boolean(value.old_value, undefined, { forceString: true });
+                    value.new_value = format.boolean(value.new_value, undefined, { forceString: true });
+                    break;
+                /**
+                 * many2one formatter exists but is expecting id/name_get or data
+                 * object but only the target record name is known in this context.
+                 *
+                 * Selection formatter exists but requires knowing all
+                 * possibilities and they are not given in this context.
+                 */
+                case 'char':
+                case 'many2one':
+                case 'selection':
+                    value.old_value = format.char(value.old_value);
+                    value.new_value = format.char(value.new_value);
+                    break;
+                case 'date':
+                    if (value.old_value) {
+                        value.old_value = moment.utc(value.old_value);
+                    }
+                    if (value.new_value) {
+                        value.new_value = moment.utc(value.new_value);
+                    }
+                    value.old_value = format.date(value.old_value);
+                    value.new_value = format.date(value.new_value);
+                    break;
+                case 'datetime':
+                    if (value.old_value) {
+                        value.old_value = moment.utc(value.old_value);
+                    }
+                    if (value.new_value) {
+                        value.new_value = moment.utc(value.new_value);
+                    }
+                    value.old_value = format.datetime(value.old_value);
+                    value.new_value = format.datetime(value.new_value);
+                    break;
+                case 'float':
+                    value.old_value = format.float(value.old_value);
+                    value.new_value = format.float(value.new_value);
+                    break;
+                case 'integer':
+                    value.old_value = format.integer(value.old_value);
+                    value.new_value = format.integer(value.new_value);
+                    break;
+                case 'monetary':
+                    value.old_value = format.monetary(value.old_value, undefined, {
+                        currency: value.currency_id
+                            ? this.env.session.currencies[value.currency_id]
+                            : undefined,
+                        forceString: true,
+                    });
+                    value.new_value = format.monetary(value.new_value, undefined, {
+                        currency: value.currency_id
+                            ? this.env.session.currencies[value.currency_id]
+                            : undefined,
+                        forceString: true,
+                    });
+                    break;
+                case 'text':
+                    value.old_value = format.text(value.old_value);
+                    value.new_value = format.text(value.new_value);
+                    break;
             }
             return value;
         });
@@ -388,6 +439,13 @@ class Message extends Component {
      * @private
      */
     _update() {
+        if (!this.message) {
+            return;
+        }
+        if (this._prettyBodyRef.el && this.message.prettyBody !== this._lastPrettyBody) {
+            this._prettyBodyRef.el.innerHTML = this.message.prettyBody;
+            this._lastPrettyBody = this.message.prettyBody;
+        }
         // Remove all readmore before if any before reinsert them with _insertReadMoreLess.
         // This is needed because _insertReadMoreLess is working with direct DOM mutations
         // which are not sync with Owl.
@@ -396,27 +454,21 @@ class Message extends Component {
                 el.remove();
             }
             this._insertReadMoreLess($(this._contentRef.el));
+            this.env.messagingBus.trigger('o-component-message-read-more-less-inserted', {
+                message: this.message,
+            });
         }
-        this._wasSelected = this.props.isSelected;
-        if (!this.state.timeElapsed) {
-            this.state.timeElapsed = timeFromNow(this.message.date);
-        }
+        this._wasSelected = this.isSelected;
+        this.message.refreshDateFromNow();
         clearInterval(this._intervalId);
         this._intervalId = setInterval(() => {
-            this.state.timeElapsed = timeFromNow(this.message.date);
+            this.message.refreshDateFromNow();
         }, 60 * 1000);
     }
 
     //--------------------------------------------------------------------------
     // Handlers
     //--------------------------------------------------------------------------
-
-    /**
-     * @private
-     */
-    _onChangeCheckbox() {
-        this.message.toggleCheck(this.threadView.thread, this.threadView.stringifiedDomain);
-    }
 
     /**
      * @private
@@ -443,7 +495,13 @@ class Message extends Component {
             }
             return;
         }
-        this.state.isClicked = !this.state.isClicked;
+        if (
+            !isEventHandled(ev, 'Message.ClickAuthorAvatar') &&
+            !isEventHandled(ev, 'Message.ClickAuthorName') &&
+            !isEventHandled(ev, 'Message.ClickFailure')
+        ) {
+            this.state.isClicked = !this.state.isClicked;
+        }
     }
 
     /**
@@ -451,6 +509,7 @@ class Message extends Component {
      * @param {MouseEvent} ev
      */
     _onClickAuthorAvatar(ev) {
+        markEventHandled(ev, 'Message.ClickAuthorAvatar');
         if (!this.hasAuthorOpenChat) {
             return;
         }
@@ -462,6 +521,7 @@ class Message extends Component {
      * @param {MouseEvent} ev
      */
     _onClickAuthorName(ev) {
+        markEventHandled(ev, 'Message.ClickAuthorName');
         if (!this.message.author) {
             return;
         }
@@ -473,52 +533,8 @@ class Message extends Component {
      * @param {MouseEvent} ev
      */
     _onClickFailure(ev) {
+        markEventHandled(ev, 'Message.ClickFailure');
         this.message.openResendAction();
-    }
-
-    /**
-     * @private
-     * @param {MouseEvent} ev
-     */
-    _onClickModerationAccept(ev) {
-        ev.preventDefault();
-        this.message.moderate('accept');
-    }
-
-    /**
-     * @private
-     * @param {MouseEvent} ev
-     */
-    _onClickModerationAllow(ev) {
-        ev.preventDefault();
-        this.message.moderate('allow');
-    }
-
-    /**
-     * @private
-     * @param {MouseEvent} ev
-     */
-    _onClickModerationBan(ev) {
-        ev.preventDefault();
-        this.state.hasModerationBanDialog = true;
-    }
-
-    /**
-     * @private
-     * @param {MouseEvent} ev
-     */
-    _onClickModerationDiscard(ev) {
-        ev.preventDefault();
-        this.state.hasModerationDiscardDialog = true;
-    }
-
-    /**
-     * @private
-     * @param {MouseEvent} ev
-     */
-    _onClickModerationReject(ev) {
-        ev.preventDefault();
-        this.state.hasModerationRejectDialog = true;
     }
 
     /**
@@ -564,37 +580,13 @@ class Message extends Component {
             this.message.replyTo();
         }
     }
-
-    /**
-     * @private
-     */
-    _onDialogClosedModerationBan() {
-        this.state.hasModerationBanDialog = false;
-    }
-
-    /**
-     * @private
-     */
-    _onDialogClosedModerationDiscard() {
-        this.state.hasModerationDiscardDialog = false;
-    }
-
-    /**
-     * @private
-     */
-    _onDialogClosedModerationReject() {
-        this.state.hasModerationRejectDialog = false;
-    }
-
 }
 
 Object.assign(Message, {
     components,
     defaultProps: {
-        hasCheckbox: false,
         hasMarkAsReadIcon: false,
         hasReplyIcon: false,
-        isSelected: false,
         isSquashed: false,
     },
     props: {
@@ -603,10 +595,8 @@ Object.assign(Message, {
             optional: true,
             validate: prop => ['auto', 'card', 'hover', 'none'].includes(prop),
         },
-        hasCheckbox: Boolean,
         hasMarkAsReadIcon: Boolean,
         hasReplyIcon: Boolean,
-        isSelected: Boolean,
         isSquashed: Boolean,
         messageLocalId: String,
         threadViewLocalId: {
@@ -615,8 +605,4 @@ Object.assign(Message, {
         },
     },
     template: 'mail.Message',
-});
-
-return Message;
-
 });

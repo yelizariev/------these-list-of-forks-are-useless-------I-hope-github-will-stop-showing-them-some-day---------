@@ -11,6 +11,7 @@ from odoo import api, fields, models, tools, _
 from odoo.addons.http_routing.models.ir_http import slug
 from odoo.exceptions import AccessError
 from odoo.osv import expression
+from odoo.tools import is_html_empty
 
 _logger = logging.getLogger(__name__)
 
@@ -26,6 +27,12 @@ class ChannelUsersRelation(models.Model):
     completed_slides_count = fields.Integer('# Completed Slides')
     partner_id = fields.Many2one('res.partner', index=True, required=True, ondelete='cascade')
     partner_email = fields.Char(related='partner_id.email', readonly=True)
+    # channel-related information (for UX purpose)
+    channel_user_id = fields.Many2one('res.users', string='Responsible', related='channel_id.user_id')
+    channel_type = fields.Selection(related='channel_id.channel_type')
+    channel_visibility = fields.Selection(related='channel_id.visibility')
+    channel_enroll = fields.Selection(related='channel_id.enroll')
+    channel_website_id = fields.Many2one('website', string='Website', related='channel_id.website_id')
 
     def _recompute_completion(self):
         read_group_res = self.env['slide.slide.partner'].sudo().read_group(
@@ -45,7 +52,7 @@ class ChannelUsersRelation(models.Model):
         for record in self:
             record.completed_slides_count = mapped_data.get(record.channel_id.id, dict()).get(record.partner_id.id, 0)
             record.completion = 100.0 if record.completed else round(100.0 * record.completed_slides_count / (record.channel_id.total_slides or 1))
-            if not record.completed and record.completed_slides_count >= record.channel_id.total_slides:
+            if not record.completed and record.channel_id.active and record.completed_slides_count >= record.channel_id.total_slides:
                 completed_records += record
 
         if completed_records:
@@ -142,8 +149,8 @@ class Channel(models.Model):
     # description
     name = fields.Char('Name', translate=True, required=True)
     active = fields.Boolean(default=True, tracking=100)
-    description = fields.Text('Description', translate=True, help="The description that is displayed on top of the course page, just below the title")
-    description_short = fields.Text('Short Description', translate=True, help="The description that is displayed on the course card")
+    description = fields.Html('Description', translate=True, help="The description that is displayed on top of the course page, just below the title")
+    description_short = fields.Html('Short Description', translate=True, help="The description that is displayed on the course card")
     description_html = fields.Html('Detailed Description', translate=tools.html_translate, sanitize_attributes=False, sanitize_form=False)
     channel_type = fields.Selection([
         ('training', 'Training'), ('documentation', 'Documentation')],
@@ -155,7 +162,7 @@ class Channel(models.Model):
         'slide.channel.tag', 'slide_channel_tag_rel', 'channel_id', 'tag_id',
         string='Tags', help='Used to categorize and filter displayed channels/courses')
     # slides: promote, statistics
-    slide_ids = fields.One2many('slide.slide', 'channel_id', string="Slides and categories", context={'active_test': False})
+    slide_ids = fields.One2many('slide.slide', 'channel_id', string="Slides and categories")
     slide_content_ids = fields.One2many('slide.slide', string='Slides', compute="_compute_category_and_slide_ids")
     slide_category_ids = fields.One2many('slide.slide', string='Categories', compute="_compute_category_and_slide_ids")
     slide_last_update = fields.Date('Last Update', compute='_compute_slide_last_update', store=True)
@@ -449,7 +456,7 @@ class Channel(models.Model):
             vals['channel_partner_ids'] = [(0, 0, {
                 'partner_id': self.env.user.partner_id.id
             })]
-        if vals.get('description') and not vals.get('description_short'):
+        if not is_html_empty(vals.get('description')) and  is_html_empty(vals.get('description_short')):
             vals['description_short'] = vals['description']
         channel = super(Channel, self.with_context(mail_create_nosubscribe=True)).create(vals)
 
@@ -462,7 +469,7 @@ class Channel(models.Model):
 
     def write(self, vals):
         # If description_short wasn't manually modified, there is an implicit link between this field and description.
-        if vals.get('description') and not vals.get('description_short') and self.description == self.description_short:
+        if not is_html_empty(vals.get('description')) and is_html_empty(vals.get('description_short')) and self.description == self.description_short:
             vals['description_short'] = vals.get('description')
 
         res = super(Channel, self).write(vals)
@@ -476,16 +483,28 @@ class Channel(models.Model):
         return res
 
     def toggle_active(self):
-        # archiving/unarchiving a channel does it on its slides, too
+        """ Archiving/unarchiving a channel does it on its slides, too.
+        1. When archiving
+        We want to be archiving the channel FIRST.
+        So that when slides are archived and the recompute is triggered,
+        it does not try to mark the channel as "completed".
+        That happens because it counts slide_done / slide_total, but slide_total
+        will be 0 since all the slides for the course have been archived as well.
+
+        2. When un-archiving
+        We want to archive the channel LAST.
+        So that when it recomputes stats for the channel and completion, it correctly
+        counts the slides_total by counting slides that are already un-archived. """
+
         to_archive = self.filtered(lambda channel: channel.active)
         to_activate = self.filtered(lambda channel: not channel.active)
-        res = super(Channel, self).toggle_active()
         if to_archive:
+            super(Channel, to_archive).toggle_active()
             to_archive.is_published = False
             to_archive.mapped('slide_ids').action_archive()
         if to_activate:
             to_activate.with_context(active_test=False).mapped('slide_ids').action_unarchive()
-        return res
+            super(Channel, to_activate).toggle_active()
 
     @api.returns('mail.message', lambda value: value.id)
     def message_post(self, *, parent_id=False, subtype_id=False, **kwargs):
@@ -505,21 +524,22 @@ class Channel(models.Model):
     # Business / Actions
     # ---------------------------------------------------------
 
-    def action_redirect_to_members(self, state=None):
+    def action_redirect_to_members(self, completed=False):
+        """ Redirects to attendees of the course. If completed is True, a filter
+        will be added in action that will display only attendees who have completed
+        the course. """
         action = self.env["ir.actions.actions"]._for_xml_id("website_slides.slide_channel_partner_action")
-        action['domain'] = [('channel_id', 'in', self.ids)]
+        action_ctx = {'active_test': False}
+        if completed:
+            action_ctx['search_default_filter_completed'] = 1
         if len(self) == 1:
             action['display_name'] = _('Attendees of %s', self.name)
-            action['context'] = {'active_test': False, 'default_channel_id': self.id}
-        if state:
-            action['domain'] += [('completed', '=', state == 'completed')]
+            action_ctx['search_default_channel_id'] = self.id
+        action['context'] = action_ctx
         return action
 
-    def action_redirect_to_running_members(self):
-        return self.action_redirect_to_members('running')
-
     def action_redirect_to_done_members(self):
-        return self.action_redirect_to_members('completed')
+        return self.action_redirect_to_members(completed=True)
 
     def action_channel_invite(self):
         self.ensure_one()

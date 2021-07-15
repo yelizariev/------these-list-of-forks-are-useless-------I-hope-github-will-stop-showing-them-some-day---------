@@ -9,6 +9,7 @@ from odoo.models import BaseModel
 from odoo.tests.common import TransactionCase
 from odoo.tools import mute_logger
 from odoo.osv import expression
+from odoo import Command
 
 
 class TestExpression(SavepointCaseWithUserDemo):
@@ -32,9 +33,9 @@ class TestExpression(SavepointCaseWithUserDemo):
         cat_b = categories.create({'name': 'test_expression_category_B'})
 
         partners = self.env['res.partner']
-        a = partners.create({'name': 'test_expression_partner_A', 'category_id': [(6, 0, [cat_a.id])]})
-        b = partners.create({'name': 'test_expression_partner_B', 'category_id': [(6, 0, [cat_b.id])]})
-        ab = partners.create({'name': 'test_expression_partner_AB', 'category_id': [(6, 0, [cat_a.id, cat_b.id])]})
+        a = partners.create({'name': 'test_expression_partner_A', 'category_id': [Command.set([cat_a.id])]})
+        b = partners.create({'name': 'test_expression_partner_B', 'category_id': [Command.set([cat_b.id])]})
+        ab = partners.create({'name': 'test_expression_partner_AB', 'category_id': [Command.set([cat_a.id, cat_b.id])]})
         c = partners.create({'name': 'test_expression_partner_C'})
 
         # The tests.
@@ -99,7 +100,7 @@ class TestExpression(SavepointCaseWithUserDemo):
         }
         pids = {}
         for name, cat_ids in partners_config.items():
-            pids[name] = partners.create({'name': name, 'category_id': [(6, 0, cat_ids)]}).id
+            pids[name] = partners.create({'name': name, 'category_id': [Command.set(cat_ids)]}).id
 
         base_domain = [('id', 'in', list(pids.values()))]
 
@@ -113,6 +114,17 @@ class TestExpression(SavepointCaseWithUserDemo):
         test('like', 'A', ['a', 'ab', 'a b', 'b ab'])
         test('not ilike', 'B', ['0', 'a'])
         test('not like', 'AB', ['0', 'a', 'b', 'a b'])
+
+    def test_09_hierarchy_filtered_domain(self):
+        Partner = self.env['res.partner']
+        p = Partner.create({'name': 'dummy'})
+
+        # hierarchy without parent
+        self.assertFalse(p.parent_id)
+        p2 = self._search(Partner, [('parent_id', 'child_of', p.id)], [('id', '=', p.id)])
+        self.assertEqual(p2, p)
+        p3 = self._search(Partner, [('parent_id', 'parent_of', p.id)], [('id', '=', p.id)])
+        self.assertEqual(p3, p)
 
     def test_10_hierarchy_in_m2m(self):
         Partner = self.env['res.partner']
@@ -593,6 +605,17 @@ class TestExpression(SavepointCaseWithUserDemo):
         norm_domain = ['&', '&', '&'] + domain
         self.assertEqual(norm_domain, expression.normalize_domain(domain), "Non-normalized domains should be properly normalized")
 
+    def test_35_negating_thruty_leafs(self):
+        self.assertEqual(expression.distribute_not(['!', '!', expression.TRUE_LEAF]), [expression.TRUE_LEAF], "distribute_not applied wrongly")
+        self.assertEqual(expression.distribute_not(['!', '!', expression.FALSE_LEAF]), [expression.FALSE_LEAF], "distribute_not applied wrongly")
+        self.assertEqual(expression.distribute_not(['!', '!', '!', '!', expression.TRUE_LEAF]), [expression.TRUE_LEAF], "distribute_not applied wrongly")
+        self.assertEqual(expression.distribute_not(['!', '!', '!', '!', expression.FALSE_LEAF]), [expression.FALSE_LEAF], "distribute_not applied wrongly")
+
+        self.assertEqual(expression.distribute_not(['!', expression.TRUE_LEAF]), [expression.FALSE_LEAF], "distribute_not applied wrongly")
+        self.assertEqual(expression.distribute_not(['!', expression.FALSE_LEAF]), [expression.TRUE_LEAF], "distribute_not applied wrongly")
+        self.assertEqual(expression.distribute_not(['!', '!', '!', expression.TRUE_LEAF]), [expression.FALSE_LEAF], "distribute_not applied wrongly")
+        self.assertEqual(expression.distribute_not(['!', '!', '!', expression.FALSE_LEAF]), [expression.TRUE_LEAF], "distribute_not applied wrongly")
+
     def test_40_negating_long_expression(self):
         source = ['!', '&', ('user_id', '=', 4), ('partner_id', 'in', [1, 2])]
         expect = ['|', ('user_id', '!=', 4), ('partner_id', 'not in', [1, 2])]
@@ -681,6 +704,10 @@ class TestExpression(SavepointCaseWithUserDemo):
             countries = self._search(Country, domain)
             self.assertEqual(countries, belgium)
 
+        countries = self._search(Country, [('name', 'not in', ['No country'])])
+        all_countries = self._search(Country, [])
+        self.assertEqual(countries, all_countries)
+
     @mute_logger('odoo.sql_db')
     def test_invalid(self):
         """ verify that invalid expressions are refused, even for magic fields """
@@ -707,8 +734,8 @@ class TestExpression(SavepointCaseWithUserDemo):
         vals = {
             'name': 'OpenERP Test',
             'active': False,
-            'category_id': [(6, 0, [self.partner_category.id])],
-            'child_ids': [(0, 0, {'name': 'address of OpenERP Test', 'country_id': self.ref("base.be")})],
+            'category_id': [Command.set([self.partner_category.id])],
+            'child_ids': [Command.create({'name': 'address of OpenERP Test', 'country_id': self.ref("base.be")})],
         }
         Partner.create(vals)
         partner = self._search(Partner, [('category_id', 'ilike', 'sellers'), ('active', '=', False)], [('active', '=', False)])
@@ -783,13 +810,23 @@ class TestExpression(SavepointCaseWithUserDemo):
         expr = expression.AND([expression.OR([false]), normal])
         self.assertEqual(expr, false)
 
+    def test_filtered_domain_order(self):
+        domain = [('name', 'ilike', 'a')]
+        countries = self.env['res.country'].search(domain)
+        self.assertGreater(len(countries), 1)
+        # same ids, same order
+        self.assertEqual(countries.filtered_domain(domain)._ids, countries._ids)
+        # again, trying the other way around
+        countries = countries.browse(reversed(countries._ids))
+        self.assertEqual(countries.filtered_domain(domain)._ids, countries._ids)
+
 
 class TestExpression2(TransactionCase):
 
     def test_long_table_alias(self):
         # To test the 64 characters limit for table aliases in PostgreSQL
-        self.patch_order('res.users', 'partner_id')
-        self.patch_order('res.partner', 'commercial_partner_id,company_id,name')
+        self.patch(self.registry['res.users'], '_order', 'partner_id')
+        self.patch(self.registry['res.partner'], '_order', 'commercial_partner_id,company_id,name')
         self.env['res.users'].search([('name', '=', 'test')])
 
 
@@ -1117,6 +1154,18 @@ class TestMany2one(TransactionCase):
         ''']):
             self.User.search([('name', 'like', 'foo')])
 
+        # the field supporting the inheritance should be auto_join, too
+        # TODO: use another model, since 'res.users' has explicit auto_join
+        with self.assertQueries(['''
+            SELECT "res_users".id
+            FROM "res_users"
+            LEFT JOIN "res_partner" AS "res_users__partner_id" ON
+                ("res_users"."partner_id" = "res_users__partner_id"."id")
+            WHERE ("res_users__partner_id"."name"::text LIKE %s)
+            ORDER BY "res_users__partner_id"."name", "res_users"."login"
+        ''']):
+            self.User.search([('partner_id.name', 'like', 'foo')])
+
     def test_regular(self):
         self.Partner.search([('company_id.partner_id.name', 'like', self.company.name)])
         self.Partner.search([('country_id.code', 'like', 'BE')])
@@ -1317,9 +1366,9 @@ class TestOne2many(TransactionCase):
         self.partner = self.Partner.create({
             'name': 'Foo',
             'bank_ids': [
-                (0, 0, {'acc_number': '123', 'acc_type': 'bank'}),
-                (0, 0, {'acc_number': '456', 'acc_type': 'bank'}),
-                (0, 0, {'acc_number': '789', 'acc_type': 'bank'}),
+                Command.create({'acc_number': '123', 'acc_type': 'bank'}),
+                Command.create({'acc_number': '456', 'acc_type': 'bank'}),
+                Command.create({'acc_number': '789', 'acc_type': 'bank'}),
             ],
         })
 

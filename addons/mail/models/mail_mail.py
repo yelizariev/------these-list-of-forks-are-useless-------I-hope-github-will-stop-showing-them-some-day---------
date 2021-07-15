@@ -54,7 +54,7 @@ class MailMail(models.Model):
         'Auto Delete',
         help="This option permanently removes any track of email after it's been sent, including from the Technical menu in the Settings, in order to preserve storage space of your Odoo database.")
     failure_reason = fields.Text(
-        'Failure Reason', readonly=1,
+        'Failure Reason', readonly=1, copy=False,
         help="Failure reason. This is usually the exception thrown by the email server, stored to ease the debugging of mailing issues.")
     scheduled_date = fields.Char('Scheduled Send Date',
         help="If set, the queue manager will send the email after the date. If not set, the email will be send as soon as possible.")
@@ -99,6 +99,9 @@ class MailMail(models.Model):
         if self._context.get('default_type') not in type(self).message_type.base_field.selection:
             self = self.with_context(dict(self._context, default_type=None))
         return super(MailMail, self).default_get(fields)
+
+    def action_retry(self):
+        self.filtered(lambda mail: mail.state == 'exception').mark_outgoing()
 
     def mark_outgoing(self):
         return self.write({'state': 'outgoing'})
@@ -313,10 +316,7 @@ class MailMail(models.Model):
                 bounce_alias = ICP.get_param("mail.bounce.alias")
                 catchall_domain = ICP.get_param("mail.catchall.domain")
                 if bounce_alias and catchall_domain:
-                    if mail.mail_message_id.is_thread_message():
-                        headers['Return-Path'] = '%s+%d-%s-%d@%s' % (bounce_alias, mail.id, mail.model, mail.res_id, catchall_domain)
-                    else:
-                        headers['Return-Path'] = '%s+%d@%s' % (bounce_alias, mail.id, catchall_domain)
+                    headers['Return-Path'] = '%s@%s' % (bounce_alias, catchall_domain)
                 if mail.headers:
                     try:
                         headers.update(ast.literal_eval(mail.headers))

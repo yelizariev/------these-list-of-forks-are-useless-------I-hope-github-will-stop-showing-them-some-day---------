@@ -44,7 +44,7 @@ class MailBot(models.AbstractModel):
             elif odoobot_state == 'onboarding_command' and command == 'help':
                 self.env.user.odoobot_state = "onboarding_ping"
                 self.env.user.odoobot_failed = False
-                return _("Wow you are a natural!<br/>Ping someone to grab its attention with @username. <b>Try to ping me using</b> <span class=\"o_odoobot_command\">@OdooBot</span> in a sentence.")
+                return _("Wow you are a natural!<br/>Ping someone with @username to grab their attention. <b>Try to ping me using</b> <span class=\"o_odoobot_command\">@OdooBot</span> in a sentence.")
             elif odoobot_state == 'onboarding_ping' and self._is_bot_pinged(values):
                 self.env.user.odoobot_state = "onboarding_attachement"
                 self.env.user.odoobot_failed = False
@@ -64,7 +64,7 @@ class MailBot(models.AbstractModel):
             # help message
             elif self._is_help_requested(body) or odoobot_state == 'idle':
                 return _("Unfortunately, I'm just a bot 😞 I don't understand! If you need help discovering our product, please check "
-                         "<a href=\"https://www.odoo.com/page/docs\" target=\"_blank\">our documentation</a> or "
+                         "<a href=\"https://www.odoo.com/documentation\" target=\"_blank\">our documentation</a> or "
                          "<a href=\"https://www.odoo.com/slides\" target=\"_blank\">our videos</a>.")
             else:
                 # repeat question

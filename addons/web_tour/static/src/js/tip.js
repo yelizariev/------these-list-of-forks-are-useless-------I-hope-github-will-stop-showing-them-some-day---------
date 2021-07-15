@@ -15,6 +15,7 @@ var Tip = Widget.extend({
         mouseleave: '_onMouseLeave',
         transitionend: '_onTransitionEnd',
     },
+    CENTER_ON_TEXT_TAGS: ['P', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6'],
 
     /**
      * @param {Widget} parent
@@ -51,18 +52,21 @@ var Tip = Widget.extend({
         };
         this.initialPosition = this.info.position;
         this.viewPortState = 'in';
-        this._onAncestorScroll = _.throttle(this._onAncestorScroll, 50);
+        this._onAncestorScroll = _.throttle(this._onAncestorScroll, 0.1);
     },
     /**
      * Attaches the tip to the provided $anchor and $altAnchor.
      * $altAnchor is an alternative trigger that can consume the step. The tip is
      * however only displayed on the $anchor.
+     * 
+     * Note that the returned promise stays pending if the Tip widget was
+     * destroyed in the meantime.
      *
      * @param {jQuery} $anchor the node on which the tip should be placed
      * @param {jQuery} $altAnchor an alternative node that can consume the step
      * @return {Promise}
      */
-    attach_to: function ($anchor, $altAnchor) {
+    attach_to: async function ($anchor, $altAnchor) {
         this._setupAnchor($anchor, $altAnchor);
 
         this.is_anchor_fixed_position = this.$anchor.css("position") === "fixed";
@@ -70,18 +74,29 @@ var Tip = Widget.extend({
         // The body never needs to have the o_tooltip_parent class. It is a
         // safe place to put the tip in the DOM at initialization and be able
         // to compute its dimensions and reposition it if required.
-        return this.appendTo(document.body);
+        await this.appendTo(document.body);
+        if (this.isDestroyed()) {
+            return new Promise(() => {});
+        }
     },
     start() {
         this.$tooltip_overlay = this.$(".o_tooltip_overlay");
         this.$tooltip_content = this.$(".o_tooltip_content");
         this.init_width = this.$el.outerWidth();
         this.init_height = this.$el.outerHeight();
-        this.content_width = this.$tooltip_content.outerWidth(true);
-        this.content_height = this.$tooltip_content.outerHeight(true);
+        this.$el.addClass('active');
+        this.el.style.setProperty('width', `${this.info.width}px`, 'important');
+        this.el.style.setProperty('height', 'auto', 'important');
+        this.el.style.setProperty('transition', 'none', 'important');
+        this.content_width = this.$el.outerWidth(true);
+        this.content_height = this.$el.outerHeight(true);
         this.$tooltip_content.html(this.info.scrollContent);
-        this.scrollContentWidth = this.$tooltip_content.outerWidth(true);
-        this.scrollContentHeight = this.$tooltip_content.outerHeight(true);
+        this.scrollContentWidth = this.$el.outerWidth(true);
+        this.scrollContentHeight = this.$el.outerHeight(true);
+        this.$el.removeClass('active');
+        this.el.style.removeProperty('width');
+        this.el.style.removeProperty('height');
+        this.el.style.removeProperty('transition');
         this.$tooltip_content.html(this.info.content);
         this.$window = $(window);
 
@@ -123,8 +138,12 @@ var Tip = Widget.extend({
                 $el.removeClass("o_tooltip_parent");
             }
         };
-        _removeParentClass(this.$ideal_location);
-        _removeParentClass(this.$furtherIdealLocation);
+        if (this.$el && this.$ideal_location) {
+            _removeParentClass(this.$ideal_location);
+        }
+        if (this.$el && this.$furtherIdealLocation) {
+            _removeParentClass(this.$furtherIdealLocation);
+        }
 
         return this._super.apply(this, arguments);
     },
@@ -146,6 +165,7 @@ var Tip = Widget.extend({
             this._setupAnchor($anchor, $altAnchor);
         }
         this._bind_anchor_events();
+        this._delegateEvents();
         if (!this.$el) {
             // Ideally this case should not happen but this is still possible,
             // as update may be called before the `start` method is called.
@@ -249,7 +269,7 @@ var Tip = Widget.extend({
         }
     },
     _get_ideal_location: function ($anchor = this.$anchor) {
-        var $location = $anchor;
+        var $location = this.info.location ? $(this.info.location) : $anchor;
         if ($location.is("html,body")) {
             return $(document.body);
         }
@@ -263,6 +283,7 @@ var Tip = Widget.extend({
         } while (
             $location.hasClass('dropdown-menu') ||
             $location.hasClass('o_notebook_headers') ||
+            $location.hasClass('o_forbidden_tooltip_parent') ||
             (
                 (o === "visible" || o.includes("hidden")) && // Possible case where the overflow = "hidden auto"
                 p !== "fixed" &&
@@ -297,8 +318,40 @@ var Tip = Widget.extend({
                 of: this.$anchor,
                 collision: "none",
                 using: props => {
-                    this.el.style.setProperty('top', `${props.top}px`, 'important');
-                    this.el.style.setProperty('left', `${props.left}px`, 'important');
+                    const {top} = props;
+                    let {left} = props;
+                    const anchorEl = this.$anchor[0];
+                    if (this.CENTER_ON_TEXT_TAGS.includes(anchorEl.nodeName)) {
+                        const textContainerWidth = anchorEl.getBoundingClientRect().width;
+                        const textNode = anchorEl.firstChild;
+                        const range = document.createRange();
+                        range.selectNodeContents(textNode);
+                        const textWidth = range.getBoundingClientRect().width;
+
+                        const alignment = window.getComputedStyle(anchorEl).getPropertyValue('text-align');
+                        const posVertical = (this.info.position === 'top' || this.info.position === 'bottom');
+                        if (alignment === 'left') {
+                            if (posVertical) {
+                                left = left - textContainerWidth / 2 + textWidth / 2;
+                            } else if (this.info.position === 'right') {
+                                left = left - textContainerWidth + textWidth;
+                            }
+                        } else if (alignment === 'right') {
+                            if (posVertical) {
+                                left = left + textContainerWidth / 2 - textWidth / 2;
+                            } else if (this.info.position === 'left') {
+                                left = left + textContainerWidth - textWidth;
+                            }
+                        } else if (alignment === 'center') {
+                            if (this.info.position === 'left') {
+                                left = left + textContainerWidth / 2 - textWidth / 2;
+                            } else if (this.info.position === 'right') {
+                                left = left - textContainerWidth / 2 + textWidth / 2;
+                            }
+                        }
+                    }
+                    this.el.style.setProperty('top', `${top}px`, 'important');
+                    this.el.style.setProperty('left', `${left}px`, 'important');
                 },
             });
         } else {
@@ -384,9 +437,15 @@ var Tip = Widget.extend({
         return $consumeEventAnchors;
     },
     _unbind_anchor_events: function () {
-        this.$anchor.off(".anchor");
-        this.$consumeEventAnchors.off(".anchor");
-        this.$scrolableElement.off('.Tip');
+        if (this.$anchor) {
+            this.$anchor.off(".anchor");
+        }
+        if (this.$consumeEventAnchors) {
+            this.$consumeEventAnchors.off(".anchor");
+        }
+        if (this.$scrolableElement) {
+            this.$scrolableElement.off('.Tip');
+        }
     },
     _get_spaced_inverted_position: function (position) {
         if (position === "right") return "left+" + this.info.space;
@@ -501,7 +560,7 @@ var Tip = Widget.extend({
         if (this.tip_opened) {
             this._to_bubble_mode(true);
         } else {
-            this._updatePosition();
+            this._updatePosition(true);
         }
     },
     /**
@@ -519,12 +578,18 @@ var Tip = Widget.extend({
     /**
      * On touch devices, closes the tip when clicked.
      *
+     * Also stop propagation to avoid undesired behavior, such as the kanban
+     * quick create closing when the user clicks on the tooltip.
+     *
      * @private
+     * @param {MouseEvent} ev
      */
-    _onTipClicked: function () {
+    _onTipClicked: function (ev) {
         if (config.device.touch && this.tip_opened) {
             this._to_bubble_mode();
         }
+
+        ev.stopPropagation();
     },
     /**
      * @private

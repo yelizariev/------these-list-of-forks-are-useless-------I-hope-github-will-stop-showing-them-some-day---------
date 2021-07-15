@@ -1,49 +1,36 @@
-odoo.define('mail/static/src/components/discuss/discuss.js', function (require) {
-'use strict';
+/** @odoo-module **/
 
-const components = {
-    AutocompleteInput: require('mail/static/src/components/autocomplete_input/autocomplete_input.js'),
-    Composer: require('mail/static/src/components/composer/composer.js'),
-    DiscussMobileMailboxSelection: require('mail/static/src/components/discuss_mobile_mailbox_selection/discuss_mobile_mailbox_selection.js'),
-    DiscussSidebar: require('mail/static/src/components/discuss_sidebar/discuss_sidebar.js'),
-    MobileMessagingNavbar: require('mail/static/src/components/mobile_messaging_navbar/mobile_messaging_navbar.js'),
-    ModerationDiscardDialog: require('mail/static/src/components/moderation_discard_dialog/moderation_discard_dialog.js'),
-    ModerationRejectDialog: require('mail/static/src/components/moderation_reject_dialog/moderation_reject_dialog.js'),
-    NotificationList: require('mail/static/src/components/notification_list/notification_list.js'),
-    ThreadView: require('mail/static/src/components/thread_view/thread_view.js'),
-};
-const useStore = require('mail/static/src/component_hooks/use_store/use_store.js');
+import { useShouldUpdateBasedOnProps } from '@mail/component_hooks/use_should_update_based_on_props/use_should_update_based_on_props';
+import { useStore } from '@mail/component_hooks/use_store/use_store';
+import { AutocompleteInput } from '@mail/components/autocomplete_input/autocomplete_input';
+import { Composer } from '@mail/components/composer/composer';
+import { DiscussMobileMailboxSelection } from '@mail/components/discuss_mobile_mailbox_selection/discuss_mobile_mailbox_selection';
+import { DiscussSidebar } from '@mail/components/discuss_sidebar/discuss_sidebar';
+import { MobileMessagingNavbar } from '@mail/components/mobile_messaging_navbar/mobile_messaging_navbar';
+import { NotificationList } from '@mail/components/notification_list/notification_list';
+import { ThreadView } from '@mail/components/thread_view/thread_view';
 
 const { Component } = owl;
 const { useRef } = owl.hooks;
 
-class Discuss extends Component {
+const components = {
+    AutocompleteInput,
+    Composer,
+    DiscussMobileMailboxSelection,
+    DiscussSidebar,
+    MobileMessagingNavbar,
+    NotificationList,
+    ThreadView,
+};
 
+export class Discuss extends Component {
     /**
      * @override
      */
     constructor(...args) {
         super(...args);
-        useStore(props => {
-            const discuss = this.env.messaging && this.env.messaging.discuss;
-            const threadView = discuss && discuss.threadView;
-            return {
-                checkedMessages: threadView ? threadView.checkedMessages.map(message => message.__state) : [],
-                discuss: discuss ? discuss.__state : undefined,
-                isDeviceMobile: this.env.messaging && this.env.messaging.device.isMobile,
-                isMessagingInitialized: this.env.isMessagingInitialized(),
-                thread: discuss && discuss.thread ? discuss.thread.__state : undefined,
-                threadCache: (threadView && threadView.threadCache)
-                    ? threadView.threadCache.__state
-                    : undefined,
-                uncheckedMessages: threadView ? threadView.uncheckedMessages.map(message => message.__state) : [],
-            };
-        }, {
-            compareDepth: {
-                checkedMessages: 1,
-                uncheckedMessages: 1,
-            },
-        });
+        useShouldUpdateBasedOnProps();
+        useStore((...args) => this._useStoreSelector(...args), {});
         this._updateLocalStoreProps();
         /**
          * Reference of the composer. Useful to focus it.
@@ -62,11 +49,10 @@ class Discuss extends Component {
         this.discuss.update({ isOpen: true });
         if (this.discuss.thread) {
             this.trigger('o-push-state-action-manager');
-        } else if (this.env.messaging.isInitialized) {
+        } else if (this.env.isMessagingInitialized()) {
             this.discuss.openInitThread();
         }
         this._updateLocalStoreProps();
-        this._update();
     }
 
     patched() {
@@ -85,7 +71,6 @@ class Discuss extends Component {
         }
         this._activeThreadCache = this.discuss.threadView && this.discuss.threadView.threadCache;
         this._updateLocalStoreProps();
-        this._update();
     }
 
     willUnmount() {
@@ -145,24 +130,6 @@ class Discuss extends Component {
     /**
      * @private
      */
-    _update() {
-        if (this.discuss.isDoFocus) {
-            this.discuss.update({ isDoFocus: false });
-            const composer = this._composerRef.comp;
-            if (composer) {
-                composer.focus();
-            } else {
-                const threadView = this._threadViewRef.comp;
-                if (threadView) {
-                    threadView.focus();
-                }
-            }
-        }
-    }
-
-    /**
-     * @private
-     */
     _updateLocalStoreProps() {
         /**
          * Locally tracked store props `activeThreadCache`.
@@ -184,22 +151,54 @@ class Discuss extends Component {
         );
     }
 
+    /**
+     * Returns data selected from the store.
+     *
+     * @private
+     * @param {Object} props
+     * @returns {Object}
+     */
+    _useStoreSelector(props) {
+        const discuss = this.env.messaging && this.env.messaging.discuss;
+        const thread = discuss && discuss.thread;
+        const threadView = discuss && discuss.threadView;
+        const replyingToMessage = discuss && discuss.replyingToMessage;
+        const replyingToMessageOriginThread = replyingToMessage && replyingToMessage.originThread;
+        return {
+            discuss,
+            discussActiveId: discuss && discuss.activeId, // for widget
+            discussActiveMobileNavbarTabId: discuss && discuss.activeMobileNavbarTabId,
+            discussIsAddingChannel: discuss && discuss.isAddingChannel,
+            discussIsAddingChat: discuss && discuss.isAddingChat,
+            discussIsDoFocus: discuss && discuss.isDoFocus,
+            discussReplyingToMessageOriginThreadComposer: replyingToMessageOriginThread && replyingToMessageOriginThread.composer,
+            inbox: this.env.messaging.inbox,
+            isDeviceMobile: this.env.messaging && this.env.messaging.device.isMobile,
+            isMessagingInitialized: this.env.isMessagingInitialized(),
+            replyingToMessage,
+            starred: this.env.messaging.starred, // for widget
+            thread,
+            threadCache: threadView && threadView.threadCache,
+            threadChannelType: thread && thread.channel_type, // for widget
+            threadDisplayName: thread && thread.displayName, // for widget
+            threadCounter: thread && thread.counter,
+            threadModel: thread && thread.model,
+            threadPublic: thread && thread.public, // for widget
+            threadView,
+            threadViewMessagesLength: threadView && threadView.messages.length, // for widget
+        };
+    }
+
     //--------------------------------------------------------------------------
     // Handlers
     //--------------------------------------------------------------------------
 
     /**
      * @private
+     * @param {CustomEvent} ev
      */
-    _onDialogClosedModerationDiscard() {
-        this.discuss.update({ hasModerationDiscardDialog: false });
-    }
-
-    /**
-     * @private
-     */
-    _onDialogClosedModerationReject() {
-        this.discuss.update({ hasModerationRejectDialog: false });
+    _onFocusinComposer(ev) {
+        this.discuss.update({ isDoFocus: false });
     }
 
     /**
@@ -248,9 +247,9 @@ class Discuss extends Component {
         this.env.services['notification'].notify({
             message: _.str.sprintf(
                 this.env._t(`Message posted on "%s"`),
-                owl.utils.escape(this.discuss.replyingToMessage.originThread.displayName)
+                this.discuss.replyingToMessage.originThread.displayName
             ),
-            type: 'warning',
+            type: 'info',
         });
         this.discuss.clearReplyingToMessage();
     }
@@ -284,8 +283,4 @@ Object.assign(Discuss, {
     components,
     props: {},
     template: 'mail.Discuss',
-});
-
-return Discuss;
-
 });

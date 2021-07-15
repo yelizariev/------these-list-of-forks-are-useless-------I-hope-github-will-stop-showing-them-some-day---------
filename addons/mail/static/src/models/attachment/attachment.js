@@ -1,16 +1,15 @@
-odoo.define('mail/static/src/models/attachment/attachment.js', function (require) {
-'use strict';
+/** @odoo-module **/
 
-const { registerNewModel } = require('mail/static/src/model/model_core.js');
-const { attr, many2many, many2one } = require('mail/static/src/model/model_field.js');
-const { clear } = require('mail/static/src/model/model_field_command.js');
+import { registerNewModel } from '@mail/model/model_core';
+import { attr, many2many, many2one } from '@mail/model/model_field';
+import { clear, insert, link, replace } from '@mail/model/model_field_command';
 
 function factory(dependencies) {
 
-    let nextTemporaryId = -1;
-    function getAttachmentNextTemporaryId() {
-        const id = nextTemporaryId;
-        nextTemporaryId -= 1;
+    let nextUploadingId = -1;
+    function getAttachmentNextUploadingId() {
+        const id = nextUploadingId;
+        nextUploadingId -= 1;
         return id;
     }
     class Attachment extends dependencies['mail.model'] {
@@ -41,10 +40,10 @@ function factory(dependencies) {
 
             // relation
             if ('res_id' in data && 'res_model' in data) {
-                data2.originThread = [['insert', {
+                data2.originThread = insert({
                     id: data.res_id,
                     model: data.res_model,
-                }]];
+                });
             }
 
             return data2;
@@ -58,7 +57,7 @@ function factory(dependencies) {
             const dataList = isMulti ? data : [data];
             for (const data of dataList) {
                 if (!data.id) {
-                    data.id = getAttachmentNextTemporaryId();
+                    data.id = getAttachmentNextUploadingId();
                 }
             }
             return super.create(...arguments);
@@ -88,8 +87,8 @@ function factory(dependencies) {
                 return;
             }
             this.env.messaging.dialogManager.open('mail.attachment_viewer', {
-                attachment: [['link', attachment]],
-                attachments: [['replace', attachments]],
+                attachment: link(attachment),
+                attachments: replace(attachments),
             });
         }
 
@@ -97,12 +96,20 @@ function factory(dependencies) {
          * Remove this attachment globally.
          */
         async remove() {
-            if (!this.isTemporary) {
-                await this.async(() => this.env.services.rpc({
-                    model: 'ir.attachment',
-                    method: 'unlink',
-                    args: [this.id],
-                }, { shadow: true }));
+            if (this.isUnlinkPending) {
+                return;
+            }
+            if (!this.isUploading) {
+                this.update({ isUnlinkPending: true });
+                try {
+                    await this.async(() => this.env.services.rpc({
+                        model: 'ir.attachment',
+                        method: 'unlink',
+                        args: [this.id],
+                    }, { shadow: true }));
+                } finally {
+                    this.update({ isUnlinkPending: false });
+                }
             } else if (this.uploadingAbortController) {
                 this.uploadingAbortController.abort();
             }
@@ -121,24 +128,24 @@ function factory(dependencies) {
         }
 
         /**
+         * Reconciliation between uploading attachment and real attachment.
+         *
          * @private
-         * @returns {mail.composer[]}
          */
-        _computeComposers() {
-            if (this.isTemporary) {
-                return [];
+        _created() {
+            if (this.isUploading) {
+                return;
             }
-            const relatedTemporaryAttachment = this.env.models['mail.attachment']
+            const relatedUploadingAttachment = this.env.models['mail.attachment']
                 .find(attachment =>
                     attachment.filename === this.filename &&
-                    attachment.isTemporary
+                    attachment.isUploading
                 );
-            if (relatedTemporaryAttachment) {
-                const composers = relatedTemporaryAttachment.composers;
-                relatedTemporaryAttachment.delete();
-                return [['replace', composers]];
+            if (relatedUploadingAttachment) {
+                const composers = relatedUploadingAttachment.composers;
+                relatedUploadingAttachment.delete();
+                this.update({ composers: replace(composers) });
             }
-            return [];
         }
 
         /**
@@ -168,7 +175,7 @@ function factory(dependencies) {
                 return `https://www.youtube.com/embed/${token}`;
             }
             if (this.fileType === 'video') {
-                return `/web/image/${this.id}?model=ir.attachment`;
+                return `/web/content/${this.id}?model=ir.attachment`;
             }
             return clear();
         }
@@ -207,16 +214,39 @@ function factory(dependencies) {
             } else if (!this.mimetype) {
                 return clear();
             }
-            const match = this.type === 'url'
-                ? this.url.match('(youtu|.png|.jpg|.gif)')
-                : this.mimetype.match('(image|video|application/pdf|text)');
-            if (!match) {
+            switch (this.mimetype) {
+                case 'application/pdf':
+                    return 'application/pdf';
+                case 'image/bmp':
+                case 'image/gif':
+                case 'image/jpeg':
+                case 'image/png':
+                case 'image/svg+xml':
+                case 'image/tiff':
+                case 'image/x-icon':
+                    return 'image';
+                case 'application/javascript':
+                case 'application/json':
+                case 'text/css':
+                case 'text/html':
+                case 'text/plain':
+                    return 'text';
+                case 'audio/mpeg':
+                case 'video/x-matroska':
+                case 'video/mp4':
+                case 'video/webm':
+                    return 'video';
+            }
+            if (!this.url) {
                 return clear();
             }
-            if (match[1].match('(.png|.jpg|.gif)')) {
+            if (this.url.match('(.png|.jpg|.gif)')) {
                 return 'image';
             }
-            return match[1];
+            if (this.url.includes('youtu')) {
+                return 'youtu';
+            }
+            return clear();
         }
 
         /**
@@ -235,7 +265,7 @@ function factory(dependencies) {
             if (!this.fileType) {
                 return false;
             }
-            return this.fileType.includes('text');
+            return this.fileType === 'text';
         }
 
         /**
@@ -243,15 +273,32 @@ function factory(dependencies) {
          * @returns {boolean}
          */
         _computeIsViewable() {
-            return (
-                this.mediaType === 'image' ||
-                this.mediaType === 'video' ||
-                this.mimetype === 'application/pdf' ||
-                this.isTextFile
-            );
+            switch (this.mimetype) {
+                case 'application/javascript':
+                case 'application/json':
+                case 'application/pdf':
+                case 'audio/mpeg':
+                case 'image/bmp':
+                case 'image/gif':
+                case 'image/jpeg':
+                case 'image/png':
+                case 'image/svg+xml':
+                case 'image/tiff':
+                case 'image/x-icon':
+                case 'text/css':
+                case 'text/html':
+                case 'text/plain':
+                case 'video/x-matroska':
+                case 'video/mp4':
+                case 'video/webm':
+                    return true;
+                default:
+                    return false;
+            }
         }
 
         /**
+         * @deprecated
          * @private
          * @returns {string}
          */
@@ -264,7 +311,7 @@ function factory(dependencies) {
          * @returns {AbortController|undefined}
          */
         _computeUploadingAbortController() {
-            if (this.isTemporary) {
+            if (this.isUploading) {
                 if (!this.uploadingAbortController) {
                     const abortController = new AbortController();
                     abortController.signal.onabort = () => {
@@ -276,7 +323,7 @@ function factory(dependencies) {
                 }
                 return this.uploadingAbortController;
             }
-            return undefined;
+            return;
         }
     }
 
@@ -289,7 +336,6 @@ function factory(dependencies) {
         }),
         checkSum: attr(),
         composers: many2many('mail.composer', {
-            compute: '_computeComposers',
             inverse: 'attachments',
         }),
         defaultSource: attr({
@@ -321,26 +367,35 @@ function factory(dependencies) {
                 'url',
             ],
         }),
-        id: attr(),
+        id: attr({
+            required: true,
+        }),
         isLinkedToComposer: attr({
             compute: '_computeIsLinkedToComposer',
             dependencies: ['composers'],
-        }),
-        isTemporary: attr({
-            default: false,
         }),
         isTextFile: attr({
             compute: '_computeIsTextFile',
             dependencies: ['fileType'],
         }),
+        /**
+         * True if an unlink RPC is pending, used to prevent multiple unlink attempts.
+         */
+        isUnlinkPending: attr({
+            default: false,
+        }),
+        isUploading: attr({
+            default: false,
+        }),
         isViewable: attr({
             compute: '_computeIsViewable',
             dependencies: [
-                'mediaType',
-                'isTextFile',
                 'mimetype',
             ],
         }),
+        /**
+         * @deprecated
+         */
         mediaType: attr({
             compute: '_computeMediaType',
             dependencies: ['mimetype'],
@@ -367,7 +422,7 @@ function factory(dependencies) {
         uploadingAbortController: attr({
             compute: '_computeUploadingAbortController',
             dependencies: [
-                'isTemporary',
+                'isUploading',
                 'uploadingAbortController',
             ],
         }),
@@ -380,5 +435,3 @@ function factory(dependencies) {
 }
 
 registerNewModel('mail.attachment', factory);
-
-});

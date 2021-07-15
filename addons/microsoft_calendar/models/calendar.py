@@ -6,7 +6,8 @@ from dateutil.parser import parse
 from dateutil.relativedelta import relativedelta
 
 from odoo import api, fields, models, _
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError, ValidationError
+from odoo.tools import html2plaintext, is_html_empty, plaintext2html
 
 ATTENDEE_CONVERTER_O2M = {
     'needsAction': 'notresponded',
@@ -35,6 +36,12 @@ class Meeting(models.Model):
         return {'name', 'description', 'allday', 'start', 'date_end', 'stop',
                 'user_id', 'privacy',
                 'attendee_ids', 'alarm_ids', 'location', 'show_as', 'active'}
+
+    @api.model
+    def _restart_microsoft_sync(self):
+        self.env['calendar.event'].search(self._get_microsoft_sync_domain()).write({
+            'need_sync_m': True,
+        })
 
     @api.model_create_multi
     def create(self, vals_list):
@@ -81,7 +88,7 @@ class Meeting(models.Model):
         values = {
             **default_values,
             'name': microsoft_event.subject or _("(No title)"),
-            'description': microsoft_event.bodyPreview,
+            'description': plaintext2html(microsoft_event.bodyPreview),
             'location': microsoft_event.location and microsoft_event.location.get('displayName') or False,
             'user_id': microsoft_event.owner(self.env).id,
             'privacy': sensitivity_o2m.get(microsoft_event.sensitivity, self.default_get(['privacy'])['privacy']),
@@ -125,33 +132,31 @@ class Meeting(models.Model):
         commands_partner = []
 
         microsoft_attendees = microsoft_event.attendees or []
-        if microsoft_event.isOrganizer:
-            user = microsoft_event.owner(self.env)
-            microsoft_attendees += [{
-                'emailAddress': {'address': user.partner_id.email},
-                'status': {'response': 'organizer'}
-            }]
         emails = [a.get('emailAddress').get('address') for a in microsoft_attendees]
         existing_attendees = self.env['calendar.attendee']
         if microsoft_event.exists(self.env):
             existing_attendees = self.env['calendar.attendee'].search([
                 ('event_id', '=', microsoft_event.odoo_id(self.env)),
                 ('email', 'in', emails)])
+        elif self.env.user.partner_id.email not in emails:
+            commands_attendee += [(0, 0, {'state': 'accepted', 'partner_id': self.env.user.partner_id.id})]
+            commands_partner += [(4, self.env.user.partner_id.id)]
+        partners = self.env['mail.thread']._mail_find_partner_from_emails(emails, records=self, force_create=True)
         attendees_by_emails = {a.email: a for a in existing_attendees}
-        for attendee in microsoft_attendees:
-            email = attendee.get('emailAddress').get('address')
-            state = ATTENDEE_CONVERTER_M2O.get(attendee.get('status').get('response'))
+        for attendee in zip(emails, partners, microsoft_attendees):
+            email = attendee[0]
+            state = ATTENDEE_CONVERTER_M2O.get(attendee[2].get('status').get('response'))
 
             if email in attendees_by_emails:
                 # Update existing attendees
                 commands_attendee += [(1, attendees_by_emails[email].id, {'state': state})]
             else:
                 # Create new attendees
-                partner = self.env['res.partner'].find_or_create(email)
+                partner = attendee[1]
                 commands_attendee += [(0, 0, {'state': state, 'partner_id': partner.id})]
                 commands_partner += [(4, partner.id)]
-                if attendee.get('emailAddress').get('name') and not partner.name:
-                    partner.name = attendee.get('emailAddress').get('name')
+                if attendee[2].get('emailAddress').get('name') and not partner.name:
+                    partner.name = attendee[2].get('emailAddress').get('name')
         for odoo_attendee in attendees_by_emails.values():
             # Remove old attendees
             if odoo_attendee.email not in emails:
@@ -244,7 +249,7 @@ class Meeting(models.Model):
 
         if 'description' in fields_to_sync:
             values['body'] = {
-                'content': self.description or '',
+                'content': html2plaintext(self.description) if not is_html_empty(self.description) else '',
                 'contentType': "text",
             }
 
@@ -309,24 +314,24 @@ class Meeting(models.Model):
             if recurrence.month_by == 'day' or recurrence.rrule_type == 'weekly':
                 pattern['daysOfWeek'] = [
                     weekday_name for weekday_name, weekday in {
-                        'monday': recurrence.mo,
-                        'tuesday': recurrence.tu,
-                        'wednesday': recurrence.we,
-                        'thursday': recurrence.th,
-                        'friday': recurrence.fr,
-                        'saturday': recurrence.sa,
-                        'sunday': recurrence.su,
+                        'monday': recurrence.mon,
+                        'tuesday': recurrence.tue,
+                        'wednesday': recurrence.wed,
+                        'thursday': recurrence.thu,
+                        'friday': recurrence.fri,
+                        'saturday': recurrence.sat,
+                        'sunday': recurrence.sun,
                     }.items() if weekday]
                 pattern['firstDayOfWeek'] = 'sunday'
 
             if recurrence.rrule_type == 'monthly' and recurrence.month_by == 'day':
-                byday_selection = [
-                    ('1', 'first'),
-                    ('2', 'second'),
-                    ('3', 'third'),
-                    ('4', 'fourth'),
-                    ('-1', 'last')
-                ]
+                byday_selection = {
+                    '1': 'first',
+                    '2': 'second',
+                    '3': 'third',
+                    '4': 'fourth',
+                    '-1': 'last',
+                }
                 pattern['index'] = byday_selection[recurrence.byday]
 
             rule_range = {
@@ -349,6 +354,27 @@ class Meeting(models.Model):
             }
 
         return values
+
+    def _ensure_attendees_have_email(self):
+        invalid_event_ids = self.env['calendar.event'].search_read(
+            domain=[('id', 'in', self.ids), ('attendee_ids.partner_id.email', '=', False)],
+            fields=['display_time', 'display_name'],
+            order='start',
+        )
+        if invalid_event_ids:
+            list_length_limit = 50
+            total_invalid_events = len(invalid_event_ids)
+            invalid_event_ids = invalid_event_ids[:list_length_limit]
+            invalid_events = ['\t- %s: %s' % (event['display_time'], event['display_name'])
+                              for event in invalid_event_ids]
+            invalid_events = '\n'.join(invalid_events)
+            details = "(%d/%d)" % (list_length_limit, total_invalid_events) if list_length_limit < total_invalid_events else "(%d)" % total_invalid_events
+            raise ValidationError(_("For a correct synchronization between Odoo and Outlook Calendar, "
+                                    "all attendees must have an email address. However, some events do "
+                                    "not respect this condition. As long as the events are incorrect, "
+                                    "the calendars will not be synchronized."
+                                    "\nEither update the events/attendees or archive these events %s:"
+                                    "\n%s", details, invalid_events))
 
     def _microsoft_values_occurence(self, initial_values={}):
         values = dict(initial_values)

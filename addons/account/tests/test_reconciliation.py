@@ -271,7 +271,7 @@ class TestReconciliationExec(TestAccountReconciliationCommon):
             'company_id': self.company.id,
             'date': time.strftime('%Y') + '-' + '07' + '-01',
             'partner_id': self.partner_agrolait_id,
-            'payment_method_id': self.env.ref('account.account_payment_method_manual_out').id,
+            'payment_method_line_id': self.inbound_payment_method_line.id,
             'partner_type': 'supplier'})
 
         # One that will complete the payment of a, the rest goes to b
@@ -282,7 +282,7 @@ class TestReconciliationExec(TestAccountReconciliationCommon):
             'company_id': self.company.id,
             'date': time.strftime('%Y') + '-' + '08' + '-01',
             'partner_id': self.partner_agrolait_id,
-            'payment_method_id': self.env.ref('account.account_payment_method_manual_out').id,
+            'payment_method_line_id': self.outbound_payment_method_line.id,
             'partner_type': 'supplier'})
 
         # The last one will complete the payment of b
@@ -293,7 +293,7 @@ class TestReconciliationExec(TestAccountReconciliationCommon):
             'company_id': self.company.id,
             'date': time.strftime('%Y') + '-' + '09' + '-01',
             'partner_id': self.partner_agrolait_id,
-            'payment_method_id': self.env.ref('account.account_payment_method_manual_out').id,
+            'payment_method_line_id': self.outbound_payment_method_line.id,
             'partner_type': 'supplier'})
 
         payment_a.action_post()
@@ -339,7 +339,7 @@ class TestReconciliationExec(TestAccountReconciliationCommon):
         inv2 = self.create_invoice(invoice_amount=20, currency_id=self.currency_usd_id)
         payment = self.env['account.payment'].create({
             'payment_type': 'inbound',
-            'payment_method_id': self.env.ref('account.account_payment_method_manual_in').id,
+            'payment_method_line_id': self.inbound_payment_method_line.id,
             'partner_type': 'customer',
             'partner_id': self.partner_agrolait_id,
             'amount': 100,
@@ -389,7 +389,7 @@ class TestReconciliationExec(TestAccountReconciliationCommon):
         inv = self.create_invoice(invoice_amount=111, currency_id=self.currency_usd_id)
         payment = self.env['account.payment'].create({
             'payment_type': 'inbound',
-            'payment_method_id': self.env.ref('account.account_payment_method_manual_in').id,
+            'payment_method_line_id': self.inbound_payment_method_line.id,
             'partner_type': 'customer',
             'partner_id': self.partner_agrolait_id,
             'amount': 111,
@@ -414,7 +414,7 @@ class TestReconciliationExec(TestAccountReconciliationCommon):
 
     def test_revert_payment_and_reconcile(self):
         payment = self.env['account.payment'].create({
-            'payment_method_id': self.inbound_payment_method.id,
+            'payment_method_line_id': self.inbound_payment_method_line.id,
             'payment_type': 'inbound',
             'partner_type': 'customer',
             'partner_id': self.partner_agrolait_id,
@@ -426,7 +426,7 @@ class TestReconciliationExec(TestAccountReconciliationCommon):
 
         self.assertEqual(len(payment.line_ids), 2)
 
-        bank_line = payment.line_ids.filtered(lambda l: l.account_id.id == self.bank_journal_usd.payment_debit_account_id.id)
+        bank_line = payment.line_ids.filtered(lambda l: l.account_id.id == self.bank_journal_usd.company_id.account_journal_payment_debit_account_id.id)
         customer_line = payment.line_ids - bank_line
 
         self.assertEqual(len(bank_line), 1)
@@ -443,7 +443,7 @@ class TestReconciliationExec(TestAccountReconciliationCommon):
         self.assertEqual(len(reversed_move.line_ids), 2)
 
         # Testing the reconciliation matching between the move lines and their reversed counterparts
-        reversed_bank_line = reversed_move.line_ids.filtered(lambda l: l.account_id.id == self.bank_journal_usd.payment_debit_account_id.id)
+        reversed_bank_line = reversed_move.line_ids.filtered(lambda l: l.account_id.id == self.bank_journal_usd.company_id.account_journal_payment_debit_account_id.id)
         reversed_customer_line = reversed_move.line_ids - reversed_bank_line
 
         self.assertEqual(len(reversed_bank_line), 1)
@@ -495,7 +495,7 @@ class TestReconciliationExec(TestAccountReconciliationCommon):
         inv = self.create_invoice(invoice_amount=111, currency_id=self.currency_usd_id)
         payment = self.env['account.payment'].create({
             'payment_type': 'inbound',
-            'payment_method_id': self.env.ref('account.account_payment_method_manual_in').id,
+            'payment_method_line_id': self.inbound_payment_method_line.id,
             'partner_type': 'customer',
             'partner_id': self.partner_agrolait_id,
             'amount': 111,
@@ -617,7 +617,7 @@ class TestReconciliationExec(TestAccountReconciliationCommon):
         payment = self.env['account.payment'].create({
             'date': time.strftime('%Y') + '-07-15',
             'payment_type': 'inbound',
-            'payment_method_id': self.env.ref('account.account_payment_method_manual_in').id,
+            'payment_method_line_id': self.inbound_payment_method_line.id,
             'partner_type': 'customer',
             'partner_id': self.partner_agrolait_id,
             'amount': 25,
@@ -711,11 +711,11 @@ class TestReconciliationExec(TestAccountReconciliationCommon):
             'company_id': self.company.id
         })
         inv1 = self.create_invoice(invoice_amount=800, currency_id=self.currency_usd_id)
-        inv2 = self.create_invoice(type="out_refund", invoice_amount=400, currency_id=self.currency_usd_id)
+        inv2 = self.create_invoice(move_type="out_refund", invoice_amount=400, currency_id=self.currency_usd_id)
 
         payment = self.env['account.payment'].create({
             'date': time.strftime('%Y') + '-07-15',
-            'payment_method_id': self.inbound_payment_method.id,
+            'payment_method_line_id': self.inbound_payment_method_line.id,
             'payment_type': 'inbound',
             'partner_type': 'customer',
             'partner_id': inv1.partner_id.id,
@@ -777,10 +777,10 @@ class TestReconciliationExec(TestAccountReconciliationCommon):
             'company_id': company.id
         })
         inv1 = self.create_invoice(invoice_amount=658, currency_id=self.currency_usd_id)
-        inv2 = self.create_invoice(type="out_refund", invoice_amount=225, currency_id=self.currency_usd_id)
+        inv2 = self.create_invoice(move_type="out_refund", invoice_amount=225, currency_id=self.currency_usd_id)
 
         payment = self.env['account.payment'].create({
-            'payment_method_id': self.inbound_payment_method.id,
+            'payment_method_line_id': self.inbound_payment_method_line.id,
             'payment_type': 'inbound',
             'partner_type': 'customer',
             'partner_id': inv1.partner_id.id,
@@ -851,11 +851,11 @@ class TestReconciliationExec(TestAccountReconciliationCommon):
             'company_id': company.id
         })
         inv1 = self._create_invoice(invoice_amount=658, currency_id=self.currency_usd_id, date_invoice=time.strftime('%Y') + '-07-01', auto_validate=True)
-        inv2 = self._create_invoice(type="out_refund", invoice_amount=225, currency_id=self.currency_usd_id, date_invoice=time.strftime('%Y') + '-07-15', auto_validate=True)
+        inv2 = self._create_invoice(move_type="out_refund", invoice_amount=225, currency_id=self.currency_usd_id, date_invoice=time.strftime('%Y') + '-07-15', auto_validate=True)
 
         payment = self.env['account.payment'].create({
             'date': time.strftime('%Y') + '-07-15',
-            'payment_method_id': self.inbound_payment_method.id,
+            'payment_method_line_id': self.inbound_payment_method_line.id,
             'payment_type': 'inbound',
             'partner_type': 'customer',
             'partner_id': inv1.partner_id.id,
@@ -923,7 +923,7 @@ class TestReconciliationExec(TestAccountReconciliationCommon):
         })
 
         inv1 = self._create_invoice(invoice_amount=600, currency_id=self.currency_usd_id, date_invoice=time.strftime('%Y') + '-07-15', auto_validate=True)
-        inv2 = self._create_invoice(type="out_refund", invoice_amount=250, currency_id=self.currency_usd_id, date_invoice=time.strftime('%Y') + '-07-15', auto_validate=True)
+        inv2 = self._create_invoice(move_type="out_refund", invoice_amount=250, currency_id=self.currency_usd_id, date_invoice=time.strftime('%Y') + '-07-15', auto_validate=True)
 
         inv1_receivable = inv1.line_ids.filtered(lambda l: l.account_id.internal_type == 'receivable')
         inv2_receivable = inv2.line_ids.filtered(lambda l: l.account_id.internal_type == 'receivable')
@@ -981,7 +981,7 @@ class TestReconciliationExec(TestAccountReconciliationCommon):
             'company_id': company.id
         })
         inv1 = self._create_invoice(invoice_amount=600, currency_id=self.currency_usd_id, date_invoice=time.strftime('%Y') + '-07-15', auto_validate=True)
-        inv2 = self._create_invoice(type="out_refund", invoice_amount=250, currency_id=self.currency_usd_id, date_invoice=time.strftime('%Y') + '-07-15', auto_validate=True)
+        inv2 = self._create_invoice(move_type="out_refund", invoice_amount=250, currency_id=self.currency_usd_id, date_invoice=time.strftime('%Y') + '-07-15', auto_validate=True)
 
         inv1_receivable = inv1.line_ids.filtered(lambda l: l.account_id.internal_type == 'receivable')
         inv2_receivable = inv2.line_ids.filtered(lambda l: l.account_id.internal_type == 'receivable')
@@ -1051,7 +1051,7 @@ class TestReconciliationExec(TestAccountReconciliationCommon):
             'company_id': company.id
         })
         inv1 = self._create_invoice(invoice_amount=600, currency_id=foreign_1.id, date_invoice=time.strftime('%Y') + '-07-15', auto_validate=True)
-        inv2 = self._create_invoice(type="out_refund", invoice_amount=250, currency_id=foreign_1.id, date_invoice=time.strftime('%Y') + '-07-15', auto_validate=True)
+        inv2 = self._create_invoice(move_type="out_refund", invoice_amount=250, currency_id=foreign_1.id, date_invoice=time.strftime('%Y') + '-07-15', auto_validate=True)
 
         inv1_receivable = inv1.line_ids.filtered(lambda l: l.account_id.internal_type == 'receivable')
         inv2_receivable = inv2.line_ids.filtered(lambda l: l.account_id.internal_type == 'receivable')
@@ -1172,7 +1172,7 @@ class TestReconciliationExec(TestAccountReconciliationCommon):
         Payment = self.env['account.payment']
         payment = Payment.create({
             'date': time.strftime('%Y') + '-07-15',
-            'payment_method_id': self.inbound_payment_method.id,
+            'payment_method_line_id': self.inbound_payment_method_line.id,
             'payment_type': 'inbound',
             'partner_type': 'customer',
             'partner_id': inv1.partner_id.id,

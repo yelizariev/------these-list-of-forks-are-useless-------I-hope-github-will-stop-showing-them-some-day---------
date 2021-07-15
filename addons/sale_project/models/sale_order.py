@@ -4,6 +4,7 @@
 from odoo import api, fields, models, _
 
 from odoo.tools.safe_eval import safe_eval
+from odoo.tools.sql import column_exists, create_column
 
 
 class SaleOrder(models.Model):
@@ -17,11 +18,13 @@ class SaleOrder(models.Model):
         'project.project', 'Project', readonly=True, states={'draft': [('readonly', False)], 'sent': [('readonly', False)]},
         help='Select a non billable project on which tasks can be created.')
     project_ids = fields.Many2many('project.project', compute="_compute_project_ids", string='Projects', copy=False, groups="project.group_project_user", help="Projects used in this sales order.")
+    project_overview = fields.Boolean('Show Project Overview', compute='_compute_project_overview')
+    project_count = fields.Integer(string='Number of Projects', compute='_compute_project_ids', groups='project.group_project_user')
 
     @api.depends('order_line.product_id.project_id')
     def _compute_tasks_ids(self):
         for order in self:
-            order.tasks_ids = self.env['project.task'].search(['|', ('sale_line_id', 'in', order.order_line.ids), ('sale_order_id', '=', order.id)])
+            order.tasks_ids = self.env['project.task'].search(['&', ('display_project_id', '!=', 'False'), '|', ('sale_line_id', 'in', order.order_line.ids), ('sale_order_id', '=', order.id)])
             order.tasks_count = len(order.tasks_ids)
 
     @api.depends('order_line.product_id.service_tracking')
@@ -33,6 +36,12 @@ class SaleOrder(models.Model):
                 service_tracking == 'task_in_project' for service_tracking in order.order_line.mapped('product_id.service_tracking')
             )
 
+    @api.depends('project_ids')
+    def _compute_project_overview(self):
+        for order in self:
+            billable_projects = order.project_ids.filtered('sale_line_id')
+            order.project_overview = len(order.project_ids) == 1 and len(billable_projects) == 1 and billable_projects.project_overview
+
     @api.depends('order_line.product_id', 'order_line.project_id')
     def _compute_project_ids(self):
         for order in self:
@@ -40,6 +49,7 @@ class SaleOrder(models.Model):
             projects |= order.order_line.mapped('project_id')
             projects |= order.project_id
             order.project_ids = projects
+            order.project_count = len(projects)
 
     @api.onchange('project_id')
     def _onchange_project_id(self):
@@ -66,11 +76,10 @@ class SaleOrder(models.Model):
         form_view_id = self.env.ref('project.view_task_form2').id
 
         action = {'type': 'ir.actions.act_window_close'}
-
         task_projects = self.tasks_ids.mapped('project_id')
         if len(task_projects) == 1 and len(self.tasks_ids) > 1:  # redirect to task of the project (with kanban stage, ...)
-            action = self.with_context(active_id=task_projects.id).env.ref(
-                'project.act_project_project_2_project_task_all').read()[0]
+            action = self.with_context(active_id=task_projects.id).env['ir.actions.actions']._for_xml_id(
+                'project.act_project_project_2_project_task_all')
             action['domain'] = [('id', 'in', self.tasks_ids.ids)]
             if action.get('context'):
                 eval_context = self.env['ir.actions.actions']._get_eval_context()
@@ -98,11 +107,14 @@ class SaleOrder(models.Model):
         action = {
             'type': 'ir.actions.act_window',
             'domain': [('id', 'in', self.project_ids.ids)],
-            'views': [(view_kanban_id, 'kanban'), (view_form_id, 'form')],
             'view_mode': 'kanban,form',
             'name': _('Projects'),
             'res_model': 'project.project',
         }
+        if len(self.project_ids) == 1:
+            action.update({'views': [(view_form_id, 'form')], 'res_id': self.project_ids.id})
+        else:
+            action['views'] = [(view_kanban_id, 'kanban'), (view_form_id, 'form')]
         return action
 
     def write(self, values):
@@ -135,6 +147,21 @@ class SaleOrderLine(models.Model):
             else:
                 super(SaleOrderLine, line)._compute_product_updatable()
 
+    def _auto_init(self):
+        """
+        Create column to stop ORM from computing it himself (too slow)
+        """
+        if not column_exists(self.env.cr, 'sale_order_line', 'is_service'):
+            create_column(self.env.cr, 'sale_order_line', 'is_service', 'bool')
+            self.env.cr.execute("""
+                UPDATE sale_order_line line
+                SET is_service = (pt.type = 'service')
+                FROM product_product pp
+                LEFT JOIN product_template pt ON pt.id = pp.product_tmpl_id
+                WHERE pp.id = line.product_id
+            """)
+        return super()._auto_init()
+
     @api.model_create_multi
     def create(self, vals_list):
         lines = super().create(vals_list)
@@ -156,7 +183,7 @@ class SaleOrderLine(models.Model):
         # of a locked sale order.
         if 'product_uom_qty' in values and not self.env.context.get('no_update_planned_hours', False):
             for line in self:
-                if line.task_id:
+                if line.task_id and line.product_id.type == 'service':
                     planned_hours = line._convert_qty_company_hours(line.task_id.company_id)
                     line.task_id.write({'planned_hours': planned_hours})
         return result
@@ -181,7 +208,6 @@ class SaleOrderLine(models.Model):
             'analytic_account_id': account.id,
             'partner_id': self.order_id.partner_id.id,
             'sale_line_id': self.id,
-            'sale_order_id': self.order_id.id,
             'active': True,
             'company_id': self.company_id.id,
         }

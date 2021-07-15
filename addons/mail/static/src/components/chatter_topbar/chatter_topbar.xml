@@ -13,6 +13,8 @@
                                 'o-bordered': chatter.hasExternalBorder,
                             }"
                             t-att-disabled="chatter.isDisabled"
+                            title="Send a message"
+                            data-hotkey="m"
                             t-on-click="_onClickSendMessage"
                         >
                             Send message
@@ -25,12 +27,14 @@
                             }"
                             t-att-disabled="chatter.isDisabled"
                             t-on-click="_onClickLogNote"
+                            title="Log a note"
+                            data-hotkey="shift+m"
                         >
                             Log note
                         </button>
                     </t>
                     <t t-if="chatter.hasActivities">
-                        <button class="btn btn-link o_ChatterTopbar_button o_ChatterTopbar_buttonScheduleActivity" type="button" t-att-disabled="chatter.isDisabled" t-on-click="_onClickScheduleActivity">
+                        <button class="btn btn-link o_ChatterTopbar_button o_ChatterTopbar_buttonScheduleActivity" type="button" t-att-disabled="chatter.isDisabled" t-on-click="_onClickScheduleActivity" title="Schedule an activity" data-hotkey="shift+a">
                             <i class="fa fa-clock-o"/>
                             Schedule activity
                         </button>
@@ -43,15 +47,17 @@
                                     <span class="o_ChatterTopbar_buttonCount o_ChatterTopbar_buttonAttachmentsCount" t-esc="chatter.thread ? chatter.thread.allAttachments.length : 0"/>
                                 </t>
                                 <t t-else="">
-                                    <i class="o_ChatterTopbar_buttonAttachmentsCountLoader fa fa-spinner fa-spin" aria-label="Attachment counter loading..."/>
+                                    <i class="o_ChatterTopbar_buttonAttachmentsCountLoader fa fa-circle-o-notch fa-spin" aria-label="Attachment counter loading..."/>
                                 </t>
                             </button>
                             <t t-if="chatter.hasFollowers and chatter.thread">
-                                <FollowButton
-                                    class="o_ChatterTopbar_button o_ChatterTopbar_followButton"
-                                    isDisabled="chatter.isDisabled"
-                                    threadLocalId="chatter.thread.localId"
-                                />
+                                <t t-if="chatter.thread.channel_type !== 'chat'">
+                                    <FollowButton
+                                        class="o_ChatterTopbar_button o_ChatterTopbar_followButton"
+                                        isDisabled="chatter.isDisabled"
+                                        threadLocalId="chatter.thread.localId"
+                                    />
+                                </t>
                                 <FollowerListMenu
                                     class="o_ChatterTopbar_button o_ChatterTopbar_followerListMenu"
                                     isDisabled="chatter.isDisabled"

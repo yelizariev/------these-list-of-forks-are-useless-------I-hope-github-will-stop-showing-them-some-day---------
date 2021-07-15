@@ -1,17 +1,18 @@
-odoo.define('mail/static/src/components/follow_button/follow_button.js', function (require) {
-'use strict';
+/** @odoo-module **/
 
-const useStore = require('mail/static/src/component_hooks/use_store/use_store.js');
+import { useShouldUpdateBasedOnProps } from '@mail/component_hooks/use_should_update_based_on_props/use_should_update_based_on_props';
+import { useStore } from '@mail/component_hooks/use_store/use_store';
 
 const { Component } = owl;
 const { useState } = owl.hooks;
 
-class FollowButton extends Component {
+export class FollowButton extends Component {
     /**
      * @override
      */
     constructor(...args) {
         super(...args);
+        useShouldUpdateBasedOnProps();
         this.state = useState({
             /**
              * Determine whether the unfollow button is highlighted or not.
@@ -21,7 +22,7 @@ class FollowButton extends Component {
         useStore(props => {
             const thread = this.env.models['mail.thread'].get(props.threadLocalId);
             return {
-                thread: thread ? thread.__state : undefined,
+                threadIsCurrentPartnerFollowing: thread && thread.isCurrentPartnerFollowing,
             };
         });
     }
@@ -84,8 +85,4 @@ Object.assign(FollowButton, {
         threadLocalId: String,
     },
     template: 'mail.FollowButton',
-});
-
-return FollowButton;
-
 });

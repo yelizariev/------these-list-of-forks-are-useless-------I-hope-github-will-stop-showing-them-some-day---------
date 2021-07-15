@@ -24,7 +24,7 @@ class AccountAnalyticLine(models.Model):
         domain = [('allow_timesheets', '=', True)]
         if not self.user_has_groups('hr_timesheet.group_timesheet_manager'):
             return expression.AND([domain,
-                ['|', ('privacy_visibility', '!=', 'followers'), ('allowed_internal_user_ids', 'in', self.env.user.ids)]
+                ['|', ('privacy_visibility', '!=', 'followers'), ('message_partner_ids', 'in', [self.env.user.partner_id.id])]
             ])
         return domain
 
@@ -35,14 +35,14 @@ class AccountAnalyticLine(models.Model):
 
     def _domain_task_id(self):
         if not self.user_has_groups('hr_timesheet.group_hr_timesheet_approver'):
-            return ['|', ('privacy_visibility', '!=', 'followers'), ('allowed_user_ids', 'in', self.env.user.ids)]
+            return ['|', ('privacy_visibility', '!=', 'followers'), ('message_partner_ids', 'in', [self.env.user.partner_id.id])]
         return []
 
     task_id = fields.Many2one(
-        'project.task', 'Task', compute='_compute_project_task_id', store=True, readonly=False, index=True,
+        'project.task', 'Task', compute='_compute_task_id', store=True, readonly=False, index=True,
         domain="[('company_id', '=', company_id), ('project_id.allow_timesheets', '=', True), ('project_id', '=?', project_id)]")
     project_id = fields.Many2one(
-        'project.project', 'Project', compute='_compute_project_task_id', store=True, readonly=False,
+        'project.project', 'Project', compute='_compute_project_id', store=True, readonly=False,
         domain=_domain_project_id)
     user_id = fields.Many2one(compute='_compute_user_id', store=True, readonly=False)
     employee_id = fields.Many2one('hr.employee', "Employee", domain=_domain_employee_id)
@@ -53,12 +53,23 @@ class AccountAnalyticLine(models.Model):
         for analytic_line in self:
             analytic_line.encoding_uom_id = analytic_line.company_id.timesheet_encode_uom_id
 
-    @api.depends('task_id', 'task_id.project_id', 'project_id')
-    def _compute_project_task_id(self):
+    @api.depends('task_id', 'task_id.project_id')
+    def _compute_project_id(self):
         for line in self.filtered(lambda line: not line.project_id):
             line.project_id = line.task_id.project_id
-        for line in self.filtered(lambda line: not line.project_id and line.project_id != line.task_id.project_id):
+
+    @api.depends('project_id')
+    def _compute_task_id(self):
+        for line in self.filtered(lambda line: not line.project_id):
             line.task_id = False
+
+    @api.onchange('project_id')
+    def _onchange_project_id(self):
+        # TODO KBA in master - check to do it "properly", currently:
+        # This onchange is used to reset the task_id when the project changes.
+        # Doing it in the compute will remove the task_id when the project of a task changes.
+        if self.project_id != self.task_id.project_id:
+            self.task_id = False
 
     @api.depends('employee_id')
     def _compute_user_id(self):
@@ -123,13 +134,25 @@ class AccountAnalyticLine(models.Model):
             node.set('string', _('Duration (%s)') % (re.sub(r'[\(\)]', '', encoding_uom.name or '')))
         return etree.tostring(doc, encoding='unicode')
 
+    @api.model
+    def _apply_time_label(self, view_arch, related_model):
+        doc = etree.XML(view_arch)
+        Model = self.env[related_model]
+        encoding_uom = self.env.company.timesheet_encode_uom_id
+        for node in doc.xpath("//field[@widget='timesheet_uom'][not(@string)] | //field[@widget='timesheet_uom_no_toggle'][not(@string)]"):
+            name_with_uom = re.sub(_('Hours') + "|Hours", encoding_uom.name or '', Model._fields[node.get('name')]._description_string(self.env), flags=re.IGNORECASE)
+            node.set('string', name_with_uom)
+
+        return etree.tostring(doc, encoding='unicode')
+
     def _timesheet_get_portal_domain(self):
+        if self.env.user.has_group('hr_timesheet.group_hr_timesheet_user'):
+            # Then, he is internal user, and we take the domain for this current user
+            return self.env['ir.rule']._compute_domain(self._name)
         return ['&',
-                    '|', '|', '|',
+                    '|',
                     ('task_id.project_id.message_partner_ids', 'child_of', [self.env.user.partner_id.commercial_partner_id.id]),
                     ('task_id.message_partner_ids', 'child_of', [self.env.user.partner_id.commercial_partner_id.id]),
-                    ('task_id.project_id.allowed_portal_user_ids', 'child_of', [self.env.user.id]),
-                    ('task_id.allowed_user_ids', 'in', [self.env.user.id]),
                 ('task_id.project_id.privacy_visibility', '=', 'portal')]
 
     def _timesheet_preprocess(self, vals):
@@ -141,9 +164,9 @@ class AccountAnalyticLine(models.Model):
         if vals.get('project_id') and not vals.get('account_id'):
             project = self.env['project.project'].browse(vals.get('project_id'))
             vals['account_id'] = project.analytic_account_id.id
-            vals['company_id'] = project.analytic_account_id.company_id.id
+            vals['company_id'] = project.analytic_account_id.company_id.id or project.company_id.id
             if not project.analytic_account_id.active:
-                raise UserError(_('The project you are timesheeting on is not linked to an active analytic account. Set one on the project configuration.'))
+                raise UserError(_('You cannot add timesheets to a project linked to an inactive analytic account.'))
         # employee implies user
         if vals.get('employee_id') and not vals.get('user_id'):
             employee = self.env['hr.employee'].browse(vals['employee_id'])

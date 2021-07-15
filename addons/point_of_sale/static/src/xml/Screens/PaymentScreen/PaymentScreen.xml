@@ -29,7 +29,7 @@
                         <div class="paymentmethods-container">
                             <PaymentScreenPaymentLines paymentLines="paymentLines" />
                             <div class="paymentmethods">
-                                <t t-foreach="env.pos.payment_methods" t-as="paymentMethod"
+                                <t t-foreach="payment_methods_from_config" t-as="paymentMethod"
                                    t-key="paymentMethod.id">
                                     <PaymentMethodButton paymentMethod="paymentMethod" />
                                 </t>
@@ -76,6 +76,11 @@
                                     <div t-if="env.pos.config.iface_cashdrawer" class="button js_cashdrawer"
                                         t-on-click="openCashbox">
                                         <i class="fa fa-archive" /> Open Cashbox
+                                    </div>
+                                    <div t-if="env.pos.config.ship_later" class="button"
+                                         t-att-class="{ highlight: currentOrder.is_to_ship() }"
+                                         t-on-click="toggleIsToShip()">
+                                        <i class="fa fa-clock-o" /> Ship Later
                                     </div>
                                 </div>
                             </div>

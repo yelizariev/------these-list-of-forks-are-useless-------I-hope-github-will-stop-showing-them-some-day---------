@@ -21,7 +21,7 @@ class MailThread(models.AbstractModel):
         res = {}
         if self.ids:
             self._cr.execute(""" SELECT msg.res_id, COUNT(msg.res_id) FROM mail_message msg
-                                 RIGHT JOIN mail_message_res_partner_needaction_rel rel
+                                 RIGHT JOIN mail_notification rel
                                  ON rel.mail_message_id = msg.id AND rel.notification_type = 'sms' AND rel.notification_status in ('exception')
                                  WHERE msg.author_id = %s AND msg.model = %s AND msg.res_id in %s AND msg.message_type != 'user_notification'
                                  GROUP BY msg.res_id""",
@@ -53,13 +53,15 @@ class MailThread(models.AbstractModel):
         """
         partners = self.env['res.partner']
         for fname in self._sms_get_partner_fields():
-            partners |= self.mapped(fname)
+            partners = partners.union(*self.mapped(fname))  # ensure ordering
         return partners
 
     def _sms_get_number_fields(self):
         """ This method returns the fields to use to find the number to use to
         send an SMS on a record. """
-        return ['mobile']
+        if 'mobile' in self:
+            return ['mobile']
+        return []
 
     def _sms_get_recipients_info(self, force_field=False, partner_fallback=True):
         """" Get SMS recipient information on current record set. This method
@@ -269,7 +271,7 @@ class MailThread(models.AbstractModel):
         }
 
         # notify from computed recipients_data (followers, specific recipients)
-        partners_data = [r for r in recipients_data['partners'] if r['notif'] == 'sms']
+        partners_data = [r for r in recipients_data if r['notif'] == 'sms']
         partner_ids = [r['id'] for r in partners_data]
         if partner_ids:
             for partner in self.env['res.partner'].sudo().browse(partner_ids):

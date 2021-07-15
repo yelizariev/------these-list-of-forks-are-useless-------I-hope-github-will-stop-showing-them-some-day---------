@@ -9,8 +9,8 @@ from odoo.exceptions import UserError
 
 class WebsiteSaleDelivery(WebsiteSale):
 
-    @http.route(['/shop/payment'], type='http', auth="public", website=True)
-    def payment(self, **post):
+    @http.route()
+    def shop_payment(self, **post):
         order = request.website.sale_get_order()
         carrier_id = post.get('carrier_id')
         if carrier_id:
@@ -20,7 +20,7 @@ class WebsiteSaleDelivery(WebsiteSale):
             if carrier_id:
                 return request.redirect("/shop/payment")
 
-        return super(WebsiteSaleDelivery, self).payment(**post)
+        return super(WebsiteSaleDelivery, self).shop_payment(**post)
 
     @http.route(['/shop/update_carrier'], type='json', auth='public', methods=['POST'], website=True, csrf=False)
     def update_eshop_carrier(self, **post):
@@ -43,6 +43,22 @@ class WebsiteSaleDelivery(WebsiteSale):
         carrier = request.env['delivery.carrier'].sudo().browse(int(carrier_id))
         rate = carrier.rate_shipment(order)
         if rate.get('success'):
+            tax_ids = carrier.product_id.taxes_id.filtered(lambda t: t.company_id == order.company_id)
+            if tax_ids:
+                fpos = order.fiscal_position_id
+                tax_ids = fpos.map_tax(tax_ids)
+                taxes = tax_ids.compute_all(
+                    rate['price'],
+                    currency=order.currency_id,
+                    quantity=1.0,
+                    product=carrier.product_id,
+                    partner=order.partner_shipping_id,
+                )
+                if request.env.user.has_group('account.group_show_line_subtotals_tax_excluded'):
+                    rate['price'] = taxes['total_excluded']
+                else:
+                    rate['price'] = taxes['total_included']
+
             res['status'] = True
             res['new_amount_delivery'] = Monetary.value_to_html(rate['price'], {'display_currency': order.currency_id})
             res['is_free_delivery'] = not bool(rate['price'])

@@ -1,17 +1,14 @@
-odoo.define('website.root', function (require) {
-'use strict';
+/** @odoo-module alias=website.root */
 
-const ajax = require('web.ajax');
-const {_t} = require('web.core');
-var Dialog = require('web.Dialog');
-const KeyboardNavigationMixin = require('web.KeyboardNavigationMixin');
-const session = require('web.session');
-var publicRootData = require('web.public.root');
-require("web.zoomodoo");
+import ajax from 'web.ajax';
+import { _t } from 'web.core';
+import KeyboardNavigationMixin from 'web.KeyboardNavigationMixin';
+import session from 'web.session';
+import publicRootData from 'web.public.root';
+import "web.zoomodoo";
+import { FullscreenIndication } from '@website/js/widgets/fullscreen_indication';
 
-var websiteRootRegistry = publicRootData.publicRootRegistry;
-
-var WebsiteRoot = publicRootData.PublicRoot.extend(KeyboardNavigationMixin, {
+export const WebsiteRoot = publicRootData.PublicRoot.extend(KeyboardNavigationMixin, {
     events: _.extend({}, KeyboardNavigationMixin.events, publicRootData.PublicRoot.prototype.events || {}, {
         'click .js_change_lang': '_onLangChangeClick',
         'click .js_publish_management .js_publish_btn': '_onPublishBtnClick',
@@ -34,6 +31,16 @@ var WebsiteRoot = publicRootData.PublicRoot.extend(KeyboardNavigationMixin, {
             autoAccessKeys: false,
         });
         return this._super(...arguments);
+    },
+    /**
+     * @override
+     */
+    willStart: async function () {
+        this.fullscreenIndication = new FullscreenIndication(this);
+        return Promise.all([
+            this._super(...arguments),
+            this.fullscreenIndication.appendTo(document.body),
+        ]);
     },
     /**
      * @override
@@ -151,6 +158,7 @@ var WebsiteRoot = publicRootData.PublicRoot.extend(KeyboardNavigationMixin, {
                                         text: _t("Check your configuration."),
                                     }),
                                 )[0].outerHTML,
+                            messageIsHtml: true, // HTML is built with only safe static parts
                         });
                     }
                     resolve(false);
@@ -170,6 +178,11 @@ var WebsiteRoot = publicRootData.PublicRoot.extend(KeyboardNavigationMixin, {
      */
     _toggleFullscreen(state) {
         this.isFullscreen = state;
+        if (this.isFullscreen) {
+            this.fullscreenIndication.show();
+        } else {
+            this.fullscreenIndication.hide();
+        }
         document.body.classList.add('o_fullscreen_transition');
         document.body.classList.toggle('o_fullscreen', this.isFullscreen);
         document.body.style.overflowX = 'hidden';
@@ -304,20 +317,6 @@ var WebsiteRoot = publicRootData.PublicRoot.extend(KeyboardNavigationMixin, {
                         _t("Published with success."),
                 });
             }
-        })
-        .guardedCatch(function (err, data) {
-            data = data || {statusText: err.message.message};
-            return new Dialog(self, {
-                title: data.data ? data.data.arguments[0] : "",
-                $content: $('<div/>', {
-                    html: (data.data ? data.data.arguments[1] : data.statusText)
-                        + '<br/>'
-                        + _.str.sprintf(
-                            _t('It might be possible to edit the relevant items or fix the issue in <a href="%s">the classic Odoo interface</a>'),
-                            '/web#model=' + $data.data('object') + '&id=' + $data.data('id')
-                        ),
-                }),
-            }).open();
         });
     },
     /**
@@ -327,12 +326,12 @@ var WebsiteRoot = publicRootData.PublicRoot.extend(KeyboardNavigationMixin, {
     _onWebsiteSwitch: function (ev) {
         var websiteId = ev.currentTarget.getAttribute('website-id');
         var websiteDomain = ev.currentTarget.getAttribute('domain');
-        var url = window.location.href;
+        let url = `/website/force/${websiteId}`;
         if (websiteDomain && window.location.hostname !== websiteDomain) {
-            var path = window.location.pathname + window.location.search + window.location.hash;
-            url = websiteDomain + path;
+            url = websiteDomain + url;
         }
-        window.location.href = $.param.querystring(url, {'fw': websiteId});
+        const path = window.location.pathname + window.location.search + window.location.hash;
+        window.location.href = $.param.querystring(url, {'path': path});
     },
     /**
      * @private
@@ -357,8 +356,6 @@ var WebsiteRoot = publicRootData.PublicRoot.extend(KeyboardNavigationMixin, {
     },
 });
 
-return {
+export default {
     WebsiteRoot: WebsiteRoot,
-    websiteRootRegistry: websiteRootRegistry,
 };
-});

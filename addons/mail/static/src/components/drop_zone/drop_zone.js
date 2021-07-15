@@ -1,15 +1,17 @@
-odoo.define('mail/static/src/components/drop_zone/drop_zone.js', function (require) {
-'use strict';
+/** @odoo-module **/
+
+import { useShouldUpdateBasedOnProps } from '@mail/component_hooks/use_should_update_based_on_props/use_should_update_based_on_props';
 
 const { Component, useState } = owl;
 
-class DropZone extends Component {
+export class DropZone extends Component {
 
     /**
      * @override
      */
     constructor(...args) {
         super(...args);
+        useShouldUpdateBasedOnProps();
         this.state = useState({
             /**
              * Determine whether the user is dragging files over the dropzone.
@@ -129,8 +131,4 @@ class DropZone extends Component {
 Object.assign(DropZone, {
     props: {},
     template: 'mail.DropZone',
-});
-
-return DropZone;
-
 });

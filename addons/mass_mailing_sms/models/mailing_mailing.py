@@ -30,8 +30,8 @@ class Mailing(models.Model):
     # otherwise 'sms_subject' will get the old helper from 'mass_mailing' module.
     # overriding 'subject' field helper in this model is not working, since the helper will keep the new value
     # even when 'mass_mailing_sms' removed (see 'mailing_mailing_view_form_sms' for more details).                    
-    sms_subject = fields.Char('Title', help='For an Email, Subject your Recipients will see in their inbox.\n'
-                              'For an SMS Text Message, internal Title of the Message.',
+    sms_subject = fields.Char('Title', help='For an email, the subject your recipients will see in their inbox.\n'
+                              'For an SMS, the internal title of the message.',
                               related='subject', translate=True, readonly=False)
     # sms options
     body_plaintext = fields.Text('SMS Body', compute='_compute_body_plaintext', store=True, readonly=False)
@@ -43,7 +43,7 @@ class Mailing(models.Model):
         'Unregistered IAP account', compute='_compute_sms_has_iap_failure',
         help='UX Field to propose to Register the SMS IAP account')
     sms_force_send = fields.Boolean(
-        'Send Directly', help='Use at your own risks.')
+        'Send Directly', help='Immediately send the SMS Mailing instead of queuing up. Use at your own risk.')
     # opt_out_link
     sms_allow_unsubscribe = fields.Boolean('Include opt-out link', default=False)
 
@@ -98,17 +98,6 @@ class Mailing(models.Model):
     # BUSINESS / VIEWS ACTIONS
     # --------------------------------------------------
 
-    def action_put_in_queue_sms(self):
-        res = self.action_put_in_queue()
-        if self.sms_force_send:
-            self.action_send_mail()
-        return res
-
-    def action_send_now_sms(self):
-        if not self.sms_force_send:
-            self.write({'sms_force_send': True})
-        return self.action_send_mail()
-
     def action_retry_failed(self):
         mass_sms = self.filtered(lambda m: m.mailing_type == 'sms')
         if mass_sms:
@@ -156,20 +145,16 @@ class Mailing(models.Model):
     # --------------------------------------------------
 
     def _get_opt_out_list_sms(self):
-        """Returns a set of emails opted-out in target model"""
+        """ Give list of opt-outed records, depending on specific model-based
+        computation if available.
+
+        :return list: opt-outed record IDs
+        """
         self.ensure_one()
         opt_out = []
         target = self.env[self.mailing_model_real]
-        if self.mailing_model_real == 'mailing.contact':
-            # if user is opt_out on One list but not on another
-            # or if two user with same email address, one opted in and the other one opted out, send the mail anyway
-            # TODO DBE Fixme : Optimise the following to get real opt_out and opt_in
-            subscriptions = self.env['mailing.contact.subscription'].sudo().search(
-                [('list_id', 'in', self.contact_list_ids.ids)])
-            opt_out_contacts = subscriptions.filtered(lambda sub: sub.opt_out).mapped('contact_id')
-            opt_in_contacts = subscriptions.filtered(lambda sub: not sub.opt_out).mapped('contact_id')
-            opt_out = list(set(c.id for c in opt_out_contacts if c not in opt_in_contacts))
-
+        if hasattr(self.env[self.mailing_model_name], '_mailing_get_opt_out_list_sms'):
+            opt_out = self.env[self.mailing_model_name]._mailing_get_opt_out_list_sms(self)
             _logger.info("Mass SMS %s targets %s: optout: %s contacts", self, target._name, len(opt_out))
         else:
             _logger.info("Mass SMS %s targets %s: no opt out list available", self, target._name)
@@ -180,31 +165,51 @@ class Mailing(models.Model):
         self.ensure_one()
         target = self.env[self.mailing_model_real]
 
+        partner_fields = []
         if issubclass(type(target), self.pool['mail.thread.phone']):
             phone_fields = ['phone_sanitized']
         elif issubclass(type(target), self.pool['mail.thread']):
             phone_fields = target._sms_get_number_fields()
+            partner_fields = target._sms_get_partner_fields()
         else:
             phone_fields = []
             if 'mobile' in target._fields:
                 phone_fields.append('mobile')
             if 'phone' in target._fields:
                 phone_fields.append('phone')
-        if not phone_fields:
+        partner_field = next(
+            (fname for fname in partner_fields if target._fields[fname].type == 'many2one'),
+            False
+        )
+        if not phone_fields and not partner_field:
             raise UserError(_("Unsupported %s for mass SMS", self.mailing_model_id.name))
 
         query = """
             SELECT %(select_query)s
               FROM mailing_trace trace
               JOIN %(target_table)s target ON (trace.res_id = target.id)
+              %(join_add_query)s
              WHERE (%(where_query)s)
-             AND trace.mass_mailing_id = %%(mailing_id)s
-             AND trace.model = %%(target_model)s
+               AND trace.mass_mailing_id = %%(mailing_id)s
+               AND trace.model = %%(target_model)s
         """
+        if phone_fields:
+            # phone fields are checked on target mailed model
+            select_query = 'target.id, ' + ', '.join('target.%s' % fname for fname in phone_fields)
+            where_query = ' OR '.join('target.%s IS NOT NULL' % fname for fname in phone_fields)
+            join_add_query = ''
+        else:
+            # phone fields are checked on res.partner model
+            partner_phone_fields = ['mobile', 'phone']
+            select_query = 'target.id, ' + ', '.join('partner.%s' % fname for fname in partner_phone_fields)
+            where_query = ' OR '.join('partner.%s IS NOT NULL' % fname for fname in partner_phone_fields)
+            join_add_query = 'JOIN res_partner partner ON (target.%s = partner.id)' % partner_field
+
         query = query % {
-            'select_query': 'target.id, ' + ', '.join('target.%s' % fname for fname in phone_fields),
-            'where_query': ' OR '.join('target.%s IS NOT NULL' % fname for fname in phone_fields),
-            'target_table': target._table
+            'select_query': select_query,
+            'where_query': where_query,
+            'target_table': target._table,
+            'join_add_query': join_add_query,
         }
         params = {'mailing_id': self.id, 'target_model': self.mailing_model_real}
         self._cr.execute(query, params)
@@ -239,13 +244,59 @@ class Mailing(models.Model):
         for mailing in self:
             if not res_ids:
                 res_ids = mailing._get_remaining_recipients()
-            if not res_ids:
-                raise UserError(_('There are no recipients selected.'))
+            if res_ids:
+                composer = self.env['sms.composer'].with_context(active_id=False).create(mailing._send_sms_get_composer_values(res_ids))
+                composer._action_send_sms()
 
-            composer = self.env['sms.composer'].with_context(active_id=False).create(mailing._send_sms_get_composer_values(res_ids))
-            composer._action_send_sms()
-            mailing.write({'state': 'done', 'sent_date': fields.Datetime.now()})
+            mailing.write({
+                'state': 'done',
+                'sent_date': fields.Datetime.now(),
+                'kpi_mail_required': not mailing.sent_date,
+                })
         return True
+
+    # ------------------------------------------------------
+    # STATISTICS
+    # ------------------------------------------------------
+
+    def _prepare_statistics_email_values(self):
+        """Return some statistics that will be displayed in the mailing statistics email.
+
+        Each item in the returned list will be displayed as a table, with a title and
+        1, 2 or 3 columns.
+        """
+        values = super(Mailing, self)._prepare_statistics_email_values()
+        if self.mailing_type == 'sms':
+            mailing_type = self._get_pretty_mailing_type()
+            values['title'] = _('24H Stats of %(mailing_type)s "%(mailing_name)s"',
+                                mailing_type=mailing_type,
+                                mailing_name=self.subject
+                               )
+            values['kpi_data'][0] = {
+                'kpi_fullname': _('Report for %(expected)i %(mailing_type)s Sent',
+                                  expected=self.expected,
+                                  mailing_type=mailing_type
+                                 ),
+                'kpi_col1': {
+                    'value': f'{self.received_ratio}%',
+                    'col_subtitle': _('RECEIVED (%i)', self.delivered),
+                },
+                'kpi_col2': {
+                    'value': f'{self.clicks_ratio}%',
+                    'col_subtitle': _('CLICKED (%i)', self.clicked),
+                },
+                'kpi_col3': {
+                    'value': f'{self.bounced_ratio}%',
+                    'col_subtitle': _('BOUNCED (%i)', self.bounced),
+                },
+                'kpi_action': None,
+            }
+        return values
+
+    def _get_pretty_mailing_type(self):
+        if self.mailing_type == 'sms':
+            return _('SMS Text Message')
+        return super(Mailing, self)._get_pretty_mailing_type()
 
     # --------------------------------------------------
     # TOOLS
@@ -257,3 +308,13 @@ class Mailing(models.Model):
             mailing_domain = expression.AND([mailing_domain, [('phone_sanitized_blacklisted', '=', False)]])
 
         return mailing_domain
+
+    def convert_links(self):
+        sms_mailings = self.filtered(lambda m: m.mailing_type == 'sms')
+        res = {}
+        for mailing in sms_mailings:
+            tracker_values = mailing._get_link_tracker_values()
+            body = mailing._shorten_links_text(mailing.body_plaintext, tracker_values)
+            res[mailing.id] = body
+        res.update(super(Mailing, self - sms_mailings).convert_links())
+        return res

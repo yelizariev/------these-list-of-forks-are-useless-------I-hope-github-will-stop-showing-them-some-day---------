@@ -5,7 +5,7 @@ import base64
 import logging
 
 
-from odoo import _, api, fields, models, tools
+from odoo import _, api, fields, models, tools, Command
 from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
@@ -26,7 +26,7 @@ class MailTemplate(models.Model):
         return res
 
     # description
-    name = fields.Char('Name')
+    name = fields.Char('Name', translate=True)
     model_id = fields.Many2one('ir.model', 'Applies to', help="The type of document this template can be used with")
     model = fields.Char('Related Document Model', related='model_id.model', index=True, store=True, readonly=True)
     subject = fields.Char('Subject', translate=True, help="Subject (placeholders may be used here)")
@@ -43,7 +43,7 @@ class MailTemplate(models.Model):
     partner_to = fields.Char('To (Partners)',
                              help="Comma-separated ids of recipient partners (placeholders may be used here)")
     email_cc = fields.Char('Cc', help="Carbon copy recipients (placeholders may be used here)")
-    reply_to = fields.Char('Reply-To', help="Preferred response address (placeholders may be used here)")
+    reply_to = fields.Char('Reply To', help="Email address to which replies will be redirected when sending emails in mass; only used when the reply is not logged in the original discussion thread.")
     # content
     body_html = fields.Html('Body', translate=True, sanitize=False)
     attachment_ids = fields.Many2many('ir.attachment', 'email_template_attachment_rel', 'email_template_id',
@@ -66,6 +66,16 @@ class MailTemplate(models.Model):
     ref_ir_act_window = fields.Many2one('ir.actions.act_window', 'Sidebar action', readonly=True, copy=False,
                                         help="Sidebar action to make this template available on records "
                                              "of the related document model")
+
+    # Overrides of mail.render.mixin
+    @api.depends('model')
+    def _compute_render_model(self):
+        for template in self:
+            template.render_model = template.model
+
+    # ------------------------------------------------------------
+    # CRUD
+    # ------------------------------------------------------------
 
     def unlink(self):
         self.unlink_action()
@@ -163,9 +173,9 @@ class MailTemplate(models.Model):
         results = dict()
         for lang, (template, template_res_ids) in self._classify_per_lang(res_ids).items():
             for field in fields:
-                template = template.with_context(safe=(field == 'subject'))
                 generated_field_values = template._render_field(
                     field, template_res_ids,
+                    options={'render_safe': field == 'subject'},
                     post_process=(field == 'body_html')
                 )
                 for res_id, field_value in generated_field_values.items():
@@ -191,7 +201,7 @@ class MailTemplate(models.Model):
             if template.report_template:
                 for res_id in template_res_ids:
                     attachments = []
-                    report_name = self._render_field('report_name', [res_id])[res_id]
+                    report_name = template._render_field('report_name', [res_id])[res_id]
                     report = template.report_template
                     report_service = report.report_name
 
@@ -245,8 +255,8 @@ class MailTemplate(models.Model):
 
         # create a mail_mail based on values, without attachments
         values = self.generate_email(res_id, ['subject', 'body_html', 'email_from', 'email_to', 'partner_to', 'email_cc', 'reply_to', 'scheduled_date'])
-        values['recipient_ids'] = [(4, pid) for pid in values.get('partner_ids', list())]
-        values['attachment_ids'] = [(4, aid) for aid in values.get('attachment_ids', list())]
+        values['recipient_ids'] = [Command.link(pid) for pid in values.get('partner_ids', list())]
+        values['attachment_ids'] = [Command.link(aid) for aid in values.get('attachment_ids', list())]
         values.update(email_values or {})
         attachment_ids = values.pop('attachment_ids', [])
         attachments = values.pop('attachments', [])
@@ -261,9 +271,16 @@ class MailTemplate(models.Model):
                 _logger.warning('QWeb template %s not found when sending template %s. Sending without layouting.' % (notif_layout, self.name))
             else:
                 record = self.env[self.model].browse(res_id)
+                model = self.env['ir.model']._get(record._name)
+
+                if self.lang:
+                    lang = self._render_lang([res_id])[res_id]
+                    template = template.with_context(lang=lang)
+                    model = model.with_context(lang=lang)
+
                 template_ctx = {
                     'message': self.env['mail.message'].sudo().new(dict(body=values['body_html'], record_name=record.display_name)),
-                    'model_description': self.env['ir.model']._get(record._name).display_name,
+                    'model_description': model.display_name,
                     'company': 'company_id' in record and record['company_id'] or self.env.company,
                     'record': record,
                 }

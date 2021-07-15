@@ -1,11 +1,11 @@
-odoo.define('mail/static/src/utils/utils.js', function (require) {
-'use strict';
+/** @odoo-module **/
 
-const { delay } = require('web.concurrency');
-const {
-    patch: webUtilsPatch,
-    unpatch: webUtilsUnpatch,
-} = require('web.utils');
+import { delay } from 'web.concurrency';
+import {
+    patch as webUtilsPatch,
+    unaccent,
+    unpatch as webUtilsUnpatch,
+} from 'web.utils';
 
 //------------------------------------------------------------------------------
 // Public
@@ -13,6 +13,18 @@ const {
 
 const classPatchMap = new WeakMap();
 const eventHandledWeakMap = new WeakMap();
+
+/**
+ * Returns the given string after cleaning it. The goal of the clean is to give
+ * more convenient results when comparing it to potential search results, on
+ * which the clean should also be called before comparing them.
+ *
+ * @param {string} searchTerm
+ * @returns {string}
+ */
+function cleanSearchTerm(searchTerm) {
+    return unaccent(searchTerm.toLowerCase());
+}
 
 /**
  * Executes the provided functions in order, but with a potential delay between
@@ -124,7 +136,7 @@ function patchClassMethods(Class, patchName, patch) {
  * @returns {function} unpatch function
  */
 function patchInstanceMethods(Class, patchName, patch) {
-    return webUtilsPatch(Class, patchName, patch);
+    return webUtilsPatch(Class.prototype, patchName, patch);
 }
 
 /**
@@ -158,14 +170,15 @@ function unpatchClassMethods(Class, patchName) {
  * @param {string} patchName
  */
 function unpatchInstanceMethods(Class, patchName) {
-    return webUtilsUnpatch(Class, patchName);
+    return webUtilsUnpatch(Class.prototype, patchName);
 }
 
 //------------------------------------------------------------------------------
 // Export
 //------------------------------------------------------------------------------
 
-return {
+export {
+    cleanSearchTerm,
     executeGracefully,
     isEventHandled,
     markEventHandled,
@@ -175,5 +188,3 @@ return {
     unpatchClassMethods,
     unpatchInstanceMethods,
 };
-
-});
